@@ -247,7 +247,7 @@ export const resourceCategories: ResourceCategory[] = [
     subCategories: [
       {
         id: 'policy-gov',
-        label: '1. 교육부 지침',
+        label: '1. 국가 및 교육부 지침',
         iconEmoji: '🏛️',
         items: [
           { id: 'pol-1-1', title: '인공지능 행동계획', url: 'https://drive.google.com/file/d/1uVEhE63fvCxCf3eukHIHmMi7vZUvu1jS/view?usp=drive_link', description: '교육부의 인공지능 교육 추진 방향과 단계별 실행 계획을 담은 공식 문서' },
