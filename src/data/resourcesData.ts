@@ -160,8 +160,6 @@ export const resourceCategories: ResourceCategory[] = [
         iconEmoji: '📚',
         items: [
           { id: 'l-1-6', title: '온한글', url: 'https://onhan.cne.go.kr/', description: '충청남도교육청 한글 해득 진단·보정 시스템. 미해득 학생 보정 자료와 성장 기록 지원' },
-          { id: 'l-1-7', title: '아이랑한글이랑', url: 'https://onsem.withrun.co.kr/', description: '한글 미해득 진단부터 보정 지원, 누가 관리까지 이어지는 한글 해득 지원 시스템' },
-          { id: 'l-1-8', title: '한글 해득 진단 도구 개발 연구', url: 'https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002468811', description: '초등 1학년 한글 해득 수준 진단과 보충 교육 설계의 근거로 참고할 수 있는 연구 자료' },
         ],
       },
       {
