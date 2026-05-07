@@ -906,7 +906,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 </div>
               )}
             </div>
-            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : 'p-8'} flex flex-col overflow-y-auto no-scrollbar`}>
+            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : 'p-8 lg:pt-0'} flex flex-col overflow-y-auto no-scrollbar`}>
               {lesson.interactive ? (
                 <>
                   {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
