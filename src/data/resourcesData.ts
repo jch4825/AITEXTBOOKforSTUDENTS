@@ -155,8 +155,23 @@ export const resourceCategories: ResourceCategory[] = [
     iconColor: 'text-purple-500',
     subCategories: [
       {
+        id: 'hangul-literacy',
+        label: '1. 한글·문해 수업 자료',
+        iconEmoji: '📚',
+        items: [
+          { id: 'l-1-1', title: '소중한글 공식 사이트', url: 'https://sojunghangeul.com/home/main', description: '한글 해득, 쓰기, 문해력 학습을 앱·교재·교구로 안내하는 소중한글 공식 사이트' },
+          { id: 'l-1-2', title: '소중한글 무료 체험', url: 'https://form.h2k.co.kr', description: '학생 수준 확인과 수업 전 체험 활동에 활용할 수 있는 소중한글 체험 신청 페이지' },
+          { id: 'l-1-3', title: '소중한글 공식 카페', url: 'https://cafe.naver.com/sojunghangeul', description: '복습 활동지, 그림책 추천, 가정 연계 활동 자료를 확인할 수 있는 공식 커뮤니티' },
+          { id: 'l-1-4', title: '소중한글 Google Play', url: 'https://play.google.com/store/apps/details?id=com.h2kresearch.preciousHangul', description: '파닉스 기반 한글 교육 앱. 진단, 자모음, 받침, 쓰기 학습 흐름 확인용' },
+          { id: 'l-1-5', title: '소중한글 동요 Google Play', url: 'https://play.google.com/store/apps/details?id=com.h2kresearch.ps', description: '한글 동요와 기초 게임으로 글자 호기심을 키우는 유아·초기 문해 활동용 앱' },
+          { id: 'l-1-6', title: '온한글', url: 'https://onhan.cne.go.kr/', description: '충청남도교육청 한글 해득 진단·보정 시스템. 미해득 학생 보정 자료와 성장 기록 지원' },
+          { id: 'l-1-7', title: '아이랑한글이랑', url: 'https://onsem.withrun.co.kr/', description: '한글 미해득 진단부터 보정 지원, 누가 관리까지 이어지는 한글 해득 지원 시스템' },
+          { id: 'l-1-8', title: '한글 해득 진단 도구 개발 연구', url: 'https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002468811', description: '초등 1학년 한글 해득 수준 진단과 보충 교육 설계의 근거로 참고할 수 있는 연구 자료' },
+        ],
+      },
+      {
         id: 'edu-portal',
-        label: '1. AI 교육 포털',
+        label: '2. AI 교육 포털',
         iconEmoji: '🌐',
         items: [
           { id: 'l-3-1', title: '에듀넷 AI·SW 교육', url: 'https://ai.edunet.net', description: '교육부 공식 AI·SW 교육 포털. 교사·학생용 자료, 연수, 수업 지원 통합 제공' },
