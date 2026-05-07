@@ -178,7 +178,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const l11CompleteRef = useRef<HTMLButtonElement | null>(null);
   const l11NextRef = useRef<HTMLButtonElement | null>(null);
   const isL11 = lesson.id === 'l1-1';
-  const isL52 = lesson.id === 'l5-2';
+  const hasCompactM5InputPanel = lesson.id === 'l5-2' || lesson.id === 'l5-5';
 
   const l11TourClass = (step: L11TourStep) =>
     isL11 && l11TourStep === step ? 'l1-tour-highlight' : '';
@@ -878,7 +878,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               ? 'flex-1'
               : lesson.moduleId === 'm0'
               ? 'lg:flex-[7] lg:border-b md:flex-1'
-              : isL52
+              : hasCompactM5InputPanel
               ? 'lg:flex-[3.5] lg:border-b md:flex-1'
               : 'lg:flex-[3] lg:border-b md:flex-1'
           }`}>
@@ -1083,7 +1083,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
           {/* AI Response area (Hidden for M4 because it uses popup, hidden for M0 because it uses SimWizard) */}
           {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
-            <div className={`${isL52 ? 'lg:flex-[1.75] max-h-[260px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
+            <div className={`${hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[260px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
               <div className="p-4 border-b border-gray-800 flex items-center justify-center shrink-0 hidden md:flex">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">답변 안내</span>
               </div>
