@@ -1083,20 +1083,20 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
           {/* AI Response area (Hidden for M4 because it uses popup, hidden for M0 because it uses SimWizard) */}
           {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
-            <div className={`${hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[260px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
+            <div className={`${hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
               <div className="p-4 border-b border-gray-800 flex items-center justify-center shrink-0 hidden md:flex">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">답변 안내</span>
               </div>
-              <div className={`${lesson.moduleId === 'm0' ? 'p-3' : 'p-8'} flex-1 overflow-y-auto overflow-x-hidden no-scrollbar min-w-0`}>
+              <div className={`${lesson.moduleId === 'm0' ? 'p-3' : hasCompactM5InputPanel ? 'px-8 py-4' : 'p-8'} flex-1 overflow-y-auto overflow-x-hidden no-scrollbar min-w-0`}>
                 <div
-                  className={`${lesson.moduleId === 'm0' ? 'min-h-[125px]' : 'min-h-[160px]'} rounded-xl p-[1px] relative`}
+                  className={`${lesson.moduleId === 'm0' ? 'min-h-[125px]' : hasCompactM5InputPanel ? 'min-h-[110px]' : 'min-h-[160px]'} rounded-xl p-[1px] relative`}
                   style={{ background: `linear-gradient(135deg, ${theme.accent}55, transparent 45%, ${theme.accent}25)` }}
                 >
                 <div
                   ref={isL11 ? l11ResponseRef : undefined}
-                  className={`${lesson.moduleId === 'm0' ? 'p-3' : 'p-8'} bg-[#1c232b] rounded-[11px] relative ${l11TourClass('response')}`}
+                  className={`${lesson.moduleId === 'm0' ? 'p-3' : hasCompactM5InputPanel ? 'p-4' : 'p-8'} bg-[#1c232b] rounded-[11px] relative ${l11TourClass('response')}`}
                 >
-                  <div className={`flex items-center justify-between ${lesson.moduleId === 'm0' ? 'mb-1' : 'mb-5'}`}>
+                  <div className={`flex items-center justify-between ${lesson.moduleId === 'm0' ? 'mb-1' : hasCompactM5InputPanel ? 'mb-3' : 'mb-5'}`}>
                     <div className="flex items-center gap-2.5">
                       <span className="relative flex h-2.5 w-2.5">
                         <span
