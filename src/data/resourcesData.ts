@@ -170,8 +170,20 @@ export const resourceCategories: ResourceCategory[] = [
         ],
       },
       {
+        id: 'corn-theme',
+        label: '2. 주제별 통합 수업: 옥수수',
+        iconEmoji: '🌽',
+        items: [
+          { id: 'l-2-1', title: '텃밭에서 옥수수 키우기', url: 'https://www.rda.go.kr/webzine/2021/05/sub4-2.html', description: '농촌진흥청 자료를 바탕으로 옥수수 품종, 심기, 가꾸기 흐름을 설명하는 텃밭 수업 자료' },
+          { id: 'l-2-2', title: '식물의 한살이 개념 정리', url: 'https://www.home-learn.co.kr/newsroom/news/A/1231', description: '씨 관찰, 발아 조건, 식물 성장 과정을 옥수수 관찰 활동과 연결해 활용할 수 있는 초등 과학 자료' },
+          { id: 'l-2-3', title: '옥수수 온면', url: 'https://encykorea.aks.ac.kr/Article/E0080021', description: '한국민족문화대백과사전의 옥수수 음식문화 자료. 사회·국어 읽기 자료로 활용 가능' },
+          { id: 'l-2-4', title: '옥수수 어휘 정보', url: 'https://en.wiktionary.org/wiki/%EC%98%A5%EC%88%98%EC%88%98', description: '옥수수의 어원, 발음, 뜻을 확인할 수 있는 어휘 탐구 참고 자료' },
+          { id: 'l-2-5', title: '옥수수 농업기술길잡이', url: 'https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=290210143', description: '농촌진흥청이 집필한 옥수수 재배 전문 자료. 교사용 배경지식 확인용' },
+        ],
+      },
+      {
         id: 'edu-portal',
-        label: '2. AI 교육 포털',
+        label: '3. AI 교육 포털',
         iconEmoji: '🌐',
         items: [
           { id: 'l-3-1', title: '에듀넷 AI·SW 교육', url: 'https://ai.edunet.net', description: '교육부 공식 AI·SW 교육 포털. 교사·학생용 자료, 연수, 수업 지원 통합 제공' },
