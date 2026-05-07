@@ -182,8 +182,38 @@ export const resourceCategories: ResourceCategory[] = [
         ],
       },
       {
+        id: 'creative-small-tools',
+        label: '3. 창작·스몰 도구',
+        iconEmoji: '🎨',
+        items: [
+          { id: 'small-1', title: 'Chrome Music Lab', url: 'https://musiclab.chromeexperiments.com/', description: '리듬, 멜로디, 소리의 파형을 놀이처럼 탐색하는 구글의 웹 기반 음악 실험실' },
+          { id: 'small-2', title: 'AutoDraw', url: 'https://www.autodraw.com/', description: '간단한 스케치를 AI가 그림 아이콘으로 추천해 주는 구글 크리에이티브 랩의 드로잉 도구' },
+        ],
+      },
+      {
+        id: 'programming-tools',
+        label: '4. 프로그래밍 수업 도구',
+        iconEmoji: '💻',
+        items: [
+          { id: 'programming-1', title: 'Delightex Edu', url: 'https://www.delightex.com/edu', description: '3D 공간, VR·AR 콘텐츠를 만들고 블록 코딩과 스크립트로 상호작용을 구현하는 교육용 제작 도구' },
+          { id: 'programming-2', title: '엔트리', url: 'https://playentry.org/ko/', description: '네이버 커넥트재단에서 운영하는 비영리 블록 코딩 교육 플랫폼' },
+          { id: 'programming-3', title: '스크래치', url: 'https://scratch.mit.edu/', description: '스토리, 게임, 애니메이션을 만들며 프로그래밍 기초를 배우는 블록 기반 창작 플랫폼' },
+        ],
+      },
+      {
+        id: 'simulation-tools',
+        label: '5. 시뮬레이션 수업 도구',
+        iconEmoji: '🧪',
+        items: [
+          { id: 'simulation-1', title: '자바실험실', url: 'https://javalab.org/ko/', description: '과학·수학 개념을 웹 시뮬레이션으로 탐구할 수 있는 한국어 실험 자료 사이트' },
+          { id: 'simulation-2', title: '지오지브라', url: 'https://www.geogebra.org/?lang=ko', description: '함수, 기하, 통계, 3D 그래프 등을 조작하며 탐구하는 수학 시뮬레이션 플랫폼' },
+          { id: 'simulation-3', title: '알지오매스', url: 'https://www.algeomath.kr/', description: '수학 개념을 그래프와 기하 모델로 시각화해 수업에 활용할 수 있는 국내 수학 탐구 도구' },
+          { id: 'simulation-4', title: 'VlabON', url: 'https://www.vlabon.re.kr/', description: '가상 실험과 과학 탐구 활동을 지원하는 온라인 과학 실험 플랫폼' },
+        ],
+      },
+      {
         id: 'edu-portal',
-        label: '3. AI 교육 포털',
+        label: '6. AI 교육 포털',
         iconEmoji: '🌐',
         items: [
           { id: 'l-3-1', title: '에듀넷 AI·SW 교육', url: 'https://ai.edunet.net', description: '교육부 공식 AI·SW 교육 포털. 교사·학생용 자료, 연수, 수업 지원 통합 제공' },
