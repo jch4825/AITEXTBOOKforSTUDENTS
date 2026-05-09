@@ -227,7 +227,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
           </div>
         </div>
         <p className="text-[10px] text-canva-gray text-center leading-relaxed">
-          이 프로그램은 Claude Code와 Google AI Studio로 제작되었습니다.
+          이 프로그램은 바이브 코딩 도구를 사용하여 팀 제로갭(교사 전창한, 교사 정상태, 교사 박주연, 교사 이정윤)의 협업으로 제작되었습니다.
         </p>
       </div>
       </aside>
