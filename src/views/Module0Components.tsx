@@ -670,8 +670,18 @@ export function Lesson04Interactive({ onComplete, onContinue, isCompleted }: Mod
                   <GoogleWordmark className="text-2xl" />
                   <h3 className="mt-4 text-lg font-bold text-gray-900">Google 계정 만들기</h3>
                   <div className="mt-5 space-y-3">
-                    <input value={name} readOnly className="w-full rounded border border-gray-300 px-3 py-2 text-base text-gray-800" placeholder="이름" />
-                    <input value={email} readOnly className="w-full rounded border border-gray-300 px-3 py-2 text-base text-gray-800" placeholder="사용할 Gmail 주소" />
+                    <input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full rounded border border-gray-300 px-3 py-2 text-base text-gray-800 focus:border-blue-400 focus:outline-none"
+                      placeholder="이름 (예: 홍길동 선생님)"
+                    />
+                    <input
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full rounded border border-gray-300 px-3 py-2 text-base text-gray-800 focus:border-blue-400 focus:outline-none"
+                      placeholder="사용할 Gmail 주소 (예: teacher2026)"
+                    />
                     <button
                       onClick={() => setPopup('next')}
                       className={`cursor-pointer rounded bg-blue-600 px-4 py-2 text-base font-bold text-white ${actionClass}`}
@@ -682,20 +692,6 @@ export function Lesson04Interactive({ onComplete, onContinue, isCompleted }: Mod
                 </div>
               </div>
             </BrowserShell>
-            <div className="grid gap-3 md:grid-cols-2">
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="예: 홍길동 선생님"
-                className="rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base text-white outline-none focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/30"
-              />
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="예: teacher2026"
-                className="rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-base text-white outline-none focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/30"
-              />
-            </div>
           </div>
           {popup === 'next' && (
             <SimPopup

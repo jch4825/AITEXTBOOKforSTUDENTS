@@ -43,6 +43,39 @@ import {
 
 let module4PrinciplesShown = false;
 
+const MODULE_COMPLETE_MESSAGES: Record<string, { title: string; body: string; emoji: string }> = {
+  m0: {
+    emoji: '🗺️',
+    title: '진단 완료!',
+    body: 'AI 학습 여정의 출발점을 확인했어요. 여기서 파악한 방향을 기억하며 앞으로의 모듈을 채워가세요.',
+  },
+  m1: {
+    emoji: '🌱',
+    title: '모듈 1 완료!',
+    body: 'LLM이 무엇인지 감을 잡았어요. 아직 갈 길이 멀지만, 첫 개념을 이해한 것만으로도 충분한 시작입니다.',
+  },
+  m2: {
+    emoji: '✏️',
+    title: '모듈 2 완료!',
+    body: '프롬프트의 기본을 익혔어요! AI에게 잘 묻는 법은 써볼수록 늘어납니다.',
+  },
+  m3: {
+    emoji: '🏫',
+    title: '모듈 3 완료!',
+    body: '수업 활용의 첫 아이디어를 얻었어요! 실제로 써봐야 진짜 배움이 시작됩니다.',
+  },
+  m4: {
+    emoji: '💼',
+    title: '모듈 4 완료!',
+    body: '행정 자동화의 가능성을 봤어요! 직접 시도하면서 자신만의 방법을 찾아가세요.',
+  },
+  m5: {
+    emoji: '🤔',
+    title: '모듈 5 완료!',
+    body: 'AI 윤리의 핵심 질문들을 만났어요! 정답은 없고, 계속 고민하는 것이 중요합니다.',
+  },
+};
+
 interface LessonViewerProps {
   lesson: Lesson;
   onBack: () => void;
@@ -151,6 +184,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const difficulty = getLessonDifficulty(lesson);
   const [userInput, setUserInput] = useState(lesson.interactive?.initialInput || '');
   const [aiResponse, setAiResponse] = useState<AiResponse>('');
+  const aiResponseLessonRef = useRef<string>('');
   const [isTyping, setIsTyping] = useState(false);
   const [learningPoint, setLearningPoint] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
@@ -166,6 +200,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [dictResult, setDictResult] = useState('');
   const [isDictLoading, setIsDictLoading] = useState(false);
   const [manualCompleteRequested, setManualCompleteRequested] = useState(false);
+  const [showModuleCompletePopup, setShowModuleCompletePopup] = useState(false);
   const [l11TourStep, setL11TourStep] = useState<L11TourStep | null>(null);
   const [l11GuideStyle, setL11GuideStyle] = useState<React.CSSProperties>({});
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -189,7 +224,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   }, [lesson.id]);
 
   useEffect(() => {
-    const hasCompletionSignal = (!!aiResponse && !isTyping) || manualCompleteRequested;
+    const hasCompletionSignal = (!!aiResponse && !isTyping && aiResponseLessonRef.current === lesson.id) || manualCompleteRequested;
     if (!isCompleted && hasCompletionSignal) {
       onMarkComplete(lesson.id);
     }
@@ -280,7 +315,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     if (nextLesson) {
       onNavigateToLesson(nextLesson.id);
     } else {
-      onModuleComplete();
+      setShowModuleCompletePopup(true);
     }
   };
 
@@ -353,6 +388,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     // Reset state when navigating to a different lesson
     setUserInput(lesson.interactive?.initialInput || '');
     setAiResponse('');
+    aiResponseLessonRef.current = '';
     setIsTyping(false);
 
     window.requestAnimationFrame(() => {
@@ -386,6 +422,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
     setIsTyping(true);
     setAiResponse('');
+    aiResponseLessonRef.current = lesson.id;
 
     // Helper: starts a character-by-character typing animation.
     // Cancels itself if a newer run has started (runIdRef > myRunId).
@@ -709,6 +746,14 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           </button>
         </div>
         <div ref={leftScrollRef} className="flex-1 overflow-y-auto min-w-0 bg-white relative">
+          <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={lesson.id}
+            initial={{ opacity: 0, x: 18 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -18 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+          >
           <div
             className={`relative px-10 pt-10 pb-8 mb-2 overflow-hidden bg-gradient-to-br ${theme.gradient}`}
           >
@@ -866,6 +911,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               </div>
             </div>
           )}
+        </motion.div>
+        </AnimatePresence>
         </div>
       </div>
 
@@ -1041,6 +1088,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           onClick={() => {
                             setUserInput(lesson.interactive?.initialInput || '');
                             setAiResponse('');
+                            aiResponseLessonRef.current = '';
                             if (isL11 && l11TourStep === 'reset') setL11TourStep('run');
                           }}
                           disabled={isTyping}
@@ -1202,7 +1250,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             </div>
           )}
         </div>
-        
+
         {/* Navigation / Completion Buttons */}
         <div className={`sticky bottom-0 p-6 border-t border-gray-800 flex justify-end gap-3 bg-[#0e1318] shrink-0 ${isL11 && (l11TourStep === 'complete' || l11TourStep === 'next') ? 'z-[65]' : 'z-10'}`}>
           <button
@@ -1232,7 +1280,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               if (nextLesson) {
                 onNavigateToLesson(nextLesson.id);
               } else {
-                onModuleComplete();
+                setShowModuleCompletePopup(true);
               }
             }}
             className={`px-6 py-3 bg-gray-800 text-white rounded-xl font-bold text-sm hover:bg-gray-700 transition-all flex items-center gap-2 ${l11TourClass('next')}`}
@@ -1258,6 +1306,42 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           </div>
         </>
       )}
+
+      {/* Module Complete Congratulation Popup */}
+      <AnimatePresence>
+        {showModuleCompletePopup && (() => {
+          const msg = MODULE_COMPLETE_MESSAGES[lesson.moduleId] ?? MODULE_COMPLETE_MESSAGES['m1'];
+          return (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+            >
+              <motion.div
+                initial={{ scale: 0.85, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.85, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+                className="relative w-full max-w-sm rounded-2xl bg-white shadow-2xl p-8 flex flex-col items-center text-center gap-4"
+              >
+                <div className="text-6xl">{msg.emoji}</div>
+                <h2 className="text-xl font-bold text-gray-900">{msg.title}</h2>
+                <p className="text-sm text-gray-600 leading-relaxed">{msg.body}</p>
+                <button
+                  onClick={() => {
+                    setShowModuleCompletePopup(false);
+                    onModuleComplete();
+                  }}
+                  className="mt-2 px-8 py-3 rounded-xl bg-gray-900 text-white font-bold text-sm hover:bg-gray-700 transition-all"
+                >
+                  확인
+                </button>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
 
       {/* M4 Result Popup Overlay */}
       {m4PopupData && (
