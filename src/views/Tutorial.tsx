@@ -1129,7 +1129,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
           <div
-            className={`relative px-4 sm:px-7 lg:px-10 pt-10 pb-8 mb-2 overflow-hidden bg-gradient-to-br ${theme.gradient}`}
+            className={`relative px-4 sm:px-7 lg:px-14 pt-10 pb-8 mb-2 overflow-hidden bg-gradient-to-br ${theme.gradient}`}
           >
             <div
               className="pointer-events-none absolute -top-10 -right-6 text-[160px] font-black select-none leading-none"
@@ -1161,7 +1161,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               <div className="mt-5 h-1 w-16 rounded-full" style={{ backgroundColor: theme.accent }} />
             </div>
           </div>
-          <div className="w-full px-4 sm:px-7 lg:px-10 pb-20">
+          <div className="w-full px-4 sm:px-7 lg:px-14 pb-20">
             <div className="markdown-container text-canva-ink leading-relaxed text-base">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
