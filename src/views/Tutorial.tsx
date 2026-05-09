@@ -43,6 +43,276 @@ import {
 
 let module4PrinciplesShown = false;
 
+const M0_WELCOME_KEY = 'ai-bridge-m0-welcome-shown';
+
+function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        style={{ backgroundColor: 'rgba(30, 20, 10, 0.65)', backdropFilter: 'blur(2px)' }}
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 32, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 16, scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-[520px] mx-auto px-7 py-12 sm:px-11"
+          style={{
+            background: 'linear-gradient(160deg, #f5e6c0 0%, #ede0b0 40%, #e8d8a0 70%, #f0e2b8 100%)',
+            borderRadius: '4px',
+            boxShadow: '0 0 0 1px #c8a96e, 0 0 0 4px #e8d8a0, 0 0 0 5px #b8945a, 0 8px 48px rgba(80,50,10,0.45), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(160,120,40,0.3)',
+          }}
+        >
+          {/* 양피지 노이즈 질감 */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-[4px] opacity-[0.18]"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+              backgroundSize: '200px 200px',
+            }}
+          />
+
+          {/* 상단 장식선 */}
+          <div className="absolute top-[18px] left-[20px] right-[20px] h-px" style={{ background: 'linear-gradient(90deg, transparent, #a07830, transparent)' }} />
+          <div className="absolute top-[22px] left-[28px] right-[28px] h-px" style={{ background: 'linear-gradient(90deg, transparent, #c8a050 60%, transparent)' }} />
+
+          {/* 하단 장식선 */}
+          <div className="absolute bottom-[18px] left-[20px] right-[20px] h-px" style={{ background: 'linear-gradient(90deg, transparent, #a07830, transparent)' }} />
+          <div className="absolute bottom-[22px] left-[28px] right-[28px] h-px" style={{ background: 'linear-gradient(90deg, transparent, #c8a050 60%, transparent)' }} />
+
+          {/* 닫기 버튼 */}
+          <button
+            onClick={onClose}
+            className="absolute top-5 right-5 w-7 h-7 flex items-center justify-center rounded-full transition-colors"
+            style={{ color: '#8a6030', background: 'rgba(160,100,30,0.1)' }}
+            aria-label="닫기"
+          >
+            <X size={15} />
+          </button>
+
+          {/* 본문 */}
+          <div className="relative text-center">
+            {/* 제목 */}
+            <p
+              className="font-serif mb-6 leading-snug"
+              style={{ fontSize: '25px', color: '#4a2e0a', letterSpacing: '-0.01em' }}
+            >
+              선생님, 어서 오세요
+            </p>
+
+            {/* 구분 장식 */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <div className="h-px w-12" style={{ background: 'linear-gradient(90deg, transparent, #b08040)' }} />
+              <span style={{ fontSize: '14px', color: '#b08040' }}>✦</span>
+              <div className="h-px w-12" style={{ background: 'linear-gradient(90deg, #b08040, transparent)' }} />
+            </div>
+
+            {/* 본문 텍스트 */}
+            <div className="text-center space-y-4 mb-8 font-serif" style={{ color: '#5a3a12', wordBreak: 'keep-all' }}>
+              <p style={{ fontSize: '17px', lineHeight: '1.85' }}>
+                살아온 모든 것이 이야기입니다.<br />
+                가르쳐온 교실도, 걸어온 날들도.
+              </p>
+              <p style={{ fontSize: '17px', lineHeight: '1.85' }}>
+                선생님은 지금 그 이야기의 새 챕터를 시작하려 하십니다.
+              </p>
+              <p style={{ fontSize: '17px', lineHeight: '1.85' }}>
+                AI Bridge는 선생님이 AI와 함께 써내려갈 이야기의 첫 문장이 되고 싶습니다.
+              </p>
+              <p style={{ fontSize: '17px', lineHeight: '1.85' }}>
+                선생님의 용기를 응원합니다.
+              </p>
+            </div>
+
+            {/* 버튼 */}
+            <button
+              onClick={onClose}
+              className="inline-flex items-center gap-2 font-serif transition-all"
+              style={{
+                fontSize: '15px',
+                color: '#3a2008',
+                background: 'linear-gradient(135deg, #d4a84b 0%, #c49030 50%, #b87e20 100%)',
+                padding: '11px 28px',
+                borderRadius: '3px',
+                boxShadow: '0 1px 0 rgba(255,255,255,0.3) inset, 0 2px 8px rgba(100,60,0,0.3)',
+                letterSpacing: '0.02em',
+                fontWeight: 600,
+              }}
+            >
+              새 챕터를 시작합니다 →
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+const MODULE_COMPLETE_COPY: Record<string, { title: string; lines: string[]; button: string }> = {
+  m0: {
+    title: '첫 걸음을 내딛으셨습니다',
+    lines: [
+      '낯선 길 앞에서 선뜻 발을 내민다는 것,',
+      '쉬운 일이 아닙니다.',
+      '선생님은 오늘 그 일을 해내셨습니다.',
+    ],
+    button: '다음 챕터로',
+  },
+  m1: {
+    title: 'AI의 언어를 읽기 시작하셨습니다',
+    lines: [
+      '어렵게 느껴졌던 개념들이 조금은 익숙해지셨을 것입니다.',
+      '그 변화가 이미 대단한 성취입니다.',
+    ],
+    button: '계속 나아갑니다',
+  },
+  m2: {
+    title: 'AI와 대화하는 법을 아십니다',
+    lines: [
+      '같은 질문도 어떻게 묻느냐에 따라 전혀 다른 답이 돌아온다는 것,',
+      '선생님은 이제 그 비결을 갖고 계십니다.',
+    ],
+    button: '계속 나아갑니다',
+  },
+  m3: {
+    title: '교실이 한 뼘 넓어졌습니다',
+    lines: [
+      '배운 것을 수업으로 옮기는 일은 용기가 필요한 일입니다.',
+      '선생님은 그 용기를 보여주셨습니다.',
+    ],
+    button: '계속 나아갑니다',
+  },
+  m4: {
+    title: '소중한 시간을 되찾으셨습니다',
+    lines: [
+      '반복되던 서류 작업이 조금 가벼워졌을 것입니다.',
+      '그 시간만큼, 선생님은 더 중요한 것에 집중할 수 있게 되셨습니다.',
+    ],
+    button: '마지막 챕터로',
+  },
+  m5: {
+    title: '이야기책이 완성되었습니다',
+    lines: [
+      '처음 AI 앞에서 느꼈던 막막함을 기억하시나요?',
+      '그 자리에서 여기까지 오셨습니다.',
+      '선생님의 이야기책, 정말 아름답습니다.',
+    ],
+    button: '더 멋진 챕터로 출발',
+  },
+};
+
+function ModuleCompletePopup({ moduleId, onClose }: { moduleId: string; onClose: () => void }) {
+  const copy = MODULE_COMPLETE_COPY[moduleId] ?? MODULE_COMPLETE_COPY['m1'];
+  const isLast = moduleId === 'm5';
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        style={{ backgroundColor: 'rgba(30, 20, 10, 0.65)', backdropFilter: 'blur(2px)' }}
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 32, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 16, scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-[520px] mx-auto px-7 py-12 sm:px-11"
+          style={{
+            background: 'linear-gradient(160deg, #f5e6c0 0%, #ede0b0 40%, #e8d8a0 70%, #f0e2b8 100%)',
+            borderRadius: '4px',
+            boxShadow: '0 0 0 1px #c8a96e, 0 0 0 4px #e8d8a0, 0 0 0 5px #b8945a, 0 8px 48px rgba(80,50,10,0.45), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(160,120,40,0.3)',
+          }}
+        >
+          {/* 양피지 노이즈 질감 */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-[4px] opacity-[0.18]"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+              backgroundSize: '200px 200px',
+            }}
+          />
+
+          {/* 상단 장식선 */}
+          <div className="absolute top-[18px] left-[20px] right-[20px] h-px" style={{ background: 'linear-gradient(90deg, transparent, #a07830, transparent)' }} />
+          <div className="absolute top-[22px] left-[28px] right-[28px] h-px" style={{ background: 'linear-gradient(90deg, transparent, #c8a050 60%, transparent)' }} />
+
+          {/* 하단 장식선 */}
+          <div className="absolute bottom-[18px] left-[20px] right-[20px] h-px" style={{ background: 'linear-gradient(90deg, transparent, #a07830, transparent)' }} />
+          <div className="absolute bottom-[22px] left-[28px] right-[28px] h-px" style={{ background: 'linear-gradient(90deg, transparent, #c8a050 60%, transparent)' }} />
+
+          {/* 닫기 버튼 */}
+          <button
+            onClick={onClose}
+            className="absolute top-5 right-5 w-7 h-7 flex items-center justify-center rounded-full transition-colors"
+            style={{ color: '#8a6030', background: 'rgba(160,100,30,0.1)' }}
+            aria-label="닫기"
+          >
+            <X size={15} />
+          </button>
+
+          <div className="relative text-center">
+            {/* 완료 뱃지 */}
+            <div className="mb-4 flex justify-center">
+              <span style={{ fontSize: '32px' }}>{isLast ? '📖' : '✦'}</span>
+            </div>
+
+            {/* 제목 */}
+            <p
+              className="font-serif mb-6 leading-snug"
+              style={{ fontSize: '25px', color: '#4a2e0a', letterSpacing: '-0.01em' }}
+            >
+              {copy.title}
+            </p>
+
+            {/* 구분 장식 */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <div className="h-px w-12" style={{ background: 'linear-gradient(90deg, transparent, #b08040)' }} />
+              <span style={{ fontSize: '14px', color: '#b08040' }}>✦</span>
+              <div className="h-px w-12" style={{ background: 'linear-gradient(90deg, #b08040, transparent)' }} />
+            </div>
+
+            {/* 본문 */}
+            <div className="text-center space-y-3 mb-8 font-serif" style={{ color: '#5a3a12', wordBreak: 'keep-all' }}>
+              {copy.lines.map((line, i) => (
+                <p key={i} style={{ fontSize: '17px', lineHeight: '1.85' }}>{line}</p>
+              ))}
+            </div>
+
+            {/* 버튼 */}
+            <button
+              onClick={onClose}
+              className="inline-flex items-center gap-2 font-serif transition-all"
+              style={{
+                fontSize: '15px',
+                color: '#3a2008',
+                background: 'linear-gradient(135deg, #d4a84b 0%, #c49030 50%, #b87e20 100%)',
+                padding: '11px 28px',
+                borderRadius: '3px',
+                boxShadow: '0 1px 0 rgba(255,255,255,0.3) inset, 0 2px 8px rgba(100,60,0,0.3)',
+                letterSpacing: '0.02em',
+                fontWeight: 600,
+              }}
+            >
+              {copy.button}
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 interface LessonViewerProps {
   lesson: Lesson;
   onBack: () => void;
@@ -166,6 +436,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [dictResult, setDictResult] = useState('');
   const [isDictLoading, setIsDictLoading] = useState(false);
   const [manualCompleteRequested, setManualCompleteRequested] = useState(false);
+  const [showModuleComplete, setShowModuleComplete] = useState(false);
   const [l11TourStep, setL11TourStep] = useState<L11TourStep | null>(null);
   const [l11GuideStyle, setL11GuideStyle] = useState<React.CSSProperties>({});
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -280,7 +551,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     if (nextLesson) {
       onNavigateToLesson(nextLesson.id);
     } else {
-      onModuleComplete();
+      setShowModuleComplete(true);
     }
   };
 
@@ -1232,7 +1503,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               if (nextLesson) {
                 onNavigateToLesson(nextLesson.id);
               } else {
-                onModuleComplete();
+                setShowModuleComplete(true);
               }
             }}
             className={`px-6 py-3 bg-gray-800 text-white rounded-xl font-bold text-sm hover:bg-gray-700 transition-all flex items-center gap-2 ${l11TourClass('next')}`}
@@ -1326,6 +1597,17 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             </div>
           </motion.div>
         </div>
+      )}
+
+      {/* 모듈 완료 팝업 */}
+      {showModuleComplete && (
+        <ModuleCompletePopup
+          moduleId={lesson.moduleId}
+          onClose={() => {
+            setShowModuleComplete(false);
+            onModuleComplete();
+          }}
+        />
       )}
 
       {/* 단어 사전 모달 */}
@@ -1425,6 +1707,7 @@ interface TutorialProps {
 export default function Tutorial({ selectedModule, onSelectModule, completedLessons, onToggleComplete, onMarkComplete, onOpenTools }: TutorialProps) {
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
+  const [showM0Welcome, setShowM0Welcome] = useState(false);
   const [persona, setPersona] = useState<Persona | null>(() => loadPersona());
   const [purpose, setPurpose] = useState<DiagnosticPurpose | null>(() => {
     try {
@@ -1473,15 +1756,22 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
   // 사이드바에서 모듈이 바뀌면 현재 레슨 초기화
   useEffect(() => {
     if (!initialLoadDone) return;
-    
+
     // 초기 로딩으로 인해 App.tsx의 selectedModule이 뒤늦게 업데이트되었을 때
     // 화면이 튕기는 현상 방지
     if (currentLesson && selectedModule?.id === currentLesson.moduleId) {
       return;
     }
-    
+
     setCurrentLesson(null);
   }, [selectedModule?.id, initialLoadDone]);
+
+  // 모듈0 첫 진입 시 환영 팝업
+  useEffect(() => {
+    if (selectedModule?.id !== 'm0') return;
+    if (localStorage.getItem(M0_WELCOME_KEY)) return;
+    setShowM0Welcome(true);
+  }, [selectedModule?.id]);
 
   const toggleComplete = onToggleComplete;
   const markComplete = onMarkComplete;
@@ -1787,8 +2077,14 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
   };
 
 
+  const handleM0WelcomeClose = () => {
+    localStorage.setItem(M0_WELCOME_KEY, '1');
+    setShowM0Welcome(false);
+  };
+
   return (
     <div className="min-h-screen bg-canva-bg">
+      {showM0Welcome && <Module0WelcomePopup onClose={handleM0WelcomeClose} />}
       <AnimatePresence mode="wait">
         {currentLesson ? (
           <motion.div
