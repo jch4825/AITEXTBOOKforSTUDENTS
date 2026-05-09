@@ -110,7 +110,7 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
     try {
       const norm = normalizeCode(trimmed);
       const ai = new GoogleGenAI({ apiKey: key });
-      const prompt = `2022 개정 교육과정 성취기준 ${norm}에 대해 알려줘. 학년군, 교과, 영역, 성취기준 전문을 자세히 설명해줘.`;
+      const prompt = `2022 개정 교육과정(2022년 12월 22일 교육부 고시 제2022-33호)의 성취기준 ${norm}에 대해 알려줘. 반드시 2022 개정 교육과정 기준으로만 답변하고, 2015 개정 교육과정의 내용은 사용하지 마. 학년군, 교과, 영역, 그리고 성취기준 전문(공식 문서에 기재된 그대로의 문장)을 정확하게 알려줘.`;
       const response = await runWithGeminiModelFallback(model =>
         ai.models.generateContent({
           model,
