@@ -1653,6 +1653,10 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           <button
             ref={isL11 ? l11NextRef : undefined}
             onClick={() => {
+              if (isL11 && l11TourStep) {
+                setL11TourStep(null);
+                return;
+              }
               if (!isCompleted && ((!!aiResponse && !isTyping) || manualCompleteRequested)) {
                 onMarkComplete(lesson.id);
               }
