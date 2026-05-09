@@ -1301,6 +1301,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               ? 'lg:flex-[7] lg:border-b md:flex-1'
               : hasCompactM5InputPanel
               ? 'lg:flex-[3.5] lg:border-b md:flex-1'
+              : lesson.id === 'l5-1'
+              ? 'lg:flex-[5] lg:border-b md:flex-1'
               : 'lg:flex-[3] lg:border-b md:flex-1'
           }`}>
             <div className="p-4 border-b border-gray-800 flex items-center justify-between shrink-0 hidden md:flex">
