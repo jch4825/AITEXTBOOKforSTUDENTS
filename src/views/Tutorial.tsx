@@ -1236,6 +1236,9 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           {visual.caption}
                         </figcaption>
                       )}
+                      <div className="px-4 pb-2 text-[10px] leading-relaxed text-gray-400 italic">
+                        이 이미지는 ChatGPT의 images 2.0으로 제작되었습니다.
+                      </div>
                     </figure>
                   );
                 })}
