@@ -498,6 +498,7 @@ export const lessons: Lesson[] = [
       - [3-8. 나만의 커스텀 챗봇 만들기](#lesson:l3-8)
 
       **모듈 5 — AI 윤리와 현명한 사용**
+      - [5-1. AI가 틀릴 때, 그리고 줄이는 법](#lesson:l5-1)
       - [5-5. 학생에게 AI 윤리 가르치기](#lesson:l5-5)
 
       ---
