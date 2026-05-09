@@ -1305,7 +1305,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           }`}>
             <div className="p-4 border-b border-gray-800 flex items-center justify-between shrink-0 hidden md:flex">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{lesson.moduleId === 'm0' ? '시뮬레이션' : '문제 입력'}</span>
-              {(lesson.id === 'l1-5' || lesson.id === 'l2-6' || lesson.id === 'l2-7' || lesson.id === 'l2-8' || (lesson.moduleId === 'm3' && lesson.id !== 'l3-1') || lesson.id === 'l5-5') && (
+              {(lesson.id === 'l1-5' || lesson.id === 'l2-6' || lesson.id === 'l2-7' || lesson.id === 'l2-8' || (lesson.moduleId === 'm3' && lesson.id !== 'l3-1') || lesson.id === 'l5-1' || lesson.id === 'l5-5') && (
                 <div className="flex items-center gap-2">
                   <div className={`text-[10px] px-2 py-1 rounded-full font-bold ${hasApiKey ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}`}>
                     {hasApiKey ? '● API 연결됨' : '○ API 키 미등록'}
