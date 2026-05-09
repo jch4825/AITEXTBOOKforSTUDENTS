@@ -883,7 +883,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
         </div>
       )}
       {/* Left Side (1 & 4): Explanation */}
-      <div className="w-full lg:w-2/5 lg:border-r border-gray-800 flex flex-col bg-white min-w-0 md:min-h-auto lg:h-full lg:overflow-hidden">
+      <div className="w-full lg:w-1/2 lg:border-r border-gray-800 flex flex-col bg-white min-w-0 md:min-h-auto lg:h-full lg:overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pr-4">
             <button 
@@ -981,7 +981,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
         </div>
         <div ref={leftScrollRef} className="flex-1 overflow-y-auto min-w-0 bg-white relative">
           <div
-            className={`relative px-10 pt-10 pb-8 mb-2 overflow-hidden bg-gradient-to-br ${theme.gradient}`}
+            className={`relative px-4 sm:px-7 lg:px-10 pt-10 pb-8 mb-2 overflow-hidden bg-gradient-to-br ${theme.gradient}`}
           >
             <div
               className="pointer-events-none absolute -top-10 -right-6 text-[160px] font-black select-none leading-none"
@@ -1013,7 +1013,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               <div className="mt-5 h-1 w-16 rounded-full" style={{ backgroundColor: theme.accent }} />
             </div>
           </div>
-          <div className="w-full px-10 pb-20" style={{ maxWidth: '40em' }}>
+          <div className="w-full px-4 sm:px-7 lg:px-10 pb-20" style={{ maxWidth: '40em' }}>
             <div className="markdown-container text-canva-ink leading-relaxed text-base">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -1141,7 +1141,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       </div>
 
       {/* Right Side (2 & 3) */}
-      <div className="w-full lg:w-3/5 flex flex-col lg:h-full lg:overflow-hidden">
+      <div className="w-full lg:w-1/2 flex flex-col lg:h-full lg:overflow-hidden">
         <div className="flex-1 flex flex-col min-h-0 relative overflow-hidden">
           {/* Main interactive area: full height for m4, otherwise top half */}
           <div className={`flex flex-col border-gray-800 min-h-0 ${
