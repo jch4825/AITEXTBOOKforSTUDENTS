@@ -142,23 +142,19 @@ export default function Home({ onViewChange, onStartDiagnostic }: HomeProps) {
   }, []);
 
   return (
-    <div
-      className="min-h-screen overflow-hidden bg-[#f6f7fb]"
-      style={{
-        backgroundImage: `radial-gradient(circle, rgba(139,61,255,0.07) 1px, transparent 1px)`,
-        backgroundSize: '28px 28px',
-      }}
-    >
-      <section className="relative min-h-[520px] overflow-hidden bg-[radial-gradient(ellipse_85%_60%_at_-5%_-5%,rgba(167,139,250,0.5),transparent),radial-gradient(ellipse_60%_70%_at_108%_108%,rgba(34,211,238,0.38),transparent),linear-gradient(135deg,#6d28d9_0%,#4338ca_45%,#0891b2_100%)] px-5 py-10 text-white sm:px-8 lg:px-12 lg:py-14">
+    <div className="moholy-page min-h-screen overflow-hidden">
+      <section className="moholy-hero relative min-h-[520px] overflow-hidden px-5 py-10 text-white sm:px-8 lg:px-12 lg:py-14">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")`,
           }}
         />
-        <div className="pointer-events-none absolute -right-16 top-12 h-80 w-80 rounded-full bg-purple-300/30 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-0 left-1/3 h-52 w-[28rem] rounded-full bg-cyan-200/25 blur-3xl" />
-        <div className="pointer-events-none absolute left-0 top-1/2 h-56 w-56 rounded-full bg-violet-400/20 blur-3xl" />
+        <div className="moholy-shape moholy-band-primary" />
+        <div className="moholy-shape moholy-band-secondary" />
+        <div className="moholy-shape moholy-ring" />
+        <div className="moholy-shape moholy-disc" />
+        <div className="moholy-shape moholy-line-stack" />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <motion.div
@@ -198,7 +194,7 @@ export default function Home({ onViewChange, onStartDiagnostic }: HomeProps) {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="absolute inset-x-0 top-4 mx-auto h-[330px] max-w-[620px] rounded-[28px] border border-white/24 bg-white/14 p-4 shadow-2xl shadow-indigo-950/20 backdrop-blur-xl sm:h-[390px]"
+              className="moholy-preview-panel absolute inset-x-0 top-4 mx-auto h-[330px] max-w-[620px] rounded-[28px] border border-white/24 p-4 shadow-2xl shadow-indigo-950/20 backdrop-blur-xl sm:h-[390px]"
             >
               <div className="flex items-center justify-between border-b border-white/14 pb-3">
                 <div className="flex items-center gap-2">

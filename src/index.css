@@ -124,6 +124,261 @@
 
 }
 
+.moholy-page {
+  background:
+    linear-gradient(90deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
+    #f6f7fb;
+  background-size: 32px 32px;
+}
+
+.moholy-hero {
+  background:
+    linear-gradient(118deg, rgba(13, 27, 42, 0.96) 0%, rgba(45, 79, 168, 0.93) 42%, rgba(0, 166, 180, 0.88) 100%),
+    #12213c;
+}
+
+.moholy-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.11) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 84%, transparent);
+  opacity: 0.5;
+}
+
+.moholy-shape {
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+.moholy-band-primary {
+  left: -5rem;
+  top: 5rem;
+  height: 7rem;
+  width: 36rem;
+  background: rgba(255, 192, 64, 0.72);
+  transform: rotate(-18deg);
+  clip-path: polygon(0 34%, 100% 0, 100% 62%, 0 100%);
+  mix-blend-mode: screen;
+}
+
+.moholy-band-secondary {
+  right: -7rem;
+  bottom: 3.25rem;
+  height: 5rem;
+  width: 32rem;
+  background: rgba(255, 84, 76, 0.58);
+  transform: rotate(-31deg);
+  clip-path: polygon(0 0, 100% 38%, 100% 100%, 0 62%);
+  mix-blend-mode: screen;
+}
+
+.moholy-ring {
+  right: 8%;
+  top: 4.5rem;
+  height: 15rem;
+  width: 15rem;
+  border: 1.25rem solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+}
+
+.moholy-disc {
+  left: 42%;
+  bottom: 4.25rem;
+  height: 7rem;
+  width: 7rem;
+  border-radius: 999px;
+  background: rgba(0, 196, 204, 0.34);
+  mix-blend-mode: screen;
+}
+
+.moholy-line-stack {
+  right: 6%;
+  top: 11.25rem;
+  height: 12rem;
+  width: 18rem;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.34) 0 2px,
+    transparent 2px 18px
+  );
+  transform: rotate(16deg);
+  opacity: 0.42;
+}
+
+.moholy-preview-panel {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    rgba(255, 255, 255, 0.14);
+  background-size: 28px 28px;
+}
+
+.moholy-preview-panel::after {
+  content: "";
+  position: absolute;
+  right: 1.25rem;
+  top: 4.2rem;
+  height: 9rem;
+  width: 9rem;
+  border: 0.8rem solid rgba(255, 207, 74, 0.24);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.moholy-surface {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(14, 19, 24, 0.045) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(14, 19, 24, 0.04) 1px, transparent 1px),
+    #f5f7fb;
+  background-size: 34px 34px;
+}
+
+.moholy-surface::before,
+.moholy-surface::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.moholy-surface::before {
+  right: -9rem;
+  top: 4rem;
+  height: 20rem;
+  width: 42rem;
+  background:
+    linear-gradient(128deg, transparent 0 22%, rgba(255, 192, 64, 0.26) 22% 34%, transparent 34% 48%, rgba(0, 196, 204, 0.2) 48% 58%, transparent 58%),
+    repeating-linear-gradient(90deg, rgba(14, 19, 24, 0.08) 0 2px, transparent 2px 18px);
+  transform: rotate(-14deg);
+  opacity: 0.85;
+}
+
+.moholy-surface::after {
+  left: -6rem;
+  bottom: 5rem;
+  height: 18rem;
+  width: 18rem;
+  border: 1.25rem solid rgba(139, 61, 255, 0.12);
+  border-radius: 999px;
+  box-shadow: 7rem -3rem 0 -4.6rem rgba(255, 84, 76, 0.3);
+}
+
+.moholy-surface-tools::before {
+  right: -8rem;
+  top: 3rem;
+  height: 22rem;
+  width: 44rem;
+  background:
+    linear-gradient(128deg, transparent 0 18%, rgba(255, 84, 76, 0.28) 18% 30%, transparent 30% 44%, rgba(0, 196, 204, 0.24) 44% 56%, transparent 56%),
+    repeating-linear-gradient(90deg, rgba(14, 19, 24, 0.09) 0 2px, transparent 2px 16px);
+  transform: rotate(-18deg);
+}
+
+.moholy-surface-tools::after {
+  left: -5rem;
+  bottom: 4rem;
+  border-color: rgba(255, 192, 64, 0.18);
+  box-shadow:
+    7rem -3rem 0 -4.6rem rgba(139, 61, 255, 0.28),
+    11rem 1rem 0 -6rem rgba(0, 196, 204, 0.34);
+}
+
+.moholy-surface-resources {
+  background:
+    linear-gradient(90deg, rgba(14, 19, 24, 0.04) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
+    #f7f8fb;
+  background-size: 40px 40px;
+}
+
+.moholy-surface-resources::before {
+  left: -10rem;
+  top: 5rem;
+  height: 20rem;
+  width: 48rem;
+  background:
+    linear-gradient(142deg, transparent 0 25%, rgba(139, 61, 255, 0.16) 25% 35%, transparent 35% 50%, rgba(255, 192, 64, 0.18) 50% 60%, transparent 60%),
+    repeating-linear-gradient(0deg, rgba(14, 19, 24, 0.055) 0 2px, transparent 2px 22px);
+  transform: rotate(9deg);
+  opacity: 0.9;
+}
+
+.moholy-surface-resources::after {
+  right: -5rem;
+  bottom: 6rem;
+  left: auto;
+  height: 17rem;
+  width: 17rem;
+  border-color: rgba(0, 196, 204, 0.13);
+  box-shadow:
+    -8rem -2rem 0 -5.2rem rgba(255, 84, 76, 0.18),
+    -12rem 3.5rem 0 -6.2rem rgba(139, 61, 255, 0.18);
+}
+
+.klee-surface {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(84, 63, 37, 0.045) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(84, 63, 37, 0.04) 1px, transparent 1px),
+    linear-gradient(135deg, #fbf3df 0%, #f4ead2 48%, #eef1e4 100%);
+  background-size: 36px 36px;
+}
+
+.klee-surface::before,
+.klee-surface::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.klee-surface::before {
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(214, 83, 64, 0.16) 0 4.8rem, transparent 4.9rem),
+    radial-gradient(circle at 82% 19%, rgba(55, 126, 137, 0.14) 0 6rem, transparent 6.1rem),
+    radial-gradient(circle at 72% 84%, rgba(226, 171, 62, 0.18) 0 5.4rem, transparent 5.5rem),
+    linear-gradient(126deg, transparent 0 12%, rgba(124, 87, 53, 0.08) 12% 22%, transparent 22% 44%, rgba(76, 115, 82, 0.1) 44% 52%, transparent 52%);
+  opacity: 0.92;
+}
+
+.klee-surface::after {
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='220' height='220' viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23533d2a' stroke-width='2' stroke-linecap='round' stroke-opacity='.16'%3E%3Cpath d='M24 42h24v24H24z'/%3E%3Cpath d='M165 34l23 20-23 20z'/%3E%3Cpath d='M78 156c18-22 37-22 55 0'/%3E%3Cpath d='M32 178l18-18 18 18'/%3E%3Cpath d='M144 118h44'/%3E%3Cpath d='M166 96v44'/%3E%3Ccircle cx='98' cy='62' r='12'/%3E%3C/g%3E%3Cg fill='%23533d2a' fill-opacity='.13'%3E%3Ccircle cx='34' cy='116' r='4'/%3E%3Ccircle cx='192' cy='156' r='4'/%3E%3Ccircle cx='116' cy='194' r='3'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  opacity: 0.72;
+}
+
+.klee-module-select::before {
+  background:
+    linear-gradient(90deg, rgba(84, 63, 37, 0.04) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(84, 63, 37, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 16% 18%, rgba(214, 83, 64, 0.17) 0 5rem, transparent 5.1rem),
+    radial-gradient(circle at 86% 24%, rgba(55, 126, 137, 0.15) 0 6.2rem, transparent 6.3rem),
+    radial-gradient(circle at 74% 86%, rgba(226, 171, 62, 0.18) 0 5.6rem, transparent 5.7rem);
+  background-size: 42px 42px, 42px 42px, auto, auto, auto;
+}
+
+.klee-lesson-select::before {
+  background:
+    linear-gradient(90deg, rgba(84, 63, 37, 0.038) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(84, 63, 37, 0.034) 1px, transparent 1px),
+    radial-gradient(circle at 12% 78%, rgba(55, 126, 137, 0.14) 0 5.4rem, transparent 5.5rem),
+    radial-gradient(circle at 88% 18%, rgba(226, 171, 62, 0.18) 0 5.8rem, transparent 5.9rem),
+    linear-gradient(118deg, transparent 0 18%, rgba(214, 83, 64, 0.1) 18% 26%, transparent 26% 58%, rgba(76, 115, 82, 0.1) 58% 66%, transparent 66%);
+  background-size: 38px 38px, 38px 38px, auto, auto, auto;
+}
+
 /* "다음에 누를 버튼" 강조용 글로우 (시뮬레이션 단계 안내) */
 @keyframes highlight-glow {
   0%, 100% {

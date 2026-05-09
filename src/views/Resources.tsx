@@ -140,8 +140,8 @@ export default function Resources() {
   );
 
   return (
-    <div className="min-h-screen bg-[#f5f7fb]">
-      <div className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
+    <div className="moholy-surface moholy-surface-resources min-h-screen">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:py-10">
         <header className="mb-8 text-center">
           <p className="mb-2 text-xs font-bold text-canva-purple">AI Bridge Resource Hub</p>
           <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-canva-ink">자료실</h1>

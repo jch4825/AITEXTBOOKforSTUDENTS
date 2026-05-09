@@ -1950,7 +1950,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
   const markComplete = onMarkComplete;
 
   const renderModuleList = () => (
-    <div className="max-w-4xl mx-auto p-10">
+    <div className="relative z-10 max-w-4xl mx-auto p-10">
       <header className="mb-12">
         <h1 className="text-3xl font-bold text-canva-ink mb-4">인공지능 배워보기</h1>
         <p className="text-canva-ink">LLM 이해부터 윤리 점검까지, 초등교사를 위한 5단계 로드맵입니다.</p>
@@ -2108,7 +2108,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
     };
 
     return (
-      <div className="max-w-4xl mx-auto p-10">
+      <div className="relative z-10 max-w-4xl mx-auto p-10">
         <button
           onClick={() => onSelectModule(null)}
           className="flex items-center gap-2 text-canva-gray hover:text-canva-ink mb-8 font-bold text-sm transition-colors"
@@ -2301,7 +2301,9 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
           >
-            {renderLessonList(selectedModule)}
+            <div className="klee-surface klee-lesson-select min-h-screen">
+              {renderLessonList(selectedModule)}
+            </div>
           </motion.div>
         ) : (
           <motion.div
@@ -2310,7 +2312,9 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
           >
-            {renderModuleList()}
+            <div className="klee-surface klee-module-select min-h-screen">
+              {renderModuleList()}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

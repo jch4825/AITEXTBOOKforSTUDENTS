@@ -277,8 +277,8 @@ export default function QuickTools() {
   const totalCount = filteredGroups.reduce((sum, g) => sum + g.tools.length, 0);
 
   return (
-    <div className="min-h-screen bg-[#f5f7fb]">
-      <div className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
+    <div className="moholy-surface moholy-surface-tools min-h-screen">
+      <div className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:py-10">
         <header className="mb-8 text-center">
           <p className="mb-2 text-xs font-bold text-canva-purple">AI Bridge Tool Hub</p>
           <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-canva-ink">AI 도구 모음</h1>
