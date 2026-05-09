@@ -422,6 +422,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const difficulty = getLessonDifficulty(lesson);
   const [userInput, setUserInput] = useState(lesson.interactive?.initialInput || '');
   const [aiResponse, setAiResponse] = useState<AiResponse>('');
+  const aiResponseLessonRef = useRef<string>('');
   const [isTyping, setIsTyping] = useState(false);
   const [learningPoint, setLearningPoint] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
@@ -462,7 +463,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   }, [lesson.id]);
 
   useEffect(() => {
-    const hasCompletionSignal = (!!aiResponse && !isTyping) || manualCompleteRequested;
+    const hasCompletionSignal = (!!aiResponse && !isTyping && aiResponseLessonRef.current === lesson.id) || manualCompleteRequested;
     if (!isCompleted && hasCompletionSignal) {
       onMarkComplete(lesson.id);
     }
@@ -630,6 +631,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     // Reset state when navigating to a different lesson
     setUserInput(lesson.interactive?.initialInput || '');
     setAiResponse('');
+    aiResponseLessonRef.current = '';
     setIsTyping(false);
 
     window.requestAnimationFrame(() => {
@@ -663,6 +665,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
     setIsTyping(true);
     setAiResponse('');
+    aiResponseLessonRef.current = lesson.id;
 
     // Helper: starts a character-by-character typing animation.
     // Cancels itself if a newer run has started (runIdRef > myRunId).
@@ -1117,6 +1120,14 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           </button>
         </div>
         <div ref={leftScrollRef} className="flex-1 overflow-y-auto min-w-0 bg-canva-ivory relative">
+          <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={lesson.id}
+            initial={{ opacity: 0, x: 18 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -18 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+          >
           <div
             className={`relative px-5 lg:px-16 pt-10 pb-8 mb-2 overflow-hidden bg-gradient-to-br ${theme.gradient}`}
           >
@@ -1274,6 +1285,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               </div>
             </div>
           )}
+        </motion.div>
+        </AnimatePresence>
         </div>
       </div>
 
@@ -1449,6 +1462,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           onClick={() => {
                             setUserInput(lesson.interactive?.initialInput || '');
                             setAiResponse('');
+                            aiResponseLessonRef.current = '';
                             if (isL11 && l11TourStep === 'reset') setL11TourStep('run');
                           }}
                           disabled={isTyping}
@@ -1610,7 +1624,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             </div>
           )}
         </div>
-        
+
         {/* Navigation / Completion Buttons */}
         <div className={`sticky bottom-0 p-6 border-t border-gray-800 flex justify-end gap-3 bg-[#0e1318] shrink-0 ${isL11 && (l11TourStep === 'complete' || l11TourStep === 'next') ? 'z-[65]' : 'z-10'}`}>
           <button
