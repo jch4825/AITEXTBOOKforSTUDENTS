@@ -1141,7 +1141,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               backgroundImage: 'radial-gradient(circle at 1px 1px, #000 1px, transparent 0)',
               backgroundSize: '18px 18px',
             }} />
-            <div className="relative" style={{ maxWidth: '40em' }}>
+            <div className="relative">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xl">{theme.emoji}</span>
                 <span
@@ -1161,7 +1161,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               <div className="mt-5 h-1 w-16 rounded-full" style={{ backgroundColor: theme.accent }} />
             </div>
           </div>
-          <div className="w-full px-4 sm:px-7 lg:px-10 pb-20" style={{ maxWidth: '40em' }}>
+          <div className="w-full px-4 sm:px-7 lg:px-10 pb-20">
             <div className="markdown-container text-canva-ink leading-relaxed text-base">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
