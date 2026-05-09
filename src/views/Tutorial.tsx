@@ -805,18 +805,18 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const advanceL11Tour = () => {
     if (!isL11 || !l11TourStep) return;
 
+    if (l11TourStep === 'run') {
+      handleRun();
+      setL11TourStep('input');
+      return;
+    }
+
     if (l11TourStep === 'input') {
       setL11TourStep('reset');
       return;
     }
 
     if (l11TourStep === 'reset') {
-      setL11TourStep('run');
-      return;
-    }
-
-    if (l11TourStep === 'run') {
-      handleRun();
       setL11TourStep('complete');
       return;
     }
@@ -829,6 +829,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
     if (l11TourStep === 'next') {
       setL11TourStep(null);
+      try { localStorage.setItem('l1-1-tour-seen', '1'); } catch {}
     }
   };
 
@@ -1468,7 +1469,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                             setUserInput(lesson.interactive?.initialInput || '');
                             setAiResponse('');
                             aiResponseLessonRef.current = '';
-                            if (isL11 && l11TourStep === 'reset') setL11TourStep('run');
+                            if (isL11 && l11TourStep === 'reset') setL11TourStep('complete');
                           }}
                           disabled={isTyping}
                           className={`px-6 py-3 bg-gray-700 text-white rounded-xl font-bold text-sm hover:bg-gray-600 transition-all disabled:opacity-50 shadow-lg ${l11TourClass('reset')}`}
@@ -1479,12 +1480,15 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           ref={isL11 ? l11RunRef : undefined}
                           onClick={() => {
                             if (isL11 && !l11TourStep) {
-                              setL11TourStep('input');
-                              return;
+                              const seen = (() => { try { return localStorage.getItem('l1-1-tour-seen') === '1'; } catch { return false; } })();
+                              if (!seen) {
+                                setL11TourStep('run');
+                                return;
+                              }
                             }
                             if (isL11 && l11TourStep === 'run') {
                               handleRun();
-                              setL11TourStep('complete');
+                              setL11TourStep('input');
                               return;
                             }
                             if (isL11 && l11TourStep) return;
@@ -1655,6 +1659,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             onClick={() => {
               if (isL11 && l11TourStep) {
                 setL11TourStep(null);
+                try { localStorage.setItem('l1-1-tour-seen', '1'); } catch {}
                 return;
               }
               if (!isCompleted && ((!!aiResponse && !isTyping) || manualCompleteRequested)) {
