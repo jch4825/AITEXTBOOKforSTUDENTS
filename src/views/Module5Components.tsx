@@ -208,7 +208,7 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
 
           {!isLoading && aiText && realStandard && realStandard !== 'not-found' && (
             <div className="bg-amber-950/20 border border-amber-800/40 rounded-lg p-3 text-xs text-amber-200 leading-relaxed">
-              💡 두 답변을 비교해보세요. AI는 성취기준 코드의 <strong>존재 자체는 알지만</strong>, 정확한 성취기준 전문은 <strong>사전학습 데이터 부족으로 틀리게 답변</strong>합니다. 이것이 <strong>할루시네이션</strong>입니다.
+              💡 두 답변을 비교해보세요. 위쪽은 인공지능이 생성한 답변이고, 아래쪽은 AI Bridge에 내장된 <strong>2022 개정 교육과정 초등학교 성취기준 데이터베이스</strong>의 실제 자료입니다.
             </div>
           )}
         </div>
