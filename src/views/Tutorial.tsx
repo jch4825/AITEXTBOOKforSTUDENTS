@@ -12,6 +12,7 @@ import SpeakButton from '../components/SpeakButton';
 import { runWithGeminiModelFallback } from '../utils/gemini';
 import PersonaRecommendCard from '../components/onboarding/PersonaRecommendCard';
 import { getModuleVisibility } from '../data/moduleVisibility';
+import { applyFontScale } from '../utils/a11y';
 import { DIAGNOSTIC_STORAGE_KEYS, loadPersona } from '../hooks/useDiagnostic';
 import {
   Lesson01Interactive,
@@ -154,6 +155,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [isTyping, setIsTyping] = useState(false);
   const [learningPoint, setLearningPoint] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showWelcomePopup, setShowWelcomePopup] = useState(lesson.id === 'l0-1');
   const [hasApiKey, setHasApiKey] = useState(() => {
     const key = localStorage.getItem('gemini-api-key');
     return !!(key && key.length > 10);
@@ -289,6 +291,10 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       setShowOverlay(true);
     }
   }, [lesson.moduleId]);
+
+  useEffect(() => {
+    setShowWelcomePopup(lesson.id === 'l0-1');
+  }, [lesson.id]);
 
   const handleCloseOverlay = () => {
     module4PrinciplesShown = true;
@@ -565,6 +571,137 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
         background: `radial-gradient(ellipse 60% 50% at 100% 0%, ${theme.glowA}, transparent 60%), radial-gradient(ellipse 50% 50% at 0% 100%, ${theme.glowB}, transparent 60%), #0e1318`,
       }}
     >
+      {showWelcomePopup && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-6 overflow-y-auto"
+          style={{ minHeight: '100vh', background: 'rgba(30, 20, 10, 0.72)' }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.94, y: 16 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            style={{
+              fontSize: '16px',
+              background: 'linear-gradient(160deg, #fdf6e3 0%, #f5e8c8 60%, #ede0b0 100%)',
+              border: '2px solid #c8a96e',
+              boxShadow: '0 0 0 6px #e8d5a0, 0 8px 40px rgba(80,50,10,0.35), inset 0 0 60px rgba(200,160,80,0.08)',
+              maxWidth: 480,
+              width: '100%',
+              borderRadius: 4,
+              padding: '40px 44px 36px',
+              position: 'relative',
+              fontFamily: '"Georgia", "Batang", serif',
+            }}
+          >
+            {/* 모서리 장식 */}
+            {(['top-left','top-right','bottom-left','bottom-right'] as const).map((pos) => (
+              <span
+                key={pos}
+                style={{
+                  position: 'absolute',
+                  ...(pos.includes('top') ? { top: 8 } : { bottom: 8 }),
+                  ...(pos.includes('left') ? { left: 8 } : { right: 8 }),
+                  color: '#b8965a',
+                  fontSize: 18,
+                  lineHeight: 1,
+                  userSelect: 'none',
+                }}
+              >
+                ✦
+              </span>
+            ))}
+
+            {/* 내부 이중 테두리 */}
+            <div style={{
+              border: '1px solid #c8a96e',
+              borderRadius: 2,
+              padding: '28px 24px 24px',
+              position: 'relative',
+            }}>
+              {/* 제목 */}
+              <h2 style={{
+                textAlign: 'center',
+                fontSize: '18px',
+                fontWeight: 700,
+                color: '#5c3d11',
+                letterSpacing: '0.04em',
+                marginBottom: 20,
+                lineHeight: 1.5,
+              }}>
+                선생님의 방문을 진심으로 환영합니다.
+              </h2>
+
+              {/* 구분선 */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+                <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, transparent, #c8a96e)' }} />
+                <span style={{ color: '#b8965a', fontSize: 14 }}>✦</span>
+                <div style={{ flex: 1, height: 1, background: 'linear-gradient(to left, transparent, #c8a96e)' }} />
+              </div>
+
+              {/* 본문 */}
+              <div style={{
+                fontSize: '15px',
+                color: '#4a3010',
+                lineHeight: 1.95,
+                textAlign: 'center',
+                whiteSpace: 'pre-line',
+              }}>
+                {'모든 이야기는 첫 페이지에서 시작됩니다.\n지금 선생님이 바로 그 첫 페이지를 펼쳤습니다.'}
+              </div>
+
+              <div style={{
+                margin: '18px 0',
+                fontSize: '14px',
+                color: '#6b4c1e',
+                lineHeight: 2,
+                textAlign: 'center',
+                whiteSpace: 'pre-line',
+                fontStyle: 'italic',
+              }}>
+                {'선생님이 만들어갈 이야기가 더욱 풍성해질 수 있도록,\nAI Bridge가 그 첫 문장을 함께 써내려가려고 합니다.'}
+              </div>
+
+              {/* 구분선 */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '20px 0 22px' }}>
+                <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, transparent, #c8a96e)' }} />
+                <span style={{ color: '#b8965a', fontSize: 14 }}>✦</span>
+                <div style={{ flex: 1, height: 1, background: 'linear-gradient(to left, transparent, #c8a96e)' }} />
+              </div>
+
+              {/* 닫기 버튼 */}
+              <button
+                onClick={() => setShowWelcomePopup(false)}
+                style={{
+                  display: 'block',
+                  margin: '0 auto',
+                  padding: '9px 32px',
+                  background: 'transparent',
+                  border: '1.5px solid #b8965a',
+                  borderRadius: 2,
+                  color: '#5c3d11',
+                  fontSize: '14px',
+                  fontFamily: '"Georgia", "Batang", serif',
+                  letterSpacing: '0.06em',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = '#c8a96e';
+                  (e.currentTarget as HTMLButtonElement).style.color = '#fff';
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+                  (e.currentTarget as HTMLButtonElement).style.color = '#5c3d11';
+                }}
+              >
+                시작하겠습니다
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       {showOverlay && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6 overflow-y-auto" style={{ minHeight: '100vh' }}>
           <div className="bg-white rounded-xl max-w-[480px] w-full p-8 shadow-2xl relative">
@@ -612,7 +749,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
         </div>
       )}
       {/* Left Side (1 & 4): Explanation */}
-      <div className="w-full lg:w-2/5 lg:border-r border-gray-800 flex flex-col bg-white min-w-0 md:min-h-auto lg:h-full lg:overflow-hidden">
+      <div className="w-full lg:w-1/2 lg:border-r border-gray-800 flex flex-col bg-canva-ivory min-w-0 md:min-h-auto lg:h-full lg:overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-3 overflow-x-auto no-scrollbar pr-4">
             <button 
@@ -708,9 +845,9 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             📖 단어 사전
           </button>
         </div>
-        <div ref={leftScrollRef} className="flex-1 overflow-y-auto min-w-0 bg-white relative">
+        <div ref={leftScrollRef} className="flex-1 overflow-y-auto min-w-0 bg-canva-ivory relative">
           <div
-            className={`relative px-10 pt-10 pb-8 mb-2 overflow-hidden bg-gradient-to-br ${theme.gradient}`}
+            className={`relative px-5 lg:px-16 pt-10 pb-8 mb-2 overflow-hidden bg-gradient-to-br ${theme.gradient}`}
           >
             <div
               className="pointer-events-none absolute -top-10 -right-6 text-[160px] font-black select-none leading-none"
@@ -742,7 +879,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               <div className="mt-5 h-1 w-16 rounded-full" style={{ backgroundColor: theme.accent }} />
             </div>
           </div>
-          <div className="w-full px-10 pb-20" style={{ maxWidth: '40em' }}>
+          <div className="w-full px-5 lg:px-16 pb-20">
             <div className="markdown-container text-canva-ink leading-relaxed text-base">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
@@ -853,7 +990,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           
           {/* Technique Connection Feature (Spec Requirement) */}
           {lesson.technique && (
-            <div className="sticky bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+            <div className="sticky bottom-0 left-0 right-0 p-6 bg-canva-ivory border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
               <div className="flex items-start gap-4">
                 <div className="bg-canva-purple/10 text-canva-purple p-2 rounded-lg flex-shrink-0">
                   <Info size={18} />
@@ -870,7 +1007,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       </div>
 
       {/* Right Side (2 & 3) */}
-      <div className="w-full lg:w-3/5 flex flex-col lg:h-full lg:overflow-hidden">
+      <div className="w-full lg:w-1/2 flex flex-col lg:h-full lg:overflow-hidden">
         <div className="flex-1 flex flex-col min-h-0 relative overflow-hidden">
           {/* Main interactive area: full height for m4, otherwise top half */}
           <div className={`flex flex-col border-gray-800 min-h-0 ${
@@ -1449,6 +1586,14 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
     };
   }, []);
 
+  useEffect(() => {
+    if (!currentLesson) return;
+    if (currentLesson.moduleId === 'm0') {
+      applyFontScale('large');
+      window.dispatchEvent(new StorageEvent('storage', { key: 'ai-bridge-font-scale', newValue: 'large' }));
+    }
+  }, [currentLesson?.moduleId]);
+
   // URL 파라미터에서 레슨 ID를 읽어서 초기화
   useEffect(() => {
     if (initialLoadDone) return;
@@ -1792,10 +1937,11 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
       <AnimatePresence mode="wait">
         {currentLesson ? (
           <motion.div
-            key="lesson"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            key={currentLesson.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
           >
             <LessonViewer
               lesson={currentLesson}

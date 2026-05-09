@@ -264,6 +264,8 @@ export const lessons: Lesson[] = [
 
       Google AI Studio는 Gemini를 더 깊게 실험해 보는 AI 실습실입니다. Chrome 주소창에 **aistudio.google.com** 을 입력해 들어갑니다.
 
+      Google AI Studio는 영문으로 되어 있습니다. 하지만 두려워할 필요 없습니다. Google 계정이 있으면 단순한 클릭 몇 번으로 가입이 가능하고, AI Studio 안의 인공지능과는 **한글로 대화**할 수 있습니다.
+
       앞에서 Google 계정을 만들어 두었다면 계정 선택과 약관 확인만으로 가입 절차가 간단해집니다. Google 계정은 국내외 여러 사이트의 가입과 로그인도 쉽게 해 줍니다.
 
       Google 계정은 외부 Google AI 도구를 무료로 불러오기 위해 여러분이 준비물을 챙기는 행동에 가깝습니다. AI Bridge(우리 사이트)의 **모든 기능**을 사용하기 위해서는 Google ID를 가지고 있어야 하고, Google AI Studio에 회원가입도 해야 합니다. 하지만 이런 준비가 되어 있지 않다고 해서 사용할 수 없는 것은 아닙니다. **일부 기능이 제한**될 뿐입니다.

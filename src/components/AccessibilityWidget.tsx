@@ -48,6 +48,17 @@ export default function AccessibilityWidget() {
   }, [scale]);
 
   useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'ai-bridge-font-scale' && e.newValue) {
+        const next = e.newValue as FontScale;
+        if (next in { normal: 1, large: 1, xlarge: 1 }) setScale(next);
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  useEffect(() => {
     const onResize = () => {
       const element = getWidgetElement();
       if (!pos || !element) return;

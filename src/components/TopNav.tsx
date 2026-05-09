@@ -71,7 +71,7 @@ export default function TopNav({ currentView, onViewChange }: TopNavProps) {
             className={`flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-full font-bold border transition-colors mr-2 ${
               hasApiKey
                 ? 'bg-green-50 text-green-600 border-green-200'
-                : 'bg-amber-50 text-amber-600 border-amber-200'
+                : 'bg-amber-50 text-amber-800 border-amber-300'
             }`}
           >
             <Key size={11} />

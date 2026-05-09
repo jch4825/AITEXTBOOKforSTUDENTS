@@ -202,7 +202,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
           className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border transition-colors w-full ${
             hasApiKey
               ? 'bg-green-50 text-green-600 border-green-200 hover:bg-green-100'
-              : 'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100'
+              : 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
           }`}
         >
           <Key size={16} />

@@ -14,7 +14,7 @@ export default function SpeakButton({
   text,
   label = '읽어주기',
   className = '',
-  size = 14,
+  size = 21,
   stopPropagation = false,
 }: SpeakButtonProps) {
   const [playing, setPlaying] = useState(false);
@@ -53,7 +53,7 @@ export default function SpeakButton({
       onClick={handleClick}
       aria-label={playing ? '읽기 중지' : label}
       title={playing ? '읽기 중지' : label}
-      className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-medium transition-colors ${
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors ${
         playing
           ? 'border-red-200 bg-red-50 text-red-600'
           : 'border-gray-200 text-gray-600 hover:bg-gray-50'
