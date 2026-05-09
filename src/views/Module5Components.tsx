@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Check, FileText } from 'lucide-react';
 import { Lesson } from '../data/tutorialData';
+import { GoogleGenAI } from '@google/genai';
+import { runWithGeminiModelFallback } from '../utils/gemini';
+import { initCurriculum, lookupStandard, normalizeCode, CurriculumStandard } from '../utils/curriculumLookup';
 
 export const CopyButton = ({ text, className = "" }: { text: string, className?: string }) => {
   const [copied, setCopied] = useState(false);
@@ -41,182 +44,175 @@ export const GoogleDocsButton = ({ text, className = "" }: { text: string, class
   );
 };
 
-// 5-1: 틀린 정보 찾기 (클릭 선택 + 채점)
+// 5-1: 할루시네이션 직접 체험 (성취기준 코드 → Gemini vs 실제 DB 비교)
 type CompletionProps = {
   onComplete?: () => void;
 };
 
+const SIMULATION_ANSWERS: Record<string, string> = {
+  '[2국01-01]': '네, 2022 개정 교육과정 성취기준 [2국01-01]에 대해 설명드리겠습니다.\n\n학년군: 1~2학년군\n교과: 국어\n영역: 읽기\n\n성취기준 전문:\n"글자와 소리의 관계를 이해하고 낱말을 정확하게 소리 내어 읽는다."\n\n이 성취기준은 초등학교 1~2학년 학생들이 한글의 기본 원리인 자음과 모음의 결합 방식을 이해하고, 이를 바탕으로 낱말을 정확하게 발음하며 읽을 수 있는 능력을 기르는 것을 목표로 합니다.',
+  '[4수01-03]': '2022 개정 교육과정 성취기준 [4수01-03]에 대해 알려드리겠습니다.\n\n학년군: 3~4학년군\n교과: 수학\n영역: 수와 연산\n\n성취기준 전문:\n"분수의 개념을 이해하고, 단위분수, 진분수, 가분수, 대분수의 관계를 알 수 있다."\n\n이 성취기준은 학생들이 분수의 기본 개념을 이해하고, 다양한 분수의 종류를 구별하며 상호 관계를 파악하는 역량을 기르는 데 초점을 맞추고 있습니다.',
+  '[6사02-02]': '2022 개정 교육과정 성취기준 [6사02-02]에 대해 설명드리겠습니다.\n\n학년군: 5~6학년군\n교과: 사회\n영역: 역사\n\n성취기준 전문:\n"조선 시대 신분 제도의 특징을 파악하고, 양반·중인·상민·천민의 생활 모습을 비교하여 설명한다."\n\n이 성취기준은 조선 시대의 사회 구조를 이해하고, 각 신분 계층의 역할과 생활 방식의 차이를 탐구함으로써 역사적 사고력을 기르는 것을 목적으로 합니다.',
+  '[3과02-01]': '2022 개정 교육과정 성취기준 [3과02-01]에 대해 안내드립니다.\n\n학년군: 3~4학년군\n교과: 과학\n영역: 생명과학\n\n성취기준 전문:\n"동물의 한살이 과정을 관찰하고, 완전변태와 불완전변태의 차이점을 설명한다."\n\n이 성취기준은 학생들이 다양한 동물의 성장 과정을 직접 관찰하고 기록하는 탐구 활동을 통해, 변태 방식의 차이를 과학적으로 이해하도록 구성되어 있습니다.',
+};
+
+const SIMULATION_FALLBACK = (code: string) =>
+  `2022 개정 교육과정 성취기준 ${code}에 대해 설명드리겠습니다.\n\n학년군: 해당 학년군\n교과: 해당 교과\n영역: 해당 영역\n\n성취기준 전문:\n"관련 개념을 이해하고, 다양한 상황에서 이를 적용하여 문제를 해결하며, 학습한 내용을 바탕으로 창의적으로 표현할 수 있다."\n\n이 성취기준은 학생들이 핵심 개념을 탐구하고 실생활과 연계하여 사고력과 문제해결력을 기르는 것을 목표로 합니다.`;
+
 export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
-  const [currentText, setCurrentText] = useState(0);
-  const [selected, setSelected] = useState<Set<number>>(new Set());
-  const [submitted, setSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
-  const [roundScores, setRoundScores] = useState<number[]>([]);
-  const [finished, setFinished] = useState(false);
+  const [codeInput, setCodeInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [aiText, setAiText] = useState('');
+  const [isSimulation, setIsSimulation] = useState(false);
+  const [realStandard, setRealStandard] = useState<CurriculumStandard | 'not-found' | null>(null);
+  const [hasApiKey, setHasApiKey] = useState(false);
+  const [queried, setQueried] = useState(false);
 
-  const wrongTexts = [
-    {
-      sentences: [
-        { text: '식물의 광합성은 주로 뿌리에서 이루어집니다.', isWrong: true },
-        { text: '식물은 이산화탄소와 물을 흡수하여 포도당과 산소를 만들어냅니다.', isWrong: false },
-        { text: '광합성에는 햇빛이 필요하며, 이 과정은 낮과 밤 모두 동일한 속도로 진행됩니다.', isWrong: true },
-      ],
-      corrections: [
-        '"뿌리에서" → 실제로는 잎의 엽록체에서 이루어집니다.',
-        '"낮과 밤 모두 동일한 속도로" → 밤에는 빛이 없으므로 광합성이 중단됩니다.',
-      ],
-    },
-    {
-      sentences: [
-        { text: '훈민정음은 1443년 세종대왕이 창제하였으며, 1446년에 반포되었습니다.', isWrong: false },
-        { text: '훈민정음은 처음부터 28자로 구성되었으며 현재까지 동일하게 사용되고 있습니다.', isWrong: true },
-      ],
-      corrections: [
-        '"현재까지 동일하게" → 현재는 24자가 사용됩니다. 창제 당시 28자 중 4자가 소멸되었습니다.',
-      ],
-    },
-    {
-      sentences: [
-        { text: '초등학교 현장체험학습은 교육부령 제2023-15호에 따라 연간 최대 30일까지 실시할 수 있으며,', isWrong: true },
-        { text: '보호자 동의서는 출발 3일 전까지 제출해야 합니다.', isWrong: false },
-      ],
-      corrections: [
-        '"교육부령 제2023-15호" → 존재하지 않는 법령입니다. 구체적인 법령 번호를 AI가 지어낸 전형적인 할루시네이션 사례입니다.',
-      ],
-    },
-  ];
+  const EXAMPLES = ['[2국01-01]', '[4수01-03]', '[6사02-02]', '[3과02-01]'];
 
-  const current = wrongTexts[currentText];
+  useEffect(() => {
+    const key = localStorage.getItem('gemini-api-key');
+    setHasApiKey(!!(key && key.length > 10));
+    initCurriculum();
+    const onKeyChange = () => {
+      const k = localStorage.getItem('gemini-api-key');
+      setHasApiKey(!!(k && k.length > 10));
+    };
+    window.addEventListener('api-key-changed', onKeyChange);
+    return () => window.removeEventListener('api-key-changed', onKeyChange);
+  }, []);
 
-  const toggle = (idx: number) => {
-    if (submitted) return;
-    setSelected(prev => {
-      const next = new Set(prev);
-      next.has(idx) ? next.delete(idx) : next.add(idx);
-      return next;
-    });
-  };
+  const handleQuery = async (code: string) => {
+    const trimmed = code.trim();
+    if (!trimmed) return;
 
-  const handleSubmit = () => {
-    let roundScore = 0;
-    current.sentences.forEach((s, idx) => {
-      if (s.isWrong && selected.has(idx)) roundScore += 10;
-      if (!s.isWrong && selected.has(idx)) roundScore -= 5;
-    });
-    setScore(prev => prev + roundScore);
-    setRoundScores(prev => [...prev, roundScore]);
-    setSubmitted(true);
-  };
+    setIsLoading(true);
+    setAiText('');
+    setRealStandard(null);
+    setQueried(true);
 
-  const handleNext = () => {
-    if (currentText < wrongTexts.length - 1) {
-      setCurrentText(prev => prev + 1);
-      setSelected(new Set());
-      setSubmitted(false);
-    } else {
-      setFinished(true);
+    await initCurriculum();
+    const found = lookupStandard(trimmed);
+    setRealStandard(found ?? 'not-found');
+
+    const key = localStorage.getItem('gemini-api-key');
+    if (!key || key.length < 10) {
+      const norm = normalizeCode(trimmed);
+      const simAnswer = SIMULATION_ANSWERS[norm] ?? SIMULATION_FALLBACK(norm);
+      setIsSimulation(true);
+      setAiText(simAnswer);
+      setIsLoading(false);
       onComplete?.();
+      return;
+    }
+
+    setIsSimulation(false);
+    try {
+      const norm = normalizeCode(trimmed);
+      const ai = new GoogleGenAI({ apiKey: key });
+      const prompt = `2022 개정 교육과정 성취기준 ${norm}에 대해 알려줘. 학년군, 교과, 영역, 성취기준 전문을 자세히 설명해줘.`;
+      const response = await runWithGeminiModelFallback(model =>
+        ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: { systemInstruction: '표(마크다운 테이블 포함)는 사용하지 마세요. 간결하게 답해주세요.' }
+        })
+      );
+      setAiText(response.text ?? '응답이 비어 있습니다.');
+      onComplete?.();
+    } catch (e) {
+      setAiText(`오류 발생: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleReset = () => {
-    setCurrentText(0); setSelected(new Set());
-    setSubmitted(false); setScore(0);
-    setRoundScores([]); setFinished(false);
-  };
-
-  if (finished) {
-    const maxScore = wrongTexts.reduce((acc, t) => acc + t.sentences.filter(s => s.isWrong).length * 10, 0);
-    const grade = score >= maxScore * 0.8 ? { label: '우수', color: 'text-green-400' }
-      : score >= maxScore * 0.4 ? { label: '양호', color: 'text-yellow-400' }
-      : { label: '개선 필요', color: 'text-red-400' };
-    return (
-      <div className="flex-1 bg-[#0e1318] rounded-xl p-5 border border-gray-800 flex flex-col gap-5 items-center justify-center">
-        <div className="text-center">
-          <div className="text-gray-400 text-sm mb-1">검수 완료</div>
-          <div className={`text-3xl font-bold mb-3 ${grade.color}`}>{grade.label}</div>
-          <div className="bg-gray-800 rounded-xl px-8 py-4">
-            <div className="text-gray-400 text-xs mb-1">총 점수</div>
-            <div className="text-white font-bold text-3xl">{score}점</div>
-            <div className="text-gray-500 text-xs mt-1">최대 {maxScore}점</div>
-          </div>
-          <div className="mt-3 text-xs text-gray-500">정답 문장 선택 +10점 · 오선택 -5점</div>
+  return (
+    <div className="flex-1 bg-[#0e1318] rounded-xl p-4 border border-gray-800 flex flex-col gap-3 overflow-y-auto">
+      <div className="flex items-center justify-between">
+        <div className="text-white font-bold text-sm">할루시네이션 직접 체험</div>
+        <div className={`text-[10px] px-2 py-1 rounded-full font-bold ${hasApiKey ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}`}>
+          {hasApiKey ? '● API 연결됨' : '○ API 키 미등록'}
         </div>
-        <button onClick={handleReset} className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-medium transition-colors">
-          다시 시작
+      </div>
+
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="text-xs text-gray-400">예시 코드:</span>
+        {EXAMPLES.map(code => (
+          <button
+            key={code}
+            onClick={() => setCodeInput(code)}
+            className="px-2.5 py-1 bg-[#1c232b] border border-gray-700 hover:border-canva-purple text-gray-300 text-xs rounded font-mono transition-colors"
+          >
+            {code}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        <input
+          value={codeInput}
+          onChange={e => setCodeInput(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Enter') handleQuery(codeInput); }}
+          placeholder="예: [2국01-01]"
+          className="flex-1 bg-[#1c232b] border border-gray-700 rounded-lg px-3 py-2 text-white font-mono text-sm outline-none focus:border-canva-purple transition-colors"
+        />
+        <button
+          onClick={() => handleQuery(codeInput)}
+          disabled={isLoading || !codeInput.trim()}
+          className="px-4 py-2 bg-canva-purple hover:bg-canva-purple/80 disabled:opacity-40 text-white rounded-lg text-sm font-bold transition-colors whitespace-nowrap"
+        >
+          {isLoading ? '요청 중...' : 'AI에게 물어보기'}
         </button>
       </div>
-    );
-  }
 
-  const lastRoundScore = roundScores[roundScores.length - 1];
-
-  return (
-    <div className="flex-1 bg-[#0e1318] rounded-xl p-5 border border-gray-800 flex flex-col gap-4 overflow-y-auto">
-      <div className="flex items-center justify-between">
-        <div className="text-white font-bold text-sm">틀린 정보 찾기</div>
-        <div className="text-xs text-gray-500">{currentText + 1} / {wrongTexts.length}</div>
-      </div>
-
-      <div className="bg-gray-800/40 rounded-lg p-3 text-xs text-gray-400 leading-relaxed">
-        AI가 생성한 텍스트입니다. <span className="text-canva-purple font-semibold">할루시네이션이 포함된 문장을 클릭</span>하여 선택하고 제출하세요.
-      </div>
-
-      <div className="flex flex-col gap-2">
-        {current.sentences.map((s, idx) => {
-          const isSel = selected.has(idx);
-          let cls = 'bg-gray-800 hover:bg-gray-700 border border-transparent cursor-pointer';
-          if (submitted) {
-            if (s.isWrong && isSel) cls = 'bg-green-900/40 border border-green-600 cursor-default';
-            else if (!s.isWrong && isSel) cls = 'bg-red-900/40 border border-red-600 cursor-default';
-            else if (s.isWrong && !isSel) cls = 'bg-orange-900/30 border border-orange-700 cursor-default';
-            else cls = 'bg-gray-800 border border-transparent cursor-default';
-          } else if (isSel) {
-            cls = 'bg-canva-purple/20 border border-canva-purple cursor-pointer';
-          }
-          return (
-            <div key={idx} onClick={() => toggle(idx)}
-              className={`p-3 rounded-lg text-sm text-gray-200 leading-relaxed transition-all ${cls}`}>
-              <span>{s.text}</span>
-              {submitted && s.isWrong && isSel && <span className="ml-2 text-green-400 text-xs font-bold">✓ +10점</span>}
-              {submitted && !s.isWrong && isSel && <span className="ml-2 text-red-400 text-xs font-bold">✗ -5점</span>}
-              {submitted && s.isWrong && !isSel && <span className="ml-2 text-orange-400 text-xs font-bold">△ 놓침</span>}
+      {queried && (
+        <div className="flex flex-col gap-3">
+          <div className="bg-red-950/20 border border-red-800/40 rounded-lg p-3">
+            <div className="text-red-300 font-bold text-xs mb-2 flex items-center gap-2">
+              <span>🤖 AI 답변 (Gemini) — RAG 없이 생성</span>
+              {isSimulation && (
+                <span className="text-[10px] font-normal text-amber-400 bg-amber-900/30 border border-amber-700/50 px-1.5 py-0.5 rounded">
+                  사전 입력된 시뮬레이션 답변입니다.
+                </span>
+              )}
             </div>
-          );
-        })}
-      </div>
-
-      {submitted && (
-        <div className="bg-blue-900/20 border border-blue-800/60 rounded-lg p-4 text-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-blue-300 font-bold text-xs">해설</span>
-            <span className={`text-xs font-bold ${lastRoundScore >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-              이번 라운드 {lastRoundScore > 0 ? '+' : ''}{lastRoundScore}점
-            </span>
+            {isLoading ? (
+              <div className="text-gray-400 text-xs animate-pulse">응답 생성 중...</div>
+            ) : (
+              <div className="text-gray-200 text-xs leading-relaxed whitespace-pre-wrap">{aiText}</div>
+            )}
           </div>
-          {current.corrections.map((c, i) => (
-            <div key={i} className="text-gray-300 text-xs mb-1">• {c}</div>
-          ))}
+
+          {realStandard !== null && (
+            <div className="bg-green-950/20 border border-green-800/40 rounded-lg p-3">
+              <div className="text-green-300 font-bold text-xs mb-2">📚 실제 성취기준 (2022 개정 교육과정 DB)</div>
+              {realStandard === 'not-found' ? (
+                <div className="text-gray-400 text-xs">DB에서 찾을 수 없습니다. 위 예시 코드를 사용해 보세요.</div>
+              ) : (
+                <div className="flex flex-col gap-1.5 text-xs">
+                  <div className="flex gap-3 flex-wrap">
+                    <span><span className="text-gray-400">코드 </span><span className="text-white font-mono">{realStandard.code}</span></span>
+                    <span><span className="text-gray-400">학년군 </span><span className="text-white">{realStandard.gradeGroup}학년</span></span>
+                    <span><span className="text-gray-400">교과 </span><span className="text-white">{realStandard.subject}</span></span>
+                    <span><span className="text-gray-400">영역 </span><span className="text-white">{realStandard.domain}</span></span>
+                  </div>
+                  <div className="bg-green-900/20 rounded p-2 mt-0.5">
+                    <span className="text-gray-400">성취기준: </span>
+                    <span className="text-green-200 font-medium">{realStandard.title}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {!isLoading && aiText && realStandard && realStandard !== 'not-found' && (
+            <div className="bg-amber-950/20 border border-amber-800/40 rounded-lg p-3 text-xs text-amber-200 leading-relaxed">
+              💡 두 답변을 비교해보세요. AI는 성취기준 코드의 <strong>존재 자체는 알지만</strong>, 정확한 성취기준 전문은 <strong>사전학습 데이터 부족으로 틀리게 답변</strong>합니다. 이것이 <strong>할루시네이션</strong>입니다.
+            </div>
+          )}
         </div>
       )}
-
-      <div className="flex gap-2 mt-auto">
-        {!submitted ? (
-          <button onClick={handleSubmit} disabled={selected.size === 0}
-            className="flex-1 bg-canva-purple hover:bg-canva-purple/80 disabled:opacity-40 text-white rounded-lg py-2.5 text-sm font-bold transition-colors">
-            제출
-          </button>
-        ) : (
-          <button onClick={handleNext}
-            className="flex-1 bg-gray-700 hover:bg-gray-600 text-white rounded-lg py-2.5 text-sm font-bold transition-colors">
-            {currentText < wrongTexts.length - 1 ? '다음 →' : '결과 보기'}
-          </button>
-        )}
-      </div>
-
-      <div className="text-xs text-gray-500 text-right">
-        누적 점수: <span className="text-white font-bold">{score}점</span>
-      </div>
     </div>
   );
 };
