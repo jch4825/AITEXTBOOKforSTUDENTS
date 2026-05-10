@@ -11,3 +11,21 @@ dev-server.err
 .env*
 !.env.example
 metadata.json
+
+# Ad-hoc screenshots and scratch notes at repo root
+/equal-split.png
+/font-large-check.png
+/font-large-widget.png
+/home-current.png
+/ivory-bg.png
+/moholy-home.png
+/no-maxwidth.png
+/padding-check.png
+/padding-more.png
+/popup-fixed.png
+/speak-btn.png
+/speak-btn-75.png
+/welcome-popup.png
+/welcome-popup2.png
+/welcome-popup3.png
+/tutorial-flow.md
