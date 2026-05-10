@@ -2,9 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronDown, ExternalLink, Link2, Search, Star, X } from 'lucide-react';
 import { resourceCategories, type ResourceCategory, type ResourceItem, type ResourceSubCategory } from '../data/resourcesData';
 
-const CATEGORY_ORDER = ['policy', 'ai-basics', 'ethics', 'lesson', 'research-etc'];
+const CATEGORY_ORDER = ['school-admin-support', 'policy', 'ai-basics', 'ethics', 'lesson', 'research-etc'];
 
 const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
+  'school-admin-support': {
+    title: '학교 업무 지원',
+    subtitle: '학교 업무 전반에서 꼭 확인해야 할 핵심 도움 자료',
+  },
   policy: {
     title: '정책·지침',
     subtitle: '교육부·시도교육청 AI 정책 자료',
@@ -128,12 +132,23 @@ function ItemRow({
   isFav: boolean;
   onToggleFav: () => void;
 }) {
+  const isFeatured = item.id === 'r-3-4';
   const rowClass =
-    'group flex w-full items-start gap-3 px-4 py-3 pr-10 text-left transition hover:bg-canva-purple/5 focus:outline-none focus:ring-2 focus:ring-canva-purple/30';
+    `group flex w-full items-start gap-3 px-4 py-3 pr-10 text-left transition focus:outline-none focus:ring-2 ${
+      isFeatured
+        ? 'bg-amber-50/80 hover:bg-amber-100/80 focus:ring-amber-300'
+        : 'hover:bg-canva-purple/5 focus:ring-canva-purple/30'
+    }`;
 
   const content = (
     <>
-      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-400 ring-1 ring-gray-200 group-hover:text-canva-purple">
+      <span
+        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ring-1 ${
+          isFeatured
+            ? 'bg-amber-100 text-amber-700 ring-amber-200'
+            : 'bg-gray-50 text-gray-400 ring-gray-200 group-hover:text-canva-purple'
+        }`}
+      >
         {item.url ? <ExternalLink size={14} /> : <Link2 size={14} />}
       </span>
       <span className="min-w-0 flex-1">
@@ -142,15 +157,26 @@ function ItemRow({
             {breadcrumb}
           </span>
         )}
-        <span className="block text-xs font-bold leading-snug text-gray-900 group-hover:text-canva-purple">
+        {isFeatured && (
+          <span className="mb-1 inline-flex rounded-full bg-amber-200/70 px-2 py-0.5 text-[10px] font-extrabold text-amber-800">
+            필수 확인
+          </span>
+        )}
+        <span
+          className={`block font-bold leading-snug ${
+            isFeatured
+              ? 'text-sm text-amber-950 group-hover:text-amber-800'
+              : 'text-xs text-gray-900 group-hover:text-canva-purple'
+          }`}
+        >
           {highlight(item.title, query)}
         </span>
         {item.description && (
-          <span className="mt-1 block text-[11px] leading-relaxed text-gray-500">
+          <span className={`mt-1 block text-[11px] leading-relaxed ${isFeatured ? 'text-amber-900/80' : 'text-gray-500'}`}>
             {highlight(item.description, query)}
           </span>
         )}
-        <span className="mt-1.5 block truncate text-[10px] font-mono text-gray-400">
+        <span className={`mt-1.5 block truncate text-[10px] font-mono ${isFeatured ? 'text-amber-700/80' : 'text-gray-400'}`}>
           {getHostName(item.url)}
         </span>
       </span>
@@ -174,7 +200,9 @@ function ItemRow({
         className={`absolute right-2 top-2.5 z-10 rounded-full p-1.5 transition ${
           isFav
             ? 'text-amber-400 hover:bg-amber-50'
-            : 'text-gray-300 hover:bg-gray-100 hover:text-amber-400'
+            : isFeatured
+              ? 'text-amber-500/60 hover:bg-amber-200/60 hover:text-amber-700'
+              : 'text-gray-300 hover:bg-gray-100 hover:text-amber-400'
         }`}
       >
         <Star size={14} fill={isFav ? 'currentColor' : 'none'} />

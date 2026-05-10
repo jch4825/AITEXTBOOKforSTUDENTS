@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { BookOpen, MessageSquare, Layout, Shield, FileText } from 'lucide-react';
+import { BookOpen, BriefcaseBusiness, MessageSquare, Layout, Shield, FileText } from 'lucide-react';
 
 export interface ResourceItem {
   id: string;
@@ -26,6 +26,24 @@ export interface ResourceCategory {
 }
 
 export const resourceCategories: ResourceCategory[] = [
+  {
+    id: 'school-admin-support',
+    title: '학교 업무 지원',
+    subtitle: '학교 업무 전반에서 꼭 확인해야 할 핵심 도움 자료',
+    icon: BriefcaseBusiness,
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-600',
+    subCategories: [
+      {
+        id: 'school-admin',
+        label: '1. 학교 업무 도움 자료',
+        iconEmoji: '🗂️',
+        items: [
+          { id: 'r-3-4', title: '경상남도교육청 학교업무 도움자료', url: 'https://hryoon0.github.io/helppage/', description: '경상남도교육청 학교업무 도움자료 사이트. 초등학교 업무 참고 자료를 확인할 수 있습니다.' },
+        ],
+      },
+    ],
+  },
   {
     id: 'ai-basics',
     title: 'AI 기초 자료',
@@ -135,14 +153,6 @@ export const resourceCategories: ResourceCategory[] = [
         iconEmoji: '📖',
         items: [
           { id: 'r-2-1', title: 'KERIS 종합교육연수원 연수 자료집', url: 'https://www.cet.keris.or.kr/usr/reference/selectTrainingListPageVw.do?menuNo=23100', description: 'KERIS 종합교육연수원에서 제공하는 교원 연수 자료집 모음' },
-        ],
-      },
-      {
-        id: 'school-admin',
-        label: '3. 학교 업무',
-        iconEmoji: '🗂️',
-        items: [
-          { id: 'r-3-4', title: '경상남도교육청 학교업무 도움자료', url: 'https://hryoon0.github.io/helppage/', description: '경상남도교육청 학교업무 도움자료 사이트. 초등학교 업무 참고 자료를 확인할 수 있습니다.' },
         ],
       },
     ],
