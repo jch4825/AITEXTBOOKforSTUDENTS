@@ -434,7 +434,6 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [metaPromptCopied, setMetaPromptCopied] = useState(false);
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
   const [showDict, setShowDict] = useState(false);
-  const [showApiKeyInfo, setShowApiKeyInfo] = useState(false);
   const [dictWord, setDictWord] = useState('');
   const [dictResult, setDictResult] = useState('');
   const [isDictLoading, setIsDictLoading] = useState(false);
@@ -1455,14 +1454,6 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                             {metaPromptCopied ? '✓ 복사됨! Gems 요청 사항에 붙여넣기' : '2-6에서 만든 프롬프트 복사'}
                           </button>
                         )}
-                        {(lesson.id === 'l2-6' || lesson.id === 'l2-7' || lesson.id === 'l2-8' || lesson.moduleId === 'm3') && (
-                          <button
-                            onClick={() => setShowApiKeyInfo(true)}
-                            className="px-6 py-3 bg-canva-purple text-white rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all shadow-lg"
-                          >
-                            API 키 입력
-                          </button>
-                        )}
                         <button
                           ref={isL11 ? l11ResetRef : undefined}
                           onClick={() => {
@@ -1867,9 +1858,10 @@ interface TutorialProps {
   onToggleComplete: (lessonId: string) => void;
   onMarkComplete: (lessonId: string) => void;
   onOpenTools: () => void;
+  onOpenResources: () => void;
 }
 
-export default function Tutorial({ selectedModule, onSelectModule, completedLessons, onToggleComplete, onMarkComplete, onOpenTools }: TutorialProps) {
+export default function Tutorial({ selectedModule, onSelectModule, completedLessons, onToggleComplete, onMarkComplete, onOpenTools, onOpenResources }: TutorialProps) {
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [showM0Welcome, setShowM0Welcome] = useState(false);
@@ -1966,6 +1958,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
               if (module) onSelectModule(module);
             }}
             onOpenTools={onOpenTools}
+            onOpenResources={onOpenResources}
           />
         </div>
       )}

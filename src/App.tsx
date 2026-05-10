@@ -112,6 +112,10 @@ export default function App() {
             setCurrentView('tools');
             setSelectedModule(null);
           }}
+          onOpenResources={() => {
+            setCurrentView('resources');
+            setSelectedModule(null);
+          }}
         />;
       default:
         return <Home onViewChange={setCurrentView} onStartDiagnostic={() => setShowDiagnostic(true)} />;

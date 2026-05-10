@@ -46,9 +46,9 @@ const purposeCopy: Partial<Record<DiagnosticPurpose, string>> = {
 interface PersonaRecommendCardProps {
   persona: Persona;
   purpose: DiagnosticPurpose;
-  onStartModule?: (moduleId: string) => void;
-  onOpenTools?: () => void;
-  onOpenResources?: () => void;
+  onStartModule: (moduleId: string) => void;
+  onOpenTools: () => void;
+  onOpenResources: () => void;
 }
 
 export default function PersonaRecommendCard({ persona, purpose, onStartModule, onOpenTools, onOpenResources }: PersonaRecommendCardProps) {
@@ -57,11 +57,11 @@ export default function PersonaRecommendCard({ persona, purpose, onStartModule, 
 
   const handlePrimary = () => {
     if (copy.primaryAction === 'module' && copy.moduleId) {
-      onStartModule?.(copy.moduleId);
+      onStartModule(copy.moduleId);
     } else if (copy.primaryAction === 'resources') {
-      onOpenResources?.();
+      onOpenResources();
     } else {
-      onOpenTools?.();
+      onOpenTools();
     }
   };
 
