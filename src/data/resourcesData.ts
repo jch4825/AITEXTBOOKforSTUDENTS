@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { BookOpen, MessageSquare, Layout, ClipboardList, Shield, FileText } from 'lucide-react';
+import { BookOpen, MessageSquare, Layout, Shield, FileText } from 'lucide-react';
 
 export interface ResourceItem {
   id: string;
@@ -138,13 +138,11 @@ export const resourceCategories: ResourceCategory[] = [
         ],
       },
       {
-        id: 'etc',
-        label: '3. 기타',
-        iconEmoji: '📦',
+        id: 'school-admin',
+        label: '3. 학교 업무',
+        iconEmoji: '🗂️',
         items: [
-          { id: 'r-3-1', title: '교과 학습발달상황 작성 GPT', url: 'https://chatgpt.com/g/g-6753f78947708191b221bbf659619dfd-seongcwigijun-giban-gyogwahagseubbaldalsanghwang-saengseong-caesbos-jeongwamog', description: 'ChatGPT 커스텀 GPT. 학생의 학습 활동·성과를 입력하면 교과 학습발달상황을 자동으로 생성' },
-          { id: 'r-3-2', title: '교육 아이디어 도우미 GPT', url: 'https://chatgpt.com/g/g-677cab3951bc8191adf633bd9e6b9fcb-gyoyug-aidieo-doumi', description: 'ChatGPT 커스텀 GPT. 수업 주제·상황을 입력하면 교육 활동 아이디어를 제안해 주는 도우미' },
-          { id: 'r-3-3', title: '교육·다큐멘터리·어학·어린이 유튜브 영상 보기 GPT', url: 'https://chatgpt.com/g/g-f7aSrkPEP-gyoyug-dakyumenteori-eohag-eorini-yutyubeu-yeongsang-bogi-education', description: 'ChatGPT 커스텀 GPT. 교육·다큐멘터리·어학·어린이 분야의 유튜브 영상을 추천하고 함께 시청·정리할 수 있는 도우미' },
+          { id: 'r-3-4', title: '경상남도교육청 학교업무 도움자료', url: 'https://hryoon0.github.io/helppage/', description: '경상남도교육청 학교업무 도움자료 사이트. 초등학교 업무 참고 자료를 확인할 수 있습니다.' },
         ],
       },
     ],
@@ -196,9 +194,9 @@ export const resourceCategories: ResourceCategory[] = [
         ],
       },
       {
-        id: 'edu-portal',
-        label: '5. AI 교육 포털',
-        iconEmoji: '🌐',
+        id: 'edu-portal-public',
+        label: '5. 공공·국가 AI 교육 포털',
+        iconEmoji: '🏛️',
         items: [
           { id: 'l-3-1', title: '에듀넷 AI·SW 교육', url: 'https://ai.edunet.net', description: '교육부 공식 AI·SW 교육 포털. 교사·학생용 자료, 연수, 수업 지원 통합 제공' },
           { id: 'l-3-2', title: '에듀넷 티-클리어 AI 교수학습자료', url: 'https://ai.edunet.net/aiTchLrngData/list/408', description: '에듀넷의 AI 교수·학습 자료 목록. 수업에서 바로 활용 가능한 자료 모음' },
@@ -207,37 +205,40 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'l-3-5', title: 'SAI 교육콘텐츠', url: 'https://sai.software.kr', description: '학교 AI 교육을 위한 교육콘텐츠·수업 자료 포털' },
           { id: 'l-3-6', title: 'AI·디지털 교육자료 수업지원센터', url: 'https://www.ai-dt.net', description: '교사가 AI·디지털 교육자료를 찾고 수업에 바로 적용할 수 있는 지원 센터' },
           { id: 'l-3-7', title: 'AI·디지털 교육자료(aidtbook)', url: 'https://www.aidtbook.kr/index.do', description: 'AI 디지털 교과서 관련 교육자료 통합 제공 포털' },
-          { id: 'l-3-8', title: '미래엔 AI·디지털 교육자료', url: 'https://aidt.m-teacher.co.kr', description: '출판사 미래엔에서 제공하는 AI·디지털 교육자료 및 교사 지원 자료' },
-          { id: 'l-3-9', title: '아이스크림 AI 디지털 교육자료', url: 'https://aidt.i-scream.co.kr', description: '아이스크림미디어의 AI 디지털 교육자료 플랫폼. 초등 특화 콘텐츠 다수' },
+          { id: 'l-3-16', title: '소프트웨어야 놀자', url: 'https://www.playsw.or.kr/main', description: '네이버커넥트재단이 운영하는 SW·AI 교육 콘텐츠 플랫폼' },
+        ],
+      },
+      {
+        id: 'edu-portal-local',
+        label: '6. 시도교육청 AI 교육 자료',
+        iconEmoji: '🗺️',
+        items: [
           { id: 'l-3-10', title: '빛고을 아이(AI) — 광주 AI 교육 프로그램', url: 'https://sw.gen.go.kr/bbs/board.php?bo_table=data&wr_id=15', description: '광주 AI 교육센터가 2024년에 공개한 초등용 AI 교육 프로그램 교재' },
           { id: 'l-3-11', title: '울산교육청 우리아이', url: 'https://wooriai.use.go.kr/', description: '울산광역시교육청에서 운영하는 학생용 AI 챗봇 서비스' },
           { id: 'l-3-12', title: '초·중등 AI 수학 융합교육 교수학습자료', url: 'https://sw.gen.go.kr/bbs/board.php?bo_table=data&wr_id=64', description: '광주 SW 교육지원센터가 2024년에 발간한 초·중등 인공지능-수학 융합 수업 자료' },
-          { id: 'l-3-13', title: '초등인공지능교육.COM', url: 'https://www.xn--ob0bug89lftci99a2oa25k5pi.com/', description: '초등 교사가 직접 운영하는 인공지능 수업 자료 모음 사이트' },
-          { id: 'l-3-14', title: 'VIVASAM 초등 인공지능 자료', url: 'https://e.vivasam.com/creative/edu/sw/cia/list', description: '비상교육 비바샘에서 제공하는 초등 인공지능·창의 수업 자료 모음' },
-          { id: 'l-3-15', title: '초등 인공지능 교육 모듈형 39강좌', url: 'https://sites.google.com/ptsaebit.es.kr/metaverse/%EC%B4%88%EB%93%B1swai-%EC%BD%98%ED%85%90%EC%B8%A0-%EB%AA%A8%EC%9D%8C/%EC%B4%88%EB%93%B1-%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5-%EA%B5%90%EC%9C%A1%EB%AA%A8%EB%93%88%ED%98%95-39%EA%B0%95%EC%A2%8C', description: '초등 단계의 인공지능 교육을 모듈형 39강좌로 구성한 교사용 콘텐츠 모음' },
-          { id: 'l-3-16', title: '소프트웨어야 놀자', url: 'https://www.playsw.or.kr/main', description: '네이버커넥트재단이 운영하는 SW·AI 교육 콘텐츠 플랫폼' },
-          { id: 'l-3-17', title: '씨마스 AI 디지털 교육자료', url: 'https://viewer.cmass.kr/html/aidt/aidt_e/view_aidt_e.html', description: '씨마스가 제공하는 AI 디지털 교과서 미리보기·교육자료' },
-          { id: 'l-3-18', title: '천재교육 AI 디지털 교육자료 지원센터', url: 'https://support.aitextbook.co.kr/', description: '천재교육의 AI 디지털 교과서 활용 안내 및 교사 지원 자료' },
-          { id: 'l-3-19', title: 'MyAI Edu', url: 'https://myai.kr/', description: '교사·학생을 위한 인공지능 교육 통합 콘텐츠 사이트' },
-          { id: 'l-3-20', title: '인공지능 교육자료 사이트 모음(노션)', url: 'https://ai4edu.notion.site/AI-92b8c8eca0294fc7a9a2538bca205bdf', description: '이준기·김귀훈 선생님이 정리한 국내외 AI 교육자료 링크 모음 노션 페이지' },
         ],
       },
-    ],
-  },
-  {
-    id: 'assessment',
-    title: '행정 업무 자료',
-    subtitle: '학교 업무 전반의 실무 참고 자료',
-    icon: ClipboardList,
-    iconBg: 'bg-amber-50',
-    iconColor: 'text-amber-500',
-    subCategories: [
       {
-        id: 'school-work',
-        label: '학교업무 도움자료',
-        iconEmoji: '🗂️',
+        id: 'edu-portal-publisher',
+        label: '7. 출판사 AI 디지털 교육자료',
+        iconEmoji: '📘',
         items: [
-          { id: 'a-2-3', title: '경상남도교육청 학교업무 도움자료', url: 'https://hryoon0.github.io/helppage/', description: '경상남도교육청 학교업무 도움자료 사이트. 초등학교 업무 참고 자료를 확인할 수 있습니다.' },
+          { id: 'l-3-8', title: '미래엔 AI·디지털 교육자료', url: 'https://aidt.m-teacher.co.kr', description: '출판사 미래엔에서 제공하는 AI·디지털 교육자료 및 교사 지원 자료' },
+          { id: 'l-3-9', title: '아이스크림 AI 디지털 교육자료', url: 'https://aidt.i-scream.co.kr', description: '아이스크림미디어의 AI 디지털 교육자료 플랫폼. 초등 특화 콘텐츠 다수' },
+          { id: 'l-3-14', title: 'VIVASAM 초등 인공지능 자료', url: 'https://e.vivasam.com/creative/edu/sw/cia/list', description: '비상교육 비바샘에서 제공하는 초등 인공지능·창의 수업 자료 모음' },
+          { id: 'l-3-17', title: '씨마스 AI 디지털 교육자료', url: 'https://viewer.cmass.kr/html/aidt/aidt_e/view_aidt_e.html', description: '씨마스가 제공하는 AI 디지털 교과서 미리보기·교육자료' },
+          { id: 'l-3-18', title: '천재교육 AI 디지털 교육자료 지원센터', url: 'https://support.aitextbook.co.kr/', description: '천재교육의 AI 디지털 교과서 활용 안내 및 교사 지원 자료' },
+        ],
+      },
+      {
+        id: 'edu-portal-community',
+        label: '8. 교사·커뮤니티 자료 모음',
+        iconEmoji: '👩‍🏫',
+        items: [
+          { id: 'l-3-13', title: '초등인공지능교육.COM', url: 'https://www.xn--ob0bug89lftci99a2oa25k5pi.com/', description: '초등 교사가 직접 운영하는 인공지능 수업 자료 모음 사이트' },
+          { id: 'l-3-15', title: '초등 인공지능 교육 모듈형 39강좌', url: 'https://sites.google.com/ptsaebit.es.kr/metaverse/%EC%B4%88%EB%93%B1swai-%EC%BD%98%ED%85%90%EC%B8%A0-%EB%AA%A8%EC%9D%8C/%EC%B4%88%EB%93%B1-%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5-%EA%B5%90%EC%9C%A1%EB%AA%A8%EB%93%88%ED%98%95-39%EA%B0%95%EC%A2%8C', description: '초등 단계의 인공지능 교육을 모듈형 39강좌로 구성한 교사용 콘텐츠 모음' },
+          { id: 'l-3-19', title: 'MyAI Edu', url: 'https://myai.kr/', description: '교사·학생을 위한 인공지능 교육 통합 콘텐츠 사이트' },
+          { id: 'l-3-20', title: '인공지능 교육자료 사이트 모음(노션)', url: 'https://ai4edu.notion.site/AI-92b8c8eca0294fc7a9a2538bca205bdf', description: '이준기·김귀훈 선생님이 정리한 국내외 AI 교육자료 링크 모음 노션 페이지' },
         ],
       },
     ],

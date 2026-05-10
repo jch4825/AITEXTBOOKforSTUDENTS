@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { ChevronDown, ExternalLink, Link2, Search } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
-import { resourceCategories, type ResourceCategory } from '../data/resourcesData';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ChevronDown, ExternalLink, Link2, Search, Star, X } from 'lucide-react';
+import { resourceCategories, type ResourceCategory, type ResourceItem, type ResourceSubCategory } from '../data/resourcesData';
 
-const CATEGORY_ORDER = ['policy', 'ai-basics', 'ethics', 'lesson', 'assessment', 'research-etc'];
+const CATEGORY_ORDER = ['policy', 'ai-basics', 'ethics', 'lesson', 'research-etc'];
 
 const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
   policy: {
@@ -22,15 +21,35 @@ const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
     title: '수업 지원',
     subtitle: '지도안·활동지·수업 자료',
   },
-  assessment: {
-    title: '행정 업무',
-    subtitle: 'ALL IN ONE',
-  },
-  prompts: {
+  'research-etc': {
     title: '연구·연수·기타',
-    subtitle: '프롬프트 예시와 기타 참고 자료',
+    subtitle: '학술 연구·교사 연수·기타 참고 자료',
   },
 };
+
+const PREVIEW_COUNT = 5;
+const FAVORITES_KEY = 'ai-teachers-resource-favorites';
+
+const TAG_RULES: Array<{ tag: string; pattern: RegExp }> = [
+  { tag: '초등', pattern: /초등/ },
+  { tag: '한글·문해', pattern: /한글|문해/ },
+  { tag: '정책', pattern: /정책|기본계획|행동계획|추진 계획|관리 가이드|안내서/ },
+  { tag: '윤리·안전', pattern: /윤리|안전|개인정보|과의존|편향|저작권/ },
+  { tag: '시뮬레이션', pattern: /시뮬레이션|실험실|가상 실험|VlabON/i },
+  { tag: '코딩', pattern: /코딩|프로그래밍|스크래치|엔트리|블록 코딩/i },
+  { tag: '디자인', pattern: /디자인|만화|드로잉|UI/i },
+  { tag: '음성·소리', pattern: /음성|음악|TTS|더빙|노래|작곡/ },
+  { tag: '로컬 AI', pattern: /로컬|Ollama|LM Studio|GPT4ALL|Open WebUI|Jan/i },
+  { tag: '노코드', pattern: /노코드|코드 없는|No Code|Teachable Machine|Brightics/i },
+  { tag: '출판사', pattern: /출판사|미래엔|아이스크림|비상교육|비바샘|씨마스|천재교육/ },
+  { tag: '시도교육청', pattern: /시도교육청|광주|울산|경상남도교육청|서울시교육청|충청남도교육청/ },
+  { tag: '연구', pattern: /학술|논문|학회|연구보고서/ },
+  { tag: '연수', pattern: /연수/ },
+  { tag: '행정', pattern: /행정|학교업무|학교 업무|생기부|학습발달|업무 도움/ },
+  { tag: '수학', pattern: /수학/ },
+  { tag: '과학', pattern: /과학/ },
+  { tag: '영상', pattern: /영상|유튜브|동영상|영화/ },
+];
 
 function getDisplayCategory(category: ResourceCategory): ResourceCategory {
   const display = CATEGORY_DISPLAY[category.id];
@@ -39,7 +58,6 @@ function getDisplayCategory(category: ResourceCategory): ResourceCategory {
 
 function getHostName(url?: string) {
   if (!url) return '링크 준비 중';
-
   try {
     return new URL(url).hostname;
   } catch {
@@ -51,270 +69,475 @@ function getCategoryCount(category: ResourceCategory) {
   return category.subCategories.reduce((sum, sub) => sum + sub.items.length, 0);
 }
 
-const doorPalettes = [
-  { base: '#f3e8ff', shade: '#e9d5ff', accent: '#8b3dff' },
-  { base: '#cffafe', shade: '#bae6fd', accent: '#00a9b4' },
-  { base: '#fef3c7', shade: '#fde68a', accent: '#d97706' },
-  { base: '#fce7f3', shade: '#fbcfe8', accent: '#db2777' },
-  { base: '#d1fae5', shade: '#bbf7d0', accent: '#059669' },
-  { base: '#e0e7ff', shade: '#c7d2fe', accent: '#4f46e5' },
-];
-
-function getDoorPalette(categoryId: string) {
-  const index = Math.abs([...categoryId].reduce((sum, char) => sum + char.charCodeAt(0), 0));
-  return doorPalettes[index % doorPalettes.length];
+function getItemTags(catTitle: string, subLabel: string, item: ResourceItem): string[] {
+  const text = `${catTitle} ${subLabel} ${item.title} ${item.description ?? ''}`;
+  return TAG_RULES.filter(r => r.pattern.test(text)).map(r => r.tag);
 }
 
-function DoorPreview({ category, isOpen }: { category: ResourceCategory; isOpen: boolean }) {
-  const Icon = category.icon;
-  const previewItems = category.subCategories.slice(0, 3);
-  const palette = getDoorPalette(category.id);
-
+function highlight(text: string, query: string): React.ReactNode {
+  if (!query) return text;
+  const lower = text.toLowerCase();
+  const idx = lower.indexOf(query);
+  if (idx === -1) return text;
   return (
-    <span
-      className="resource-door-scene"
-      aria-hidden="true"
-      data-open={isOpen}
-      style={{
-        '--door-base': palette.base,
-        '--door-shade': palette.shade,
-        '--door-accent': palette.accent,
-      } as React.CSSProperties}
-    >
-      <span className={`resource-door-frame ${category.iconBg}`}>
-        <span className="resource-door-glow" />
-        <Icon size={20} className={`resource-door-symbol ${category.iconColor}`} />
-        {previewItems.map((subCategory, index) => (
-          <span
-            key={subCategory.id}
-            className="resource-door-item"
-            style={{ '--door-item-index': index } as React.CSSProperties}
-          >
-            <span>{subCategory.iconEmoji}</span>
+    <>
+      {text.slice(0, idx)}
+      <mark className="rounded bg-yellow-200/70 px-0.5 text-gray-900">
+        {text.slice(idx, idx + query.length)}
+      </mark>
+      {text.slice(idx + query.length)}
+    </>
+  );
+}
+
+function useFavorites() {
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem(FAVORITES_KEY);
+      if (!saved) return [];
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+    } catch {}
+  }, [favorites]);
+
+  const toggle = (id: string) => {
+    setFavorites(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
+  };
+
+  return { favorites, toggle };
+}
+
+function ItemRow({
+  item,
+  breadcrumb,
+  query = '',
+  isFav,
+  onToggleFav,
+}: {
+  item: ResourceItem;
+  breadcrumb?: string;
+  query?: string;
+  isFav: boolean;
+  onToggleFav: () => void;
+}) {
+  const rowClass =
+    'group flex w-full items-start gap-3 px-4 py-3 pr-10 text-left transition hover:bg-canva-purple/5 focus:outline-none focus:ring-2 focus:ring-canva-purple/30';
+
+  const content = (
+    <>
+      <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gray-50 text-gray-400 ring-1 ring-gray-200 group-hover:text-canva-purple">
+        {item.url ? <ExternalLink size={14} /> : <Link2 size={14} />}
+      </span>
+      <span className="min-w-0 flex-1">
+        {breadcrumb && (
+          <span className="mb-0.5 block text-[10px] font-bold uppercase tracking-wide text-gray-400">
+            {breadcrumb}
           </span>
-        ))}
-        <span className="resource-door-panel">
-          <span className="resource-door-knob" />
+        )}
+        <span className="block text-xs font-bold leading-snug text-gray-900 group-hover:text-canva-purple">
+          {highlight(item.title, query)}
+        </span>
+        {item.description && (
+          <span className="mt-1 block text-[11px] leading-relaxed text-gray-500">
+            {highlight(item.description, query)}
+          </span>
+        )}
+        <span className="mt-1.5 block truncate text-[10px] font-mono text-gray-400">
+          {getHostName(item.url)}
         </span>
       </span>
-    </span>
+    </>
   );
+
+  return (
+    <div className="relative">
+      {item.url ? (
+        <a href={item.url} target="_blank" rel="noopener noreferrer" className={rowClass}>
+          {content}
+        </a>
+      ) : (
+        <div className={`${rowClass} cursor-default opacity-65`}>{content}</div>
+      )}
+      <button
+        type="button"
+        onClick={onToggleFav}
+        aria-label={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
+        title={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
+        className={`absolute right-2 top-2.5 z-10 rounded-full p-1.5 transition ${
+          isFav
+            ? 'text-amber-400 hover:bg-amber-50'
+            : 'text-gray-300 hover:bg-gray-100 hover:text-amber-400'
+        }`}
+      >
+        <Star size={14} fill={isFav ? 'currentColor' : 'none'} />
+      </button>
+    </div>
+  );
+}
+
+function SubCategoryCard({
+  subCategory,
+  favorites,
+  onToggleFav,
+}: {
+  subCategory: ResourceSubCategory;
+  favorites: string[];
+  onToggleFav: (id: string) => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const total = subCategory.items.length;
+  const visibleItems = expanded ? subCategory.items : subCategory.items.slice(0, PREVIEW_COUNT);
+  const hasMore = total > PREVIEW_COUNT;
+
+  return (
+    <section className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <header className="flex items-center gap-3 border-b border-gray-100 px-4 py-3">
+        <span className="text-lg leading-none">{subCategory.iconEmoji}</span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-extrabold text-gray-900">{subCategory.label}</span>
+          <span className="mt-0.5 block text-[11px] text-gray-500">{total}개 자료</span>
+        </span>
+      </header>
+
+      {total === 0 ? (
+        <p className="px-4 py-6 text-center text-xs text-gray-400">자료 준비 중</p>
+      ) : (
+        <ul className="divide-y divide-gray-100">
+          {visibleItems.map(item => (
+            <li key={item.id}>
+              <ItemRow
+                item={item}
+                isFav={favorites.includes(item.id)}
+                onToggleFav={() => onToggleFav(item.id)}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {hasMore && (
+        <button
+          type="button"
+          onClick={() => setExpanded(v => !v)}
+          className="flex w-full items-center justify-center gap-1.5 border-t border-gray-100 py-2.5 text-xs font-bold text-canva-purple hover:bg-canva-purple/5"
+        >
+          {expanded ? '접기' : `+${total - PREVIEW_COUNT}개 더 보기`}
+          <ChevronDown
+            size={14}
+            className={`transition-transform ${expanded ? 'rotate-180' : ''}`}
+          />
+        </button>
+      )}
+    </section>
+  );
+}
+
+interface TaggedEntry {
+  item: ResourceItem;
+  categoryTitle: string;
+  subCategoryLabel: string;
+  tags: string[];
+  key: string;
 }
 
 export default function Resources() {
   const [query, setQuery] = useState('');
-  const [openCategoryId, setOpenCategoryId] = useState<string | null>(null);
-  const [openSubCategoryId, setOpenSubCategoryId] = useState<string | null>(null);
-  const orderedCategories = [...resourceCategories]
-    .sort((a, b) => CATEGORY_ORDER.indexOf(a.id) - CATEGORY_ORDER.indexOf(b.id))
-    .map(getDisplayCategory);
+  const [activeTags, setActiveTags] = useState<Set<string>>(() => new Set());
+  const [showFavOnly, setShowFavOnly] = useState(false);
+  const { favorites, toggle: toggleFav } = useFavorites();
+
+  const orderedCategories = useMemo(
+    () =>
+      [...resourceCategories]
+        .sort((a, b) => CATEGORY_ORDER.indexOf(a.id) - CATEGORY_ORDER.indexOf(b.id))
+        .map(getDisplayCategory)
+        .filter(category => getCategoryCount(category) > 0),
+    []
+  );
+
+  const taggedItems: TaggedEntry[] = useMemo(() => {
+    const out: TaggedEntry[] = [];
+    for (const category of orderedCategories) {
+      for (const sub of category.subCategories) {
+        for (const item of sub.items) {
+          out.push({
+            item,
+            categoryTitle: category.title,
+            subCategoryLabel: sub.label,
+            tags: getItemTags(category.title, sub.label, item),
+            key: `${category.id}-${sub.id}-${item.id}`,
+          });
+        }
+      }
+    }
+    return out;
+  }, [orderedCategories]);
+
+  const tagCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const t of taggedItems) {
+      for (const tag of t.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  }, [taggedItems]);
 
   const normalizedQuery = query.trim().toLowerCase();
-  const visibleCategories = orderedCategories
-    .map(category => ({
-      ...category,
-      subCategories: category.subCategories
-        .map(subCategory => ({
-          ...subCategory,
-          items: subCategory.items.filter(item => {
-            if (!normalizedQuery) return true;
+  const isFiltering = normalizedQuery.length > 0 || activeTags.size > 0 || showFavOnly;
 
-            return (
-              category.title.toLowerCase().includes(normalizedQuery) ||
-              category.subtitle.toLowerCase().includes(normalizedQuery) ||
-              subCategory.label.toLowerCase().includes(normalizedQuery) ||
-              item.title.toLowerCase().includes(normalizedQuery) ||
-              item.description?.toLowerCase().includes(normalizedQuery) ||
-              item.url?.toLowerCase().includes(normalizedQuery)
-            );
-          }),
-        }))
-        .filter(subCategory => !normalizedQuery || subCategory.items.length > 0),
-    }))
-    .filter(category => !normalizedQuery || category.subCategories.length > 0);
+  const filteredResults = useMemo(() => {
+    if (!isFiltering) return [];
+    return taggedItems.filter(({ item, categoryTitle, subCategoryLabel, tags }) => {
+      if (showFavOnly && !favorites.includes(item.id)) return false;
+      if (activeTags.size > 0 && !tags.some(t => activeTags.has(t))) return false;
+      if (normalizedQuery) {
+        const haystack = [
+          categoryTitle,
+          subCategoryLabel,
+          item.title,
+          item.description ?? '',
+          item.url ?? '',
+        ]
+          .join(' ')
+          .toLowerCase();
+        if (!haystack.includes(normalizedQuery)) return false;
+      }
+      return true;
+    });
+  }, [isFiltering, taggedItems, showFavOnly, favorites, activeTags, normalizedQuery]);
 
-  const activeCategory = visibleCategories.find(category => category.id === openCategoryId) ?? null;
-  const totalVisibleCount = visibleCategories.reduce(
-    (sum, category) => sum + category.subCategories.reduce((subSum, sub) => subSum + sub.items.length, 0),
-    0
+  const favoriteEntries = useMemo(
+    () => taggedItems.filter(t => favorites.includes(t.item.id)),
+    [taggedItems, favorites]
   );
+
+  const toggleTag = (tag: string) => {
+    setActiveTags(prev => {
+      const next = new Set(prev);
+      if (next.has(tag)) next.delete(tag);
+      else next.add(tag);
+      return next;
+    });
+  };
+
+  const clearFilters = () => {
+    setActiveTags(new Set());
+    setShowFavOnly(false);
+    setQuery('');
+  };
+
+  const handleAnchorClick = (id: string) => {
+    document
+      .getElementById(`resource-cat-${id}`)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <div className="moholy-surface moholy-surface-resources min-h-screen">
       <div className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:py-10">
-        <header className="mb-8 text-center">
+        <header className="mb-6 text-center">
           <p className="mb-2 text-xs font-bold text-canva-purple">AI Bridge Resource Hub</p>
           <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-canva-ink">자료실</h1>
           <p className="text-sm text-canva-gray">
-            문을 열듯 분류를 선택하면 관련 자료가 펼쳐지고, 아래에서 전체 목록을 빠르게 확인할 수 있습니다.
+            카테고리·태그·즐겨찾기·검색을 자유롭게 조합해 자료를 빠르게 찾을 수 있습니다.
           </p>
         </header>
 
-        <div className="relative mb-6">
-          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            value={query}
-            onChange={e => {
-              setQuery(e.target.value);
-              setOpenCategoryId(null);
-              setOpenSubCategoryId(null);
-            }}
-            placeholder="자료명, 설명, 링크 검색..."
-            className="h-12 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 text-sm shadow-sm outline-none transition focus:border-canva-purple/40 focus:ring-2 focus:ring-canva-purple/20"
-          />
+        <div className="sticky top-2 z-20 mb-4">
+          <div className="relative">
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="자료명, 설명, 링크 검색..."
+              className="h-12 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-10 text-sm shadow-sm outline-none transition focus:border-canva-purple/40 focus:ring-2 focus:ring-canva-purple/20"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                aria-label="검색어 지우기"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {visibleCategories.map(category => {
-            const isOpen = openCategoryId === category.id;
-            const categoryCount = getCategoryCount(category);
-
+        <div className="mb-5 flex flex-wrap items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setShowFavOnly(v => !v)}
+            disabled={favorites.length === 0}
+            className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold transition disabled:cursor-not-allowed disabled:opacity-40 ${
+              showFavOnly
+                ? 'border-amber-400 bg-amber-50 text-amber-700'
+                : 'border-gray-200 bg-white text-gray-700 hover:border-amber-300 hover:text-amber-600'
+            }`}
+          >
+            <Star size={11} fill={showFavOnly ? 'currentColor' : 'none'} />
+            즐겨찾기
+            {favorites.length > 0 && <span className="opacity-60">{favorites.length}</span>}
+          </button>
+          {tagCounts.map(([tag, count]) => {
+            const isOn = activeTags.has(tag);
             return (
-              <div key={category.id} className="min-w-0">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setOpenCategoryId(isOpen ? null : category.id);
-                    setOpenSubCategoryId(null);
-                  }}
-                  aria-expanded={isOpen}
-                  className={`resource-card group flex min-h-28 w-full items-center gap-4 rounded-2xl border bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-canva-purple/30 ${
-                    isOpen ? 'border-canva-purple ring-2 ring-canva-purple/15' : 'border-gray-200'
-                  }`}
-                >
-                  <DoorPreview category={category} isOpen={isOpen} />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-base font-bold text-gray-900">{category.title}</span>
-                    <span className="mt-1 block text-xs leading-relaxed text-gray-500">{category.subtitle}</span>
-                    <span className="mt-2 block text-[11px] font-bold text-canva-purple">{categoryCount}개 자료</span>
-                  </span>
-                  <ChevronDown
-                    size={18}
-                    className={`shrink-0 text-gray-400 transition-transform ${isOpen ? 'rotate-180 text-canva-purple' : ''}`}
-                  />
-                </button>
-
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.section
-                      key={`${category.id}-panel`}
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.18 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="mt-2 max-h-[58vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
-                        <div className="border-b border-gray-100 px-4 py-3">
-                          <h2 className="text-sm font-extrabold text-gray-900">{category.title}</h2>
-                          <p className="mt-1 text-xs text-gray-500">{category.subtitle}</p>
-                        </div>
-
-                        <div className="space-y-2 p-3">
-                          {category.subCategories.length === 0 && (
-                            <p className="py-6 text-center text-sm text-gray-400">자료를 준비 중입니다.</p>
-                          )}
-                          {category.subCategories.map(subCategory => (
-                            <section key={subCategory.id} className="rounded-xl border border-gray-200 bg-gray-50">
-                              <button
-                                type="button"
-                                onClick={() => setOpenSubCategoryId(
-                                  openSubCategoryId === subCategory.id ? null : subCategory.id
-                                )}
-                                aria-expanded={openSubCategoryId === subCategory.id}
-                                className="flex w-full items-center gap-3 px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-canva-purple/30"
-                              >
-                                <span className="text-base leading-none">{subCategory.iconEmoji}</span>
-                                <span className="min-w-0 flex-1">
-                                  <span className="block text-xs font-extrabold text-gray-800">{subCategory.label}</span>
-                                  <span className="mt-0.5 block text-[10px] font-bold text-canva-purple">{subCategory.items.length}개 자료</span>
-                                </span>
-                                <ChevronDown
-                                  size={16}
-                                  className={`shrink-0 text-gray-400 transition-transform ${
-                                    openSubCategoryId === subCategory.id ? 'rotate-180 text-canva-purple' : ''
-                                  }`}
-                                />
-                              </button>
-
-                              <AnimatePresence>
-                                {openSubCategoryId === subCategory.id && (
-                                  <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    transition={{ duration: 0.16 }}
-                                    className="overflow-hidden"
-                                  >
-                                    <div className="space-y-2 border-t border-gray-200 bg-white p-3">
-                                      {subCategory.items.map(item => {
-                                        const rowClass = 'group flex w-full items-start gap-3 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-left transition hover:border-canva-purple/30 hover:bg-white focus:outline-none focus:ring-2 focus:ring-canva-purple/30';
-                                        const content = (
-                                          <>
-                                            <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-gray-400 ring-1 ring-gray-200 group-hover:text-canva-purple">
-                                              {item.url ? <ExternalLink size={14} /> : <Link2 size={14} />}
-                                            </span>
-                                            <span className="min-w-0 flex-1">
-                                              <span className="block text-xs font-bold leading-snug text-gray-900 group-hover:text-canva-purple">
-                                                {item.title}
-                                              </span>
-                                              {item.description && (
-                                                <span className="mt-1 block text-[11px] leading-relaxed text-gray-500">{item.description}</span>
-                                              )}
-                                              <span className="mt-2 block truncate text-[10px] font-mono text-gray-400">
-                                                {getHostName(item.url)}
-                                              </span>
-                                            </span>
-                                          </>
-                                        );
-
-                                        if (!item.url) {
-                                          return (
-                                            <div key={item.id} className={`${rowClass} opacity-65`}>
-                                              {content}
-                                            </div>
-                                          );
-                                        }
-
-                                        return (
-                                          <a
-                                            key={item.id}
-                                            href={item.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={rowClass}
-                                          >
-                                            {content}
-                                          </a>
-                                        );
-                                      })}
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </section>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.section>
-                  )}
-                </AnimatePresence>
-              </div>
+              <button
+                key={tag}
+                type="button"
+                onClick={() => toggleTag(tag)}
+                className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold transition ${
+                  isOn
+                    ? 'border-canva-purple bg-canva-purple/10 text-canva-purple'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-canva-purple/40 hover:text-canva-purple'
+                }`}
+              >
+                {tag} <span className="opacity-60">{count}</span>
+              </button>
             );
           })}
+          {(activeTags.size > 0 || showFavOnly || query) && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="ml-1 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold text-gray-500 hover:text-gray-800"
+            >
+              <X size={11} /> 필터 초기화
+            </button>
+          )}
         </div>
 
-        {totalVisibleCount === 0 && (
-          <div className="mt-5 rounded-2xl border border-gray-200 bg-white py-16 text-center text-sm text-gray-400">
-            "{query}"에 해당하는 자료가 없습니다.
-          </div>
+        {!isFiltering && (
+          <>
+            {favoriteEntries.length > 0 && (
+              <section className="mb-8 scroll-mt-24">
+                <header className="mb-3 flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
+                    <Star size={18} fill="currentColor" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <h2 className="text-lg font-extrabold text-canva-ink">
+                      즐겨찾기
+                      <span className="ml-2 text-xs font-bold text-amber-600">
+                        {favoriteEntries.length}
+                      </span>
+                    </h2>
+                    <p className="text-xs text-gray-500">★ 표시한 자료를 한곳에 모아 봅니다</p>
+                  </span>
+                </header>
+                <ul className="divide-y divide-gray-100 rounded-2xl border border-gray-200 bg-white shadow-sm">
+                  {favoriteEntries.map(entry => (
+                    <li key={entry.key}>
+                      <ItemRow
+                        item={entry.item}
+                        breadcrumb={`${entry.categoryTitle} › ${entry.subCategoryLabel}`}
+                        isFav={true}
+                        onToggleFav={() => toggleFav(entry.item.id)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            <nav className="mb-6 flex flex-wrap gap-2">
+              {orderedCategories.map(category => (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => handleAnchorClick(category.id)}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold text-gray-700 shadow-sm transition hover:border-canva-purple/40 hover:text-canva-purple"
+                >
+                  <span>{category.title}</span>
+                  <span className="text-[10px] text-gray-400">{getCategoryCount(category)}</span>
+                </button>
+              ))}
+            </nav>
+
+            <div className="space-y-10">
+              {orderedCategories.map(category => {
+                const Icon = category.icon;
+                return (
+                  <section
+                    key={category.id}
+                    id={`resource-cat-${category.id}`}
+                    className="scroll-mt-24"
+                  >
+                    <header className="mb-3 flex items-center gap-3">
+                      <span
+                        className={`flex h-9 w-9 items-center justify-center rounded-xl ${category.iconBg}`}
+                      >
+                        <Icon size={18} className={category.iconColor} />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <h2 className="text-lg font-extrabold text-canva-ink">
+                          {category.title}
+                          <span className="ml-2 text-xs font-bold text-canva-purple">
+                            {getCategoryCount(category)}
+                          </span>
+                        </h2>
+                        <p className="text-xs text-gray-500">{category.subtitle}</p>
+                      </span>
+                    </header>
+
+                    <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+                      {category.subCategories.map(sub => (
+                        <SubCategoryCard
+                          key={sub.id}
+                          subCategory={sub}
+                          favorites={favorites}
+                          onToggleFav={toggleFav}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
+          </>
         )}
 
-        {totalVisibleCount > 0 && !activeCategory && (
-          <div className="mt-5 rounded-2xl border border-dashed border-gray-300 bg-white/70 py-12 text-center text-sm text-gray-500">
-            위의 분류 버튼을 누르면 문이 열리고 자료 목록이 아래에 표시됩니다.
-          </div>
+        {isFiltering && (
+          <section>
+            <p className="mb-3 flex flex-wrap items-center gap-2 text-xs font-bold text-gray-500">
+              <span>
+                필터 결과 <span className="text-canva-purple">{filteredResults.length}</span>건
+              </span>
+              {showFavOnly && <span className="text-amber-600">★ 즐겨찾기만</span>}
+              {activeTags.size > 0 && (
+                <span className="text-canva-purple">#{[...activeTags].join(' #')}</span>
+              )}
+              {normalizedQuery && <span className="text-gray-700">"{query}"</span>}
+            </p>
+            {filteredResults.length === 0 ? (
+              <div className="rounded-2xl border border-gray-200 bg-white py-16 text-center text-sm text-gray-400">
+                조건에 맞는 자료가 없습니다.
+              </div>
+            ) : (
+              <ul className="divide-y divide-gray-100 rounded-2xl border border-gray-200 bg-white shadow-sm">
+                {filteredResults.map(({ item, categoryTitle, subCategoryLabel, key }) => (
+                  <li key={key}>
+                    <ItemRow
+                      item={item}
+                      breadcrumb={`${categoryTitle} › ${subCategoryLabel}`}
+                      query={normalizedQuery}
+                      isFav={favorites.includes(item.id)}
+                      onToggleFav={() => toggleFav(item.id)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
         )}
       </div>
     </div>
