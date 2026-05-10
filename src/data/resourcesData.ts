@@ -170,6 +170,7 @@ export const resourceCategories: ResourceCategory[] = [
         items: [
           { id: 'small-1', title: 'Chrome Music Lab', url: 'https://musiclab.chromeexperiments.com/', description: '리듬, 멜로디, 소리의 파형을 놀이처럼 탐색하는 구글의 웹 기반 음악 실험실' },
           { id: 'small-2', title: 'AutoDraw', url: 'https://www.autodraw.com/', description: '간단한 스케치를 AI가 그림 아이콘으로 추천해 주는 구글 크리에이티브 랩의 드로잉 도구' },
+          { id: 'small-3', title: 'Google Arts & Culture', url: 'https://artsandculture.google.com/?hl=ko', description: '세계 미술 작품, 박물관, 역사·문화 자료를 고화질 이미지와 인터랙티브 콘텐츠로 탐색할 수 있는 구글 문화예술 플랫폼' },
         ],
       },
       {
