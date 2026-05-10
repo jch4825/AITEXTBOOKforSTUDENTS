@@ -62,7 +62,7 @@ const WORK_MODES = [
     bar: 'bg-canva-ink',
     button: 'bg-canva-ink hover:bg-canva-ink/90',
     chipStyle: 'bg-slate-200 text-slate-600',
-    chips: ['PPT', 'PDF', '서식'],
+    chips: ['AI 도구', '교육 포털', '정책 지침'],
   },
 ] as const;
 

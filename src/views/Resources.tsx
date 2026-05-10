@@ -24,7 +24,7 @@ const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
   },
   assessment: {
     title: '행정 업무',
-    subtitle: '평가·기록·생기부 업무 자료',
+    subtitle: 'ALL IN ONE',
   },
   prompts: {
     title: '연구·연수·기타',

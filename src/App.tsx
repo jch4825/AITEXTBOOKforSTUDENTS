@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useState } from 'react';
 import Sidebar from './components/Sidebar';
-import { Menu } from 'lucide-react';
+import { Menu, ChevronRight } from 'lucide-react';
 import AccessibilityWidget from './components/AccessibilityWidget';
 import DiagnosticModal from './components/onboarding/DiagnosticModal';
 import { ViewType, Module } from './types';
@@ -25,6 +25,22 @@ function ViewFallback() {
 
 export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('ai-bridge-sidebar-collapsed') === 'true';
+    } catch {
+      return false;
+    }
+  });
+  const toggleSidebarCollapsed = () => {
+    setIsSidebarCollapsed(prev => {
+      const next = !prev;
+      try {
+        localStorage.setItem('ai-bridge-sidebar-collapsed', String(next));
+      } catch {}
+      return next;
+    });
+  };
   const [currentView, setCurrentView] = useState<ViewType>(() => {
     const params = new URLSearchParams(window.location.search);
     return params.has('lesson') ? 'tutorial' : 'home';
@@ -126,12 +142,25 @@ export default function App() {
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
         onRestartDiagnostic={restartDiagnosticWithProgressReset}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebarCollapsed}
       />
 
+      {isSidebarCollapsed && (
+        <button
+          onClick={toggleSidebarCollapsed}
+          aria-label="사이드바 펼치기"
+          title="사이드바 펼치기"
+          className="hidden md:flex fixed top-4 left-3 z-50 w-9 h-9 items-center justify-center rounded-full border border-canva-border bg-white text-canva-gray hover:text-canva-purple hover:border-canva-purple shadow-sm transition-colors"
+        >
+          <ChevronRight size={18} />
+        </button>
+      )}
+
       <main
-        className={`md:pl-52 lg:pl-64 min-h-screen transition-[padding] duration-300 ${
-          currentView === 'tutorial' ? 'pt-0' : 'pt-12 landscape:pt-10 md:pt-0'
-        }`}
+        className={`min-h-screen transition-[padding] duration-300 ${
+          isSidebarCollapsed ? 'md:pl-0' : 'md:pl-52 lg:pl-64'
+        } ${currentView === 'tutorial' ? 'pt-0' : 'pt-12 landscape:pt-10 md:pt-0'}`}
       >
         <AnimatePresence mode="wait">
           <motion.div

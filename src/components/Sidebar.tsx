@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, BookOpen, Wrench, GraduationCap, CheckCircle2, Key, X, LogOut, RotateCcw } from 'lucide-react';
+import { Home, BookOpen, Wrench, GraduationCap, CheckCircle2, Key, X, LogOut, RotateCcw, ChevronLeft } from 'lucide-react';
 import { ViewType, Module, Persona } from '../types';
 import { modules, lessons } from '../data/tutorialData';
 import { motion } from 'motion/react';
@@ -16,9 +16,11 @@ interface SidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
   onRestartDiagnostic?: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export default function Sidebar({ currentView, onViewChange, selectedModule, onSelectModule, completedLessons, isOpen, onClose, onRestartDiagnostic }: SidebarProps) {
+export default function Sidebar({ currentView, onViewChange, selectedModule, onSelectModule, completedLessons, isOpen, onClose, onRestartDiagnostic, isCollapsed, onToggleCollapse }: SidebarProps) {
   const [showApiModal, setShowApiModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [apiKeyError, setApiKeyError] = useState('');
@@ -105,8 +107,8 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
           onClick={onClose}
         />
       )}
-      <aside className={`w-64 md:w-52 lg:w-64 h-screen bg-white border-r border-canva-border flex flex-col fixed left-0 top-0 z-50 transition-all duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-        <div className="p-6 pb-4 shrink-0">
+      <aside className={`w-64 md:w-52 lg:w-64 h-screen bg-white border-r border-canva-border flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} ${isCollapsed ? 'md:-translate-x-full' : 'md:translate-x-0'}`}>
+        <div className="p-6 pb-4 shrink-0 relative">
           <h1 className="leading-none">
             <span className="bg-gradient-to-r from-canva-purple to-canva-teal bg-clip-text text-2xl font-black tracking-tighter text-transparent">
               AI Bridge
@@ -115,7 +117,21 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
               Zero-Gap Toolkit
             </span>
           </h1>
-          <div className="mt-1.5 h-0.5 w-14 rounded-full bg-gradient-to-r from-canva-purple to-canva-teal" />
+          <div className="mt-3 flex items-center gap-1.5" aria-hidden="true">
+            <span className="block h-2.5 w-2.5 bg-canva-ink" />
+            <span className="block h-px w-7 bg-canva-purple" />
+            <span className="block h-2 w-2 rounded-full bg-canva-teal" />
+          </div>
+          {onToggleCollapse && (
+            <button
+              onClick={onToggleCollapse}
+              aria-label="사이드바 접기"
+              title="사이드바 접기"
+              className="hidden md:flex absolute top-5 right-3 w-7 h-7 items-center justify-center rounded-full border border-canva-border bg-white text-canva-gray hover:text-canva-purple hover:border-canva-purple transition-colors"
+            >
+              <ChevronLeft size={16} />
+            </button>
+          )}
         </div>
 
       <nav className="flex-1 min-h-0 px-4 flex flex-col overflow-y-auto webkit-scrollbar-hide">

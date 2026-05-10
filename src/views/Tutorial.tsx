@@ -2179,7 +2179,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                     key={lesson.id}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.05, duration: 0.3 }}
+                    transition={{ delay: idx * 0.02, duration: 0.18 }}
                     className="relative group"
                   >
                     <div
@@ -2258,7 +2258,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
   return (
     <div className="min-h-screen bg-canva-bg">
       {showM0Welcome && <Module0WelcomePopup onClose={handleM0WelcomeClose} />}
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {currentLesson ? (
           <motion.div
             key={currentLesson.id}
@@ -2300,6 +2300,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.18 }}
           >
             <div className="klee-surface klee-lesson-select min-h-screen">
               {renderLessonList(selectedModule)}
@@ -2311,6 +2312,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.18 }}
           >
             <div className="klee-surface klee-module-select min-h-screen">
               {renderModuleList()}
