@@ -22,10 +22,11 @@ const CATEGORY_ORDER: ToolDefinition['category'][] = [
   '수업도구',
   '행정도구',
   'AI 활용',
-  '외부도구',
+  'GPTs',
 ];
 
 type CategoryMeta = {
+  label?: string;
   description: string;
   badgeClass: string;
   icon: React.ElementType;
@@ -67,8 +68,9 @@ const CATEGORY_META: Record<ToolDefinition['category'], CategoryMeta> = {
     iconColor: 'text-fuchsia-500',
     doorPalette: { base: '#fae8ff', shade: '#f5d0fe', accent: '#c026d3' },
   },
-  '외부도구': {
-    description: '바로 이동해서 쓰는 외부 서비스',
+  'GPTs': {
+    label: 'GPTs(외부도구)',
+    description: '바로 이동해서 쓰는 교육용 GPT 모음',
     badgeClass: 'bg-slate-100 text-slate-700 border-slate-200',
     icon: Globe,
     iconBg: 'bg-slate-100',
@@ -241,6 +243,20 @@ function ToolCard({
   );
 }
 
+function groupToolsBySubCategory(tools: ToolDefinition[]): { subCategory: string; tools: ToolDefinition[] }[] {
+  const groups = new Map<string, ToolDefinition[]>();
+
+  for (const tool of tools) {
+    const subCategory = tool.subCategory ?? '기타';
+    groups.set(subCategory, [...(groups.get(subCategory) ?? []), tool]);
+  }
+
+  return Array.from(groups.entries()).map(([subCategory, groupedTools]) => ({
+    subCategory,
+    tools: groupedTools,
+  }));
+}
+
 export default function QuickTools() {
   const [query, setQuery] = useState('');
   const [openCategory, setOpenCategory] = useState<ToolDefinition['category'] | null>(null);
@@ -260,6 +276,7 @@ export default function QuickTools() {
           tool.title.includes(query) ||
           tool.description.includes(query) ||
           tool.tags.some(tag => tag.includes(query)) ||
+          (tool.subCategory?.includes(query) ?? false) ||
           category.includes(query)
         );
       }),
@@ -305,6 +322,7 @@ export default function QuickTools() {
           {filteredGroups.map(({ category, tools }) => {
             const isOpen = openCategory === category;
             const meta = CATEGORY_META[category];
+            const categoryLabel = meta.label ?? category;
 
             return (
               <div key={category} className="min-w-0">
@@ -318,7 +336,7 @@ export default function QuickTools() {
                 >
                   <ToolPalettePreview category={category} tools={tools} isOpen={isOpen} />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-base font-bold text-gray-900">{category}</span>
+                    <span className="block text-base font-bold text-gray-900">{categoryLabel}</span>
                     <span className="mt-1 block text-xs leading-relaxed text-gray-500">{meta.description}</span>
                     <span className="mt-2 block text-[11px] font-bold text-canva-purple">{tools.length}개 도구</span>
                   </span>
@@ -340,15 +358,35 @@ export default function QuickTools() {
                     >
                       <div className="mt-2 max-h-[70vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
                         <div className="border-b border-gray-100 px-4 py-3">
-                          <h2 className="text-sm font-extrabold text-gray-900">{category}</h2>
+                          <h2 className="text-sm font-extrabold text-gray-900">{categoryLabel}</h2>
                           <p className="mt-1 text-xs text-gray-500">{meta.description}</p>
                         </div>
                         <div className="p-3">
-                          <div className="flex flex-col gap-2">
-                            {tools.map((tool, index) => (
-                              <ToolCard key={tool.id} tool={tool} index={index} onOpen={handleOpen} />
-                            ))}
-                          </div>
+                          {category === 'GPTs' ? (
+                            <div className="space-y-4">
+                              {groupToolsBySubCategory(tools).map(({ subCategory, tools: subCategoryTools }) => (
+                                <section key={subCategory}>
+                                  <div className="mb-2 flex items-center justify-between gap-3 border-b border-gray-100 pb-2">
+                                    <h3 className="text-xs font-extrabold text-gray-800">{subCategory}</h3>
+                                    <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-500">
+                                      {subCategoryTools.length}개
+                                    </span>
+                                  </div>
+                                  <div className="flex flex-col gap-2">
+                                    {subCategoryTools.map((tool, index) => (
+                                      <ToolCard key={tool.id} tool={tool} index={index} onOpen={handleOpen} />
+                                    ))}
+                                  </div>
+                                </section>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex flex-col gap-2">
+                              {tools.map((tool, index) => (
+                                <ToolCard key={tool.id} tool={tool} index={index} onOpen={handleOpen} />
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </motion.section>

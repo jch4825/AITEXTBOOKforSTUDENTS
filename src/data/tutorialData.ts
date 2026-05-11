@@ -1530,6 +1530,8 @@ export const lessons: Lesson[] = [
       * 이번 실습에서는 Gemini API 키를 사용할 수 있습니다.
       * API키가 입력된 상태라면 나만의 질문, 나만의 답변을 생성할 수 있습니다.
       * 답변이 생성되면 **'구글Docs에 ctrl+v 하세요'** 버튼으로 복사해 챗봇 설정 초안으로 활용해 보세요.
+
+      [Gems 공유 방법 안내](https://www.iorad.com/player/2670512/)
     `,
     estimatedMinutes: 5,
     order: 8,
