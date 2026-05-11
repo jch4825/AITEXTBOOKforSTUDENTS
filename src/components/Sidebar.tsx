@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 import { GEMINI_MODEL_GUIDE } from '../utils/gemini';
 import { getModuleVisibility } from '../data/moduleVisibility';
 import { loadPersona } from '../hooks/useDiagnostic';
+import { clearGeminiApiKey, hasGeminiApiKey, saveGeminiApiKey } from '../services/storage';
 
 interface SidebarProps {
   currentView: ViewType;
@@ -29,16 +30,14 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
   const [showRestartConfirm, setShowRestartConfirm] = useState(false);
   const [persona, setPersona] = useState<Persona | null>(() => loadPersona());
   
-  // localStorage 변경을 즉시 UI에 반영하기 위해 state로 관리
+  // Keep key changes reflected in same-tab UI state.
   const [hasApiKey, setHasApiKey] = useState(() => {
-    const key = localStorage.getItem('gemini-api-key');
-    return !!(key && key.length > 10);
+    return hasGeminiApiKey();
   });
 
   useEffect(() => {
     const refresh = () => {
-      const key = localStorage.getItem('gemini-api-key');
-      setHasApiKey(!!(key && key.length > 10));
+      setHasApiKey(hasGeminiApiKey());
     };
     // 다른 탭에서 변경될 때 (storage 이벤트는 동일 탭에서는 안 발생)
     window.addEventListener('storage', refresh);
@@ -71,12 +70,14 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
     }
 
     try {
-      localStorage.setItem('gemini-api-key', cleaned);
+      if (!saveGeminiApiKey(cleaned)) {
+        setApiKeyError('釉뚮씪?곗? ???怨듦컙??遺議깊빐 ?ㅻ? ??ν븷 ???놁뒿?덈떎.');
+        return;
+      }
     } catch {
       setApiKeyError('브라우저 저장 공간이 부족해 키를 저장할 수 없습니다.');
       return;
     }
-    window.dispatchEvent(new Event('api-key-changed'));
     setShowApiModal(false);
     setApiKeyInput('');
     setApiKeyError('');
@@ -266,8 +267,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => {
-                  localStorage.removeItem('gemini-api-key');
-                  window.dispatchEvent(new Event('api-key-changed'));
+                  clearGeminiApiKey();
                   setShowExitModal(false);
                   window.close();
                   // window.close() may be blocked; show a friendly fallback
@@ -403,8 +403,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
-                          localStorage.removeItem('gemini-api-key');
-                          window.dispatchEvent(new Event('api-key-changed'));
+                          clearGeminiApiKey();
                           setShowApiModal(false);
                           setShowDeleteConfirm(false);
                         }}

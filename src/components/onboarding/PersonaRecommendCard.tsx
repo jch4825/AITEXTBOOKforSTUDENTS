@@ -29,8 +29,8 @@ const personaCopy: Record<Persona, { title: string; body: string; bullets: strin
   },
   expert: {
     title: '자료부터 바로 가져가세요',
-    body: '이미 충분히 익숙하시다면 자료실에서 수업·행정 템플릿을 즉시 활용하세요. AI 윤리 모듈(모듈 5)도 함께 살펴보시길 권합니다.',
-    bullets: ['수업·행정 템플릿 즉시 다운로드', '모듈은 필요한 부분만 골라 보기', 'AI 윤리와 현명한 사용(모듈 5) 추천'],
+    body: '이미 충분히 익숙하시다면 자료실과 AI 도구 모음에서 수업·행정 템플릿을 즉시 활용하세요. AI 윤리 모듈(모듈 5)도 함께 살펴보시길 권합니다.',
+    bullets: ['내가 원하는 인공지능 관련 자료 즉시 확인', '모듈은 필요한 부분만 골라 보기', 'AI 윤리와 현명한 사용(모듈 5) 추천'],
     primaryLabel: '자료실 바로 가기',
     primaryAction: 'resources',
   },
@@ -95,6 +95,26 @@ export default function PersonaRecommendCard({ persona, purpose, onStartModule, 
         {copy.primaryLabel}
         <ArrowRight size={16} />
       </button>
+      {persona === 'expert' && (
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => onStartModule('m5')}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-3 text-sm font-extrabold text-white hover:bg-emerald-800"
+          >
+            모듈 5 바로 가기
+            <ArrowRight size={16} />
+          </button>
+          <button
+            type="button"
+            onClick={onOpenTools}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-sky-700 px-4 py-3 text-sm font-extrabold text-white hover:bg-sky-800"
+          >
+            AI 도구 모음 바로 가기
+            <ArrowRight size={16} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

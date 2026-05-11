@@ -5,7 +5,15 @@ import AccessibilityWidget from './components/AccessibilityWidget';
 import DiagnosticModal from './components/onboarding/DiagnosticModal';
 import { ViewType, Module } from './types';
 import { motion, AnimatePresence } from 'motion/react';
-import { DIAGNOSTIC_STORAGE_KEYS } from './hooks/useDiagnostic';
+import {
+  clearLessonProgress,
+  getLessonProgress,
+  getSidebarCollapsed,
+  hasCompletedOnboarding,
+  resetDiagnosticStorage,
+  saveLessonProgress,
+  saveSidebarCollapsed,
+} from './services/storage';
 
 const Home = lazy(() => import('./views/Home'));
 const Tutorial = lazy(() => import('./views/Tutorial'));
@@ -25,19 +33,11 @@ function ViewFallback() {
 
 export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('ai-bridge-sidebar-collapsed') === 'true';
-    } catch {
-      return false;
-    }
-  });
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => getSidebarCollapsed());
   const toggleSidebarCollapsed = () => {
     setIsSidebarCollapsed(prev => {
       const next = !prev;
-      try {
-        localStorage.setItem('ai-bridge-sidebar-collapsed', String(next));
-      } catch {}
+      saveSidebarCollapsed(next);
       return next;
     });
   };
@@ -46,21 +46,8 @@ export default function App() {
     return params.has('lesson') ? 'tutorial' : 'home';
   });
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
-  const [showDiagnostic, setShowDiagnostic] = useState(() => {
-    try {
-      return localStorage.getItem(DIAGNOSTIC_STORAGE_KEYS.onboarded) !== 'true';
-    } catch {
-      return false;
-    }
-  });
-  const [completedLessons, setCompletedLessons] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('ai-teachers-progress');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [showDiagnostic, setShowDiagnostic] = useState(() => !hasCompletedOnboarding());
+  const [completedLessons, setCompletedLessons] = useState<string[]>(() => getLessonProgress());
 
   const handleViewChange = (view: ViewType) => {
     setCurrentView(view);
@@ -69,7 +56,8 @@ export default function App() {
 
   const restartDiagnosticWithProgressReset = () => {
     setCompletedLessons([]);
-    localStorage.removeItem('ai-teachers-progress');
+    clearLessonProgress();
+    resetDiagnosticStorage();
     setShowDiagnostic(true);
     setIsMobileMenuOpen(false);
   };
@@ -79,7 +67,7 @@ export default function App() {
       const next = prev.includes(lessonId)
         ? prev.filter(id => id !== lessonId)
         : [...prev, lessonId];
-      localStorage.setItem('ai-teachers-progress', JSON.stringify(next));
+      saveLessonProgress(next);
       return next;
     });
   };
@@ -88,7 +76,7 @@ export default function App() {
     setCompletedLessons(prev => {
       if (prev.includes(lessonId)) return prev;
       const next = [...prev, lessonId];
-      localStorage.setItem('ai-teachers-progress', JSON.stringify(next));
+      saveLessonProgress(next);
       return next;
     });
   };

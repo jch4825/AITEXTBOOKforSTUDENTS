@@ -1,21 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Type, GripVertical, X } from 'lucide-react';
 import { FontScale, applyFontScale, loadFontScale } from '../utils/a11y';
+import {
+  getWidgetCollapsed,
+  loadWidgetPos,
+  saveWidgetCollapsed,
+  saveWidgetPos,
+  STORAGE_KEYS,
+} from '../services/storage';
 
 type Pos = { x: number; y: number };
-
-const POS_KEY = 'ai-bridge-widget-pos';
-const COLLAPSED_KEY = 'ai-bridge-widget-collapsed';
-
-function loadPos(): Pos | null {
-  try {
-    const raw = localStorage.getItem(POS_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (typeof parsed?.x === 'number' && typeof parsed?.y === 'number') return parsed;
-  } catch {}
-  return null;
-}
 
 function clampToViewport(p: Pos, w: number, h: number): Pos {
   const maxX = Math.max(0, window.innerWidth - w - 4);
@@ -28,11 +22,9 @@ function clampToViewport(p: Pos, w: number, h: number): Pos {
 
 export default function AccessibilityWidget() {
   const [scale, setScale] = useState<FontScale>(() => loadFontScale());
-  const [pos, setPos] = useState<Pos | null>(() => loadPos());
+  const [pos, setPos] = useState<Pos | null>(() => loadWidgetPos());
   const [dragging, setDragging] = useState(false);
-  const [collapsed, setCollapsed] = useState<boolean>(() => {
-    try { return localStorage.getItem(COLLAPSED_KEY) === 'true'; } catch { return false; }
-  });
+  const [collapsed, setCollapsed] = useState<boolean>(() => getWidgetCollapsed());
   const expandedRef = useRef<HTMLDivElement>(null);
   const collapsedRef = useRef<HTMLButtonElement>(null);
   const dragStart = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null);
@@ -40,7 +32,7 @@ export default function AccessibilityWidget() {
 
   const toggleCollapsed = (next: boolean) => {
     setCollapsed(next);
-    try { localStorage.setItem(COLLAPSED_KEY, String(next)); } catch {}
+    saveWidgetCollapsed(next);
   };
 
   useEffect(() => {
@@ -49,9 +41,11 @@ export default function AccessibilityWidget() {
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
-      if (e.key === 'ai-bridge-font-scale' && e.newValue) {
+      if (e.key === STORAGE_KEYS.diagnostic.fontScale && e.newValue) {
         const next = e.newValue as FontScale;
         if (next in { normal: 1, large: 1, xlarge: 1 }) setScale(next);
+      } else if (e.key === STORAGE_KEYS.diagnostic.fontScale && !e.newValue) {
+        setScale('normal');
       }
     };
     window.addEventListener('storage', onStorage);
@@ -87,9 +81,7 @@ export default function AccessibilityWidget() {
     const onUp = () => {
       setDragging(false);
       dragStart.current = null;
-      try {
-        if (pos) localStorage.setItem(POS_KEY, JSON.stringify(pos));
-      } catch {}
+      if (pos) saveWidgetPos(pos);
     };
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);

@@ -20,6 +20,7 @@ import { friendlyApiError } from '../utils/apiError';
 import SpeakButton from '../components/SpeakButton';
 import { formatStandardForPrompt, getStandardPreview, initCurriculum } from '../utils/curriculumLookup';
 import { runWithGeminiModelFallback } from '../utils/gemini';
+import { getGeminiApiKey, hasGeminiApiKey } from '../services/storage';
 
 interface ToolPageProps {
   tool: ToolDefinition;
@@ -91,15 +92,11 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
     initCurriculum().then(() => setCurriculumReady(true));
   }, [hasCurriculumInput]);
 
-  const [hasApiKey, setHasApiKey] = useState(() => {
-    const key = localStorage.getItem('gemini-api-key');
-    return !!(key && key.length > 10);
-  });
+  const [hasApiKey, setHasApiKey] = useState(() => hasGeminiApiKey());
 
   useEffect(() => {
     const refresh = () => {
-      const key = localStorage.getItem('gemini-api-key');
-      setHasApiKey(!!(key && key.length > 10));
+      setHasApiKey(hasGeminiApiKey());
     };
     window.addEventListener('api-key-changed', refresh);
     window.addEventListener('storage', refresh);
@@ -110,7 +107,7 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
   }, []);
 
   const genAI = useMemo(() => {
-    const key = localStorage.getItem('gemini-api-key') || '';
+    const key = getGeminiApiKey();
     return key ? new GoogleGenAI({ apiKey: key }) : null;
   }, [hasApiKey]);
 

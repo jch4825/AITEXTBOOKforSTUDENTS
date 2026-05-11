@@ -13,7 +13,21 @@ import { runWithGeminiModelFallback } from '../utils/gemini';
 import PersonaRecommendCard from '../components/onboarding/PersonaRecommendCard';
 import { getModuleVisibility } from '../data/moduleVisibility';
 import { applyFontScale } from '../utils/a11y';
-import { DIAGNOSTIC_STORAGE_KEYS, loadPersona } from '../hooks/useDiagnostic';
+import { loadPersona } from '../hooks/useDiagnostic';
+import {
+  clearGeminiApiKey,
+  dispatchFontScaleChanged,
+  getGeminiApiKey,
+  getMetaPromptL26,
+  hasGeminiApiKey,
+  hasSeenL11Tour,
+  hasSeenM0Welcome,
+  loadPurposeValue,
+  markL11TourSeen,
+  markM0WelcomeSeen,
+  saveGeminiApiKey,
+  saveMetaPromptL26,
+} from '../services/storage';
 import {
   Lesson01Interactive,
   Lesson02Interactive,
@@ -43,8 +57,21 @@ import {
 } from './Module5Components';
 
 let module4PrinciplesShown = false;
-
-const M0_WELCOME_KEY = 'ai-bridge-m0-welcome-shown';
+const GEMINI_API_LINKED_LESSON_IDS = new Set([
+  'l1-5',
+  'l2-6',
+  'l2-7',
+  'l2-8',
+  'l3-2',
+  'l3-3',
+  'l3-4',
+  'l3-5',
+  'l3-6',
+  'l3-7',
+  'l3-8',
+  'l5-1',
+  'l5-5',
+]);
 
 function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
   return (
@@ -63,7 +90,7 @@ function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
           exit={{ opacity: 0, y: 16, scale: 0.97 }}
           transition={{ type: 'spring', stiffness: 280, damping: 28 }}
           onClick={(e) => e.stopPropagation()}
-          className="relative w-full max-w-[520px] mx-auto px-7 py-12 sm:px-11"
+          className="relative w-full max-w-[560px] mx-auto px-7 py-12 sm:px-12"
           style={{
             background: 'linear-gradient(160deg, #f5e6c0 0%, #ede0b0 40%, #e8d8a0 70%, #f0e2b8 100%)',
             borderRadius: '4px',
@@ -102,7 +129,7 @@ function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
             {/* 제목 */}
             <p
               className="font-serif mb-6 leading-snug"
-              style={{ fontSize: '25px', color: '#4a2e0a', letterSpacing: '-0.01em' }}
+              style={{ fontSize: '23px', color: '#4a2e0a', letterSpacing: '0' }}
             >
               선생님, 어서 오세요
             </p>
@@ -115,18 +142,21 @@ function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
             </div>
 
             {/* 본문 텍스트 */}
-            <div className="text-center space-y-4 mb-8 font-serif" style={{ color: '#5a3a12', wordBreak: 'keep-all' }}>
-              <p style={{ fontSize: '17px', lineHeight: '1.85' }}>
+            <div
+              className="text-center space-y-4 mb-8 font-serif"
+              style={{ color: '#5a3a12', wordBreak: 'keep-all', overflowWrap: 'normal', textWrap: 'pretty' }}
+            >
+              <p style={{ fontSize: '16.5px', lineHeight: '1.85' }}>
                 살아온 모든 것이 이야기입니다.<br />
                 가르쳐온 교실도, 걸어온 날들도.
               </p>
-              <p style={{ fontSize: '17px', lineHeight: '1.85' }}>
+              <p style={{ fontSize: '16.5px', lineHeight: '1.85' }}>
                 선생님은 지금 그 이야기의 새 챕터를 시작하려 하십니다.
               </p>
-              <p style={{ fontSize: '17px', lineHeight: '1.85' }}>
+              <p style={{ fontSize: '16.5px', lineHeight: '1.85' }}>
                 AI Bridge는 선생님이 AI와 함께 써내려갈 이야기의 첫 문장이 되고 싶습니다.
               </p>
-              <p style={{ fontSize: '17px', lineHeight: '1.85' }}>
+              <p style={{ fontSize: '16.5px', lineHeight: '1.85' }}>
                 선생님의 용기를 응원합니다.
               </p>
             </div>
@@ -427,10 +457,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [learningPoint, setLearningPoint] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
   const [showWelcomePopup, setShowWelcomePopup] = useState(lesson.id === 'l0-1');
-  const [hasApiKey, setHasApiKey] = useState(() => {
-    const key = localStorage.getItem('gemini-api-key');
-    return !!(key && key.length > 10);
-  });
+  const [hasApiKey, setHasApiKey] = useState(() => hasGeminiApiKey());
   const [metaPromptCopied, setMetaPromptCopied] = useState(false);
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
   const [showDict, setShowDict] = useState(false);
@@ -587,7 +614,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
   const handleDictSearch = async () => {
     if (!dictWord.trim() || isDictLoading) return;
-    const apiKey = localStorage.getItem('gemini-api-key');
+    const apiKey = getGeminiApiKey();
     if (!apiKey) {
       setDictResult('API 키가 필요합니다. [1-4. API 키 발급] 레슨에서 먼저 등록해 주세요.');
       return;
@@ -699,16 +726,15 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     if (lesson.id === 'l1-4') {
       const apiKey = inputToUse.replace(/\s+/g, '');
       if (apiKey.startsWith('AIza') && apiKey.length >= 30) {
-        localStorage.setItem('gemini-api-key', apiKey);
+        saveGeminiApiKey(apiKey);
         setHasApiKey(true);
         // 사이드바·상단 네비 등 다른 곳의 hasApiKey 상태가 즉시 반영되도록
-        window.dispatchEvent(new Event('api-key-changed'));
       }
     }
 
     // Special handling for lessons that call Gemini API
     if (lesson.id === 'l1-5' || lesson.interactive?.systemPrompt) {
-      const savedKey = localStorage.getItem('gemini-api-key');
+      const savedKey = getGeminiApiKey();
       let fullText = "";
 
       if (!savedKey || savedKey.length < 10) {
@@ -765,7 +791,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           // Save l2-6 meta-prompt output so l3-8 can reuse it
           if (lesson.id === 'l2-6' && response.text) {
             try {
-              localStorage.setItem('meta-prompt-l2-6', response.text);
+              saveMetaPromptL26(response.text);
             } catch {}
           }
         } catch (error: any) {
@@ -828,7 +854,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
     if (l11TourStep === 'next') {
       setL11TourStep(null);
-      try { localStorage.setItem('l1-1-tour-seen', '1'); } catch {}
+      markL11TourSeen();
     }
   };
 
@@ -860,7 +886,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               background: 'linear-gradient(160deg, #fdf6e3 0%, #f5e8c8 60%, #ede0b0 100%)',
               border: '2px solid #c8a96e',
               boxShadow: '0 0 0 6px #e8d5a0, 0 8px 40px rgba(80,50,10,0.35), inset 0 0 60px rgba(200,160,80,0.08)',
-              maxWidth: 480,
+              maxWidth: 540,
               width: '100%',
               borderRadius: 4,
               padding: '40px 44px 36px',
@@ -896,12 +922,14 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               {/* 제목 */}
               <h2 style={{
                 textAlign: 'center',
-                fontSize: '18px',
+                fontSize: '17px',
                 fontWeight: 700,
                 color: '#5c3d11',
-                letterSpacing: '0.04em',
+                letterSpacing: '0',
                 marginBottom: 20,
                 lineHeight: 1.5,
+                wordBreak: 'keep-all',
+                textWrap: 'pretty',
               }}>
                 선생님의 방문을 진심으로 환영합니다.
               </h2>
@@ -1310,7 +1338,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           }`}>
             <div className="p-4 border-b border-gray-800 flex items-center justify-between shrink-0 hidden md:flex">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{lesson.moduleId === 'm0' ? '시뮬레이션' : '문제 입력'}</span>
-              {(lesson.id === 'l1-5' || lesson.id === 'l2-6' || lesson.id === 'l2-7' || lesson.id === 'l2-8' || (lesson.moduleId === 'm3' && lesson.id !== 'l3-1') || lesson.id === 'l5-1' || lesson.id === 'l5-5') && (
+              {GEMINI_API_LINKED_LESSON_IDS.has(lesson.id) && (
                 <div className="flex items-center gap-2">
                   <div className={`text-[10px] px-2 py-1 rounded-full font-bold ${hasApiKey ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}`}>
                     {hasApiKey ? '● API 연결됨' : '○ API 키 미등록'}
@@ -1319,9 +1347,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                     <button
                       onClick={() => {
                         if (window.confirm('저장된 API 키를 삭제하시겠습니까?\n공용 PC에서는 사용 후 꼭 해제해 주세요.')) {
-                          localStorage.removeItem('gemini-api-key');
+                          clearGeminiApiKey();
                           setHasApiKey(false);
-                          window.dispatchEvent(new Event('api-key-changed'));
                         }
                       }}
                       className="text-[10px] px-2 py-1 rounded-full font-bold border border-red-500/40 text-red-300 hover:bg-red-500/10 transition-colors"
@@ -1436,10 +1463,10 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                         }
                       />
                       <div className="static flex gap-3 flex-wrap justify-end md:absolute md:bottom-5 md:right-5">
-                        {lesson.id === 'l3-8' && localStorage.getItem('meta-prompt-l2-6') && (
+                        {lesson.id === 'l3-8' && getMetaPromptL26() && (
                           <button
                             onClick={async () => {
-                              const saved = localStorage.getItem('meta-prompt-l2-6') || '';
+                              const saved = getMetaPromptL26();
                               try {
                                 await navigator.clipboard.writeText(saved);
                                 setMetaPromptCopied(true);
@@ -1471,7 +1498,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           ref={isL11 ? l11RunRef : undefined}
                           onClick={() => {
                             if (isL11 && !l11TourStep) {
-                              const seen = (() => { try { return localStorage.getItem('l1-1-tour-seen') === '1'; } catch { return false; } })();
+                              const seen = hasSeenL11Tour();
                               if (!seen) {
                                 setL11TourStep('run');
                                 return;
@@ -1538,10 +1565,10 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                         <span className="h-px flex-1 max-w-[80px]" style={{ background: `linear-gradient(to right, ${theme.accent}80, transparent)` }} />
                       )}
                     </div>
-                    {(lesson.id === 'l2-6' || lesson.id === 'l2-7' || (lesson.moduleId === 'm3' && lesson.id !== 'l3-1') || lesson.id === 'l4-1' || lesson.id === 'l4-2' || lesson.id === 'l5-5') && aiResponse && !isTyping && (
+                    {(GEMINI_API_LINKED_LESSON_IDS.has(lesson.id) || lesson.id === 'l4-1' || lesson.id === 'l4-2') && aiResponse && !isTyping && (
                       <button
                         onClick={async () => {
-                          if (!localStorage.getItem('gemini-api-key')) {
+                          if (!hasGeminiApiKey()) {
                             alert('구글 Docs 문서로 내보낼 수 없습니다.\n\n이유: 사용자의 API 키가 저장되어 있지 않습니다. [1-4. API 키 발급 및 입력] 레슨에서 API 키를 먼저 등록해주세요.');
                             return;
                           }
@@ -1650,7 +1677,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             onClick={() => {
               if (isL11 && l11TourStep) {
                 setL11TourStep(null);
-                try { localStorage.setItem('l1-1-tour-seen', '1'); } catch {}
+                markL11TourSeen();
                 return;
               }
               if (!isCompleted && ((!!aiResponse && !isTyping) || manualCompleteRequested)) {
@@ -1866,20 +1893,12 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [showM0Welcome, setShowM0Welcome] = useState(false);
   const [persona, setPersona] = useState<Persona | null>(() => loadPersona());
-  const [purpose, setPurpose] = useState<DiagnosticPurpose | null>(() => {
-    try {
-      const value = localStorage.getItem(DIAGNOSTIC_STORAGE_KEYS.purpose);
-      return value === 'class' || value === 'admin' || value === 'share' || value === 'ethics' || value === 'explore' ? value : null;
-    } catch {
-      return null;
-    }
-  });
+  const [purpose, setPurpose] = useState<DiagnosticPurpose | null>(() => loadPurposeValue());
 
   useEffect(() => {
     const refresh = () => {
       setPersona(loadPersona());
-      const value = localStorage.getItem(DIAGNOSTIC_STORAGE_KEYS.purpose);
-      setPurpose(value === 'class' || value === 'admin' || value === 'share' || value === 'ethics' || value === 'explore' ? value : null);
+      setPurpose(loadPurposeValue());
     };
     window.addEventListener('storage', refresh);
     window.addEventListener('ai-bridge-persona-changed', refresh);
@@ -1893,7 +1912,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
     if (!currentLesson) return;
     if (currentLesson.moduleId === 'm0') {
       applyFontScale('large');
-      window.dispatchEvent(new StorageEvent('storage', { key: 'ai-bridge-font-scale', newValue: 'large' }));
+      dispatchFontScaleChanged('large');
     }
   }, [currentLesson?.moduleId]);
 
@@ -1934,7 +1953,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
   // 모듈0 첫 진입 시 환영 팝업
   useEffect(() => {
     if (selectedModule?.id !== 'm0') return;
-    if (localStorage.getItem(M0_WELCOME_KEY)) return;
+    if (hasSeenM0Welcome()) return;
     setShowM0Welcome(true);
   }, [selectedModule?.id]);
 
@@ -2101,7 +2120,13 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
     };
 
     return (
-      <div className="relative z-10 max-w-4xl mx-auto p-10">
+      <div
+        className="relative z-10 mx-auto max-w-4xl p-10"
+        style={{
+          background: `linear-gradient(180deg, ${theme.accentSoft} 0%, rgba(255,255,255,0) 260px)`,
+          borderRadius: 24,
+        }}
+      >
         <button
           onClick={() => onSelectModule(null)}
           className="flex items-center gap-2 text-canva-gray hover:text-canva-ink mb-8 font-bold text-sm transition-colors"
@@ -2110,7 +2135,11 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
         </button>
 
         <header
-          className={`relative mb-12 p-8 rounded-2xl bg-gradient-to-br ${theme.gradient} overflow-hidden border border-gray-100`}
+          className={`relative mb-12 overflow-hidden rounded-2xl border p-8 bg-gradient-to-br ${theme.gradient}`}
+          style={{
+            borderColor: theme.accentSoft,
+            boxShadow: `inset 0 1px 0 rgba(255,255,255,0.72), 0 12px 30px ${theme.glowA}`,
+          }}
         >
           <div
             className="pointer-events-none absolute -top-8 -right-4 text-[140px] font-black select-none leading-none"
@@ -2118,13 +2147,22 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
           >
             {module.order}
           </div>
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-1.5"
+            style={{ backgroundColor: theme.accent }}
+          />
           <div className="pointer-events-none absolute inset-0 opacity-[0.04]" style={{
             backgroundImage: 'radial-gradient(circle at 1px 1px, #000 1px, transparent 0)',
             backgroundSize: '18px 18px',
           }} />
           <div className="relative">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-xl">{theme.emoji}</span>
+              <span
+                className="flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold"
+                style={{ backgroundColor: theme.accentSoft, color: theme.accent }}
+              >
+                {theme.emoji}
+              </span>
               <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: theme.accent }}>
                 Module {module.order}
               </span>
@@ -2188,8 +2226,14 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
 
                     <div
                       onClick={() => setCurrentLesson(lesson)}
-                      className="bg-white border border-canva-border rounded-xl p-5 cursor-pointer transition-all hover:shadow-lg hover:-translate-y-0.5"
-                      style={{ borderLeft: `3px solid ${theme.accent}` }}
+                      className="rounded-xl border bg-white p-5 cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                      style={{
+                        borderColor: isDone ? theme.accentSoft : 'var(--color-canva-border, #e5e7eb)',
+                        borderLeft: `3px solid ${theme.accent}`,
+                        background: isDone
+                          ? `linear-gradient(90deg, ${theme.accentSoft}, #ffffff 34%)`
+                          : '#ffffff',
+                      }}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
@@ -2201,7 +2245,10 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                               Lesson {lessonNum}
                             </span>
                             {isDone && (
-                              <span className="text-[10px] font-bold text-canva-teal flex items-center gap-1">
+                              <span
+                                className="flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold"
+                                style={{ backgroundColor: theme.accentSoft, color: theme.accent }}
+                              >
                                 <CheckCircle2 size={10} /> 완료
                               </span>
                             )}
@@ -2244,7 +2291,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
 
 
   const handleM0WelcomeClose = () => {
-    localStorage.setItem(M0_WELCOME_KEY, '1');
+    markM0WelcomeSeen();
     setShowM0Welcome(false);
   };
 

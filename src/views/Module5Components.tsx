@@ -4,6 +4,7 @@ import { Lesson } from '../data/tutorialData';
 import { GoogleGenAI } from '@google/genai';
 import { runWithGeminiModelFallback } from '../utils/gemini';
 import { initCurriculum, lookupStandard, normalizeCode, CurriculumStandard } from '../utils/curriculumLookup';
+import { getGeminiApiKey, hasGeminiApiKey } from '../services/storage';
 
 export const CopyButton = ({ text, className = "" }: { text: string, className?: string }) => {
   const [copied, setCopied] = useState(false);
@@ -71,12 +72,10 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
   const EXAMPLES = ['[2국01-01]', '[4수01-03]', '[6사02-02]', '[3과02-01]'];
 
   useEffect(() => {
-    const key = localStorage.getItem('gemini-api-key');
-    setHasApiKey(!!(key && key.length > 10));
+    setHasApiKey(hasGeminiApiKey());
     initCurriculum();
     const onKeyChange = () => {
-      const k = localStorage.getItem('gemini-api-key');
-      setHasApiKey(!!(k && k.length > 10));
+      setHasApiKey(hasGeminiApiKey());
     };
     window.addEventListener('api-key-changed', onKeyChange);
     return () => window.removeEventListener('api-key-changed', onKeyChange);
@@ -95,7 +94,7 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
     const found = lookupStandard(trimmed);
     setRealStandard(found ?? 'not-found');
 
-    const key = localStorage.getItem('gemini-api-key');
+    const key = getGeminiApiKey();
     if (!key || key.length < 10) {
       const norm = normalizeCode(trimmed);
       const simAnswer = SIMULATION_ANSWERS[norm] ?? SIMULATION_FALLBACK(norm);
@@ -169,13 +168,16 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
       {queried && (
         <div className="flex flex-col gap-3">
           <div className="bg-red-950/20 border border-red-800/40 rounded-lg p-3">
-            <div className="text-red-300 font-bold text-xs mb-2 flex items-center gap-2">
-              <span>🤖 AI 답변 (Gemini) — RAG 없이 생성</span>
-              {isSimulation && (
-                <span className="text-[10px] font-normal text-amber-400 bg-amber-900/30 border border-amber-700/50 px-1.5 py-0.5 rounded">
-                  사전 입력된 시뮬레이션 답변입니다.
-                </span>
-              )}
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <div className="text-red-300 font-bold text-xs flex items-center gap-2">
+                <span>🤖 AI 답변 (Gemini) — RAG 없이 생성</span>
+                {isSimulation && (
+                  <span className="text-[10px] font-normal text-amber-400 bg-amber-900/30 border border-amber-700/50 px-1.5 py-0.5 rounded">
+                    사전 입력된 시뮬레이션 답변입니다.
+                  </span>
+                )}
+              </div>
+              {!isLoading && aiText && <GoogleDocsButton text={aiText} className="shrink-0" />}
             </div>
             {isLoading ? (
               <div className="text-gray-400 text-xs animate-pulse">응답 생성 중...</div>
@@ -633,8 +635,7 @@ export const Lesson55Interactive = ({ onRun, setUserInput, onNavigateToLesson }:
   const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
-    const key = localStorage.getItem('gemini-api-key');
-    setHasApiKey(!!(key && key.length > 10));
+    setHasApiKey(hasGeminiApiKey());
   }, []);
 
   const handleGenerate = () => {

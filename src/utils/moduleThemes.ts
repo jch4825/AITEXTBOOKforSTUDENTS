@@ -1,5 +1,3 @@
-// 모듈별 컬러 테마. Tutorial 화면 / QuickTools 메달 등 여러 곳에서 재사용.
-
 export interface ModuleTheme {
   accent: string;
   accentSoft: string;
@@ -10,18 +8,59 @@ export interface ModuleTheme {
 }
 
 export const MODULE_THEMES: Record<string, ModuleTheme> = {
-  m0: { accent: '#2563eb', accentSoft: 'rgba(37,99,235,0.12)', gradient: 'from-blue-500/25 via-cyan-500/10 to-transparent', emoji: '🌐', glowA: 'rgba(37,99,235,0.20)', glowB: 'rgba(0,196,204,0.12)' },
-  m1: { accent: '#8b3dff', accentSoft: 'rgba(139,61,255,0.12)', gradient: 'from-violet-500/25 via-fuchsia-500/10 to-transparent', emoji: '🧠', glowA: 'rgba(139,61,255,0.18)', glowB: 'rgba(0,196,204,0.10)' },
-  m2: { accent: '#00c4cc', accentSoft: 'rgba(0,196,204,0.12)', gradient: 'from-cyan-500/25 via-teal-500/10 to-transparent', emoji: '✍️', glowA: 'rgba(0,196,204,0.20)', glowB: 'rgba(139,61,255,0.10)' },
-  m3: { accent: '#f59e0b', accentSoft: 'rgba(245,158,11,0.12)', gradient: 'from-amber-500/25 via-orange-500/10 to-transparent', emoji: '🎓', glowA: 'rgba(245,158,11,0.20)', glowB: 'rgba(236,72,153,0.10)' },
-  m4: { accent: '#ec4899', accentSoft: 'rgba(236,72,153,0.12)', gradient: 'from-rose-500/25 via-pink-500/10 to-transparent', emoji: '🏫', glowA: 'rgba(236,72,153,0.20)', glowB: 'rgba(139,61,255,0.10)' },
-  m5: { accent: '#10b981', accentSoft: 'rgba(16,185,129,0.12)', gradient: 'from-emerald-500/25 via-green-500/10 to-transparent', emoji: '⚖️', glowA: 'rgba(16,185,129,0.20)', glowB: 'rgba(0,196,204,0.10)' },
+  m0: {
+    accent: '#9A6F45',
+    accentSoft: 'rgba(154,111,69,0.16)',
+    gradient: 'from-stone-300/45 via-amber-100/30 to-white',
+    emoji: '▣',
+    glowA: 'rgba(154,111,69,0.18)',
+    glowB: 'rgba(180,145,90,0.10)',
+  },
+  m1: {
+    accent: '#4E718F',
+    accentSoft: 'rgba(78,113,143,0.16)',
+    gradient: 'from-blue-200/48 via-slate-100/32 to-white',
+    emoji: '◇',
+    glowA: 'rgba(78,113,143,0.18)',
+    glowB: 'rgba(116,139,170,0.10)',
+  },
+  m2: {
+    accent: '#7360A0',
+    accentSoft: 'rgba(115,96,160,0.16)',
+    gradient: 'from-violet-200/50 via-purple-100/30 to-white',
+    emoji: '✦',
+    glowA: 'rgba(115,96,160,0.18)',
+    glowB: 'rgba(150,130,190,0.10)',
+  },
+  m3: {
+    accent: '#4F8378',
+    accentSoft: 'rgba(79,131,120,0.16)',
+    gradient: 'from-teal-200/50 via-emerald-100/28 to-white',
+    emoji: '●',
+    glowA: 'rgba(79,131,120,0.18)',
+    glowB: 'rgba(110,165,150,0.10)',
+  },
+  m4: {
+    accent: '#5F6F91',
+    accentSoft: 'rgba(95,111,145,0.16)',
+    gradient: 'from-indigo-200/46 via-slate-100/34 to-white',
+    emoji: '■',
+    glowA: 'rgba(95,111,145,0.18)',
+    glowB: 'rgba(125,135,170,0.10)',
+  },
+  m5: {
+    accent: '#8A7A45',
+    accentSoft: 'rgba(138,122,69,0.16)',
+    gradient: 'from-amber-200/50 via-lime-100/22 to-white',
+    emoji: '◆',
+    glowA: 'rgba(138,122,69,0.18)',
+    glowB: 'rgba(170,150,80,0.10)',
+  },
 };
 
 export const getTheme = (moduleId: string): ModuleTheme =>
   MODULE_THEMES[moduleId] || MODULE_THEMES.m1;
 
-/** 레슨 ID(예: 'l3-2')에서 모듈 ID(예: 'm3')를 뽑아낸다 */
 export const moduleIdFromLesson = (lessonId: string): string => {
   const match = lessonId.match(/^l(\d+)/);
   return match ? `m${match[1]}` : 'm1';

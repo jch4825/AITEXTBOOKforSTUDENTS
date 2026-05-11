@@ -1,14 +1,12 @@
 import { DiagnosticAnswers, DiagnosticPurpose, Persona } from '../types';
+import {
+  loadPersonaValue,
+  saveDiagnosticResult,
+  skipDiagnosticStorage,
+  STORAGE_KEYS,
+} from '../services/storage';
 
-export const DIAGNOSTIC_STORAGE_KEYS = {
-  onboarded: 'ai-bridge-onboarded',
-  persona: 'ai-bridge-persona',
-  purpose: 'ai-bridge-purpose',
-  score: 'ai-bridge-diagnostic-score',
-  answers: 'ai-bridge-diagnostic-answers',
-  legacyFontScale: 'ai-bridge-font-size',
-  fontScale: 'ai-bridge-font-scale',
-} as const;
+export const DIAGNOSTIC_STORAGE_KEYS = STORAGE_KEYS.diagnostic;
 
 export interface DiagnosticResult {
   persona: Persona;
@@ -41,40 +39,15 @@ export function calculateDiagnosticResult(answers: Required<DiagnosticAnswers>):
 }
 
 export function loadPersona(): Persona | null {
-  try {
-    const value = localStorage.getItem(DIAGNOSTIC_STORAGE_KEYS.persona);
-    return value === 'novice' || value === 'newbie' || value === 'lead' || value === 'expert'
-      ? value
-      : null;
-  } catch {
-    return null;
-  }
+  return loadPersonaValue();
 }
 
 export function saveDiagnostic(answers: Required<DiagnosticAnswers>) {
   const result = calculateDiagnosticResult(answers);
-  localStorage.setItem(DIAGNOSTIC_STORAGE_KEYS.onboarded, 'true');
-  localStorage.setItem(DIAGNOSTIC_STORAGE_KEYS.persona, result.persona);
-  localStorage.setItem(DIAGNOSTIC_STORAGE_KEYS.purpose, result.purpose);
-  localStorage.setItem(DIAGNOSTIC_STORAGE_KEYS.score, String(result.score));
-  localStorage.setItem(DIAGNOSTIC_STORAGE_KEYS.answers, JSON.stringify(answers));
-
-  if (result.persona === 'novice') {
-    localStorage.setItem(DIAGNOSTIC_STORAGE_KEYS.legacyFontScale, 'large');
-    localStorage.setItem(DIAGNOSTIC_STORAGE_KEYS.fontScale, 'large');
-    window.dispatchEvent(new Event('storage'));
-  }
-
-  window.dispatchEvent(new Event('ai-bridge-persona-changed'));
+  saveDiagnosticResult(result, answers);
   return result;
 }
 
 export function skipDiagnostic() {
-  localStorage.setItem(DIAGNOSTIC_STORAGE_KEYS.onboarded, 'true');
-  localStorage.removeItem(DIAGNOSTIC_STORAGE_KEYS.persona);
-  localStorage.removeItem(DIAGNOSTIC_STORAGE_KEYS.purpose);
-  localStorage.removeItem(DIAGNOSTIC_STORAGE_KEYS.score);
-  localStorage.removeItem(DIAGNOSTIC_STORAGE_KEYS.answers);
-  window.dispatchEvent(new Event('ai-bridge-persona-changed'));
+  skipDiagnosticStorage();
 }
-

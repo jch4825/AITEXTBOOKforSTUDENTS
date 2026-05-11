@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronDown, ExternalLink, Link2, Search, Star, X } from 'lucide-react';
 import { resourceCategories, type ResourceCategory, type ResourceItem, type ResourceSubCategory } from '../data/resourcesData';
+import { getResourceFavorites, saveResourceFavorites } from '../services/storage';
 
 const CATEGORY_ORDER = ['school-admin-support', 'policy', 'ai-basics', 'ethics', 'lesson', 'research-etc'];
 
@@ -32,7 +33,6 @@ const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
 };
 
 const PREVIEW_COUNT = 5;
-const FAVORITES_KEY = 'ai-teachers-resource-favorites';
 
 const TAG_RULES: Array<{ tag: string; pattern: RegExp }> = [
   { tag: '초등', pattern: /초등/ },
@@ -95,21 +95,10 @@ function highlight(text: string, query: string): React.ReactNode {
 }
 
 function useFavorites() {
-  const [favorites, setFavorites] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem(FAVORITES_KEY);
-      if (!saved) return [];
-      const parsed = JSON.parse(saved);
-      return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
-    } catch {
-      return [];
-    }
-  });
+  const [favorites, setFavorites] = useState<string[]>(() => getResourceFavorites());
 
   useEffect(() => {
-    try {
-      localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
-    } catch {}
+    saveResourceFavorites(favorites);
   }, [favorites]);
 
   const toggle = (id: string) => {

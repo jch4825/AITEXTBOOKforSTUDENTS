@@ -1,6 +1,6 @@
-export type FontScale = 'normal' | 'large' | 'xlarge';
+import { loadFontScaleValue, saveFontScaleValue } from '../services/storage';
 
-const STORAGE_KEY = 'ai-bridge-font-scale';
+export type FontScale = 'normal' | 'large' | 'xlarge';
 
 const SCALE_TO_PX: Record<FontScale, string> = {
   normal: '16px',
@@ -10,12 +10,11 @@ const SCALE_TO_PX: Record<FontScale, string> = {
 
 export function applyFontScale(scale: FontScale) {
   document.documentElement.style.fontSize = SCALE_TO_PX[scale];
-  localStorage.setItem(STORAGE_KEY, scale);
+  saveFontScaleValue(scale);
 }
 
 export function loadFontScale(): FontScale {
-  const saved = localStorage.getItem(STORAGE_KEY) as FontScale | null;
-  return saved && saved in SCALE_TO_PX ? saved : 'normal';
+  return loadFontScaleValue();
 }
 
 export function stripMarkdown(text: string): string {
