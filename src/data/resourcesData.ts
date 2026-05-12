@@ -154,6 +154,16 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'r-2-1', title: 'KERIS 종합교육연수원 연수 자료집', url: 'https://www.cet.keris.or.kr/usr/reference/selectTrainingListPageVw.do?menuNo=23100', description: 'KERIS 종합교육연수원에서 제공하는 교원 연수 자료집 모음' },
         ],
       },
+      {
+        id: 'claude-skill-mcp',
+        label: '3. Claude Skill & MCP',
+        iconEmoji: '🔌',
+        items: [
+          { id: 'r-3-5', title: 'Claude Education Skills', url: 'https://github.com/GarethManning/claude-education-skills', description: '111개 증거 기반 교수법 Skill과 MCP 원격 서버를 제공하는 Claude 교육용 Skill 모음' },
+          { id: 'r-3-6', title: 'OpenEdu MCP', url: 'https://github.com/Cicatriiz/openedu-mcp', description: '학년별 필터와 커리큘럼 연동을 지원하는 Python 기반 교육 MCP 서버' },
+          { id: 'r-3-7', title: 'Anki MCP Server', url: 'https://github.com/ankimcp/anki-mcp-server', description: '플래시카드 도구 Anki와 AI를 MCP로 연동하는 서버' },
+        ],
+      },
     ],
   },
   {
