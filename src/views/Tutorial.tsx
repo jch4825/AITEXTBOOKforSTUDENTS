@@ -1337,7 +1337,9 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               : 'lg:flex-[3] lg:border-b md:flex-1'
           }`}>
             <div className="p-4 border-b border-gray-800 flex items-center justify-between shrink-0 hidden md:flex">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{lesson.moduleId === 'm0' ? '시뮬레이션' : '문제 입력'}</span>
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                {lesson.moduleId === 'm0' ? '시뮬레이션' : lesson.id === 'l1-5' ? '궁금한 것을 물어보세요.' : '문제 입력'}
+              </span>
               {GEMINI_API_LINKED_LESSON_IDS.has(lesson.id) && (
                 <div className="flex items-center gap-2">
                   <div className={`text-[10px] px-2 py-1 rounded-full font-bold ${hasApiKey ? 'bg-green-500/20 text-green-400' : 'bg-amber-500/20 text-amber-400'}`}>
@@ -1456,7 +1458,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           lesson.id === 'l1-1'
                             ? "위 문장을 따라 써보세요..."
                             : lesson.id === 'l1-5'
-                            ? "아무런 질문이나 작성해 보세요..."
+                            ? "궁금한 것을 물어보세요."
                             : lesson.id === 'l2-8'
                             ? "[상황] 학교 상황을 구체적으로 적어주세요.\n\n[역할] 특수교사, 행동중재 전문가, 학교장"
                             : "여기에 질문을 입력하거나 위 문장을 따라 써보세요..."
