@@ -426,6 +426,58 @@
   --hl-strong: rgba(0, 196, 204, 0.85);
 }
 
+@keyframes learning-path-glow {
+  0%, 100% {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.10),
+      0 0 0 0 rgba(255, 207, 74, 0.55),
+      0 0 18px rgba(255, 255, 255, 0.28);
+  }
+  50% {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.10),
+      0 0 0 5px rgba(255, 207, 74, 0.20),
+      0 0 30px rgba(255, 207, 74, 0.72);
+  }
+}
+
+@keyframes learning-path-shine {
+  0% {
+    transform: translateX(-130%) skewX(-18deg);
+  }
+  45%, 100% {
+    transform: translateX(230%) skewX(-18deg);
+  }
+}
+
+.learning-path-sparkle {
+  position: relative;
+  overflow: hidden;
+  animation: learning-path-glow 1.8s ease-in-out infinite;
+}
+
+.learning-path-sparkle::before {
+  content: "";
+  position: absolute;
+  inset: -35% auto -35% 0;
+  width: 42%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.84), transparent);
+  animation: learning-path-shine 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.learning-path-sparkle > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .learning-path-sparkle,
+  .learning-path-sparkle::before {
+    animation: none;
+  }
+}
+
 .resource-door-scene {
   display: block;
   width: 5rem;

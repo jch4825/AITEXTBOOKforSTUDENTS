@@ -4,7 +4,7 @@ import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/AI_bridge_test_v0.1/',
+  base: '/AI_Bridge/',
 
   plugins: [
     react(),

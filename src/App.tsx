@@ -10,6 +10,8 @@ import {
   getLessonProgress,
   getSidebarCollapsed,
   hasCompletedOnboarding,
+  loadPersonaValue,
+  loadPurposeValue,
   resetDiagnosticStorage,
   saveLessonProgress,
   saveSidebarCollapsed,
@@ -31,6 +33,10 @@ function ViewFallback() {
   );
 }
 
+function hasSavedLearningPath() {
+  return loadPersonaValue() !== null && loadPurposeValue() !== null;
+}
+
 export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => getSidebarCollapsed());
@@ -47,7 +53,12 @@ export default function App() {
   });
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
   const [showDiagnostic, setShowDiagnostic] = useState(() => !hasCompletedOnboarding());
+  const [isLearningPathSaved, setIsLearningPathSaved] = useState(() => hasSavedLearningPath());
   const [completedLessons, setCompletedLessons] = useState<string[]>(() => getLessonProgress());
+
+  const refreshLearningPathStatus = () => {
+    setIsLearningPathSaved(hasSavedLearningPath());
+  };
 
   const handleViewChange = (view: ViewType) => {
     setCurrentView(view);
@@ -58,6 +69,7 @@ export default function App() {
     setCompletedLessons([]);
     clearLessonProgress();
     resetDiagnosticStorage();
+    setIsLearningPathSaved(false);
     setShowDiagnostic(true);
     setIsMobileMenuOpen(false);
   };
@@ -84,7 +96,13 @@ export default function App() {
   const renderView = () => {
     switch (currentView) {
       case 'home':
-        return <Home onViewChange={setCurrentView} onStartDiagnostic={() => setShowDiagnostic(true)} />;
+        return (
+          <Home
+            onViewChange={setCurrentView}
+            onStartDiagnostic={() => setShowDiagnostic(true)}
+            isLearningPathSaved={isLearningPathSaved}
+          />
+        );
       case 'resources':
         return <Resources />;
       case 'tools':
@@ -106,7 +124,13 @@ export default function App() {
           }}
         />;
       default:
-        return <Home onViewChange={setCurrentView} onStartDiagnostic={() => setShowDiagnostic(true)} />;
+        return (
+          <Home
+            onViewChange={setCurrentView}
+            onStartDiagnostic={() => setShowDiagnostic(true)}
+            isLearningPathSaved={isLearningPathSaved}
+          />
+        );
     }
   };
 
@@ -171,16 +195,22 @@ export default function App() {
       <AccessibilityWidget />
       {showDiagnostic && (
         <DiagnosticModal
-          onClose={() => setShowDiagnostic(false)}
+          onClose={() => {
+            refreshLearningPathStatus();
+            setShowDiagnostic(false);
+          }}
           onStartModule={(module) => {
+            refreshLearningPathStatus();
             setCurrentView('tutorial');
             setSelectedModule(module);
           }}
           onOpenTools={() => {
+            refreshLearningPathStatus();
             setCurrentView('tools');
             setSelectedModule(null);
           }}
           onOpenResources={() => {
+            refreshLearningPathStatus();
             setCurrentView('resources');
             setSelectedModule(null);
           }}

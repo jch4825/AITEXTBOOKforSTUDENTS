@@ -16,6 +16,7 @@ import { ViewType } from '../types';
 interface HomeProps {
   onViewChange: (view: ViewType) => void;
   onStartDiagnostic: () => void;
+  isLearningPathSaved: boolean;
 }
 
 const WORK_MODES = [
@@ -130,7 +131,7 @@ function FloatingCard({
   );
 }
 
-export default function Home({ onViewChange, onStartDiagnostic }: HomeProps) {
+export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSaved }: HomeProps) {
   const [tipIndex, setTipIndex] = useState(() => Math.floor(Math.random() * TEACHING_TIPS.length));
 
   useEffect(() => {
@@ -181,7 +182,7 @@ export default function Home({ onViewChange, onStartDiagnostic }: HomeProps) {
             <div className="mt-8 flex flex-wrap gap-3">
               <button
                 onClick={onStartDiagnostic}
-                className="inline-flex min-w-44 items-center justify-center gap-2 rounded-xl bg-white px-7 py-3 text-sm font-extrabold text-canva-ink shadow-lg shadow-black/10 transition-transform hover:-translate-y-0.5"
+                className={`inline-flex min-w-44 items-center justify-center gap-2 rounded-xl bg-white px-7 py-3 text-sm font-extrabold text-canva-ink shadow-lg shadow-black/10 transition-transform hover:-translate-y-0.5 ${isLearningPathSaved ? '' : 'learning-path-sparkle'}`}
               >
                 나의 학습 경로 추천 받기
                 <ArrowRight size={16} />

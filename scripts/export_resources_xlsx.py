@@ -46,7 +46,6 @@ categories = [
         ('5. No Code AI 도구', [
             ('Teachable Machine', 'https://teachablemachine.withgoogle.com', 'Google의 코딩 없는 머신러닝 체험 도구. 이미지·소리·자세를 학습시켜 AI 모델 직접 제작'),
             ('orange3', 'https://orangedatamining.com', '드래그앤드롭 방식의 오픈소스 데이터 분석·머신러닝 도구. 시각적 워크플로우로 AI 학습 가능'),
-            ('RunwayML', 'https://runwayml.com', '코드 없이 사용하는 AI 영상·이미지 생성 도구. 배경 제거, 모션 추적, AI 영상 편집 지원'),
             ('lobe', 'https://www.lobe.ai', 'Microsoft의 코드 없는 이미지 분류 AI 학습 도구. 사진만 모으면 분류 모델 생성 가능'),
             ('Brightics AI (삼성)', 'https://www.brightics.ai', '삼성SDS의 노코드 AI 분석 플랫폼. 제조·유통·금융 데이터 분석에 특화된 기업용 도구'),
         ]),
