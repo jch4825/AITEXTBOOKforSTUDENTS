@@ -1963,8 +1963,8 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
   const markComplete = onMarkComplete;
 
   const renderModuleList = () => (
-    <div className="relative z-10 max-w-4xl mx-auto p-10">
-      <header className="mb-12">
+    <div className="relative z-10 max-w-4xl mx-auto px-5 py-8 sm:p-10">
+      <header className="mb-8 sm:mb-12">
         <h1 className="text-3xl font-bold text-canva-ink mb-4">인공지능 배워보기</h1>
         <p className="text-canva-ink">LLM 이해부터 윤리 점검까지, 초등교사를 위한 5단계 로드맵입니다.</p>
       </header>
@@ -2004,7 +2004,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
               transition={{ delay: index * 0.08 }}
               whileHover={{ y: -4 }}
               onClick={() => onSelectModule(module)}
-              className={`bg-white border rounded-2xl overflow-hidden cursor-pointer group flex transition-shadow hover:shadow-xl ${
+              className={`bg-white border rounded-2xl overflow-hidden cursor-pointer group flex flex-col transition-shadow hover:shadow-xl sm:flex-row ${
                 isRecommended
                   ? 'border-canva-teal shadow-md shadow-cyan-900/5'
                   : isCollapsed
@@ -2015,7 +2015,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
             >
               {/* Left colored panel (1/4) */}
               <div
-                className={`relative w-1/4 min-w-[140px] p-5 flex flex-col justify-between bg-gradient-to-br ${theme.gradient} overflow-hidden`}
+                className={`relative min-h-[112px] w-full p-5 flex flex-col justify-between bg-gradient-to-br ${theme.gradient} overflow-hidden sm:w-1/4 sm:min-w-[140px]`}
               >
                 <div
                   className="pointer-events-none absolute -bottom-6 -right-2 text-[110px] font-black select-none leading-none"
@@ -2076,11 +2076,11 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
 
                 <div className="mt-4 flex items-end justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-[11px] font-bold text-canva-gray uppercase flex items-center gap-1">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
+                      <span className="text-[11px] font-bold text-canva-gray uppercase flex items-center gap-1 whitespace-nowrap">
                         <BookOpen size={12} /> {module.lessonsCount} 레슨
                       </span>
-                      <span className="text-[11px] font-bold text-canva-gray uppercase flex items-center gap-1">
+                      <span className="text-[11px] font-bold text-canva-gray uppercase flex items-center gap-1 whitespace-nowrap">
                         <Clock size={12} /> {module.estimatedTime}
                       </span>
                     </div>

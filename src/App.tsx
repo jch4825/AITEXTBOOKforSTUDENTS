@@ -176,7 +176,7 @@ export default function App() {
       <main
         className={`min-h-screen transition-[padding] duration-300 ${
           isSidebarCollapsed ? 'md:pl-0' : 'md:pl-52 lg:pl-64'
-        } ${currentView === 'tutorial' ? 'pt-0' : 'pt-12 landscape:pt-10 md:pt-0'}`}
+        } pt-12 landscape:pt-10 md:pt-0`}
       >
         <AnimatePresence mode="wait">
           <motion.div
