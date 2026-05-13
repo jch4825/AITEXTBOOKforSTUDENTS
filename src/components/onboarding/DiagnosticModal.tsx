@@ -27,15 +27,13 @@ function isComplete(answers: DiagnosticAnswers): answers is Required<DiagnosticA
 export default function DiagnosticModal({ onClose, onStartModule, onOpenTools, onOpenResources }: DiagnosticModalProps) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<DiagnosticAnswers>({});
-  const [skipConfirm, setSkipConfirm] = useState(false);
-
   const result = useMemo(() => {
     return isComplete(answers) ? calculateDiagnosticResult(answers) : null;
   }, [answers]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setSkipConfirm(true);
+      if (event.key === 'Escape') handleSkip();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -73,7 +71,7 @@ export default function DiagnosticModal({ onClose, onStartModule, onOpenTools, o
       >
         <button
           type="button"
-          onClick={() => setSkipConfirm(true)}
+          onClick={handleSkip}
           aria-label="진단 닫기"
           className="absolute right-3 top-3 z-10 rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-700"
         >
@@ -102,7 +100,7 @@ export default function DiagnosticModal({ onClose, onStartModule, onOpenTools, o
                 </button>
                 <button
                   type="button"
-                  onClick={() => setSkipConfirm(true)}
+                  onClick={handleSkip}
                   className="rounded-xl border border-canva-border px-5 py-3 text-sm font-bold text-canva-gray hover:bg-gray-50"
                 >
                   건너뛰기
@@ -190,32 +188,6 @@ export default function DiagnosticModal({ onClose, onStartModule, onOpenTools, o
           )}
         </div>
       </div>
-
-      {skipConfirm && (
-        <div className="fixed inset-0 z-[190] flex items-center justify-center bg-black/30 px-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
-            <h2 className="text-base font-black text-canva-ink">진단을 건너뛸까요?</h2>
-            <p className="mt-2 text-sm leading-6 text-canva-gray">나중에 사이드바에서 다시 추천을 받을 수 있습니다.</p>
-            <div className="mt-6 flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={handleSkip}
-                className="rounded-xl bg-canva-ink px-4 py-3 text-sm font-extrabold text-white hover:bg-canva-ink/90"
-              >
-                건너뛰기
-              </button>
-              <button
-                type="button"
-                onClick={() => setSkipConfirm(false)}
-                className="rounded-xl border border-canva-border px-4 py-3 text-sm font-bold text-canva-gray hover:bg-gray-50"
-              >
-                계속 답하기
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
-

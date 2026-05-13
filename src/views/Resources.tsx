@@ -269,6 +269,7 @@ export default function Resources() {
   const [query, setQuery] = useState('');
   const [activeTags, setActiveTags] = useState<Set<string>>(() => new Set());
   const [showFavOnly, setShowFavOnly] = useState(false);
+  const [showAllTags, setShowAllTags] = useState(false);
   const { favorites, toggle: toggleFav } = useFavorites();
 
   const orderedCategories = useMemo(
@@ -308,6 +309,7 @@ export default function Resources() {
 
   const normalizedQuery = query.trim().toLowerCase();
   const isFiltering = normalizedQuery.length > 0 || activeTags.size > 0 || showFavOnly;
+  const visibleTagCounts = showAllTags ? tagCounts : tagCounts.slice(0, 8);
 
   const filteredResults = useMemo(() => {
     if (!isFiltering) return [];
@@ -405,7 +407,7 @@ export default function Resources() {
             즐겨찾기
             {favorites.length > 0 && <span className="opacity-60">{favorites.length}</span>}
           </button>
-          {tagCounts.map(([tag, count]) => {
+          {visibleTagCounts.map(([tag, count]) => {
             const isOn = activeTags.has(tag);
             return (
               <button
@@ -422,6 +424,16 @@ export default function Resources() {
               </button>
             );
           })}
+          {tagCounts.length > 8 && (
+            <button
+              type="button"
+              onClick={() => setShowAllTags(v => !v)}
+              className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-bold text-gray-500 transition hover:border-canva-purple/40 hover:text-canva-purple"
+            >
+              {showAllTags ? '접기' : `+${tagCounts.length - 8}개 더보기`}
+              <ChevronDown size={11} className={`transition-transform ${showAllTags ? 'rotate-180' : ''}`} />
+            </button>
+          )}
           {(activeTags.size > 0 || showFavOnly || query) && (
             <button
               type="button"

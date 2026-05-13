@@ -144,7 +144,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
 
   return (
     <div className="moholy-page min-h-screen overflow-hidden">
-      <section className="moholy-hero relative min-h-[520px] overflow-hidden px-5 py-10 text-white sm:px-8 lg:px-12 lg:py-14">
+      <section className="moholy-hero relative min-h-[500px] overflow-hidden px-5 py-8 text-white sm:min-h-[520px] sm:px-8 sm:py-10 lg:px-12 lg:py-14">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
           style={{
@@ -174,12 +174,12 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
                 Zero-Gap Toolkit
               </span>
             </h1>
-            <p className="mt-6 text-base font-medium leading-8 text-white/84 sm:text-lg">
+            <p className="mt-5 text-base font-medium leading-8 text-white/84 sm:mt-6 sm:text-lg">
               AI 활용 수업, 어떻게 시작하는지 아무도 제대로 안 알려줬죠.
               <br />
               여기서 시작하세요.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-3 sm:mt-8">
               <button
                 onClick={onStartDiagnostic}
                 className={`inline-flex min-w-44 items-center justify-center gap-2 rounded-xl bg-white px-7 py-3 text-sm font-extrabold text-canva-ink shadow-lg shadow-black/10 transition-transform hover:-translate-y-0.5 ${isLearningPathSaved ? '' : 'learning-path-sparkle'}`}
@@ -190,12 +190,12 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
             </div>
           </motion.div>
 
-          <div className="relative min-h-[360px] lg:min-h-[420px]" aria-hidden="true">
+          <div className="relative min-h-[300px] sm:min-h-[360px] lg:min-h-[420px]" aria-hidden="true">
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="moholy-preview-panel absolute inset-x-0 top-4 mx-auto h-[330px] max-w-[620px] rounded-[28px] border border-white/24 p-4 shadow-2xl shadow-indigo-950/20 backdrop-blur-xl sm:h-[390px]"
+              className="moholy-preview-panel absolute inset-x-0 top-2 mx-auto h-[300px] max-w-[620px] rounded-[28px] border border-white/24 p-4 shadow-2xl shadow-indigo-950/20 backdrop-blur-xl sm:top-4 sm:h-[390px]"
             >
               <div className="flex items-center justify-between border-b border-white/14 pb-3">
                 <div className="flex items-center gap-2">
@@ -245,7 +245,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
 
                 <FloatingCard
                   delay={0.46}
-                  className="absolute bottom-10 left-10 w-[45%] rounded-2xl bg-white p-4 text-canva-ink shadow-xl shadow-slate-900/12"
+                  className="absolute bottom-10 left-10 hidden w-[45%] rounded-2xl bg-white p-4 text-canva-ink shadow-xl shadow-slate-900/12 sm:block"
                 >
                   <div className="mb-3 flex items-center gap-2 text-xs font-extrabold text-emerald-600">
                     <Layers size={14} />
@@ -264,7 +264,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.7 }}
-                  className="absolute bottom-20 right-8 rounded-full bg-canva-ink px-4 py-2 text-xs font-extrabold text-white shadow-lg"
+                  className="absolute bottom-20 right-8 hidden rounded-full bg-canva-ink px-4 py-2 text-xs font-extrabold text-white shadow-lg sm:block"
                 >
                   AI가 자료를 연결 중
                 </motion.div>
@@ -308,7 +308,8 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+          <div className="rounded-[28px] border border-white/70 bg-white/55 p-3 shadow-inner shadow-slate-900/5 sm:p-4">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
             {WORK_MODES.map((card, index) => {
               const Icon = card.icon;
               return (
@@ -319,7 +320,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.08 * index }}
-                  className="group relative flex min-h-[292px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-canva-border bg-white p-6 text-left shadow-sm transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-900/12 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-canva-purple/25"
+                  className="group relative flex min-h-[292px] cursor-pointer flex-col overflow-hidden rounded-2xl border border-canva-border bg-white/95 p-6 text-left shadow-sm transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-slate-900/12 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-canva-purple/25"
                 >
                   {/* Left accent bar */}
                   <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl ${card.bar}`} />
@@ -353,6 +354,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
                 </motion.button>
               );
             })}
+          </div>
           </div>
         </section>
       </main>

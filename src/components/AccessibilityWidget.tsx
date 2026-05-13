@@ -24,7 +24,10 @@ export default function AccessibilityWidget() {
   const [scale, setScale] = useState<FontScale>(() => loadFontScale());
   const [pos, setPos] = useState<Pos | null>(() => loadWidgetPos());
   const [dragging, setDragging] = useState(false);
-  const [collapsed, setCollapsed] = useState<boolean>(() => getWidgetCollapsed());
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    if (window.innerWidth < 640) return true;
+    return getWidgetCollapsed();
+  });
   const expandedRef = useRef<HTMLDivElement>(null);
   const collapsedRef = useRef<HTMLButtonElement>(null);
   const dragStart = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null);

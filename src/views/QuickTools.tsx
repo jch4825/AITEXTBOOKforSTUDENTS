@@ -404,7 +404,7 @@ export default function QuickTools() {
         )}
 
         {totalCount > 0 && !openCategory && (
-          <div className="mt-5 rounded-2xl border border-dashed border-gray-300 bg-white/70 py-12 text-center text-sm text-gray-500">
+          <div className="mx-auto mt-5 max-w-2xl rounded-2xl border border-dashed border-gray-300 bg-white/70 px-4 py-6 text-center text-sm text-gray-500">
             위의 카테고리를 누르면 문이 열리고 도구 목록이 나타납니다.
           </div>
         )}
