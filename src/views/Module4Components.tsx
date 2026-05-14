@@ -152,7 +152,7 @@ export const Lesson43Interactive = ({ onExecute }: { onExecute: (data: {title: s
       <div className="text-sm text-gray-300 bg-gray-800/50 p-4 rounded-lg">
         <ul className="list-decimal pl-4 space-y-2">
           <li><a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer" className="text-canva-teal hover:underline font-bold">Google Gemini</a> 에 접속해 로그인합니다.</li>
-          <li>입력창 하단의 <strong>[Canvas]</strong> 옵션을 켭니다.</li>
+          <li>입력창 하단의 <strong>도구</strong>를 누른 뒤 <strong>[Canvas]</strong> 옵션을 누릅니다.</li>
           <li>아래 예시 프롬프트를 붙여 넣고 전송합니다. 오른쪽 Canvas 창에 즉시 작동하는 도구가 생성됩니다.</li>
           <li>추가 대화로 색상·기능을 조정해 봅니다. (예: "버튼 색을 보라색으로 바꿔줘")</li>
         </ul>
@@ -688,6 +688,15 @@ export const Lesson45Interactive = ({ onExecute }: { onExecute: (data: {title: s
     '최신 교육부 보도자료 (웹)': true
   };
 
+  const feedbackByItem: Record<string, string> = {
+    'Google Drive 문서': 'Google Drive 문서는 사용자가 명시적으로 권한을 허용한 개인/업무 문서 범위 안에서만 연결할 수 있습니다.',
+    'NEIS 성적 데이터': 'NEIS 성적 데이터는 학생 개인정보와 민감 정보가 포함되므로 개인이 임의로 AI와 직접 연동해서는 안 됩니다.',
+    '학부모 개인 연락처': '학부모 연락처는 개인정보입니다. 동의와 공식 절차 없이 AI 도구에 넘기거나 연동하면 안 됩니다.',
+    '학교 공식 캘린더': '학교 공식 캘린더는 공개 일정이나 허용된 계정 권한 범위 안에서는 연결해 활용할 수 있습니다.',
+    '업무관리시스템 공문': '업무관리시스템 공문은 공식 행정 시스템 자료입니다. 개인 MCP 연결이 아니라 교육청 승인과 공식 절차가 필요합니다.',
+    '최신 교육부 보도자료 (웹)': '교육부 보도자료처럼 공개된 웹 자료는 웹 검색 MCP로 확인해 최신 정보를 반영할 수 있습니다.',
+  };
+
   useEffect(() => {
     const timer = window.setTimeout(() => setShowSafeHints(true), 120000);
     return () => window.clearTimeout(timer);
@@ -720,6 +729,10 @@ export const Lesson45Interactive = ({ onExecute }: { onExecute: (data: {title: s
 
   const isAllAnswered = Object.values(classifications).every(v => v !== null);
   const correctCount = Object.keys(classifications).filter(k => classifications[k] === exactAnswers[k]).length;
+  const wrongItems = Object.keys(classifications).filter(k => classifications[k] !== null && classifications[k] !== exactAnswers[k]);
+  const resetClassifications = () => {
+    setClassifications(Object.fromEntries(Object.keys(classifications).map(item => [item, null])));
+  };
 
   return (
     <div className="flex-1 bg-[#0e1318] rounded-xl p-5 border border-gray-800 flex flex-col gap-4 overflow-y-auto">
@@ -762,8 +775,27 @@ export const Lesson45Interactive = ({ onExecute }: { onExecute: (data: {title: s
         {isAllAnswered && (
           <div className={`mt-4 flex flex-col gap-3 p-3 rounded text-xs font-bold ${correctCount === 6 ? 'bg-canva-teal/20 text-canva-teal' : 'bg-amber-500/20 text-amber-500'}`}>
             <div>
-              {correctCount === 6 ? "완벽합니다! 교육청 승인 없는 교내 시스템/개인정보 연동은 절대 금물입니다." : "틀린 항목이 있습니다. NEIS, 업무관리시스템, 학생/학부모 개인정보는 임의 연동이 절대 불가합니다."}
+              {correctCount === 6 ? "완벽합니다! 교육청 승인 없는 교내 시스템/개인정보 연동은 절대 금물입니다." : `${wrongItems.length}개 항목을 다시 확인해 보세요. 연결 가능 여부는 '공개 자료인가', '사용자가 명시적으로 권한을 허용했는가', '개인정보/공식 행정 시스템인가'로 판단합니다.`}
             </div>
+            {wrongItems.length > 0 && (
+              <div className="space-y-2 rounded-lg bg-black/20 p-3 text-amber-100/95">
+                {wrongItems.map(item => (
+                  <div key={item}>
+                    <span className="font-extrabold">{item}</span>
+                    <span className="text-amber-200/80"> — 정답은 {exactAnswers[item] ? '가능(안전)' : '불가(위험)'}</span>
+                    <div className="mt-0.5 font-medium leading-relaxed text-amber-50/85">{feedbackByItem[item]}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {wrongItems.length > 0 && (
+              <button
+                onClick={resetClassifications}
+                className="py-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-100 border border-amber-400/30 rounded transition-colors text-center w-full"
+              >
+                다시 분류해보기
+              </button>
+            )}
             {correctCount === 6 && (
               <button onClick={() => onExecute({
                   title: '데이터 판별 결과 (피드백)',

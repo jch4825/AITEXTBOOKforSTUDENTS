@@ -219,60 +219,55 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
   );
 };
 
-// 5-2: 편향 탐지 (슬라이더 평가 + 채점)
+// 5-2: 편향 문장 탐정
 export const Lesson52Interactive = ({ onComplete }: CompletionProps = {}) => {
-  const [currentBias, setCurrentBias] = useState(0);
-  const [sliderValue, setSliderValue] = useState(50);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const [totalScore, setTotalScore] = useState(0);
-  const [roundResults, setRoundResults] = useState<{ user: number; target: number; diff: number }[]>([]);
+  const [correctCount, setCorrectCount] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  const biases = [
+  const cases = [
     {
-      role: '간호사',
-      description: '간호사는 공감 능력이 뛰어나고 세심한 여성입니다. 환자를 돌보고 의사를 보조합니다.',
-      biasLevel: 85,
-      biasPoints: ['특정 성별(여성)로 고정 서술', '"의사를 보조" — 직업 위계 고정'],
-      improvement: '"간호사는 공감 능력이 뛰어난 전문 의료인입니다. 환자를 돌봅니다."',
+      label: '역할 배정 안내',
+      sentence: '남학생은 로봇 조립을 맡고, 여학생은 발표 자료 꾸미기를 맡기면 좋습니다.',
+      correctType: '성별 편향',
+      affected: '로봇 조립에 관심 있는 여학생, 디자인을 좋아하지 않는 여학생, 발표 자료보다 조립을 잘하는 학생이 배제될 수 있습니다.',
+      reason: '성별을 기준으로 역할을 나누면 학생의 관심과 역량보다 고정관념이 먼저 작동합니다.',
+      improvement: '학생의 성별이 아니라 희망, 관심, 경험에 따라 로봇 조립·자료 제작·발표 역할을 나눕니다.',
     },
     {
-      role: '수학 천재 학생',
-      description: '수학 천재 학생은 안경을 쓰고 있으며, 특정 국적의 학생입니다. 수학 올림피아드에서 메달을 딴 경험이 있습니다.',
-      biasLevel: 70,
-      biasPoints: ['특정 외모(안경) 고정', '특정 국적 연상'],
-      improvement: '"수학 천재 학생은 문제 해결에 열정적입니다. 수학 올림피아드에서 메달을 딴 경험이 있습니다."',
+      label: '학급 대표 추천 기준',
+      sentence: '학급 대표는 발표를 잘하고, 친구들 앞에서 자신 있게 말하며, 항상 적극적으로 손드는 학생이 좋습니다.',
+      correctType: '성격·표현 방식 편향',
+      affected: '조용하지만 책임감 있는 학생, 말은 느리지만 약속을 잘 지키는 학생, 공개 발표보다 조율을 잘하는 학생이 불리해질 수 있습니다.',
+      reason: '좋은 리더를 외향성과 발표력으로만 좁히면 다양한 리더십이 보이지 않습니다.',
+      improvement: '학급 대표는 책임감, 약속 이행, 친구 의견 경청, 갈등 조정 능력 등 여러 기준을 함께 보아 추천합니다.',
     },
     {
-      role: '행복한 가족',
-      description: '행복한 가족은 엄마, 아빠, 그리고 두 명의 자녀로 구성됩니다. 함께 저녁 식사를 하는 모습이 따뜻합니다.',
-      biasLevel: 60,
-      biasPoints: ['핵가족 중심 서술', '한부모·조손가정 등 다양한 가족 형태 배제'],
-      improvement: '"행복한 가족은 서로를 아끼고 함께 시간을 보냅니다. 저녁 식사를 함께 하는 모습이 따뜻합니다."',
+      label: '가족 그림 자료 설명',
+      sentence: '행복한 가족은 엄마, 아빠, 그리고 두 명의 자녀로 구성됩니다.',
+      correctType: '가족 형태 편향',
+      affected: '한부모가정, 조손가정, 다문화가정, 형제자매가 없는 학생이 자신을 정상적인 가족 모습 밖에 있다고 느낄 수 있습니다.',
+      reason: '가족을 한 가지 형태로만 설명하면 다양한 가족을 자연스럽게 인정하지 못합니다.',
+      improvement: '행복한 가족은 구성 형태와 관계없이 서로를 아끼고 돌보는 사람들로 이루어질 수 있습니다.',
     },
   ];
 
-  const current = biases[currentBias];
+  const biasTypes = ['성별 편향', '성격·표현 방식 편향', '가족 형태 편향', '문제 없음'];
+  const current = cases[currentIndex];
+  const isCorrect = selectedType === current.correctType;
 
-  const getPoints = (diff: number) => {
-    if (diff <= 10) return 10;
-    if (diff <= 20) return 7;
-    if (diff <= 30) return 4;
-    return 1;
-  };
-
-  const handleSubmit = () => {
-    const diff = Math.abs(sliderValue - current.biasLevel);
-    const pts = getPoints(diff);
-    setTotalScore(prev => prev + pts);
-    setRoundResults(prev => [...prev, { user: sliderValue, target: current.biasLevel, diff }]);
+  const submitAnswer = () => {
+    if (!selectedType) return;
+    if (selectedType === current.correctType) setCorrectCount(prev => prev + 1);
     setSubmitted(true);
   };
 
   const handleNext = () => {
-    if (currentBias < biases.length - 1) {
-      setCurrentBias(prev => prev + 1);
-      setSliderValue(50);
+    if (currentIndex < cases.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+      setSelectedType(null);
       setSubmitted(false);
     } else {
       setFinished(true);
@@ -281,25 +276,21 @@ export const Lesson52Interactive = ({ onComplete }: CompletionProps = {}) => {
   };
 
   const handleReset = () => {
-    setCurrentBias(0); setSliderValue(50);
-    setSubmitted(false); setTotalScore(0);
-    setRoundResults([]); setFinished(false);
+    setCurrentIndex(0);
+    setSelectedType(null);
+    setSubmitted(false);
+    setCorrectCount(0);
+    setFinished(false);
   };
 
   if (finished) {
-    const maxScore = biases.length * 10;
-    const pct = Math.round((totalScore / maxScore) * 100);
-    const label = pct >= 80 ? '우수' : pct >= 50 ? '양호' : '개선 필요';
-    const color = pct >= 80 ? 'text-green-400' : pct >= 50 ? 'text-yellow-400' : 'text-red-400';
     return (
       <div className="flex-1 bg-[#0e1318] rounded-xl p-5 border border-gray-800 flex flex-col gap-5 items-center justify-center">
         <div className="text-center">
-          <div className="text-gray-400 text-sm mb-1">편향 탐지 완료</div>
-          <div className={`text-3xl font-bold mb-3 ${color}`}>{label}</div>
-          <div className="bg-gray-800 rounded-xl px-8 py-4">
-            <div className="text-gray-400 text-xs mb-1">정확도</div>
-            <div className="text-white font-bold text-3xl">{pct}%</div>
-            <div className="text-gray-500 text-xs mt-1">오차 10% 이내 +10점 · 20% 이내 +7점 · 30% 이내 +4점</div>
+          <div className="text-gray-400 text-sm mb-1">편향 문장 탐정 완료</div>
+          <div className="text-3xl font-bold mb-3 text-canva-teal">{correctCount} / {cases.length}</div>
+          <div className="max-w-md bg-gray-800 rounded-xl px-6 py-4 text-sm leading-relaxed text-gray-300">
+            편향은 숫자로 맞히는 문제가 아니라, <span className="text-white font-bold">누가 빠졌는지</span>와 <span className="text-white font-bold">어떻게 고칠지</span>를 보는 습관입니다. AI 결과물을 수업에 쓰기 전 한 번 더 읽고 표현을 넓혀 주세요.
           </div>
         </div>
         <button onClick={handleReset} className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-medium transition-colors">
@@ -309,78 +300,70 @@ export const Lesson52Interactive = ({ onComplete }: CompletionProps = {}) => {
     );
   }
 
-  const lastResult = roundResults[roundResults.length - 1];
-
   return (
     <div className="flex-1 bg-[#0e1318] rounded-xl p-5 border border-gray-800 flex flex-col gap-4 overflow-y-auto">
       <div className="flex items-center justify-between">
-        <div className="text-white font-bold text-sm">편향 탐지</div>
-        <div className="text-xs text-gray-500">{currentBias + 1} / {biases.length}</div>
+        <div className="text-white font-bold text-sm">편향 문장 탐정</div>
+        <div className="text-xs text-gray-500">{currentIndex + 1} / {cases.length}</div>
       </div>
 
       <div className="bg-gray-800/40 rounded-lg p-3 text-xs text-gray-400 leading-relaxed">
-        아래 AI 생성 문장의 <span className="text-canva-purple font-semibold">편향 정도를 슬라이더로 평가</span>하고 제출하세요.
+        아래 AI 생성 문장을 읽고 <span className="text-canva-purple font-semibold">어떤 편향이 숨어 있는지</span> 고르세요. 핵심은 점수가 아니라 “누가 불리해질 수 있는가?”를 찾는 것입니다.
       </div>
 
       <div className="bg-gray-900 rounded-lg p-4">
-        <div className="text-gray-400 text-xs mb-2">역할: <span className="text-white font-semibold">{current.role}</span></div>
-        <p className="text-gray-200 text-sm leading-relaxed">{current.description}</p>
+        <div className="text-gray-400 text-xs mb-2">상황: <span className="text-white font-semibold">{current.label}</span></div>
+        <p className="text-gray-200 text-sm leading-relaxed">“{current.sentence}”</p>
       </div>
 
-      <div className="bg-gray-800/40 rounded-lg p-4">
-        <div className="flex justify-between text-xs text-gray-400 mb-3">
-          <span>편향 없음</span>
-          <span className="font-bold text-white text-sm">{sliderValue}%</span>
-          <span>편향 강함</span>
-        </div>
-        <input
-          type="range" min="0" max="100" value={sliderValue}
-          onChange={e => { if (!submitted) setSliderValue(Number(e.target.value)); }}
-          disabled={submitted}
-          className="w-full h-2 rounded-full cursor-pointer disabled:cursor-default"
-          style={{ accentColor: '#7F77DD' }}
-        />
-        <div className="flex justify-between mt-1 text-[10px] text-gray-600">
-          <span>0</span><span>50</span><span>100</span>
-        </div>
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {biasTypes.map(type => (
+          <button
+            key={type}
+            disabled={submitted}
+            onClick={() => setSelectedType(type)}
+            className={`rounded-lg border px-3 py-2 text-left text-xs font-bold transition-colors disabled:cursor-default ${
+              selectedType === type
+                ? 'border-canva-purple bg-canva-purple/20 text-white'
+                : 'border-gray-700 bg-gray-800/60 text-gray-300 hover:border-canva-purple/60'
+            }`}
+          >
+            {type}
+          </button>
+        ))}
       </div>
 
       {submitted && (
-        <div className="bg-blue-900/20 border border-blue-800/60 rounded-lg p-4 text-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-blue-300 font-bold text-xs">분석 결과</span>
-            <span className="text-xs text-gray-400">
-              정답 {lastResult.target}% · 내 답 {lastResult.user}% · 오차 {lastResult.diff}%
-            </span>
+        <div className={`rounded-lg border p-4 text-sm ${isCorrect ? 'border-green-700/60 bg-green-950/20' : 'border-amber-700/60 bg-amber-950/20'}`}>
+          <div className={`mb-2 font-bold ${isCorrect ? 'text-green-300' : 'text-amber-300'}`}>
+            {isCorrect ? '잘 찾았습니다.' : `다시 보면 정답은 ${current.correctType}입니다.`}
           </div>
-          <div className="mb-3">
-            {current.biasPoints.map((p, i) => (
-              <div key={i} className="text-gray-300 text-xs mb-1">• {p}</div>
-            ))}
+          <div className="mb-3 text-xs leading-relaxed text-gray-300">
+            <div className="mb-1"><span className="font-bold text-white">왜 문제인가요?</span> {current.reason}</div>
+            <div><span className="font-bold text-white">누가 불리해질 수 있나요?</span> {current.affected}</div>
           </div>
-          <div className="bg-gray-800/50 rounded p-2 text-xs">
-            <span className="text-green-400 font-semibold">개선 예시: </span>
-            <span className="text-gray-300">{current.improvement}</span>
+          <div className="rounded bg-gray-900/70 p-3 text-xs leading-relaxed">
+            <div className="mb-1 font-bold text-canva-teal">더 나은 표현</div>
+            <div className="text-gray-200">“{current.improvement}”</div>
           </div>
         </div>
       )}
 
       <div className="flex gap-2 mt-auto">
         {!submitted ? (
-          <button onClick={handleSubmit}
-            className="flex-1 bg-canva-purple hover:bg-canva-purple/80 text-white rounded-lg py-2.5 text-sm font-bold transition-colors">
-            제출
+          <button
+            onClick={submitAnswer}
+            disabled={!selectedType}
+            className="flex-1 bg-canva-purple hover:bg-canva-purple/80 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg py-2.5 text-sm font-bold transition-colors"
+          >
+            확인하기
           </button>
         ) : (
           <button onClick={handleNext}
             className="flex-1 bg-gray-700 hover:bg-gray-600 text-white rounded-lg py-2.5 text-sm font-bold transition-colors">
-            {currentBias < biases.length - 1 ? '다음 →' : '결과 보기'}
+            {currentIndex < cases.length - 1 ? '다음 문장 →' : '마무리'}
           </button>
         )}
-      </div>
-
-      <div className="text-xs text-gray-500 text-right">
-        누적 점수: <span className="text-white font-bold">{totalScore}점</span>
       </div>
     </div>
   );

@@ -479,6 +479,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const l11CompleteRef = useRef<HTMLButtonElement | null>(null);
   const l11NextRef = useRef<HTMLButtonElement | null>(null);
   const isL11 = lesson.id === 'l1-1';
+  const usesGeminiApi = GEMINI_API_LINKED_LESSON_IDS.has(lesson.id) || Boolean(lesson.interactive?.systemPrompt);
+  const hasBalancedInputResponse = lesson.id === 'l5-1';
   const hasCompactM5InputPanel = lesson.id === 'l5-2' || lesson.id === 'l5-5';
 
   const l11TourClass = (step: L11TourStep) =>
@@ -1354,6 +1356,10 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               ? 'flex-1'
               : lesson.moduleId === 'm0'
               ? 'lg:flex-[7] lg:border-b md:flex-1'
+              : hasBalancedInputResponse
+              ? 'lg:flex-1 lg:border-b md:flex-1'
+              : usesGeminiApi
+              ? 'lg:flex-[3.25] lg:border-b md:flex-1'
               : hasCompactM5InputPanel
               ? 'lg:flex-[3.5] lg:border-b md:flex-1'
               : (lesson.id === 'l5-1' || lesson.id === 'l5-3' || lesson.id === 'l5-4')
@@ -1385,13 +1391,13 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 </div>
               )}
             </div>
-            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : 'p-8 lg:pt-0'} flex flex-col overflow-y-auto no-scrollbar`}>
+            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : usesGeminiApi ? 'px-8 py-5 lg:pt-0' : 'p-8 lg:pt-0'} flex flex-col ${usesGeminiApi ? 'overflow-visible' : 'overflow-y-auto no-scrollbar'}`}>
               {lesson.interactive ? (
                 <>
                   {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
-                    <div className="mb-6">
+                    <div className={usesGeminiApi ? 'mb-4' : 'mb-6'}>
                       <span className="text-canva-teal font-bold text-sm mb-3 block">{lesson.interactive.prompt}</span>
-                      <div className="bg-[#1c232b] rounded-xl p-5 border border-gray-800 text-gray-300 font-mono text-sm">
+                      <div className={`bg-[#1c232b] rounded-xl border border-gray-800 text-gray-300 font-mono text-sm ${usesGeminiApi ? 'p-4' : 'p-5'}`}>
                         {lesson.id === 'l1-3' ? (
                           <div className="flex gap-4">
                             {['ChatGPT', 'Gemini', 'Claude'].map(model => (
@@ -1463,10 +1469,10 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                     </>
                   ) : lesson.id !== 'l2-1' && lesson.id !== 'l2-2' && lesson.id !== 'l2-3' && lesson.id !== 'l2-4' && lesson.id !== 'l2-5' && lesson.id !== 'l3-1' && (
                     <div
-                      className="flex-1 rounded-xl p-[1px] relative group min-h-[200px]"
+                      className={`${usesGeminiApi ? 'flex-none min-h-[260px]' : 'flex-1 min-h-[200px]'} rounded-xl p-[1px] relative group`}
                       style={{ background: `linear-gradient(135deg, ${theme.accent}55, transparent 40%, ${theme.accent}30)` }}
                     >
-                    <div className="w-full h-full bg-[#1c232b] rounded-[11px] p-5 relative flex flex-col gap-4">
+                    <div className={`w-full h-full bg-[#1c232b] rounded-[11px] relative flex flex-col gap-4 ${usesGeminiApi ? 'p-4' : 'p-5'}`}>
                       <textarea
                         ref={isL11 ? l11InputRef : undefined}
                         value={userInput}
@@ -1477,7 +1483,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                         onFocus={() => {
                           if (l11TourStep === 'input') setL11TourStep('reset');
                         }}
-                        className={`w-full flex-1 min-h-[150px] bg-transparent text-white font-mono text-sm outline-none resize-none ${l11TourClass('input')}`}
+                        rows={usesGeminiApi ? 10 : undefined}
+                        className={`w-full ${usesGeminiApi ? 'h-[15rem] min-h-[15rem]' : 'flex-1 min-h-[150px]'} bg-transparent text-white font-mono text-sm outline-none resize-none ${l11TourClass('input')}`}
                         placeholder={
                           lesson.id === 'l1-1'
                             ? "위 문장을 따라 써보세요..."
@@ -1558,20 +1565,20 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
           {/* AI Response area (Hidden for M4 because it uses popup, hidden for M0 because it uses SimWizard) */}
           {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
-            <div className={`${hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
+            <div className={`${hasBalancedInputResponse ? 'lg:flex-1' : usesGeminiApi ? 'lg:flex-[3.75]' : hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
               <div className="p-4 border-b border-gray-800 flex items-center justify-center shrink-0 hidden md:flex">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">답변 안내</span>
               </div>
-              <div className={`${lesson.moduleId === 'm0' ? 'p-3' : hasCompactM5InputPanel ? 'px-8 py-4' : 'p-8'} flex-1 overflow-y-auto overflow-x-hidden no-scrollbar min-w-0`}>
+              <div className={`${lesson.moduleId === 'm0' ? 'p-3' : usesGeminiApi ? 'px-8 py-5' : hasCompactM5InputPanel ? 'px-8 py-4' : 'p-8'} flex-1 overflow-y-auto overflow-x-hidden no-scrollbar min-w-0`}>
                 <div
-                  className={`${lesson.moduleId === 'm0' ? 'min-h-[125px]' : hasCompactM5InputPanel ? 'min-h-[110px]' : 'min-h-[160px]'} rounded-xl p-[1px] relative`}
+                  className={`${lesson.moduleId === 'm0' ? 'min-h-[125px]' : usesGeminiApi ? 'min-h-[260px]' : hasCompactM5InputPanel ? 'min-h-[110px]' : 'min-h-[160px]'} rounded-xl p-[1px] relative`}
                   style={{ background: `linear-gradient(135deg, ${theme.accent}55, transparent 45%, ${theme.accent}25)` }}
                 >
                 <div
                   ref={isL11 ? l11ResponseRef : undefined}
-                  className={`${lesson.moduleId === 'm0' ? 'p-3' : hasCompactM5InputPanel ? 'p-4' : 'p-8'} bg-[#1c232b] rounded-[11px] relative ${l11TourClass('response')}`}
+                  className={`${lesson.moduleId === 'm0' ? 'p-3' : usesGeminiApi ? 'p-5' : hasCompactM5InputPanel ? 'p-4' : 'p-8'} bg-[#1c232b] rounded-[11px] relative ${l11TourClass('response')}`}
                 >
-                  <div className={`flex items-center justify-between ${lesson.moduleId === 'm0' ? 'mb-1' : hasCompactM5InputPanel ? 'mb-3' : 'mb-5'}`}>
+                  <div className={`flex items-center justify-between ${lesson.moduleId === 'm0' ? 'mb-1' : usesGeminiApi || hasCompactM5InputPanel ? 'mb-3' : 'mb-5'}`}>
                     <div className="flex items-center gap-2.5">
                       <span className="relative flex h-2.5 w-2.5">
                         <span
