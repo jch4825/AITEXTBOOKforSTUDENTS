@@ -460,6 +460,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [hasApiKey, setHasApiKey] = useState(() => hasGeminiApiKey());
   const [metaPromptCopied, setMetaPromptCopied] = useState(false);
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
+  const [imgRetries, setImgRetries] = useState<Record<string, number>>({});
   const [showDict, setShowDict] = useState(false);
   const [dictWord, setDictWord] = useState('');
   const [dictResult, setDictResult] = useState('');
@@ -1221,9 +1222,14 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             {lesson.visuals && lesson.visuals.length > 0 && (
               <div className="mt-8 mb-8 space-y-4">
                 {lesson.visuals.map((visual, index) => {
+                  const visualKey = `${lesson.id}-${index}`;
                   const visualSrc = visual.image.startsWith('/')
                     ? `${import.meta.env.BASE_URL}${visual.image.replace(/^\/+/, '')}`
                     : visual.image;
+                  const retryCount = imgRetries[visualKey] ?? 0;
+                  const displayedVisualSrc = retryCount > 0
+                    ? `${visualSrc}${visualSrc.includes('?') ? '&' : '?'}retry=${retryCount}`
+                    : visualSrc;
 
                   return (
                     <figure
@@ -1236,7 +1242,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                         </div>
                         <div className="mt-1 text-sm font-semibold text-canva-ink">{visual.title}</div>
                       </div>
-                      {imgErrors.has(`${lesson.id}-${index}`) ? (
+                      {imgErrors.has(visualKey) ? (
                         <div className="flex flex-col items-center justify-center gap-3 bg-gray-50 px-6 py-10 text-center">
                           <div className="text-4xl">🖼️</div>
                           <p className="text-sm text-gray-500 max-w-sm leading-relaxed">{visual.alt}</p>
@@ -1251,11 +1257,18 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           title="새 창에서 이미지 보기"
                         >
                           <img
-                            src={visualSrc}
+                            src={displayedVisualSrc}
                             alt={visual.alt}
                             className="block h-auto w-full object-cover transition-opacity hover:opacity-95"
                             loading="lazy"
-                            onError={() => setImgErrors(prev => new Set(prev).add(`${lesson.id}-${index}`))}
+                            onError={() => {
+                              if (retryCount < 1) {
+                                setImgRetries(prev => ({ ...prev, [visualKey]: retryCount + 1 }));
+                                return;
+                              }
+
+                              setImgErrors(prev => new Set(prev).add(visualKey));
+                            }}
                           />
                         </a>
                       )}

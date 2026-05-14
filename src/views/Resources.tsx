@@ -7,7 +7,7 @@ const CATEGORY_ORDER = ['school-admin-support', 'policy', 'ai-basics', 'ethics',
 
 const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
   'school-admin-support': {
-    title: '학교 업무 지원',
+    title: '핵심 도움 자료',
     subtitle: '학교 업무 전반에서 꼭 확인해야 할 핵심 도움 자료',
   },
   policy: {
@@ -122,10 +122,13 @@ function ItemRow({
   onToggleFav: () => void;
 }) {
   const isFeatured = item.id === 'r-3-4';
+  const isStrongRecommended = item.id === 'teachle-tools';
   const rowClass =
     `group flex w-full items-start gap-3 px-4 py-3 pr-10 text-left transition focus:outline-none focus:ring-2 ${
       isFeatured
         ? 'bg-amber-50/80 hover:bg-amber-100/80 focus:ring-amber-300'
+        : isStrongRecommended
+          ? 'bg-emerald-50/80 hover:bg-emerald-100/80 focus:ring-emerald-300'
         : 'hover:bg-canva-purple/5 focus:ring-canva-purple/30'
     }`;
 
@@ -135,6 +138,8 @@ function ItemRow({
         className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ring-1 ${
           isFeatured
             ? 'bg-amber-100 text-amber-700 ring-amber-200'
+            : isStrongRecommended
+              ? 'bg-emerald-100 text-emerald-700 ring-emerald-200'
             : 'bg-gray-50 text-gray-400 ring-gray-200 group-hover:text-canva-purple'
         }`}
       >
@@ -151,21 +156,40 @@ function ItemRow({
             필수 확인
           </span>
         )}
+        {isStrongRecommended && (
+          <span className="mb-1 inline-flex rounded-full bg-emerald-200/70 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">
+            강력 추천
+          </span>
+        )}
         <span
           className={`block font-bold leading-snug ${
             isFeatured
               ? 'text-sm text-amber-950 group-hover:text-amber-800'
+              : isStrongRecommended
+                ? 'text-sm text-emerald-950 group-hover:text-emerald-800'
               : 'text-xs text-gray-900 group-hover:text-canva-purple'
           }`}
         >
           {highlight(item.title, query)}
         </span>
         {item.description && (
-          <span className={`mt-1 block text-[11px] leading-relaxed ${isFeatured ? 'text-amber-900/80' : 'text-gray-500'}`}>
+          <span className={`mt-1 block text-[11px] leading-relaxed ${
+            isFeatured
+              ? 'text-amber-900/80'
+              : isStrongRecommended
+                ? 'text-emerald-900/80'
+                : 'text-gray-500'
+          }`}>
             {highlight(item.description, query)}
           </span>
         )}
-        <span className={`mt-1.5 block truncate text-[10px] font-mono ${isFeatured ? 'text-amber-700/80' : 'text-gray-400'}`}>
+        <span className={`mt-1.5 block truncate text-[10px] font-mono ${
+          isFeatured
+            ? 'text-amber-700/80'
+            : isStrongRecommended
+              ? 'text-emerald-700/80'
+              : 'text-gray-400'
+        }`}>
           {getHostName(item.url)}
         </span>
       </span>
@@ -191,7 +215,9 @@ function ItemRow({
             ? 'text-amber-400 hover:bg-amber-50'
             : isFeatured
               ? 'text-amber-500/60 hover:bg-amber-200/60 hover:text-amber-700'
-              : 'text-gray-300 hover:bg-gray-100 hover:text-amber-400'
+              : isStrongRecommended
+                ? 'text-emerald-500/60 hover:bg-emerald-200/60 hover:text-emerald-700'
+                : 'text-gray-300 hover:bg-gray-100 hover:text-amber-400'
         }`}
       >
         <Star size={14} fill={isFav ? 'currentColor' : 'none'} />
@@ -213,10 +239,24 @@ function SubCategoryCard({
   const total = subCategory.items.length;
   const visibleItems = expanded ? subCategory.items : subCategory.items.slice(0, PREVIEW_COUNT);
   const hasMore = total > PREVIEW_COUNT;
+  const isSchoolAdmin = subCategory.id === 'school-admin';
+  const isTeachingTools = subCategory.id === 'teaching-tools';
 
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-      <header className="flex items-center gap-3 border-b border-gray-100 px-4 py-3">
+    <section className={`rounded-2xl border shadow-sm ${
+      isSchoolAdmin
+        ? 'border-amber-200 bg-amber-50/45'
+        : isTeachingTools
+          ? 'border-emerald-200 bg-emerald-50/45'
+          : 'border-gray-200 bg-white'
+    }`}>
+      <header className={`flex items-center gap-3 border-b px-4 py-3 ${
+        isSchoolAdmin
+          ? 'border-amber-100'
+          : isTeachingTools
+            ? 'border-emerald-100'
+            : 'border-gray-100'
+      }`}>
         <span className="text-lg leading-none">{subCategory.iconEmoji}</span>
         <span className="min-w-0 flex-1">
           <span className="block text-sm font-extrabold text-gray-900">{subCategory.label}</span>

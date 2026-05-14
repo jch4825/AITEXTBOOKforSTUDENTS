@@ -28,7 +28,7 @@ export interface ResourceCategory {
 export const resourceCategories: ResourceCategory[] = [
   {
     id: 'school-admin-support',
-    title: '학교 업무 지원',
+    title: '핵심 도움 자료',
     subtitle: '학교 업무 전반에서 꼭 확인해야 할 핵심 도움 자료',
     icon: BriefcaseBusiness,
     iconBg: 'bg-amber-50',
@@ -40,6 +40,14 @@ export const resourceCategories: ResourceCategory[] = [
         iconEmoji: '🗂️',
         items: [
           { id: 'r-3-4', title: '경상남도교육청 학교업무 도움자료', url: 'https://hryoon0.github.io/helppage/', description: '경상남도교육청 학교업무 도움자료 사이트. 초등학교 업무 참고 자료를 확인할 수 있습니다.' },
+        ],
+      },
+      {
+        id: 'teaching-tools',
+        label: '2. AI·소프트웨어 티칭툴 검색도구',
+        iconEmoji: '🌱',
+        items: [
+          { id: 'teachle-tools', title: 'AI, 소프트웨어 티칭툴 검색도구', url: 'https://teachle.co.kr/teaching-tools/', description: '티끌 자료실에서 제공하는 AI·소프트웨어 티칭툴 검색도구. 수업에 활용할 수 있는 교육 도구를 빠르게 찾아볼 수 있습니다.' },
         ],
       },
     ],
