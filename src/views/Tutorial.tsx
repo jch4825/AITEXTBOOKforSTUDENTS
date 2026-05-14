@@ -12,7 +12,7 @@ import SpeakButton from '../components/SpeakButton';
 import { runWithGeminiModelFallback } from '../utils/gemini';
 import PersonaRecommendCard from '../components/onboarding/PersonaRecommendCard';
 import { getModuleVisibility } from '../data/moduleVisibility';
-import { applyFontScale } from '../utils/a11y';
+import { applyFontScale, stopSpeaking } from '../utils/a11y';
 import { loadPersona } from '../hooks/useDiagnostic';
 import {
   clearGeminiApiKey,
@@ -562,6 +562,14 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     return currentIndex >= 0 ? moduleLessons[currentIndex + 1] ?? null : null;
   })();
 
+  const previousLesson = (() => {
+    const moduleLessons = lessons
+      .filter(l => l.moduleId === lesson.moduleId)
+      .sort((a, b) => a.order - b.order);
+    const currentIndex = moduleLessons.findIndex(l => l.id === lesson.id);
+    return currentIndex > 0 ? moduleLessons[currentIndex - 1] ?? null : null;
+  })();
+
   // M4 Popup State
   const [m4PopupData, setM4PopupData] = useState<{title: string, content: React.ReactNode, point: string, hideDocsButton?: boolean} | null>(null);
 
@@ -573,10 +581,12 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   };
 
   const closeM4Popup = () => {
+    stopSpeaking();
     setM4PopupData(null);
   };
 
   const completeAndContinue = () => {
+    stopSpeaking();
     onMarkComplete(lesson.id);
     if (nextLesson) {
       onNavigateToLesson(nextLesson.id);
@@ -1204,6 +1214,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
+                            stopSpeaking();
                             onNavigateToLesson(lessonId);
                           }}
                           className="text-canva-purple font-semibold hover:underline cursor-pointer"
@@ -1669,9 +1680,22 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
         {/* Navigation / Completion Buttons */}
         <div className={`sticky bottom-0 p-6 border-t border-gray-800 flex justify-end gap-3 bg-[#0e1318] shrink-0 ${isL11 && (l11TourStep === 'complete' || l11TourStep === 'next') ? 'z-[65]' : 'z-10'}`}>
+          {previousLesson && (
+            <button
+              onClick={() => {
+                stopSpeaking();
+                onNavigateToLesson(previousLesson.id);
+              }}
+              className="px-6 py-3 bg-gray-800 text-white rounded-xl font-bold text-sm hover:bg-gray-700 transition-all flex items-center gap-2"
+            >
+              <ArrowLeft size={18} />
+              <span>이전 레슨</span>
+            </button>
+          )}
           <button
             ref={isL11 ? l11CompleteRef : undefined}
             onClick={() => {
+              stopSpeaking();
               setManualCompleteRequested(true);
               if (isL11 && l11TourStep === 'complete') setL11TourStep('next');
             }}
@@ -1690,6 +1714,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           <button
             ref={isL11 ? l11NextRef : undefined}
             onClick={() => {
+              stopSpeaking();
               if (isL11 && l11TourStep) {
                 setL11TourStep(null);
                 markL11TourSeen();
@@ -1855,7 +1880,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 <p className="mt-2 text-[11px] text-amber-600">
                   ⚠️ API 키가 없으면 검색이 안 됩니다.{' '}
                   <button
-                    onClick={() => { setShowDict(false); onNavigateToLesson('l1-4'); }}
+                    onClick={() => { stopSpeaking(); setShowDict(false); onNavigateToLesson('l1-4'); }}
                     className="underline font-bold"
                   >
                     1-4에서 등록하기
@@ -1989,7 +2014,10 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
             purpose={purpose}
             onStartModule={(moduleId) => {
               const module = modules.find(item => item.id === moduleId);
-              if (module) onSelectModule(module);
+              if (module) {
+                stopSpeaking();
+                onSelectModule(module);
+              }
             }}
             onOpenTools={onOpenTools}
             onOpenResources={onOpenResources}
@@ -2016,7 +2044,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.08 }}
               whileHover={{ y: -4 }}
-              onClick={() => onSelectModule(module)}
+              onClick={() => { stopSpeaking(); onSelectModule(module); }}
               className={`bg-white border rounded-2xl overflow-hidden cursor-pointer group flex flex-col transition-shadow hover:shadow-xl sm:flex-row ${
                 isRecommended
                   ? 'border-canva-teal shadow-md shadow-cyan-900/5'
@@ -2143,7 +2171,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
         }}
       >
         <button
-          onClick={() => onSelectModule(null)}
+          onClick={() => { stopSpeaking(); onSelectModule(null); }}
           className="flex items-center gap-2 text-canva-gray hover:text-canva-ink mb-8 font-bold text-sm transition-colors"
         >
           <ArrowLeft size={16} /> 모듈 목록으로 돌아가기
@@ -2240,7 +2268,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                     </div>
 
                     <div
-                      onClick={() => setCurrentLesson(lesson)}
+                      onClick={() => { stopSpeaking(); setCurrentLesson(lesson); }}
                       className="rounded-xl border bg-white p-5 cursor-pointer transition-all hover:-translate-y-0.5 hover:shadow-lg"
                       style={{
                         borderColor: isDone ? theme.accentSoft : 'var(--color-canva-border, #e5e7eb)',
@@ -2324,8 +2352,9 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
           >
             <LessonViewer
               lesson={currentLesson}
-              onBack={() => setCurrentLesson(null)}
+              onBack={() => { stopSpeaking(); setCurrentLesson(null); }}
               onModuleComplete={() => {
+                stopSpeaking();
                 setCurrentLesson(null);
                 onSelectModule(null);
               }}
@@ -2336,6 +2365,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
               onNavigateToLesson={(id) => {
                 const lesson = lessons.find(l => l.id === id);
                 if (lesson) {
+                  stopSpeaking();
                   setCurrentLesson(lesson);
                 }
               }}
@@ -2343,6 +2373,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                 const currentIndex = modules.findIndex(m => m.id === currentLesson.moduleId);
                 const nextModule = modules[currentIndex + 1];
                 if (nextModule) {
+                  stopSpeaking();
                   setCurrentLesson(null);
                   onSelectModule(nextModule);
                 }

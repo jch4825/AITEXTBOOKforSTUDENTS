@@ -16,6 +16,7 @@ import {
   saveLessonProgress,
   saveSidebarCollapsed,
 } from './services/storage';
+import { stopSpeaking } from './utils/a11y';
 
 const Home = lazy(() => import('./views/Home'));
 const Tutorial = lazy(() => import('./views/Tutorial'));
@@ -62,6 +63,7 @@ export default function App() {
   };
 
   const handleViewChange = (view: ViewType) => {
+    stopSpeaking();
     setCurrentView(view);
     if (view !== 'tutorial') setSelectedModule(null);
   };
@@ -116,10 +118,12 @@ export default function App() {
           onToggleComplete={toggleComplete}
           onMarkComplete={markComplete}
           onOpenTools={() => {
+            stopSpeaking();
             setCurrentView('tools');
             setSelectedModule(null);
           }}
           onOpenResources={() => {
+            stopSpeaking();
             setCurrentView('resources');
             setSelectedModule(null);
           }}
@@ -152,6 +156,7 @@ export default function App() {
         onViewChange={handleViewChange}
         selectedModule={selectedModule}
         onSelectModule={(mod) => {
+          stopSpeaking();
           setCurrentView('tutorial');
           setSelectedModule(mod);
         }}
@@ -201,16 +206,19 @@ export default function App() {
             setShowDiagnostic(false);
           }}
           onStartModule={(module) => {
+            stopSpeaking();
             refreshLearningPathStatus();
             setCurrentView('tutorial');
             setSelectedModule(module);
           }}
           onOpenTools={() => {
+            stopSpeaking();
             refreshLearningPathStatus();
             setCurrentView('tools');
             setSelectedModule(null);
           }}
           onOpenResources={() => {
+            stopSpeaking();
             refreshLearningPathStatus();
             setCurrentView('resources');
             setSelectedModule(null);
