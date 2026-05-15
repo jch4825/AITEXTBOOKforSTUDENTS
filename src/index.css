@@ -132,6 +132,18 @@
   background-size: 32px 32px;
 }
 
+html.home-snap-scroll {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+.home-snap-scroll .moholy-hero,
+.home-snap-scroll .home-work-surface,
+.home-snap-scroll .brand-scroll-scene {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
 .moholy-hero {
   background:
     linear-gradient(118deg, rgba(13, 27, 42, 0.96) 0%, rgba(45, 79, 168, 0.93) 42%, rgba(0, 166, 180, 0.88) 100%),
@@ -263,6 +275,317 @@
   border: 0.8rem solid rgba(255, 207, 74, 0.24);
   border-radius: 999px;
   pointer-events: none;
+}
+
+.brand-scroll {
+  position: relative;
+  overflow: hidden;
+  background: #f6f7fb;
+}
+
+.brand-scroll-scene {
+  position: relative;
+  display: flex;
+  min-height: 86vh;
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.5rem, 7vw, 6rem);
+  border-top: 1px solid rgba(14, 19, 24, 0.08);
+  background:
+    linear-gradient(90deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
+    #f7f8fb;
+  background-size: 38px 38px;
+}
+
+.brand-scroll-copy {
+  position: relative;
+  z-index: 1;
+  width: min(72rem, 100%);
+}
+
+.brand-scroll-copy-left {
+  align-self: flex-start;
+  margin-top: clamp(2rem, 8vh, 5rem);
+}
+
+.brand-scroll-copy-right {
+  align-self: center;
+  margin-left: auto;
+  width: min(60rem, 88%);
+  text-align: right;
+}
+
+.brand-scroll-copy-right .brand-scroll-detail {
+  margin-left: auto;
+}
+
+.brand-scroll-copy-low {
+  align-self: flex-end;
+  margin-bottom: clamp(2rem, 9vh, 6rem);
+  margin-left: clamp(0rem, 12vw, 10rem);
+  width: min(68rem, 92%);
+}
+
+.brand-scroll-eyebrow {
+  margin-bottom: 1.35rem;
+  color: rgba(14, 19, 24, 0.56);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.brand-scroll-copy h2 {
+  color: #0e1318;
+  font-size: clamp(3rem, 7.2vw, 6.8rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.98;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+
+.brand-scroll-copy h2 span {
+  display: block;
+  max-width: max-content;
+  word-break: keep-all;
+}
+
+.brand-scroll-detail {
+  margin-top: 1.8rem;
+  max-width: 42rem;
+  color: rgba(14, 19, 24, 0.62);
+  font-size: clamp(1.05rem, 2vw, 1.45rem);
+  font-weight: 800;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+
+.brand-scroll-members {
+  margin-top: 2rem;
+  color: #0e1318;
+  font-size: clamp(1.15rem, 2.2vw, 1.8rem);
+  font-weight: 900;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.brand-scroll-art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.brand-scroll-plane,
+.brand-scroll-ring,
+.brand-scroll-lines {
+  position: absolute;
+  display: block;
+}
+
+.brand-scroll-plane-a {
+  right: -9rem;
+  top: 14%;
+  width: min(58vw, 46rem);
+  height: 7rem;
+  background: rgba(255, 192, 64, 0.42);
+  clip-path: polygon(0 32%, 100% 0, 100% 64%, 0 100%);
+  transform: rotate(-16deg);
+}
+
+.brand-scroll-plane-b {
+  left: -12rem;
+  bottom: 14%;
+  width: min(62vw, 48rem);
+  height: 6.2rem;
+  background: rgba(0, 196, 204, 0.24);
+  clip-path: polygon(0 0, 100% 34%, 100% 100%, 0 68%);
+  transform: rotate(13deg);
+}
+
+.brand-scroll-ring {
+  right: 12%;
+  bottom: 12%;
+  width: clamp(8rem, 19vw, 17rem);
+  height: clamp(8rem, 19vw, 17rem);
+  border: clamp(0.8rem, 1.8vw, 1.45rem) solid rgba(139, 61, 255, 0.16);
+  border-radius: 999px;
+}
+
+.brand-scroll-lines {
+  right: 6%;
+  top: 16%;
+  width: clamp(12rem, 24vw, 22rem);
+  height: clamp(9rem, 18vw, 16rem);
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(14, 19, 24, 0.12) 0 2px,
+    transparent 2px 18px
+  );
+  opacity: 0.42;
+  transform: rotate(18deg);
+}
+
+.brand-scroll-scene-flow {
+  background-color: #101820;
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+.brand-scroll-scene-flow .brand-scroll-copy h2,
+.brand-scroll-scene-flow .brand-scroll-members {
+  color: #fff;
+}
+
+.brand-scroll-scene-flow .brand-scroll-eyebrow,
+.brand-scroll-scene-flow .brand-scroll-detail {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.brand-scroll-scene-flow .brand-scroll-plane-a {
+  background: rgba(255, 84, 76, 0.56);
+  mix-blend-mode: screen;
+}
+
+.brand-scroll-scene-flow .brand-scroll-plane-b {
+  background: rgba(0, 196, 204, 0.42);
+  mix-blend-mode: screen;
+}
+
+.brand-scroll-scene-flow .brand-scroll-ring {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.brand-scroll-scene-flow .brand-scroll-lines {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.24) 0 2px,
+    transparent 2px 18px
+  );
+}
+
+.brand-scroll-scene-vision .brand-scroll-plane-a {
+  background: rgba(139, 61, 255, 0.2);
+}
+
+.brand-scroll-scene-vision .brand-scroll-plane-b {
+  background: rgba(255, 84, 76, 0.2);
+}
+
+.brand-scroll-team {
+  min-height: 86vh;
+  align-items: flex-start;
+  padding-bottom: 31vh;
+}
+
+.brand-scroll-team-copy {
+  margin-top: clamp(3rem, 9vh, 6rem);
+  margin-left: auto;
+  width: min(64rem, 90%);
+  text-align: right;
+}
+
+.brand-scroll-team-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 33vh;
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 7vw, 6rem) 4.6rem;
+  background: #07090c;
+  color: rgba(255, 255, 255, 0.46);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 1.2rem 2rem rgba(255, 255, 255, 0.02);
+}
+
+.brand-scroll-team-bar > p {
+  max-width: 54rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: clamp(0.78rem, 1.18vw, 1.06rem);
+  font-weight: 900;
+  line-height: 1.55;
+  text-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.92),
+    0 1px 0 rgba(255, 255, 255, 0.08);
+  word-break: keep-all;
+}
+
+.brand-scroll-team-bar > p + p {
+  margin-top: 0.55rem;
+  color: rgba(255, 255, 255, 0.36);
+  font-size: clamp(0.75rem, 1.05vw, 0.95rem);
+}
+
+.brand-scroll-footer {
+  position: absolute;
+  left: clamp(1.5rem, 7vw, 6rem);
+  right: clamp(1.5rem, 7vw, 6rem);
+  bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .brand-scroll-scene {
+    min-height: 78vh;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .brand-scroll-copy h2 {
+    font-size: clamp(2.45rem, 13.5vw, 4.15rem);
+  }
+
+  .brand-scroll-copy-left,
+  .brand-scroll-copy-right,
+  .brand-scroll-copy-low,
+  .brand-scroll-team-copy {
+    align-self: center;
+    width: 100%;
+    margin: 0;
+    text-align: left;
+  }
+
+  .brand-scroll-plane-a {
+    right: -15rem;
+    width: 34rem;
+  }
+
+  .brand-scroll-plane-b {
+    left: -18rem;
+    width: 36rem;
+  }
+
+  .brand-scroll-lines {
+    right: -4rem;
+    opacity: 0.24;
+  }
+
+  .brand-scroll-footer {
+    flex-direction: column;
+  }
+
+  .brand-scroll-team {
+    padding-bottom: 36vh;
+  }
+
+  .brand-scroll-team-bar {
+    min-height: 36vh;
+  }
 }
 
 .moholy-surface {

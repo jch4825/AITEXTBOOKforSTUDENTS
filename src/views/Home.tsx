@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
@@ -90,6 +90,30 @@ const TEACHING_TIPS = [
   'AI는 시간을 아껴주는 도구입니다. 아낀 시간은 아이 얼굴을 더 오래 보는 데 쓰면 됩니다.',
 ] as const;
 
+const BRAND_SCENES = [
+  {
+    eyebrow: 'Core Value',
+    title: ['AI 격차를 줄이는 일,', '교실에서 시작됩니다.'],
+    detail: '경상남도 교원의 AI 리터러시를 위한 연결점.',
+    tone: 'brand-scroll-scene-value',
+    copyClass: 'brand-scroll-copy-left',
+  },
+  {
+    eyebrow: 'Flow',
+    title: ['막연함에서 활용으로.'],
+    detail: '개념 · 사례 · 도구 · 수업',
+    tone: 'brand-scroll-scene-flow',
+    copyClass: 'brand-scroll-copy-right',
+  },
+  {
+    eyebrow: 'Vision',
+    title: ['AI를 아는 교사.', 'AI로부터 소외되지 않는 교실.'],
+    detail: '',
+    tone: 'brand-scroll-scene-vision',
+    copyClass: 'brand-scroll-copy-low',
+  },
+] as const;
+
 function getRandomTipIndex(currentIndex: number) {
   if (TEACHING_TIPS.length < 2) return 0;
 
@@ -131,8 +155,115 @@ function FloatingCard({
   );
 }
 
+function BrandScrollSection() {
+  return (
+    <section className="brand-scroll" aria-label="AI Bridge 소개">
+      {BRAND_SCENES.map((scene, index) => (
+        <motion.section
+          key={scene.eyebrow}
+          data-home-snap-section
+          className={`brand-scroll-scene ${scene.tone}`}
+          initial={{ opacity: 0.72 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, amount: 0.45 }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
+        >
+          <div className="brand-scroll-art" aria-hidden="true">
+            <span className="brand-scroll-plane brand-scroll-plane-a" />
+            <span className="brand-scroll-plane brand-scroll-plane-b" />
+            <span className="brand-scroll-ring" />
+            <span className="brand-scroll-lines" />
+          </div>
+          <motion.div
+            className={`brand-scroll-copy ${scene.copyClass}`}
+            initial={{ opacity: 0, y: 34 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.58 }}
+            transition={{ duration: 0.58, delay: index * 0.04, ease: 'easeOut' }}
+          >
+            <p className="brand-scroll-eyebrow">{scene.eyebrow}</p>
+            <h2>
+              {scene.title.map((line) => (
+                <span key={line}>{line}</span>
+              ))}
+            </h2>
+            {scene.detail && <p className="brand-scroll-detail">{scene.detail}</p>}
+          </motion.div>
+        </motion.section>
+      ))}
+
+      <section className="brand-scroll-scene brand-scroll-team" data-home-snap-section>
+        <div className="brand-scroll-art" aria-hidden="true">
+          <span className="brand-scroll-plane brand-scroll-plane-a" />
+          <span className="brand-scroll-plane brand-scroll-plane-b" />
+          <span className="brand-scroll-ring" />
+          <span className="brand-scroll-lines" />
+        </div>
+        <motion.div
+          className="brand-scroll-copy brand-scroll-team-copy"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.45 }}
+          transition={{ duration: 0.55, ease: 'easeOut' }}
+        >
+          <p className="brand-scroll-eyebrow">Team</p>
+          <h2>
+            <span>Team Zer0-Gap</span>
+          </h2>
+        </motion.div>
+        <div className="brand-scroll-team-bar">
+          <p>경상국립대학교 AI융합교육 전공 교원 4인으로 이루어진 캡스톤 디자인 프로젝트팀</p>
+          <p>정상태 · 박주연 · 전창한 · 이정윤</p>
+          <footer className="brand-scroll-footer">
+            <span>AI Bridge by Team Zer0-Gap</span>
+            <span>© 2026 Team Zer0-Gap. All rights reserved.</span>
+          </footer>
+        </div>
+      </section>
+    </section>
+  );
+}
+
 export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSaved }: HomeProps) {
   const [tipIndex, setTipIndex] = useState(() => Math.floor(Math.random() * TEACHING_TIPS.length));
+  const isSnappingRef = useRef(false);
+
+  useEffect(() => {
+    document.documentElement.classList.add('home-snap-scroll');
+
+    const handleWheel = (event: WheelEvent) => {
+      if (Math.abs(event.deltaY) < 18 || isSnappingRef.current) return;
+
+      const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-home-snap-section]'));
+      if (sections.length === 0) return;
+
+      event.preventDefault();
+
+      const viewportAnchor = window.innerHeight * 0.28;
+      const currentIndex = sections.reduce((closestIndex, section, index) => {
+        const currentDistance = Math.abs(section.getBoundingClientRect().top - viewportAnchor);
+        const closestDistance = Math.abs(sections[closestIndex].getBoundingClientRect().top - viewportAnchor);
+        return currentDistance < closestDistance ? index : closestIndex;
+      }, 0);
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.min(Math.max(currentIndex + direction, 0), sections.length - 1);
+
+      if (nextIndex === currentIndex) return;
+
+      isSnappingRef.current = true;
+      sections[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.setTimeout(() => {
+        isSnappingRef.current = false;
+      }, 720);
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      document.documentElement.classList.remove('home-snap-scroll');
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -144,7 +275,10 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
 
   return (
     <div className="moholy-page min-h-screen overflow-hidden">
-      <section className="moholy-hero relative min-h-[500px] overflow-hidden px-5 py-8 text-white sm:min-h-[520px] sm:px-8 sm:py-10 lg:px-12 lg:py-14">
+      <section
+        className="moholy-hero relative min-h-[500px] overflow-hidden px-5 py-8 text-white sm:min-h-[520px] sm:px-8 sm:py-10 lg:px-12 lg:py-14"
+        data-home-snap-section
+      >
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
           style={{
@@ -274,7 +408,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
         </div>
       </section>
 
-      <main className="relative mx-auto max-w-7xl px-5 pb-14 sm:px-8 lg:px-12">
+      <main className="home-work-surface relative mx-auto max-w-7xl px-5 pb-14 sm:px-8 lg:px-12" data-home-snap-section>
         <section className="relative -mt-8 overflow-hidden rounded-2xl border border-canva-border bg-white px-5 py-4 shadow-lg shadow-slate-900/7 sm:px-6">
           <div className="absolute bottom-0 left-0 top-0 w-1 rounded-l-2xl bg-amber-400" />
           <div className="flex min-h-[48px] items-center gap-4">
@@ -358,6 +492,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
           </div>
         </section>
       </main>
+      <BrandScrollSection />
     </div>
   );
 }
