@@ -157,6 +157,39 @@
   z-index: 0;
 }
 
+.accessibility-widget-hint {
+  animation: accessibility-widget-pulse 1.8s ease-in-out 4;
+}
+
+.accessibility-widget-hint::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 9999px;
+  background: #8b3dff;
+  box-shadow: 0 0 0 3px rgba(139, 61, 255, 0.16);
+}
+
+@keyframes accessibility-widget-pulse {
+  0%, 100% {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(139, 61, 255, 0.16), 0 14px 28px -8px rgba(0, 0, 0, 0.24);
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accessibility-widget-hint {
+    animation: none;
+  }
+}
+
 .moholy-band-primary {
   left: -5rem;
   top: 5rem;

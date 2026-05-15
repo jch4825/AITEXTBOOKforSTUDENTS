@@ -758,24 +758,24 @@ export const Lesson55Interactive = ({ onRun, setUserInput, onNavigateToLesson }:
   return (
     <div className="flex-1 bg-[#0e1318] rounded-xl p-5 border border-gray-800 flex flex-col gap-4 overflow-y-auto">
       {/* AI 지도안 생성 폼 */}
-      <div className="bg-gradient-to-br from-purple-900/30 to-gray-900 border border-canva-purple/40 rounded-xl p-4">
-        <div className="flex items-center justify-between mb-3">
+      <div className="bg-gradient-to-br from-purple-900/30 to-gray-900 border border-canva-purple/40 rounded-xl p-3">
+        <div className="flex items-center justify-between mb-2">
           <div className="text-white font-bold flex items-center gap-2">
             <span className="text-lg">🎓</span> AI 윤리 수업 지도안 생성기
           </div>
         </div>
 
-        <div className="text-[11px] text-gray-400 mb-3 leading-relaxed">
+        <div className="text-[11px] text-gray-400 mb-2 leading-relaxed">
           우리 반 정보를 입력하면 Gemini AI가 바로 사용할 수 있는 <span className="text-canva-teal font-bold">맞춤 수업 지도안</span>을 작성합니다.
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-2">
           <div>
-            <label className="block text-[11px] font-bold text-gray-300 mb-1.5">학교급 / 학년</label>
+            <label className="block text-[11px] font-bold text-gray-300 mb-1">학교급 / 학년</label>
             <select
               value={schoolLevel}
               onChange={(e) => setSchoolLevel(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-canva-purple"
+              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-canva-purple"
             >
               <option>초등학교 1-2학년군</option>
               <option>초등학교 3-4학년군</option>
@@ -790,33 +790,33 @@ export const Lesson55Interactive = ({ onRun, setUserInput, onNavigateToLesson }:
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-gray-300 mb-1.5">학생 수</label>
+            <label className="block text-[11px] font-bold text-gray-300 mb-1">학생 수</label>
             <input
               type="number"
               value={studentCount}
               onChange={(e) => setStudentCount(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-canva-purple"
+              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-canva-purple"
               placeholder="예: 24"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-gray-300 mb-1.5">학생 특성 (자유 기재)</label>
+            <label className="block text-[11px] font-bold text-gray-300 mb-1">학생 특성 (자유 기재)</label>
             <textarea
               value={studentTraits}
               onChange={(e) => setStudentTraits(e.target.value)}
               rows={2}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-canva-purple resize-none"
+              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-canva-purple resize-none"
               placeholder={'예: 디지털 기기 사용 익숙, 비판적 분석 경험 적음, 다문화 학생 3명'}
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-gray-300 mb-1.5">윤리 수업 주제 및 포커스</label>
+            <label className="block text-[11px] font-bold text-gray-300 mb-1">윤리 수업 주제 및 포커스</label>
             <select
               value={ethicsFocus}
               onChange={(e) => setEthicsFocus(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-canva-purple"
+              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-canva-purple"
             >
               <option>종합</option>
               <option>할루시네이션</option>
@@ -834,11 +834,11 @@ export const Lesson55Interactive = ({ onRun, setUserInput, onNavigateToLesson }:
           </div>
         </div>
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 mt-3">
           {!hasApiKey && onNavigateToLesson && (
             <button
               onClick={() => onNavigateToLesson('l1-4')}
-              className="px-4 py-2.5 bg-canva-purple text-white rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all shadow-lg"
+              className="px-4 py-2 bg-canva-purple text-white rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all shadow-lg"
             >
               API 키 입력
             </button>
@@ -846,21 +846,21 @@ export const Lesson55Interactive = ({ onRun, setUserInput, onNavigateToLesson }:
           <button
             onClick={handleGenerate}
             disabled={!onRun}
-            className="flex-1 px-5 py-2.5 bg-canva-teal text-white rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all disabled:opacity-40 shadow-lg shadow-teal-900/20"
+            className="flex-1 px-5 py-2 bg-canva-teal text-white rounded-lg font-bold text-sm hover:bg-opacity-90 transition-all disabled:opacity-40 shadow-lg shadow-teal-900/20"
           >
             ✨ AI 지도안 생성 (Run)
           </button>
         </div>
 
         {!hasApiKey && (
-          <div className="mt-3 p-2.5 bg-amber-500/10 border border-amber-500/30 rounded text-[10px] text-amber-200 leading-relaxed">
+          <div className="mt-2 p-2 bg-amber-500/10 border border-amber-500/30 rounded text-[10px] text-amber-200 leading-relaxed">
             💡 API 키가 없어도 괜찮습니다. 아래 <span className="font-bold">&quot;기본 수업 활동 모음&quot;</span>에서 저·중·고학년별로 준비된 9가지 활동을 바로 구글 Docs로 내보내 수업에 쓸 수 있습니다.
           </div>
         )}
       </div>
 
       {/* Fallback: 기존 9개 시나리오 활동 */}
-      <div className="mt-2">
+      <div className="mt-1">
         <button
           onClick={() => setShowFallback(!showFallback)}
           className="w-full flex items-center justify-between bg-gray-900 hover:bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-left transition-colors"

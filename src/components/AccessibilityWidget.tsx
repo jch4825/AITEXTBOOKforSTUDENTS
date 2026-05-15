@@ -3,13 +3,18 @@ import { Type, GripVertical, X } from 'lucide-react';
 import { FontScale, applyFontScale, loadFontScale } from '../utils/a11y';
 import {
   getWidgetCollapsed,
+  hasSeenWidgetHint,
   loadWidgetPos,
+  markWidgetHintSeen,
   saveWidgetCollapsed,
   saveWidgetPos,
   STORAGE_KEYS,
 } from '../services/storage';
 
 type Pos = { x: number; y: number };
+type DragStart = { pointerX: number; pointerY: number; x: number; y: number; moved: boolean };
+
+const DRAG_THRESHOLD = 8;
 
 function clampToViewport(p: Pos, w: number, h: number): Pos {
   const maxX = Math.max(0, window.innerWidth - w - 4);
@@ -24,19 +29,33 @@ export default function AccessibilityWidget() {
   const [scale, setScale] = useState<FontScale>(() => loadFontScale());
   const [pos, setPos] = useState<Pos | null>(() => loadWidgetPos());
   const [dragging, setDragging] = useState(false);
+  const [hintSeen, setHintSeen] = useState<boolean>(() => hasSeenWidgetHint());
   const [collapsed, setCollapsed] = useState<boolean>(() => {
     if (window.innerWidth < 640) return true;
     return getWidgetCollapsed();
   });
   const expandedRef = useRef<HTMLDivElement>(null);
   const collapsedRef = useRef<HTMLButtonElement>(null);
-  const dragStart = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null);
+  const dragStart = useRef<DragStart | null>(null);
+  const lastPos = useRef<Pos | null>(pos);
+  const suppressClick = useRef(false);
   const getWidgetElement = () => (collapsed ? collapsedRef.current : expandedRef.current);
 
+  const dismissHint = () => {
+    if (hintSeen) return;
+    setHintSeen(true);
+    markWidgetHintSeen();
+  };
+
   const toggleCollapsed = (next: boolean) => {
+    if (next) dismissHint();
     setCollapsed(next);
     saveWidgetCollapsed(next);
   };
+
+  useEffect(() => {
+    lastPos.current = pos;
+  }, [pos]);
 
   useEffect(() => {
     applyFontScale(scale);
@@ -67,12 +86,26 @@ export default function AccessibilityWidget() {
   }, [pos, collapsed]);
 
   useEffect(() => {
+    if (!pos) return;
+    const frame = window.requestAnimationFrame(() => {
+      const element = getWidgetElement();
+      if (!element) return;
+      const rect = element.getBoundingClientRect();
+      const next = clampToViewport(pos, rect.width, rect.height);
+      if (next.x !== pos.x || next.y !== pos.y) setPos(next);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [collapsed, pos]);
+
+  useEffect(() => {
     if (!dragging) return;
     const onMove = (e: PointerEvent) => {
       const element = getWidgetElement();
       if (!dragStart.current || !element) return;
       const dx = e.clientX - dragStart.current.pointerX;
       const dy = e.clientY - dragStart.current.pointerY;
+      if (!dragStart.current.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+      dragStart.current.moved = true;
       const rect = element.getBoundingClientRect();
       const next = clampToViewport(
         { x: dragStart.current.x + dx, y: dragStart.current.y + dy },
@@ -82,9 +115,12 @@ export default function AccessibilityWidget() {
       setPos(next);
     };
     const onUp = () => {
+      const moved = Boolean(dragStart.current?.moved);
+      if (moved) dismissHint();
+      suppressClick.current = moved;
       setDragging(false);
       dragStart.current = null;
-      if (pos) saveWidgetPos(pos);
+      if (lastPos.current) saveWidgetPos(lastPos.current);
     };
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
@@ -94,7 +130,7 @@ export default function AccessibilityWidget() {
       window.removeEventListener('pointerup', onUp);
       window.removeEventListener('pointercancel', onUp);
     };
-  }, [dragging, pos]);
+  }, [dragging, hintSeen]);
 
   const handleDragStart = (e: React.PointerEvent) => {
     const element = getWidgetElement();
@@ -106,14 +142,23 @@ export default function AccessibilityWidget() {
       pointerY: e.clientY,
       x: startPos.x,
       y: startPos.y,
+      moved: false,
     };
     
     // Modern way to handle dragging: capture the pointer
-    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    e.currentTarget.setPointerCapture(e.pointerId);
     
     setPos(startPos);
     setDragging(true);
     e.preventDefault();
+  };
+
+  const handleCollapsedClick = () => {
+    if (suppressClick.current) {
+      suppressClick.current = false;
+      return;
+    }
+    toggleCollapsed(false);
   };
 
   const options: { value: FontScale; label: string; size: string }[] = [
@@ -134,10 +179,13 @@ export default function AccessibilityWidget() {
       <button
         ref={collapsedRef}
         style={style}
-        onClick={() => toggleCollapsed(false)}
+        onPointerDown={handleDragStart}
+        onClick={handleCollapsedClick}
         aria-label="글자 크기 위젯 열기"
         title="글자 크기 위젯 열기"
-        className="fixed z-[100] bg-white border border-gray-200 rounded-full shadow-lg w-9 h-9 flex items-center justify-center text-gray-400 hover:text-canva-purple hover:border-canva-purple transition-colors"
+        className={`fixed z-[100] bg-white border border-gray-200 rounded-full shadow-lg w-9 h-9 flex items-center justify-center text-gray-400 hover:text-canva-purple hover:border-canva-purple transition-colors ${
+          dragging ? 'cursor-grabbing shadow-2xl' : 'cursor-grab'
+        } ${!hintSeen ? 'accessibility-widget-hint' : ''}`}
       >
         <Type size={16} />
       </button>
@@ -169,7 +217,10 @@ export default function AccessibilityWidget() {
         {options.map(opt => (
           <button
             key={opt.value}
-            onClick={() => setScale(opt.value)}
+            onClick={() => {
+              dismissHint();
+              setScale(opt.value);
+            }}
             aria-pressed={scale === opt.value}
             className={`${opt.size} px-2 py-2 min-w-[2.75rem] rounded-full font-bold transition-colors ${
               scale === opt.value

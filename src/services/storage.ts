@@ -18,6 +18,7 @@ export const STORAGE_KEYS = {
   sidebarCollapsed: 'ai-bridge-sidebar-collapsed',
   accessibilityWidgetPos: 'ai-bridge-widget-pos',
   accessibilityWidgetCollapsed: 'ai-bridge-widget-collapsed',
+  accessibilityWidgetHintSeen: 'ai-bridge-widget-hint-seen',
   resourceFavorites: 'ai-teachers-resource-favorites',
   metaPromptL26: 'meta-prompt-l2-6',
   l11TourSeen: 'l1-1-tour-seen',
@@ -151,6 +152,14 @@ export function getWidgetCollapsed(): boolean {
 
 export function saveWidgetCollapsed(value: boolean) {
   setItem(STORAGE_KEYS.accessibilityWidgetCollapsed, String(value));
+}
+
+export function hasSeenWidgetHint(): boolean {
+  return getItem(STORAGE_KEYS.accessibilityWidgetHintSeen) === 'true';
+}
+
+export function markWidgetHintSeen() {
+  setItem(STORAGE_KEYS.accessibilityWidgetHintSeen, 'true');
 }
 
 export function loadFontScaleValue(): FontScale {
