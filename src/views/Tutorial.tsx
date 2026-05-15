@@ -3,13 +3,13 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, BookOpen, CheckCircle2, ChevronRight, PlayCircle, Clock, ArrowRight, Copy, Info, FileText, Lock, Check, School, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { GoogleGenAI } from "@google/genai";
 import { modules, lessons, Lesson } from '../data/tutorialData';
 import { DiagnosticPurpose, Module, Persona } from '../types';
 import { friendlyApiError } from '../utils/apiError';
 import { getTheme } from '../utils/moduleThemes';
 import SpeakButton from '../components/SpeakButton';
-import { runWithGeminiModelFallback } from '../utils/gemini';
+import { callGemini, streamGemini } from '../utils/gemini';
+import { useExternalStorageState } from '../hooks/useExternalStorageState';
 import PersonaRecommendCard from '../components/onboarding/PersonaRecommendCard';
 import { getModuleVisibility } from '../data/moduleVisibility';
 import { applyFontScale, stopSpeaking } from '../utils/a11y';
@@ -55,6 +55,42 @@ import {
   Lesson56Interactive,
   Lesson57Interactive
 } from './Module5Components';
+
+type Module0InteractiveProps = { onComplete: () => void; onContinue: () => void; isCompleted: boolean };
+type Module4InteractiveProps = { onExecute: (data: { title: string; content: React.ReactNode; point: string; hideDocsButton?: boolean }) => void };
+type Module5CompletionProps = { onComplete?: () => void };
+
+const MODULE0_INTERACTIVES: Record<string, React.ComponentType<Module0InteractiveProps>> = {
+  'l0-1': Lesson01Interactive,
+  'l0-2': Lesson02Interactive,
+  'l0-3': Lesson03Interactive,
+  'l0-4': Lesson04Interactive,
+  'l0-5': Lesson05Interactive,
+  'l0-6': Lesson06Interactive,
+};
+
+// 의도된 ID↔컴포넌트 교차 매핑: 콘텐츠 작성 순서가 변경되었으나 컴포넌트 이름은 옛 번호를 유지.
+// 새 레슨 추가 시 컴포넌트 이름이 아니라 lesson.id 기준으로 매핑하세요.
+const MODULE4_INTERACTIVES: Record<string, React.ComponentType<Module4InteractiveProps>> = {
+  'l4-1': Lesson41Interactive,
+  'l4-2': Lesson42Interactive,
+  'l4-3': Lesson43Interactive,
+  'l4-4': Lesson44Interactive,
+  'l4-5': Lesson45Interactive,
+  'l4-6': Lesson47Interactive, // Claude Skill / hwpx 공문 자동 작성
+  'l4-7': Lesson46Interactive, // 도구를 쓰는 AI 에이전트
+  'l4-8': Lesson48Interactive,
+};
+
+// l5-5는 prop 시그니처가 달라 별도 처리. 나머지는 onComplete만 받음.
+const MODULE5_COMPLETION_INTERACTIVES: Record<string, React.ComponentType<Module5CompletionProps>> = {
+  'l5-1': Lesson51Interactive,
+  'l5-2': Lesson52Interactive,
+  'l5-3': Lesson53Interactive,
+  'l5-4': Lesson54Interactive,
+  'l5-6': Lesson57Interactive, // AI Slop — 의도된 cross 매핑
+  'l5-7': Lesson56Interactive, // 가이드라인 — 의도된 cross 매핑
+};
 
 let module4PrinciplesShown = false;
 const GEMINI_API_LINKED_LESSON_IDS = new Set([
@@ -476,7 +512,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [learningPoint, setLearningPoint] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
   const [showWelcomePopup, setShowWelcomePopup] = useState(lesson.id === 'l0-1');
-  const [hasApiKey, setHasApiKey] = useState(() => hasGeminiApiKey());
+  const hasApiKey = useExternalStorageState(hasGeminiApiKey, 'api-key-changed');
   const [metaPromptCopied, setMetaPromptCopied] = useState(false);
   const [imgErrors, setImgErrors] = useState<Set<string>>(new Set());
   const [imgRetries, setImgRetries] = useState<Record<string, number>>({});
@@ -657,19 +693,16 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     setIsDictLoading(true);
     setDictResult('');
     try {
-      const ai = new GoogleGenAI({ apiKey });
-      await runWithGeminiModelFallback(async (modelName) => {
-        const response = await ai.models.generateContentStream({
-          model: modelName,
-          config: { systemInstruction: DICT_SYSTEM_PROMPT },
-          contents: [{ role: 'user', parts: [{ text: `"${dictWord.trim()}"` }] }],
-        });
-        let accumulated = '';
-        for await (const chunk of response) {
-          accumulated += chunk.text ?? '';
-          setDictResult(accumulated);
-        }
+      const response = await streamGemini({
+        apiKey,
+        systemInstruction: DICT_SYSTEM_PROMPT,
+        contents: [{ role: 'user', parts: [{ text: `"${dictWord.trim()}"` }] }],
       });
+      let accumulated = '';
+      for await (const chunk of response) {
+        accumulated += chunk.text ?? '';
+        setDictResult(accumulated);
+      }
     } catch (err) {
       setDictResult(`오류가 발생했습니다: ${friendlyApiError(err)}`);
     } finally {
@@ -762,8 +795,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       const apiKey = inputToUse.replace(/\s+/g, '');
       if (apiKey.startsWith('AIza') && apiKey.length >= 30) {
         saveGeminiApiKey(apiKey);
-        setHasApiKey(true);
-        // 사이드바·상단 네비 등 다른 곳의 hasApiKey 상태가 즉시 반영되도록
+        // saveGeminiApiKey가 api-key-changed 이벤트를 발행하므로 hasApiKey 상태는 자동 갱신됨.
       }
     }
 
@@ -790,36 +822,12 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           systemInstruction = "답변은 반드시 5줄 이내로 간결하게 작성해주세요." + FORMAT_RULE;
         }
 
-        const callOnce = async () => {
-          const ai = new GoogleGenAI({ apiKey: savedKey });
-          return await runWithGeminiModelFallback(model =>
-            ai.models.generateContent({
-              model,
-              contents: inputToUse,
-              config: systemInstruction ? { systemInstruction } : undefined
-            })
-          );
-        };
-
-        // 신규 키 전파 지연(Google 측) 대응: API_KEY_INVALID 만 1회 자동 재시도
-        const isPropagationError = (e: any) => {
-          const msg = (e?.message ?? '').toString();
-          return /API_KEY_INVALID|API key expired|API key not valid|key expired/i.test(msg);
-        };
-
         try {
-          let response;
-          try {
-            response = await callOnce();
-          } catch (firstErr) {
-            if (isPropagationError(firstErr)) {
-              // 1.8초 대기 후 재시도 (Google 인증 서버 전파 시간)
-              await new Promise(r => setTimeout(r, 1800));
-              response = await callOnce();
-            } else {
-              throw firstErr;
-            }
-          }
+          const response = await callGemini({
+            apiKey: savedKey,
+            contents: inputToUse,
+            systemInstruction: systemInstruction || undefined,
+          });
 
           fullText = response.text?.trim() || "답변을 생성할 수 없습니다.";
 
@@ -1388,7 +1396,6 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                       onClick={() => {
                         if (window.confirm('저장된 API 키를 삭제하시겠습니까?\n공용 PC에서는 사용 후 꼭 해제해 주세요.')) {
                           clearGeminiApiKey();
-                          setHasApiKey(false);
                         }
                       }}
                       className="text-[10px] px-2 py-1 rounded-full font-bold border border-red-500/40 text-red-300 hover:bg-red-500/10 transition-colors"
@@ -1444,37 +1451,19 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                       </div>
                     </div>
                   )}
-                  {lesson.moduleId === 'm0' ? (
-                    <>
-                      {lesson.id === 'l0-1' && <Lesson01Interactive onComplete={() => onMarkComplete(lesson.id)} onContinue={completeAndContinue} isCompleted={isCompleted} />}
-                      {lesson.id === 'l0-2' && <Lesson02Interactive onComplete={() => onMarkComplete(lesson.id)} onContinue={completeAndContinue} isCompleted={isCompleted} />}
-                      {lesson.id === 'l0-3' && <Lesson03Interactive onComplete={() => onMarkComplete(lesson.id)} onContinue={completeAndContinue} isCompleted={isCompleted} />}
-                      {lesson.id === 'l0-4' && <Lesson04Interactive onComplete={() => onMarkComplete(lesson.id)} onContinue={completeAndContinue} isCompleted={isCompleted} />}
-                      {lesson.id === 'l0-5' && <Lesson05Interactive onComplete={() => onMarkComplete(lesson.id)} onContinue={completeAndContinue} isCompleted={isCompleted} />}
-                      {lesson.id === 'l0-6' && <Lesson06Interactive onComplete={() => onMarkComplete(lesson.id)} onContinue={completeAndContinue} isCompleted={isCompleted} />}
-                    </>
-                  ) : lesson.moduleId === 'm4' ? (
-                    <>
-                      {lesson.id === 'l4-1' && <Lesson41Interactive onExecute={handleM4Execute} />}
-                      {lesson.id === 'l4-2' && <Lesson42Interactive onExecute={handleM4Execute} />}
-                      {lesson.id === 'l4-3' && <Lesson43Interactive onExecute={handleM4Execute} />}
-                      {lesson.id === 'l4-4' && <Lesson44Interactive onExecute={handleM4Execute} />}
-                      {lesson.id === 'l4-5' && <Lesson45Interactive onExecute={handleM4Execute} />}
-                      {lesson.id === 'l4-6' && <Lesson47Interactive onExecute={handleM4Execute} />}
-                      {lesson.id === 'l4-7' && <Lesson46Interactive onExecute={handleM4Execute} />}
-                      {lesson.id === 'l4-8' && <Lesson48Interactive onExecute={handleM4Execute} />}
-                    </>
-                  ) : lesson.moduleId === 'm5' ? (
-                    <>
-                      {lesson.id === 'l5-1' && <Lesson51Interactive onComplete={() => onMarkComplete(lesson.id)} />}
-                      {lesson.id === 'l5-2' && <Lesson52Interactive onComplete={() => onMarkComplete(lesson.id)} />}
-                      {lesson.id === 'l5-3' && <Lesson53Interactive onComplete={() => onMarkComplete(lesson.id)} />}
-                      {lesson.id === 'l5-4' && <Lesson54Interactive onComplete={() => onMarkComplete(lesson.id)} />}
-                      {lesson.id === 'l5-5' && <Lesson55Interactive onRun={handleRun} setUserInput={setUserInput} onNavigateToLesson={onNavigateToLesson} />}
-                      {/* l5-6 = AI Slop (Lesson57Interactive), l5-7 = 가이드라인 (Lesson56Interactive) — 원래 코드 만들 때 순서가 반대였어서 매핑이 cross-됨 */}
-                      {lesson.id === 'l5-6' && <Lesson57Interactive onComplete={() => onMarkComplete(lesson.id)} />}
-                      {lesson.id === 'l5-7' && <Lesson56Interactive onComplete={() => onMarkComplete(lesson.id)} />}
-                    </>
+                  {lesson.moduleId === 'm0' ? (() => {
+                    const Component = MODULE0_INTERACTIVES[lesson.id];
+                    return Component ? <Component onComplete={() => onMarkComplete(lesson.id)} onContinue={completeAndContinue} isCompleted={isCompleted} /> : null;
+                  })() : lesson.moduleId === 'm4' ? (() => {
+                    const Component = MODULE4_INTERACTIVES[lesson.id];
+                    return Component ? <Component onExecute={handleM4Execute} /> : null;
+                  })() : lesson.moduleId === 'm5' ? (
+                    lesson.id === 'l5-5' ? (
+                      <Lesson55Interactive onRun={handleRun} setUserInput={setUserInput} onNavigateToLesson={onNavigateToLesson} />
+                    ) : (() => {
+                      const Component = MODULE5_COMPLETION_INTERACTIVES[lesson.id];
+                      return Component ? <Component onComplete={() => onMarkComplete(lesson.id)} /> : null;
+                    })()
                   ) : lesson.id !== 'l2-1' && lesson.id !== 'l2-2' && lesson.id !== 'l2-3' && lesson.id !== 'l2-4' && lesson.id !== 'l2-5' && lesson.id !== 'l3-1' && (
                     <div
                       className={`${usesGeminiApi ? 'flex-none min-h-[260px]' : 'flex-1 min-h-[200px]'} rounded-xl p-[1px] relative group`}

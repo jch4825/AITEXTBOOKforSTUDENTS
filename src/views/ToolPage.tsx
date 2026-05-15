@@ -12,15 +12,13 @@ import {
 import { motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import {
-  GoogleGenAI,
-} from '@google/genai';
 import { ToolDefinition, ToolInput } from '../tools/ToolRegistry';
 import { friendlyApiError } from '../utils/apiError';
 import SpeakButton from '../components/SpeakButton';
 import { formatStandardForPrompt, getStandardPreview, initCurriculum } from '../utils/curriculumLookup';
-import { runWithGeminiModelFallback } from '../utils/gemini';
+import { streamGemini } from '../utils/gemini';
 import { getGeminiApiKey, hasGeminiApiKey } from '../services/storage';
+import { useExternalStorageState } from '../hooks/useExternalStorageState';
 
 interface ToolPageProps {
   tool: ToolDefinition;
@@ -92,24 +90,7 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
     initCurriculum().then(() => setCurriculumReady(true));
   }, [hasCurriculumInput]);
 
-  const [hasApiKey, setHasApiKey] = useState(() => hasGeminiApiKey());
-
-  useEffect(() => {
-    const refresh = () => {
-      setHasApiKey(hasGeminiApiKey());
-    };
-    window.addEventListener('api-key-changed', refresh);
-    window.addEventListener('storage', refresh);
-    return () => {
-      window.removeEventListener('api-key-changed', refresh);
-      window.removeEventListener('storage', refresh);
-    };
-  }, []);
-
-  const genAI = useMemo(() => {
-    const key = getGeminiApiKey();
-    return key ? new GoogleGenAI({ apiKey: key }) : null;
-  }, [hasApiKey]);
+  const hasApiKey = useExternalStorageState(hasGeminiApiKey, 'api-key-changed');
 
   const setValue = (id: string, value: string) => {
     setValues(prev => ({ ...prev, [id]: value }));
@@ -292,33 +273,12 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
       });
     }
 
-    const startStream = async () => {
-      return runWithGeminiModelFallback(model =>
-        genAI!.models.generateContentStream({
-          model,
-          config: { systemInstruction: tool.systemPrompt },
-          contents: [{ role: 'user', parts }],
-        }),
-      );
-    };
-
-    const isInvalidApiKeyError = (error: any) => {
-      const message = (error?.message ?? '').toString();
-      return /API_KEY_INVALID|API key expired|API key not valid|key expired/i.test(message);
-    };
-
     try {
-      let response;
-      try {
-        response = await startStream();
-      } catch (firstError) {
-        if (isInvalidApiKeyError(firstError)) {
-          await new Promise(resolve => setTimeout(resolve, 1800));
-          response = await startStream();
-        } else {
-          throw firstError;
-        }
-      }
+      const response = await streamGemini({
+        apiKey: getGeminiApiKey(),
+        systemInstruction: tool.systemPrompt,
+        contents: [{ role: 'user', parts }],
+      });
 
       let full = '';
       for await (const chunk of response) {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Check, FileText } from 'lucide-react';
 import { Lesson } from '../data/tutorialData';
-import { GoogleGenAI } from '@google/genai';
-import { runWithGeminiModelFallback } from '../utils/gemini';
+import { callGemini } from '../utils/gemini';
 import { initCurriculum, lookupStandard, normalizeCode, CurriculumStandard } from '../utils/curriculumLookup';
 import { getGeminiApiKey, hasGeminiApiKey } from '../services/storage';
+import { useExternalStorageState } from '../hooks/useExternalStorageState';
 
 export const CopyButton = ({ text, className = "" }: { text: string, className?: string }) => {
   const [copied, setCopied] = useState(false);
@@ -66,19 +66,13 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
   const [aiText, setAiText] = useState('');
   const [isSimulation, setIsSimulation] = useState(false);
   const [realStandard, setRealStandard] = useState<CurriculumStandard | 'not-found' | null>(null);
-  const [hasApiKey, setHasApiKey] = useState(false);
+  const hasApiKey = useExternalStorageState(hasGeminiApiKey, 'api-key-changed');
   const [queried, setQueried] = useState(false);
 
   const EXAMPLES = ['[2국01-01]', '[4수01-03]', '[6사02-02]', '[3과02-01]'];
 
   useEffect(() => {
-    setHasApiKey(hasGeminiApiKey());
     initCurriculum();
-    const onKeyChange = () => {
-      setHasApiKey(hasGeminiApiKey());
-    };
-    window.addEventListener('api-key-changed', onKeyChange);
-    return () => window.removeEventListener('api-key-changed', onKeyChange);
   }, []);
 
   const handleQuery = async (code: string) => {
@@ -108,15 +102,12 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
     setIsSimulation(false);
     try {
       const norm = normalizeCode(trimmed);
-      const ai = new GoogleGenAI({ apiKey: key });
       const prompt = `2022 개정 교육과정(2022년 12월 22일 교육부 고시 제2022-33호)의 성취기준 ${norm}에 대해 알려줘. 반드시 2022 개정 교육과정 기준으로만 답변하고, 2015 개정 교육과정의 내용은 사용하지 마. 학년군, 교과, 영역, 그리고 성취기준 전문(공식 문서에 기재된 그대로의 문장)을 정확하게 알려줘.`;
-      const response = await runWithGeminiModelFallback(model =>
-        ai.models.generateContent({
-          model,
-          contents: prompt,
-          config: { systemInstruction: '표(마크다운 테이블 포함)는 사용하지 마세요. 간결하게 답해주세요.' }
-        })
-      );
+      const response = await callGemini({
+        apiKey: key,
+        contents: prompt,
+        systemInstruction: '표(마크다운 테이블 포함)는 사용하지 마세요. 간결하게 답해주세요.',
+      });
       setAiText(response.text ?? '응답이 비어 있습니다.');
       onComplete?.();
     } catch (e) {
@@ -620,12 +611,8 @@ export const Lesson55Interactive = ({ onRun, setUserInput, onNavigateToLesson }:
   const [studentCount, setStudentCount] = useState('24');
   const [studentTraits, setStudentTraits] = useState('');
   const [ethicsFocus, setEthicsFocus] = useState('종합');
-  const [hasApiKey, setHasApiKey] = useState(false);
+  const hasApiKey = useExternalStorageState(hasGeminiApiKey, 'api-key-changed');
   const [showFallback, setShowFallback] = useState(false);
-
-  useEffect(() => {
-    setHasApiKey(hasGeminiApiKey());
-  }, []);
 
   const handleGenerate = () => {
     if (!onRun || !setUserInput) return;

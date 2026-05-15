@@ -7,6 +7,7 @@ import { GEMINI_MODEL_GUIDE } from '../utils/gemini';
 import { getModuleVisibility } from '../data/moduleVisibility';
 import { loadPersona } from '../hooks/useDiagnostic';
 import { clearGeminiApiKey, hasGeminiApiKey, saveGeminiApiKey } from '../services/storage';
+import { useExternalStorageState } from '../hooks/useExternalStorageState';
 
 interface SidebarProps {
   currentView: ViewType;
@@ -28,36 +29,8 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
   const [showRestartConfirm, setShowRestartConfirm] = useState(false);
-  const [persona, setPersona] = useState<Persona | null>(() => loadPersona());
-  
-  // Keep key changes reflected in same-tab UI state.
-  const [hasApiKey, setHasApiKey] = useState(() => {
-    return hasGeminiApiKey();
-  });
-
-  useEffect(() => {
-    const refresh = () => {
-      setHasApiKey(hasGeminiApiKey());
-    };
-    // 다른 탭에서 변경될 때 (storage 이벤트는 동일 탭에서는 안 발생)
-    window.addEventListener('storage', refresh);
-    // 동일 탭 안에서 1-4 레슨이나 다른 곳에서 키를 바꿨을 때
-    window.addEventListener('api-key-changed', refresh);
-    return () => {
-      window.removeEventListener('storage', refresh);
-      window.removeEventListener('api-key-changed', refresh);
-    };
-  }, []);
-
-  useEffect(() => {
-    const refresh = () => setPersona(loadPersona());
-    window.addEventListener('storage', refresh);
-    window.addEventListener('ai-bridge-persona-changed', refresh);
-    return () => {
-      window.removeEventListener('storage', refresh);
-      window.removeEventListener('ai-bridge-persona-changed', refresh);
-    };
-  }, []);
+  const persona = useExternalStorageState<Persona | null>(loadPersona, 'ai-bridge-persona-changed');
+  const hasApiKey = useExternalStorageState(hasGeminiApiKey, 'api-key-changed');
 
   const saveApiKey = () => {
     // 내부 공백·줄바꿈·탭까지 모두 제거 (복사 과정에서 끼어드는 문자 차단)
@@ -69,12 +42,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
       return;
     }
 
-    try {
-      if (!saveGeminiApiKey(cleaned)) {
-        setApiKeyError('釉뚮씪?곗? ???怨듦컙??遺議깊빐 ?ㅻ? ??ν븷 ???놁뒿?덈떎.');
-        return;
-      }
-    } catch {
+    if (!saveGeminiApiKey(cleaned)) {
       setApiKeyError('브라우저 저장 공간이 부족해 키를 저장할 수 없습니다.');
       return;
     }
