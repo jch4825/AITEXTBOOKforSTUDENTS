@@ -73,6 +73,24 @@ const GEMINI_API_LINKED_LESSON_IDS = new Set([
   'l5-5',
 ]);
 
+function normalizeKoreanMarkdownStrong(markdown: string) {
+  let inFence = false;
+
+  return markdown
+    .split('\n')
+    .map((line) => {
+      if (/^\s*```/.test(line)) {
+        inFence = !inFence;
+        return line;
+      }
+
+      if (inFence) return line;
+
+      return line.replace(/\*\*([^*\n]+?)\*\*(?=[가-힣])/g, '**$1**&ZeroWidthSpace;');
+    })
+    .join('\n');
+}
+
 function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
   return (
     <AnimatePresence>
@@ -1231,7 +1249,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                   },
                 }}
               >
-                {lesson.content.replace(/^[ \t]+/gm, '')}
+                {normalizeKoreanMarkdownStrong(lesson.content.replace(/^[ \t]+/gm, ''))}
               </ReactMarkdown>
             </div>
             {lesson.visuals && lesson.visuals.length > 0 && (
@@ -1624,7 +1642,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
                         }}
                       >
-                        {aiResponse.content}
+                        {normalizeKoreanMarkdownStrong(aiResponse.content)}
                       </ReactMarkdown>
                     ) : (
                       <ReactMarkdown
@@ -1633,13 +1651,13 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
                         }}
                       >
-                        {aiResponse as string}
+                        {normalizeKoreanMarkdownStrong(aiResponse as string)}
                       </ReactMarkdown>
                     )}
                     {isTyping && <span className="inline-block w-2 h-4 bg-canva-teal ml-1 animate-pulse"></span>}
                     {!aiResponse && !isTyping && (
                       <span className="text-gray-400 italic">
-                        {lesson.interactive?.answer || '실행 버튼을 눌러 AI의 답변을 확인하세요.'}
+                        {normalizeKoreanMarkdownStrong(lesson.interactive?.answer || '실행 버튼을 눌러 AI의 답변을 확인하세요.')}
                       </span>
                     )}
                   </div>
@@ -1663,7 +1681,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
                         }}
                       >
-                        {learningPoint}
+                        {normalizeKoreanMarkdownStrong(learningPoint)}
                       </ReactMarkdown>
                     </div>
                   </motion.div>

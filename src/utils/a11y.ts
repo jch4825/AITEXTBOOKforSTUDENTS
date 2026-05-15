@@ -19,7 +19,9 @@ export function loadFontScale(): FontScale {
 
 export function stripMarkdown(text: string): string {
   return text
+    .replace(/&ZeroWidthSpace;|\u200b/g, '')
     .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/(?:^\s*\|.*\|\s*$\n?){2,}/gm, ' 표가 있습니다. 표는 눈으로 직접 확인하세요. ')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
