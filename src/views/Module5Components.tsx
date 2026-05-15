@@ -696,7 +696,7 @@ export const Lesson55Interactive = ({ onRun, setUserInput, onNavigateToLesson }:
         ]
       },
       {
-        title: '활동 5 — "AI 탐정단"',
+        title: '활동 5 — "AI 글 vs. 내 글"',
         time: '30분',
         goal: 'AI 생성 글과 사람이 쓴 글을 비교 분석한다',
         steps: [

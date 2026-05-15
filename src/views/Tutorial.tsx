@@ -499,7 +499,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const l11NextRef = useRef<HTMLButtonElement | null>(null);
   const isL11 = lesson.id === 'l1-1';
   const usesGeminiApi = GEMINI_API_LINKED_LESSON_IDS.has(lesson.id) || Boolean(lesson.interactive?.systemPrompt);
-  const usesL26PanelHeight = usesGeminiApi || L2_FOUNDATION_LESSON_IDS.has(lesson.id);
+  const usesL26PanelHeight = usesGeminiApi || L2_FOUNDATION_LESSON_IDS.has(lesson.id) || lesson.id === 'l3-1';
   const isL55 = lesson.id === 'l5-5';
   const isL55ShowingResponse = isL55 && (isTyping || (!!aiResponse && aiResponseLessonRef.current === lesson.id));
   const hasBalancedInputResponse = lesson.id === 'l5-1';
@@ -1363,7 +1363,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               : lesson.moduleId === 'm0'
               ? 'lg:flex-[7] lg:border-b md:flex-1'
               : hasBalancedInputResponse
-              ? 'lg:flex-1 lg:border-b md:flex-1'
+              ? 'lg:flex-[1.25] lg:border-b md:flex-1'
               : isL55
               ? (isL55ShowingResponse ? 'lg:flex-[3.25] lg:border-b md:flex-1' : 'lg:flex-none lg:h-[732px] lg:border-b md:flex-1')
               : usesL26PanelHeight
@@ -1573,7 +1573,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
           {/* AI Response area (Hidden for M4 because it uses popup, hidden for M0 because it uses SimWizard) */}
           {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
-            <div className={`${hasBalancedInputResponse ? 'lg:flex-1' : isL55 ? 'lg:flex-[3.75]' : usesL26PanelHeight ? 'lg:flex-[3.75]' : hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
+            <div className={`${hasBalancedInputResponse ? 'lg:flex-[0.75]' : isL55 ? 'lg:flex-[3.75]' : usesL26PanelHeight ? 'lg:flex-[3.75]' : hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
               <div className="p-4 border-b border-gray-800 flex items-center justify-center shrink-0 hidden md:flex">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">답변 안내</span>
               </div>
