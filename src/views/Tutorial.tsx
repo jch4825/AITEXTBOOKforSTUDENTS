@@ -72,6 +72,7 @@ const GEMINI_API_LINKED_LESSON_IDS = new Set([
   'l5-1',
   'l5-5',
 ]);
+const L2_FOUNDATION_LESSON_IDS = new Set(['l2-1', 'l2-2', 'l2-3', 'l2-4', 'l2-5']);
 
 function normalizeKoreanMarkdownStrong(markdown: string) {
   let inFence = false;
@@ -498,6 +499,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const l11NextRef = useRef<HTMLButtonElement | null>(null);
   const isL11 = lesson.id === 'l1-1';
   const usesGeminiApi = GEMINI_API_LINKED_LESSON_IDS.has(lesson.id) || Boolean(lesson.interactive?.systemPrompt);
+  const usesL26PanelHeight = usesGeminiApi || L2_FOUNDATION_LESSON_IDS.has(lesson.id);
   const isL55 = lesson.id === 'l5-5';
   const isL55ShowingResponse = isL55 && (isTyping || (!!aiResponse && aiResponseLessonRef.current === lesson.id));
   const hasBalancedInputResponse = lesson.id === 'l5-1';
@@ -1364,7 +1366,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               ? 'lg:flex-1 lg:border-b md:flex-1'
               : isL55
               ? (isL55ShowingResponse ? 'lg:flex-[3.25] lg:border-b md:flex-1' : 'lg:flex-none lg:h-[732px] lg:border-b md:flex-1')
-              : usesGeminiApi
+              : usesL26PanelHeight
               ? 'lg:flex-[3.25] lg:border-b md:flex-1'
               : hasCompactM5InputPanel
               ? 'lg:flex-[3.5] lg:border-b md:flex-1'
@@ -1397,13 +1399,13 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 </div>
               )}
             </div>
-            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : usesGeminiApi ? 'px-8 py-5 lg:pt-0' : 'p-8 lg:pt-0'} flex flex-col ${usesGeminiApi && !isL55 ? 'overflow-visible' : 'overflow-y-auto no-scrollbar'}`}>
+            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : usesL26PanelHeight ? 'px-8 py-5 lg:pt-0' : 'p-8 lg:pt-0'} flex flex-col ${usesGeminiApi && !isL55 ? 'overflow-visible' : 'overflow-y-auto no-scrollbar'}`}>
               {lesson.interactive ? (
                 <>
                   {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
-                    <div className={usesGeminiApi ? 'mb-4' : 'mb-6'}>
+                    <div className={usesL26PanelHeight ? 'mb-4' : 'mb-6'}>
                       <span className="text-canva-teal font-bold text-sm mb-3 block">{lesson.interactive.prompt}</span>
-                      <div className={`bg-[#1c232b] rounded-xl border border-gray-800 text-gray-300 font-mono text-sm ${usesGeminiApi ? 'p-4' : 'p-5'}`}>
+                      <div className={`bg-[#1c232b] rounded-xl border border-gray-800 text-gray-300 font-mono text-sm ${usesL26PanelHeight ? 'p-4' : 'p-5'}`}>
                         {lesson.id === 'l1-3' ? (
                           <div className="flex gap-4">
                             {['ChatGPT', 'Gemini', 'Claude'].map(model => (
@@ -1571,20 +1573,20 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
           {/* AI Response area (Hidden for M4 because it uses popup, hidden for M0 because it uses SimWizard) */}
           {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
-            <div className={`${hasBalancedInputResponse ? 'lg:flex-1' : isL55 ? 'lg:flex-[3.75]' : usesGeminiApi ? 'lg:flex-[3.75]' : hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
+            <div className={`${hasBalancedInputResponse ? 'lg:flex-1' : isL55 ? 'lg:flex-[3.75]' : usesL26PanelHeight ? 'lg:flex-[3.75]' : hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
               <div className="p-4 border-b border-gray-800 flex items-center justify-center shrink-0 hidden md:flex">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">답변 안내</span>
               </div>
-              <div className={`${lesson.moduleId === 'm0' ? 'p-3' : isL55 ? 'px-8 py-4' : usesGeminiApi ? 'px-8 py-5' : hasCompactM5InputPanel ? 'px-8 py-4' : 'p-8'} flex-1 overflow-visible lg:overflow-x-hidden lg:overflow-y-auto no-scrollbar min-w-0`}>
+              <div className={`${lesson.moduleId === 'm0' ? 'p-3' : isL55 ? 'px-8 py-4' : usesL26PanelHeight ? 'px-8 py-5' : hasCompactM5InputPanel ? 'px-8 py-4' : 'p-8'} flex-1 overflow-visible lg:overflow-x-hidden lg:overflow-y-auto no-scrollbar min-w-0`}>
                 <div
-                  className={`${lesson.moduleId === 'm0' ? 'min-h-[125px]' : isL55 ? 'min-h-[180px]' : usesGeminiApi ? 'min-h-[260px]' : hasCompactM5InputPanel ? 'min-h-[110px]' : 'min-h-[160px]'} rounded-xl p-[1px] relative`}
+                  className={`${lesson.moduleId === 'm0' ? 'min-h-[125px]' : isL55 ? 'min-h-[180px]' : usesL26PanelHeight ? 'min-h-[260px]' : hasCompactM5InputPanel ? 'min-h-[110px]' : 'min-h-[160px]'} rounded-xl p-[1px] relative`}
                   style={{ background: `linear-gradient(135deg, ${theme.accent}55, transparent 45%, ${theme.accent}25)` }}
                 >
                 <div
                   ref={isL11 ? l11ResponseRef : undefined}
-                  className={`${lesson.moduleId === 'm0' ? 'p-3' : isL55 ? 'p-4' : usesGeminiApi ? 'p-5' : hasCompactM5InputPanel ? 'p-4' : 'p-8'} bg-[#1c232b] rounded-[11px] relative ${l11TourClass('response')}`}
+                  className={`${lesson.moduleId === 'm0' ? 'p-3' : isL55 ? 'p-4' : usesL26PanelHeight ? 'p-5' : hasCompactM5InputPanel ? 'p-4' : 'p-8'} bg-[#1c232b] rounded-[11px] relative ${l11TourClass('response')}`}
                 >
-                  <div className={`flex items-center justify-between ${lesson.moduleId === 'm0' ? 'mb-1' : usesGeminiApi || hasCompactM5InputPanel ? 'mb-3' : 'mb-5'}`}>
+                  <div className={`flex items-center justify-between ${lesson.moduleId === 'm0' ? 'mb-1' : usesL26PanelHeight || hasCompactM5InputPanel ? 'mb-3' : 'mb-5'}`}>
                     <div className="flex items-center gap-2.5">
                       <span className="relative flex h-2.5 w-2.5">
                         <span
