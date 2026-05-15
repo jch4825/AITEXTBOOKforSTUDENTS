@@ -708,6 +708,8 @@ html.home-snap-scroll {
 
   .brand-scroll-footer {
     flex-direction: column;
+    position: static;
+    margin-top: 1.4rem;
   }
 
   .brand-scroll-team {
