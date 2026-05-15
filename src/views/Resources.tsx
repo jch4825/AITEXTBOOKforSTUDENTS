@@ -3,7 +3,15 @@ import { ChevronDown, ExternalLink, Link2, Search, Star, X } from 'lucide-react'
 import { resourceCategories, type ResourceCategory, type ResourceItem, type ResourceSubCategory } from '../data/resourcesData';
 import { getResourceFavorites, saveResourceFavorites } from '../services/storage';
 
-const CATEGORY_ORDER = ['school-admin-support', 'policy', 'ai-basics', 'ethics', 'lesson', 'research-etc'];
+const CATEGORY_ORDER = [
+  'school-admin-support',
+  'policy',
+  'ai-basics',
+  'ethics',
+  'lesson',
+  'research-etc',
+  'ai-industry-experts',
+];
 
 const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
   'school-admin-support': {
@@ -27,8 +35,12 @@ const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
     subtitle: '지도안·활동지·수업 자료',
   },
   'research-etc': {
-    title: '연구·연수·기타',
-    subtitle: '학술 연구·교사 연수·기타 참고 자료',
+    title: '연구·연수·뉴스',
+    subtitle: '학술 연구·교사 연수·AI 뉴스 동향',
+  },
+  'ai-industry-experts': {
+    title: 'AI 산업·전문가 자료',
+    subtitle: '한국 AI 기업·개발자 도구·의료 AI·공공기관 (전문가 참고용)',
   },
 };
 
@@ -53,6 +65,11 @@ const TAG_RULES: Array<{ tag: string; pattern: RegExp }> = [
   { tag: '수학', pattern: /수학/ },
   { tag: '과학', pattern: /과학/ },
   { tag: '영상', pattern: /영상|유튜브|동영상|영화/ },
+  { tag: '해외', pattern: /\(해외\)/ },
+  { tag: '뉴스', pattern: /뉴스|매체|미디어|보도|동향/ },
+  { tag: '의료', pattern: /의료|병리|뇌질환|신약|바이오|헬스케어|진단/ },
+  { tag: 'LLM', pattern: /LLM|초거대|챗봇|대화형 AI/ },
+  { tag: '개발자', pattern: /개발자|프레임워크|API|RAG|MLOps|GPU|반도체|코딩 AI/ },
 ];
 
 function getDisplayCategory(category: ResourceCategory): ResourceCategory {
