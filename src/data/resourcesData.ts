@@ -51,15 +51,6 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'teachle-tools', title: 'AI, 소프트웨어 티칭툴 검색도구', url: 'https://teachle.co.kr/teaching-tools/', description: '티끌 자료실에서 제공하는 AI·소프트웨어 티칭툴 검색도구. 수업에 활용할 수 있는 교육 도구를 빠르게 찾아볼 수 있습니다.' },
         ],
       },
-      {
-        id: 'productivity-tools',
-        label: '3. 교사 노트·생산성 도구',
-        iconEmoji: '📝',
-        items: [
-          { id: 'notion', title: '노션 (Notion)', url: 'https://www.notion.so', description: '올인원 노트·문서·데이터베이스·협업 도구. AI 기능으로 수업 자료·학생 관리·메모를 한곳에서 정리 (해외)' },
-          { id: 'obsidian', title: '옵시디언 (Obsidian)', url: 'https://obsidian.md', description: '로컬 마크다운 기반 개인 노트 앱. 지식 그래프·백링크·플러그인으로 자료를 체계적으로 관리 (해외)' },
-        ],
-      },
     ],
   },
   {
@@ -340,6 +331,15 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'r-3-7', title: 'Anki MCP Server', url: 'https://github.com/ankimcp/anki-mcp-server', description: '플래시카드 도구 Anki와 AI를 MCP로 연동하는 서버' },
         ],
       },
+      {
+        id: 'productivity-tools',
+        label: '10. 교사 노트·생산성 도구',
+        iconEmoji: '📝',
+        items: [
+          { id: 'notion', title: '노션 (Notion)', url: 'https://www.notion.so', description: '올인원 노트·문서·데이터베이스·협업 도구. AI 기능으로 수업 자료·학생 관리·메모를 한곳에서 정리 (해외)' },
+          { id: 'obsidian', title: '옵시디언 (Obsidian)', url: 'https://obsidian.md', description: '로컬 마크다운 기반 개인 노트 앱. 지식 그래프·백링크·플러그인으로 자료를 체계적으로 관리 (해외)' },
+        ],
+      },
     ],
   },
   {
@@ -493,17 +493,24 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'dev-llm-coding',
-        label: '5. LLM 앱·추론 인프라·코딩 AI',
+        label: '5. LLM 앱·자동화·인프라·코딩 AI',
         iconEmoji: '🚀',
         items: [
           { id: 'dev-3-1', title: 'LangChain', url: 'https://www.langchain.com', description: '검색증강생성·에이전트·LLM 워크플로 구축을 지원하는 개발 프레임워크 (해외)' },
           { id: 'dev-3-2', title: 'LlamaIndex', url: 'https://www.llamaindex.ai', description: '문서·데이터와 LLM을 연결하는 RAG 애플리케이션 개발 프레임워크 (해외)' },
+          { id: 'dify', title: 'Dify', url: 'https://dify.ai', description: '오픈소스 LLM 앱 개발 플랫폼. 프롬프트·RAG·에이전트를 노코드로 구축 (해외)' },
+          { id: 'comfyui', title: 'ComfyUI', url: 'https://www.comfy.org', description: '노드 기반 Stable Diffusion 이미지·영상 생성 워크플로 도구 (해외, 오픈소스)' },
+          { id: 'n8n', title: 'n8n', url: 'https://n8n.io', description: '오픈소스 워크플로 자동화 도구. 노드 기반 비주얼 자동화·LLM 연동 구축 (해외)' },
+          { id: 'make', title: 'Make', url: 'https://www.make.com', description: '노코드 워크플로 자동화 플랫폼(구 Integromat). 다양한 SaaS·AI 연동 (해외)' },
           { id: 'dev-4-1', title: 'Replicate', url: 'https://replicate.com', description: '오픈 모델을 API 형태로 실행·배포할 수 있는 AI 모델 호스팅 플랫폼 (해외)' },
           { id: 'dev-4-2', title: 'Together AI', url: 'https://www.together.ai', description: '오픈 모델 학습·추론 API와 GPU 인프라를 제공하는 AI 클라우드 플랫폼 (해외)' },
           { id: 'dev-4-3', title: 'Groq', url: 'https://groq.com', description: '고속 LLM 추론 API와 전용 가속 하드웨어 기반 서비스 (해외)' },
           { id: 'dev-4-4', title: 'Fireworks AI', url: 'https://fireworks.ai', description: '오픈 LLM과 이미지 모델을 고성능 API로 제공하는 추론 플랫폼 (해외)' },
           { id: 'dev-4-5', title: 'Anyscale', url: 'https://www.anyscale.com', description: 'Ray 기반 대규모 AI 워크로드 학습·서빙 플랫폼 (해외)' },
           { id: 'dev-4-6', title: 'Modal', url: 'https://modal.com', description: 'AI·데이터 애플리케이션을 서버리스 GPU 환경에서 실행 (해외)' },
+          { id: 'vercel', title: 'Vercel', url: 'https://vercel.com', description: 'Next.js 등 프론트엔드 앱을 배포·서버리스 호스팅하는 플랫폼 (해외)' },
+          { id: 'netlify', title: 'Netlify', url: 'https://www.netlify.com', description: '정적 사이트·서버리스 함수를 호스팅하는 프론트엔드 배포 플랫폼 (해외)' },
+          { id: 'supabase', title: 'Supabase', url: 'https://supabase.com', description: '오픈소스 Firebase 대안. PostgreSQL·인증·스토리지 등 BaaS 제공 (해외)' },
           { id: 'dev-5-1', title: 'GitHub Copilot', url: 'https://github.com/features/copilot', description: '개발자 코드 작성·리뷰·문서화를 보조하는 AI 코딩 도구 (해외)' },
           { id: 'dev-5-2', title: 'Cursor', url: 'https://cursor.com', description: 'AI 에이전트와 코드 편집 기능을 결합한 개발자용 코드 에디터 (해외)' },
           { id: 'dev-5-3', title: 'Windsurf', url: 'https://windsurf.com', description: 'AI 코드 에이전트와 개발 워크플로 자동화를 제공하는 IDE (해외)' },
