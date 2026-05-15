@@ -39,8 +39,8 @@ export const resourceCategories: ResourceCategory[] = [
         label: '1. 학교 업무 도움 자료',
         iconEmoji: '🗂️',
         items: [
-          { id: 'neis-openapi', title: 'NEIS OpenAPI 신청', url: 'https://open.neis.go.kr', description: '교육행정정보시스템(NEIS)의 공공 OpenAPI를 신청·활용할 수 있는 포털. 학교 데이터 연동 개발·자동화에 사용' },
           { id: 'r-3-4', title: '경상남도교육청 학교업무 도움자료', url: 'https://hryoon0.github.io/helppage/', description: '경상남도교육청 학교업무 도움자료 사이트. 초등학교 업무 참고 자료를 확인할 수 있습니다.' },
+          { id: 'neis-openapi', title: 'NEIS OpenAPI 신청', url: 'https://open.neis.go.kr', description: '교육행정정보시스템(NEIS)의 공공 OpenAPI를 신청·활용할 수 있는 포털. 학교 데이터 연동 개발·자동화에 사용' },
         ],
       },
       {
