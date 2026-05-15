@@ -56,7 +56,7 @@ export const modules: Module[] = [
     title: '모듈 3: 수업 적용',
     description: '수업 준비·진행·평가·기록 전 과정에 AI를 활용합니다.',
     lessonsCount: 8,
-    estimatedTime: '약 35분',
+    estimatedTime: '약 40분',
     order: 3,
   },
   {
@@ -1503,7 +1503,7 @@ export const lessons: Lesson[] = [
       * API키가 입력된 상태라면 나만의 질문, 나만의 답변을 생성할 수 있습니다.
       * 답변이 생성되면 **'구글Docs에 ctrl+v 하세요'** 버튼으로 복사해 챗봇 설정 초안으로 활용해 보세요.
     `,
-    estimatedMinutes: 5,
+    estimatedMinutes: 10,
     order: 8,
     interactive: {
       prompt: "어떤 업무를 도와줄 챗봇이 필요한가요? Gems의 '요청 사항' 칸에 바로 복사해 넣을 초안을 짜드립니다.",
