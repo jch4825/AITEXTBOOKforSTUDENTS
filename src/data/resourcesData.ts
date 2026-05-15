@@ -168,7 +168,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'dev-7-6', title: 'D-ID', url: 'https://www.d-id.com', description: '이미지 기반 말하는 아바타와 AI 영상 생성 (해외)' },
           { id: 'dev-7-7', title: 'Black Forest Labs', url: 'https://blackforestlabs.ai', description: 'FLUX 계열 이미지 생성 모델을 개발하는 생성 AI 연구·제품 기업 (해외)' },
           { id: 'vrew', title: 'Vrew', url: 'https://vrew.ai', description: '텍스트 편집 방식의 AI 영상 편집 도구. 자막 자동 생성과 영상 컷 편집 지원 (보이저엑스)' },
-          { id: 'catcup', title: 'CatCup', description: '콘텐츠 제작 도구 (URL 확인 필요)' },
+          { id: 'capcut', title: 'CapCut', url: 'https://www.capcut.com/', description: 'ByteDance의 무료 영상 편집 도구. AI 자동 자막·음성 합성·효과 등 다양한 편집 기능 (해외)' },
         ],
       },
       {
@@ -312,7 +312,6 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'lead4school', title: '리드포스쿨 (Read for School)', url: 'https://www.readfor.school/', description: 'VisualCamp의 AI 시선추적 영어 문해력 코스웨어' },
           { id: 'one-percent-math', title: '1%연산 (일프로연산)', url: 'https://www.1promath.com/', description: '초등 수학 연산 학습 콘텐츠' },
           { id: 'math-king', title: '수학대왕', url: 'https://www.iammathking.com/', description: 'AI 기반 수학 문제 풀이·학습 디지털 문제집' },
-          { id: 'linkone-ai', title: '링크원AI', description: 'AI 기반 학습 도구 (URL 확인 필요)' },
           { id: 'todo-hangul', title: '토도한글', url: 'https://enuma.com/ko/todoSeries/', description: 'Enuma의 한글 학습 앱(토도 시리즈)' },
           { id: 'todo-math', title: '토도수학', url: 'https://todoschool.com/kr/math', description: 'Enuma의 수학 학습 앱' },
           { id: 'todo-english', title: '토도영어', url: 'https://english.todoschool.com/', description: 'Enuma의 영어 학습 앱' },
