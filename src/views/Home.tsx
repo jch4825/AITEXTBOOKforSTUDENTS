@@ -217,6 +217,7 @@ function BrandScrollSection() {
         <div className="brand-scroll-team-bar">
           <p>경상국립대학교 AI융합교육 전공 교원 4인으로 이루어진 캡스톤 디자인 프로젝트팀</p>
           <p>정상태 · 박주연 · 전창한 · 이정윤</p>
+          <p>바이브 코딩 도구를 사용하여 제작되었습니다</p>
           <footer className="brand-scroll-footer">
             <span>AI Bridge by Team Zer0-Gap</span>
             <span>© 2026 Team Zer0-Gap. All rights reserved.</span>

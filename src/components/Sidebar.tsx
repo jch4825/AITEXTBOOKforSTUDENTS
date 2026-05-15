@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, BookOpen, Wrench, GraduationCap, CheckCircle2, Key, X, LogOut, RotateCcw, ChevronLeft } from 'lucide-react';
+import { Home, BookOpen, Wrench, GraduationCap, CheckCircle2, Key, X, LogOut, RotateCcw, ChevronLeft, Info } from 'lucide-react';
 import { ViewType, Module, Persona } from '../types';
 import { modules, lessons } from '../data/tutorialData';
 import { motion } from 'motion/react';
@@ -243,9 +243,17 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
             <div className="bg-canva-purple h-1.5 rounded-full transition-all" style={{ width: `${progressPercent}%` }}></div>
           </div>
         </div>
-        <p className="text-[10px] text-canva-gray text-center leading-relaxed">
-          이 프로그램은 바이브 코딩 도구를 사용하여 팀 제로갭(교사 전창한, 교사 정상태, 교사 박주연, 교사 이정윤)의 협업으로 제작되었습니다.
-        </p>
+        <div className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+          <Info size={14} className="mt-0.5 flex-shrink-0 text-gray-600" />
+          <div className="leading-relaxed">
+            <p className="text-[11px] font-bold text-gray-700">
+              로그인 없이 모든 정보는 이 브라우저에만 저장됩니다.
+            </p>
+            <p className="mt-1 text-[10px] text-gray-500">
+              이어서 학습하시려면 같은 기기·브라우저로 접속해 주세요.
+            </p>
+          </div>
+        </div>
       </div>
       </aside>
 
