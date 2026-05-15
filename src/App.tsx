@@ -52,7 +52,6 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     return params.has('lesson') ? 'tutorial' : 'home';
   });
-  const showMobileHeader = currentView !== 'tutorial';
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
   const [showDiagnostic, setShowDiagnostic] = useState(() => !hasCompletedOnboarding());
   const [isLearningPathSaved, setIsLearningPathSaved] = useState(() => hasSavedLearningPath());
@@ -141,16 +140,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-canva-bg font-sans text-canva-ink">
-      {/* Mobile Header */}
-      <div className={`${showMobileHeader ? 'flex' : 'hidden'} md:hidden fixed top-0 left-0 right-0 h-12 landscape:h-10 bg-white border-b border-canva-border z-40 items-center px-4 justify-between`}>
-        <div className="flex items-center gap-2">
-          <h1 className="text-lg font-bold text-canva-teal tracking-tighter">AI Bridge</h1>
-        </div>
-        <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 -mr-2">
-          <Menu size={22} className="text-canva-ink" />
-        </button>
-      </div>
-
       <Sidebar
         currentView={currentView}
         onViewChange={handleViewChange}
@@ -179,7 +168,7 @@ export default function App() {
         </button>
       )}
 
-      {!showMobileHeader && !isMobileMenuOpen && (
+      {!isMobileMenuOpen && (
         <button
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="메뉴 열기"
@@ -193,7 +182,7 @@ export default function App() {
       <main
         className={`min-h-screen transition-[padding] duration-300 ${
           isSidebarCollapsed ? 'md:pl-0' : 'md:pl-52 lg:pl-64'
-        } ${currentView === 'tutorial' ? 'pt-0' : 'pt-12 landscape:pt-10'} md:pt-0`}
+        }`}
       >
         <AnimatePresence mode="wait">
           <motion.div
