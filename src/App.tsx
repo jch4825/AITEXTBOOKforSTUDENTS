@@ -179,6 +179,17 @@ export default function App() {
         </button>
       )}
 
+      {!showMobileHeader && !isMobileMenuOpen && (
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          aria-label="메뉴 열기"
+          title="메뉴 열기"
+          className="md:hidden fixed top-3 left-3 z-40 w-8 h-8 flex items-center justify-center rounded-full border border-canva-border bg-white/80 backdrop-blur text-canva-gray hover:text-canva-purple shadow-sm transition-colors"
+        >
+          <Menu size={16} />
+        </button>
+      )}
+
       <main
         className={`min-h-screen transition-[padding] duration-300 ${
           isSidebarCollapsed ? 'md:pl-0' : 'md:pl-52 lg:pl-64'
