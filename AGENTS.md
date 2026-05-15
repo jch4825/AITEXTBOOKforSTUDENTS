@@ -19,6 +19,12 @@ Set `GEMINI_API_KEY` in `.env.local` before using Gemini-backed features. Use `.
 
 Follow `.editorconfig`: UTF-8, LF line endings, final newline, 2-space indentation for TS/TSX/JS/JSON/Markdown/CSS/HTML, and 4-space indentation for Python. Use PascalCase for React components and view files, such as `TopNav.tsx` or `Resources.tsx`. Use camelCase for functions, variables, hooks, and utility filenames where appropriate. Prefer the existing `@/` alias for imports from `src/`.
 
+## Codex Skill Usage
+
+Do not open or load gstack/stack skills by default. Use gstack/stack skills only when the user explicitly calls for that skill or asks for a workflow that requires it.
+
+Always load and apply the Andrej Karpathy coding guidelines skill when using Codex for implementation, review, refactoring, or debugging work.
+
 ## Testing Guidelines
 
 No dedicated test framework is currently configured. Before submitting changes, run `npm run lint` and `npm run build`; for UI work, also run `npm run dev` and manually verify the affected flows. If tests are added later, place them near the code they cover using a clear pattern such as `ComponentName.test.tsx` or `utilityName.test.ts`.

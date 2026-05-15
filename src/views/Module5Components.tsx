@@ -257,6 +257,7 @@ export const Lesson52Interactive = ({ onComplete }: CompletionProps = {}) => {
   const biasTypes = ['성별 편향', '성격·표현 방식 편향', '가족 형태 편향', '문제 없음'];
   const current = cases[currentIndex];
   const isCorrect = selectedType === current.correctType;
+  const lowScoreMessage = '잠깐만요. 손가락이 너무 열심히 일해서 눈보다 살짝 앞서갔습니다. 잠시만 시간을 두고 문제를 읽어봐 주세요.';
 
   const submitAnswer = () => {
     if (!selectedType) return;
@@ -289,6 +290,11 @@ export const Lesson52Interactive = ({ onComplete }: CompletionProps = {}) => {
         <div className="text-center">
           <div className="text-gray-400 text-sm mb-1">편향 문장 탐정 완료</div>
           <div className="text-3xl font-bold mb-3 text-canva-teal">{correctCount} / {cases.length}</div>
+          {correctCount <= 1 && (
+            <div className="mb-3 max-w-md rounded-xl border border-amber-600/50 bg-amber-950/30 px-6 py-4 text-sm font-semibold leading-relaxed text-amber-100">
+              {lowScoreMessage}
+            </div>
+          )}
           <div className="max-w-md bg-gray-800 rounded-xl px-6 py-4 text-sm leading-relaxed text-gray-300">
             편향은 숫자로 맞히는 문제가 아니라, <span className="text-white font-bold">누가 빠졌는지</span>와 <span className="text-white font-bold">어떻게 고칠지</span>를 보는 습관입니다. AI 결과물을 수업에 쓰기 전 한 번 더 읽고 표현을 넓혀 주세요.
           </div>
