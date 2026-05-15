@@ -1328,22 +1328,6 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               </div>
             )}
           </div>
-          
-          {/* Technique Connection Feature (Spec Requirement) */}
-          {lesson.technique && (
-            <div className="sticky bottom-0 left-0 right-0 p-6 bg-canva-ivory border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
-              <div className="flex items-start gap-4">
-                <div className="bg-canva-purple/10 text-canva-purple p-2 rounded-lg flex-shrink-0">
-                  <Info size={18} />
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-sm font-bold text-canva-ink mb-1">기법 연결: {lesson.technique.label}</h4>
-                  <p className="text-xs text-canva-gray leading-relaxed">{lesson.technique.description}</p>
-                </div>
-                <SpeakButton text={`기법 연결 ${lesson.technique.label}. ${lesson.technique.description}`} label="기법 설명 듣기" />
-              </div>
-            </div>
-          )}
         </motion.div>
         </AnimatePresence>
         </div>

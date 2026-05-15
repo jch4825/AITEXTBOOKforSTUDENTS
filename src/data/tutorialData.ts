@@ -14,10 +14,6 @@ export interface Lesson {
     caption?: string;
   }[];
   relatedToolId?: string;
-  technique?: {
-    label: string;
-    description: string;
-  };
   tip?: string;
   interactive?: {
     prompt: string;
@@ -1161,10 +1157,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 1,
-    technique: {
-      label: "Zero-shot → Few-shot",
-      description: "예시 없이 바로 요청하는 제로샷보다, 1~3개의 예시를 제공하는 퓨샷이 훨씬 정확한 결과를 만듭니다."
-    },
     interactive: {
       prompt: "아래 버튼을 눌러 예시 유무(Zero-shot vs Few-shot)에 따른 품질 차이를 확인해보세요.",
       initialInput: "",
@@ -1218,10 +1210,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 2,
-    technique: {
-      label: "지식 생성 프롬프트 → CoT",
-      description: "[2-5에서 배운 CoT(사고의 사슬)]를 교육과정 설계에 적용합니다. AI에게 배경 지식을 먼저 생성하게 하고, 단계별(도입-전개-정리)로 사고하게 하여 지도안의 질을 높입니다."
-    },
     interactive: {
       prompt: "AI에게 먼저 오개념을 분석시킨 후 지도안을 짜게 해보세요.",
       initialInput: "초등 4학년 사회 '[4사06-02] 지역의 박물관, 기념관, 유적지 체험' 수업에서 학생들이 쉽게 빠지는 오개념 3개를 분석한 후, 지도안을 짜줘.",
@@ -1267,10 +1255,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 3,
-    technique: {
-      label: "프롬프트 체이닝 → 방향 자극",
-      description: "이전 결과를 다음 요청에 연결하고, 특정 수준(기초/심화)으로 방향을 유도하여 최적의 자료를 만듭니다."
-    },
     interactive: {
       prompt: "기본 학습지 내용을 넣고 '기초용' 또는 '심화용'으로 수정을 요청해 보세요.",
       initialInput: "[학습지 내용: 광합성은 식물이 빛을 이용해 양분을 만드는 과정입니다. 1. 광합성에 필요한 요소는?]\n\n이 내용을 기초 학생용으로 아주 쉽게 바꿔줘.",
@@ -1313,10 +1297,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 4,
-    technique: {
-      label: "후보 생성 후 선택",
-      description: "여러 발문 후보를 한꺼번에 생성한 뒤, 수업 목표에 가장 잘 맞는 것을 고르는 방식입니다. 선택지가 많을수록 좋은 질문을 건질 확률이 높아집니다."
-    },
     interactive: {
       prompt: "수업 중 던질 질문이 고민되는 단원명을 입력해 보세요.",
       initialInput: "초등 4학년 수학 '각도' 단원에서 학생들의 호기심을 자극할 도입 질문 3가지 만들어줘.",
@@ -1360,10 +1340,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 5,
-    technique: {
-      label: "다중 생성 비교 → 출력 형식 지정",
-      description: "같은 기준으로 여러 문항을 만들어 비교한 뒤 가장 나은 것을 선택하고, 복사/붙여넣기가 용이하도록 AI의 출력 포맷(표 대신 개조식)을 강력하게 통제합니다."
-    },
     interactive: {
       prompt: "성취기준이나 단원명을 입력하고 평가 문항과 루브릭을 생성해 보세요.",
       initialInput: "초등 4학년 과학 '식물의 한살이' 단원의 서술형 문제 1개와 채점 루브릭을 만들어줘. 단, 복사하기 좋게 표(Table)는 쓰지 말고, 상/중/하 단계별로 '개조식(글머리 기호)'으로 깔끔하게 적어줘.",
@@ -1406,10 +1382,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 6,
-    technique: {
-      label: "방향 자극 → 퓨샷 (Few-shot)",
-      description: "원하는 문체와 길이를 예시로 보여주어(퓨샷), 생기부 문구를 교사의 스타일대로 고정합니다."
-    },
     interactive: {
       prompt: "학생의 특징과 관찰 기록(에피소드)을 키워드로 입력해 보세요.",
       initialInput: "학생 특성: 꼼꼼함, 수학 흥미 높음. \n에피소드: '비와 비율' 단원에서 실생활 예시를 스스로 찾아내어 발표함. \n\n이 내용을 바탕으로 교과 세특 문구 150자 내외로 작성해줘.",
@@ -1453,10 +1425,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 7,
-    technique: {
-      label: "반성 프롬프팅 → 프롬프트 체이닝",
-      description: "AI와 대화를 이어가며 불완전한 초안을 다듬고, 점진적으로 완성도를 높여가는 과정입니다."
-    },
     interactive: {
       prompt: "AI가 준 답변이 마음에 안 든다고 가정하고, 구체적인 수정 요청을 해보세요.",
       initialInput: "방금 만든 학습지에서 2번 문제는 너무 복잡해. 4학년이 이해하기 쉬운 비유를 사용해서 다시 설명해줘.",
@@ -1510,6 +1478,10 @@ export const lessons: Lesson[] = [
       3. 만족스럽다면 **[저장]**을 클릭하여 생성을 완료합니다. 
       ⚠️ **주의:** 미리보기만 하고 [저장]을 누르지 않으면 Gem이 저장되지 않습니다!
 
+      [Gems 공유 방법 안내](https://www.iorad.com/player/2670512/)
+
+      만든 Gem을 다른 사람에게 공유하는 화면 흐름을 단계별로 보여주는 외부 안내입니다.
+
       &nbsp;
 
       💡 **참고하기**
@@ -1530,15 +1502,9 @@ export const lessons: Lesson[] = [
       * 이번 실습에서는 Gemini API 키를 사용할 수 있습니다.
       * API키가 입력된 상태라면 나만의 질문, 나만의 답변을 생성할 수 있습니다.
       * 답변이 생성되면 **'구글Docs에 ctrl+v 하세요'** 버튼으로 복사해 챗봇 설정 초안으로 활용해 보세요.
-
-      [Gems 공유 방법 안내](https://www.iorad.com/player/2670512/)
     `,
     estimatedMinutes: 5,
     order: 8,
-    technique: {
-      label: "시스템 프롬프팅 (System Prompting)",
-      description: "커스텀 챗봇(Gems)이 항상 기억하고 따라야 할 기본적인 역할, 성격, 행동 규칙을 부여합니다."
-    },
     interactive: {
       prompt: "어떤 업무를 도와줄 챗봇이 필요한가요? Gems의 '요청 사항' 칸에 바로 복사해 넣을 초안을 짜드립니다.",
       initialInput: "학생들의 일기장을 다정하게 검사하고 짧은 코멘트와 칭찬을 남겨주는 '다정한 일기 쌤' 챗봇 요청 사항을 만들어줘.",
@@ -1584,10 +1550,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 1,
-    technique: {
-      label: "시스템 프롬프트 (System Prompt)",
-      description: "AI와의 대화 시작 시 역할·규칙·기본 정보를 고정하는 지시문. 이후 모든 답변이 이 내용을 기본 전제로 삼게 됩니다. (참고: 시스템 프롬프트·프롬프트 템플릿·검색 결과 등 AI가 보는 모든 정보를 설계하는 상위 분야를 '컨텍스트 엔지니어링'이라고 부릅니다.)"
-    },
     tip: "AI에게 알려둔 정보는 대화 창을 닫으면 사라집니다. 완성한 시스템 프롬프트를 메모장이나 문서에 저장해 두고, 새 대화 시작 시 첫 번째 메시지로 붙여넣는 습관을 만드세요.",
     interactive: {
       prompt: "나의 학교 시스템 프롬프트 만들기",
@@ -1634,10 +1596,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 2,
-    technique: {
-      label: "프롬프트 템플릿 (Prompt Template)",
-      description: "특정 업무의 형식·어조·구조를 고정해두고, 매번 주제만 바꿔 재사용하는 양식. 시스템 프롬프트가 '어떤 AI로 작동하느냐'라면, 프롬프트 템플릿은 '어떤 결과물을 내느냐'를 결정합니다."
-    },
     tip: "잘 만든 템플릿 하나는 수십 번의 반복 작업을 대체합니다. 학기 초에 업무 유형별 템플릿을 미리 만들어 두고, 학기 중에는 주제만 바꿔가며 사용하세요. 학기 말에 한 번씩만 업데이트하면 됩니다.",
     interactive: {
       prompt: "나의 행정 업무 프롬프트 템플릿 만들기",
@@ -1693,10 +1651,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 3,
-    technique: {
-      label: "바이브 코딩 입문 (Vibe Coding Starter)",
-      description: "코딩 지식 없이 자연어 대화만으로 인터랙티브 도구를 즉석에서 만드는 경험. Gemini Canvas는 가장 진입 장벽이 낮은 시작점입니다."
-    },
     tip: "복잡한 요구사항을 한 번에 쏟아내지 말고, 가장 단순한 형태부터 만든 뒤 대화로 점진적으로 발전시키세요. AI가 의도를 더 정확히 파악합니다.",
     interactive: {
       prompt: "Gemini Canvas 체험 가이드",
@@ -1751,10 +1705,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 4,
-    technique: {
-      label: "바이브 코딩 심화 (Custom AI App)",
-      description: "자연어 지시만으로 시스템 프롬프트와 프롬프트 템플릿이 내장된 영구 AI 앱(도구)을 생성합니다. 아이디어만 있다면 누구나 개발자가 될 수 있습니다."
-    },
     tip: "만들어진 앱은 단순한 챗봇이 아닙니다. 내가 지정한 양식과 업무 원칙을 고정값으로 탑재하고 있기 때문에, 매번 양식을 무시하고 엉뚱한 대답을 내놓는 실수를 원천 차단합니다.",
     interactive: {
       prompt: "바이브 코딩으로 앱 맛보기",
@@ -1798,10 +1748,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 5,
     order: 5,
-    technique: {
-      label: "MCP (Model Context Protocol)",
-      description: "AI와 외부 도구·데이터·서비스를 안전하게 연결하는 표준 규약. MCP는 AI를 '어항 안의 물고기'에서 '바다를 헤엄치는 시스템'으로 진화시킵니다."
-    },
     tip: "MCP로 AI에게 외부 시스템 접근 권한을 줄 때는 '최소 권한 원칙'을 따릅니다. 꼭 필요한 형태에만 접근을 허용하세요. 특히 학교 공식 NEIS나 K-에듀파인 연동은 절대 단독 연동해선 안 되며 시도청 교육청의 절차를 거쳐야 합니다.",
     interactive: {
       prompt: "AI가 외부 자료를 직접 가져오는 체험",
@@ -1852,10 +1798,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 6,
     order: 6,
-    technique: {
-      label: "스킬 확장 (Skill Extension)",
-      description: "Skill은 Claude에 전문 능력을 영구적으로 추가하는 모듈입니다. 한 번 설치하면 계정에 남아 언제든 재사용할 수 있어, 반복 업무를 근본적으로 자동화합니다."
-    },
     tip: "Skill 업로드 전에는 반드시 출처를 확인하세요. 신뢰할 수 있는 교사·공무원 커뮤니티에서 공유된 Skill만 사용하고, 학생 개인정보가 포함된 초안에는 [ ] 자리표시자를 남기는 습관을 기르세요.",
     interactive: {
       prompt: "Claude Skill 업로드 시뮬레이션",
@@ -1958,10 +1900,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 8,
     order: 7,
-    technique: {
-      label: "AI 에이전트 (Agent) 개념 이해",
-      description: "에이전트는 말로만 대답하는 AI를 넘어, 도구를 직접 불러와 검색·파일 생성·업로드 등 실제 작업을 처리하는 AI입니다. 4-6의 hwpx 자동 생성이 바로 에이전트의 첫 체험이었습니다."
-    },
     tip: "에이전트라는 말이 어렵게 느껴지면, 'AI가 대신 실행해주는 것'이라고 생각하세요. 교사는 무엇을 원하는지 말하고, 에이전트는 필요한 도구를 골라 실행합니다. 실제 학교 현장에서는 개인정보와 권한 범위를 확인한 뒤, 사람이 최종 승인하는 구조로 쓰는 것이 안전합니다.",
     interactive: {
       prompt: "AI 에이전트 도구 사용 흐름 정리하기",
@@ -2060,10 +1998,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 7,
     order: 8,
-    technique: {
-      label: "에이전트 팀 (Multi-Agent Workflow)",
-      description: "여러 AI 에이전트가 각자 역할을 분담하고 결과를 이어받아 처리하는 자동화 파이프라인. 총괄 에이전트가 전체 흐름을 지휘합니다."
-    },
     tip: "에이전트 팀을 구성할 때 가장 중요한 것은 각 에이전트의 역할을 명확히 구분하는 것입니다. '무엇을 받아서(입력), 무엇을 만들어야 하는가(출력)'를 프롬프트에 명확히 써주면 에이전트가 훨씬 안정적으로 동작합니다. 오른쪽 실습에서 각 에이전트의 프롬프트 템플릿을 직접 만들어보세요.",
     interactive: {
       prompt: "에이전트 팀 프롬프트 템플릿 만들기",
@@ -2163,10 +2097,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 8,
     order: 1,
-    technique: {
-      label: "할루시네이션(Hallucination) + RAG(검색 증강 생성)",
-      description: "AI가 모르는 것도 자신감 있게 말하는 현상을 줄이는 가장 실용적인 방법"
-    },
     tip: "학기 초 '[할루시네이션 체크 루틴]' 포스터를 교실에 붙여두세요. AI 결과물을 자료로 쓸 때마다 (1) 출처 확인 (2) 구글 검색으로 교차 검증 (3) '말이 되는가?' 판단을 습관화하면 법적 문제도 예방할 수 있습니다.",
     interactive: {
       prompt: "성취기준 코드를 입력하고 AI 답변과 실제 DB를 비교해보세요",
@@ -2218,10 +2148,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 6,
     order: 2,
-    technique: {
-      label: "알고리즘 편향(Algorithmic Bias)",
-      description: "학습 데이터의 편향이 AI 결과에 반영되는 현상을 인식하고 보정하기"
-    },
     tip: "AI 생성물을 교실에서 보여주기 전에 5초만 들여 확인하세요: 성별·인종·나이가 고르게 표현되어 있는가? 특정 집단이 자신을 배제된 대상으로 느끼지 않는가? 만족스럽지 않다면 프롬프트에 '다양한 성별과 인종'을 명시해서 다시 생성하세요.",
     interactive: {
       prompt: "편향 탐지 체험",
@@ -2288,10 +2214,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 7,
     order: 3,
-    technique: {
-      label: "데이터 프라이버시 & 개인정보보호법",
-      description: "AI 서비스에 입력한 정보의 흐름을 이해하고 법적 책임을 인식하기"
-    },
     tip: "모르는 것이 있을 때는 교육청 개인정보보호 담당자에게 문의하세요.",
     interactive: {
       prompt: "실제 상황 딜레마 시나리오",
@@ -2351,10 +2273,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 6,
     order: 4,
-    technique: {
-      label: "저작권 & 투명성",
-      description: "법이 정해지기 전에 올바른 AI 사용 습관을 만들기"
-    },
     tip: "학기 초 학급 규칙을 정할 때 'AI 사용 규칙'을 별도 항목으로 추가하세요. 예: '과제할 때 AI를 쓰면 반드시 AI 도구명과 어느 부분에 사용했는지 표기한다' 등 구체적으로. 교육청 가이드라인이 나오면 그 즉시 확인하고 업데이트하세요.",
     interactive: {
       prompt: "AI 생성물의 출처 표기 필요성 판단",
@@ -2442,10 +2360,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 8,
     order: 5,
-    technique: {
-      label: "비판적 AI 리터러시",
-      description: "학생이 AI를 비판적으로 활용하는 능력 기르기"
-    },
     tip: `"AI는 위험하다"가 아닌 "AI를 현명하게 쓰는 사람이 되자"는 메시지로 수업을 마무리하세요.`,
     interactive: {
       prompt: "AI 윤리 수업 지도안 생성기",
@@ -2552,10 +2466,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 7,
     order: 7,
-    technique: {
-      label: "AI 윤리 가이드라인 설계",
-      description: "모듈 1~5의 학습을 통합하여 나만의 AI 사용 원칙 만들기"
-    },
     tip: "AI 기술은 매우 빠르게 변합니다. 오늘 만든 원칙을 학기 초마다 한 번씩 검토하세요.",
     interactive: {
       prompt: "나만의 AI 윤리 가이드라인 빌더",
@@ -2649,10 +2559,6 @@ export const lessons: Lesson[] = [
     `,
     estimatedMinutes: 7,
     order: 6,
-    technique: {
-      label: "AI Slop 자가 검토 체크리스트",
-      description: "AI 결과물을 다른 사람에게 보내기 전 반드시 본인이 읽고 정리하는 습관 만들기"
-    },
     tip: "만드는 데 1분 걸렸으면, 검토에 5분 쓰는 것이 정상입니다. 그 시간이 아깝다면 보내지 마세요.",
     interactive: {
       prompt: "AI Slop vs 검토된 결과물",
