@@ -141,7 +141,7 @@ function ItemRow({
   const isFeatured = item.id === 'r-3-4';
   const isStrongRecommended = item.id === 'teachle-tools';
   const rowClass =
-    `group flex w-full items-start gap-3 px-4 py-3 pr-10 text-left transition focus:outline-none focus:ring-2 ${
+    `group flex w-full items-start gap-3 px-4 py-3 pr-12 text-left transition focus:outline-none focus:ring-2 ${
       isFeatured
         ? 'bg-amber-50/80 hover:bg-amber-100/80 focus:ring-amber-300'
         : isStrongRecommended
@@ -227,17 +227,17 @@ function ItemRow({
         onClick={onToggleFav}
         aria-label={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
         title={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
-        className={`absolute right-2 top-2.5 z-10 rounded-full p-1.5 transition ${
+        className={`absolute right-1.5 top-1.5 z-10 rounded-full p-2.5 transition ${
           isFav
             ? 'text-amber-400 hover:bg-amber-50'
             : isFeatured
-              ? 'text-amber-500/60 hover:bg-amber-200/60 hover:text-amber-700'
+              ? 'text-amber-600/80 hover:bg-amber-200/60 hover:text-amber-700'
               : isStrongRecommended
-                ? 'text-emerald-500/60 hover:bg-emerald-200/60 hover:text-emerald-700'
-                : 'text-gray-300 hover:bg-gray-100 hover:text-amber-400'
+                ? 'text-emerald-600/80 hover:bg-emerald-200/60 hover:text-emerald-700'
+                : 'text-gray-400 hover:bg-gray-100 hover:text-amber-500'
         }`}
       >
-        <Star size={14} fill={isFav ? 'currentColor' : 'none'} />
+        <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
       </button>
     </div>
   );
