@@ -97,13 +97,15 @@ const BRAND_SCENES = [
     detail: '경상남도 교원의 AI 리터러시를 위한 연결점.',
     tone: 'brand-scroll-scene-value',
     copyClass: 'brand-scroll-copy-left',
+    artClass: 'brand-scroll-art-split',
   },
   {
     eyebrow: 'Flow',
-    title: ['막연함에서 활용으로.'],
-    detail: '개념 · 사례 · 도구 · 수업',
+    title: ['연수에서 끝나지 않게.', '내일 수업에 닿게.'],
+    detail: '교사용 개념 · 수업 사례 · 도구 · 활동 설계',
     tone: 'brand-scroll-scene-flow',
     copyClass: 'brand-scroll-copy-right',
+    artClass: 'brand-scroll-art-flow',
   },
   {
     eyebrow: 'Vision',
@@ -111,6 +113,7 @@ const BRAND_SCENES = [
     detail: '',
     tone: 'brand-scroll-scene-vision',
     copyClass: 'brand-scroll-copy-low',
+    artClass: 'brand-scroll-art-vision',
   },
 ] as const;
 
@@ -168,11 +171,11 @@ function BrandScrollSection() {
           viewport={{ once: false, amount: 0.45 }}
           transition={{ duration: 0.45, ease: 'easeOut' }}
         >
-          <div className="brand-scroll-art" aria-hidden="true">
-            <span className="brand-scroll-plane brand-scroll-plane-a" />
-            <span className="brand-scroll-plane brand-scroll-plane-b" />
-            <span className="brand-scroll-ring" />
-            <span className="brand-scroll-lines" />
+          <div className={`brand-scroll-art ${scene.artClass}`} aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
           </div>
           <motion.div
             className={`brand-scroll-copy ${scene.copyClass}`}
@@ -193,11 +196,11 @@ function BrandScrollSection() {
       ))}
 
       <section className="brand-scroll-scene brand-scroll-team" data-home-snap-section>
-        <div className="brand-scroll-art" aria-hidden="true">
-          <span className="brand-scroll-plane brand-scroll-plane-a" />
-          <span className="brand-scroll-plane brand-scroll-plane-b" />
-          <span className="brand-scroll-ring" />
-          <span className="brand-scroll-lines" />
+        <div className="brand-scroll-art brand-scroll-art-credit" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
         </div>
         <motion.div
           className="brand-scroll-copy brand-scroll-team-copy"

@@ -396,38 +396,42 @@ html.home-snap-scroll {
   z-index: 1;
 }
 
-.brand-scroll-plane,
-.brand-scroll-ring,
-.brand-scroll-lines {
+.brand-scroll-art > span {
   position: absolute;
   display: block;
 }
 
-.brand-scroll-plane-a {
-  right: -14rem;
-  top: 12%;
-  width: min(76vw, 64rem);
-  height: clamp(5.5rem, 9vw, 9rem);
+.brand-scroll-art-split span:nth-child(1) {
+  left: -8vw;
+  top: 20%;
+  width: 58vw;
+  height: 62vh;
   background: rgba(255, 212, 59, 0.62);
-  clip-path: polygon(0 28%, 100% 0, 100% 58%, 0 100%);
-  transform: rotate(-18deg);
+  clip-path: polygon(0 8%, 100% 0, 76% 100%, 0 88%);
   mix-blend-mode: multiply;
 }
 
-.brand-scroll-plane-b {
-  left: -15rem;
-  bottom: 7%;
-  width: min(74vw, 58rem);
-  height: clamp(5.2rem, 8vw, 7.8rem);
-  background: rgba(0, 213, 232, 0.32);
-  clip-path: polygon(0 0, 100% 34%, 100% 100%, 0 68%);
-  transform: rotate(14deg);
-  mix-blend-mode: multiply;
+.brand-scroll-art-split span:nth-child(2) {
+  right: -10vw;
+  top: 0;
+  width: 56vw;
+  height: 100%;
+  background: rgba(244, 246, 251, 0.86);
+  clip-path: polygon(34% 0, 100% 0, 100% 100%, 0 100%);
 }
 
-.brand-scroll-ring {
-  right: 7%;
-  bottom: 6%;
+.brand-scroll-art-split span:nth-child(3) {
+  left: 33%;
+  top: 8%;
+  width: clamp(2.8rem, 6vw, 5.5rem);
+  height: 82%;
+  background: rgba(9, 11, 15, 0.1);
+  clip-path: polygon(0 0, 100% 7%, 55% 100%, 0 94%);
+}
+
+.brand-scroll-art-split span:nth-child(4) {
+  right: 8%;
+  bottom: 9%;
   width: clamp(9rem, 22vw, 20rem);
   height: clamp(9rem, 22vw, 20rem);
   border: clamp(0.9rem, 2vw, 1.65rem) solid rgba(122, 44, 255, 0.2);
@@ -435,18 +439,123 @@ html.home-snap-scroll {
   mix-blend-mode: multiply;
 }
 
-.brand-scroll-lines {
-  right: 3%;
-  top: 12%;
-  width: clamp(14rem, 28vw, 26rem);
-  height: clamp(10rem, 19vw, 17rem);
+.brand-scroll-art-flow span:nth-child(1) {
+  left: 9%;
+  right: 10%;
+  top: 47%;
+  height: 0.55rem;
+  background: linear-gradient(90deg, rgba(0, 213, 232, 0.72), rgba(255, 75, 62, 0.78));
+  transform: skewY(-7deg);
+  box-shadow:
+    0 -16vh 0 rgba(255, 255, 255, 0.035),
+    0 16vh 0 rgba(255, 255, 255, 0.035);
+}
+
+.brand-scroll-art-flow span:nth-child(2) {
+  left: 13%;
+  top: 31%;
+  width: 14rem;
+  height: 14rem;
+  background:
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.96) 0 24%, transparent 25%),
+    conic-gradient(from 90deg, rgba(0, 213, 232, 0.8), rgba(255, 75, 62, 0.8), rgba(122, 44, 255, 0.7), rgba(0, 213, 232, 0.8));
+  border-radius: 999px;
+  opacity: 0.78;
+}
+
+.brand-scroll-art-flow span:nth-child(3) {
+  left: 37%;
+  top: 37%;
+  width: 12rem;
+  height: 12rem;
+  background: rgba(255, 75, 62, 0.74);
+  clip-path: polygon(0 0, 100% 18%, 82% 100%, 0 74%);
+  transform: rotate(-8deg);
+  mix-blend-mode: screen;
+}
+
+.brand-scroll-art-flow span:nth-child(4) {
+  right: 8%;
+  top: 23%;
+  width: min(36vw, 31rem);
+  height: min(36vw, 31rem);
+  border: 1.25rem solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 2.1rem rgba(0, 213, 232, 0.1);
+}
+
+.brand-scroll-art-vision span:nth-child(1) {
+  left: 7%;
+  top: 11%;
+  width: 70vw;
+  height: 62vh;
+  border: clamp(0.7rem, 1.4vw, 1.15rem) solid rgba(9, 11, 15, 0.12);
+}
+
+.brand-scroll-art-vision span:nth-child(2) {
+  right: 9%;
+  top: 8%;
+  width: clamp(14rem, 31vw, 30rem);
+  height: clamp(14rem, 31vw, 30rem);
+  border-radius: 999px;
+  background: radial-gradient(circle at center, transparent 0 42%, rgba(122, 44, 255, 0.28) 43% 55%, transparent 56%);
+  mix-blend-mode: multiply;
+}
+
+.brand-scroll-art-vision span:nth-child(3) {
+  left: 0;
+  bottom: 12%;
+  width: 100%;
+  height: 1px;
+  background: rgba(9, 11, 15, 0.22);
+}
+
+.brand-scroll-art-vision span:nth-child(4) {
+  left: 12%;
+  bottom: 18%;
+  width: clamp(16rem, 38vw, 36rem);
+  height: clamp(5rem, 9vw, 8rem);
+  background: rgba(255, 75, 62, 0.24);
+  clip-path: polygon(0 0, 100% 36%, 100% 100%, 0 64%);
+  mix-blend-mode: multiply;
+}
+
+.brand-scroll-art-credit span:nth-child(1) {
+  left: 0;
+  right: 0;
+  top: 18%;
+  height: 1px;
+  background: rgba(9, 11, 15, 0.16);
+}
+
+.brand-scroll-art-credit span:nth-child(2) {
+  left: clamp(1.5rem, 7vw, 6rem);
+  top: 26%;
+  width: 48vw;
+  height: 0.8rem;
+  background: repeating-linear-gradient(90deg, rgba(9, 11, 15, 0.22) 0 3rem, transparent 3rem 3.8rem);
+}
+
+.brand-scroll-art-credit span:nth-child(3) {
+  right: 8%;
+  top: 11%;
+  width: clamp(14rem, 26vw, 24rem);
+  height: clamp(14rem, 26vw, 24rem);
+  border: 1.1rem solid rgba(255, 212, 59, 0.34);
+  border-radius: 999px;
+  mix-blend-mode: multiply;
+}
+
+.brand-scroll-art-credit span:nth-child(4) {
+  right: 0;
+  bottom: 28%;
+  width: 44vw;
+  height: 12rem;
   background: repeating-linear-gradient(
-    90deg,
-    rgba(9, 11, 15, 0.16) 0 2px,
-    transparent 2px 16px
+    105deg,
+    rgba(9, 11, 15, 0.08) 0 2px,
+    transparent 2px 20px
   );
-  opacity: 0.5;
-  transform: rotate(16deg);
 }
 
 .brand-scroll-scene-flow {
@@ -466,37 +575,6 @@ html.home-snap-scroll {
 .brand-scroll-scene-flow .brand-scroll-eyebrow,
 .brand-scroll-scene-flow .brand-scroll-detail {
   color: rgba(255, 255, 255, 0.72);
-}
-
-.brand-scroll-scene-flow .brand-scroll-plane-a {
-  background: rgba(255, 75, 62, 0.72);
-  mix-blend-mode: screen;
-}
-
-.brand-scroll-scene-flow .brand-scroll-plane-b {
-  background: rgba(0, 213, 232, 0.48);
-  mix-blend-mode: screen;
-}
-
-.brand-scroll-scene-flow .brand-scroll-ring {
-  border-color: rgba(255, 255, 255, 0.24);
-  mix-blend-mode: screen;
-}
-
-.brand-scroll-scene-flow .brand-scroll-lines {
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.3) 0 2px,
-    transparent 2px 16px
-  );
-}
-
-.brand-scroll-scene-vision .brand-scroll-plane-a {
-  background: rgba(122, 44, 255, 0.3);
-}
-
-.brand-scroll-scene-vision .brand-scroll-plane-b {
-  background: rgba(255, 75, 62, 0.24);
 }
 
 .brand-scroll-team {
@@ -594,21 +672,38 @@ html.home-snap-scroll {
     text-align: left;
   }
 
-  .brand-scroll-plane-a {
-    right: -17rem;
-    top: 15%;
-    width: 39rem;
+  .brand-scroll-art-split span:nth-child(1) {
+    left: -22vw;
+    width: 82vw;
   }
 
-  .brand-scroll-plane-b {
-    left: -20rem;
-    bottom: 5%;
-    width: 40rem;
+  .brand-scroll-art-split span:nth-child(2) {
+    right: -40vw;
+    width: 78vw;
   }
 
-  .brand-scroll-lines {
-    right: -4rem;
-    opacity: 0.28;
+  .brand-scroll-art-flow span:nth-child(1) {
+    left: -5%;
+    right: -10%;
+  }
+
+  .brand-scroll-art-flow span:nth-child(2) {
+    left: -5rem;
+    top: 22%;
+  }
+
+  .brand-scroll-art-flow span:nth-child(3) {
+    left: 42%;
+    top: 49%;
+  }
+
+  .brand-scroll-art-vision span:nth-child(1) {
+    left: 1.5rem;
+    width: 88vw;
+  }
+
+  .brand-scroll-art-credit span:nth-child(2) {
+    width: 76vw;
   }
 
   .brand-scroll-footer {
