@@ -372,6 +372,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'pol-2-4', title: '2026년 AI 중점학교 기본계획 및 AI 중점학교 명단', url: 'https://www.gne.go.kr/user/bbs/BD_selectBbs.do?q_rowPerPage=10&q_currPage=2&q_sortName=&q_sortOrder=&q_bbsSn=1464&q_bbsDocNo=20260309200422066&q_menu=&q_ctgryCd=&q_clsfNo=1&q_lwrkCdId=10&q_searchKeyTy=ttl___1002&q_searchVal=&', description: '경상남도교육청 2026년 AI 중점학교 운영 기본계획과 선정 학교 명단' },
           { id: 'pol-2-5', title: '2025년 정보통신윤리교육 강화 및 지능정보서비스 과의존 예방교육 기본계획', url: 'https://www.gne.go.kr/user/bbs/BD_selectBbs.do?q_rowPerPage=10&q_currPage=10&q_sortName=&q_sortOrder=&q_bbsSn=1464&q_bbsDocNo=20250326085906790&q_menu=&q_ctgryCd=&q_clsfNo=1&q_lwrkCdId=10&q_searchKeyTy=ttl___1002&q_searchVal=&', description: '경상남도교육청 2025년 정보통신윤리교육 강화와 지능정보서비스 과의존 예방교육 추진 기본계획' },
           { id: 'pol-2-6', title: '서울시교육청 인공지능 Ebook 자료실', url: 'https://fliphtml5.com/bookcase/bucrw/', description: '서울시교육청이 발간한 인공지능 관련 전자책(Ebook)을 한곳에 모아둔 FlipHTML5 책장' },
+          { id: 'pol-2-7', title: '경북교육청 인공지능 학교지원종합자료실', url: 'https://ai.gbe.kr/', description: '경상북도교육청이 운영하는 학교 현장 AI 도입·활용을 지원하는 종합 자료실' },
         ],
       },
     ],
