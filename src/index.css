@@ -280,7 +280,7 @@ html.home-snap-scroll {
 .brand-scroll {
   position: relative;
   overflow: hidden;
-  background: #f6f7fb;
+  background: #f4f6fb;
 }
 
 .brand-scroll::before {
@@ -289,43 +289,43 @@ html.home-snap-scroll {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(139, 61, 255, 0.04) 34%, rgba(0, 196, 204, 0.045) 66%, rgba(255, 255, 255, 0) 100%);
+    linear-gradient(180deg, rgba(9, 11, 15, 0) 0%, rgba(122, 44, 255, 0.055) 34%, rgba(0, 213, 232, 0.055) 66%, rgba(9, 11, 15, 0) 100%);
   z-index: 0;
 }
 
 .brand-scroll-scene {
   position: relative;
   display: flex;
-  min-height: 108vh;
+  min-height: 104vh;
   align-items: center;
   overflow: hidden;
-  padding: clamp(7rem, 13vw, 12rem) clamp(1.5rem, 7vw, 6rem);
+  padding: clamp(6.5rem, 11vw, 10.5rem) clamp(1.5rem, 7vw, 6rem);
   background:
-    linear-gradient(90deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(9, 11, 15, 0.055) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(9, 11, 15, 0.045) 1px, transparent 1px),
     transparent;
   background-size: 38px 38px;
 }
 
 .brand-scroll-scene + .brand-scroll-scene {
-  margin-top: -8vh;
+  margin-top: -12vh;
 }
 
 .brand-scroll-copy {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: min(72rem, 100%);
 }
 
 .brand-scroll-copy-left {
   align-self: flex-start;
-  margin-top: clamp(2rem, 8vh, 5rem);
+  margin-top: clamp(1rem, 5vh, 3.5rem);
 }
 
 .brand-scroll-copy-right {
   align-self: center;
   margin-left: auto;
-  width: min(60rem, 88%);
+  width: min(58rem, 86%);
   text-align: right;
 }
 
@@ -335,14 +335,14 @@ html.home-snap-scroll {
 
 .brand-scroll-copy-low {
   align-self: flex-end;
-  margin-bottom: clamp(2rem, 9vh, 6rem);
-  margin-left: clamp(0rem, 12vw, 10rem);
-  width: min(68rem, 92%);
+  margin-bottom: clamp(0rem, 5vh, 4rem);
+  margin-left: clamp(0rem, 18vw, 15rem);
+  width: min(62rem, 88%);
 }
 
 .brand-scroll-eyebrow {
-  margin-bottom: 1.35rem;
-  color: rgba(14, 19, 24, 0.56);
+  margin-bottom: 1rem;
+  color: rgba(9, 11, 15, 0.54);
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0;
@@ -350,13 +350,14 @@ html.home-snap-scroll {
 }
 
 .brand-scroll-copy h2 {
-  color: #0e1318;
-  font-size: clamp(3rem, 7.2vw, 6.8rem);
+  color: #090b0f;
+  font-size: clamp(3.4rem, 8.1vw, 7.8rem);
   font-weight: 900;
   letter-spacing: 0;
-  line-height: 0.98;
+  line-height: 0.9;
   text-wrap: balance;
   word-break: keep-all;
+  filter: drop-shadow(0 0.04em 0 rgba(255, 255, 255, 0.72));
 }
 
 .brand-scroll-copy h2 span {
@@ -365,10 +366,14 @@ html.home-snap-scroll {
   word-break: keep-all;
 }
 
+.brand-scroll-copy h2 span:nth-child(2) {
+  margin-left: clamp(0rem, 4vw, 4rem);
+}
+
 .brand-scroll-detail {
-  margin-top: 1.8rem;
+  margin-top: 1.6rem;
   max-width: 42rem;
-  color: rgba(14, 19, 24, 0.62);
+  color: rgba(9, 11, 15, 0.58);
   font-size: clamp(1.05rem, 2vw, 1.45rem);
   font-weight: 800;
   line-height: 1.65;
@@ -388,6 +393,7 @@ html.home-snap-scroll {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 1;
 }
 
 .brand-scroll-plane,
@@ -398,107 +404,116 @@ html.home-snap-scroll {
 }
 
 .brand-scroll-plane-a {
-  right: -9rem;
-  top: 14%;
-  width: min(58vw, 46rem);
-  height: 7rem;
-  background: rgba(255, 192, 64, 0.42);
-  clip-path: polygon(0 32%, 100% 0, 100% 64%, 0 100%);
-  transform: rotate(-16deg);
+  right: -14rem;
+  top: 12%;
+  width: min(76vw, 64rem);
+  height: clamp(5.5rem, 9vw, 9rem);
+  background: rgba(255, 212, 59, 0.62);
+  clip-path: polygon(0 28%, 100% 0, 100% 58%, 0 100%);
+  transform: rotate(-18deg);
+  mix-blend-mode: multiply;
 }
 
 .brand-scroll-plane-b {
-  left: -12rem;
-  bottom: 14%;
-  width: min(62vw, 48rem);
-  height: 6.2rem;
-  background: rgba(0, 196, 204, 0.24);
+  left: -15rem;
+  bottom: 7%;
+  width: min(74vw, 58rem);
+  height: clamp(5.2rem, 8vw, 7.8rem);
+  background: rgba(0, 213, 232, 0.32);
   clip-path: polygon(0 0, 100% 34%, 100% 100%, 0 68%);
-  transform: rotate(13deg);
+  transform: rotate(14deg);
+  mix-blend-mode: multiply;
 }
 
 .brand-scroll-ring {
-  right: 12%;
-  bottom: 12%;
-  width: clamp(8rem, 19vw, 17rem);
-  height: clamp(8rem, 19vw, 17rem);
-  border: clamp(0.8rem, 1.8vw, 1.45rem) solid rgba(139, 61, 255, 0.16);
+  right: 7%;
+  bottom: 6%;
+  width: clamp(9rem, 22vw, 20rem);
+  height: clamp(9rem, 22vw, 20rem);
+  border: clamp(0.9rem, 2vw, 1.65rem) solid rgba(122, 44, 255, 0.2);
   border-radius: 999px;
+  mix-blend-mode: multiply;
 }
 
 .brand-scroll-lines {
-  right: 6%;
-  top: 16%;
-  width: clamp(12rem, 24vw, 22rem);
-  height: clamp(9rem, 18vw, 16rem);
+  right: 3%;
+  top: 12%;
+  width: clamp(14rem, 28vw, 26rem);
+  height: clamp(10rem, 19vw, 17rem);
   background: repeating-linear-gradient(
     90deg,
-    rgba(14, 19, 24, 0.12) 0 2px,
-    transparent 2px 18px
+    rgba(9, 11, 15, 0.16) 0 2px,
+    transparent 2px 16px
   );
-  opacity: 0.42;
-  transform: rotate(18deg);
+  opacity: 0.5;
+  transform: rotate(16deg);
 }
 
 .brand-scroll-scene-flow {
-  background-color: #101820;
+  background-color: #090b0f;
   background-image:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(246, 247, 251, 0.12), rgba(16, 24, 32, 0) 20%, rgba(16, 24, 32, 0) 80%, rgba(246, 247, 251, 0.08));
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(244, 246, 251, 0.16), rgba(9, 11, 15, 0) 18%, rgba(9, 11, 15, 0) 80%, rgba(244, 246, 251, 0.1));
 }
 
 .brand-scroll-scene-flow .brand-scroll-copy h2,
 .brand-scroll-scene-flow .brand-scroll-members {
   color: #fff;
+  filter: drop-shadow(0 0.04em 0 rgba(255, 75, 62, 0.42));
 }
 
 .brand-scroll-scene-flow .brand-scroll-eyebrow,
 .brand-scroll-scene-flow .brand-scroll-detail {
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .brand-scroll-scene-flow .brand-scroll-plane-a {
-  background: rgba(255, 84, 76, 0.56);
+  background: rgba(255, 75, 62, 0.72);
   mix-blend-mode: screen;
 }
 
 .brand-scroll-scene-flow .brand-scroll-plane-b {
-  background: rgba(0, 196, 204, 0.42);
+  background: rgba(0, 213, 232, 0.48);
   mix-blend-mode: screen;
 }
 
 .brand-scroll-scene-flow .brand-scroll-ring {
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.24);
+  mix-blend-mode: screen;
 }
 
 .brand-scroll-scene-flow .brand-scroll-lines {
   background: repeating-linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.24) 0 2px,
-    transparent 2px 18px
+    rgba(255, 255, 255, 0.3) 0 2px,
+    transparent 2px 16px
   );
 }
 
 .brand-scroll-scene-vision .brand-scroll-plane-a {
-  background: rgba(139, 61, 255, 0.2);
+  background: rgba(122, 44, 255, 0.3);
 }
 
 .brand-scroll-scene-vision .brand-scroll-plane-b {
-  background: rgba(255, 84, 76, 0.2);
+  background: rgba(255, 75, 62, 0.24);
 }
 
 .brand-scroll-team {
-  min-height: 104vh;
+  min-height: 88vh;
   align-items: flex-start;
-  padding-bottom: 35vh;
+  padding-bottom: 28vh;
 }
 
 .brand-scroll-team-copy {
-  margin-top: clamp(3rem, 9vh, 6rem);
+  margin-top: clamp(2rem, 6vh, 4rem);
   margin-left: auto;
-  width: min(64rem, 90%);
+  width: min(58rem, 86%);
   text-align: right;
+}
+
+.brand-scroll-team-copy h2 {
+  font-size: clamp(3rem, 7.1vw, 7rem);
 }
 
 .brand-scroll-team-bar {
@@ -510,9 +525,9 @@ html.home-snap-scroll {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: 33vh;
+  min-height: 28vh;
   padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 7vw, 6rem) 4.6rem;
-  background: #07090c;
+  background: #050609;
   color: rgba(255, 255, 255, 0.46);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -522,7 +537,7 @@ html.home-snap-scroll {
 .brand-scroll-team-bar > p {
   max-width: 54rem;
   margin: 0;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.38);
   font-size: clamp(0.78rem, 1.18vw, 1.06rem);
   font-weight: 900;
   line-height: 1.55;
@@ -534,7 +549,7 @@ html.home-snap-scroll {
 
 .brand-scroll-team-bar > p + p {
   margin-top: 0.55rem;
-  color: rgba(255, 255, 255, 0.36);
+  color: rgba(255, 255, 255, 0.48);
   font-size: clamp(0.75rem, 1.05vw, 0.95rem);
 }
 
@@ -556,8 +571,8 @@ html.home-snap-scroll {
 @media (max-width: 720px) {
   .brand-scroll-scene {
     min-height: 96vh;
-    padding-top: 6rem;
-    padding-bottom: 6rem;
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
   }
 
   .brand-scroll-scene + .brand-scroll-scene {
@@ -565,7 +580,8 @@ html.home-snap-scroll {
   }
 
   .brand-scroll-copy h2 {
-    font-size: clamp(2.45rem, 13.5vw, 4.15rem);
+    font-size: clamp(3.2rem, 15vw, 4.9rem);
+    line-height: 0.86;
   }
 
   .brand-scroll-copy-left,
@@ -579,18 +595,20 @@ html.home-snap-scroll {
   }
 
   .brand-scroll-plane-a {
-    right: -15rem;
-    width: 34rem;
+    right: -17rem;
+    top: 15%;
+    width: 39rem;
   }
 
   .brand-scroll-plane-b {
-    left: -18rem;
-    width: 36rem;
+    left: -20rem;
+    bottom: 5%;
+    width: 40rem;
   }
 
   .brand-scroll-lines {
     right: -4rem;
-    opacity: 0.24;
+    opacity: 0.28;
   }
 
   .brand-scroll-footer {
@@ -598,11 +616,12 @@ html.home-snap-scroll {
   }
 
   .brand-scroll-team {
-    padding-bottom: 36vh;
+    min-height: 86vh;
+    padding-bottom: 34vh;
   }
 
   .brand-scroll-team-bar {
-    min-height: 36vh;
+    min-height: 34vh;
   }
 }
 
