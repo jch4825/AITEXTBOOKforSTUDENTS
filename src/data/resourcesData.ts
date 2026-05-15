@@ -337,6 +337,7 @@ export const resourceCategories: ResourceCategory[] = [
         items: [
           { id: 'notion', title: '노션 (Notion)', url: 'https://www.notion.so', description: '올인원 노트·문서·데이터베이스·협업 도구. AI 기능으로 수업 자료·학생 관리·메모를 한곳에서 정리 (해외)' },
           { id: 'obsidian', title: '옵시디언 (Obsidian)', url: 'https://obsidian.md', description: '로컬 마크다운 기반 개인 노트 앱. 지식 그래프·백링크·플러그인으로 자료를 체계적으로 관리 (해외)' },
+          { id: 'inline-ai', title: 'Inline AI', url: 'https://www.inline-ai.com/', description: '아래아한글(HWP) 문서를 직접 작성·편집할 수 있는 AI 도구. 공문·기안·보고서 등 학교 행정 문서 작성에 활용' },
         ],
       },
     ],
