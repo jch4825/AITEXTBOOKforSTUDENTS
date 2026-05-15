@@ -140,7 +140,7 @@ html.home-snap-scroll {
 .home-snap-scroll .moholy-hero,
 .home-snap-scroll .home-work-surface,
 .home-snap-scroll .brand-scroll-scene {
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   scroll-snap-stop: always;
 }
 
@@ -283,19 +283,32 @@ html.home-snap-scroll {
   background: #f6f7fb;
 }
 
+.brand-scroll::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(139, 61, 255, 0.04) 34%, rgba(0, 196, 204, 0.045) 66%, rgba(255, 255, 255, 0) 100%);
+  z-index: 0;
+}
+
 .brand-scroll-scene {
   position: relative;
   display: flex;
-  min-height: 86vh;
+  min-height: 108vh;
   align-items: center;
   overflow: hidden;
-  padding: clamp(4.5rem, 9vw, 8rem) clamp(1.5rem, 7vw, 6rem);
-  border-top: 1px solid rgba(14, 19, 24, 0.08);
+  padding: clamp(7rem, 13vw, 12rem) clamp(1.5rem, 7vw, 6rem);
   background:
     linear-gradient(90deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
     linear-gradient(0deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
-    #f7f8fb;
+    transparent;
   background-size: 38px 38px;
+}
+
+.brand-scroll-scene + .brand-scroll-scene {
+  margin-top: -8vh;
 }
 
 .brand-scroll-copy {
@@ -431,7 +444,8 @@ html.home-snap-scroll {
   background-color: #101820;
   background-image:
     linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(0deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(246, 247, 251, 0.12), rgba(16, 24, 32, 0) 20%, rgba(16, 24, 32, 0) 80%, rgba(246, 247, 251, 0.08));
 }
 
 .brand-scroll-scene-flow .brand-scroll-copy h2,
@@ -475,9 +489,9 @@ html.home-snap-scroll {
 }
 
 .brand-scroll-team {
-  min-height: 86vh;
+  min-height: 104vh;
   align-items: flex-start;
-  padding-bottom: 31vh;
+  padding-bottom: 35vh;
 }
 
 .brand-scroll-team-copy {
@@ -528,22 +542,26 @@ html.home-snap-scroll {
   position: absolute;
   left: clamp(1.5rem, 7vw, 6rem);
   right: clamp(1.5rem, 7vw, 6rem);
-  bottom: 1.25rem;
+  bottom: 2.35rem;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 1rem;
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 0.82rem;
+  padding-top: 0.75rem;
+  color: rgba(255, 255, 255, 0.26);
+  font-size: 0.68rem;
   font-weight: 800;
 }
 
 @media (max-width: 720px) {
   .brand-scroll-scene {
-    min-height: 78vh;
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    min-height: 96vh;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .brand-scroll-scene + .brand-scroll-scene {
+    margin-top: -5vh;
   }
 
   .brand-scroll-copy h2 {

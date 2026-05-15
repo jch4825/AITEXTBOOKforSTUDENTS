@@ -251,7 +251,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
       if (nextIndex === currentIndex) return;
 
       isSnappingRef.current = true;
-      sections[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      sections[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
       window.setTimeout(() => {
         isSnappingRef.current = false;
       }, 720);
