@@ -28,10 +28,10 @@ const personaCopy: Record<Persona, { title: string; body: string; bullets: strin
     primaryAction: 'module',
   },
   expert: {
-    title: '자료부터 바로 가져가세요',
-    body: '이미 충분히 익숙하시다면 자료실과 AI 도구 모음에서 수업·행정 템플릿을 즉시 활용하세요. AI 윤리 모듈(모듈 5)도 함께 살펴보시길 권합니다.',
-    bullets: ['내가 원하는 인공지능 관련 자료 즉시 확인', '모듈은 필요한 부분만 골라 보기', 'AI 윤리와 현명한 사용(모듈 5) 추천'],
-    primaryLabel: '자료실 바로 가기',
+    title: '링크부터 바로 둘러보세요',
+    body: '이미 충분히 익숙하시다면 링크 도서관과 AI 도구 모음에서 수업·행정 템플릿을 즉시 활용하세요. AI 윤리 모듈(모듈 5)도 함께 살펴보시길 권합니다.',
+    bullets: ['내가 원하는 인공지능 관련 링크 즉시 확인', '모듈은 필요한 부분만 골라 보기', 'AI 윤리와 현명한 사용(모듈 5) 추천'],
+    primaryLabel: '링크 도서관 바로 가기',
     primaryAction: 'resources',
   },
 };
@@ -39,7 +39,7 @@ const personaCopy: Record<Persona, { title: string; body: string; bullets: strin
 const purposeCopy: Partial<Record<DiagnosticPurpose, string>> = {
   class: '수업 적용 사례는 모듈 3에 모여 있습니다.',
   admin: '행정 자동화는 모듈 4에서 다룹니다.',
-  share: '동료 연수 자료는 자료실에서 바로 확인할 수 있습니다.',
+  share: '동료 연수 자료는 링크 도서관에서 바로 확인할 수 있습니다.',
   ethics: '인공지능 윤리 및 안전 교육은 모듈 5에서 할루시네이션, 편향, 프라이버시, 저작권, 학생 지도 원칙까지 함께 다룹니다.',
 };
 

@@ -96,7 +96,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
     { id: 'home', label: '홈', icon: Home },
     { id: 'tutorial', label: '인공지능 배워보기', icon: GraduationCap },
     { id: 'tools', label: 'AI 도구 모음', icon: Wrench },
-    { id: 'resources', label: '자료실', icon: BookOpen },
+    { id: 'resources', label: '링크 도서관', icon: BookOpen },
   ] as const;
 
   return (

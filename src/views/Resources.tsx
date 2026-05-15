@@ -419,8 +419,8 @@ export default function Resources() {
     <div className="moholy-surface moholy-surface-resources min-h-screen">
       <div className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:py-10">
         <header className="mb-6 text-center">
-          <p className="mb-2 text-xs font-bold text-canva-purple">AI Bridge Resource Hub</p>
-          <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-canva-ink">자료실</h1>
+          <p className="mb-2 text-xs font-bold text-canva-purple">AI Bridge Link Library</p>
+          <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-canva-ink">링크 도서관</h1>
           <p className="text-sm text-canva-gray">
             카테고리·태그·즐겨찾기·검색을 자유롭게 조합해 자료를 빠르게 찾을 수 있습니다.
           </p>
