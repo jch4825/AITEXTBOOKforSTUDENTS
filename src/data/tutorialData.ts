@@ -97,7 +97,7 @@ export const lessons: Lesson[] = [
 
       컴퓨터에서 인터넷을 쓰는 일은 큰 학교에 들어가는 일과 비슷합니다. 이 학교에는 초록색 정문, 파란색 후문, 붉은색 옆문처럼 여러 문이 있습니다. 이 문들이 바로 **브라우저**입니다.
 
-      Google Chrome, Microsoft Edge, Safari, Naver Whale은 모두 같은 인터넷 학교로 들어가는 문입니다. 다만 문 색깔과 모양이 다르듯이, 각 브라우저가 기본으로 가지고 있는 능력과 기능도 조금씩 다릅니다. 어떤 문은 Google 도구와 잘 맞고, 어떤 문은 윈도우에 기본으로 붙어 있으며, 어떤 문은 네이버 서비스와 친숙합니다.
+      Google Chrome, Microsoft Edge, Apple Safari, Naver Whale은 모두 같은 인터넷 학교로 들어가는 문입니다. 다만 문 색깔과 모양이 다르듯이, 각 브라우저가 기본으로 가지고 있는 능력과 기능도 조금씩 다릅니다. 어떤 문은 Google 도구와 잘 맞고, 어떤 문은 윈도우에 기본으로 붙어 있으며, 어떤 문은 네이버 서비스와 친숙합니다.
 
       이번 모듈에서는 Chrome을 기본 문으로 정합니다. 이유는 앞으로 들어갈 교실이 Gemini, Google AI Studio처럼 Google이 운영하는 곳이기 때문입니다. Chrome을 설치한다고 해서 기존 Edge가 사라지는 것은 아닙니다. 같은 학교에 들어가는 문이 하나 더 생기는 것뿐입니다.
 
@@ -110,7 +110,7 @@ export const lessons: Lesson[] = [
     interactive: {
       prompt: 'Chrome 기본 개념 시뮬레이션',
       initialInput: '',
-      answer: '브라우저는 인터넷 학교에 들어가는 문입니다. 같은 인터넷에 들어가지만 Chrome, Edge, Safari, Naver Whale은 색깔과 모양, 기본 기능이 조금씩 다른 문입니다.'
+      answer: '브라우저는 인터넷 학교에 들어가는 문입니다. 같은 인터넷에 들어가지만 Chrome, Edge, Apple Safari, Naver Whale은 색깔과 모양, 기본 기능이 조금씩 다른 문입니다.'
     }
   },
   {

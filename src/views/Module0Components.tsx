@@ -433,7 +433,7 @@ export function Lesson01Interactive({ onComplete, onContinue, isCompleted }: Mod
             {[
               { name: 'Microsoft Edge', icon: <EdgeMark size={34} />, desc: '윈도우 컴퓨터에 기본으로 있는 파란색 후문입니다. Chrome을 데려올 때 잠깐 사용합니다.', active: false },
               { name: 'Google Chrome', icon: <Chrome size={34} />, desc: 'Google 도구와 잘 맞는 정문입니다. Gemini와 Google AI Studio에 들어갈 때 기본으로 씁니다.', active: true },
-              { name: 'Safari', icon: <span className="text-xl font-black">S</span>, desc: '아이폰과 맥에 많이 있는 다른 모양의 문입니다.', active: false },
+              { name: 'Apple Safari', icon: <span className="text-xl font-black">S</span>, desc: '아이폰과 맥에 많이 있는 다른 모양의 문입니다.', active: false },
               { name: 'Naver Whale', icon: <span className="text-xl font-black">W</span>, desc: '네이버 서비스와 친숙한 또 다른 문입니다. 같은 인터넷에 들어가지만 기본 기능이 조금 다릅니다.', active: false },
             ].map((item) => (
               <div key={item.name} className={`rounded-xl border p-4 ${item.active ? 'border-cyan-300 bg-cyan-300/10' : 'border-gray-700 bg-gray-900/60'}`}>
