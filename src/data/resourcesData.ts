@@ -73,6 +73,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'consensus', title: '컨센서스 (Consensus)', url: 'https://consensus.app/', description: '논문 기반 근거를 찾아 질문에 답하는 학술 AI 검색·리서치 도구' },
           { id: 'moonlight', title: '문라이트 (Moonlight)', url: 'https://www.themoonlight.io', description: 'AI 논문 검색·요약·동향 파악을 지원하는 학술 AI 리서치 도구' },
           { id: 'ai-1-6', title: '젠스파크 (Genspark)', url: 'https://www.genspark.ai', description: '멀티 AI 에이전트 기반 검색·정리 도구. 복잡한 주제를 자동 요약' },
+          { id: 'felo', title: '펠로 (Felo)', url: 'https://felo.ai', description: '검색·리서치·문서화를 지원하는 AI 에이전트 기반 정보 탐색 도구' },
           { id: 'skywork', title: '스카이워크 (Skywork)', url: 'https://skywork.ai', description: '리서치·문서 작성·콘텐츠 생성을 지원하는 AI 에이전트 기반 업무 도구' },
           { id: 'manus', title: '마누스 (Manus)', url: 'https://manus.im', description: '복잡한 작업을 계획하고 실행하는 범용 AI 에이전트 서비스' },
           { id: 'ai-1-8', title: '마이크로소프트 코파일럿 (Microsoft Copilot)', url: 'https://copilot.microsoft.com', description: '웹·Windows·Microsoft 365와 연동되는 생성 AI 보조 도구 (해외)' },
