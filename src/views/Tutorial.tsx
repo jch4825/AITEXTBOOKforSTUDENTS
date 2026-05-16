@@ -1132,6 +1132,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                       <button
                         onClick={() => onNavigateToLesson(ml.id)}
                         title={ml.title}
+                        aria-label={`${ml.title}로 이동`}
+                        aria-current={isCurrent ? 'step' : undefined}
                         className={`relative h-7 px-2.5 min-w-[2.25rem] rounded-full flex items-center justify-center gap-1 text-[10px] font-bold transition-all flex-shrink-0 ${
                           isCurrent ? 'text-white scale-105 shadow-md ring-2 ring-offset-1' :
                           isDone ? 'text-white hover:scale-105' :
@@ -1141,7 +1143,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           isCurrent
                             ? { backgroundColor: theme.accent, boxShadow: `0 4px 14px ${theme.accentSoft}` }
                             : isDone
-                              ? { backgroundColor: theme.accent + 'cc' }
+                              ? { backgroundColor: theme.accent }
                               : undefined
                         }
                       >
@@ -1170,6 +1172,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                       <button
                         onClick={onNavigateToNextModule}
                         title={`다음 모듈: ${nextModule.title}`}
+                        aria-label={`다음 모듈 ${nextModule.title}로 이동`}
                         className="p-1 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors flex-shrink-0 ml-1"
                       >
                         <ArrowRight size={18} />
@@ -1186,6 +1189,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             onClick={() => { setShowDict(true); setDictResult(''); setDictWord(''); }}
             className="hidden md:flex items-center gap-1.5 ml-auto mr-2 px-3 py-1.5 rounded-full bg-lime-600 hover:bg-lime-700 text-white text-[11px] font-bold shadow-sm hover:shadow-md transition-all shrink-0"
             title="모르는 단어를 쉽게 설명해 드립니다"
+            aria-label="쉬운 단어 사전 열기"
           >
             📖 단어 사전
           </button>

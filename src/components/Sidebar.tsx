@@ -82,7 +82,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
             <span className="bg-gradient-to-r from-canva-purple to-canva-teal bg-clip-text text-2xl font-black tracking-tighter text-transparent">
               AI Bridge
             </span>
-            <span className="mt-0.5 block text-xs font-medium tracking-wide text-canva-gray/70">
+            <span className="mt-0.5 block text-xs font-medium tracking-wide text-canva-gray">
               Zero-Gap Toolkit
             </span>
           </h1>
@@ -151,8 +151,8 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
                         : isRecommended
                           ? 'bg-canva-teal/10 text-canva-ink font-bold hover:bg-canva-teal/15'
                           : isCollapsed
-                            ? 'text-canva-ink opacity-35 hover:opacity-80 hover:bg-canva-bg'
-                            : 'text-canva-ink opacity-60 hover:opacity-100 hover:bg-canva-bg'
+                            ? 'text-gray-600 hover:text-canva-ink hover:bg-canva-bg'
+                            : 'text-gray-700 hover:text-canva-ink hover:bg-canva-bg'
                     }`}
                   >
                     <span className={`w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold flex-shrink-0 ${
