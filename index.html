@@ -11,7 +11,6 @@
     <meta name="author" content="AI Bridge — 경남 초등교사 AI 학습 커뮤니티" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
-    <meta name="naver-site-verification" content="" />
     <meta name="application-name" content="AI Bridge" />
     <meta name="theme-color" content="#00c4cc" />
     <link rel="canonical" href="https://jch4825.github.io/AI_Bridge/" />
@@ -33,30 +32,56 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "AI Bridge: Zero-Gap Toolkit",
-      "alternateName": "AI 브릿지 — 경남 초등교사 AI 학습 플랫폼",
-      "url": "https://jch4825.github.io/AI_Bridge/",
-      "description": "초등교사를 위한 생성형 AI 활용 학습 플랫폼. LLM 기초, 프롬프트 엔지니어링, 수업 적용, 학교 업무 자동화, AI 윤리 5개 모듈 34개 차시와 다양한 AI 도구 및 GPTs를 제공합니다.",
-      "inLanguage": "ko",
-      "isAccessibleForFree": true,
-      "audience": {
-        "@type": "EducationalAudience",
-        "educationalRole": "teacher",
-        "audienceType": "초등학교 교사"
-      },
-      "keywords": "초등교사, 경남, 교사, AI, 인공지능, 학습, 자료, Google AI Studio, Gemini, Claude, Codex, ChatGPT, 프롬프트 엔지니어링, AI 윤리, 수업 자료, 2022 개정 교육과정",
-      "teaches": [
-        "LLM(거대언어모델) 기초",
-        "프롬프트 엔지니어링",
-        "AI 수업 적용",
-        "학교 업무 자동화",
-        "AI 윤리와 디지털 리터러시"
-      ],
-      "publisher": {
-        "@type": "Organization",
-        "name": "AI Bridge"
-      }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://jch4825.github.io/AI_Bridge/#organization",
+          "name": "AI Bridge",
+          "alternateName": "Team Zer0-Gap",
+          "url": "https://jch4825.github.io/AI_Bridge/"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://jch4825.github.io/AI_Bridge/#website",
+          "name": "AI Bridge: Zero-Gap Toolkit",
+          "alternateName": "AI 브릿지 — 경남 초등교사 AI 학습 플랫폼",
+          "url": "https://jch4825.github.io/AI_Bridge/",
+          "description": "초등교사를 위한 생성형 AI 활용 학습 플랫폼. LLM 기초, 프롬프트 엔지니어링, 수업 적용, 학교 업무 자동화, AI 윤리 5개 모듈 34개 차시와 다양한 AI 도구 및 GPTs를 제공합니다.",
+          "inLanguage": "ko-KR",
+          "isAccessibleForFree": true,
+          "publisher": {
+            "@id": "https://jch4825.github.io/AI_Bridge/#organization"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://jch4825.github.io/AI_Bridge/#webapp",
+          "name": "AI Bridge: Zero-Gap Toolkit",
+          "url": "https://jch4825.github.io/AI_Bridge/",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "Web",
+          "browserRequirements": "Requires JavaScript",
+          "isAccessibleForFree": true,
+          "inLanguage": "ko-KR",
+          "description": "초등교사가 생성형 AI를 수업과 학교 업무에 안전하게 적용하도록 돕는 무료 웹 학습 도구입니다.",
+          "audience": {
+            "@type": "EducationalAudience",
+            "educationalRole": "teacher",
+            "audienceType": "초등학교 교사"
+          },
+          "keywords": "초등교사, 경남, 교사 AI, 생성형 AI, 인공지능 교육, 프롬프트 엔지니어링, AI 윤리, 수업 자료, 학교 업무 자동화, 2022 개정 교육과정",
+          "teaches": [
+            "LLM(거대언어모델) 기초",
+            "프롬프트 엔지니어링",
+            "AI 수업 적용",
+            "학교 업무 자동화",
+            "AI 윤리와 디지털 리터러시"
+          ],
+          "publisher": {
+            "@id": "https://jch4825.github.io/AI_Bridge/#organization"
+          }
+        }
+      ]
     }
     </script>
   </head>

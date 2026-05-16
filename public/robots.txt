@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jch4825.github.io/AI_Bridge/sitemap.xml
