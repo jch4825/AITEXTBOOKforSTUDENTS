@@ -207,7 +207,6 @@ export const resourceCategories: ResourceCategory[] = [
         label: '1. 추천 수업 지원 도구',
         iconEmoji: '🧰',
         items: [
-          { id: 'bigkinds', title: '빅카인즈 (BIGKinds)', url: 'https://www.bigkinds.or.kr', description: '한국언론진흥재단의 뉴스 빅데이터 분석 플랫폼. 신문 기사 검색·분석으로 시사·사회·국어 수업에 활용' },
           { id: 'padlet', title: '패들랫 (Padlet)', url: 'https://padlet.com', description: '협업 게시판 도구. 학생 의견·과제·작품을 한 화면에 모으는 수업 활동에 활용 (해외)' },
           { id: 'kahoot', title: '카훗 (Kahoot!)', url: 'https://kahoot.com', description: '퀴즈 기반 게임형 학습 플랫폼. 실시간 참여형 퀴즈로 수업 흥미 유발 (해외)' },
           { id: 'l-1-6', title: '온한글', url: 'https://onhan.cne.go.kr/', description: '충청남도교육청 한글 해득 진단·보정 시스템. 미해득 학생 보정 자료와 성장 기록 지원' },
@@ -221,8 +220,25 @@ export const resourceCategories: ResourceCategory[] = [
         ],
       },
       {
+        id: 'big-data-tools',
+        label: '2. 빅데이터',
+        iconEmoji: '📊',
+        items: [
+          { id: 'bigkinds', title: '빅카인즈 (BIGKinds)', url: 'https://www.bigkinds.or.kr', description: '한국언론진흥재단의 뉴스 빅데이터 분석 플랫폼. 신문 기사 검색·분석으로 시사·사회·국어 수업에 활용' },
+          { id: 'google-trends', title: '구글 트랜드 (Google Trends)', url: 'https://trends.google.co.kr/trends/', description: '구글 검색어 관심도와 지역별 트렌드를 비교·분석할 수 있는 데이터 탐색 도구' },
+          { id: 'naver-datalab', title: '네이버 데이터랩', url: 'https://datalab.naver.com/', description: '네이버 검색어 트렌드와 쇼핑 인사이트를 확인해 국내 관심도 변화를 분석할 수 있는 데이터 도구' },
+          { id: 'gov-1-1', title: 'AI Hub', url: 'https://aihub.or.kr', description: '한국어·영상·헬스케어 등 인공지능 학습용 데이터를 제공하는 대표 공공 데이터 플랫폼' },
+          { id: 'gov-1-2', title: '공공데이터포털', url: 'https://www.data.go.kr', description: '정부와 공공기관의 개방 데이터를 검색·활용할 수 있는 국가 데이터 포털' },
+          { id: 'kosis', title: '국가통계포털', url: 'http://kosis.kr/', description: '통계청이 제공하는 국가 승인 통계 통합 포털. 인구·경제·사회 등 공식 통계 데이터를 탐색할 수 있습니다.' },
+          { id: 'ex-open-oasis', title: '도로공사 오픈오아시스', url: 'http://data.ex.co.kr/', description: '한국도로공사의 고속도로 교통·시설·운영 데이터를 제공하는 공공 데이터 서비스' },
+          { id: 'hira-opendata', title: '보건의료 빅데이터 개방시스템', url: 'https://opendata.hira.or.kr/home.do', description: '건강보험심사평가원의 보건의료 공공 데이터를 검색·활용할 수 있는 빅데이터 개방 서비스' },
+          { id: 'kepco-bigdata', title: '전력 빅데이터 센터', url: 'https://bigdata.kepco.co.kr', description: '한국전력의 전력 사용·에너지 관련 데이터를 제공하는 빅데이터 플랫폼' },
+          { id: 'culture-bigdata', title: '문화 빅데이터 플랫폼', url: 'http://www.bigdata-culture.kr/bigdata/', description: '문화·관광·콘텐츠 분야 데이터를 검색하고 활용할 수 있는 빅데이터 플랫폼' },
+        ],
+      },
+      {
         id: 'programming-tools',
-        label: '2. 프로그래밍 수업 도구',
+        label: '3. 프로그래밍 수업 도구',
         iconEmoji: '💻',
         items: [
           { id: 'programming-1', title: 'Delightex Edu', url: 'https://www.delightex.com/edu', description: '3D 공간, VR·AR 콘텐츠를 만들고 블록 코딩과 스크립트로 상호작용을 구현하는 교육용 제작 도구' },
@@ -232,7 +248,7 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'simulation-tools',
-        label: '3. 시뮬레이션 수업 도구',
+        label: '4. 시뮬레이션 수업 도구',
         iconEmoji: '🧪',
         items: [
           { id: 'simulation-1', title: '자바실험실', url: 'https://javalab.org/ko/', description: '과학·수학 개념을 웹 시뮬레이션으로 탐구할 수 있는 한국어 실험 자료 사이트' },
@@ -243,7 +259,7 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'edu-portal-public',
-        label: '4. 공공·국가 AI 교육 포털',
+        label: '5. 공공·국가 AI 교육 포털',
         iconEmoji: '🏛️',
         items: [
           { id: 'l-3-1', title: '에듀넷 AI·SW 교육', url: 'https://ai.edunet.net', description: '교육부 공식 AI·SW 교육 포털. 교사·학생용 자료, 연수, 수업 지원 통합 제공' },
@@ -258,7 +274,7 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'edu-portal-local',
-        label: '5. 시도교육청 AI 교육 자료',
+        label: '6. 시도교육청 AI 교육 자료',
         iconEmoji: '🗺️',
         items: [
           { id: 'l-3-10', title: '빛고을 아이(AI) — 광주 AI 교육 프로그램', url: 'https://sw.gen.go.kr/bbs/board.php?bo_table=data&wr_id=15', description: '광주 AI 교육센터가 2024년에 공개한 초등용 AI 교육 프로그램 교재' },
@@ -268,7 +284,7 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'edu-portal-publisher',
-        label: '6. 출판사 AI 디지털 교육자료',
+        label: '7. 출판사 AI 디지털 교육자료',
         iconEmoji: '📘',
         items: [
           { id: 'l-3-8', title: '미래엔 AI·디지털 교육자료', url: 'https://aidt.m-teacher.co.kr', description: '출판사 미래엔에서 제공하는 AI·디지털 교육자료 및 교사 지원 자료' },
@@ -280,7 +296,7 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'edu-portal-community',
-        label: '7. 교사·커뮤니티 자료 모음',
+        label: '8. 교사·커뮤니티 자료 모음',
         iconEmoji: '👩‍🏫',
         items: [
           { id: 'l-3-13', title: '초등인공지능교육.COM', url: 'https://www.xn--ob0bug89lftci99a2oa25k5pi.com/', description: '초등 교사가 직접 운영하는 인공지능 수업 자료 모음 사이트' },
@@ -291,7 +307,7 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'edu-ai-services',
-        label: '8. 교육 AI 서비스·플랫폼',
+        label: '9. 교육 AI 서비스·플랫폼',
         iconEmoji: '🎓',
         items: [
           { id: 'l-4-1', title: 'Riiid', url: 'https://riiid.com', description: 'AI 기반 맞춤형 학습과 평가 기술을 제공하는 한국 에듀테크 기업' },
@@ -322,7 +338,7 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'claude-skill-mcp',
-        label: '9. Claude Skill & MCP',
+        label: '10. Claude Skill & MCP',
         iconEmoji: '🔌',
         items: [
           { id: 'r-3-5', title: 'Claude Education Skills', url: 'https://github.com/GarethManning/claude-education-skills', description: '111개 증거 기반 교수법 Skill과 MCP 원격 서버를 제공하는 Claude 교육용 Skill 모음' },
@@ -332,7 +348,7 @@ export const resourceCategories: ResourceCategory[] = [
       },
       {
         id: 'productivity-tools',
-        label: '10. 교사 노트·생산성 도구',
+        label: '11. 교사 노트·생산성 도구',
         iconEmoji: '📝',
         items: [
           { id: 'notion', title: '노션 (Notion)', url: 'https://www.notion.so', description: '올인원 노트·문서·데이터베이스·협업 도구. AI 기능으로 수업 자료·학생 관리·메모를 한곳에서 정리 (해외)' },
@@ -559,8 +575,6 @@ export const resourceCategories: ResourceCategory[] = [
         label: '8. 정부·공공·연구기관',
         iconEmoji: '🏛️',
         items: [
-          { id: 'gov-1-1', title: 'AI Hub', url: 'https://aihub.or.kr', description: '한국어·영상·헬스케어 등 인공지능 학습용 데이터를 제공하는 대표 공공 데이터 플랫폼' },
-          { id: 'gov-1-2', title: '공공데이터포털', url: 'https://www.data.go.kr', description: '정부와 공공기관의 개방 데이터를 검색·활용할 수 있는 국가 데이터 포털' },
           { id: 'gov-1-3', title: 'AI Factory', url: 'https://aifactory.space', description: 'AI 모델 개발 경진대회와 실습 프로젝트를 제공하는 국내 AI 커뮤니티 플랫폼' },
           { id: 'gov-1-4', title: 'DACON', url: 'https://dacon.io', description: '데이터 분석·AI 경진대회와 학습 콘텐츠를 제공하는 국내 데이터 사이언스 플랫폼' },
           { id: 'gov-1-5', title: 'K-MOOC', url: 'https://www.kmooc.kr', description: 'AI·데이터·SW 관련 대학 공개강좌를 제공하는 국가 평생학습 플랫폼' },

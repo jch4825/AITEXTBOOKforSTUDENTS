@@ -84,7 +84,7 @@ export default function DiagnosticModal({ onClose, onStartModule, onOpenTools, o
               <p className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-canva-teal">AI Bridge 진단</p>
               <h1 id="diagnostic-title" className="text-2xl font-black text-canva-ink">선생님께 맞는 시작점을 찾아드릴게요</h1>
               <p className="mt-4 text-sm font-medium leading-7 text-canva-gray">
-                1분 정도 걸리는 6개의 질문입니다. 정답이나 오답은 없고, 답변은 이 기기 안에만 저장됩니다.
+                1분 정도 걸리는 6개의 질문입니다. 정답이나 오답은 없고, 답변은 이 브라우저 안에만 저장됩니다.
               </p>
               <div className="mt-6 rounded-xl bg-canva-bg p-4 text-sm leading-7 text-canva-ink">
                 <p>처음이시면 모듈 0부터, 이미 익숙하시면 필요한 자료와 도구부터 볼 수 있도록 학습 경로를 조정합니다.</p>
