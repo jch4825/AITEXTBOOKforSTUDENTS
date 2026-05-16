@@ -186,7 +186,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
           onClick={() => setShowApiModal(true)}
           className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-bold border transition-colors w-full ${
             hasApiKey
-              ? 'bg-green-50 text-green-600 border-green-200 hover:bg-green-100'
+              ? 'bg-green-100 text-green-800 border-green-300 hover:bg-green-200'
               : 'bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100'
           }`}
         >
