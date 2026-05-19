@@ -22,7 +22,8 @@ const CATEGORY_ORDER: ToolDefinition['category'][] = [
   '수업도구',
   '행정도구',
   'AI 활용',
-  'GPTs',
+  'GPTs-학생용',
+  'GPTs-교원용',
 ];
 
 type CategoryMeta = {
@@ -68,9 +69,18 @@ const CATEGORY_META: Record<ToolDefinition['category'], CategoryMeta> = {
     iconColor: 'text-fuchsia-500',
     doorPalette: { base: '#fae8ff', shade: '#f5d0fe', accent: '#c026d3' },
   },
-  'GPTs': {
-    label: 'GPTs(외부도구)',
-    description: '바로 이동해서 쓰는 교육용 GPT 모음',
+  'GPTs-학생용': {
+    label: 'GPTs-학생용(외부)',
+    description: '학생이 직접 학습과 연습에 활용할 수 있는 GPT 모음',
+    badgeClass: 'bg-slate-100 text-slate-700 border-slate-200',
+    icon: GraduationCap,
+    iconBg: 'bg-slate-100',
+    iconColor: 'text-slate-500',
+    doorPalette: { base: '#f1f5f9', shade: '#e2e8f0', accent: '#475569' },
+  },
+  'GPTs-교원용': {
+    label: 'GPTs-교원용(외부)',
+    description: '교사의 수업 준비, 기록, 업무를 돕는 GPT 모음',
     badgeClass: 'bg-slate-100 text-slate-700 border-slate-200',
     icon: Globe,
     iconBg: 'bg-slate-100',
@@ -362,7 +372,7 @@ export default function QuickTools() {
                           <p className="mt-1 text-xs text-gray-500">{meta.description}</p>
                         </div>
                         <div className="p-3">
-                          {category === 'GPTs' ? (
+                          {category.startsWith('GPTs-') ? (
                             <div className="space-y-4">
                               {groupToolsBySubCategory(tools).map(({ subCategory, tools: subCategoryTools }) => (
                                 <section key={subCategory}>

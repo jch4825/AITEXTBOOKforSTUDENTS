@@ -28,7 +28,7 @@ type ToolKind =
 export type ToolDefinition = {
   id: string;
   title: string;
-  category: '지도안 제작' | '수업도구' | '행정도구' | 'AI 활용' | 'GPTs';
+  category: '지도안 제작' | '수업도구' | '행정도구' | 'AI 활용' | 'GPTs-학생용' | 'GPTs-교원용';
   description: string;
   icon: React.ElementType;
   gradient: string;
@@ -1855,7 +1855,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-haksbabaldal',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '초등교사 수업 준비용 GPTs',
     title: '교과 학습발달상황 작성 GPT',
     description: '학생의 학습 활동·성과를 입력하면 교과 학습발달상황 문장을 자동 생성하는 ChatGPT 커스텀 GPT',
@@ -1871,7 +1871,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-edu-idea',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '초등교사 수업 준비용 GPTs',
     title: '교육 아이디어 도우미 GPT',
     description: '수업 주제·상황을 입력하면 교육 활동 아이디어를 제안해 주는 ChatGPT 커스텀 GPT',
@@ -1887,7 +1887,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-edu-youtube',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '기타GPTs',
     title: '교육·다큐·어학·어린이 유튜브 영상 GPT',
     description: '교육·다큐멘터리·어학·어린이 분야 유튜브 영상을 추천하고 함께 시청·정리하도록 돕는 ChatGPT 커스텀 GPT',
@@ -1903,7 +1903,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-elementary-school',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등학생 직접 학습용 GPTs',
     title: 'Elementary School',
     description: '영어, 수학, 사회, 과학, 예술, 건강·체육 등을 다루는 초등학생용 종합 교육 GPT',
@@ -1918,7 +1918,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-childrens-tutor-school-life',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등학생 직접 학습용 GPTs',
     title: "Children's Tutor for School and Life",
     description: '어린이의 학교생활과 기초 학습을 돕는 적응형 튜터 GPT',
@@ -1933,7 +1933,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-tutor-elementary-phd',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등학생 직접 학습용 GPTs',
     title: 'GPT Tutor, From Elementary To PhD Level',
     description: '초등 수준부터 고급 수준까지 설명 가능한 범용 튜터 GPT',
@@ -1948,7 +1948,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-knowledge',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등학생 직접 학습용 GPTs',
     title: '초등학생 지식인',
     description: '초등학생 수준의 다양한 질문에 답변하는 지식 Q&A형 GPT',
@@ -1963,7 +1963,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-childrens-encyclopedia-tutor',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등학생 직접 학습용 GPTs',
     title: "Children's Encyclopedia Tutor",
     description: '어린이 눈높이의 백과사전식 지식 학습을 지원하는 GPT',
@@ -1979,7 +1979,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-elementary-math-tutor',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 수학 관련 GPTs',
     title: '초등수학 튜터',
     description: '아이들을 위한 친근한 초등 수학 튜터 GPT',
@@ -1994,7 +1994,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-school-math-wiz',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 수학 관련 GPTs',
     title: 'Elementary School Math Wiz',
     description: '초등학교 수학 개념 학습과 문제 풀이를 지원하는 GPT',
@@ -2009,7 +2009,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-math-kids',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 수학 관련 GPTs',
     title: 'Math Kids',
     description: '어린이 수학 학습을 단계적으로 설명해주는 GPT',
@@ -2024,7 +2024,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-kids-math-bot',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 수학 관련 GPTs',
     title: 'Kids Math Bot',
     description: '어린이를 대상으로 한 수학 문제 풀이 및 개념 설명 GPT',
@@ -2039,7 +2039,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-math-education-helper',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '초등 수학 관련 GPTs',
     title: '초등 수학 교육 관련 질문 도우미 GPT',
     description: '예비교사, 현직교사, 학부모의 초등수학교육 질문을 돕는 GPT',
@@ -2055,7 +2055,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-elementary-english-teacher',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 영어 관련 GPTs',
     title: '초등영어선생님',
     description: '초등학생 수준의 영어 대화와 기초 단어 학습을 지원하는 GPT',
@@ -2070,7 +2070,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-speaking-english',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 영어 관련 GPTs',
     title: '영어회화 초등학생용 눈높이 speaking English 영어 회화',
     description: '초등학생 눈높이에 맞춘 영어 회화 연습 GPT',
@@ -2085,7 +2085,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-ai-elementary-english-conversation',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 영어 관련 GPTs',
     title: 'AI 초등영어회화',
     description: '초급 영어회화 연습을 지원하는 초등학생용 GPT',
@@ -2100,7 +2100,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-english-word-extractor-2',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 영어 관련 GPTs',
     title: '초등학생 영어 단어 추출기2',
     description: '주제에 맞는 초등학생 수준 영어 단어를 추출하는 GPT',
@@ -2115,7 +2115,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-english-word-extractor',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 영어 관련 GPTs',
     title: '초등학생을 위한 영어단어 추출기',
     description: '주제 기반으로 초등학생에게 적합한 영어 단어를 추천하는 GPT',
@@ -2130,7 +2130,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-english-writing-feedback',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 영어 관련 GPTs',
     title: '초등학생 영작문 첨삭',
     description: '초등학생의 영어 작문을 첨삭하고 개선 방향을 제시하는 GPT',
@@ -2145,7 +2145,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-english-quiz',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 영어 관련 GPTs',
     title: '초등영어퀴즈',
     description: '초등 영어 학습을 위한 퀴즈 생성 및 연습용 GPT',
@@ -2160,7 +2160,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-english-words',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '초등 영어 관련 GPTs',
     title: '초등영어단어',
     description: '초등 영어 단어 수준에 맞추어 응답하거나 단어 학습을 지원하는 GPT',
@@ -2176,7 +2176,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-writing-prompt-elementary',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '독서·글쓰기·창작 관련 GPTs',
     title: 'Writing Prompt Generator for Elementary Students',
     description: '초등학생용 글쓰기 주제, 이미지 프롬프트, 토론 질문을 생성하는 GPT',
@@ -2191,7 +2191,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-book-recommendation-children',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '독서·글쓰기·창작 관련 GPTs',
     title: '챗GPT 도서 추천 - 유아 / 어린이 / 초등학생 / 청소년 / 권장도서 / 필수도서',
     description: '유아, 어린이, 초등학생, 청소년 대상 도서를 추천하는 GPT',
@@ -2206,7 +2206,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-interactive-story-wizard',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '독서·글쓰기·창작 관련 GPTs',
     title: 'Interactive Story Wizard',
     description: '초등학생과 함께 영어 인터랙티브 스토리를 만들 수 있는 창작형 GPT 사례',
@@ -2222,7 +2222,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-elementary-math-lesson-plan',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '초등교사 수업 준비용 GPTs',
     title: '초등 수학 수업 지도안 작성도우미 GPT',
     description: '초등 수학 수업 지도안 작성을 지원하는 교사용 GPT',
@@ -2237,7 +2237,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-bluekit-elementary-teacher',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '초등교사 수업 준비용 GPTs',
     title: '로그인도 필요 없는 블루킷(초등교사)',
     description: '블루킷 수업 활동에 활용할 객관식·단답형 퀴즈를 생성하는 GPT',
@@ -2252,7 +2252,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-teacher-play-script',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '초등교사 수업 준비용 GPTs',
     title: '초등교사 맞춤형 연극 대본 작가',
     description: '초등학교 수업이나 행사에 활용할 연극 대본 작성을 지원하는 GPT',
@@ -2267,7 +2267,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-ai-digital-textbook-lesson-design',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '초등교사 수업 준비용 GPTs',
     title: '(초등) AI디지털교과서 수업 설계 by 호남샘',
     description: '과목과 성취기준을 바탕으로 AI 디지털교과서 수업 설계를 돕는 GPT',
@@ -2282,7 +2282,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-elementary-haengbal-generator',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '초등교사 수업 준비용 GPTs',
     title: '행발 생성기(초등)',
     description: '초등 생활기록부 행동특성 및 종합의견 작성을 지원하는 GPT',
@@ -2298,7 +2298,7 @@ AI 사용 중 교사가 해야 할 일:
 
   {
     id: 'gpt-student-record-writing',
-    category: 'GPTs',
+    category: 'GPTs-교원용',
     subCategory: '기타GPTs',
     title: '학생부 생기부 작성해드려요',
     description: '초·중·고 학생부, 생기부, 행발, 세특 작성 등을 지원하는 GPT',
@@ -2313,7 +2313,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-multiple-intelligence-elementary',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '기타GPTs',
     title: '다중지능테스트 초등1',
     description: '초등학생 대상 다중지능 검사 또는 진단 활동을 지원하는 GPT',
@@ -2328,7 +2328,7 @@ AI 사용 중 교사가 해야 할 일:
   },
   {
     id: 'gpt-programming-explain-elementary',
-    category: 'GPTs',
+    category: 'GPTs-학생용',
     subCategory: '기타GPTs',
     title: '프로그래밍 설명을 초등학생 수준으로 해설',
     description: '프로그래밍 관련 설명을 초등학생 눈높이로 쉽게 풀어주는 GPT',

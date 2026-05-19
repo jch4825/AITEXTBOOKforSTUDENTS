@@ -99,6 +99,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'ai-2-5', title: '안티그래비티 (Antigravity)', url: 'https://antigravity.google/', description: 'Google의 전문가용 바이브코딩 도구' },
           { id: 'ai-2-6', title: '노트북LM (NotebookLM)', url: 'https://notebooklm.google.com', description: '문서·PDF를 업로드하면 AI가 요약·질의응답해 주는 구글의 AI 노트 도구' },
           { id: 'ai-2-7', title: '스티치 (Stitch)', url: 'https://stitch.withgoogle.com/', description: 'Google의 AI UI 디자인 도구. 자연어 프롬프트로 앱·웹 UI 시안과 코드까지 생성' },
+          { id: 'ai-2-8', title: '오팔 (Opal)', url: 'https://opal.google/', description: 'Google Gemini 기반 워크플로우 제작 도구. 자연어로 업무 흐름을 설계하고 AI 앱처럼 실행할 수 있습니다.' },
         ],
       },
       {
