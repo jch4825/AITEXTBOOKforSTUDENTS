@@ -1261,6 +1261,9 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                     }
                     return <a {...props} href={href} target="_blank" rel="noopener noreferrer">{children}</a>;
                   },
+                  hr: () => (
+                    <hr className={lesson.id === 'l4-4' ? 'my-10 border-gray-300' : 'my-6 border-gray-300'} />
+                  ),
                 }}
               >
                 {normalizeKoreanMarkdownStrong(lesson.content.replace(/^[ \t]+/gm, ''))}
