@@ -33,3 +33,9 @@ metadata.json
 skill-work/
 AGENTS.md
 CLAUDE.md
+
+# Session opener monitoring — local operational data
+monitor-state.json
+monitor-prompts/
+health-reports/
+pending-resources/
