@@ -199,7 +199,17 @@ export const resourceCategories: ResourceCategory[] = [
     icon: Shield,
     iconBg: 'bg-red-50',
     iconColor: 'text-red-500',
-    subCategories: [],
+    subCategories: [
+      {
+        id: 'ethics-copyright',
+        label: '1. 저작권·공정이용 안내',
+        iconEmoji: '⚖️',
+        items: [
+          { id: 'eth-1-1', title: '생성형 AI 저작권 안내서 (한국저작권위원회)', url: 'https://www.copyright.or.kr/information-materials/publication/research-report/view.do?brdctsno=52591', description: '한국저작권위원회가 발간한 생성형 AI 저작물 활용 저작권 기준 안내서. 교사·학생 AI 결과물 사용 시 참고 필수' },
+          { id: 'eth-1-2', title: '생성형 AI 활용 저작물 저작권 등록 안내서', url: 'https://www.copyright.or.kr/information-materials/publication/research-report/view.do?brdctsno=54253', description: '한국저작권위원회의 2025년 안내서. 생성형 AI를 활용한 결과물의 저작권 등록 기준과 인간 기여 요건 설명' },
+        ],
+      },
+    ],
   },
   {
     id: 'lesson',
@@ -383,6 +393,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'pol-1-3', title: '초중등 디지털 인프라 관리 가이드', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=316&boardSeq=104618&lev=0&searchType=null&statusYN=W&page=3&s=moe&m=0302&opType=N', description: '교육부가 발표한 초·중등학교 디지털 인프라 구축·운영·관리 표준 가이드' },
           { id: 'pol-1-4', title: '제7차 교육정보화 기본계획', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=103106&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=0310&opType=N', description: '교육부가 수립한 제7차 교육정보화 기본계획. 교육정보화의 비전과 중점 추진 과제를 담은 공식 정책 문서' },
           { id: 'pol-1-6', title: '2025년 지능정보사회 실행계획', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=103108&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=0310&opType=N', description: '교육부의 2025년 지능정보사회 실행계획. 교육 분야 AI·디지털 전환을 위한 연도별 추진 과제' },
+          { id: 'pol-1-7', title: '함께학교 (교육부 소통 플랫폼)', url: 'https://www.togetherschool.go.kr/', description: '교육부가 운영하는 학생·학부모·교원 디지털 소통 플랫폼. 정책 공지, AI 디지털교육자료, 수업의 숲(교사 수업 공유) 제공' },
         ],
       },
       {
