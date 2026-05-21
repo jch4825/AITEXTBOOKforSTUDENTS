@@ -234,6 +234,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'sojung-hangul', title: '소중한글', url: 'https://sojunghangeul.com/', description: 'H2K Research의 한글 파닉스 학습 앱' },
           { id: 'artbongbong', title: '아트봉봉', url: 'https://school.art-bonbon.com/', description: '학교용 어린이 창작·미술 활동 콘텐츠 플랫폼' },
           { id: 'jajak-jajak', title: '자작자작', url: 'https://www.jajakjajak.com/', description: '생각 중심 글쓰기 AI 디지털 교육 플랫폼' },
+          { id: 'snorkl', title: '스노클 (Snorkl)', url: 'https://snorkl.app/', description: '학생이 풀이 과정과 설명을 음성·화면으로 제출하면 AI 피드백을 제공하는 수업 지원 도구 (해외)' },
         ],
       },
       {
@@ -252,6 +253,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'hira-opendata', title: '보건의료 빅데이터 개방시스템', url: 'https://opendata.hira.or.kr/home.do', description: '건강보험심사평가원의 보건의료 공공 데이터를 검색·활용할 수 있는 빅데이터 개방 서비스' },
           { id: 'kepco-bigdata', title: '전력 빅데이터 센터', url: 'https://bigdata.kepco.co.kr', description: '한국전력의 전력 사용·에너지 관련 데이터를 제공하는 빅데이터 플랫폼' },
           { id: 'culture-bigdata', title: '문화 빅데이터 플랫폼', url: 'http://www.bigdata-culture.kr/bigdata/', description: '문화·관광·콘텐츠 분야 데이터를 검색하고 활용할 수 있는 빅데이터 플랫폼' },
+          { id: 'tonggrami', title: '통그라미', url: 'https://tong.kostat.go.kr/front/bbs/information.do', description: '통계청 통계인재개발원의 실용통계교육 플랫폼. 설문·자료 수집·통계 분석·보고서 작성 등 통계 프로젝트 수업에 활용' },
         ],
       },
       {
