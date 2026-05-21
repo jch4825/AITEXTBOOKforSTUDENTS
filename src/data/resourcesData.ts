@@ -395,7 +395,6 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'pol-1-3', title: '초중등 디지털 인프라 관리 가이드', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=316&boardSeq=104618&lev=0&searchType=null&statusYN=W&page=3&s=moe&m=0302&opType=N', description: '교육부가 발표한 초·중등학교 디지털 인프라 구축·운영·관리 표준 가이드' },
           { id: 'pol-1-4', title: '제7차 교육정보화 기본계획', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=103106&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=0310&opType=N', description: '교육부가 수립한 제7차 교육정보화 기본계획. 교육정보화의 비전과 중점 추진 과제를 담은 공식 정책 문서' },
           { id: 'pol-1-6', title: '2025년 지능정보사회 실행계획', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=103108&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=0310&opType=N', description: '교육부의 2025년 지능정보사회 실행계획. 교육 분야 AI·디지털 전환을 위한 연도별 추진 과제' },
-          { id: 'pol-1-7', title: '함께학교 (교육부 소통 플랫폼)', url: 'https://www.togetherschool.go.kr/', description: '교육부가 운영하는 학생·학부모·교원 디지털 소통 플랫폼. 정책 공지, AI 디지털교육자료, 수업의 숲(교사 수업 공유) 제공' },
         ],
       },
       {
@@ -611,6 +610,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'gov-2-9', title: 'KISA 한국인터넷진흥원', url: 'https://www.kisa.or.kr', description: 'AI 보안·개인정보·사이버보안 정책과 가이드를 제공하는 공공기관' },
           { id: 'gov-3-1', title: 'KERIS 한국교육학술정보원', url: 'https://www.keris.or.kr', description: 'AI·디지털 교육 정책·교육정보화·에듀테크 연구 자료를 제공하는 기관' },
           { id: 'gov-3-2', title: 'KEDI 한국교육개발원', url: 'https://www.kedi.re.kr', description: '교육정책 연구와 AI·디지털 교육 관련 보고서를 탐색할 수 있는 연구기관' },
+          { id: 'pol-1-7', title: '함께학교 (교육부 소통 플랫폼)', url: 'https://www.togetherschool.go.kr/', description: '교육부가 운영하는 학생·학부모·교원 디지털 소통 플랫폼. 정책 공지, AI 디지털교육자료, 수업의 숲(교사 수업 공유) 제공' },
         ],
       },
     ],
