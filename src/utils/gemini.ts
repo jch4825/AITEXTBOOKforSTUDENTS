@@ -1,8 +1,8 @@
 import { GoogleGenAI } from '@google/genai';
 
-export const GEMINI_MODEL_CANDIDATES = ['gemini-3-flash-preview', 'gemini-2.5-flash'] as const;
+export const GEMINI_MODEL_CANDIDATES = ['gemini-3-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'] as const;
 
-export const GEMINI_MODEL_GUIDE = 'Gemini 3 Flash Preview 또는 Gemini 2.5 Flash';
+export const GEMINI_MODEL_GUIDE = 'Gemini 3 Flash, Gemini 2.5 Flash, 또는 Gemini 2.5 Flash Lite';
 
 const API_KEY_PROPAGATION_RETRY_DELAY_MS = 1800;
 
@@ -39,7 +39,6 @@ export function isApiKeyPropagationError(error: unknown): boolean {
   return /API_KEY_INVALID|API key expired|API key not valid|key expired/i.test(message);
 }
 
-// 신규 키 전파 지연(Google 인증 서버) 대응: API_KEY_INVALID 류 오류만 1회 자동 재시도.
 async function withApiKeyPropagationRetry<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
