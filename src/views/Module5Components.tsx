@@ -181,7 +181,7 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
             <div className="bg-green-950/20 border border-green-800/40 rounded-lg p-3">
               <div className="text-green-300 font-bold text-xs mb-2">📚 실제 성취기준 (2022 개정 교육과정 DB)</div>
               {realStandard === 'not-found' ? (
-                <div className="text-gray-400 text-xs">DB에서 찾을 수 없습니다. 위 예시 코드를 사용해 보세요.</div>
+                <div className="text-gray-400 text-xs">DB에서 찾을 수 없습니다. 다른 예시 코드를 사용해 보세요.</div>
               ) : (
                 <div className="flex flex-col gap-1.5 text-xs">
                   <div className="flex gap-3 flex-wrap">
