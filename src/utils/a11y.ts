@@ -8,6 +8,21 @@ const SCALE_TO_PX: Record<FontScale, string> = {
   xlarge: '21px',
 };
 
+const SINO_KOREAN_DIGITS = ['영', '일', '이', '삼', '사', '오', '육', '칠', '팔', '구'];
+
+function toSinoKoreanNumber(value: string): string {
+  const number = Number(value);
+  if (!Number.isInteger(number) || number < 0 || number > 99) return value;
+  if (number < 10) return SINO_KOREAN_DIGITS[number];
+  const tens = Math.floor(number / 10);
+  const ones = number % 10;
+  return `${tens > 1 ? SINO_KOREAN_DIGITS[tens] : ''}십${ones > 0 ? SINO_KOREAN_DIGITS[ones] : ''}`;
+}
+
+function spokenLessonPrefix(moduleNumber: string, lessonNumber: string): string {
+  return `${toSinoKoreanNumber(moduleNumber)} 장 ${toSinoKoreanNumber(lessonNumber)} 차시`;
+}
+
 export function applyFontScale(scale: FontScale) {
   document.documentElement.style.fontSize = SCALE_TO_PX[scale];
   saveFontScaleValue(scale);
@@ -43,9 +58,11 @@ export function stripMarkdown(text: string): string {
 
 export function normalizeForSpeech(text: string): string {
   return text
-    .replace(/\b(?:L|l)([0-9]+)-([0-9]+)\b/g, '$1 장 $2 차시')
-    .replace(/(^|\s)([0-5])-([0-9]{1,2})(?=\.)/g, '$1$2 장 $3 차시')
-    .replace(/(^|[^A-Za-z0-9.])([0-5])-([0-9]{1,2})(?![\d.])/g, '$1$2 장 $3 차시')
+    .replace(/\b(?:L|l)([0-9]+)-([0-9]+)\b/g, (_, moduleNumber, lessonNumber) => spokenLessonPrefix(moduleNumber, lessonNumber))
+    .replace(/(^|\s)([0-5])-([0-9]{1,2})\.\s+(?=\S)/g, (_, prefix, moduleNumber, lessonNumber) => `${prefix}${spokenLessonPrefix(moduleNumber, lessonNumber)}, `)
+    .replace(/(^|\s)([0-5])-([0-9]{1,2})\.(?=\s*$)/g, (_, prefix, moduleNumber, lessonNumber) => `${prefix}${spokenLessonPrefix(moduleNumber, lessonNumber)}`)
+    .replace(/(^|[^A-Za-z0-9.])([0-5])-([0-9]{1,2})\s*차시/g, (_, prefix, moduleNumber, lessonNumber) => `${prefix}${spokenLessonPrefix(moduleNumber, lessonNumber)}`)
+    .replace(/(^|[^A-Za-z0-9.])([0-5])-([0-9]{1,2})(?![\d.])/g, (_, prefix, moduleNumber, lessonNumber) => `${prefix}${spokenLessonPrefix(moduleNumber, lessonNumber)}`)
     .replace(/(\d+)\s*~\s*(\d+)\s*월에는/g, '$1월부터 $2월까지는')
     .replace(/(\d+)\s*~\s*(\d+)\s*월에/g, '$1월부터 $2월까지')
     .replace(/(\d+)\s*~\s*(\d+)\s*월[은는]/g, '$1월부터 $2월까지는')
