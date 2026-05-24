@@ -207,6 +207,8 @@ export const resourceCategories: ResourceCategory[] = [
         items: [
           { id: 'eth-1-1', title: '생성형 AI 저작권 안내서 (한국저작권위원회)', url: 'https://www.copyright.or.kr/information-materials/publication/research-report/view.do?brdctsno=52591', description: '한국저작권위원회가 발간한 생성형 AI 저작물 활용 저작권 기준 안내서. 교사·학생 AI 결과물 사용 시 참고 필수' },
           { id: 'eth-1-2', title: '생성형 AI 활용 저작물 저작권 등록 안내서', url: 'https://www.copyright.or.kr/information-materials/publication/research-report/view.do?brdctsno=54253', description: '한국저작권위원회의 2025년 안내서. 생성형 AI를 활용한 결과물의 저작권 등록 기준과 인간 기여 요건 설명' },
+          { id: 'eth-1-3', title: '인공지능 윤리 소통채널', url: 'https://ai.kisdi.re.kr/aieth/main/main.do', description: 'KISDI가 운영하는 AI 윤리·신뢰성 소통채널. AI 윤리기준, 자율점검표, 신뢰성 개발 안내서, 윤리교육 자료 확인 가능' },
+          { id: 'eth-1-4', title: '디지털윤리.kr', url: 'https://xn--2z1b40gs9nlqcf0n.kr/main.do', description: '디지털윤리 교육 자료실, 동향, 교육 안내, 체험 콘텐츠를 제공하는 디지털 윤리·안전 자료 포털' },
         ],
       },
     ],
