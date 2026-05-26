@@ -120,11 +120,11 @@ export const resourceCategories: ResourceCategory[] = [
         iconEmoji: '🎵',
         items: [
           { id: 'ai-5-1', title: '일레븐랩스 (ElevenLabs)', url: 'https://elevenlabs.io', description: '텍스트를 자연스러운 목소리로 변환하는 AI TTS 서비스. 다국어 지원 (해외)' },
+          { id: 'ai-5-6', title: '슈퍼톤 (Supertone)', url: 'https://www.supertone.ai/ko', description: '음성 합성·보이스 디자인·가창 음성 기술을 개발하는 한국 AI 오디오 기업' },
           { id: 'ai-5-2', title: '클로바 더빙', url: 'https://clovadubbing.naver.com', description: '네이버의 한국어 특화 AI 더빙·TTS 서비스. 영상에 자동 더빙 적용 가능' },
           { id: 'ai-5-3', title: '수노 AI (Suno AI)', url: 'https://suno.com', description: '텍스트 프롬프트만으로 완성된 노래(가사+반주)를 생성하는 AI 작곡 도구 (해외)' },
           { id: 'ai-5-4', title: '유디오 (Udio)', url: 'https://www.udio.com', description: '고품질 AI 음악 생성 도구. 다양한 장르와 세밀한 스타일 조정 지원 (해외)' },
           { id: 'ai-5-5', title: '타입캐스트 (Typecast)', url: 'https://typecast.ai', description: '한국어를 포함한 AI 성우 음성과 가상 캐릭터 음성 제작 (네오사피엔스)' },
-          { id: 'ai-5-6', title: '슈퍼톤 (Supertone)', url: 'https://supertone.ai', description: '음성 합성·보이스 디자인·가창 음성 기술을 개발하는 한국 AI 오디오 기업' },
           { id: 'ai-5-7', title: '웰세드 랩스 (WellSaid Labs)', url: 'https://wellsaidlabs.com', description: '기업 교육·마케팅용 AI 보이스오버 제작 플랫폼 (해외)' },
           { id: 'ai-5-8', title: '머프 AI (Murf AI)', url: 'https://murf.ai', description: '프레젠테이션·영상·광고용 AI 보이스오버 제작 도구 (해외)' },
           { id: 'ai-5-9', title: '플레이HT (PlayHT)', url: 'https://play.ht', description: 'API와 웹 도구로 AI 음성 생성·복제를 제공하는 플랫폼 (해외)' },
