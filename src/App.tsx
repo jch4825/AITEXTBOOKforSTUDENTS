@@ -64,7 +64,7 @@ export default function App() {
   const handleViewChange = (view: ViewType) => {
     stopSpeaking();
     setCurrentView(view);
-    if (view !== 'tutorial') setSelectedModule(null);
+    setSelectedModule(null);
   };
 
   const restartDiagnosticWithProgressReset = () => {
