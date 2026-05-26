@@ -176,6 +176,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'dev-7-7', title: '블랙 포레스트 랩스 (Black Forest Labs)', url: 'https://blackforestlabs.ai', description: 'FLUX 계열 이미지 생성 모델을 개발하는 생성 AI 연구·제품 기업 (해외)' },
           { id: 'vrew', title: '브루 (Vrew)', url: 'https://vrew.ai', description: '텍스트 편집 방식의 AI 영상 편집 도구. 자막 자동 생성과 영상 컷 편집 지원 (보이저엑스) (해외)' },
           { id: 'capcut', title: '캡컷 (CapCut)', url: 'https://www.capcut.com/', description: 'ByteDance의 무료 영상 편집 도구. AI 자동 자막·음성 합성·효과 등 다양한 편집 기능 (해외)' },
+          { id: 'meshy-ai', title: '메쉬 AI (Meshy AI)', url: 'https://www.meshy.ai/ko/discover', description: '텍스트·이미지에서 3D 모델과 텍스처를 생성하는 AI 3D 제작 도구 (해외)' },
         ],
       },
       {
@@ -582,6 +583,9 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'dev-5-2', title: '커서 (Cursor)', url: 'https://cursor.com', description: 'AI 에이전트와 코드 편집 기능을 결합한 개발자용 코드 에디터 (해외)' },
           { id: 'dev-5-3', title: '윈드서프 (Windsurf)', url: 'https://windsurf.com', description: 'AI 코드 에이전트와 개발 워크플로 자동화를 제공하는 IDE (해외)' },
           { id: 'dev-5-4', title: '레플릿 AI (Replit AI)', url: 'https://replit.com', description: '브라우저 기반 개발환경과 AI 코딩 보조 기능을 제공하는 플랫폼 (해외)' },
+          { id: 'opencode', title: '오픈코드 (OpenCode)', url: 'https://opencode.ai/ko', description: '터미널에서 동작하는 오픈소스 AI 코딩 에이전트 (해외)' },
+          { id: 'hermes-agent', title: '헤르메스 에이전트 (Hermes Agent)', url: 'https://github.com/NousResearch/hermes-agent', description: 'Nous Research가 공개한 오픈소스 AI 에이전트 프레임워크 GitHub 저장소 (해외)' },
+          { id: 'ubuntu-desktop', title: '우분투 데스크톱 (Ubuntu Desktop)', url: 'https://ubuntu.com/download/desktop', description: 'AI·개발 환경 구축에 널리 쓰이는 오픈소스 리눅스 운영체제 다운로드 (해외)' },
         ],
       },
       {
