@@ -646,18 +646,17 @@ export default function Resources() {
                     <p className="text-xs text-gray-500">★ 표시한 자료를 한곳에 모아 봅니다</p>
                   </span>
                 </header>
-                <ul className="divide-y divide-gray-100 rounded-2xl border border-gray-200 bg-white shadow-sm">
+                <div className="flex flex-col gap-2">
                   {favoriteEntries.map(entry => (
-                    <li key={entry.key}>
-                      <ItemRow
-                        item={entry.item}
-                        breadcrumb={`${entry.categoryTitle} › ${entry.subCategoryLabel}`}
-                        isFav={true}
-                        onToggleFav={() => toggleFav(entry.item.id)}
-                      />
-                    </li>
+                    <ResourceCard
+                      key={entry.key}
+                      item={entry.item}
+                      breadcrumb={`${entry.categoryTitle} › ${entry.subCategoryLabel}`}
+                      isFav={true}
+                      onToggleFav={() => toggleFav(entry.item.id)}
+                    />
                   ))}
-                </ul>
+                </div>
               </section>
             )}
 
@@ -735,19 +734,18 @@ export default function Resources() {
                 조건에 맞는 자료가 없습니다.
               </div>
             ) : (
-              <ul className="divide-y divide-gray-100 rounded-2xl border border-gray-200 bg-white shadow-sm">
+              <div className="flex flex-col gap-2">
                 {filteredResults.map(({ item, categoryTitle, subCategoryLabel, key }) => (
-                  <li key={key}>
-                    <ItemRow
-                      item={item}
-                      breadcrumb={`${categoryTitle} › ${subCategoryLabel}`}
-                      query={normalizedQuery}
-                      isFav={favorites.includes(item.id)}
-                      onToggleFav={() => toggleFav(item.id)}
-                    />
-                  </li>
+                  <ResourceCard
+                    key={key}
+                    item={item}
+                    breadcrumb={`${categoryTitle} › ${subCategoryLabel}`}
+                    query={normalizedQuery}
+                    isFav={favorites.includes(item.id)}
+                    onToggleFav={() => toggleFav(item.id)}
+                  />
                 ))}
-              </ul>
+              </div>
             )}
           </section>
         )}
