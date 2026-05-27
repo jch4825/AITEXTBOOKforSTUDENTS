@@ -13,6 +13,9 @@ const CATEGORY_ORDER = [
   'ai-industry-experts',
 ];
 
+const FEATURED_ITEM_ID = 'r-3-4';
+const STRONG_RECOMMENDED_ITEM_ID = 'teachle-tools';
+
 const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
   'school-admin-support': {
     title: '핵심 도움 자료',
@@ -138,8 +141,8 @@ function ResourceCard({
   breadcrumb?: string;
   query?: string;
 }) {
-  const isFeatured = item.id === 'r-3-4';
-  const isStrongRecommended = item.id === 'teachle-tools';
+  const isFeatured = item.id === FEATURED_ITEM_ID;
+  const isStrongRecommended = item.id === STRONG_RECOMMENDED_ITEM_ID;
   const hasUrl = !!item.url;
 
   const containerBgClass = isFeatured
@@ -261,8 +264,8 @@ function ItemRow({
   isFav: boolean;
   onToggleFav: () => void;
 }) {
-  const isFeatured = item.id === 'r-3-4';
-  const isStrongRecommended = item.id === 'teachle-tools';
+  const isFeatured = item.id === FEATURED_ITEM_ID;
+  const isStrongRecommended = item.id === STRONG_RECOMMENDED_ITEM_ID;
   const rowClass =
     `group flex w-full items-start gap-3 px-4 py-3 pr-12 text-left transition focus:outline-none focus:ring-2 ${
       isFeatured
