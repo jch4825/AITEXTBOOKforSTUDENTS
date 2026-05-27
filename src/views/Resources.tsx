@@ -48,8 +48,6 @@ const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
   },
 };
 
-const PREVIEW_COUNT = 5;
-
 const CATEGORY_DOOR_PALETTE: Record<string, { base: string; shade: string; accent: string }> = {
   'school-admin-support': { base: '#fef3c7', shade: '#fde68a', accent: '#d97706' },
   'ai-basics': { base: '#dbeafe', shade: '#bfdbfe', accent: '#2563eb' },
@@ -264,124 +262,6 @@ function ResourceCard({
   );
 }
 
-function ItemRow({
-  item,
-  breadcrumb,
-  query = '',
-  isFav,
-  onToggleFav,
-}: {
-  item: ResourceItem;
-  breadcrumb?: string;
-  query?: string;
-  isFav: boolean;
-  onToggleFav: () => void;
-}) {
-  const isFeatured = item.id === FEATURED_ITEM_ID;
-  const isStrongRecommended = item.id === STRONG_RECOMMENDED_ITEM_ID;
-  const rowClass =
-    `group flex w-full items-start gap-3 px-4 py-3 pr-12 text-left transition focus:outline-none focus:ring-2 ${
-      isFeatured
-        ? 'bg-amber-50/80 hover:bg-amber-100/80 focus:ring-amber-300'
-        : isStrongRecommended
-          ? 'bg-emerald-50/80 hover:bg-emerald-100/80 focus:ring-emerald-300'
-        : 'hover:bg-canva-purple/5 focus:ring-canva-purple/30'
-    }`;
-
-  const content = (
-    <>
-      <span
-        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ring-1 ${
-          isFeatured
-            ? 'bg-amber-100 text-amber-700 ring-amber-200'
-            : isStrongRecommended
-              ? 'bg-emerald-100 text-emerald-700 ring-emerald-200'
-            : 'bg-gray-50 text-gray-400 ring-gray-200 group-hover:text-canva-purple'
-        }`}
-      >
-        {item.url ? <ExternalLink size={14} /> : <Link2 size={14} />}
-      </span>
-      <span className="min-w-0 flex-1">
-        {breadcrumb && (
-          <span className="mb-0.5 block text-[10px] font-bold uppercase tracking-wide text-gray-400">
-            {breadcrumb}
-          </span>
-        )}
-        {isFeatured && (
-          <span className="mb-1 inline-flex rounded-full bg-amber-200/70 px-2 py-0.5 text-[10px] font-extrabold text-amber-800">
-            필수 확인
-          </span>
-        )}
-        {isStrongRecommended && (
-          <span className="mb-1 inline-flex rounded-full bg-emerald-200/70 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">
-            강력 추천
-          </span>
-        )}
-        <span
-          className={`block font-bold leading-snug ${
-            isFeatured
-              ? 'text-sm text-amber-950 group-hover:text-amber-800'
-              : isStrongRecommended
-                ? 'text-sm text-emerald-950 group-hover:text-emerald-800'
-              : 'text-xs text-gray-900 group-hover:text-canva-purple'
-          }`}
-        >
-          {highlight(item.title, query)}
-        </span>
-        {item.description && (
-          <span className={`mt-1 block text-[11px] leading-relaxed ${
-            isFeatured
-              ? 'text-amber-900/80'
-              : isStrongRecommended
-                ? 'text-emerald-900/80'
-                : 'text-gray-500'
-          }`}>
-            {highlight(item.description, query)}
-          </span>
-        )}
-        <span className={`mt-1.5 block truncate text-[10px] font-mono ${
-          isFeatured
-            ? 'text-amber-700/80'
-            : isStrongRecommended
-              ? 'text-emerald-700/80'
-              : 'text-gray-400'
-        }`}>
-          {getHostName(item.url)}
-        </span>
-      </span>
-    </>
-  );
-
-  return (
-    <div className="relative">
-      {item.url ? (
-        <a href={item.url} target="_blank" rel="noopener noreferrer" className={rowClass}>
-          {content}
-        </a>
-      ) : (
-        <div className={`${rowClass} cursor-default opacity-65`}>{content}</div>
-      )}
-      <button
-        type="button"
-        onClick={onToggleFav}
-        aria-label={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
-        title={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
-        className={`absolute right-1.5 top-1.5 z-10 rounded-full p-2.5 transition ${
-          isFav
-            ? 'text-amber-400 hover:bg-amber-50'
-            : isFeatured
-              ? 'text-amber-600/80 hover:bg-amber-200/60 hover:text-amber-700'
-              : isStrongRecommended
-                ? 'text-emerald-600/80 hover:bg-emerald-200/60 hover:text-emerald-700'
-                : 'text-gray-400 hover:bg-gray-100 hover:text-amber-500'
-        }`}
-      >
-        <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
-      </button>
-    </div>
-  );
-}
-
 function SubCategoryDoor({
   subCategory,
   categoryId,
@@ -488,77 +368,6 @@ function SubCategoryDoor({
         )}
       </AnimatePresence>
     </div>
-  );
-}
-
-function SubCategoryCard({
-  subCategory,
-  favorites,
-  onToggleFav,
-}: {
-  subCategory: ResourceSubCategory;
-  favorites: string[];
-  onToggleFav: (id: string) => void;
-}) {
-  const [expanded, setExpanded] = useState(false);
-  const total = subCategory.items.length;
-  const visibleItems = expanded ? subCategory.items : subCategory.items.slice(0, PREVIEW_COUNT);
-  const hasMore = total > PREVIEW_COUNT;
-  const isSchoolAdmin = subCategory.id === 'school-admin';
-  const isTeachingTools = subCategory.id === 'teaching-tools';
-
-  return (
-    <section className={`rounded-2xl border shadow-sm ${
-      isSchoolAdmin
-        ? 'border-amber-200 bg-amber-50/45'
-        : isTeachingTools
-          ? 'border-emerald-200 bg-emerald-50/45'
-          : 'border-gray-200 bg-white'
-    }`}>
-      <header className={`flex items-center gap-3 border-b px-4 py-3 ${
-        isSchoolAdmin
-          ? 'border-amber-100'
-          : isTeachingTools
-            ? 'border-emerald-100'
-            : 'border-gray-100'
-      }`}>
-        <span className="text-lg leading-none">{subCategory.iconEmoji}</span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-sm font-extrabold text-gray-900">{subCategory.label}</span>
-          <span className="mt-0.5 block text-[11px] text-gray-500">{total}개 자료</span>
-        </span>
-      </header>
-
-      {total === 0 ? (
-        <p className="px-4 py-6 text-center text-xs text-gray-400">자료 준비 중</p>
-      ) : (
-        <ul className="divide-y divide-gray-100">
-          {visibleItems.map(item => (
-            <li key={item.id}>
-              <ItemRow
-                item={item}
-                isFav={favorites.includes(item.id)}
-                onToggleFav={() => onToggleFav(item.id)}
-              />
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {hasMore && (
-        <button
-          type="button"
-          onClick={() => setExpanded(v => !v)}
-          className="flex w-full items-center justify-center gap-1.5 border-t border-gray-100 py-2.5 text-xs font-bold text-canva-purple hover:bg-canva-purple/5"
-        >
-          {expanded ? '접기' : `+${total - PREVIEW_COUNT}개 더 보기`}
-          <ChevronDown
-            size={14}
-            className={`transition-transform ${expanded ? 'rotate-180' : ''}`}
-          />
-        </button>
-      )}
-    </section>
   );
 }
 
@@ -824,9 +633,10 @@ export default function Resources() {
 
                     <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
                       {category.subCategories.map(sub => (
-                        <SubCategoryCard
+                        <SubCategoryDoor
                           key={sub.id}
                           subCategory={sub}
+                          categoryId={category.id}
                           favorites={favorites}
                           onToggleFav={toggleFav}
                         />
