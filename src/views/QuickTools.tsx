@@ -209,7 +209,7 @@ function ToolCard({
         <p className={`font-bold text-sm leading-tight mb-0.5 transition-colors ${isExternal ? 'text-gray-800 group-hover:text-gray-600' : 'text-gray-900 group-hover:text-canva-purple'}`}>
           {tool.title}
         </p>
-        <p className="text-[11px] text-gray-500 leading-snug line-clamp-2">{tool.description}</p>
+        <p className="text-[11px] text-gray-500 leading-snug">{tool.description}</p>
         {isExternal && tool.hostLabel && (
           <p className="text-[10px] text-gray-400 font-mono mt-0.5 truncate">{tool.hostLabel}</p>
         )}

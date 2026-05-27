@@ -60,6 +60,8 @@ const CATEGORY_DOOR_PALETTE: Record<string, { base: string; shade: string; accen
 
 const DEFAULT_DOOR_PALETTE = { base: '#f1f5f9', shade: '#e2e8f0', accent: '#475569' };
 
+const DEFAULT_OPEN_CATEGORIES = new Set(['school-admin-support']);
+
 const TAG_RULES: Array<{ tag: string; pattern: RegExp }> = [
   { tag: '초등', pattern: /초등/ },
   { tag: '한글·문해', pattern: /한글|문해/ },
@@ -273,7 +275,7 @@ function SubCategoryDoor({
   favorites: string[];
   onToggleFav: (id: string) => void;
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(DEFAULT_OPEN_CATEGORIES.has(categoryId));
   const total = subCategory.items.length;
   const palette = CATEGORY_DOOR_PALETTE[categoryId] ?? DEFAULT_DOOR_PALETTE;
 
