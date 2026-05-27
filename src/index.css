@@ -782,38 +782,6 @@ html.home-snap-scroll {
     11rem 1rem 0 -6rem rgba(0, 196, 204, 0.34);
 }
 
-.moholy-surface-resources {
-  background:
-    linear-gradient(90deg, rgba(14, 19, 24, 0.04) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
-    #f7f8fb;
-  background-size: 40px 40px;
-}
-
-.moholy-surface-resources::before {
-  left: -10rem;
-  top: 5rem;
-  height: 20rem;
-  width: 48rem;
-  background:
-    linear-gradient(142deg, transparent 0 25%, rgba(139, 61, 255, 0.16) 25% 35%, transparent 35% 50%, rgba(255, 192, 64, 0.18) 50% 60%, transparent 60%),
-    repeating-linear-gradient(0deg, rgba(14, 19, 24, 0.055) 0 2px, transparent 2px 22px);
-  transform: rotate(9deg);
-  opacity: 0.9;
-}
-
-.moholy-surface-resources::after {
-  right: -5rem;
-  bottom: 6rem;
-  left: auto;
-  height: 17rem;
-  width: 17rem;
-  border-color: rgba(0, 196, 204, 0.13);
-  box-shadow:
-    -8rem -2rem 0 -5.2rem rgba(255, 84, 76, 0.18),
-    -12rem 3.5rem 0 -6.2rem rgba(139, 61, 255, 0.18);
-}
-
 .klee-surface {
   position: relative;
   overflow: hidden;

@@ -475,7 +475,7 @@ export default function Resources() {
   };
 
   return (
-    <div className="moholy-surface moholy-surface-resources min-h-screen">
+    <div className="moholy-surface moholy-surface-tools min-h-screen">
       <div className="relative z-10 mx-auto max-w-5xl px-4 py-8 sm:py-10">
         <header className="mb-6 text-center">
           <p className="mb-2 text-xs font-bold text-canva-purple">AI Bridge Link Library</p>
