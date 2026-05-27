@@ -125,6 +125,129 @@ function useFavorites() {
   return { favorites, toggle };
 }
 
+function ResourceCard({
+  item,
+  isFav,
+  onToggleFav,
+  breadcrumb,
+  query = '',
+}: {
+  item: ResourceItem;
+  isFav: boolean;
+  onToggleFav: () => void;
+  breadcrumb?: string;
+  query?: string;
+}) {
+  const isFeatured = item.id === 'r-3-4';
+  const isStrongRecommended = item.id === 'teachle-tools';
+  const hasUrl = !!item.url;
+
+  const containerBgClass = isFeatured
+    ? 'bg-amber-50/80 border-amber-200'
+    : isStrongRecommended
+      ? 'bg-emerald-50/80 border-emerald-200'
+      : 'bg-white border-gray-200';
+
+  const iconWrapClass = isFeatured
+    ? 'bg-amber-100 text-amber-700 ring-amber-200'
+    : isStrongRecommended
+      ? 'bg-emerald-100 text-emerald-700 ring-emerald-200'
+      : 'bg-gray-50 text-gray-400 ring-gray-200';
+
+  const titleClass = isFeatured
+    ? 'text-amber-950 group-hover:text-amber-800'
+    : isStrongRecommended
+      ? 'text-emerald-950 group-hover:text-emerald-800'
+      : 'text-gray-900 group-hover:text-canva-purple';
+
+  const descClass = isFeatured
+    ? 'text-amber-900/80'
+    : isStrongRecommended
+      ? 'text-emerald-900/80'
+      : 'text-gray-500';
+
+  const hostClass = isFeatured
+    ? 'text-amber-700/80'
+    : isStrongRecommended
+      ? 'text-emerald-700/80'
+      : 'text-gray-400';
+
+  const cardClass =
+    `group relative flex items-start gap-3 ${containerBgClass} border rounded-xl px-3 py-3 pr-12 text-left transition-all hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-canva-purple/30 ${hasUrl ? '' : 'opacity-65 cursor-default'}`;
+
+  const inner = (
+    <>
+      <span
+        className={`shrink-0 mt-0.5 flex h-10 w-10 items-center justify-center rounded-xl ring-1 ${iconWrapClass}`}
+      >
+        {hasUrl ? <ExternalLink size={18} /> : <Link2 size={18} />}
+      </span>
+      <span className="min-w-0 flex-1">
+        {breadcrumb && (
+          <span className="mb-0.5 block text-[10px] font-bold uppercase tracking-wide text-gray-400">
+            {breadcrumb}
+          </span>
+        )}
+        {isFeatured && (
+          <span className="mb-1 inline-flex rounded-full bg-amber-200/70 px-2 py-0.5 text-[10px] font-extrabold text-amber-800">
+            필수 확인
+          </span>
+        )}
+        {isStrongRecommended && (
+          <span className="mb-1 inline-flex rounded-full bg-emerald-200/70 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800">
+            강력 추천
+          </span>
+        )}
+        <span className={`block text-sm font-bold leading-tight transition-colors ${titleClass}`}>
+          {highlight(item.title, query)}
+        </span>
+        {item.description && (
+          <span className={`mt-1 block text-[11px] leading-snug ${descClass}`}>
+            {highlight(item.description, query)}
+          </span>
+        )}
+        <span className={`mt-1.5 block truncate text-[10px] font-mono ${hostClass}`}>
+          {getHostName(item.url)}
+        </span>
+      </span>
+    </>
+  );
+
+  return (
+    <div className="relative">
+      {hasUrl ? (
+        <a
+          href={item.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cardClass}
+        >
+          {inner}
+        </a>
+      ) : (
+        <div className={cardClass}>{inner}</div>
+      )}
+      <button
+        type="button"
+        onClick={onToggleFav}
+        aria-label={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
+        title={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
+        className={`absolute right-1.5 top-1.5 z-10 rounded-full p-2 transition ${
+          isFav
+            ? 'text-amber-400 hover:bg-amber-50'
+            : isFeatured
+              ? 'text-amber-600/80 hover:bg-amber-200/60 hover:text-amber-700'
+              : isStrongRecommended
+                ? 'text-emerald-600/80 hover:bg-emerald-200/60 hover:text-emerald-700'
+                : 'text-gray-400 hover:bg-gray-100 hover:text-amber-500'
+        }`}
+      >
+        <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
+      </button>
+    </div>
+  );
+}
+
 function ItemRow({
   item,
   breadcrumb,
