@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { ChevronDown, ExternalLink, Link2, Search, Star, X } from 'lucide-react';
 import { resourceCategories, type ResourceCategory, type ResourceItem, type ResourceSubCategory } from '../data/resourcesData';
 import { getResourceFavorites, saveResourceFavorites } from '../services/storage';
@@ -48,6 +49,18 @@ const CATEGORY_DISPLAY: Record<string, { title: string; subtitle: string }> = {
 };
 
 const PREVIEW_COUNT = 5;
+
+const CATEGORY_DOOR_PALETTE: Record<string, { base: string; shade: string; accent: string }> = {
+  'school-admin-support': { base: '#fef3c7', shade: '#fde68a', accent: '#d97706' },
+  'ai-basics': { base: '#dbeafe', shade: '#bfdbfe', accent: '#2563eb' },
+  'ethics': { base: '#fee2e2', shade: '#fecaca', accent: '#ef4444' },
+  'lesson': { base: '#ede9fe', shade: '#ddd6fe', accent: '#7c3aed' },
+  'policy': { base: '#f1f5f9', shade: '#e2e8f0', accent: '#475569' },
+  'research-etc': { base: '#dcfce7', shade: '#bbf7d0', accent: '#16a34a' },
+  'ai-industry-experts': { base: '#e0e7ff', shade: '#c7d2fe', accent: '#4f46e5' },
+};
+
+const DEFAULT_DOOR_PALETTE = { base: '#f1f5f9', shade: '#e2e8f0', accent: '#475569' };
 
 const TAG_RULES: Array<{ tag: string; pattern: RegExp }> = [
   { tag: '초등', pattern: /초등/ },
@@ -365,6 +378,115 @@ function ItemRow({
       >
         <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
       </button>
+    </div>
+  );
+}
+
+function SubCategoryDoor({
+  subCategory,
+  categoryId,
+  favorites,
+  onToggleFav,
+}: {
+  subCategory: ResourceSubCategory;
+  categoryId: string;
+  favorites: string[];
+  onToggleFav: (id: string) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const total = subCategory.items.length;
+  const palette = CATEGORY_DOOR_PALETTE[categoryId] ?? DEFAULT_DOOR_PALETTE;
+
+  const itemPositions = [
+    { x: '1.9rem', y: '-0.95rem' },
+    { x: '2.65rem', y: '0.05rem' },
+    { x: '1.9rem', y: '1.05rem' },
+  ];
+
+  return (
+    <div className="min-w-0">
+      <button
+        type="button"
+        onClick={() => setIsOpen(v => !v)}
+        aria-expanded={isOpen}
+        className={`resource-card group flex min-h-24 w-full items-center gap-3 rounded-2xl border bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-canva-purple/30 ${
+          isOpen ? 'border-canva-purple ring-2 ring-canva-purple/15' : 'border-gray-200'
+        }`}
+      >
+        <span
+          className="tool-palette-scene"
+          aria-hidden="true"
+          data-open={isOpen}
+          style={{
+            '--palette-base': palette.base,
+            '--palette-shade': palette.shade,
+            '--palette-accent': palette.accent,
+          } as React.CSSProperties}
+        >
+          <span className="tool-palette-wrap">
+            <span className="tool-palette-base">
+              <span className="tool-palette-shine" />
+              <span className="tool-palette-symbol text-base leading-none">
+                {subCategory.iconEmoji}
+              </span>
+            </span>
+            {itemPositions.map((pos, index) => (
+              <span
+                key={index}
+                className="tool-palette-item"
+                style={{
+                  '--palette-item-index': index,
+                  '--palette-item-x': pos.x,
+                  '--palette-item-y': pos.y,
+                } as React.CSSProperties}
+              />
+            ))}
+          </span>
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-extrabold text-gray-900">{subCategory.label}</span>
+          <span className="mt-1 block text-[11px] font-bold text-canva-purple">{total}개 자료</span>
+        </span>
+        <ChevronDown
+          size={18}
+          className={`shrink-0 text-gray-400 transition-transform ${isOpen ? 'rotate-180 text-canva-purple' : ''}`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.section
+            key={`${subCategory.id}-panel`}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.18 }}
+            className="overflow-hidden"
+          >
+            <div className="mt-2 max-h-[70vh] overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
+              <div className="border-b border-gray-100 px-4 py-3">
+                <h3 className="text-sm font-extrabold text-gray-900">{subCategory.label}</h3>
+              </div>
+              <div className="p-3">
+                {total === 0 ? (
+                  <p className="px-1 py-6 text-center text-xs text-gray-400">자료 준비 중</p>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {subCategory.items.map(item => (
+                      <ResourceCard
+                        key={item.id}
+                        item={item}
+                        isFav={favorites.includes(item.id)}
+                        onToggleFav={() => onToggleFav(item.id)}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
