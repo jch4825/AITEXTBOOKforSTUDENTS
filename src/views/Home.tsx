@@ -187,7 +187,12 @@ function BrandScrollSection() {
             <p className="brand-scroll-eyebrow">{scene.eyebrow}</p>
             <h2>
               {scene.title.map((line) => (
-                <span key={line}>{line}</span>
+                <span key={line}>
+                  {line === 'AI로부터 소외되지 않는 교실.' && (
+                    <small className="brand-scroll-title-prefix">아이들이</small>
+                  )}
+                  {line}
+                </span>
               ))}
             </h2>
             {scene.detail && <p className="brand-scroll-detail">{scene.detail}</p>}
@@ -216,7 +221,7 @@ function BrandScrollSection() {
         </motion.div>
         <div className="brand-scroll-team-bar">
           <p>경상국립대학교 AI융합교육 전공 교원 4인으로 이루어진 캡스톤 디자인 프로젝트팀</p>
-          <p>정상태 · 박주연 · 전창한 · 이정윤</p>
+          <p>초등교사 정상태 · 초등교사 박주연 · 초등교사 이정윤 · 특수교사 전창한 · 경상국립대학 교수 김선영(지도·감독)</p>
           <p>AI Bridge는 전체 내용과 과정이 바이브 코딩으로 제작되었습니다.</p>
           <footer className="brand-scroll-footer">
             <span>AI Bridge by Team Zer0-Gap</span>

@@ -370,6 +370,14 @@ html.home-snap-scroll {
   margin-left: clamp(0rem, 4vw, 4rem);
 }
 
+.brand-scroll-title-prefix {
+  display: inline-block;
+  margin-right: 0.4em;
+  font-size: 0.18em;
+  line-height: 1;
+  vertical-align: baseline;
+}
+
 .brand-scroll-detail {
   margin-top: 1.6rem;
   max-width: 42rem;
