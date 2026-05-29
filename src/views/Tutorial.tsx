@@ -13,6 +13,7 @@ import { useExternalStorageState } from '../hooks/useExternalStorageState';
 import PersonaRecommendCard from '../components/onboarding/PersonaRecommendCard';
 import { getModuleVisibility } from '../data/moduleVisibility';
 import { applyFontScale, stopSpeaking } from '../utils/a11y';
+import { getKnownLearningDictionaryEntry } from '../utils/learningDictionary';
 import { loadPersona } from '../hooks/useDiagnostic';
 import {
   clearGeminiApiKey,
@@ -526,6 +527,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [l11GuideStyle, setL11GuideStyle] = useState<React.CSSProperties>({});
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const runIdRef = useRef(0);
+  const dictRequestIdRef = useRef(0);
   const leftScrollRef = useRef<HTMLDivElement | null>(null);
   const l11InputRef = useRef<HTMLTextAreaElement | null>(null);
   const l11ResetRef = useRef<HTMLButtonElement | null>(null);
@@ -670,7 +672,13 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     setShowOverlay(false);
   };
 
-  const DICT_SYSTEM_PROMPT = `너는 교사를 위한 AI·디지털 교육 용어 해설 전문가야. 초등 교사가 AI를 배우다가 모르는 단어나 개념을 물어보면 다음 형식으로 설명해.
+  const DICT_SYSTEM_PROMPT = `너는 교사를 위한 AI·디지털 교육 용어 해설 전문가야. 초등 교사가 AI Bridge 학습 모듈을 배우다가 모르는 단어나 개념을 물어보면 AI·디지털 교육 맥락을 최우선으로 해석하고 다음 형식으로 설명해.
+
+[맥락 고정]
+- MCP는 이 프로그램에서 Model Context Protocol을 뜻한다. AI가 외부 자료·도구와 정해진 방식으로 연결되게 하는 규격으로 설명한다.
+- MCP를 마이크로소프트 시험, 자격증, Microsoft Certified Professional로 설명하지 않는다.
+- 바이브코딩은 교육용 코딩 학습 플랫폼이 아니라, 사람이 자연어로 지시하고 AI가 코드를 만들거나 수정하게 하는 작업 방식으로 설명한다.
+- 약어가 여러 뜻을 가질 수 있어도, 사용자가 별도 맥락을 쓰지 않으면 AI 교육·디지털 도구 맥락의 뜻을 우선한다.
 
 ## 한 줄 설명
 교사가 바로 이해할 수 있는 쉬운 말 1~2문장.
@@ -684,7 +692,19 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 규칙: 전문 용어 최대한 피하기. 짧고 명확하게. 한국어로만.`;
 
   const handleDictSearch = async () => {
-    if (!dictWord.trim() || isDictLoading) return;
+    const searchTerm = dictWord.trim();
+    if (!searchTerm) return;
+
+    const requestId = dictRequestIdRef.current + 1;
+    dictRequestIdRef.current = requestId;
+
+    const knownEntry = getKnownLearningDictionaryEntry(searchTerm);
+    if (knownEntry) {
+      setIsDictLoading(false);
+      setDictResult(knownEntry);
+      return;
+    }
+
     const apiKey = getGeminiApiKey();
     if (!apiKey) {
       setDictResult('API 키가 필요합니다. [1-4. API 키 발급] 레슨에서 먼저 등록해 주세요.');
@@ -696,17 +716,21 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       const response = await streamGemini({
         apiKey,
         systemInstruction: DICT_SYSTEM_PROMPT,
-        contents: [{ role: 'user', parts: [{ text: `"${dictWord.trim()}"` }] }],
+        contents: [{ role: 'user', parts: [{ text: `"${searchTerm}"` }] }],
       });
       let accumulated = '';
       for await (const chunk of response) {
+        if (requestId !== dictRequestIdRef.current) return;
         accumulated += chunk.text ?? '';
         setDictResult(accumulated);
       }
     } catch (err) {
+      if (requestId !== dictRequestIdRef.current) return;
       setDictResult(`오류가 발생했습니다: ${friendlyApiError(err)}`);
     } finally {
-      setIsDictLoading(false);
+      if (requestId === dictRequestIdRef.current) {
+        setIsDictLoading(false);
+      }
     }
   };
 
@@ -1881,7 +1905,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 />
                 <button
                   onClick={handleDictSearch}
-                  disabled={isDictLoading || !dictWord.trim()}
+                  disabled={!dictWord.trim()}
                   className="px-4 py-2 bg-lime-600 hover:bg-lime-700 disabled:opacity-40 text-white text-sm font-bold rounded-lg transition-colors"
                 >
                   {isDictLoading ? '…' : '찾기'}
@@ -1889,7 +1913,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               </div>
               {!hasApiKey && (
                 <p className="mt-2 text-[11px] text-amber-600">
-                  ⚠️ API 키가 없으면 검색이 안 됩니다.{' '}
+                  ⚠️ 기본 용어 외 검색에는 API 키가 필요합니다.{' '}
                   <button
                     onClick={() => { stopSpeaking(); setShowDict(false); onNavigateToLesson('l1-4'); }}
                     className="underline font-bold"
