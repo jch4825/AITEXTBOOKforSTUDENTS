@@ -250,6 +250,19 @@ export const Lesson47Interactive = ({ onExecute }: { onExecute: (data: {title: s
     }, 1800);
   };
 
+  const handleBack = () => {
+    setAddMenuOpen(false);
+    setCreateSubmenuOpen(false);
+    if (step === 5) {
+      setUploaded(false);
+      setChatSent(false);
+      setChatInput('');
+      setShowResponse(false);
+      setAiTyping(false);
+    }
+    setStep(s => Math.max(1, s - 1));
+  };
+
   const handleComplete = () => {
     const resultJSX = (
       <div className="flex flex-col gap-3 w-full">
@@ -283,18 +296,33 @@ export const Lesson47Interactive = ({ onExecute }: { onExecute: (data: {title: s
     <div className="flex-1 bg-[#0e1318] rounded-xl p-0 border border-gray-800 flex flex-col overflow-hidden">
       {/* Claude 시뮬레이션 헤더 */}
       <div className="flex items-center gap-2 px-4 py-2.5 bg-[#1a1d24] border-b border-gray-800">
-        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-orange-400 to-amber-600 flex items-center justify-center text-[10px] font-bold text-white">C</div>
-        <div className="text-xs text-gray-300 font-semibold">Claude.ai — Skill 업로드 시뮬레이터</div>
-        <div className="ml-auto flex gap-1">
+        <div className="w-5 h-5 shrink-0 rounded-full bg-gradient-to-br from-orange-400 to-amber-600 flex items-center justify-center text-[10px] font-bold text-white">C</div>
+        <div className="text-xs text-gray-300 font-semibold truncate min-w-0">Claude.ai — Skill 업로드 시뮬레이터</div>
+        <div className="ml-auto hidden md:flex gap-1">
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/70"></div>
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></div>
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/70"></div>
         </div>
+        {/* 모바일 전용: 외부 사이드바를 숨기는 대신 헤더에 이전/스텝 표시 */}
+        <div className="ml-auto md:hidden flex items-center gap-2 shrink-0">
+          <button
+            onClick={handleBack}
+            disabled={step <= 1}
+            className="text-[10px] px-2 py-1 rounded border border-gray-700 text-gray-300 hover:text-white hover:border-gray-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            title="직전 단계로 돌아가기"
+          >
+            ← 이전
+          </button>
+          <div className="text-[10px] text-gray-500">
+            <span className="text-canva-teal font-bold">{Math.min(step, 5)}</span>
+            <span className="text-gray-700">/5</span>
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* 좌측 사이드바 (Claude 스타일) */}
-        <div className="w-[180px] bg-[#141820] border-r border-gray-800 p-3 flex flex-col gap-1.5">
+        {/* 좌측 사이드바 (Claude 스타일) — 모바일에서는 숨김(헤더로 컨트롤 이동) */}
+        <div className="hidden md:flex w-[180px] bg-[#141820] border-r border-gray-800 p-3 flex-col gap-1.5">
           <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">메뉴</div>
           <div className="text-xs text-gray-400 px-2 py-1.5 rounded hover:bg-gray-800/50">💬 새 대화</div>
           <div className="text-xs text-gray-400 px-2 py-1.5 rounded hover:bg-gray-800/50">📁 Projects</div>
@@ -307,19 +335,7 @@ export const Lesson47Interactive = ({ onExecute }: { onExecute: (data: {title: s
           <div className="text-xs text-gray-500 px-2 py-1.5">⚙️ 설정</div>
           <div className="mt-auto border-t border-gray-800 pt-2 flex items-center justify-between gap-2">
             <button
-              onClick={() => {
-                setAddMenuOpen(false);
-                setCreateSubmenuOpen(false);
-                if (step === 5) {
-                  // 업로드 완료 화면에서 되돌아가면 업로드/대화 상태도 초기화
-                  setUploaded(false);
-                  setChatSent(false);
-                  setChatInput('');
-                  setShowResponse(false);
-                  setAiTyping(false);
-                }
-                setStep(s => Math.max(1, s - 1));
-              }}
+              onClick={handleBack}
               disabled={step <= 1}
               className="text-[10px] px-2 py-1 rounded border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               title="직전 단계로 돌아가기"
