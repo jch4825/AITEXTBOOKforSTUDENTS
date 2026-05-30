@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, BookOpen, Wrench, GraduationCap, CheckCircle2, Key, X, LogOut, RotateCcw, ChevronLeft, Info } from 'lucide-react';
+import { Home, BookOpen, Wrench, GraduationCap, CheckCircle2, Key, X, LogOut, RotateCcw, ChevronLeft, Info, Bug } from 'lucide-react';
 import { ViewType, Module, Persona } from '../types';
 import { modules, lessons } from '../data/tutorialData';
 import { motion } from 'motion/react';
@@ -7,7 +7,9 @@ import { GEMINI_MODEL_GUIDE } from '../utils/gemini';
 import { getModuleVisibility } from '../data/moduleVisibility';
 import { loadPersona } from '../hooks/useDiagnostic';
 import { clearGeminiApiKey, hasGeminiApiKey, isValidGeminiApiKey, saveGeminiApiKey } from '../services/storage';
+import { isBugReportEnabled } from '../services/bugReport';
 import { useExternalStorageState } from '../hooks/useExternalStorageState';
+import BugReportModal from './BugReportModal';
 
 interface SidebarProps {
   currentView: ViewType;
@@ -29,6 +31,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
   const [showRestartConfirm, setShowRestartConfirm] = useState(false);
+  const [showBugReport, setShowBugReport] = useState(false);
   const persona = useExternalStorageState<Persona | null>(loadPersona, 'ai-bridge-persona-changed');
   const hasApiKey = useExternalStorageState(hasGeminiApiKey, 'api-key-changed');
 
@@ -218,6 +221,15 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
             </p>
           </div>
         </div>
+        {isBugReportEnabled() && (
+          <button
+            onClick={() => setShowBugReport(true)}
+            className="-mt-1 inline-flex items-center justify-center gap-1.5 text-[11px] font-bold text-gray-500 transition-colors hover:text-rose-600"
+          >
+            <Bug size={12} />
+            버그 신고
+          </button>
+        )}
       </div>
       </aside>
 
@@ -397,6 +409,8 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
           </div>
         </div>
       )}
+
+      {showBugReport && <BugReportModal onClose={() => setShowBugReport(false)} />}
     </>
   );
 }
