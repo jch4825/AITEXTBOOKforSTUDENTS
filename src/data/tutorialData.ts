@@ -463,7 +463,7 @@ export const lessons: Lesson[] = [
       1) [Google AI Studio](https://aistudio.google.com/)에 접속합니다.
       2) 왼쪽 메뉴에서 **'Get API key'** 버튼을 클릭합니다.
       3) **'Create API key'**를 눌러 키를 생성합니다.
-      4) 생성된 키(예: AIza...)를 복사하여 안전한 곳에 보관하세요.
+      4) 생성된 키(예: AIza... 또는 AQ....)를 복사하여 안전한 곳에 보관하세요.
       
       [Google AI Studio API 키 발급 장소 이미지 확인](https://drive.google.com/file/d/1VX1CjCWOWE6vYwz_3lvyozRpT_M-sE1K/view?usp=sharing)
       *(💡 위 링크를 클릭하면 새 창에서 이미지를 확인할 수 있습니다.)*
@@ -513,7 +513,7 @@ export const lessons: Lesson[] = [
     order: 4,
     interactive: {
       prompt: "여러분의 API 키를 입력해 주세요.",
-      initialInput: "AIza...",
+      initialInput: "AIza... 또는 AQ....",
       answer: "여러분이 입력해주신 API키를 기반으로 향후 인공지능 활용 실습을 구동하게 될 것입니다. API 키는 인공지능 서비스를 이용하기 위한 '개인 열쇠'와 같습니다.",
       answers: {
         "default": "⚠️ **보안 주의사항**\n\n이 서비스는 무료 교육용이므로 API키를 보안 서버에 보관하지 않습니다. 이 서비스를 과금이 가능한 유료 API 키와 연동하지 마세요. API 키의 탈취가 의심된다면 곧바로 키를 삭제하세요. 이 서비스를 더 이상 이용하지 않는다면 Google AI Studio에 방문하여 연동한 API 키를 삭제하세요."

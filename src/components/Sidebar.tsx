@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import { GEMINI_MODEL_GUIDE } from '../utils/gemini';
 import { getModuleVisibility } from '../data/moduleVisibility';
 import { loadPersona } from '../hooks/useDiagnostic';
-import { clearGeminiApiKey, hasGeminiApiKey, saveGeminiApiKey } from '../services/storage';
+import { clearGeminiApiKey, hasGeminiApiKey, isValidGeminiApiKey, saveGeminiApiKey } from '../services/storage';
 import { useExternalStorageState } from '../hooks/useExternalStorageState';
 
 interface SidebarProps {
@@ -36,9 +36,8 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
     // 내부 공백·줄바꿈·탭까지 모두 제거 (복사 과정에서 끼어드는 문자 차단)
     const cleaned = apiKeyInput.replace(/\s+/g, '');
 
-    // Google Gemini API 키는 "AIza"로 시작하고 보통 39자
-    if (!cleaned.startsWith('AIza') || cleaned.length < 30) {
-      setApiKeyError('"AIza"로 시작하는 약 39자 키인지 확인해 주세요.');
+    if (!isValidGeminiApiKey(cleaned)) {
+      setApiKeyError('"AIza" 또는 "AQ."로 시작하는 키인지 확인해 주세요.');
       return;
     }
 
@@ -52,10 +51,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
   };
 
   // 저장 버튼 활성화 조건 (saveApiKey와 동일 기준)
-  const isApiKeyValid = (() => {
-    const cleaned = apiKeyInput.replace(/\s+/g, '');
-    return cleaned.startsWith('AIza') && cleaned.length >= 30;
-  })();
+  const isApiKeyValid = isValidGeminiApiKey(apiKeyInput);
 
   const totalLessons = lessons.length;
   const completedCount = completedLessons.filter(id => lessons.some(l => l.id === id)).length;
@@ -338,7 +334,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
               value={apiKeyInput}
               onChange={e => { setApiKeyInput(e.target.value); setApiKeyError(''); }}
               onKeyDown={e => e.key === 'Enter' && isApiKeyValid && saveApiKey()}
-              placeholder="AIza..."
+              placeholder="AIza... 또는 AQ...."
               autoComplete="off"
               autoCorrect="off"
               autoCapitalize="off"
@@ -348,7 +344,7 @@ export default function Sidebar({ currentView, onViewChange, selectedModule, onS
               autoFocus
             />
             <p className="text-[11px] text-gray-400 mb-1">
-              "AIza"로 시작하는 약 39자의 키입니다. 앞뒤 공백·따옴표가 섞이지 않도록 주의하세요.
+              "AIza" 또는 "AQ."로 시작하는 키입니다. 앞뒤 공백·따옴표가 섞이지 않도록 주의하세요.
             </p>
             {apiKeyError && (
               <p className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600">{apiKeyError}</p>

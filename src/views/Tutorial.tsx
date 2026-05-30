@@ -23,6 +23,7 @@ import {
   hasGeminiApiKey,
   hasSeenL11Tour,
   hasSeenM0Welcome,
+  isValidGeminiApiKey,
   loadPurposeValue,
   markL11TourSeen,
   markM0WelcomeSeen,
@@ -817,7 +818,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     // Special handling for lesson 1-4: Save API Key
     if (lesson.id === 'l1-4') {
       const apiKey = inputToUse.replace(/\s+/g, '');
-      if (apiKey.startsWith('AIza') && apiKey.length >= 30) {
+      if (isValidGeminiApiKey(apiKey)) {
         saveGeminiApiKey(apiKey);
         // saveGeminiApiKey가 api-key-changed 이벤트를 발행하므로 hasApiKey 상태는 자동 갱신됨.
       }

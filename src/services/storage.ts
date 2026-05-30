@@ -87,6 +87,12 @@ export function hasGeminiApiKey(): boolean {
   return getGeminiApiKey().length > 10;
 }
 
+export function isValidGeminiApiKey(key: string): boolean {
+  const cleaned = key.replace(/\s+/g, '');
+  if (cleaned.length < 30) return false;
+  return cleaned.startsWith('AIza') || cleaned.startsWith('AQ.');
+}
+
 export function saveGeminiApiKey(value: string): boolean {
   const ok = setItem(STORAGE_KEYS.geminiApiKey, value);
   if (ok) dispatchApiKeyChanged();
