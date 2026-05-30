@@ -34,6 +34,7 @@ jobs:
         run: npm run build
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          VITE_BUG_REPORT_URL: ${{ secrets.VITE_BUG_REPORT_URL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
