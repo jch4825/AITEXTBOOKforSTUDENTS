@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BookOpen,
   ChevronDown,
@@ -8,11 +8,12 @@ import {
   GraduationCap,
   Lightbulb,
   Search,
+  Star,
   Zap,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import SpeakButton from '../components/SpeakButton';
 import { lessons as allLessons } from '../data/tutorialData';
+import { getToolFavorites, saveToolFavorites } from '../services/storage';
 import { TOOLS, ToolDefinition } from '../tools/ToolRegistry';
 import { getTheme, moduleIdFromLesson } from '../utils/moduleThemes';
 import ToolPage from './ToolPage';
@@ -166,10 +167,16 @@ function ToolCard({
   tool,
   index,
   onOpen,
+  isFav,
+  onToggleFav,
+  breadcrumb,
 }: {
   tool: ToolDefinition;
   index: number;
   onOpen: (tool: ToolDefinition) => void;
+  isFav: boolean;
+  onToggleFav: () => void;
+  breadcrumb?: string;
 }) {
   const Icon = tool.icon;
   const isExternal = tool.kind === 'external';
@@ -191,7 +198,7 @@ function ToolCard({
           onOpen(tool);
         }
       }}
-      className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-3 py-3 text-left group cursor-pointer hover:shadow-sm hover:border-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-canva-purple/40"
+      className="relative flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-3 py-3 pr-12 text-left group cursor-pointer hover:shadow-sm hover:border-gray-300 transition-all focus:outline-none focus:ring-2 focus:ring-canva-purple/40"
     >
       {/* 아이콘 */}
       {isExternal ? (
@@ -206,6 +213,11 @@ function ToolCard({
 
       {/* 텍스트 */}
       <div className="min-w-0 flex-1">
+        {breadcrumb && (
+          <p className="mb-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-400">
+            {breadcrumb}
+          </p>
+        )}
         <p className={`font-bold text-sm leading-tight mb-0.5 transition-colors ${isExternal ? 'text-gray-800 group-hover:text-gray-600' : 'text-gray-900 group-hover:text-canva-purple'}`}>
           {tool.title}
         </p>
@@ -241,16 +253,39 @@ function ToolCard({
         </div>
       </div>
 
-      {/* 음성 버튼 */}
-      <div className="shrink-0" onClick={e => e.stopPropagation()}>
-        <SpeakButton
-          text={`${tool.title}. ${tool.description}`}
-          label="설명 듣기"
-          stopPropagation
-        />
-      </div>
+      {/* 즐겨찾기 버튼 */}
+      <button
+        type="button"
+        onClick={e => {
+          e.stopPropagation();
+          onToggleFav();
+        }}
+        aria-label={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
+        title={isFav ? '즐겨찾기 해제' : '즐겨찾기에 추가'}
+        className={`absolute right-1.5 top-1.5 z-10 rounded-full p-2 transition ${
+          isFav
+            ? 'text-amber-400 hover:bg-amber-50'
+            : 'text-gray-400 hover:bg-gray-100 hover:text-amber-500'
+        }`}
+      >
+        <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
+      </button>
     </motion.div>
   );
+}
+
+function useToolFavorites() {
+  const [favorites, setFavorites] = useState<string[]>(() => getToolFavorites());
+
+  useEffect(() => {
+    saveToolFavorites(favorites);
+  }, [favorites]);
+
+  const toggle = (id: string) => {
+    setFavorites(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
+  };
+
+  return { favorites, toggle };
 }
 
 function groupToolsBySubCategory(tools: ToolDefinition[]): { subCategory: string; tools: ToolDefinition[] }[] {
@@ -271,10 +306,15 @@ export default function QuickTools() {
   const [query, setQuery] = useState('');
   const [openCategory, setOpenCategory] = useState<ToolDefinition['category'] | null>(null);
   const [activeTool, setActiveTool] = useState<ToolDefinition | null>(null);
+  const { favorites, toggle: toggleFav } = useToolFavorites();
 
   if (activeTool) {
     return <ToolPage tool={activeTool} onBack={() => setActiveTool(null)} />;
   }
+
+  const favoriteTools = favorites
+    .map(id => TOOLS.find(t => t.id === id))
+    .filter((t): t is ToolDefinition => Boolean(t));
 
   const filteredGroups = CATEGORY_ORDER
     .map(category => ({
@@ -327,6 +367,40 @@ export default function QuickTools() {
             className="h-12 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 text-sm shadow-sm outline-none transition focus:border-canva-purple/40 focus:ring-2 focus:ring-canva-purple/20"
           />
         </div>
+
+        {favoriteTools.length > 0 && query === '' && (
+          <section className="mb-8">
+            <header className="mb-3 flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-500">
+                <Star size={18} fill="currentColor" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <h2 className="text-lg font-extrabold text-canva-ink">
+                  즐겨찾기
+                  <span className="ml-2 text-xs font-bold text-amber-600">{favoriteTools.length}</span>
+                </h2>
+                <p className="text-xs text-gray-500">★ 표시한 도구를 한곳에 모아 봅니다</p>
+              </span>
+            </header>
+            <div className="flex flex-col gap-2">
+              {favoriteTools.map((tool, index) => {
+                const meta = CATEGORY_META[tool.category];
+                const breadcrumb = meta.label ?? tool.category;
+                return (
+                  <ToolCard
+                    key={tool.id}
+                    tool={tool}
+                    index={index}
+                    onOpen={handleOpen}
+                    isFav={true}
+                    onToggleFav={() => toggleFav(tool.id)}
+                    breadcrumb={breadcrumb}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {filteredGroups.map(({ category, tools }) => {
@@ -384,7 +458,14 @@ export default function QuickTools() {
                                   </div>
                                   <div className="flex flex-col gap-2">
                                     {subCategoryTools.map((tool, index) => (
-                                      <ToolCard key={tool.id} tool={tool} index={index} onOpen={handleOpen} />
+                                      <ToolCard
+                                        key={tool.id}
+                                        tool={tool}
+                                        index={index}
+                                        onOpen={handleOpen}
+                                        isFav={favorites.includes(tool.id)}
+                                        onToggleFav={() => toggleFav(tool.id)}
+                                      />
                                     ))}
                                   </div>
                                 </section>
@@ -393,7 +474,14 @@ export default function QuickTools() {
                           ) : (
                             <div className="flex flex-col gap-2">
                               {tools.map((tool, index) => (
-                                <ToolCard key={tool.id} tool={tool} index={index} onOpen={handleOpen} />
+                                <ToolCard
+                                  key={tool.id}
+                                  tool={tool}
+                                  index={index}
+                                  onOpen={handleOpen}
+                                  isFav={favorites.includes(tool.id)}
+                                  onToggleFav={() => toggleFav(tool.id)}
+                                />
                               ))}
                             </div>
                           )}

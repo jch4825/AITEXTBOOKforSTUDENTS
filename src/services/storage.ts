@@ -20,6 +20,7 @@ export const STORAGE_KEYS = {
   accessibilityWidgetCollapsed: 'ai-bridge-widget-collapsed',
   accessibilityWidgetHintSeen: 'ai-bridge-widget-hint-seen',
   resourceFavorites: 'ai-teachers-resource-favorites',
+  toolFavorites: 'ai-teachers-tool-favorites',
   metaPromptL26: 'meta-prompt-l2-6',
   l11TourSeen: 'l1-1-tour-seen',
   m0WelcomeShown: 'ai-bridge-m0-welcome-shown',
@@ -127,6 +128,16 @@ export function getResourceFavorites(): string[] {
 
 export function saveResourceFavorites(value: string[]) {
   setJson(STORAGE_KEYS.resourceFavorites, value);
+}
+
+export function getToolFavorites(): string[] {
+  return getJson<string[]>(STORAGE_KEYS.toolFavorites, [], (value): value is string[] =>
+    Array.isArray(value) && value.every(item => typeof item === 'string'),
+  );
+}
+
+export function saveToolFavorites(value: string[]) {
+  setJson(STORAGE_KEYS.toolFavorites, value);
 }
 
 export function loadWidgetPos(): Pos | null {
