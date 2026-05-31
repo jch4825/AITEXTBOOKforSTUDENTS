@@ -670,6 +670,12 @@ html.home-snap-scroll {
     line-height: 0.86;
   }
 
+  .brand-scroll-team-copy h2 {
+    font-size: clamp(1.8rem, 11vw, 3rem);
+    line-height: 1.05;
+    word-break: keep-all;
+  }
+
   .brand-scroll-copy-left,
   .brand-scroll-copy-right,
   .brand-scroll-copy-low,
