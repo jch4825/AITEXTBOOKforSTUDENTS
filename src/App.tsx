@@ -4,7 +4,7 @@ import { Menu, ChevronRight } from 'lucide-react';
 import AccessibilityWidget from './components/AccessibilityWidget';
 import DiagnosticModal from './components/onboarding/DiagnosticModal';
 import { ViewType, Module } from './types';
-import { motion, AnimatePresence } from 'motion/react';
+import { m, AnimatePresence, LazyMotion, domAnimation } from 'motion/react';
 import {
   clearLessonProgress,
   getLessonProgress,
@@ -139,6 +139,7 @@ export default function App() {
   };
 
   return (
+    <LazyMotion features={domAnimation}>
     <div className="min-h-screen bg-canva-bg font-sans text-canva-ink">
       <Sidebar
         currentView={currentView}
@@ -185,7 +186,7 @@ export default function App() {
         }`}
       >
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={currentView}
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -195,7 +196,7 @@ export default function App() {
             <Suspense fallback={<ViewFallback />}>
               {renderView()}
             </Suspense>
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </main>
       <AccessibilityWidget />
@@ -226,5 +227,6 @@ export default function App() {
         />
       )}
     </div>
+    </LazyMotion>
   );
 }

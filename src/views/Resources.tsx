@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { ChevronDown, ExternalLink, Link2, Search, Star, X } from 'lucide-react';
 import { resourceCategories, type ResourceCategory, type ResourceItem, type ResourceSubCategory } from '../data/resourcesData';
 import { getResourceFavorites, saveResourceFavorites } from '../services/storage';
@@ -337,7 +337,7 @@ function SubCategoryDoor({
 
       <AnimatePresence>
         {isOpen && (
-          <motion.section
+          <m.section
             key={`${subCategory.id}-panel`}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -366,7 +366,7 @@ function SubCategoryDoor({
                 )}
               </div>
             </div>
-          </motion.section>
+          </m.section>
         )}
       </AnimatePresence>
     </div>

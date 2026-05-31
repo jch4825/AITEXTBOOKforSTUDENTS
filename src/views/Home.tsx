@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import {
   ArrowRight,
   BookOpen,
@@ -137,13 +137,13 @@ function FloatingCard({
   children: React.ReactNode;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 18, rotate: -2 }}
       animate={{ opacity: 1, y: 0, rotate: 0 }}
       transition={{ delay, duration: 0.55, ease: 'easeOut' }}
       className={className}
     >
-      <motion.div
+      <m.div
         animate={{ y: [0, -7, 0] }}
         transition={{
           duration: 3.2 + delay * 0.4,
@@ -153,8 +153,8 @@ function FloatingCard({
         }}
       >
         {children}
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   );
 }
 
@@ -162,7 +162,7 @@ function BrandScrollSection() {
   return (
     <section className="brand-scroll" aria-label="AI Bridge 소개">
       {BRAND_SCENES.map((scene, index) => (
-        <motion.section
+        <m.section
           key={scene.eyebrow}
           data-home-snap-section
           className={`brand-scroll-scene ${scene.tone}`}
@@ -177,7 +177,7 @@ function BrandScrollSection() {
             <span />
             <span />
           </div>
-          <motion.div
+          <m.div
             className={`brand-scroll-copy ${scene.copyClass}`}
             initial={{ opacity: 0, y: 34 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -196,8 +196,8 @@ function BrandScrollSection() {
               ))}
             </h2>
             {scene.detail && <p className="brand-scroll-detail">{scene.detail}</p>}
-          </motion.div>
-        </motion.section>
+          </m.div>
+        </m.section>
       ))}
 
       <section className="brand-scroll-scene brand-scroll-team" data-home-snap-section>
@@ -207,7 +207,7 @@ function BrandScrollSection() {
           <span />
           <span />
         </div>
-        <motion.div
+        <m.div
           className="brand-scroll-copy brand-scroll-team-copy"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -218,7 +218,7 @@ function BrandScrollSection() {
           <h2>
             <span>Team Zer0-Gap</span>
           </h2>
-        </motion.div>
+        </m.div>
         <div className="brand-scroll-team-bar">
           <p>경상국립대학교 AI융합교육 전공 교원 4인으로 이루어진 캡스톤 디자인 프로젝트팀</p>
           <p>초등교사 정상태 · 초등교사 박주연 · 초등교사 이정윤 · 특수교사 전창한 · 경상국립대학 교수 김선영(지도·감독)</p>
@@ -301,7 +301,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
         <div className="moholy-shape moholy-line-stack" />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
@@ -331,10 +331,10 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
                 <ArrowRight size={16} />
               </button>
             </div>
-          </motion.div>
+          </m.div>
 
           <div className="relative min-h-[300px] sm:min-h-[360px] lg:min-h-[420px]" aria-hidden="true">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -403,16 +403,16 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
                   </div>
                 </FloatingCard>
 
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.7 }}
                   className="absolute bottom-20 right-8 hidden rounded-full bg-canva-ink px-4 py-2 text-xs font-extrabold text-white shadow-lg sm:block"
                 >
                   AI가 자료를 연결 중
-                </motion.div>
+                </m.div>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         </div>
       </section>
@@ -426,7 +426,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
             </span>
             <div className="relative min-h-[32px] flex-1 overflow-hidden">
               <AnimatePresence mode="wait">
-                <motion.p
+                <m.p
                   key={tipIndex}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -435,7 +435,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
                   className="text-sm font-bold leading-7 text-canva-ink sm:text-base"
                 >
                   {TEACHING_TIPS[tipIndex]}
-                </motion.p>
+                </m.p>
               </AnimatePresence>
             </div>
           </div>
@@ -456,7 +456,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
             {WORK_MODES.map((card, index) => {
               const Icon = card.icon;
               return (
-                <motion.button
+                <m.button
                   key={card.id}
                   type="button"
                   onClick={() => onViewChange(card.id)}
@@ -494,7 +494,7 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
                     {card.action}
                     <ArrowRight size={16} />
                   </span>
-                </motion.button>
+                </m.button>
               );
             })}
           </div>

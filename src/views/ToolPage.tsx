@@ -9,7 +9,7 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ToolDefinition, ToolInput } from '../tools/ToolRegistry';
@@ -585,7 +585,7 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
       </button>
 
       {(result || isRunning) && (
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
+        <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-sm font-bold text-gray-700">결과</span>
             {result && !isRunning && (
@@ -620,7 +620,7 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
             )}
             {isRunning && result && <span className="ml-1 inline-block h-4 w-1.5 animate-pulse bg-canva-purple" />}
           </div>
-        </motion.div>
+        </m.div>
       )}
     </div>
   );

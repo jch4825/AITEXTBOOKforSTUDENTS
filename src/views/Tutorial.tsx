@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { m, AnimatePresence } from 'motion/react';
 import { ArrowLeft, BookOpen, CheckCircle2, ChevronRight, PlayCircle, Clock, ArrowRight, Copy, Info, FileText, Lock, Check, School, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -133,7 +133,7 @@ function normalizeKoreanMarkdownStrong(markdown: string) {
 function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -141,7 +141,7 @@ function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
         style={{ backgroundColor: 'rgba(30, 20, 10, 0.65)', backdropFilter: 'blur(2px)' }}
         onClick={onClose}
       >
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 32, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -236,8 +236,8 @@ function Module0WelcomePopup({ onClose }: { onClose: () => void }) {
               새 챕터를 시작합니다 →
             </button>
           </div>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </AnimatePresence>
   );
 }
@@ -301,7 +301,7 @@ function ModuleCompletePopup({ moduleId, onClose }: { moduleId: string; onClose:
 
   return (
     <AnimatePresence>
-      <motion.div
+      <m.div
         className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -309,7 +309,7 @@ function ModuleCompletePopup({ moduleId, onClose }: { moduleId: string; onClose:
         style={{ backgroundColor: 'rgba(30, 20, 10, 0.65)', backdropFilter: 'blur(2px)' }}
         onClick={onClose}
       >
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 32, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -395,8 +395,8 @@ function ModuleCompletePopup({ moduleId, onClose }: { moduleId: string; onClose:
               {copy.button}
             </button>
           </div>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </AnimatePresence>
   );
 }
@@ -944,7 +944,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           className="fixed inset-0 z-50 flex items-center justify-center p-6 overflow-y-auto"
           style={{ minHeight: '100vh', background: 'rgba(30, 20, 10, 0.72)' }}
         >
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.94, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 16 }}
@@ -1068,7 +1068,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 시작하겠습니다
               </button>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       )}
 
@@ -1221,7 +1221,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
         </div>
         <div ref={leftScrollRef} className="flex-1 overflow-y-auto min-w-0 bg-canva-ivory relative">
           <AnimatePresence mode="wait" initial={false}>
-          <motion.div
+          <m.div
             key={lesson.id}
             initial={{ opacity: 0, x: 18 }}
             animate={{ opacity: 1, x: 0 }}
@@ -1388,7 +1388,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               </div>
             )}
           </div>
-        </motion.div>
+        </m.div>
         </AnimatePresence>
         </div>
       </div>
@@ -1694,7 +1694,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 </div>
 
                 {aiResponse && !isTyping && (
-                  <motion.div 
+                  <m.div 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-8 p-6 bg-canva-purple/10 border border-canva-purple/20 rounded-xl"
@@ -1713,7 +1713,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                         {normalizeKoreanMarkdownStrong(learningPoint)}
                       </ReactMarkdown>
                     </div>
-                  </motion.div>
+                  </m.div>
                 )}
               </div>
             </div>
@@ -1798,7 +1798,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       {/* M4 Result Popup Overlay */}
       {m4PopupData && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto" style={{ minHeight: '100vh' }}>
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="max-w-2xl w-full bg-[#1c232b] rounded-2xl shadow-2xl flex flex-col border border-gray-700 my-auto shadow-canva-purple/10"
@@ -1860,7 +1860,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 창 닫기
               </button>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       )}
 
@@ -1881,7 +1881,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           className="fixed inset-0 z-[110] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={(e) => { if (e.target === e.currentTarget) setShowDict(false); }}
         >
-          <motion.div
+          <m.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.18 }}
@@ -1953,7 +1953,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               <span className="text-[10px] text-gray-400">AI 설명은 참고용입니다. 중요한 내용은 교차 확인하세요.</span>
               <button onClick={() => setShowDict(false)} className="text-xs text-gray-500 hover:text-gray-700 font-medium">닫기</button>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       )}
     </div>
@@ -2080,7 +2080,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
           const isCollapsed = visibility === 'collapsed';
 
           return (
-            <motion.div
+            <m.div
               key={module.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -2168,7 +2168,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                       </span>
                     </div>
                     <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                      <motion.div
+                      <m.div
                         className="h-full rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${progressPct}%` }}
@@ -2183,7 +2183,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                   />
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           );
         })}
       </div>
@@ -2264,7 +2264,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                   </span>
                 </div>
                 <div className="h-1.5 bg-white/70 rounded-full overflow-hidden">
-                  <motion.div
+                  <m.div
                     className="h-full rounded-full"
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPct}%` }}
@@ -2291,7 +2291,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                 const titleNoNum = lesson.title.replace(/^\d+-\d+\.\s*/, '');
                 const difficulty = getLessonDifficulty(lesson);
                 return (
-                  <motion.div
+                  <m.div
                     key={lesson.id}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -2360,7 +2360,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                         </div>
                       </div>
                     </div>
-                  </motion.div>
+                  </m.div>
                 );
               })}
             </div>
@@ -2385,7 +2385,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
       {showM0Welcome && <Module0WelcomePopup onClose={handleM0WelcomeClose} />}
       <AnimatePresence>
         {currentLesson ? (
-          <motion.div
+          <m.div
             key={currentLesson.id}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -2421,9 +2421,9 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
                 }
               }}
             />
-          </motion.div>
+          </m.div>
         ) : selectedModule ? (
-          <motion.div
+          <m.div
             key="lessons"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -2433,9 +2433,9 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
             <div className="klee-surface klee-lesson-select min-h-screen">
               {renderLessonList(selectedModule)}
             </div>
-          </motion.div>
+          </m.div>
         ) : (
-          <motion.div
+          <m.div
             key="modules"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -2445,7 +2445,7 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
             <div className="klee-surface klee-module-select min-h-screen">
               {renderModuleList()}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>

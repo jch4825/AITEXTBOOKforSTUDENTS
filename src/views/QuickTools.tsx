@@ -11,7 +11,7 @@ import {
   Star,
   Zap,
 } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { lessons as allLessons } from '../data/tutorialData';
 import { getToolFavorites, saveToolFavorites } from '../services/storage';
 import { TOOLS, ToolDefinition } from '../tools/ToolRegistry';
@@ -185,7 +185,7 @@ function ToolCard({
     : [];
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.025 }}
@@ -270,7 +270,7 @@ function ToolCard({
       >
         <Star size={16} fill={isFav ? 'currentColor' : 'none'} />
       </button>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -432,7 +432,7 @@ export default function QuickTools() {
 
                 <AnimatePresence>
                   {isOpen && (
-                    <motion.section
+                    <m.section
                       key={`${category}-panel`}
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
@@ -487,7 +487,7 @@ export default function QuickTools() {
                           )}
                         </div>
                       </div>
-                    </motion.section>
+                    </m.section>
                   )}
                 </AnimatePresence>
               </div>
