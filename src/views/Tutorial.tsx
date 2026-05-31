@@ -12,12 +12,11 @@ import { callGemini, streamGemini } from '../utils/gemini';
 import { useExternalStorageState } from '../hooks/useExternalStorageState';
 import PersonaRecommendCard from '../components/onboarding/PersonaRecommendCard';
 import { getModuleVisibility } from '../data/moduleVisibility';
-import { applyFontScale, stopSpeaking } from '../utils/a11y';
+import { stopSpeaking } from '../utils/a11y';
 import { getKnownLearningDictionaryEntry } from '../utils/learningDictionary';
 import { loadPersona } from '../hooks/useDiagnostic';
 import {
   clearGeminiApiKey,
-  dispatchFontScaleChanged,
   getGeminiApiKey,
   getMetaPromptL26,
   hasGeminiApiKey,
@@ -1989,14 +1988,6 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
       window.removeEventListener('ai-bridge-persona-changed', refresh);
     };
   }, []);
-
-  useEffect(() => {
-    if (!currentLesson) return;
-    if (currentLesson.moduleId === 'm0') {
-      applyFontScale('large');
-      dispatchFontScaleChanged('large');
-    }
-  }, [currentLesson?.moduleId]);
 
   // URL 파라미터에서 레슨 ID를 읽어서 초기화
   useEffect(() => {
