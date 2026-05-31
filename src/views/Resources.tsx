@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, m } from 'motion/react';
 import { ChevronDown, ExternalLink, Link2, Search, Star, X } from 'lucide-react';
 import { resourceCategories, type ResourceCategory, type ResourceItem, type ResourceSubCategory } from '../data/resourcesData';
-import { getResourceFavorites, saveResourceFavorites } from '../services/storage';
+import { useFavoritesList } from '../hooks/useFavoritesList';
 
 const CATEGORY_ORDER = [
   'school-admin-support',
@@ -125,20 +125,6 @@ function highlight(text: string, query: string): React.ReactNode {
       {text.slice(idx + query.length)}
     </>
   );
-}
-
-function useFavorites() {
-  const [favorites, setFavorites] = useState<string[]>(() => getResourceFavorites());
-
-  useEffect(() => {
-    saveResourceFavorites(favorites);
-  }, [favorites]);
-
-  const toggle = (id: string) => {
-    setFavorites(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
-  };
-
-  return { favorites, toggle };
 }
 
 function ResourceCard({
@@ -386,7 +372,7 @@ export default function Resources() {
   const [activeTags, setActiveTags] = useState<Set<string>>(() => new Set());
   const [showFavOnly, setShowFavOnly] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
-  const { favorites, toggle: toggleFav } = useFavorites();
+  const { favorites, toggle: toggleFav } = useFavoritesList('resource');
 
   const orderedCategories = useMemo(
     () =>

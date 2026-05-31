@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, m } from 'motion/react';
 import { lessons as allLessons } from '../data/tutorialData';
-import { getToolFavorites, saveToolFavorites } from '../services/storage';
+import { useFavoritesList } from '../hooks/useFavoritesList';
 import { TOOLS, ToolDefinition } from '../tools/ToolRegistry';
 import { getTheme, moduleIdFromLesson } from '../utils/moduleThemes';
 import ToolPage from './ToolPage';
@@ -274,20 +274,6 @@ function ToolCard({
   );
 }
 
-function useToolFavorites() {
-  const [favorites, setFavorites] = useState<string[]>(() => getToolFavorites());
-
-  useEffect(() => {
-    saveToolFavorites(favorites);
-  }, [favorites]);
-
-  const toggle = (id: string) => {
-    setFavorites(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
-  };
-
-  return { favorites, toggle };
-}
-
 function groupToolsBySubCategory(tools: ToolDefinition[]): { subCategory: string; tools: ToolDefinition[] }[] {
   const groups = new Map<string, ToolDefinition[]>();
 
@@ -306,7 +292,7 @@ export default function QuickTools() {
   const [query, setQuery] = useState('');
   const [openCategory, setOpenCategory] = useState<ToolDefinition['category'] | null>(null);
   const [activeTool, setActiveTool] = useState<ToolDefinition | null>(null);
-  const { favorites, toggle: toggleFav } = useToolFavorites();
+  const { favorites, toggle: toggleFav } = useFavoritesList('tool');
 
   if (activeTool) {
     return <ToolPage tool={activeTool} onBack={() => setActiveTool(null)} />;

@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { diagnosticQuestions } from '../../data/diagnosticQuestions';
 import { modules } from '../../data/tutorialData';
 import { DiagnosticAnswers, DiagnosticPurpose, Module } from '../../types';
-import { calculateDiagnosticResult, saveDiagnostic, skipDiagnostic } from '../../hooks/useDiagnostic';
+import { calculateDiagnosticResult, saveDiagnostic, skipDiagnostic } from '../../services/diagnostic';
 import PersonaRecommendCard from './PersonaRecommendCard';
 
 interface DiagnosticModalProps {

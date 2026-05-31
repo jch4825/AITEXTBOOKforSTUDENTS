@@ -1,28 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, FileText } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { callGemini } from '../utils/gemini';
 import { initCurriculum, lookupStandard, normalizeCode, CurriculumStandard } from '../utils/curriculumLookup';
 import { getGeminiApiKey, hasGeminiApiKey } from '../services/storage';
 import { useExternalStorageState } from '../hooks/useExternalStorageState';
-
-export const CopyButton = ({ text, className = "" }: { text: string, className?: string }) => {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      className={`p-1.5 bg-gray-700/50 hover:bg-gray-700 rounded-md text-gray-300 hover:text-white transition-colors flex items-center gap-1 text-xs ${className}`}
-    >
-      {copied ? <><Check size={14} /> 복사됨!</> : <><Copy size={14} /> 복사</>}
-    </button>
-  );
-};
 
 export const GoogleDocsButton = ({ text, className = "" }: { text: string, className?: string }) => {
   const handleClick = async () => {

@@ -1,24 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Check } from 'lucide-react';
-
-export const CopyButton = ({ text, className = "" }: { text: string, className?: string }) => {
-  const [copied, setCopied] = useState(false);
-  
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
-  
-  return (
-    <button 
-      onClick={handleCopy}
-      className={`absolute top-2 right-2 p-1.5 bg-gray-700/50 hover:bg-gray-700 rounded-md text-gray-300 hover:text-white transition-colors flex items-center gap-1 text-[10px] ${className}`}
-    >
-      {copied ? <><Check size={12} /> 복사됨!</> : <><Copy size={12} /> 복사</>}
-    </button>
-  );
-};
+import { Check } from 'lucide-react';
+import { CopyButton } from '../components/CopyButton';
 
 export const Lesson42Interactive = ({ onExecute }: { onExecute: (data: {title: string, content: React.ReactNode, point: string}) => void }) => {
   const [taskType, setTaskType] = useState('가정통신문');
@@ -161,7 +143,7 @@ export const Lesson43Interactive = ({ onExecute }: { onExecute: (data: {title: s
 
       <div className="relative bg-[#1c232b] p-4 rounded-lg border border-gray-700">
         <div className="text-xs font-bold text-gray-400 mb-2">Canvas에 붙여넣을 예시 프롬프트</div>
-        <CopyButton text={canvasPrompt} />
+        <CopyButton text={canvasPrompt} className="absolute top-2 right-2" />
         <pre className="text-xs text-canva-gray whitespace-pre-wrap font-mono mt-2">{canvasPrompt}</pre>
       </div>
 
@@ -205,7 +187,7 @@ export const Lesson44Interactive = ({ onExecute }: { onExecute: (data: {title: s
 
       <div className="relative bg-[#1c232b] p-4 rounded-lg border border-gray-700">
         <div className="text-xs font-bold text-gray-400 mb-2">Build 화면에 붙여넣을 템플릿</div>
-        <CopyButton text={promptText} />
+        <CopyButton text={promptText} className="absolute top-2 right-2" />
         <pre className="text-xs text-canva-gray whitespace-pre-wrap font-mono mt-2">{promptText}</pre>
       </div>
 

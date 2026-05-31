@@ -14,7 +14,7 @@ import PersonaRecommendCard from '../components/onboarding/PersonaRecommendCard'
 import { getModuleVisibility } from '../data/moduleVisibility';
 import { stopSpeaking } from '../utils/a11y';
 import { getKnownLearningDictionaryEntry } from '../utils/learningDictionary';
-import { loadPersona } from '../hooks/useDiagnostic';
+import { loadPersona } from '../services/diagnostic';
 import {
   clearGeminiApiKey,
   getGeminiApiKey,

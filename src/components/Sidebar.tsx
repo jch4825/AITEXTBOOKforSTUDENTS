@@ -4,7 +4,7 @@ import { ViewType, Module, Persona } from '../types';
 import { modules, lessons } from '../data/tutorialData';
 import { GEMINI_MODEL_GUIDE } from '../utils/geminiConstants';
 import { getModuleVisibility } from '../data/moduleVisibility';
-import { loadPersona } from '../hooks/useDiagnostic';
+import { loadPersona } from '../services/diagnostic';
 import { clearGeminiApiKey, hasGeminiApiKey, isValidGeminiApiKey, saveGeminiApiKey } from '../services/storage';
 import { isBugReportEnabled } from '../services/bugReport';
 import { useExternalStorageState } from '../hooks/useExternalStorageState';
