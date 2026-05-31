@@ -243,6 +243,16 @@ export default function Home({ onViewChange, onStartDiagnostic, isLearningPathSa
     const handleWheel = (event: WheelEvent) => {
       if (Math.abs(event.deltaY) < 18 || isSnappingRef.current) return;
 
+      // Don't hijack wheel events that belong to a modal or an inner scrollable.
+      const target = event.target instanceof Element ? event.target : null;
+      if (target?.closest('[role="dialog"]')) return;
+      for (let node: Element | null = target; node && node !== document.documentElement; node = node.parentElement) {
+        const overflowY = window.getComputedStyle(node).overflowY;
+        if ((overflowY === 'auto' || overflowY === 'scroll') && node.scrollHeight > node.clientHeight) {
+          return;
+        }
+      }
+
       const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-home-snap-section]'));
       if (sections.length === 0) return;
 
