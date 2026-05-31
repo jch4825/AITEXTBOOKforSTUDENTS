@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Check, FileText } from 'lucide-react';
-import { Lesson } from '../data/tutorialData';
 import { callGemini } from '../utils/gemini';
 import { initCurriculum, lookupStandard, normalizeCode, CurriculumStandard } from '../utils/curriculumLookup';
 import { getGeminiApiKey, hasGeminiApiKey } from '../services/storage';

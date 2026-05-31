@@ -1,4 +1,4 @@
-import { Module, Resource } from '../types';
+import { Module } from '../types';
 
 export interface Lesson {
   id: string;

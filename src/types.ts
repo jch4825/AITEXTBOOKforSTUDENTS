@@ -13,17 +13,6 @@ export interface DiagnosticAnswers {
   q6?: -1 | 0 | 1;
 }
 
-export interface Resource {
-  id: string;
-  title: string;
-  description: string;
-  category: 'AI 교재' | '심의 서류' | '정책 자료' | '기타';
-  tags: string[];
-  url: string;
-  type: 'pdf' | 'link' | 'hwp' | 'ppt';
-  updatedAt: string;
-}
-
 export interface Module {
   id: string;
   title: string;

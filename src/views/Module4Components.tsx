@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Check } from 'lucide-react';
-import { Lesson } from '../data/tutorialData';
 
 export const CopyButton = ({ text, className = "" }: { text: string, className?: string }) => {
   const [copied, setCopied] = useState(false);

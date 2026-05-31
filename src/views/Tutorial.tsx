@@ -1973,21 +1973,8 @@ export default function Tutorial({ selectedModule, onSelectModule, completedLess
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [showM0Welcome, setShowM0Welcome] = useState(false);
-  const [persona, setPersona] = useState<Persona | null>(() => loadPersona());
-  const [purpose, setPurpose] = useState<DiagnosticPurpose | null>(() => loadPurposeValue());
-
-  useEffect(() => {
-    const refresh = () => {
-      setPersona(loadPersona());
-      setPurpose(loadPurposeValue());
-    };
-    window.addEventListener('storage', refresh);
-    window.addEventListener('ai-bridge-persona-changed', refresh);
-    return () => {
-      window.removeEventListener('storage', refresh);
-      window.removeEventListener('ai-bridge-persona-changed', refresh);
-    };
-  }, []);
+  const persona = useExternalStorageState<Persona | null>(loadPersona, 'ai-bridge-persona-changed');
+  const purpose = useExternalStorageState<DiagnosticPurpose | null>(loadPurposeValue, 'ai-bridge-persona-changed');
 
   // URL 파라미터에서 레슨 ID를 읽어서 초기화
   useEffect(() => {
