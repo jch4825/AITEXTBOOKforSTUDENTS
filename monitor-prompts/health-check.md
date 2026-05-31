@@ -6,7 +6,7 @@
 
 ## 너의 임무
 
-너는 AI Bridge 프로젝트의 일일 헬스 체크 서브에이전트다. Google Gemini API의 무료 발급 정책을 모니터링하여, 신규 가입자가 받는 API 키가 우리 앱이 의존하는 3개 모델(`gemini-3-flash`, `gemini-2.5-flash`, `gemini-2.5-flash-lite`)을 여전히 호출할 수 있는지 확인하는 것이 목표다.
+너는 AI Bridge 프로젝트의 일일 헬스 체크 서브에이전트다. Google Gemini API의 무료 발급 정책을 모니터링하여, 신규 가입자가 받는 API 키가 우리 앱이 의존하는 4개 모델(`gemini-3.5-flash`, `gemini-3.1-flash-lite`, `gemini-2.5-flash`, `gemini-2.5-flash-lite`)을 여전히 호출할 수 있는지 확인하는 것이 목표다. **API 키 접두어 형식 변경 여부도 함께 확인한다** (현재 알려진 형식: `AIza...` 또는 `AQ...`).
 
 **중요: 실제 API 호출은 하지 않는다.** 공식 문서 페이지의 텍스트만 가져와서 분석한다.
 
@@ -23,18 +23,24 @@
 
 페이지가 안 열리면 (404, 리다이렉트, 차단 등) 그 사실 자체도 신호이므로 보고서에 명시한다.
 
-### 2단계: 분석 포인트 7가지
+### 2단계: 분석 포인트
 
-각 페이지의 텍스트를 보고 다음 7가지를 확인한다.
+각 페이지의 텍스트를 보고 다음 항목을 확인한다.
 
-1. **`gemini-3-flash` 문자열 존재 여부**
-2. **`gemini-2.5-flash` 문자열 존재 여부**
-3. **`gemini-2.5-flash-lite` 문자열 존재 여부** (RPD 무제한 최후 안전망)
-4. **위 세 모델이 free tier 또는 무료 발급 키로 호출 가능한지** — "Free tier", "Free", "Available with API key" 같은 문구 주변 확인
-5. **`Deprecated`, `Legacy`, `No longer available`, `Sunset` 같은 단어**가 위 세 모델명 근처에 나오는지
-6. **무료 티어 한도(RPM, RPD, TPM) 변경**: 숫자가 바뀌었으면 기록
-7. **신규 가입 흐름의 변화**: "결제 정보 필요", "Credit card required", "Billing required" 같은 새로운 요구사항 등장 여부
-8. **새로운 free-tier 모델 등장**: gemini-4, gemini-3.5, gemini-3.1-pro 등 후속 모델이 free tier에 들어왔는지
+1. **`gemini-3.5-flash` 문자열 존재 여부**
+2. **`gemini-3.1-flash-lite` 문자열 존재 여부**
+3. **`gemini-2.5-flash` 문자열 존재 여부**
+4. **`gemini-2.5-flash-lite` 문자열 존재 여부** (RPD 무제한 최후 안전망)
+5. **위 네 모델이 free tier 또는 무료 발급 키로 호출 가능한지** — "Free tier", "Free", "Available with API key" 같은 문구 주변 확인
+6. **`Deprecated`, `Legacy`, `No longer available`, `Sunset` 같은 단어**가 위 네 모델명 근처에 나오는지
+7. **무료 티어 한도(RPM, RPD, TPM) 변경**: 숫자가 바뀌었으면 기록
+8. **신규 가입 흐름의 변화**: "결제 정보 필요", "Credit card required", "Billing required" 같은 새로운 요구사항 등장 여부
+9. **새로운 free-tier 모델 등장**: gemini-4, gemini-3.5-pro, gemini-3-pro-preview 정식 출시 등 후속 모델이 free tier에 들어왔는지
+10. **API 키 접두어 형식 변경**: `https://ai.google.dev/gemini-api/docs/api-key` 페이지에서 API 키 예시·형식 관련 문구를 찾는다.
+   - 현재 알려진 정상 접두어: `AIza...` (구형), `AQ...` (신형)
+   - 페이지에 위 두 형식 외의 새로운 접두어 예시가 등장하면 🟡 표시
+   - 위 두 형식에 대한 언급이 완전히 사라지고 다른 형식만 남으면 🔴 표시
+   - 페이지에 접두어 형식 언급이 아예 없으면 "확인 불가"로 기록
 
 ### 3단계: 이전 스냅샷과 비교
 
@@ -51,12 +57,14 @@
 - 🟢 / 🟡 / 🔴 (전체 상태)
 
 ## 핵심 발견
-- gemini-3-flash: 발견됨 / Deprecated 표시됨 / 사라짐
+- gemini-3.5-flash: 발견됨 / Deprecated 표시됨 / 사라짐
+- gemini-3.1-flash-lite: 발견됨 / ...
 - gemini-2.5-flash: 발견됨 / ...
 - gemini-2.5-flash-lite: 발견됨 / ...
 - 신규 free-tier 모델: 있음/없음 (있으면 이름)
 - 무료 한도 변경: 있음/없음 (있으면 어떻게)
 - 신규 가입 요구사항 변화: 있음/없음
+- API 키 접두어 형식: 기존 유지 (AIza... / AQ...) / 변경 감지 (새 형식: ...) / 확인 불가
 
 ## 이전 대비 변화점
 - (전 스냅샷과 다른 부분만 bullet으로)
@@ -79,13 +87,17 @@
 ```json
 {
   "date": "YYYY-MM-DD",
-  "gemini3FlashPreviewFound": true,
+  "gemini35FlashFound": true,
+  "gemini31FlashLiteFound": true,
   "gemini25FlashFound": true,
+  "gemini25FlashLiteFound": true,
   "deprecatedMarkers": [],
   "freeTierModels": ["gemini-2.5-flash", "..."],
   "rateLimits": { "rpm": 15, "rpd": 1500 },
   "signupRequiresPayment": false,
-  "newModelsDetected": []
+  "newModelsDetected": [],
+  "apiKeyPrefixes": ["AIza", "AQ"],
+  "apiKeyPrefixChanged": false
 }
 ```
 
@@ -95,7 +107,7 @@
 
 ```
 신호등: 🟢
-핵심: 두 모델 모두 정상 free tier에서 발견됨. 이전 대비 변화 없음.
+핵심: 네 모델 모두 정상 free tier에서 발견됨. 이전 대비 변화 없음.
 보고서: health-reports/YYYY-MM-DD.md
 권장 조치: 없음
 ```
@@ -103,9 +115,9 @@
 문제가 있으면:
 ```
 신호등: 🔴
-핵심: gemini-3-flash가 Deprecated로 표시됨 (출처: ai.google.dev/gemini-api/docs/models 7월부터)
+핵심: gemini-3.5-flash가 Deprecated로 표시됨 (출처: ai.google.dev/gemini-api/docs/models 7월부터)
 보고서: health-reports/YYYY-MM-DD.md
-권장 조치: src/utils/gemini.ts 12번째 줄 fallback 우선순위를 gemini-2.5-flash 우선으로 변경
+권장 조치: src/utils/geminiConstants.ts의 GEMINI_MODEL_CANDIDATES에서 영향 받은 모델 제거 및 fallback 우선순위 재구성
 ```
 
 ## 주의사항
