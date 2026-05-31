@@ -1,8 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 
-export const GEMINI_MODEL_CANDIDATES = ['gemini-3-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite'] as const;
-
-export const GEMINI_MODEL_GUIDE = 'Gemini 3 Flash, Gemini 2.5 Flash, 또는 Gemini 2.5 Flash Lite';
+export { GEMINI_MODEL_CANDIDATES, GEMINI_MODEL_GUIDE } from './geminiConstants';
+import { GEMINI_MODEL_CANDIDATES } from './geminiConstants';
 
 const API_KEY_PROPAGATION_RETRY_DELAY_MS = 1800;
 
