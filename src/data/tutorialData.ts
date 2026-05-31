@@ -84,7 +84,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '브라우저는 인터넷으로 들어가는 문',
-        image: '/tutorial-visuals/module0/l0-1-visual.png',
+        image: '/tutorial-visuals/module0/l0-1-visual.webp',
         alt: 'Edge, Chrome 같은 브라우저 문을 통해 Gemini와 Google AI Studio로 이동하는 과정을 간단히 보여주는 인포그래픽',
         caption: '0-1은 설명 중심 단원이므로 브라우저와 AI 도구의 관계를 짧은 인포그래픽으로 정리했습니다.',
       },
@@ -119,7 +119,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'Edge에서 Chrome 공식 페이지 열기',
-        image: '/tutorial-visuals/module0/l0-2-visual.png',
+        image: '/tutorial-visuals/module0/l0-2-visual.webp',
         alt: 'Windows에서 Edge를 실행하고 주소창에 google.com/chrome을 입력한 뒤 Chrome 다운로드 버튼을 누르는 활동 장면',
         caption: '주소창에 공식 주소를 직접 입력하고 다운로드 버튼을 찾는 흐름을 활동 장면으로 보여줍니다.',
       },
@@ -150,7 +150,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'ChromeSetup.exe 실행하기',
-        image: '/tutorial-visuals/module0/l0-3-visual.png',
+        image: '/tutorial-visuals/module0/l0-3-visual.webp',
         alt: 'ChromeSetup.exe 설치 파일을 실행하고 설치 진행 창을 확인한 뒤 바탕화면에 Chrome 아이콘이 생기는 활동 장면',
         caption: '다운로드 파일 실행, 설치 진행, Chrome 열기까지의 순서를 한 화면으로 연결했습니다.',
       },
@@ -181,7 +181,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'Google 계정 만들기 화면 따라가기',
-        image: '/tutorial-visuals/module0/l0-4-visual.png',
+        image: '/tutorial-visuals/module0/l0-4-visual.webp',
         alt: 'Google 계정 만들기 양식에서 이름, Gmail 주소, 비밀번호, 보안 확인을 순서대로 확인하는 활동 장면',
         caption: '실제 개인정보 대신 연습용 정보로 계정 만들기 흐름만 익히는 활동을 강조했습니다.',
       },
@@ -214,7 +214,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'Gemini에 첫 질문 보내기',
-        image: '/tutorial-visuals/module0/l0-5-visual.png',
+        image: '/tutorial-visuals/module0/l0-5-visual.webp',
         alt: 'Chrome에서 Gemini를 열고 질문 입력창에 첫 질문을 보낸 뒤 답변을 확인하는 활동 장면',
         caption: '주소 입력, 질문 작성, 보내기 버튼 클릭이라는 첫 대화 활동이 보이도록 구성했습니다.',
       },
@@ -247,7 +247,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'Google AI Studio 가입 흐름 확인하기',
-        image: '/tutorial-visuals/module0/l0-6-visual.png',
+        image: '/tutorial-visuals/module0/l0-6-visual.webp',
         alt: 'aistudio.google.com에서 Google 계정으로 로그인하고 약관 확인 후 AI Studio 첫 화면으로 들어가는 활동 장면',
         caption: '로그인, 약관 확인, 시작 화면 진입까지의 가입 활동 흐름을 간단히 보여줍니다.',
       },
@@ -280,7 +280,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '다음 단어 예측 시각화',
-        image: '/tutorial-visuals/module1/l1-1-visual.png',
+        image: '/tutorial-visuals/module1/l1-1-visual.webp',
         alt: 'LLM이 다음 단어를 확률적으로 예측하는 과정을 보여주는 인포그래픽',
         caption: 'LLM은 문장의 의미를 이해하는 것처럼 보이지만, 실제로는 다음에 올 가능성이 높은 표현을 연속적으로 예측합니다.',
       },
@@ -328,7 +328,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '대표 AI 모델 성격 비교',
-        image: '/tutorial-visuals/module1/l1-2-visual.png',
+        image: '/tutorial-visuals/module1/l1-2-visual.webp',
         alt: '서로 다른 강점을 가진 세 가지 AI assistant를 비교한 교육용 일러스트',
         caption: '모델마다 잘하는 일이 다르므로, 글쓰기·문서 검토·생태계 연동처럼 목적에 맞게 선택하는 관점이 중요합니다.',
       },
@@ -374,7 +374,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '모델 티어 선택 개념도',
-        image: '/tutorial-visuals/module1/l1-3-visual.png',
+        image: '/tutorial-visuals/module1/l1-3-visual.webp',
         alt: '빠른 모델, 균형형 모델, 깊은 사고형 모델의 차이를 보여주는 인포그래픽',
         caption: '항상 가장 무거운 모델이 정답은 아닙니다. 속도, 비용, 사고 깊이를 보고 과제에 맞는 티어를 고르는 감각이 필요합니다.',
       },
@@ -431,7 +431,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'API 키 보안 개념도',
-        image: '/tutorial-visuals/module1/l1-4-visual.png',
+        image: '/tutorial-visuals/module1/l1-4-visual.webp',
         alt: 'API 키를 자물쇠와 금고로 비유해 보안의 중요성을 보여주는 일러스트',
         caption: 'API 키는 출입증이자 결제 권한에 가까운 민감 정보입니다. 공개 채널에 올리지 않고 안전하게 보관해야 합니다.',
       },
@@ -526,7 +526,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '실시간 AI 대화 체험 장면',
-        image: '/tutorial-visuals/module1/l1-5-visual.png',
+        image: '/tutorial-visuals/module1/l1-5-visual.webp',
         alt: '교사가 교실에서 노트북으로 AI와 대화하는 모습을 그린 교육용 일러스트',
         caption: '이 단계에서는 프롬프트를 입력하고 응답을 검토하는 전체 흐름을 직접 체험하면서, AI를 도구로 다루는 감각을 익히게 됩니다.',
       },
@@ -565,7 +565,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '좋은 프롬프트의 기본 구조',
-        image: '/tutorial-visuals/module2/l2-1-visual.png',
+        image: '/tutorial-visuals/module2/l2-1-visual.webp',
         alt: '교사가 역할, 맥락, 형식을 더해 AI 결과를 개선하는 과정을 보여주는 교육용 인포그래픽',
         caption: '막연한 요청보다 역할, 맥락, 형식을 함께 주었을 때 결과가 더 구체적이고 수업에 바로 쓰기 쉬워집니다.',
       },
@@ -646,7 +646,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '역할 부여 전후의 답변 차이',
-        image: '/tutorial-visuals/module2/l2-2-visual.png',
+        image: '/tutorial-visuals/module2/l2-2-visual.webp',
         alt: '같은 질문이라도 AI에게 역할을 부여했을 때 더 적절한 결과가 나오는 모습을 보여주는 인포그래픽',
         caption: 'AI에게 어떤 전문가로 답해야 하는지 지정하면 답변의 관점과 구체성이 크게 달라집니다.',
       },
@@ -702,7 +702,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '맥락이 결과를 바꾸는 이유',
-        image: '/tutorial-visuals/module2/l2-3-visual.png',
+        image: '/tutorial-visuals/module2/l2-3-visual.webp',
         alt: '학년, 교과, 교실 상황, 목적 같은 맥락 정보가 AI 결과를 개선하는 과정을 보여주는 인포그래픽',
         caption: '수업 대상과 환경, 목표를 함께 알려주면 AI가 훨씬 현실적인 초안을 제안할 수 있습니다.',
       },
@@ -791,7 +791,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '예시와 형식이 있는 프롬프트',
-        image: '/tutorial-visuals/module2/l2-4-visual.png',
+        image: '/tutorial-visuals/module2/l2-4-visual.webp',
         alt: '예시 자료와 출력 형식을 함께 제시해 AI 결과물을 다듬는 과정을 보여주는 인포그래픽',
         caption: '원하는 결과와 비슷한 예시, 그리고 출력 형식을 미리 보여주면 AI가 결과의 방향을 더 정확히 맞춥니다.',
       },
@@ -845,7 +845,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '단계별 사고의 흐름',
-        image: '/tutorial-visuals/module2/l2-5-visual.png',
+        image: '/tutorial-visuals/module2/l2-5-visual.webp',
         alt: '복잡한 학생 문제를 분석, 원칙 선택, 중재 계획의 단계로 나누어 해결하는 인포그래픽',
         caption: '복잡한 문제일수록 AI에게 단계별로 생각하게 하면 더 균형 있고 실천 가능한 답을 얻기 쉽습니다.',
       },
@@ -899,7 +899,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '메타프롬프트 조립기',
-        image: '/tutorial-visuals/module2/l2-6-visual.png',
+        image: '/tutorial-visuals/module2/l2-6-visual.webp',
         alt: '짧은 업무 요청을 역할, 맥락, 형식, 단계로 조합해 완성된 프롬프트로 바꾸는 인포그래픽',
         caption: '메타프롬프트는 짧은 요청만으로도 필요한 요소를 빠르게 조합해 재사용 가능한 프롬프트 초안을 만들어 줍니다.',
       },
@@ -961,7 +961,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '멀티미디어 프롬프트 확장',
-        image: '/tutorial-visuals/module2/l2-7-visual.png',
+        image: '/tutorial-visuals/module2/l2-7-visual.webp',
         alt: '하나의 아이디어를 이미지, 영상, 음악, 발표 자료용 프롬프트로 확장하는 인포그래픽',
         caption: '대화형 AI를 프롬프트 설계자로 쓰면 이미지, 영상, 음악, 발표 자료용 지시문도 더 빠르게 만들 수 있습니다.',
       },
@@ -1059,7 +1059,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '멀티 페르소나 자기협업 구조',
-        image: '/tutorial-visuals/module2/l2-8-visual.png',
+        image: '/tutorial-visuals/module2/l2-8-visual.webp',
         alt: '하나의 AI가 담임교사·학부모·상담사 세 역할을 맡아 토론하고 합의안을 도출하는 인포그래픽',
         caption: '하나의 AI에게 여러 전문가 역할을 동시에 맡기면, 각 입장의 강점과 약점을 한 번에 검토하고 현실적인 합의안을 얻을 수 있습니다.',
       },
@@ -1135,7 +1135,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '수업 자료 생성 흐름',
-        image: '/tutorial-visuals/module3/l3-1-visual.png',
+        image: '/tutorial-visuals/module3/l3-1-visual.webp',
         alt: '안경 낀 남성 교사가 좋은 요청 구조를 이용해 학습지와 발표 자료를 만드는 과정을 보여주는 인포그래픽',
         caption: '학년, 단원, 형식, 수준을 함께 지정하면 AI가 더 바로 쓰기 쉬운 수업 자료 초안을 만듭니다.',
       },
@@ -1186,7 +1186,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '오개념에서 지도안으로',
-        image: '/tutorial-visuals/module3/l3-2-visual.png',
+        image: '/tutorial-visuals/module3/l3-2-visual.webp',
         alt: '안경 낀 남성 교사가 학생 오개념을 먼저 분석한 뒤 지도안 초안을 만드는 과정을 보여주는 인포그래픽',
         caption: '학생들이 헷갈리는 지점을 먼저 짚으면 도입, 전개, 정리가 더 분명한 수업 흐름을 잡기 쉽습니다.',
       },
@@ -1233,7 +1233,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '수준별 자료 분기',
-        image: '/tutorial-visuals/module3/l3-3-visual.png',
+        image: '/tutorial-visuals/module3/l3-3-visual.webp',
         alt: '안경 낀 남성 교사가 하나의 원본 자료를 기초 기본 심화 버전으로 나누는 인포그래픽',
         caption: '한 번 만든 원본 자료를 바탕으로 설명과 문제 수준을 조절하면 여러 학생 수준에 맞춘 자료를 빠르게 준비할 수 있습니다.',
       },
@@ -1278,7 +1278,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '발문 설계 3단계',
-        image: '/tutorial-visuals/module3/l3-4-visual.png',
+        image: '/tutorial-visuals/module3/l3-4-visual.webp',
         alt: '안경 낀 남성 교사가 오개념 분석에서 질문 후보 생성과 토론 질문 선택으로 이어지는 과정을 보여주는 인포그래픽',
         caption: '여러 질문 후보를 만든 뒤 목적에 가장 맞는 발문을 고르면 학생 토론을 더 자연스럽게 열 수 있습니다.',
       },
@@ -1320,7 +1320,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '문항과 루브릭 설계',
-        image: '/tutorial-visuals/module3/l3-5-visual.png',
+        image: '/tutorial-visuals/module3/l3-5-visual.webp',
         alt: '안경 낀 남성 교사가 성취기준을 바탕으로 평가 문항과 루브릭을 구성하는 인포그래픽',
         caption: '성취기준을 출발점으로 문항과 채점 기준을 함께 만들면 평가의 방향과 기준이 더 또렷해집니다.',
       },
@@ -1363,7 +1363,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '관찰 기록에서 문구 초안으로',
-        image: '/tutorial-visuals/module3/l3-6-visual.png',
+        image: '/tutorial-visuals/module3/l3-6-visual.webp',
         alt: '안경 낀 남성 교사가 관찰 기록과 키워드를 바탕으로 생활기록부 문구 초안을 만드는 인포그래픽',
         caption: '관찰 기록을 키워드로 정리하고 문체를 고정하면 생활기록부 문구 초안을 더 안정적으로 만들 수 있습니다.',
       },
@@ -1405,7 +1405,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '후속 대화로 결과 다듬기',
-        image: '/tutorial-visuals/module3/l3-7-visual.png',
+        image: '/tutorial-visuals/module3/l3-7-visual.webp',
         alt: '안경 낀 남성 교사가 초안을 부분 수정 검토 확장 요청으로 다듬는 과정을 보여주는 인포그래픽',
         caption: '초안을 한 번에 끝내기보다 수정, 검토, 확장 요청을 이어 가면 결과물이 훨씬 실전형으로 다듬어집니다.',
       },
@@ -1448,7 +1448,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '커스텀 챗봇 설정 흐름',
-        image: '/tutorial-visuals/module3/l3-8-visual.png',
+        image: '/tutorial-visuals/module3/l3-8-visual.webp',
         alt: '안경 낀 남성 교사가 역할 규칙 목표를 설정해 나만의 커스텀 챗봇을 만드는 인포그래픽',
         caption: '역할, 어조, 형식, 목표를 미리 정리해 두면 반복 업무를 돕는 전용 챗봇을 더 쉽게 만들 수 있습니다.',
       },
@@ -1528,7 +1528,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '학교 정보와 금지 정보 구분하기',
-        image: '/tutorial-visuals/module4/l4-1-visual.png',
+        image: '/tutorial-visuals/module4/l4-1-visual.webp',
         alt: '중년 여성 교사가 AI에 학교 기본 정보를 설정하고, 재사용 가능한 학교 정보와 입력하면 안 되는 개인정보를 구분해 보여주는 인포그래픽',
         caption: '시스템 프롬프트에는 학교명, 학년, 문서 양식처럼 반복해서 쓰는 정보만 넣고, 학생·학부모 개인정보와 비밀번호는 절대 넣지 않습니다.',
       },
@@ -1572,7 +1572,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '업무별 프롬프트 템플릿 만들기',
-        image: '/tutorial-visuals/module4/l4-2-visual.png',
+        image: '/tutorial-visuals/module4/l4-2-visual.webp',
         alt: '중년 남성 교사가 학교 공통 정보와 업무별 규칙을 결합해 재사용 가능한 문서 템플릿을 만드는 인포그래픽',
         caption: '학교 공통 정보 위에 업무 규칙을 덧붙이면, 가정통신문과 공문 회신처럼 반복되는 결과물을 같은 형식으로 빠르게 재사용할 수 있습니다.',
       },
@@ -1618,7 +1618,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'Gemini Canvas로 바로 도구 만들기',
-        image: '/tutorial-visuals/module4/l4-3-visual.png',
+        image: '/tutorial-visuals/module4/l4-3-visual.webp',
         alt: '중년 여성 교사가 자연어로 지시하자 오른쪽에 작은 인터랙티브 도구 화면이 즉시 생성되는 장면',
         caption: 'Gemini Canvas는 코드를 몰라도 말로 설명한 기능을 바로 작동하는 페이지 형태로 보여주는 가장 쉬운 바이브 코딩 입문 도구입니다.',
       },
@@ -1671,7 +1671,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '재사용 가능한 AI 앱 빌드',
-        image: '/tutorial-visuals/module4/l4-4-visual.png',
+        image: '/tutorial-visuals/module4/l4-4-visual.webp',
         alt: '중년 남성 교사가 학교 규칙과 템플릿을 앱 빌더 화면에 넣어 영구 재사용 가능한 행정 앱으로 바꾸는 장면',
         caption: 'Canvas가 즉석 실험이라면, Build는 한 번 세팅한 규칙을 저장해 두고 학기 내내 반복 사용하는 앱을 만드는 단계입니다.',
       },
@@ -1728,7 +1728,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'AI와 외부 도구 연결 이해하기',
-        image: '/tutorial-visuals/module4/l4-5-visual.png',
+        image: '/tutorial-visuals/module4/l4-5-visual.webp',
         alt: '중년 여성 교사와 남성 교사가 AI가 웹 검색과 클라우드 문서를 연결하되 제한된 시스템은 잠금으로 표시된 구조를 살펴보는 그림',
         caption: 'MCP는 AI가 외부 도구를 무제한으로 쓰게 하는 것이 아니라, 허용된 범위와 권한 안에서만 안전하게 연결하게 하는 표준입니다.',
       },
@@ -1773,7 +1773,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'Claude Skill로 문서 자동화하기',
-        image: '/tutorial-visuals/module4/l4-6-visual.png',
+        image: '/tutorial-visuals/module4/l4-6-visual.webp',
         alt: '중년 여성 교사가 Claude에 스킬 파일을 업로드하고 공문 파일이 자동 생성되는 흐름을 보여주는 인포그래픽',
         caption: 'Skill은 Claude에 특정 업무 능력을 추가하는 확장 모듈입니다. 한 번 설치하면 대화만으로도 실제 업무 파일 생성까지 이어질 수 있습니다.',
       },
@@ -1823,7 +1823,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '도구를 쓰는 AI 에이전트 이해하기',
-        image: '/tutorial-visuals/module4/l4-7-visual.png',
+        image: '/tutorial-visuals/module4/l4-7-visual.webp',
         alt: '교사가 AI 에이전트에게 업무를 지시하고, 에이전트가 웹 검색·파일 생성·업로드 같은 도구를 사용해 실제 작업을 처리하는 인포그래픽',
         caption: 'AI 에이전트는 답변만 작성하는 챗봇을 넘어, 필요한 도구를 직접 불러와 검색·파일 생성·업로드 같은 실제 작업을 이어서 처리하는 방식입니다.',
       },
@@ -1925,7 +1925,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'AI 에이전트 팀 워크플로우',
-        image: '/tutorial-visuals/module4/l4-8-visual.png',
+        image: '/tutorial-visuals/module4/l4-8-visual.webp',
         alt: '중년 여성 교사가 수집·작성·디자인·업로드 에이전트들이 총괄 에이전트의 지휘 아래 학교 소식을 자동으로 처리하는 파이프라인을 바라보는 인포그래픽',
         caption: '에이전트 팀은 각자 전문 역할을 맡은 AI들이 워크플로우로 연결된 시스템입니다. 총괄 에이전트가 지휘하고, 각 에이전트는 자신의 일만 집중해 처리합니다.',
       },
@@ -2026,7 +2026,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '할루시네이션과 검증 흐름',
-        image: '/tutorial-visuals/module5/l5-1-visual.png',
+        image: '/tutorial-visuals/module5/l5-1-visual.webp',
         alt: '중년 남성 교사가 AI의 그럴듯한 오류 답변을 공식 자료와 출처 확인으로 검증하는 인포그래픽',
         caption: 'AI는 틀린 정보도 자신감 있게 말할 수 있으므로, 출처 확인과 교차 검증, 공식 자료 기반 RAG 습관이 반드시 필요합니다.',
       },
@@ -2125,7 +2125,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '편향된 결과와 개선된 결과 비교',
-        image: '/tutorial-visuals/module5/l5-2-visual.png',
+        image: '/tutorial-visuals/module5/l5-2-visual.webp',
         alt: '중년 여성 교사가 비슷한 모습으로만 생성된 인물들과 다양성이 반영된 개선 결과를 비교하는 그림',
         caption: '편향은 종종 너무 익숙해서 놓치기 쉽습니다. 그래서 생성 결과를 한 번 더 보고, 필요하면 다양성을 명시해 다시 요청해야 합니다.',
       },
@@ -2176,7 +2176,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'AI 입력 전 개인정보 점검',
-        image: '/tutorial-visuals/module5/l5-3-visual.png',
+        image: '/tutorial-visuals/module5/l5-3-visual.webp',
         alt: '중년 남성 교사가 익명화된 정보와 금지된 개인정보를 구분해 AI 서버로 보내는 데이터 흐름을 살펴보는 인포그래픽',
         caption: 'AI에 질문하기 전에는 항상 이름, 연락처, 민감정보가 남아 있지 않은지 먼저 점검하고 일반화된 표현으로 바꾸는 습관이 필요합니다.',
       },
@@ -2244,7 +2244,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: 'AI 생성물의 출처와 사람의 수정',
-        image: '/tutorial-visuals/module5/l5-4-visual.png',
+        image: '/tutorial-visuals/module5/l5-4-visual.webp',
         alt: '중년 여성 교사가 학습지와 게시물에 출처 표시를 붙이고 직접 수정 흔적을 남기는 장면',
         caption: '법적 기준이 완전히 정리되지 않았더라도, AI의 도움을 받았다는 사실과 사람이 직접 다듬은 부분을 투명하게 밝히는 것이 기본 원칙입니다.',
       },
@@ -2302,7 +2302,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '학생과 함께하는 AI 윤리 수업',
-        image: '/tutorial-visuals/module5/l5-5-visual.png',
+        image: '/tutorial-visuals/module5/l5-5-visual.webp',
         alt: '중년 남성 교사가 초등학생들과 AI 답변 검토, 사람과 AI 결과 비교, AI 사용 공개 원칙을 토론하는 교실 장면',
         caption: 'AI 윤리 교육은 금지 교육이 아니라, 학생이 AI를 비판적으로 사용하고 자신의 사용 과정을 투명하게 설명하도록 돕는 수업입니다.',
       },
@@ -2428,7 +2428,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '검토 없는 AI 결과물의 위험',
-        image: '/tutorial-visuals/module5/l5-6-visual.png',
+        image: '/tutorial-visuals/module5/l5-6-visual.webp',
         alt: '중년 여성 교사가 넘쳐나는 미검토 AI 문서와 이미지를 정리하고 핵심만 남긴 결과로 다듬는 장면',
         caption: 'AI가 빠르게 만든 초안은 출발점일 뿐입니다. 사람이 읽고 줄이고 고쳐야 비로소 신뢰할 수 있는 결과물이 됩니다.',
       },
@@ -2521,7 +2521,7 @@ export const lessons: Lesson[] = [
     visuals: [
       {
         title: '교사의 AI 원칙 보드',
-        image: '/tutorial-visuals/module5/l5-7-visual.png',
+        image: '/tutorial-visuals/module5/l5-7-visual.webp',
         alt: '중년 여성 교사와 남성 교사가 사실 검증, 프라이버시, 출처, 편향, 검토 습관을 한 보드에 정리하는 종합 인포그래픽',
         caption: '모듈 5의 마지막 단계는 개별 개념을 아는 데서 멈추지 않고, 교실과 학교에서 실제로 지킬 나만의 원칙으로 정리하는 것입니다.',
       },
