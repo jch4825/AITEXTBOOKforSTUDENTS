@@ -1517,6 +1517,12 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                         placeholder={
                           lesson.id === 'l1-1'
                             ? "위 문장을 따라 써보세요..."
+                            : lesson.id === 'l1-2'
+                            ? "ChatGPT, Claude, Gemini 중 하나를 입력하세요."
+                            : lesson.id === 'l1-3'
+                            ? "ChatGPT, Gemini, Claude 중 하나를 입력하거나 위 버튼을 클릭하세요."
+                            : lesson.id === 'l1-4'
+                            ? "발급받은 Gemini API 키를 붙여넣으세요. (예: AIza... 또는 AQ....)"
                             : lesson.id === 'l1-5'
                             ? "궁금한 것을 물어보세요."
                             : lesson.id === 'l2-8'
