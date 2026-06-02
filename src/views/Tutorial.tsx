@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { m, AnimatePresence } from 'motion/react';
-import { ArrowLeft, BookOpen, CheckCircle2, ChevronRight, PlayCircle, Clock, ArrowRight, Copy, Info, FileText, Lock, Check, School, X } from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle2, ChevronRight, PlayCircle, Clock, ArrowRight, Copy, Info, FileText, Lock, Check, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { modules, lessons, Lesson } from '../data/tutorialData';
