@@ -158,43 +158,140 @@ export const Lesson43Interactive = ({ onExecute }: { onExecute: (data: {title: s
 };
 
 export const Lesson44Interactive = ({ onExecute }: { onExecute: (data: {title: string, content: React.ReactNode, point: string, hideDocsButton?: boolean}) => void }) => {
-  const promptText = `(여기에 4-1에서 만든 학교 시스템 프롬프트를 붙여넣으세요)
+  const [gradeBand, setGradeBand] = useState<'g12' | 'g34' | 'g56'>('g34');
+  const [tone, setTone] = useState<'encourage' | 'balanced' | 'strict'>('balanced');
+  const [items, setItems] = useState<Record<string, boolean>>({
+    '주제 명확성': true,
+    '근거·이유': true,
+    '표현·문장': true,
+    '맞춤법': true,
+    '창의성': false,
+  });
+  const [scale, setScale] = useState<3 | 5>(5);
 
-(여기에 4-2에서 만든 행정 업무 프롬프트 템플릿을 적절히 붙여넣으세요)
+  const GRADE_BAND_LABEL: Record<typeof gradeBand, string> = {
+    g12: '1-2학년군',
+    g34: '3-4학년군',
+    g56: '5-6학년군',
+  };
+  const TONE_LABEL: Record<typeof tone, string> = {
+    encourage: '격려 중심',
+    balanced: '균형',
+    strict: '엄격',
+  };
+  const SYSTEM_PROMPT_BY_BAND: Record<typeof gradeBand, string> = {
+    g12: '받침과 한두 문장 표현을 격려 중심으로 평가합니다. 자기 생각을 글로 옮긴 시도 자체를 인정하고, 맞춤법은 가장 기본적인 자모/받침 오류 위주로만 지적합니다.',
+    g34: '두세 문장으로 이유 들기를 평가합니다. 맞춤법은 본격적으로 점검하되 학생이 위축되지 않도록 격려 톤을 유지합니다.',
+    g56: '짧은 단락에서 근거와 표현을 평가합니다. 주장-근거 구조를 명확히 점검하고, 어휘·문장 다양성과 글의 흐름을 함께 봅니다.',
+  };
 
-위 규칙을 바탕으로 사용자가 요구하는 문서를 작성하고, 사용자가 앱에서 문서를 편하게 만들어갈 수 있도록 만들어주세요.`;
+  const selectedItems = Object.keys(items).filter(k => items[k]);
+  const itemsBlock = selectedItems.length > 0
+    ? selectedItems.map((it, i) => `${i + 1}. ${it}`).join('\n')
+    : '(평가 항목을 1개 이상 선택하세요)';
+
+  const fullPrompt = `[시스템 프롬프트]
+당신은 초등 ${GRADE_BAND_LABEL[gradeBand]} 담임교사로, ${TONE_LABEL[tone]} 톤으로 학생의 짧은 글을 평가합니다. ${SYSTEM_PROMPT_BY_BAND[gradeBand]}
+
+[프롬프트 템플릿 — 학생 글 채점]
+다음 학생 글을 ${selectedItems.length}개 항목으로 ${scale}점 척도 채점:
+${itemsBlock}
+
+출력 형식:
+- 항목별 점수 (${scale}점 척도)
+- 각 항목별 한 줄 피드백
+- "잘된 점" / "보완할 점" 두 박스
+- 종합 한 단락 (학년군 톤에 맞춘 격려)
+
+[입력 처리]
+사진 입력의 경우, OCR로 읽은 텍스트를 사용자에게 먼저 보여주고 확인받은 뒤 채점하시오. 학생 이름이 포함되어 있으면 [학생A] 같은 자리표시자로 처리하시오.`;
+
+  const toggleItem = (key: string) => setItems(prev => ({ ...prev, [key]: !prev[key] }));
 
   const handleTest = () => {
     onExecute({
-      title: '바이브코딩으로 앱 제작 시뮬레이션 결과',
-      content: `### 🚀 행정 자동화 앱 초안 생성 완료\n\n\`\`\`text\n[시스템] AI가 선생님의 프롬프트를 바탕으로 '가정통신문 자동 작성 앱'을 구성했습니다.\n\n사용자 인터페이스 (UI) 예상:\n1. '주제를 입력하세요' 텍스트 박스\n2. '문서 생성' 버튼\n3. '생성된 문서 출력' 창\n\nAI가 입력된 규칙(4-1, 4-2)을 시스템 백그라운드에 고정하고,\nUI를 통해 입력된 주제만 넘겨받아 완벽하게 포맷된 문서를 출력하는 앱이 만들어집니다.\n\`\`\``,
-      point: '원래는 코드를 짜야 하지만, Google AI Studio Build에서는 이런 "지시문(Prompt)"만으로도 즉시 나만의 맞춤형 도구를 만들 수 있습니다. 이것이 바로 코딩 없이 대화만으로 프로그램을 만드는 "바이브코딩(Vibe Coding)"의 세계입니다.',
-      hideDocsButton: true
+      title: '프롬프트 빌더 — 조립된 채점기 프롬프트',
+      content: fullPrompt,
+      point: 'Build의 핵심 가치는 시스템 프롬프트(누구로 행동할지)와 템플릿(매번 채울 양식)을 결합해 React 기반 UI를 가진 진짜 웹앱을 만들 수 있다는 것입니다. Project나 Gems가 챗봇 형태로 끝나는 것과 달리, Build는 점수 카드·시각적 막대 같은 UI 요소가 본질적 가치를 더하는 도구를 만듭니다.',
+      hideDocsButton: true,
     });
   };
 
   return (
     <div className="flex-1 bg-[#0e1318] rounded-xl p-5 border border-gray-800 flex flex-col gap-4 overflow-y-auto">
-      <div className="text-white font-bold mb-2">바이브 코딩으로 앱 맛보기 (Google AI Studio Build)</div>
-      
-      <div className="text-sm text-gray-300 bg-gray-800/50 p-4 rounded-lg">
-        <ul className="list-decimal pl-4 space-y-2">
-          <li><a href="https://aistudio.google.com/build" target="_blank" rel="noopener noreferrer" className="text-canva-teal hover:underline font-bold">Google AI Studio Build</a> 에 접속하여 새 창을 엽니다.</li>
-          <li>기존에 작성해 두었던 <strong>[4-1 시스템 프롬프트]</strong>와 <strong>[4-2 프롬프트 템플릿]</strong> 내용을 조합합니다.</li>
-          <li>AI에게 아래와 같이 지시하여 나만의 도구를 만듭니다.</li>
-        </ul>
+      <div className="text-white font-bold mb-2">프롬프트 빌더 — 짧은 논술문 채점기</div>
+
+      {/* 영역 ① 시스템 프롬프트 빌더 */}
+      <div className="bg-[#13202d] p-4 rounded-lg border border-cyan-900/60">
+        <div className="text-xs font-bold text-cyan-300 mb-3">① 시스템 프롬프트 빌더 (4-1 응용)</div>
+        <div className="space-y-3">
+          <div>
+            <div className="text-xs text-gray-400 mb-1.5">학년군</div>
+            <div className="flex gap-2">
+              {(['g12', 'g34', 'g56'] as const).map(g => (
+                <button key={g} onClick={() => setGradeBand(g)} className={`flex-1 py-2 px-2 rounded text-xs font-bold border ${gradeBand === g ? 'bg-cyan-600 border-cyan-500 text-white' : 'bg-transparent border-gray-700 text-gray-400 hover:border-gray-500'}`}>
+                  {GRADE_BAND_LABEL[g]}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-gray-400 mb-1.5">평가 톤</div>
+            <div className="flex gap-2">
+              {(['encourage', 'balanced', 'strict'] as const).map(t => (
+                <button key={t} onClick={() => setTone(t)} className={`flex-1 py-2 px-2 rounded text-xs font-bold border ${tone === t ? 'bg-cyan-600 border-cyan-500 text-white' : 'bg-transparent border-gray-700 text-gray-400 hover:border-gray-500'}`}>
+                  {TONE_LABEL[t]}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
+      {/* 영역 ② 프롬프트 템플릿 빌더 */}
+      <div className="bg-[#1d1828] p-4 rounded-lg border border-purple-900/60">
+        <div className="text-xs font-bold text-purple-300 mb-3">② 프롬프트 템플릿 빌더 (4-2 응용)</div>
+        <div className="space-y-3">
+          <div>
+            <div className="text-xs text-gray-400 mb-1.5">평가 항목 (체크박스)</div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {Object.keys(items).map(k => (
+                <button key={k} onClick={() => toggleItem(k)} className={`text-left py-1.5 px-2 rounded text-xs border flex items-center gap-2 ${items[k] ? 'bg-purple-700/40 border-purple-500 text-white' : 'bg-transparent border-gray-700 text-gray-400 hover:border-gray-500'}`}>
+                  <span className={`w-3 h-3 rounded border ${items[k] ? 'bg-purple-400 border-purple-300' : 'border-gray-600'} flex items-center justify-center`}>
+                    {items[k] && <Check size={10} className="text-[#0e1318]" />}
+                  </span>
+                  {k}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs text-gray-400 mb-1.5">점수 척도</div>
+            <div className="flex gap-2">
+              {([3, 5] as const).map(s => (
+                <button key={s} onClick={() => setScale(s)} className={`flex-1 py-2 px-2 rounded text-xs font-bold border ${scale === s ? 'bg-purple-600 border-purple-500 text-white' : 'bg-transparent border-gray-700 text-gray-400 hover:border-gray-500'}`}>
+                  {s}점 척도
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 결과 영역 */}
       <div className="relative bg-[#1c232b] p-4 rounded-lg border border-gray-700">
-        <div className="text-xs font-bold text-gray-400 mb-2">Build 화면에 붙여넣을 템플릿</div>
-        <CopyButton text={promptText} className="absolute top-2 right-2" />
-        <pre className="text-xs text-canva-gray whitespace-pre-wrap font-mono mt-2">{promptText}</pre>
+        <div className="text-xs font-bold text-gray-400 mb-2">조립된 프롬프트 (Build 입력창에 그대로 붙여넣기)</div>
+        <CopyButton text={fullPrompt} className="absolute top-2 right-2" />
+        <pre className="text-[11px] text-canva-gray whitespace-pre-wrap font-mono mt-2 max-h-64 overflow-y-auto">{fullPrompt}</pre>
+      </div>
+
+      <div className="text-[11px] text-amber-300/80 bg-amber-950/30 border border-amber-900/40 rounded-lg p-3 leading-relaxed">
+        💡 OCR 인식 한계도 프롬프트에 명시되어 있어, 앱이 학생 글을 한 번 보여준 뒤 채점하도록 합니다. 학생 이름은 자리표시자로 익명화 후 입력하세요.
       </div>
 
       <div className="mt-2 text-sm">
-        <div className="text-xs text-gray-400 mb-2">안내대로 앱을 만들었을 때의 결과 시뮬레이션</div>
         <div className="flex gap-2">
-          <button onClick={handleTest} className="w-full py-3 bg-canva-teal text-white rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all shadow-lg">바이브코딩 적용 결과 확인</button>
+          <button onClick={handleTest} className="w-full py-3 bg-canva-teal text-white rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all shadow-lg">조립된 프롬프트 미리보기</button>
         </div>
       </div>
     </div>
