@@ -1091,7 +1091,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 <div className="text-2xl mt-1">🗺️</div>
                 <div>
                   <h4 className="font-bold text-gray-800 text-sm mb-1">모듈 4는 &lsquo;안내&rsquo; 중심입니다</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">무료 Gemini로 처리할 수 있는 영역은 한정적이라, 본격적인 업무 자동화에는 다양한 외부 도구(대부분 유료)가 필요합니다. 모듈 4의 레슨은 &ldquo;이런 도구가 있고, 이렇게 활용할 수 있다&rdquo;는 안내·묘사에 초점을 둡니다.</p>
+                  <p className="text-xs text-gray-600 leading-relaxed">무료 Gemini로 처리할 수 있는 영역은 한정적이라, 본격적인 업무 자동화에는 다양한 외부 도구(대부분 유료)가 필요합니다.</p>
                 </div>
               </div>
 
@@ -1105,7 +1105,6 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             </div>
 
             <div className="mt-5">
-              <p className="text-xs text-gray-500 mb-2">📚 지식샘터에서 이 주제로 더 공부해 보세요</p>
               <div>
                 {['업무자동화', '프롬프트템플릿', 'AI에이전트', 'RAG', '멀티에이전트', '바이브코딩', '클로드코드'].map(tag => (
                   <span key={tag} className="inline-block px-2.5 py-1 mr-1.5 mb-1.5 rounded-full bg-gray-100 text-gray-600 text-[11px] font-medium">
