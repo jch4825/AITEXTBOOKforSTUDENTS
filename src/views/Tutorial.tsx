@@ -1107,7 +1107,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             <div className="mt-5">
               <p className="text-xs text-gray-500 mb-2">📚 지식샘터에서 이 주제로 더 공부해 보세요</p>
               <div>
-                {['업무자동화', '공문작성', '가정통신문', '프롬프트템플릿', 'AI에이전트', 'RAG', '멀티에이전트', '바이브코딩', '클로드코드'].map(tag => (
+                {['업무자동화', '프롬프트템플릿', 'AI에이전트', 'RAG', '멀티에이전트', '바이브코딩', '클로드코드'].map(tag => (
                   <span key={tag} className="inline-block px-2.5 py-1 mr-1.5 mb-1.5 rounded-full bg-gray-100 text-gray-600 text-[11px] font-medium">
                     #{tag}
                   </span>
