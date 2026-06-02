@@ -1072,8 +1072,9 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       )}
 
       {showOverlay && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-6 overflow-y-auto" style={{ minHeight: '100vh' }}>
-          <div className="bg-white rounded-xl max-w-[480px] w-full p-5 sm:p-8 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/50 overflow-y-auto">
+          <div className="min-h-full flex items-center justify-center p-2 sm:p-6">
+            <div className="bg-white rounded-xl max-w-[480px] w-full p-5 sm:p-8 shadow-2xl relative">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-900 text-center flex-1">모듈 4를 시작하기 전에</h3>
               <SpeakButton
@@ -1120,6 +1121,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             >
               확인했습니다
             </button>
+            </div>
           </div>
         </div>
       )}
