@@ -1082,29 +1082,36 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               />
             </div>
 
+            <p className="text-sm text-gray-700 leading-relaxed mb-5">
+              솔직히 말씀드리면, 무료 Gemini만으로는 학교 업무 자동화를 온전히 구현하기 어렵습니다. 그래서 모듈 4는 &lsquo;직접 도구를 만들어 쓰는&rsquo; 다른 모듈과 달리, 외부 도구를 <strong className="font-semibold">안내하고 묘사하는</strong> 방향으로 구성했습니다.
+            </p>
+
             <div className="space-y-4">
               <div className="flex gap-4 items-start p-4 border-b border-gray-100">
-                <div className="text-2xl mt-1">🔒</div>
+                <div className="text-2xl mt-1">🗺️</div>
                 <div>
-                  <h4 className="font-bold text-gray-800 text-sm mb-1">개인정보는 AI에 넣지 않습니다</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">학생 이름·주민번호·연락처, 교사 인사 정보는 절대 AI에 입력하지 않고, 가명 혹은 익명화하여 사용합니다.</p>
+                  <h4 className="font-bold text-gray-800 text-sm mb-1">모듈 4는 &lsquo;안내&rsquo; 중심입니다</h4>
+                  <p className="text-xs text-gray-600 leading-relaxed">무료 Gemini로 처리할 수 있는 영역은 한정적이라, 본격적인 업무 자동화에는 다양한 외부 도구(대부분 유료)가 필요합니다. 모듈 4의 레슨은 &ldquo;이런 도구가 있고, 이렇게 활용할 수 있다&rdquo;는 안내·묘사에 초점을 둡니다.</p>
                 </div>
               </div>
 
-              <div className="flex gap-4 items-start p-4 border-b border-gray-100">
-                <div className="text-2xl mt-1">✅</div>
+              <div className="flex gap-4 items-start p-4">
+                <div className="text-2xl mt-1">🎓</div>
                 <div>
-                  <h4 className="font-bold text-gray-800 text-sm mb-1">AI 결과물은 반드시 교사가 검토합니다</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">공문, 가정통신문 등은 법적 효력이 발생할 수 있습니다. AI는 어디까지나 초안을 제시할 뿐 최종 책임은 작성자 본인에게 있습니다.</p>
+                  <h4 className="font-bold text-gray-800 text-sm mb-1">더 깊이 배우려면 &lsquo;지식샘터&rsquo;를</h4>
+                  <p className="text-xs text-gray-600 leading-relaxed">지식샘터에는 다양한 AI·업무 자동화 프로그램에 대한 교사 대상 강좌가 개설됩니다. AI Bridge에서 기본 틀과 개념을 잡으신 뒤, 본격적인 공부는 지식샘터의 강좌를 활용하시는 것도 좋은 대안입니다.</p>
                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-4 items-start p-4 border-b border-gray-100">
-                <div className="text-2xl mt-1"><School size={24} className="text-canva-purple" /></div>
-                <div>
-                  <h4 className="font-bold text-gray-800 text-sm mb-1">학교 공식 시스템 연동은 승인이 필요합니다</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">나이스(NEIS)나 업무관리시스템 등 학교 자체 공식망에 AI를 직접 연결하는 행위는 교육청 승인 없이 개인이 임의로 해선 안 됩니다.</p>
-                </div>
+            <div className="mt-5">
+              <p className="text-xs text-gray-500 mb-2">📚 지식샘터에서 이 주제로 더 공부해 보세요</p>
+              <div>
+                {['업무자동화', '공문작성', '가정통신문', '프롬프트템플릿', 'AI에이전트'].map(tag => (
+                  <span key={tag} className="inline-block px-2.5 py-1 mr-1.5 mb-1.5 rounded-full bg-gray-100 text-gray-600 text-[11px] font-medium">
+                    #{tag}
+                  </span>
+                ))}
               </div>
             </div>
 
