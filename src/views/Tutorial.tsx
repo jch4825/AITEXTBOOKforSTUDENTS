@@ -1072,8 +1072,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       )}
 
       {showOverlay && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6 overflow-y-auto" style={{ minHeight: '100vh' }}>
-          <div className="bg-white rounded-xl max-w-[480px] w-full p-8 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-6 overflow-y-auto" style={{ minHeight: '100vh' }}>
+          <div className="bg-white rounded-xl max-w-[480px] w-full p-5 sm:p-8 shadow-2xl relative">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-900 text-center flex-1">모듈 4를 시작하기 전에</h3>
               <SpeakButton
@@ -1087,7 +1087,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             </p>
 
             <div className="space-y-4">
-              <div className="flex gap-4 items-start p-4 border-b border-gray-100">
+              <div className="flex gap-3 sm:gap-4 items-start p-3 sm:p-4 border-b border-gray-100">
                 <div className="text-2xl mt-1">🗺️</div>
                 <div>
                   <h4 className="font-bold text-gray-800 text-sm mb-1">모듈 4는 &lsquo;안내&rsquo; 중심입니다</h4>
@@ -1095,7 +1095,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 </div>
               </div>
 
-              <div className="flex gap-4 items-start p-4">
+              <div className="flex gap-3 sm:gap-4 items-start p-3 sm:p-4">
                 <div className="text-2xl mt-1">🎓</div>
                 <div>
                   <h4 className="font-bold text-gray-800 text-sm mb-1">더 깊이 배우려면 &lsquo;지식샘터&rsquo;를</h4>
