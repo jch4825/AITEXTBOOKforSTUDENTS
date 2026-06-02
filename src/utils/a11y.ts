@@ -99,6 +99,17 @@ export function speak(text: string) {
   const voices = window.speechSynthesis.getVoices();
   const koVoice = voices.find(v => v.lang?.startsWith('ko'));
   if (koVoice) utter.voice = koVoice;
+  // Chrome cuts long utterances after ~15s; pause/resume every 10s prevents it.
+  const keepAlive = window.setInterval(() => {
+    if (!window.speechSynthesis.speaking) {
+      window.clearInterval(keepAlive);
+      return;
+    }
+    window.speechSynthesis.pause();
+    window.speechSynthesis.resume();
+  }, 10000);
+  utter.onend = () => window.clearInterval(keepAlive);
+  utter.onerror = () => window.clearInterval(keepAlive);
   window.speechSynthesis.speak(utter);
 }
 
