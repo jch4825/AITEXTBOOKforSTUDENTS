@@ -398,6 +398,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'r-3-5', title: '클로드 교육 스킬 (Claude Education Skills)', url: 'https://github.com/GarethManning/claude-education-skills', description: '111개 증거 기반 교수법 Skill과 MCP 원격 서버를 제공하는 Claude 교육용 Skill 모음' },
           { id: 'r-3-6', title: '오픈에듀 MCP (OpenEdu MCP)', url: 'https://github.com/Cicatriiz/openedu-mcp', description: '학년별 필터와 커리큘럼 연동을 지원하는 Python 기반 교육 MCP 서버' },
           { id: 'r-3-7', title: '안키 MCP 서버 (Anki MCP Server)', url: 'https://github.com/ankimcp/anki-mcp-server', description: '플래시카드 도구 Anki와 AI를 MCP로 연동하는 서버' },
+          { id: 'r-3-8', title: 'PlayMCP (카카오)', url: 'https://playmcp.kakao.com/', description: '카카오가 운영하는 공식 MCP 모음. 카카오톡 메시지 보내기, 학교 급식·복약 정보 조회 등 한국 서비스를 Claude·ChatGPT에 연결 (국내)' },
         ],
       },
       {
