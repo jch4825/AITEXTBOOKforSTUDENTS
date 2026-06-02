@@ -1077,13 +1077,13 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-gray-900 text-center flex-1">모듈 4를 시작하기 전에</h3>
               <SpeakButton
-                text="모듈 4를 시작하기 전에. 솔직히 말씀드리면, 무료 Gemini만으로는 학교 업무 자동화를 온전히 구현하기 어렵습니다. 그래서 모듈 4는 직접 도구를 만들어 쓰는 다른 모듈과 달리, 외부 도구를 안내하고 묘사하는 방향으로 구성했습니다. 첫째, 모듈 4는 안내 중심입니다. 무료 Gemini로 처리할 수 있는 영역은 한정적이라, 본격적인 업무 자동화에는 다양한 외부 도구가 필요합니다. 둘째, 더 깊이 배우려면 지식샘터를 이용하세요. 지식샘터에는 다양한 AI·업무 자동화 프로그램에 대한 교사 대상 강좌가 개설됩니다. AI Bridge에서 기본 틀과 개념을 잡으신 뒤, 본격적인 공부는 지식샘터 강좌를 활용하시는 것도 좋은 대안입니다."
+                text="모듈 4를 시작하기 전에. 무료 Gemini만으로는 학교 업무 자동화를 온전히 구현하기 어렵습니다. 그래서 모듈 4는 직접 도구를 만들어 쓰는 다른 모듈과 달리, 외부 도구를 안내하고 묘사하는 방향으로 구성했습니다. 첫째, 모듈 4는 안내 중심입니다. 무료 Gemini로 처리할 수 있는 영역은 한정적이라, 본격적인 업무 자동화에는 다양한 외부 도구가 필요합니다. 둘째, 더 깊이 배우려면 지식샘터를 이용하세요. 지식샘터에는 다양한 AI·업무 자동화 프로그램에 대한 교사 대상 강좌가 개설됩니다. AI Bridge에서 기본 틀과 개념을 잡으신 뒤, 본격적인 공부는 지식샘터 강좌를 활용하시는 것도 좋은 대안입니다."
                 label="안내 전체 듣기"
               />
             </div>
 
             <p className="text-sm text-gray-700 leading-relaxed mb-5">
-              솔직히 말씀드리면, 무료 Gemini만으로는 학교 업무 자동화를 온전히 구현하기 어렵습니다. 그래서 모듈 4는 &lsquo;직접 도구를 만들어 쓰는&rsquo; 다른 모듈과 달리, 외부 도구를 <strong className="font-semibold">안내하고 묘사하는</strong> 방향으로 구성했습니다.
+              무료 Gemini만으로는 학교 업무 자동화를 온전히 구현하기 어렵습니다. 그래서 모듈 4는 &lsquo;직접 도구를 만들어 쓰는&rsquo; 다른 모듈과 달리, 외부 도구를 <strong className="font-semibold">안내하고 묘사하는</strong> 방향으로 구성했습니다.
             </p>
 
             <div className="space-y-4">
@@ -1107,7 +1107,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             <div className="mt-5">
               <p className="text-xs text-gray-500 mb-2">📚 지식샘터에서 이 주제로 더 공부해 보세요</p>
               <div>
-                {['업무자동화', '공문작성', '가정통신문', '프롬프트템플릿', 'AI에이전트'].map(tag => (
+                {['업무자동화', '공문작성', '가정통신문', '프롬프트템플릿', 'AI에이전트', 'RAG', '멀티에이전트', '바이브코딩', '클로드코드'].map(tag => (
                   <span key={tag} className="inline-block px-2.5 py-1 mr-1.5 mb-1.5 rounded-full bg-gray-100 text-gray-600 text-[11px] font-medium">
                     #{tag}
                   </span>
