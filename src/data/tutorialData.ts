@@ -1809,11 +1809,11 @@ export const lessons: Lesson[] = [
       4. 다운로드한 \`HWPX 공문/기안문 자동 채우기 스킬 v2.zip\` 파일 업로드
       5. 업로드 완료 후 대화창에서 바로 호출 가능 → 기안문/공문 주제만 입력하면 hwpx 파일 자동 생성
 
-      > 💡 **알아두면 좋은 팁: Skill은 다른 AI에도 응용할 수 있어요**
-      >
-      > 많은 Claude Skill은 본질적으로 **프롬프트 지침 + 보조 스크립트(주로 Python)** 조합이라, 다운로드한 Skill 폴더를 ChatGPT나 Gemini의 코딩 도구(예: Codex, Antigravity, Cursor 등)에서 열어보고 수정하면 다른 AI에서도 비슷하게 활용할 수 있는 경우가 많습니다.
-      >
-      > 다만 Claude의 고유 기능(특정 도구 호출 방식, 내부 파일 시스템 등)을 깊이 활용한 Skill은 그대로 옮기기 어려울 수 있으니, 한 번 시도해 보시고 결과를 보고 판단하시면 됩니다.
+      💡 **팁:** Skill은 다른 AI에도 응용할 수 있어요.
+
+      많은 Claude Skill은 본질적으로 **프롬프트 지침 + 보조 스크립트(주로 Python)** 조합이라, 다운로드한 Skill 폴더를 ChatGPT나 Gemini의 코딩 도구(예: Codex, Antigravity, Cursor 등)에서 열어보고 수정하면 다른 AI에서도 비슷하게 활용할 수 있는 경우가 많습니다.
+
+      다만 Claude의 고유 기능(특정 도구 호출 방식, 내부 파일 시스템 등)을 깊이 활용한 Skill은 그대로 옮기기 어려울 수 있으니, 한 번 시도해 보시고 결과를 보고 판단하시면 됩니다.
 
     `,
     estimatedMinutes: 6,
