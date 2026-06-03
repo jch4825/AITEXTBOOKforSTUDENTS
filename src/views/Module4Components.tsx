@@ -190,21 +190,93 @@ export const Lesson44Interactive = ({ onExecute }: { onExecute: (data: {title: s
     ? selectedItems.map((it, i) => `${i + 1}. ${it}`).join('\n')
     : '(평가 항목을 1개 이상 선택하세요)';
 
-  const fullPrompt = `[시스템 프롬프트]
-당신은 초등 ${GRADE_BAND_LABEL[gradeBand]} 담임교사로, ${TONE_LABEL[tone]} 톤으로 학생의 짧은 글을 평가합니다. ${SYSTEM_PROMPT_BY_BAND[gradeBand]}
+  const fullPrompt = `아래 PRD대로 React 웹앱을 만들어줘. (Gemini Vision API로 OCR, Gemini Text API로 채점)
 
-[프롬프트 템플릿 — 학생 글 채점]
-다음 학생 글을 ${selectedItems.length}개 항목으로 ${scale}점 척도 채점:
+# 학생 짧은 글 채점기
+
+## 목적
+초등 ${GRADE_BAND_LABEL[gradeBand]} 교사가 학생의 짧은 글(200~400자)을 일관된 기준으로 빠르게 채점하는 도구. 한 학급 30명 분량을 일관성 있게 채점할 때 학생별 결과를 시각적으로 받아본다.
+
+## 사용 흐름
+1. **첫 진입**: Gemini API 키 입력 화면 → 키 저장
+2. **채점**: 학생 글 입력 화면 → [채점하기] → 결과 화면
+3. **재사용**: 저장된 키로 바로 채점 화면 진입 (헤더에 [API 키 변경] 링크 제공)
+
+> ⚠️ **중요**: 학년군, 평가 톤, 평가 항목, 점수 척도는 이 앱의 **고정값**이며 시스템 프롬프트에 이미 박혀 있습니다. 앱 안에 학년군 선택 탭, 톤 선택 탭, 항목 체크박스, 척도 라디오 같은 변경 UI를 **만들지 마세요**. 사용자가 입력하는 것은 학생 글뿐입니다.
+
+## 첫 화면 — Gemini API 키 입력 (키가 저장되어 있지 않을 때만)
+- 안내 문구:
+  "이 앱은 Google Gemini API로 작동합니다.
+  [Google AI Studio](https://aistudio.google.com/apikey)에서 무료 API 키를 발급받아 아래에 붙여넣어 주세요.
+  키는 브라우저 로컬(localStorage)에만 저장되고 외부 서버로 전송되지 않습니다."
+- 입력칸 (password 타입으로 마스킹) + [저장] 버튼
+- 저장 시 \\\`localStorage\\\`에 키 보관 → 다음 접속 때 자동 로드
+- 키가 \\\`AIza\\\` 또는 \\\`AQ.\\\`로 시작하지 않으면 형식 경고 표시
+- 헤더 우측에 [API 키 변경] 링크 (이미 키가 있을 때 항상 노출)
+
+## 입력 화면
+- 헤더: 앱 제목 + 작은 글씨로 채점 기준 표시 ("${GRADE_BAND_LABEL[gradeBand]} · ${TONE_LABEL[tone]} · ${scale}점 척도 · ${selectedItems.length}개 항목") + 우측 [API 키 변경] 링크
+- 학생 글 입력 (두 방법 모두 지원):
+  (a) **텍스트 영역**에 직접 입력
+  (b) **사진 업로드** 버튼 → Gemini Vision API로 OCR → 인식된 텍스트를 사용자에게 미리 보여주고 [이대로 채점] / [텍스트 수정 후 채점] 버튼 제공
+- 글 주제 입력칸 (선택, 한 줄)
+- **[채점하기]** 버튼 (학생 글이 비어 있으면 비활성화)
+
+## AI 채점 호출 명세
+
+### 시스템 프롬프트 (Gemini API의 system instruction으로 전달)
+"당신은 초등 ${GRADE_BAND_LABEL[gradeBand]} 담임교사로, ${TONE_LABEL[tone]} 톤으로 학생의 짧은 글을 평가합니다. ${SYSTEM_PROMPT_BY_BAND[gradeBand]}"
+
+### 사용자 메시지 (매 채점 호출마다)
+"다음 학생 글을 ${selectedItems.length}개 항목으로 ${scale}점 척도 채점:
 ${itemsBlock}
 
-출력 형식:
-- 항목별 점수 (${scale}점 척도)
-- 각 항목별 한 줄 피드백
-- "잘된 점" / "보완할 점" 두 박스
-- 종합 한 단락 (학년군 톤에 맞춘 격려)
+학생 글:
+\\\`\\\`\\\`
+{학생_글_본문}
+\\\`\\\`\\\`
 
-[입력 처리]
-사진 입력의 경우, OCR로 읽은 텍스트를 사용자에게 먼저 보여주고 확인받은 뒤 채점하시오. 학생 이름이 포함되어 있으면 [학생A] 같은 자리표시자로 처리하시오.`;
+학년군: ${GRADE_BAND_LABEL[gradeBand]} / 평가 톤: ${TONE_LABEL[tone]}
+
+응답은 반드시 아래 JSON 형식으로만:
+{
+  \\"scores\\": [{ \\"item\\": \\"항목명\\", \\"score\\": 0~${scale} 사이 정수, \\"feedback\\": \\"한 줄 피드백\\" }],
+  \\"wellDone\\": [\\"잘된 점 2~3개\\"],
+  \\"toImprove\\": [\\"보완할 점 2~3개\\"],
+  \\"overall\\": \\"종합 코멘트 한 단락 (학년군 톤에 맞춘 격려)\\"
+}"
+
+## OCR 호출 명세 (사진 업로드 시)
+- Gemini Vision API에 이미지 첨부
+- 프롬프트: "이미지는 초등학생이 손글씨 또는 인쇄로 쓴 짧은 글입니다. 글자만 추출해서 텍스트로 돌려주세요. 줄바꿈은 유지하세요."
+- 결과를 텍스트 영역에 채워 사용자가 수정 가능하게 함
+
+## 결과 화면
+- 상단: 학생 글 미리보기 박스 (접기/펼치기 토글)
+- **항목별 점수 카드** (가로 나열 또는 그리드):
+  - 각 카드: 항목명 + 점수(${scale}점 척도) + 시각적 막대(또는 별점) + 한 줄 피드백
+  - 점수가 높은 항목은 밝은 색, 낮은 항목은 옅은 회색 (학년군 톤에 따라 채도 조절)
+- **"잘된 점" 박스** (초록 계열 배경, 2~3개 bullet)
+- **"보완할 점" 박스** (주황 계열 배경, 2~3개 bullet)
+- **종합 코멘트** (한 단락, 학년군 톤에 맞춘 격려)
+- 하단: [다시 채점] 버튼, [결과 인쇄/PDF 저장] 버튼
+
+## 에러 처리
+- AI 응답이 JSON 형식이 아닐 때 → 사용자에게 "응답 형식 오류, 다시 시도" 안내
+- OCR 인식이 부분적으로 실패한 경우 → 텍스트 영역에서 수정하도록 안내
+- API 키 누락 → 첫 화면(키 입력)으로 자동 이동
+- API 호출 실패(401, 429, 네트워크) → 원인별 명확한 에러 메시지 + [다시 시도] 버튼
+
+## 보안·익명화
+- 입력 화면에 상시 안내 문구 노출: "학생 이름이 글에 포함되어 있으면 \\\`[학생A]\\\` 같은 자리표시자로 바꿔서 입력하세요."
+- 사진 업로드 시 OCR 결과에서도 같은 안내 반복
+- 채점 결과는 외부 서버에 저장하지 않고 브라우저 로컬에만 표시
+
+## 디자인 가이드
+- 차분하고 깔끔한 톤 (교사용 도구)
+- 모바일에서도 사용 가능 (반응형, 320~480px 폭에서 카드가 세로로 쌓이게)
+- 점수는 텍스트만이 아닌 시각적 표현(막대 또는 별점) 병행
+- 한국어 UI`;
 
   const toggleItem = (key: string) => setItems(prev => ({ ...prev, [key]: !prev[key] }));
 
@@ -276,13 +348,6 @@ ${itemsBlock}
             </div>
           </div>
         </div>
-      </div>
-
-      {/* 결과 영역 */}
-      <div className="relative bg-[#1c232b] p-4 rounded-lg border border-gray-700">
-        <div className="text-xs font-bold text-gray-400 mb-2">조립된 프롬프트 (Build 입력창에 그대로 붙여넣기)</div>
-        <CopyButton text={fullPrompt} className="absolute top-2 right-2" />
-        <pre className="text-[11px] text-canva-gray whitespace-pre-wrap font-mono mt-2 max-h-64 overflow-y-auto">{fullPrompt}</pre>
       </div>
 
       <div className="text-[11px] text-amber-300/80 bg-amber-950/30 border border-amber-900/40 rounded-lg p-3 leading-relaxed">

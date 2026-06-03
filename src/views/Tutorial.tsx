@@ -1835,8 +1835,8 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                         <FileText size={14} /> 구글Docs에 ctrl+v 하세요.
                       </button>
                     )}
-                    <div className="text-gray-400 hover:text-white cursor-pointer px-2 py-1.5 bg-[#0e1318] hover:bg-gray-800 transition-colors rounded-lg flex items-center justify-center border border-gray-700" onClick={() => navigator.clipboard.writeText(m4PopupData.content as string)} title="클립보드에 복사">
-                      <Copy size={16} />
+                    <div className="text-gray-200 hover:text-white cursor-pointer px-3 py-1.5 bg-[#0e1318] hover:bg-gray-800 transition-colors rounded-lg flex items-center gap-1.5 border border-gray-700 text-xs font-medium" onClick={() => navigator.clipboard.writeText(m4PopupData.content as string)} title="클립보드에 복사">
+                      <Copy size={14} /> 복사
                     </div>
                   </div>
                   <pre className={`text-sm text-gray-300 font-mono whitespace-pre-wrap bg-[#0e1318] p-6 ${!m4PopupData.hideDocsButton ? 'pt-14' : 'pt-14'} rounded-xl border border-gray-800 leading-relaxed max-w-full`}>
