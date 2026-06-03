@@ -465,8 +465,8 @@ export const lessons: Lesson[] = [
       3) **'Create API key'**를 눌러 키를 생성합니다.
       4) 생성된 키(예: AIza... 또는 AQ....)를 복사하여 안전한 곳에 보관하세요.
       
-      [Google AI Studio API 키 발급 장소 이미지 확인](https://drive.google.com/file/d/1VX1CjCWOWE6vYwz_3lvyozRpT_M-sE1K/view?usp=sharing)
-      *(💡 위 링크를 클릭하면 새 창에서 이미지를 확인할 수 있습니다.)*
+      [Google AI Studio에서 API key를 발급하는 방법 YouTube 영상](https://youtu.be/EaKwM8-2JH0)
+      *(💡 위 링크를 클릭하면 새 창에서 영상을 확인할 수 있습니다.)*
       
       **참고:** 구글의 Gemini API는 현재 일정 한도 내에서 **무료**로 사용할 수 있는 티어를 제공하고 있어 교육용으로 활용하기 매우 좋습니다.
       **참고2:** 여러분이 학습 중인 AI Bridge: Zero-Gap Toolkit는 여러분이 만든 Google Gemini의 API키를 입력 받아 대화를 생성합니다. 
