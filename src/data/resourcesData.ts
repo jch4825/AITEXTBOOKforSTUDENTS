@@ -435,7 +435,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'pol-1-6', title: '2025년 지능정보사회 실행계획', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=103108&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=0310&opType=N', description: '교육부의 2025년 지능정보사회 실행계획. 교육 분야 AI·디지털 전환을 위한 연도별 추진 과제' },
           { id: 'pol-1-8', title: '수행평가 AI 활용 관리 방안 (교육부)', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&boardSeq=104984&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=020402&opType=N', description: '교육부와 시도교육청이 2025년 12월 공동 발표한 수행평가 중 AI 활용 허용 범위·표기 방법·부정행위 기준을 담은 실무 지침' },
           { id: 'pol-1-9', title: '국가인공지능전략위원회', url: 'https://www.aikorea.go.kr', description: '대통령 직속 국가인공지능전략위원회 공식 포털. AI 기본법 하위법령·가이드라인·정책 보고서·위원회 회의 자료 제공' },
-          { id: 'pol-1-10', title: '인공지능 기본법 (국가법령정보센터)', url: 'https://www.law.go.kr/lsInfoP.do?lsiSeq=268543', description: '2026년 1월 22일 시행된 인공지능 발전과 신뢰 기반 조성 등에 관한 기본법 전문. 생성형 AI 워터마크·고영향 AI 의무 포함' },
+          { id: 'pol-1-10', title: '인공지능 기본법 (국가법령정보센터)', url: 'https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=268543', description: '2026년 1월 22일 시행된 인공지능 발전과 신뢰 기반 조성 등에 관한 기본법 전문. 생성형 AI 워터마크·고영향 AI 의무 포함' },
         ],
       },
       {
