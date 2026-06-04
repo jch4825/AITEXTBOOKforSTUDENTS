@@ -3,6 +3,7 @@ import { m, AnimatePresence } from 'motion/react';
 import { ArrowLeft, BookOpen, CheckCircle2, ChevronRight, PlayCircle, Clock, ArrowRight, Copy, Info, FileText, Lock, Check, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { rehypeTableLabels } from '../utils/rehypeTableLabels';
 import { modules, lessons, Lesson } from '../data/tutorialData';
 import { DiagnosticPurpose, Module, Persona } from '../types';
 import { friendlyApiError } from '../utils/apiError';
@@ -1272,6 +1273,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
             <div className="markdown-container text-canva-ink leading-relaxed text-base">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeTableLabels]}
                 components={{
                   a: ({ node, href, children, ...props }) => {
                     if (href && href.startsWith('#lesson:')) {

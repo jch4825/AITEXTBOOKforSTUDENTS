@@ -124,6 +124,67 @@
 
 }
 
+/* Mobile: render multi-column lesson tables as self-labeled cards instead of
+   cramming columns into a phone-width screen. Each cell shows its column header
+   (injected as data-label by rehypeTableLabels) before its value. Scoped to the
+   light lesson content; the dark AI-response tables are left untouched. */
+@media (max-width: 640px) {
+  .markdown-container:not(.dark-markdown) table {
+    display: block;
+    border: none;
+    overflow-x: visible;
+    font-size: 0.8125rem;
+  }
+
+  .markdown-container:not(.dark-markdown) table thead {
+    /* visually hidden, still available to screen readers */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .markdown-container:not(.dark-markdown) table tbody {
+    display: block;
+  }
+
+  .markdown-container:not(.dark-markdown) table tr {
+    display: block;
+    margin-bottom: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .markdown-container:not(.dark-markdown) table td {
+    display: block;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+  }
+
+  .markdown-container:not(.dark-markdown) table tr td:last-child {
+    border-bottom: none;
+  }
+
+  /* Label flows inline before the value, so the value uses the full card width
+     and link-heavy cells (e.g. "5-1") wrap naturally instead of being squeezed
+     into a narrow right-hand column. */
+  .markdown-container:not(.dark-markdown) table td[data-label]::before {
+    content: attr(data-label) "  ";
+    font-weight: 700;
+    color: #6b7280;
+    margin-right: 0.25rem;
+  }
+}
+
 .moholy-page {
   background:
     linear-gradient(90deg, rgba(14, 19, 24, 0.035) 1px, transparent 1px),
