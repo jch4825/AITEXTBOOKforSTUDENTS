@@ -212,6 +212,7 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'eth-1-4', title: '디지털윤리.kr', url: 'https://xn--2z1b40gs9nlqcf0n.kr/main.do', description: '디지털윤리 교육 자료실, 동향, 교육 안내, 체험 콘텐츠를 제공하는 디지털 윤리·안전 자료 포털' },
           { id: 'eth-1-5', title: '생성형 AI 저작물 학습 공정이용 안내서 (문화체육관광부)', url: 'https://www.korea.kr/briefing/pressReleaseView.do?newsId=156746205', description: '문화체육관광부가 2026년 2월 발간한 생성형 AI의 저작물 학습 공정이용 판단 기준 안내서. AI 개발·활용 시 저작권 준수 실무 지침' },
           { id: 'eth-1-6', title: '교육기관 생성형 AI 활용 저작권 가이드라인 (국회도서관)', url: 'https://nsp.nanet.go.kr/plan/subject/detail.do?newReportChk=list&nationalPlanControlNo=PLAN0000055801', description: '국회도서관 국가전략포털의 교육기관 생성형 AI 활용 저작권 가이드라인. AI 수업 활용·공모전 출품·학생 결과물 처리 기준 수록' },
+          { id: 'eth-1-7', title: 'AI-저작권 안내서 4종 모음 (한국저작권위원회)', url: 'https://www.copyright.or.kr/notify/notice/view.do?brdctsno=55402', description: '한국저작권위원회가 발간한 생성형 AI 관련 저작권 안내서 4종을 한곳에 모은 공식 안내 페이지. 교사 AI 활용 시 저작권 기준 종합 참고' },
         ],
       },
       {
@@ -388,6 +389,8 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'clipo', title: '클리포 (Clipo)', url: 'https://clipo.ai/', description: '교사용 AI 평가·채점·피드백 플랫폼' },
           { id: 'l-4-13', title: '매직스쿨 AI (MagicSchool AI)', url: 'https://www.magicschool.ai/', description: '수업 계획·평가·루브릭·IEP 등 80개 이상의 교사 업무 도구를 제공하는 AI 플랫폼. 교사 무료, 한국어 포함 24개 언어 지원 (해외)' },
           { id: 'l-4-14', title: '칸미고 (Khanmigo)', url: 'https://www.khanmigo.ai/teachers', description: '칸 아카데미의 AI 교수 보조 도구. 수업 계획·평가 문항·학생 오개념 분석 등 교사 지원. Microsoft 협력으로 교사 무료 제공 (해외)' },
+          { id: 'l-4-15', title: '스쿨AI (SchoolAI)', url: 'https://schoolai.com', description: '학생용 AI 튜터와 교사 실시간 모니터링 대시보드를 결합한 K-12 인공지능 교육 플랫폼. 교사 무료, FERPA·COPPA 준수 (해외)' },
+          { id: 'l-4-16', title: '디핏 (Diffit)', url: 'https://web.diffit.me', description: '텍스트·URL·PDF·영상을 70개 이상 언어와 학년 수준별 읽기 자료로 변환하는 수업 차별화 AI 도구. 학생 데이터 수집 없음, 교사 무료 (해외)' },
         ],
       },
       {
@@ -431,6 +434,8 @@ export const resourceCategories: ResourceCategory[] = [
           { id: 'pol-1-4', title: '제7차 교육정보화 기본계획', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=103106&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=0310&opType=N', description: '교육부가 수립한 제7차 교육정보화 기본계획. 교육정보화의 비전과 중점 추진 과제를 담은 공식 정책 문서' },
           { id: 'pol-1-6', title: '2025년 지능정보사회 실행계획', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=351&boardSeq=103108&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=0310&opType=N', description: '교육부의 2025년 지능정보사회 실행계획. 교육 분야 AI·디지털 전환을 위한 연도별 추진 과제' },
           { id: 'pol-1-8', title: '수행평가 AI 활용 관리 방안 (교육부)', url: 'https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&boardSeq=104984&lev=0&searchType=null&statusYN=W&page=1&s=moe&m=020402&opType=N', description: '교육부와 시도교육청이 2025년 12월 공동 발표한 수행평가 중 AI 활용 허용 범위·표기 방법·부정행위 기준을 담은 실무 지침' },
+          { id: 'pol-1-9', title: '국가인공지능전략위원회', url: 'https://www.aikorea.go.kr', description: '대통령 직속 국가인공지능전략위원회 공식 포털. AI 기본법 하위법령·가이드라인·정책 보고서·위원회 회의 자료 제공' },
+          { id: 'pol-1-10', title: '인공지능 기본법 (국가법령정보센터)', url: 'https://www.law.go.kr/lsInfoP.do?lsiSeq=268543', description: '2026년 1월 22일 시행된 인공지능 발전과 신뢰 기반 조성 등에 관한 기본법 전문. 생성형 AI 워터마크·고영향 AI 의무 포함' },
         ],
       },
       {

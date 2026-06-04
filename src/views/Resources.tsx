@@ -66,6 +66,7 @@ const TAG_RULES: Array<{ tag: string; pattern: RegExp }> = [
   { tag: '초등', pattern: /초등/ },
   { tag: '한글·문해', pattern: /한글|문해/ },
   { tag: '정책', pattern: /정책|기본계획|행동계획|추진 계획|관리 가이드|안내서/ },
+  { tag: '법령', pattern: /기본법|시행령|법령|법률|조항/ },
   { tag: '윤리·안전', pattern: /윤리|안전|개인정보|과의존|편향|저작권/ },
   { tag: '시뮬레이션', pattern: /시뮬레이션|실험실|가상 실험|VlabON/i },
   { tag: '코딩', pattern: /코딩|프로그래밍|스크래치|엔트리|블록 코딩/i },
