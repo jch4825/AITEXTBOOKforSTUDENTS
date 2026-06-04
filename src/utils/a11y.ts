@@ -99,17 +99,23 @@ export function speak(text: string) {
   const voices = window.speechSynthesis.getVoices();
   const koVoice = voices.find(v => v.lang?.startsWith('ko'));
   if (koVoice) utter.voice = koVoice;
-  // Chrome cuts long utterances after ~15s; pause/resume every 10s prevents it.
-  const keepAlive = window.setInterval(() => {
-    if (!window.speechSynthesis.speaking) {
-      window.clearInterval(keepAlive);
-      return;
-    }
-    window.speechSynthesis.pause();
-    window.speechSynthesis.resume();
-  }, 10000);
-  utter.onend = () => window.clearInterval(keepAlive);
-  utter.onerror = () => window.clearInterval(keepAlive);
+  // Desktop Chrome cuts long utterances after ~15s; pause/resume every 10s prevents it.
+  // Mobile browsers (Samsung Internet, Chrome Android, iOS Safari) BREAK on the same pause/resume:
+  // resume() fails silently and speech stops at the first keepalive tick. So skip on mobile.
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  let keepAlive: number | undefined;
+  if (!isMobile) {
+    keepAlive = window.setInterval(() => {
+      if (!window.speechSynthesis.speaking) {
+        if (keepAlive !== undefined) window.clearInterval(keepAlive);
+        return;
+      }
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+    }, 10000);
+  }
+  utter.onend = () => { if (keepAlive !== undefined) window.clearInterval(keepAlive); };
+  utter.onerror = () => { if (keepAlive !== undefined) window.clearInterval(keepAlive); };
   window.speechSynthesis.speak(utter);
 }
 
