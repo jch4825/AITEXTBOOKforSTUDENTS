@@ -1681,7 +1681,7 @@ export const lessons: Lesson[] = [
       ## 핵심 메시지
       4-3의 가벼운 Canvas를 넘어, **시스템 프롬프트 + 프롬프트 템플릿**을 결합해 React 기반 UI를 가진 나만의 도구를 만들 수 있습니다.
 
-      4-3에서 Gemini Canvas로 바이브 코딩을 맛보았다면, 이번에는 **Google AI Studio Build**로 내가 만든 규칙(시스템 프롬프트와 프롬프트 템플릿)을 탑재한 본격적인 '앱(소프트웨어)'을 만듭니다. Project·Gems 같은 챗봇형 도구와 결정적으로 다른 점은, **Build는 React 기반 HTML 웹앱**을 만든다는 것입니다. 점수 카드, 시각적 막대, '잘된 점/보완할 점' 박스 같은 UI 요소가 도구의 가치를 본질적으로 끌어올립니다.
+      4-3에서 Gemini Canvas로 바이브 코딩을 맛보았다면, 이번에는 **Google AI Studio Build**로 내가 만든 규칙(시스템 프롬프트와 프롬프트 템플릿)을 탑재한 본격적인 '앱(소프트웨어)'을 만듭니다. [Project·Gems 같은 챗봇형 도구](#lesson:l3-8)와 결정적으로 다른 점은, **Build는 React 기반 HTML 웹앱**을 만든다는 것입니다. 점수 카드, 시각적 막대, '잘된 점/보완할 점' 박스 같은 UI 요소가 도구의 가치를 본질적으로 끌어올립니다.
 
       ### Google AI Studio의 Build로 채점기 웹앱 만들기
       1. [Google AI Studio Build](https://aistudio.google.com/build)에 접속합니다. Google 계정과 **Gemini API 키**가 필요하며, 키는 [Google AI Studio — API 키](https://aistudio.google.com/apikey)에서 무료로 받을 수 있습니다.
