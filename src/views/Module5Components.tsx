@@ -139,11 +139,11 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
       {queried && (
         <div className="flex flex-col gap-3">
           <div className="bg-red-950/20 border border-red-800/40 rounded-lg p-3">
-            <div className="mb-2 flex items-center justify-between gap-2">
-              <div className="text-red-300 font-bold text-xs flex items-center gap-2">
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+              <div className="text-red-300 font-bold text-xs flex flex-wrap items-center gap-2">
                 <span>🤖 AI 답변 (Gemini) — RAG 없이 생성</span>
                 {isSimulation && (
-                  <span className="text-[10px] font-normal text-amber-400 bg-amber-900/30 border border-amber-700/50 px-1.5 py-0.5 rounded">
+                  <span className="text-[10px] font-normal text-amber-400 bg-amber-900/30 border border-amber-700/50 px-1.5 py-0.5 rounded break-keep">
                     사전 입력된 시뮬레이션 답변입니다.
                   </span>
                 )}

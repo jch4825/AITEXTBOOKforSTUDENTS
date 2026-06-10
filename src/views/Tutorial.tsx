@@ -1447,7 +1447,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 </div>
               )}
             </div>
-            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : usesL26PanelHeight ? 'px-8 py-5 lg:pt-0' : 'p-8 lg:pt-0'} flex flex-col ${usesGeminiApi && !isL55 ? 'overflow-visible' : 'overflow-y-auto no-scrollbar'}`}>
+            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : usesL26PanelHeight ? 'px-8 py-5 lg:pt-0' : 'p-8 lg:pt-0'} flex flex-col ${usesGeminiApi && !isL55 && !hasBalancedInputResponse ? 'overflow-visible' : 'overflow-y-auto no-scrollbar'}`}>
               {lesson.interactive ? (
                 <>
                   {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
@@ -1609,7 +1609,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
 
           {/* AI Response area (Hidden for M4 because it uses popup, hidden for M0 because it uses SimWizard) */}
           {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
-            <div className={`${hasBalancedInputResponse ? 'lg:flex-[0.75]' : isL55 ? 'lg:flex-[3.75]' : usesL26PanelHeight ? 'lg:flex-[3.75]' : hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 md:hidden lg:flex border-t border-gray-800`}>
+            <div className={`${hasBalancedInputResponse ? 'lg:flex-[0.75]' : isL55 ? 'lg:flex-[3.75]' : usesL26PanelHeight ? 'lg:flex-[3.75]' : hasCompactM5InputPanel ? 'lg:flex-[1.75] max-h-[220px]' : 'lg:flex-[2]'} flex flex-col min-h-0 border-t border-gray-800`}>
               <div className="p-4 border-b border-gray-800 flex items-center justify-center shrink-0 hidden md:flex">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">답변 안내</span>
               </div>
