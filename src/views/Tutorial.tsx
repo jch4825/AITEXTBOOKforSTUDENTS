@@ -1555,7 +1555,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                                 alert('클립보드 복사에 실패했습니다. 브라우저 권한을 확인해 주세요.');
                               }
                             }}
-                            className="px-4 py-3 bg-amber-500 text-white rounded-xl font-bold text-sm hover:bg-amber-600 transition-all shadow-lg"
+                            className="px-[16px] py-[12px] bg-amber-500 text-white rounded-xl font-bold text-[clamp(14px,0.875rem,16px)] leading-tight hover:bg-amber-600 transition-all shadow-lg"
                             title="2-6에서 생성한 메타 프롬프트를 클립보드에 복사합니다. Gems의 요청 사항 칸에 붙여넣으세요."
                           >
                             {metaPromptCopied ? '✓ 복사됨! Gems 요청 사항에 붙여넣기' : '2-6에서 만든 프롬프트 복사'}
@@ -1570,7 +1570,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                             if (isL11 && l11TourStep === 'reset') setL11TourStep('complete');
                           }}
                           disabled={isTyping}
-                          className={`px-6 py-3 bg-gray-700 text-white rounded-xl font-bold text-sm hover:bg-gray-600 transition-all disabled:opacity-50 shadow-lg ${l11TourClass('reset')}`}
+                          className={`px-[24px] py-[12px] bg-gray-700 text-white rounded-xl font-bold text-[clamp(14px,0.875rem,16px)] leading-tight hover:bg-gray-600 transition-all disabled:opacity-50 shadow-lg ${l11TourClass('reset')}`}
                         >
                           초기화
                         </button>
@@ -1593,7 +1593,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                             handleRun();
                           }}
                           disabled={isTyping}
-                          className={`px-8 py-3 bg-canva-teal text-white rounded-xl font-bold text-sm hover:bg-opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-teal-900/20 ${l11TourClass('run')}`}
+                          className={`px-[32px] py-[12px] bg-canva-teal text-white rounded-xl font-bold text-[clamp(14px,0.875rem,16px)] leading-tight hover:bg-opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-teal-900/20 ${l11TourClass('run')}`}
                         >
                           실행 (Run)
                         </button>
@@ -1732,14 +1732,14 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
         </div>
 
         {/* Navigation / Completion Buttons */}
-        <div className={`sticky bottom-0 p-6 border-t border-gray-800 flex justify-end gap-3 bg-[#0e1318] shrink-0 ${isL11 && (l11TourStep === 'complete' || l11TourStep === 'next') ? 'z-[65]' : 'z-10'}`}>
+        <div className={`sticky bottom-0 p-[20px] border-t border-gray-800 flex justify-end gap-[10px] bg-[#0e1318] shrink-0 ${isL11 && (l11TourStep === 'complete' || l11TourStep === 'next') ? 'z-[65]' : 'z-10'}`}>
           {previousLesson && (
             <button
               onClick={() => {
                 stopSpeaking();
                 onNavigateToLesson(previousLesson.id);
               }}
-              className="px-6 py-3 bg-gray-800 text-white rounded-xl font-bold text-sm hover:bg-gray-700 transition-all flex items-center gap-2"
+              className="px-[16px] py-[12px] bg-gray-800 text-white rounded-xl font-bold text-[clamp(14px,0.875rem,16px)] leading-tight hover:bg-gray-700 transition-all flex items-center gap-2"
             >
               <ArrowLeft size={18} />
               <span>이전 레슨</span>
@@ -1752,7 +1752,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
               setManualCompleteRequested(true);
               if (isL11 && l11TourStep === 'complete') setL11TourStep('next');
             }}
-            className={`px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${
+            className={`px-[16px] py-[12px] rounded-xl font-bold text-[clamp(14px,0.875rem,16px)] leading-tight transition-all flex items-center justify-center gap-2 ${
               isCompleted
                 ? 'bg-canva-teal text-white'
                 : 'bg-canva-purple text-white hover:bg-opacity-90'
@@ -1782,7 +1782,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 setShowModuleComplete(true);
               }
             }}
-            className={`px-6 py-3 bg-gray-800 text-white rounded-xl font-bold text-sm hover:bg-gray-700 transition-all flex items-center gap-2 ${l11TourClass('next')}`}
+            className={`px-[16px] py-[12px] bg-gray-800 text-white rounded-xl font-bold text-[clamp(14px,0.875rem,16px)] leading-tight hover:bg-gray-700 transition-all flex items-center gap-2 ${l11TourClass('next')}`}
           >
             {nextLesson ? <><span>다음 레슨</span><ArrowRight size={18} /></> : <><span>모듈 완료</span><CheckCircle2 size={18} /></>}
           </button>
