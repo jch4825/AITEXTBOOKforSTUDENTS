@@ -1447,7 +1447,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                 </div>
               )}
             </div>
-            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : usesL26PanelHeight ? 'px-8 py-5 lg:pt-0' : 'p-8 lg:pt-0'} flex flex-col ${usesGeminiApi && !isL55 && !hasBalancedInputResponse ? 'overflow-visible' : 'overflow-y-auto no-scrollbar'}`}>
+            <div className={`flex-1 ${lesson.moduleId === 'm0' ? 'p-2' : usesL26PanelHeight ? 'px-8 py-5 lg:pt-0' : 'p-8 lg:pt-0'} flex flex-col overflow-y-auto no-scrollbar`}>
               {lesson.interactive ? (
                 <>
                   {lesson.moduleId !== 'm4' && lesson.moduleId !== 'm0' && (
@@ -1506,8 +1506,9 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                       return Component ? <Component onComplete={() => onMarkComplete(lesson.id)} /> : null;
                     })()
                   ) : lesson.id !== 'l2-1' && lesson.id !== 'l2-2' && lesson.id !== 'l2-3' && lesson.id !== 'l2-4' && lesson.id !== 'l2-5' && lesson.id !== 'l3-1' && (
+                    <>
                     <div
-                      className={`${usesGeminiApi ? 'flex-none min-h-[260px]' : 'flex-1 min-h-[200px]'} rounded-xl p-[1px] relative group`}
+                      className={`${usesGeminiApi ? 'flex-1 min-h-[260px]' : 'flex-1 min-h-[200px]'} rounded-xl p-[1px] relative group`}
                       style={{ background: `linear-gradient(135deg, ${theme.accent}55, transparent 40%, ${theme.accent}30)` }}
                     >
                     <div className={`w-full h-full bg-[#1c232b] rounded-[11px] relative flex flex-col gap-4 ${usesGeminiApi ? 'p-4' : 'p-5'}`}>
@@ -1522,7 +1523,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           if (l11TourStep === 'input') setL11TourStep('reset');
                         }}
                         rows={usesGeminiApi ? 10 : undefined}
-                        className={`w-full ${usesGeminiApi ? 'h-[15rem] min-h-[15rem]' : 'flex-1 min-h-[150px]'} bg-transparent text-white font-mono text-sm outline-none resize-none ${l11TourClass('input')}`}
+                        className={`w-full ${usesGeminiApi ? 'flex-1 min-h-[15rem] lg:min-h-[8rem]' : 'flex-1 min-h-[150px]'} bg-transparent text-white font-mono text-sm outline-none resize-none ${l11TourClass('input')}`}
                         placeholder={
                           lesson.id === 'l1-1'
                             ? "위 문장을 따라 써보세요..."
@@ -1539,7 +1540,9 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                             : "여기에 질문을 입력하거나 위 문장을 따라 써보세요..."
                         }
                       />
-                      <div className="static flex gap-3 flex-wrap justify-end md:absolute md:bottom-5 md:right-5">
+                    </div>
+                    </div>
+                      <div className="self-end max-w-full flex gap-3 flex-wrap justify-end shrink-0 pt-4 lg:sticky lg:bottom-2">
                         {lesson.id === 'l3-8' && getMetaPromptL26() && (
                           <button
                             onClick={async () => {
@@ -1595,8 +1598,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
                           실행 (Run)
                         </button>
                       </div>
-                    </div>
-                    </div>
+                    </>
                   )}
                 </>
               ) : (
