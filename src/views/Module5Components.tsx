@@ -65,7 +65,11 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
     setRealStandard(null);
     setQueried(true);
 
-    await initCurriculum();
+    try {
+      await initCurriculum();
+    } catch {
+      // DB 로드 실패 — lookupStandard가 null을 반환하므로 실제 성취기준 비교만 빠진 채 진행된다.
+    }
     const found = lookupStandard(trimmed);
     setRealStandard(found ?? 'not-found');
 

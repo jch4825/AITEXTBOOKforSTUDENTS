@@ -30,13 +30,19 @@ let loadPromise: Promise<void> | null = null;
 export function initCurriculum(): Promise<void> {
   if (INDEX !== null) return Promise.resolve();
   if (loadPromise) return loadPromise;
-  loadPromise = import('../data/curriculumStandards.json').then(mod => {
-    const standards = (mod.default as { standards: CurriculumStandard[] }).standards;
-    INDEX = new Map<string, CurriculumStandard>();
-    for (const s of standards) {
-      INDEX.set(normalizeCode(s.code), s);
-    }
-  });
+  loadPromise = import('../data/curriculumStandards.json')
+    .then(mod => {
+      const standards = (mod.default as { standards: CurriculumStandard[] }).standards;
+      INDEX = new Map<string, CurriculumStandard>();
+      for (const s of standards) {
+        INDEX.set(normalizeCode(s.code), s);
+      }
+    })
+    .catch(err => {
+      // 로드 실패한 promise를 캐시에 남기면 영구 실패가 된다. 비워서 다음 호출이 재시도하게 한다.
+      loadPromise = null;
+      throw err;
+    });
   return loadPromise;
 }
 

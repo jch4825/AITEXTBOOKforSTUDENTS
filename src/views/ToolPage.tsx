@@ -87,7 +87,11 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
 
   useEffect(() => {
     if (!hasCurriculumInput) return;
-    initCurriculum().then(() => setCurriculumReady(true));
+    let cancelled = false;
+    initCurriculum()
+      .then(() => { if (!cancelled) setCurriculumReady(true); })
+      .catch(() => { /* 실패 시 미리보기 없이 동작. initCurriculum이 캐시를 비워 다음 진입에서 재시도된다. */ });
+    return () => { cancelled = true; };
   }, [hasCurriculumInput]);
 
   const hasApiKey = useExternalStorageState(hasGeminiApiKey, 'api-key-changed');
