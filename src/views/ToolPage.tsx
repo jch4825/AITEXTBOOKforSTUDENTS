@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AlertCircle,
   ArrowLeft,
@@ -78,6 +78,11 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
   const [result, setResult] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const runIdRef = useRef(0);
+
+  // 언마운트 시 진행 중인 스트림 소비를 무효화한다 (스트림 자체는 GC가 회수).
+  useEffect(() => () => { runIdRef.current += 1; }, []);
 
   const hasCurriculumInput = useMemo(
     () => tool.inputs.some(i => i.enrichWith === 'curriculumStandard'),
@@ -261,6 +266,7 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
 
     setIsRunning(true);
     setResult('');
+    const myRunId = ++runIdRef.current;
 
     const parts: Array<{ text?: string; inlineData?: { data: string; mimeType: string } }> = [
       { text: buildUserMessage() },
@@ -286,11 +292,14 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
 
       let full = '';
       for await (const chunk of response) {
+        if (myRunId !== runIdRef.current) return;
         full += chunk.text ?? '';
         setResult(full);
       }
+      if (myRunId !== runIdRef.current) return;
       if (!full.trim()) setResult('답변을 생성할 수 없습니다.');
     } catch (error: any) {
+      if (myRunId !== runIdRef.current) return;
       const friendly = friendlyApiError(error, { markdown: true });
       const rawMessage =
         typeof error === 'string'
@@ -302,7 +311,7 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
           : friendly,
       );
     } finally {
-      setIsRunning(false);
+      if (myRunId === runIdRef.current) setIsRunning(false);
     }
   };
 
