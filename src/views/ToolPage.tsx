@@ -390,6 +390,12 @@ export default function ToolPage({ tool, onBack }: ToolPageProps) {
                 onChange={async event => {
                   const file = event.target.files?.[0];
                   if (!file) return;
+                  // Gemini inlineData 요청 한도(~20MB) 초과를 사전 차단
+                  if (file.size > 15 * 1024 * 1024) {
+                    alert('파일이 너무 큽니다. 15MB 이하의 파일을 사용해 주세요.');
+                    event.target.value = '';
+                    return;
+                  }
                   try {
                     const asset = await readFileAsBase64(file);
                     setFileValue(input.id, asset);

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import Sidebar from './components/Sidebar';
 import { Menu, ChevronRight } from 'lucide-react';
 import AccessibilityWidget from './components/AccessibilityWidget';
@@ -85,7 +85,7 @@ export default function App() {
     setIsMobileMenuOpen(false);
   };
 
-  const toggleComplete = (lessonId: string) => {
+  const toggleComplete = useCallback((lessonId: string) => {
     setCompletedLessons(prev => {
       const next = prev.includes(lessonId)
         ? prev.filter(id => id !== lessonId)
@@ -93,16 +93,16 @@ export default function App() {
       saveLessonProgress(next);
       return next;
     });
-  };
+  }, []);
 
-  const markComplete = (lessonId: string) => {
+  const markComplete = useCallback((lessonId: string) => {
     setCompletedLessons(prev => {
       if (prev.includes(lessonId)) return prev;
       const next = [...prev, lessonId];
       saveLessonProgress(next);
       return next;
     });
-  };
+  }, []);
 
   const renderView = () => {
     switch (currentView) {
