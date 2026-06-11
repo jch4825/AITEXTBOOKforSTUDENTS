@@ -510,6 +510,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   const [userInput, setUserInput] = useState(lesson.interactive?.initialInput || '');
   const [aiResponse, setAiResponse] = useState<AiResponse>('');
   const aiResponseLessonRef = useRef<string>('');
+  const completionEligibleRef = useRef(false);
   const [isTyping, setIsTyping] = useState(false);
   const [learningPoint, setLearningPoint] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
@@ -553,7 +554,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
   }, [lesson.id]);
 
   useEffect(() => {
-    const hasCompletionSignal = (!!aiResponse && !isTyping && aiResponseLessonRef.current === lesson.id) || manualCompleteRequested;
+    const hasCompletionSignal = (!!aiResponse && !isTyping && aiResponseLessonRef.current === lesson.id && completionEligibleRef.current) || manualCompleteRequested;
     if (!isCompleted && hasCompletionSignal) {
       onMarkComplete(lesson.id);
     }
@@ -751,6 +752,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     setUserInput(lesson.interactive?.initialInput || '');
     setAiResponse('');
     aiResponseLessonRef.current = '';
+    completionEligibleRef.current = false;
     setIsTyping(false);
 
     window.requestAnimationFrame(() => {
@@ -785,6 +787,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     setIsTyping(true);
     setAiResponse('');
     aiResponseLessonRef.current = lesson.id;
+    completionEligibleRef.current = true;
 
     // Helper: starts a character-by-character typing animation.
     // Cancels itself if a newer run has started (runIdRef > myRunId).
@@ -811,6 +814,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
     };
 
     if (inputToUse.trim() === '') {
+      completionEligibleRef.current = false;
       startTyping('입력창에 내용을 작성해 주세요.');
       return;
     }
@@ -833,6 +837,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
         if (lesson.interactive.simulationAnswer) {
           fullText = lesson.interactive.simulationAnswer;
         } else {
+          completionEligibleRef.current = false;
           fullText = "(API키가 제대로 작동하지 않아, default 답변을 생성합니다.) API키를 입력한 후 실습을 진행해 보세요.";
         }
       } else {
@@ -864,6 +869,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           }
         } catch (error: any) {
           console.error("Gemini API Error:", error);
+          completionEligibleRef.current = false;
           fullText = friendlyApiError(error);
         }
       }
@@ -888,6 +894,7 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
       } else if (lesson.interactive.answers["default"]) {
         fullText = lesson.interactive.answers["default"];
       } else {
+        completionEligibleRef.current = false;
         fullText = "정확한 값을 입력하거나 버튼을 클릭해주세요.";
       }
     }
