@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import Sidebar from './components/Sidebar';
 import { Menu, ChevronRight } from 'lucide-react';
 import AccessibilityWidget from './components/AccessibilityWidget';
@@ -57,6 +57,15 @@ export default function App() {
   const [isLearningPathSaved, setIsLearningPathSaved] = useState(() => hasSavedLearningPath());
   const [completedLessons, setCompletedLessons] = useState<string[]>(() => getLessonProgress());
 
+  // ?lesson= 딥링크는 최초 로드에서만 의미가 있다. tutorial 밖으로 나가면 지워서
+  // 새로고침·URL 복사 시 의도치 않게 레슨으로 튕기는 것을 막는다.
+  useEffect(() => {
+    if (currentView === 'tutorial') return;
+    if (new URLSearchParams(window.location.search).has('lesson')) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, [currentView]);
+
   const refreshLearningPathStatus = () => {
     setIsLearningPathSaved(hasSavedLearningPath());
   };
@@ -100,7 +109,7 @@ export default function App() {
       case 'home':
         return (
           <Home
-            onViewChange={setCurrentView}
+            onViewChange={handleViewChange}
             onStartDiagnostic={() => setShowDiagnostic(true)}
             isLearningPathSaved={isLearningPathSaved}
           />
@@ -130,7 +139,7 @@ export default function App() {
       default:
         return (
           <Home
-            onViewChange={setCurrentView}
+            onViewChange={handleViewChange}
             onStartDiagnostic={() => setShowDiagnostic(true)}
             isLearningPathSaved={isLearningPathSaved}
           />
