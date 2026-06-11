@@ -52,7 +52,8 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
   const EXAMPLES = ['[2국01-01]', '[4수01-03]', '[6사02-02]', '[3과02-01]'];
 
   useEffect(() => {
-    initCurriculum();
+    // 프리로드 실패는 무시 — 실제 처리(재시도 포함)는 handleQuery에서 한다.
+    initCurriculum().catch(() => {});
   }, []);
 
   const handleQuery = async (code: string) => {
