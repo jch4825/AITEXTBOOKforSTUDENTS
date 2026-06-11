@@ -58,6 +58,7 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
   const handleQuery = async (code: string) => {
     const trimmed = code.trim();
     if (!trimmed) return;
+    if (isLoading) return;
 
     setIsLoading(true);
     setAiText('');
@@ -123,7 +124,7 @@ export const Lesson51Interactive = ({ onComplete }: CompletionProps = {}) => {
         <input
           value={codeInput}
           onChange={e => setCodeInput(e.target.value)}
-          onKeyDown={e => { if (e.key === 'Enter') handleQuery(codeInput); }}
+          onKeyDown={e => { if (e.key === 'Enter' && !isLoading && !e.nativeEvent.isComposing) handleQuery(codeInput); }}
           placeholder="위 예시 코드 버튼을 눌러보거나 직접 성취기준 코드를 적어보세요."
           className="flex-1 bg-[#1c232b] border border-gray-700 rounded-lg px-3 py-2 text-white font-mono text-sm outline-none focus:border-canva-purple transition-colors"
         />
