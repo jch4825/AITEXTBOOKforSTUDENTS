@@ -869,7 +869,10 @@ function LessonViewer({ lesson, onBack, onModuleComplete, onToggleComplete, onMa
           }
         } catch (error: any) {
           console.error("Gemini API Error:", error);
-          completionEligibleRef.current = false;
+          // 더 새로운 실행이 시작됐다면 그 실행의 완료 자격을 덮어쓰지 않는다
+          if (myRunId === runIdRef.current) {
+            completionEligibleRef.current = false;
+          }
           fullText = friendlyApiError(error);
         }
       }
