@@ -2,21 +2,13 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
-import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
-  base: '/AI_Bridge/',
+  base: '/AITEXTBOOKforSTUDENTS/',
 
   plugins: [
     react(),
     tailwindcss(),
-    process.env.ANALYZE === '1' &&
-      visualizer({
-        filename: 'dist/stats.json',
-        template: 'raw-data',
-        gzipSize: true,
-        brotliSize: true,
-      }),
   ],
 
   resolve: {
