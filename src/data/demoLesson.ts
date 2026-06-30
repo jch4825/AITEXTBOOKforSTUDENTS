@@ -23,6 +23,28 @@ export const DEMO_LESSON: DemoLesson = {
       },
     },
     {
+      kind: 'card-pick',
+      data: {
+        question: 'AI가 가장 잘하는 일은 무엇일까요?',
+        choices: [
+          { label: '사람이 묻는 말에 답해주기', isCorrect: true },
+          { label: '빨래를 개기', isCorrect: false },
+          { label: '나무 심기', isCorrect: false },
+          { label: '비 오게 하기', isCorrect: false },
+        ],
+      },
+    },
+    {
+      kind: 'matching',
+      data: {
+        pairs: [
+          { left: '시리·빅스비', right: '말로 대화하는 AI' },
+          { left: '챗봇', right: '글로 대화하는 AI' },
+          { left: '번역기', right: '말을 바꿔주는 AI' },
+        ],
+      },
+    },
+    {
       kind: 'sim-ai',
       data: {
         prompt: 'AI한테 "안녕!" 이라고 인사해봐요.',

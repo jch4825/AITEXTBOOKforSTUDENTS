@@ -4,6 +4,10 @@ import MicroLessonFrame from '../components/MicroLessonFrame';
 import DictionaryTerm from '../components/DictionaryTerm';
 import OXGame from '../components/games/OXGame';
 import type { OXQuestion } from '../components/games/OXGame';
+import CardPick from '../components/games/CardPick';
+import type { CardChoice } from '../components/games/CardPick';
+import Matching from '../components/games/Matching';
+import type { MatchingPair } from '../components/games/Matching';
 import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
 import { useSpeak } from '../hooks/useSpeak';
@@ -82,6 +86,26 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
     );
   }
 
+  function renderCardPick() {
+    const data = currentStep.data as { question: string; choices: CardChoice[] };
+    return (
+      <div className="max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold mb-2" style={{ color: theme.accent }}>골라봐요!</h2>
+        <CardPick question={data.question} choices={data.choices} onComplete={handleNext} />
+      </div>
+    );
+  }
+
+  function renderMatching() {
+    const data = currentStep.data as { pairs: MatchingPair[] };
+    return (
+      <div className="max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold mb-2" style={{ color: theme.accent }}>짝을 맞춰봐요!</h2>
+        <Matching pairs={data.pairs} onComplete={handleNext} />
+      </div>
+    );
+  }
+
   function renderSimAI() {
     const data = currentStep.data as { prompt: string; userInput: string; aiResponse: string };
     return (
@@ -109,6 +133,8 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
   let body_el: JSX.Element;
   if (currentStep.kind === 'text') body_el = renderText();
   else if (currentStep.kind === 'ox') body_el = renderOX();
+  else if (currentStep.kind === 'card-pick') body_el = renderCardPick();
+  else if (currentStep.kind === 'matching') body_el = renderMatching();
   else if (currentStep.kind === 'sim-ai') body_el = renderSimAI();
   else body_el = <p>(아직 만들지 않은 단계 종류: {currentStep.kind})</p>;
 
