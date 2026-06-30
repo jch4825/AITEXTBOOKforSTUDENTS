@@ -1,107 +1,17 @@
 <!doctype html>
-<html lang="ko" translate="no" class="notranslate">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="google" content="notranslate" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Bridge: Zero-Gap Toolkit — 초등교사를 위한 AI 활용 학습 플랫폼</title>
-
-    <meta name="description" content="AI Bridge는 초등교사를 위한 생성형 AI 활용 학습 플랫폼입니다. LLM 기초, 프롬프트 엔지니어링, 수업 적용, 학교 업무 자동화, AI 윤리까지 5개 모듈 34개 차시와 다양한 AI 도구·GPTs를 제공하며, Gemini, Claude, ChatGPT, Codex 등 생성형 AI를 교육 현장에 안전하게 활용하도록 돕습니다." />
-    <meta name="keywords" content="초등교사, 초등 교사, 경남, 경상남도, 교사 연수, AI, 인공지능, AI 교육, 인공지능 교육, AI 학습, AI 자료, 교사 AI, 교사 인공지능, AI 수업, 생성형 AI, LLM, 프롬프트, 프롬프트 엔지니어링, Google AI Studio, Gemini, 제미나이, Claude, 클로드, ChatGPT, 챗GPT, Codex, 코덱스, AI 도구, 수업 자료, 교육 자료, AI 윤리, 디지털 리터러시, AI 리터러시, 학교 업무 자동화, 2022 개정 교육과정, 성취기준, 수업 지도안" />
-    <meta name="author" content="AI Bridge — 경남 초등교사 AI 학습 커뮤니티" />
-    <meta name="robots" content="index, follow" />
-    <meta name="googlebot" content="index, follow" />
-    <meta name="naver-site-verification" content="cb1ce5f76e01fc5a4a2a396713f9d347e915c89a" />
-    <meta name="application-name" content="AI Bridge" />
-    <meta name="theme-color" content="#00c4cc" />
-    <link rel="canonical" href="https://jch4825.github.io/AI_Bridge/" />
-    <link rel="alternate" type="application/rss+xml" title="AI Bridge RSS" href="https://jch4825.github.io/AI_Bridge/rss.xml" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://jch4825.github.io/AI_Bridge/" />
-    <meta property="og:title" content="AI Bridge: Zero-Gap Toolkit — 초등교사를 위한 AI 활용 학습 플랫폼" />
-    <meta property="og:description" content="초등교사를 위한 생성형 AI 학습 플랫폼. LLM, 프롬프트, 수업 적용, 업무 자동화, AI 윤리 5개 모듈과 다양한 AI 도구·GPTs를 제공합니다." />
-    <meta property="og:image" content="https://jch4825.github.io/AI_Bridge/tutorial-visuals/module1/l1-1-visual.png" />
-    <meta property="og:image:alt" content="AI Bridge 생성형 AI 학습 플랫폼 대표 이미지" />
-    <meta property="og:locale" content="ko_KR" />
-    <meta property="og:site_name" content="AI Bridge: Zero-Gap Toolkit" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="AI Bridge: Zero-Gap Toolkit — 초등교사를 위한 AI 활용 학습 플랫폼" />
-    <meta name="twitter:description" content="초등교사를 위한 생성형 AI 학습 플랫폼. 5개 모듈 34개 차시와 다양한 AI 도구·GPTs 제공." />
-    <meta name="twitter:image" content="https://jch4825.github.io/AI_Bridge/tutorial-visuals/module1/l1-1-visual.png" />
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Organization",
-          "@id": "https://jch4825.github.io/AI_Bridge/#organization",
-          "name": "AI Bridge",
-          "alternateName": "Team Zer0-Gap",
-          "url": "https://jch4825.github.io/AI_Bridge/"
-        },
-        {
-          "@type": "WebSite",
-          "@id": "https://jch4825.github.io/AI_Bridge/#website",
-          "name": "AI Bridge: Zero-Gap Toolkit",
-          "alternateName": "AI 브릿지 — 경남 초등교사 AI 학습 플랫폼",
-          "url": "https://jch4825.github.io/AI_Bridge/",
-          "description": "초등교사를 위한 생성형 AI 활용 학습 플랫폼. LLM 기초, 프롬프트 엔지니어링, 수업 적용, 학교 업무 자동화, AI 윤리 5개 모듈 34개 차시와 다양한 AI 도구 및 GPTs를 제공합니다.",
-          "inLanguage": "ko-KR",
-          "isAccessibleForFree": true,
-          "publisher": {
-            "@id": "https://jch4825.github.io/AI_Bridge/#organization"
-          }
-        },
-        {
-          "@type": "WebApplication",
-          "@id": "https://jch4825.github.io/AI_Bridge/#webapp",
-          "name": "AI Bridge: Zero-Gap Toolkit",
-          "url": "https://jch4825.github.io/AI_Bridge/",
-          "applicationCategory": "EducationalApplication",
-          "operatingSystem": "Web",
-          "browserRequirements": "Requires JavaScript",
-          "isAccessibleForFree": true,
-          "inLanguage": "ko-KR",
-          "description": "초등교사가 생성형 AI를 수업과 학교 업무에 안전하게 적용하도록 돕는 무료 웹 학습 도구입니다.",
-          "audience": {
-            "@type": "EducationalAudience",
-            "educationalRole": "teacher",
-            "audienceType": "초등학교 교사"
-          },
-          "keywords": "초등교사, 경남, 교사 AI, 생성형 AI, 인공지능 교육, 프롬프트 엔지니어링, AI 윤리, 수업 자료, 학교 업무 자동화, 2022 개정 교육과정",
-          "teaches": [
-            "LLM(거대언어모델) 기초",
-            "프롬프트 엔지니어링",
-            "AI 수업 적용",
-            "학교 업무 자동화",
-            "AI 윤리와 디지털 리터러시"
-          ],
-          "publisher": {
-            "@id": "https://jch4825.github.io/AI_Bridge/#organization"
-          }
-        }
-      ]
-    }
-    </script>
+    <title>AI 교과서 — 발달장애 학생을 위한 AI 학습</title>
+    <meta name="description" content="발달장애 학생을 위한 AI 학습 온라인 교과서입니다." />
+    <meta name="theme-color" content="#5a4fcf" />
   </head>
-  <body translate="no" class="notranslate">
-    <div id="root" translate="no" class="notranslate"></div>
-
+  <body>
+    <div id="root"></div>
     <noscript>
-      <h1>AI Bridge: Zero-Gap Toolkit — 초등교사를 위한 AI 활용 학습 플랫폼</h1>
-      <p>
-        경남 초등교사를 위한 AI(인공지능) 활용 학습 플랫폼입니다.
-        LLM 기초, 프롬프트 엔지니어링, 수업 적용, 학교 업무 자동화, AI 윤리 등
-        5개 모듈 34개 차시와 다양한 AI 도구 및 GPTs를 무료로 제공합니다.
-        Google AI Studio, Gemini, Claude, ChatGPT, Codex 등 최신 생성형 AI를
-        교육 현장에 바로 활용할 수 있도록 돕습니다.
-      </p>
-      <p>이 사이트는 자바스크립트가 활성화된 환경에서 정상적으로 동작합니다.</p>
+      <p>이 사이트는 자바스크립트가 필요합니다.</p>
     </noscript>
-
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
