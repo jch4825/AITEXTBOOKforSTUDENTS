@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { isTeacherSessionActive, tryUnlock, logout } from '../utils/teacherMode';
 
 interface Props {
@@ -10,7 +10,7 @@ export default function TeacherView({ onExit }: Props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  function handleUnlock(e: React.FormEvent) {
+  function handleUnlock(e: FormEvent) {
     e.preventDefault();
     if (tryUnlock(password)) {
       setActive(true);

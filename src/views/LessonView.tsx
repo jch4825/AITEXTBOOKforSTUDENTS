@@ -58,7 +58,7 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
           {body.split('인공지능').reduce<(string | JSX.Element)[]>((acc, part, i, arr) => {
             acc.push(part);
             if (i < arr.length - 1) {
-              acc.push(<DictionaryTerm key={`d-${i}`} term="인공지능">인공지능</DictionaryTerm>);
+              acc.push(<span key={`d-${i}`}><DictionaryTerm term="인공지능">인공지능</DictionaryTerm></span>);
             }
             return acc;
           }, [])}
