@@ -30,3 +30,9 @@ export function lessonIdsForModule(id: ModuleId): string[] {
   if (!m) return [];
   return Array.from({ length: m.lessonCount }, (_, i) => `${id}-l${i + 1}`);
 }
+
+export function moduleIdFromLessonId(lessonId: string): ModuleId | null {
+  const prefix = lessonId.split('-')[0];
+  const m = MODULES.find(m => m.id === prefix);
+  return m ? m.id : null;
+}

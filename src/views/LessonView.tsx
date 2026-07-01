@@ -1,5 +1,5 @@
-import type { JSX } from 'react';
-import { useState } from 'react';
+import type { JSX, ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import MicroLessonFrame from '../components/MicroLessonFrame';
 import DictionaryTerm from '../components/DictionaryTerm';
 import OXGame from '../components/games/OXGame';
@@ -11,10 +11,10 @@ import type { MatchingPair } from '../components/games/Matching';
 import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
 import { useSpeak } from '../hooks/useSpeak';
-import { DEMO_LESSON } from '../data/demoLesson';
-import { getModule } from '../data/modules';
+import { getLesson } from '../data/lessons/m1';
+import { getModule, moduleIdFromLessonId } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
-import type { LessonId } from '../types';
+import type { LessonContent, LessonId } from '../types';
 
 interface Props {
   lessonId: LessonId;
@@ -23,13 +23,38 @@ interface Props {
 }
 
 export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) {
+  const lesson = getLesson(lessonId);
+  if (!lesson) {
+    return <ComingSoonLesson lessonId={lessonId} onGoHome={onGoHome} onPickLesson={onPickLesson} />;
+  }
+  return (
+    <ImplementedLesson
+      lesson={lesson}
+      onGoHome={onGoHome}
+      onPickLesson={onPickLesson}
+    />
+  );
+}
+
+interface ImplementedProps {
+  lesson: LessonContent;
+  onGoHome: () => void;
+  onPickLesson: (id: LessonId) => void;
+}
+
+function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps) {
   const { difficulty } = useSettings();
   const { markCompleted } = useProgress();
   const { speak } = useSpeak();
   const [step, setStep] = useState(0);
   const [simRevealed, setSimRevealed] = useState(false);
 
-  const lesson = DEMO_LESSON; // M1: only the demo lesson exists
+  // Reset per-lesson state whenever the lesson changes (e.g. sidebar navigation).
+  useEffect(() => {
+    setStep(0);
+    setSimRevealed(false);
+  }, [lesson.id]);
+
   const mod = getModule(lesson.moduleId)!;
   const theme = themeFor(lesson.moduleId);
   const totalSteps = lesson.steps.length;
@@ -54,19 +79,21 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
   }
 
   function renderText() {
+    const data = currentStep.data as { dictionaryTerms?: string[]; imagePlaceholder?: boolean };
+    const terms = data.dictionaryTerms ?? [];
     return (
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-4" style={{ color: theme.accent }}>{lesson.title}</h1>
-        <p className="text-xl leading-relaxed">
-          {/* split body so we can wrap key words in DictionaryTerm */}
-          {body.split('인공지능').reduce<(string | JSX.Element)[]>((acc, part, i, arr) => {
-            acc.push(part);
-            if (i < arr.length - 1) {
-              acc.push(<span key={`d-${i}`}><DictionaryTerm term="인공지능">인공지능</DictionaryTerm></span>);
-            }
-            return acc;
-          }, [])}
-        </p>
+        {data.imagePlaceholder && (
+          <div
+            className="w-full aspect-video rounded-lg border-2 border-dashed flex items-center justify-center text-[color:var(--muted)] mb-4"
+            style={{ borderColor: 'var(--border)', background: 'rgba(0,0,0,0.03)' }}
+            aria-label="이미지 자리"
+          >
+            <span className="text-base">(여기에 그림)</span>
+          </div>
+        )}
+        <p className="text-xl leading-relaxed">{wrapDictionaryTerms(body, terms)}</p>
         <button
           onClick={() => speak(body)}
           className="mt-4 px-4 py-3 rounded font-semibold text-white"
@@ -110,7 +137,7 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
     const data = currentStep.data as { prompt: string; userInput: string; aiResponse: string };
     return (
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold mb-4" style={{ color: theme.accent }}>AI한테 인사해봐요</h2>
+        <h2 className="text-2xl font-bold mb-4" style={{ color: theme.accent }}>AI랑 이야기해봐요</h2>
         <p className="text-lg mb-4">{data.prompt}</p>
         {!simRevealed ? (
           <button
@@ -141,7 +168,7 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
   return (
     <MicroLessonFrame
       lessonId={lesson.id}
-      crumb={`모듈 ${mod.number} > ${lesson.title}`}
+      crumb={`모듈 ${mod.number} > ${lesson.number}. ${lesson.title}`}
       totalSteps={totalSteps}
       currentStep={step}
       onPrev={handlePrev}
@@ -150,6 +177,68 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
       onPickLesson={onPickLesson}
     >
       {body_el}
+    </MicroLessonFrame>
+  );
+}
+
+/**
+ * Renders the body with each occurrence of a listed term wrapped in a
+ * DictionaryTerm (dotted-underline, opens the right-hand panel on click).
+ */
+function wrapDictionaryTerms(text: string, terms: string[]): ReactNode[] {
+  if (terms.length === 0) return [text];
+  const pattern = new RegExp(`(${terms.map(escapeRegExp).join('|')})`, 'g');
+  const parts = text.split(pattern);
+  return parts.map((part, i) =>
+    terms.includes(part)
+      ? <span key={i}><DictionaryTerm term={part}>{part}</DictionaryTerm></span>
+      : <span key={i}>{part}</span>
+  );
+}
+
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+interface ComingSoonProps {
+  lessonId: LessonId;
+  onGoHome: () => void;
+  onPickLesson: (id: LessonId) => void;
+}
+
+function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps) {
+  const modId = moduleIdFromLessonId(lessonId);
+  const mod = modId ? getModule(modId) : undefined;
+  const theme = themeFor(modId ?? 'm1');
+  const crumb = mod ? `모듈 ${mod.number} > ${mod.title}` : lessonId;
+
+  return (
+    <MicroLessonFrame
+      lessonId={lessonId}
+      crumb={crumb}
+      totalSteps={1}
+      currentStep={0}
+      onPrev={() => {}}
+      onNext={onGoHome}
+      onGoHome={onGoHome}
+      onPickLesson={onPickLesson}
+    >
+      <div className="max-w-xl mx-auto text-center py-16">
+        <div className="text-6xl mb-4" aria-hidden>{theme.emoji}</div>
+        <h1 className="text-3xl font-bold mb-3" style={{ color: theme.accent }}>
+          곧 열려요!
+        </h1>
+        <p className="text-lg text-[color:var(--muted)] mb-8">
+          이 차시는 아직 준비 중이에요. 첫 번째 차시부터 시작해봐요.
+        </p>
+        <button
+          onClick={() => onPickLesson('m1-l1')}
+          className="px-6 py-3 rounded-lg text-lg font-bold text-white"
+          style={{ background: theme.accent }}
+        >
+          🚀 첫 차시로 가기
+        </button>
+      </div>
     </MicroLessonFrame>
   );
 }

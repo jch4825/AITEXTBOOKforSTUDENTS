@@ -40,6 +40,38 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '도움',
     shortExplanation: '잘 못하는 걸 누가 같이 해주는 거예요.',
   },
+  {
+    term: '기계',
+    shortExplanation: '정해진 일을 반복해서 하는 물건이에요.',
+    example: '토스터, 선풍기, 세탁기 같은 것들이에요.',
+    ttsVersion: '기계는 정해진 일을 반복해서 하는 물건이에요.',
+  },
+  {
+    term: '인식',
+    shortExplanation: '보거나 듣고 "이게 뭔지" 알아보는 거예요.',
+    example: 'AI가 사진 속 강아지를 보고 "강아지"라고 알아보는 거예요.',
+  },
+  {
+    term: '음성',
+    aliases: ['목소리'],
+    shortExplanation: '사람이 말할 때 나는 소리예요.',
+  },
+  {
+    term: '학습',
+    shortExplanation: '보고 들으면서 배우는 거예요.',
+    example: 'AI도 많은 예시를 보면서 학습해요.',
+  },
+  {
+    term: '번역',
+    shortExplanation: '한 나라 말을 다른 나라 말로 바꿔주는 거예요.',
+    example: '"Hello"를 "안녕"으로 바꿔주는 거예요.',
+  },
+  {
+    term: '챗봇',
+    shortExplanation: '글로 대화해주는 AI예요.',
+    example: '"오늘 날씨 어때?" 라고 글로 물으면 답해줘요.',
+    ttsVersion: '챗봇은 글로 대화하는 AI예요.',
+  },
 ];
 
 function normalize(term: string): string {

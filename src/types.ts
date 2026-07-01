@@ -30,19 +30,27 @@ export interface SettingsState {
   ttsEnabled: boolean;
 }
 
-/**
- * Demo lesson schema for M1. M2 will introduce the full LessonContent type.
- */
-export interface DemoLessonStep {
-  kind: 'text' | 'ox' | 'card-pick' | 'matching' | 'sim-ai';
+export type LessonKind = 'concept' | 'activity' | 'experience';
+
+export type LessonStepKind = 'text' | 'ox' | 'card-pick' | 'matching' | 'sim-ai';
+
+export interface LessonStep {
+  kind: LessonStepKind;
   data: Record<string, unknown>;
 }
 
-export interface DemoLesson {
+/**
+ * Canonical lesson schema (introduced M2). Each lesson belongs to a module,
+ * carries both difficulty variants of the intro text, and a step sequence
+ * mixing text + interactive widgets.
+ */
+export interface LessonContent {
   id: LessonId;
   moduleId: ModuleId;
+  number: number;         // 1-indexed order within the module
   title: string;
+  kind: LessonKind;
   bodyEasy: string;
   bodyNormal: string;
-  steps: DemoLessonStep[];
+  steps: LessonStep[];
 }
