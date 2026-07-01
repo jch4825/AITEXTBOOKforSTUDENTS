@@ -16,11 +16,15 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
       {MODULES.map(mod => {
         const theme = themeFor(mod.id);
         const lessons = lessonIdsForModule(mod.id);
+        const doneInModule = lessons.filter(isCompleted).length;
         return (
           <section key={mod.id} className="mb-5">
-            <h3 className="text-sm font-bold mb-2" style={{ color: theme.accent }}>
-              <span className="mr-1">{theme.emoji}</span>
-              모듈 {mod.number}. {mod.title}
+            <h3 className="text-sm font-bold mb-2 flex items-baseline gap-1" style={{ color: theme.accent }}>
+              <span>{theme.emoji}</span>
+              <span>모듈 {mod.number}. {mod.title}</span>
+              <span className="ml-auto text-xs font-semibold text-[color:var(--muted)]" aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료`}>
+                {doneInModule}/{lessons.length}
+              </span>
             </h3>
             <ul className="flex flex-wrap gap-1.5">
               {lessons.map(lid => {

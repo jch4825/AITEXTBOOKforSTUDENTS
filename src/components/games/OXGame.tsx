@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 
 export interface OXQuestion {
@@ -19,11 +19,15 @@ export default function OXGame({ questions, onComplete }: Props) {
   const q = questions[idx];
   const correct = picked !== null && picked === q.answer;
 
+  // Auto-read the question when it appears (respects TTS toggle inside useSpeak).
+  useEffect(() => { speak(q.question); }, [idx, speak, q.question]);
+
   function pick(choice: 'O' | 'X') {
     if (picked) return;
     setPicked(choice);
     const isCorrect = choice === q.answer;
-    speak(isCorrect ? '정답이에요!' : '아쉬워요, 다시 생각해봐요.');
+    const feedbackLine = q.feedback ? ` ${q.feedback}` : '';
+    speak((isCorrect ? '정답이에요!' : '아쉬워요, 다시 생각해봐요.') + feedbackLine);
   }
 
   function next() {
@@ -37,7 +41,16 @@ export default function OXGame({ questions, onComplete }: Props) {
 
   return (
     <div className="my-6">
-      <p className="text-xl font-semibold mb-4">{q.question}</p>
+      <div className="flex items-start gap-2 mb-4">
+        <p className="text-xl font-semibold flex-1">{q.question}</p>
+        <button
+          type="button"
+          onClick={() => speak(q.question)}
+          aria-label="문제 다시 들려주기"
+          className="shrink-0 h-10 w-10 rounded-full border-2 text-lg"
+          style={{ borderColor: 'var(--accent)', color: 'var(--accent)', background: 'white' }}
+        >🔊</button>
+      </div>
       <div className="flex gap-4 justify-center">
         <button
           onClick={() => pick('O')}

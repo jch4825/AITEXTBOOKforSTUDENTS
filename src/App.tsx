@@ -49,5 +49,5 @@ export default function App() {
   if (state.view === 'lesson' && state.lessonId) {
     return <LessonView lessonId={state.lessonId} onGoHome={goHome} onPickLesson={goLesson} />;
   }
-  return <Home onStart={() => goLesson('m1-l1')} />;
+  return <Home onStart={goLesson} />;
 }
