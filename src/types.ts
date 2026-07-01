@@ -32,7 +32,7 @@ export interface SettingsState {
 
 export type LessonKind = 'concept' | 'activity' | 'experience';
 
-export type LessonStepKind = 'text' | 'ox' | 'card-pick' | 'matching' | 'sim-ai';
+export type LessonStepKind = 'text' | 'ox' | 'card-pick' | 'matching' | 'sim-ai' | 'real-ai';
 
 export interface LessonStep {
   kind: LessonStepKind;

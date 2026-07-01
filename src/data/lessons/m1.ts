@@ -502,11 +502,11 @@ export const M1_LESSONS: LessonContent[] = [
         },
       },
       {
-        kind: 'sim-ai',
+        kind: 'real-ai',
         data: {
-          prompt: 'AI한테 "노래 하나 추천해줘" 라고 부탁해봐요.',
+          prompt: '이번엔 진짜 AI한테 "노래 하나 추천해줘" 라고 부탁해봐요!',
           userInput: '노래 하나 추천해줘',
-          aiResponse:
+          fallbackResponse:
             '기분이 좋아지는 신나는 동요는 어때요? "곰 세 마리" 나 "숲속을 걸어요" 같은 노래를 추천해요!',
         },
       },

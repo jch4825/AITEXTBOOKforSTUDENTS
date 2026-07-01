@@ -8,6 +8,7 @@ import CardPick from '../components/games/CardPick';
 import type { CardChoice } from '../components/games/CardPick';
 import Matching from '../components/games/Matching';
 import type { MatchingPair } from '../components/games/Matching';
+import RealAIStep from '../components/RealAIStep';
 import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
 import { useSpeak } from '../hooks/useSpeak';
@@ -157,12 +158,30 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     );
   }
 
+  function renderRealAI() {
+    const data = currentStep.data as { prompt: string; userInput: string; fallbackResponse: string };
+    // Wrapper span carries the key so the child fully remounts (fresh state) on step change.
+    return (
+      <span key={`real-ai-${step}`}>
+        <RealAIStep
+          prompt={data.prompt}
+          userInput={data.userInput}
+          fallbackResponse={data.fallbackResponse}
+          accent={theme.accent}
+          accentSoft={theme.accentSoft}
+          onDone={() => { /* footer's "다음 ▶" is how the student advances */ }}
+        />
+      </span>
+    );
+  }
+
   let body_el: JSX.Element;
   if (currentStep.kind === 'text') body_el = renderText();
   else if (currentStep.kind === 'ox') body_el = renderOX();
   else if (currentStep.kind === 'card-pick') body_el = renderCardPick();
   else if (currentStep.kind === 'matching') body_el = renderMatching();
   else if (currentStep.kind === 'sim-ai') body_el = renderSimAI();
+  else if (currentStep.kind === 'real-ai') body_el = renderRealAI();
   else body_el = <p>(아직 만들지 않은 단계 종류: {currentStep.kind})</p>;
 
   return (
