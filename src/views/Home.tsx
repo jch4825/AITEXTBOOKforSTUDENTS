@@ -1,6 +1,6 @@
 import { useProgress } from '../context/ProgressContext';
 import { MODULES, lessonIdsForModule } from '../data/modules';
-import { getLesson } from '../data/lessons/m1';
+import { getLesson } from '../data/lessons';
 import type { LessonId } from '../types';
 
 interface Props {

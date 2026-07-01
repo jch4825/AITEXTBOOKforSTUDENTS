@@ -589,8 +589,3 @@ export const M1_LESSONS: LessonContent[] = [
   },
 ];
 
-const M1_LESSON_MAP = new Map(M1_LESSONS.map(l => [l.id, l]));
-
-export function getLesson(lessonId: string) {
-  return M1_LESSON_MAP.get(lessonId);
-}

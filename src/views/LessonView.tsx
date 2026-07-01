@@ -12,7 +12,7 @@ import RealAIStep from '../components/RealAIStep';
 import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
 import { useSpeak } from '../hooks/useSpeak';
-import { getLesson } from '../data/lessons/m1';
+import { getLesson } from '../data/lessons';
 import { getModule, moduleIdFromLessonId } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import type { LessonContent, LessonId } from '../types';

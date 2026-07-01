@@ -72,6 +72,33 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     example: '"오늘 날씨 어때?" 라고 글로 물으면 답해줘요.',
     ttsVersion: '챗봇은 글로 대화하는 AI예요.',
   },
+  {
+    term: '프롬프트',
+    aliases: ['질문하기'],
+    shortExplanation: 'AI한테 던지는 질문이나 부탁이에요.',
+    example: '"짧게 설명해줘" 도 프롬프트예요.',
+    ttsVersion: '프롬프트는 AI한테 던지는 질문이나 부탁이에요.',
+  },
+  {
+    term: '역할',
+    shortExplanation: '"이렇게 대해줘" 하고 정해주는 성격이에요.',
+    example: '"친구처럼 말해줘" 하면 AI가 친구처럼 답해줘요.',
+  },
+  {
+    term: '예시',
+    aliases: ['보기'],
+    shortExplanation: '"이런 식으로 해줘" 하고 보여주는 견본이에요.',
+    example: '한 문장을 먼저 보여주면 AI가 비슷하게 만들어줘요.',
+  },
+  {
+    term: '단계',
+    shortExplanation: '큰 일을 작게 나눈 한 조각이에요.',
+    example: '"1단계, 2단계로 알려줘" 라고 물어봐요.',
+  },
+  {
+    term: '부탁',
+    shortExplanation: '"이렇게 해줘요" 하고 예의 있게 말하는 거예요.',
+  },
 ];
 
 function normalize(term: string): string {
