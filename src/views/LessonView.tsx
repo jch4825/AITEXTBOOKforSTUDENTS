@@ -159,7 +159,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   }
 
   function renderRealAI() {
-    const data = currentStep.data as { prompt: string; userInput: string; fallbackResponse: string };
+    const data = currentStep.data as { prompt: string; userInput: string; fallbackResponse: string; allowFreeInput?: boolean };
     // Wrapper span carries the key so the child fully remounts (fresh state) on step change.
     return (
       <span key={`real-ai-${step}`}>
@@ -167,6 +167,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           prompt={data.prompt}
           userInput={data.userInput}
           fallbackResponse={data.fallbackResponse}
+          allowFreeInput={data.allowFreeInput}
           accent={theme.accent}
           accentSoft={theme.accentSoft}
           onDone={() => { /* footer's "다음 ▶" is how the student advances */ }}

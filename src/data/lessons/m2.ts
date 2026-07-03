@@ -148,10 +148,11 @@ export const M2_LESSONS: LessonContent[] = [
       {
         kind: 'real-ai',
         data: {
-          prompt: '진짜 AI한테 콕 집어 물어봐요: "친구한테 소개할 만한 재미있는 놀이 하나 알려줘"',
+          prompt: '진짜 AI한테 콕 집어 물어봐요. 아래 글을 그대로 보내도 되고, 🎤 로 내 목소리로 바꿔서 보내도 돼요.',
           userInput: '친구한테 소개할 만한 재미있는 놀이 하나 알려줘',
           fallbackResponse:
             '"제기차기" 어때요? 콩주머니나 둥근 물건을 발로 차서 몇 번 오래 차는지 세는 놀이예요!',
+          allowFreeInput: true,
         },
       },
     ],
@@ -463,10 +464,11 @@ export const M2_LESSONS: LessonContent[] = [
       {
         kind: 'real-ai',
         data: {
-          prompt: '진짜 AI한테 좋아하는 색깔에 어울리는 이름을 지어달라고 해봐요.',
+          prompt: '진짜 AI한테 내가 좋아하는 색에 어울리는 이름을 지어달라고 해봐요. 좋아하는 색으로 글을 고쳐 보내거나, 🎤 를 눌러 말해봐요.',
           userInput: '내가 좋아하는 색이 파랑이야. 파랑 강아지 이름 하나 지어줘.',
           fallbackResponse:
             '"바다" 어때요? 파란 바다처럼 시원하고 예쁜 이름이에요!',
+          allowFreeInput: true,
         },
       },
       {

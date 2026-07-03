@@ -36,6 +36,7 @@ export interface SttHandle {
 export function startListening(opts: {
   onResult: (text: string) => void;
   onError?: (msg: string) => void;
+  onEnd?: () => void;
 }): SttHandle | null {
   const Ctor = (typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition)) as SpeechRecognitionCtor | undefined;
   if (!Ctor) {
@@ -51,6 +52,7 @@ export function startListening(opts: {
     opts.onResult(text);
   };
   rec.onerror = (ev) => opts.onError?.(ev.error);
+  rec.onend = () => opts.onEnd?.();
   try { rec.start(); } catch (err) { opts.onError?.(String(err)); return null; }
   return { stop: () => rec.stop() };
 }
