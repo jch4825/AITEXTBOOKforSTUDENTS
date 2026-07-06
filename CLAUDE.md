@@ -9,7 +9,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 배포: GitHub Pages — base path `/AITEXTBOOKforSTUDENTS/`
 
 설계 spec: `docs/superpowers/specs/2026-06-30-student-textbook-design.md`
-현재 마일스톤: **M2 완료 → M3 준비** — 모듈 1 (AI가 뭐야?) 11차시 시뮬레이션 콘텐츠 작성 완료. 다음은 모듈 2 (실제 Gemini 호출 도입).
+교육 업그레이드 spec: `docs/superpowers/specs/2026-07-06-education-upgrade-design.md`
+교사 가이드: `docs/teacher-guide.md`
+
+현재 마일스톤: **콘텐츠 전량 완료 (68/68차시, M0~M7)** — 6모듈 전체 구현 + 교육 설계 구조(학습목표·성취기준·정리 화면) 적용. 남은 것(M8 잔여): 이미지 placeholder 채우기, 실사용 교사 베타 검토.
 
 ## Commands
 
@@ -29,21 +32,22 @@ npm run check:encoding  # Validate UTF-8 encoding
 GEMINI_API_KEY=<your key>
 ```
 
-현재는 미사용. M3(모듈 2 — 실제 Gemini 호출 도입) 시점부터 필요.
+real-ai 차시(10차시)에서 사용. 키가 없으면 각 차시의 `fallbackResponse`로 우아하게 강등된다.
 교사 모드 비번은 `VITE_TEACHER_MODE_PASSWORD` (같은 `.env`에서 주입).
+런타임 키는 교사 모드(`?teacher=1`)에서 localStorage로도 등록 가능.
 
-## Architecture (현재 — M1 완료)
+## Architecture (현재 — 콘텐츠 전량 완료)
 
 ```
 src/
 ├── App.tsx                       — URL 기반 라우터 (home / lesson / teacher)
 ├── main.tsx                      — React 19 + Settings/Progress Provider 래핑
 ├── index.css                     — Pretendard, CSS 변수, 접근성 베이스
-├── types.ts                      — Difficulty, FontSize, DictionaryEntry, DemoLesson 등
+├── types.ts                      — Difficulty, FontSize, DictionaryEntry, LessonContent 등
 ├── views/
 │   ├── Home.tsx                  — 단일 CTA + 전역 진도 카운트
-│   ├── LessonView.tsx            — 데모 차시 렌더 (미구현 차시는 "곧 열려요" placeholder)
-│   └── TeacherView.tsx           — ?teacher=1 진입 + 비번 게이트 (관리 셸은 더미)
+│   ├── LessonView.tsx            — 차시 렌더 + 정리(wrap-up) 가상 최종 단계
+│   └── TeacherView.tsx           — ?teacher=1 + 비번 게이트 — API 키·진도·학습목표 패널
 ├── components/
 │   ├── TopBar.tsx                — 브레드크럼 + TTS/Font/Difficulty/Dict 4토글
 │   ├── SidebarTree.tsx           — 6모듈 68차시 진도 점 트리
@@ -52,19 +56,23 @@ src/
 │   ├── DictionaryTerm.tsx        — 점선 밑줄 표제어 (data-dict-term 위임)
 │   ├── ProgressDots.tsx          — 차시 내 단계 인디케이터
 │   ├── ErrorMessage.tsx          — 학생 1줄 + 교사 상세 2단
+│   ├── RealAIStep.tsx            — real-ai step 렌더 (Gemini 호출 + fallback)
+│   ├── MicButton.tsx             — STT 마이크 버튼 (real-ai 자유입력용)
 │   ├── controls/                 — TTS/FontSize/Difficulty/DictionaryTrigger
-│   └── games/                    — OXGame, CardPick, Matching
+│   └── games/                    — OXGame, CardPick, Matching, Sequence
 ├── context/
 │   ├── SettingsContext.tsx       — difficulty · fontSize · ttsEnabled
 │   └── ProgressContext.tsx       — completedLessons (localStorage 동기화)
 ├── data/
 │   ├── modules.ts                — 6모듈 메타 + lessonIds/moduleIdFromLessonId 헬퍼
-│   ├── lessons/m1.ts             — 모듈 1 정식 11차시 (M1_LESSONS + getLesson)
-│   └── studentDictionary.ts      — 학생용 사전 항목 (m1 어휘 15개)
+│   ├── lessons/m1.ts ~ m6.ts     — 정식 68차시 (모듈별 파일, index.ts에서 집계)
+│   └── studentDictionary.ts      — 학생용 사전 52개 항목 (차시 dictionaryTerms 전량 커버)
 ├── hooks/useSpeak.ts             — TTS 래퍼 (Settings 감안)
 └── utils/
-    ├── tts.ts                    — Web Speech API 브라우저 shim
-    ├── stt.ts                    — STT 래퍼 (M3부터 사용)
+    ├── tts.ts / stt.ts           — Web Speech API 래퍼 (TTS / STT)
+    ├── gemini.ts                 — Gemini 호출 + 5-모델 폴백 + 안전 가드
+    ├── apiKey.ts                 — 키 저장 (빌드타임 env + localStorage)
+    ├── safetyFilter.ts           — 응답 금칙어 사후 필터
     ├── moduleThemes.ts           — 모듈별 컬러 + 이모지
     ├── storage.ts                — ai-students-progress localStorage
     └── teacherMode.ts            — ?teacher=1 + 비번 검증 + localStorage
@@ -72,15 +80,13 @@ src/
 
 **저장 키:** `ai-students-progress` (완료 차시), `ai-students-settings` (토글 상태), `ai-teacher-mode` (교사 인증).
 
-**Lesson 스키마:** `LessonContent { id, moduleId, number, title, kind, bodyEasy, bodyNormal, steps }`. Step kinds: `text | ox | card-pick | matching | sim-ai`. text step에 `dictionaryTerms: string[]`를 넣으면 본문에서 자동으로 점선 밑줄 처리.
-
-## M3에서 손댈 예정 (참고)
-
-- `src/data/lessons/m2.ts` 신설, 모듈 2 11차시 (프롬프트 입문)
-- 실제 Gemini 호출 도입 — `src/utils/gemini.ts` + 안전 가드 (길이 제한, 금칙어 필터, 15s 타임아웃)
-- STT 첫 실제 사용 (Web Speech API — 지금은 스텁만)
-- 학생용 오류 메시지 2단 구조 (`ErrorMessage`) 실사용
-- 모델 폴백 (3.5-flash → 3.1-flash-lite → 2.5-flash → 2.5-flash-lite)
+**Lesson 스키마:** `LessonContent { id, moduleId, number, title, kind, objective, standards?, bodyEasy, bodyNormal, wrapUpEasy, wrapUpNormal, steps }`.
+Step kinds: `text | ox | card-pick | matching | sequence | sim-ai | real-ai`.
+- `objective`: 교사용 학습목표 ("~할 수 있다"), `standards`: 2022 개정 특수교육 기본교육과정 성취기준 `"[코드] 원문"` — 둘 다 학생 화면 비노출, TeacherView에서만 표시.
+- `wrapUp*`: 차시 마지막 정리 화면("오늘 배운 것")에 표시 + 자동 TTS. 완료 마킹은 정리 화면에서.
+- text step에 `dictionaryTerms: string[]`를 넣으면 본문 자동 점선 밑줄. **새 어휘는 반드시 studentDictionary.ts에도 등록.**
+- real-ai step은 반드시 `fallbackResponse` 포함 (키 없는 교실 대응).
+- 성취기준 코드는 임의 창작 금지 — special-edu-curriculum-finder 스킬로 검증된 것만 사용 (검증된 풀: `docs/superpowers/plans/2026-07-06-education-upgrade.md`).
 
 ## Key Constraints
 
