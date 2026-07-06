@@ -13,6 +13,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 교사 가이드: `docs/teacher-guide.md`
 
 캐릭터·스토리 spec: `docs/superpowers/specs/2026-07-07-character-story-design.md`
+디자인 업그레이드 플랜: `docs/design-upgrade-plan.md` (D1~D5 로드맵)
+차시별 이미지·영상 생성 프롬프트: `docs/asset-prompts/` (Gemini용, 68차시 전량 — 말풍선은 항상 공란 규칙)
 
 현재 마일스톤: **콘텐츠 전량 완료 (68/68차시) + 관통 캐릭터·스토리 레이어 적용** — "AI 동아리"
 4인 캐스트(강진우·서윤아·박민준쌤·아이미)가 사회상황이야기 방식으로 전 차시를 관통.
