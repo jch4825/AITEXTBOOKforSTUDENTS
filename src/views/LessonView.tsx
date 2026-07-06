@@ -11,6 +11,9 @@ import type { MatchingPair } from '../components/games/Matching';
 import Sequence from '../components/games/Sequence';
 import type { SequenceItem } from '../components/games/Sequence';
 import RealAIStep from '../components/RealAIStep';
+import StoryIntroCard from '../components/StoryIntroCard';
+import SpeechBubble from '../components/SpeechBubble';
+import { getLessonStory, MODULE_EPISODES } from '../data/story';
 import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
 import { useSpeak } from '../hooks/useSpeak';
@@ -66,6 +69,8 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   const currentStep = lesson.steps[step];
   const body = difficulty === 'easy' ? lesson.bodyEasy : lesson.bodyNormal;
   const wrapUpText = difficulty === 'easy' ? lesson.wrapUpEasy : lesson.wrapUpNormal;
+  const story = getLessonStory(lesson.id);
+  const storyIntro = story ? (difficulty === 'easy' ? story.introEasy : story.introNormal) : null;
 
   // 정리 화면에 들어오면 자동으로 한 번 읽어준다.
   useEffect(() => {
@@ -96,7 +101,15 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     return (
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-4" style={{ color: theme.accent }}>{lesson.title}</h1>
-        {data.imagePlaceholder && (
+        {story && storyIntro ? (
+          <StoryIntroCard
+            scene={story.scene}
+            text={storyIntro}
+            episodeTitle={lesson.number === 1 ? MODULE_EPISODES[lesson.moduleId].title : undefined}
+            accent={theme.accent}
+            accentSoft={theme.accentSoft}
+          />
+        ) : data.imagePlaceholder && (
           <div
             className="w-full aspect-video rounded-lg border-2 border-dashed flex items-center justify-center text-[color:var(--muted)] mb-4"
             style={{ borderColor: 'var(--border)', background: 'rgba(0,0,0,0.03)' }}
@@ -170,9 +183,14 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
         ) : (
           <div className="space-y-3">
             <div className="p-3 rounded bg-gray-100 text-right">내가: {data.userInput}</div>
-            <div className="p-4 rounded text-lg" style={{ background: theme.accentSoft }}>
-              <strong style={{ color: theme.accent }}>AI:</strong> {data.aiResponse}
-            </div>
+            <SpeechBubble
+              speaker="aimi"
+              expression="cheer"
+              text={data.aiResponse}
+              accent={theme.accent}
+              accentSoft={theme.accentSoft}
+              showSpeakButton
+            />
           </div>
         )}
       </div>
@@ -202,7 +220,18 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       <div className="max-w-2xl mx-auto text-center py-8">
         <div className="text-5xl mb-4" aria-hidden>🌟</div>
         <h2 className="text-2xl font-bold mb-4" style={{ color: theme.accent }}>오늘 배운 것</h2>
-        <p className="text-xl leading-relaxed mb-8">{wrapUpText}</p>
+        <p className="text-xl leading-relaxed mb-6">{wrapUpText}</p>
+        {story && (
+          <div className="text-left max-w-md mx-auto mb-6">
+            <SpeechBubble
+              speaker={story.reaction.speaker}
+              text={story.reaction.text}
+              expression="happy"
+              accent={theme.accent}
+              accentSoft={theme.accentSoft}
+            />
+          </div>
+        )}
         <div className="flex flex-col items-center gap-3">
           <button
             onClick={() => speak(wrapUpText)}

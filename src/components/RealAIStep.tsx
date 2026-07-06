@@ -3,6 +3,7 @@ import { useSpeak } from '../hooks/useSpeak';
 import { askGemini, GeminiError } from '../utils/gemini';
 import ErrorMessage from './ErrorMessage';
 import MicButton from './MicButton';
+import SpeechBubble from './SpeechBubble';
 
 interface Props {
   prompt: string;              // shown to the student ("AI한테 __ 라고 물어봐요")
@@ -46,7 +47,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4" style={{ color: accent }}>AI랑 이야기해봐요</h2>
+      <h2 className="text-2xl font-bold mb-4" style={{ color: accent }}>아이미랑 이야기해봐요</h2>
       <p className="text-lg mb-4">{prompt}</p>
 
       {state.kind === 'idle' && (
@@ -86,9 +87,13 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
       )}
 
       {state.kind === 'loading' && (
-        <div className="p-4 rounded text-lg text-center" style={{ background: accentSoft, color: accent }}>
-          AI가 대답을 준비 중이에요… ⏳
-        </div>
+        <SpeechBubble
+          speaker="aimi"
+          expression="thinking"
+          text="음… 생각하고 있어요 ⏳"
+          accent={accent}
+          accentSoft={accentSoft}
+        />
       )}
 
       {(state.kind === 'success' || state.kind === 'fallback') && (
@@ -96,10 +101,14 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
           <div className="p-3 rounded bg-gray-100 text-right">내가: {state.sent}</div>
 
           {state.kind === 'success' ? (
-            <div className="p-4 rounded text-lg" style={{ background: accentSoft }}>
-              <strong style={{ color: accent }}>AI:</strong> {state.text}
-              <div className="mt-2 text-xs text-[color:var(--muted)]">모델: {state.modelUsed}</div>
-            </div>
+            <SpeechBubble
+              speaker="aimi"
+              expression="cheer"
+              text={state.text}
+              accent={accent}
+              accentSoft={accentSoft}
+              showSpeakButton
+            />
           ) : (
             <>
               <ErrorMessage
@@ -109,9 +118,14 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
               <p className="text-sm text-[color:var(--muted)] px-1">
                 지금은 미리 준비된 답변을 보여드릴게요.
               </p>
-              <div className="p-4 rounded text-lg" style={{ background: accentSoft }}>
-                <strong style={{ color: accent }}>AI:</strong> {fallbackResponse}
-              </div>
+              <SpeechBubble
+                speaker="aimi"
+                expression="happy"
+                text={fallbackResponse}
+                accent={accent}
+                accentSoft={accentSoft}
+                showSpeakButton
+              />
             </>
           )}
         </div>
