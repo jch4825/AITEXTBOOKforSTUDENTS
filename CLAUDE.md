@@ -12,7 +12,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 교육 업그레이드 spec: `docs/superpowers/specs/2026-07-06-education-upgrade-design.md`
 교사 가이드: `docs/teacher-guide.md`
 
-현재 마일스톤: **콘텐츠 전량 완료 (68/68차시, M0~M7)** — 6모듈 전체 구현 + 교육 설계 구조(학습목표·성취기준·정리 화면) 적용. 남은 것(M8 잔여): 이미지 placeholder 채우기, 실사용 교사 베타 검토.
+캐릭터·스토리 spec: `docs/superpowers/specs/2026-07-07-character-story-design.md`
+
+현재 마일스톤: **콘텐츠 전량 완료 (68/68차시) + 관통 캐릭터·스토리 레이어 적용** — "AI 동아리"
+4인 캐스트(강진우·서윤아·박민준쌤·아이미)가 사회상황이야기 방식으로 전 차시를 관통.
+남은 것: 캐릭터 실제 일러스트 교체(현재 SVG), 실사용 교사 베타 검토.
 
 ## Commands
 
@@ -56,8 +60,11 @@ src/
 │   ├── DictionaryTerm.tsx        — 점선 밑줄 표제어 (data-dict-term 위임)
 │   ├── ProgressDots.tsx          — 차시 내 단계 인디케이터
 │   ├── ErrorMessage.tsx          — 학생 1줄 + 교사 상세 2단
-│   ├── RealAIStep.tsx            — real-ai step 렌더 (Gemini 호출 + fallback)
+│   ├── RealAIStep.tsx            — real-ai step 렌더 (아이미 말풍선 + fallback)
 │   ├── MicButton.tsx             — STT 마이크 버튼 (real-ai 자유입력용)
+│   ├── CharacterAvatar.tsx       — 4인 SVG 아바타 (표정 variant) — 캐릭터 비주얼 단일 지점
+│   ├── SpeechBubble.tsx          — 캐릭터 말풍선 (이름표 + TTS)
+│   ├── StoryIntroCard.tsx        — 차시 도입 장면 카드 (사회상황이야기)
 │   ├── controls/                 — TTS/FontSize/Difficulty/DictionaryTrigger
 │   └── games/                    — OXGame, CardPick, Matching, Sequence
 ├── context/
@@ -66,6 +73,8 @@ src/
 ├── data/
 │   ├── modules.ts                — 6모듈 메타 + lessonIds/moduleIdFromLessonId 헬퍼
 │   ├── lessons/m1.ts ~ m6.ts     — 정식 68차시 (모듈별 파일, index.ts에서 집계)
+│   ├── characters.ts             — AI 동아리 캐릭터 메타 (jinwoo·yoona·minjun·aimi)
+│   ├── story.ts                  — 사회상황이야기 레이어: MODULE_EPISODES + LESSON_STORIES (68차시 전량)
 │   └── studentDictionary.ts      — 학생용 사전 52개 항목 (차시 dictionaryTerms 전량 커버)
 ├── hooks/useSpeak.ts             — TTS 래퍼 (Settings 감안)
 └── utils/
@@ -87,6 +96,12 @@ Step kinds: `text | ox | card-pick | matching | sequence | sim-ai | real-ai`.
 - text step에 `dictionaryTerms: string[]`를 넣으면 본문 자동 점선 밑줄. **새 어휘는 반드시 studentDictionary.ts에도 등록.**
 - real-ai step은 반드시 `fallbackResponse` 포함 (키 없는 교실 대응).
 - 성취기준 코드는 임의 창작 금지 — special-edu-curriculum-finder 스킬로 검증된 것만 사용 (검증된 풀: `docs/superpowers/plans/2026-07-06-education-upgrade.md`).
+
+**스토리 레이어 규칙:** 차시를 추가하면 `story.ts`의 `LESSON_STORIES`에도 반드시 항목 추가
+(scene 1~2명, introEasy/introNormal, reaction). 사회상황이야기 작법: 서술+관점 문장, 지시는
+부드럽게("~하면 좋아요"). AI 응답은 전부 아이미 화자 — Gemini 시스템 프롬프트에 페르소나 포함.
+캐릭터 비주얼 변경은 CharacterAvatar.tsx 한 곳에서만. 애니메이션은 1회성 fade-in만 허용
+(반복·점멸 금지 — 저자극 원칙).
 
 ## Key Constraints
 
