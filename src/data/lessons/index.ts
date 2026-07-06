@@ -4,6 +4,7 @@ import { M2_LESSONS } from './m2';
 import { M3_LESSONS } from './m3';
 import { M4_LESSONS } from './m4';
 import { M5_LESSONS } from './m5';
+import { M6_LESSONS } from './m6';
 
 /**
  * Aggregate registry of every implemented lesson across modules.
@@ -16,6 +17,7 @@ export const ALL_LESSONS: LessonContent[] = [
   ...M3_LESSONS,
   ...M4_LESSONS,
   ...M5_LESSONS,
+  ...M6_LESSONS,
 ];
 
 const LESSON_MAP = new Map(ALL_LESSONS.map(l => [l.id, l]));
