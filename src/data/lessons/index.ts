@@ -1,6 +1,7 @@
 import type { LessonContent, LessonId } from '../../types';
 import { M1_LESSONS } from './m1';
 import { M2_LESSONS } from './m2';
+import { M3_LESSONS } from './m3';
 
 /**
  * Aggregate registry of every implemented lesson across modules.
@@ -10,6 +11,7 @@ import { M2_LESSONS } from './m2';
 export const ALL_LESSONS: LessonContent[] = [
   ...M1_LESSONS,
   ...M2_LESSONS,
+  ...M3_LESSONS,
 ];
 
 const LESSON_MAP = new Map(ALL_LESSONS.map(l => [l.id, l]));
