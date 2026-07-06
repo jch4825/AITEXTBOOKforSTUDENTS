@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSpeak } from '../hooks/useSpeak';
 import type { DictionaryEntry } from '../types';
 import { findDictionaryEntry } from '../data/studentDictionary';
+import CharacterAvatar from './CharacterAvatar';
 
 interface Props {
   open: boolean;
@@ -42,11 +43,27 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
       />
 
       {!query && (
-        <p className="text-[color:var(--muted)]">본문에서 밑줄 친 단어를 눌러보세요.</p>
+        <div className="text-center pt-6">
+          <div className="flex justify-center mb-3" aria-hidden>
+            <CharacterAvatar character="aimi" expression="curious" size={80} />
+          </div>
+          <p className="text-[color:var(--muted)]">
+            궁금한 단어가 있어요?
+            <br />
+            본문의 <span className="dict-term">밑줄 친 단어</span>를 누르면
+            <br />
+            아이미가 뜻을 알려줘요.
+          </p>
+        </div>
       )}
 
       {query && !entry && (
-        <p className="text-[color:var(--muted)]">"{query}" 단어는 아직 사전에 없어요.</p>
+        <div className="text-center pt-6">
+          <div className="flex justify-center mb-3" aria-hidden>
+            <CharacterAvatar character="aimi" expression="thinking" size={80} />
+          </div>
+          <p className="text-[color:var(--muted)]">"{query}"는 아직 사전에 없어요. 선생님께 물어봐요!</p>
+        </div>
       )}
 
       {entry && (

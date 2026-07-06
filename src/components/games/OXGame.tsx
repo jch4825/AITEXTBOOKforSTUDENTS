@@ -84,7 +84,7 @@ export default function OXGame({ questions, onComplete }: Props) {
             onClick={next}
             className="mt-4 px-6 py-3 rounded font-bold text-white"
             style={{ background: 'var(--accent)' }}
-          >{idx + 1 < questions.length ? '다음 ▶' : '끝내기 ✓'}</button>
+          >다음 ▶</button>
         </div>
       )}
     </div>
