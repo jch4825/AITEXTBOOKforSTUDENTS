@@ -17,7 +17,7 @@ export default function TopBar({ crumb, onOpenDictionary, onGoHome, onOpenNav }:
         <button
           onClick={onOpenNav}
           aria-label="차례 열기"
-          className="md:hidden h-12 px-3 rounded border-2 font-semibold bg-white"
+          className="md:hidden h-12 px-2.5 rounded border-2 font-semibold bg-white whitespace-nowrap"
           style={{ borderColor: 'var(--accent)', color: 'var(--fg)' }}
         >☰ 차례</button>
       )}

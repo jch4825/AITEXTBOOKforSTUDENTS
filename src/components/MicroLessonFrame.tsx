@@ -88,17 +88,17 @@ export default function MicroLessonFrame({
           onSearch={setDictQuery}
         />
       </div>
-      <footer className="h-20 shrink-0 border-t border-[color:var(--border)] bg-white px-6 flex items-center justify-between">
+      <footer className="h-20 shrink-0 border-t border-[color:var(--border)] bg-white px-3 md:px-6 flex items-center justify-between gap-2">
         <button
           onClick={onPrev}
           disabled={currentStep === 0}
-          className="h-12 px-6 rounded border-2 font-semibold disabled:opacity-40"
+          className="h-12 px-4 md:px-6 rounded border-2 font-semibold disabled:opacity-40 whitespace-nowrap"
           style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
         >◀ 이전</button>
         <ProgressDots total={totalSteps} current={currentStep} />
         <button
           onClick={onNext}
-          className="h-12 px-6 rounded font-semibold text-white"
+          className="h-12 px-4 md:px-6 rounded font-semibold text-white whitespace-nowrap"
           style={{ background: 'var(--accent)' }}
         >{currentStep + 1 >= totalSteps ? '🎉 다 했어요!' : '다음 ▶'}</button>
       </footer>
