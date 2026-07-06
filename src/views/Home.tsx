@@ -1,6 +1,7 @@
 import { useProgress } from '../context/ProgressContext';
 import { MODULES, lessonIdsForModule } from '../data/modules';
 import { getLesson } from '../data/lessons';
+import CharacterAvatar from '../components/CharacterAvatar';
 import type { LessonId } from '../types';
 
 interface Props {
@@ -33,10 +34,20 @@ export default function Home({ onStart }: Props) {
   return (
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="max-w-xl text-center">
+        {/* AI 동아리 친구들 — 아이미가 가운데에서 환영 */}
+        <div className="flex justify-center items-end gap-1 mb-6 story-fade-in" aria-hidden>
+          <CharacterAvatar character="jinwoo" expression="happy" size={64} />
+          <CharacterAvatar character="aimi" expression="cheer" size={88} />
+          <CharacterAvatar character="yoona" expression="happy" size={64} />
+        </div>
         <h1 className="text-5xl font-bold mb-4" style={{ color: 'var(--accent)' }}>
           AI 교과서
         </h1>
-        <p className="text-xl mb-2">발달장애 학생을 위한 AI 학습</p>
+        <p className="text-xl mb-2">
+          {isResume
+            ? '아이미가 기다리고 있었어요!'
+            : '진우, 윤아랑 같이 AI 친구 아이미를 만나러 가요'}
+        </p>
         <p className="text-base text-[color:var(--muted)] mb-8">
           지금까지 <strong>{doneCount}</strong> / {totalLessons} 차시 끝났어요
         </p>
