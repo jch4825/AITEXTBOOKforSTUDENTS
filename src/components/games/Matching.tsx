@@ -74,7 +74,7 @@ export default function Matching({ pairs, onComplete }: Props) {
             className="block w-full p-4 rounded-lg border-4 text-lg font-semibold disabled:opacity-50"
             style={{
               borderColor: 'var(--accent)',
-              background: matched[i] ? '#86efac' : picked.leftIdx === i ? 'var(--accent)' : 'white',
+              background: matched[i] ? 'var(--ok-bg)' : picked.leftIdx === i ? 'var(--accent)' : 'white',
               color: picked.leftIdx === i ? 'white' : 'var(--fg)',
             }}
           >{matched[i] ? '✅ ' : ''}{p.left}</button>
@@ -89,7 +89,7 @@ export default function Matching({ pairs, onComplete }: Props) {
             className="block w-full p-4 rounded-lg border-4 text-lg font-semibold disabled:opacity-50"
             style={{
               borderColor: 'var(--accent)',
-              background: matched[origIdx] ? '#86efac' : picked.rightIdx === shuffleIdx ? 'var(--accent)' : 'white',
+              background: matched[origIdx] ? 'var(--ok-bg)' : picked.rightIdx === shuffleIdx ? 'var(--accent)' : 'white',
               color: picked.rightIdx === shuffleIdx ? 'white' : 'var(--fg)',
             }}
           >{matched[origIdx] ? '✅ ' : ''}{pairs[origIdx].right}</button>

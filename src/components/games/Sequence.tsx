@@ -57,7 +57,7 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
             className="p-3 rounded-lg border-2 text-lg"
             style={
               i < placedCount
-                ? { borderColor: '#16a34a', background: '#86efac' }
+                ? { borderColor: 'var(--ok)', background: 'var(--ok-bg)' }
                 : { borderColor: 'var(--border)', borderStyle: 'dashed', color: 'var(--muted)' }
             }
           >
@@ -79,8 +79,8 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
                 disabled={used}
                 className="p-4 rounded-lg border-4 text-lg font-semibold disabled:opacity-40 min-h-[64px]"
                 style={{
-                  borderColor: isWrong ? '#ea580c' : 'var(--accent)',
-                  background: used ? '#e5e7eb' : isWrong ? '#fed7aa' : 'white',
+                  borderColor: isWrong ? 'var(--warn)' : 'var(--accent)',
+                  background: used ? 'var(--done-bg)' : isWrong ? 'var(--warn-bg)' : 'white',
                   color: 'var(--fg)',
                 }}
               >{isWrong ? '🤔 ' : ''}{items[origIdx].label}</button>
@@ -90,7 +90,7 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
       )}
 
       {done && (
-        <p className="text-xl font-bold text-center" style={{ color: '#16a34a' }}>
+        <p className="text-xl font-bold text-center" style={{ color: 'var(--ok)' }}>
           🎉 순서를 다 맞췄어요!
         </p>
       )}

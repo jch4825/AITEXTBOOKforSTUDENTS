@@ -42,7 +42,7 @@ export default function CardPick({ question, choices, onComplete }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {choices.map((c, i) => {
           const selected = i === pickedIdx;
-          const bg = selected ? (c.isCorrect ? '#86efac' : '#fca5a5') : 'white';
+          const bg = selected ? (c.isCorrect ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'white';
           return (
             <button
               key={i}

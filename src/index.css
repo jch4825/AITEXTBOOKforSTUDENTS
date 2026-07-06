@@ -7,6 +7,13 @@
     --accent: #5a4fcf;
     --border: #e5e4e0;
     --muted: #6b6b6b;
+    /* 시맨틱 피드백 컬러 — 게임 정답/오답은 반드시 이 변수만 사용 */
+    --ok: #16a34a;
+    --ok-bg: #86efac;
+    --bad-bg: #fca5a5;
+    --warn: #ea580c;
+    --warn-bg: #fed7aa;
+    --done-bg: #e5e7eb;
     --font-base: 1.125rem;
     --font-large: 1.5rem;
     --leading: 1.8;

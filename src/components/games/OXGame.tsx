@@ -58,7 +58,7 @@ export default function OXGame({ questions, onComplete }: Props) {
           aria-label="맞아요"
           className="h-24 w-24 rounded-full text-5xl font-bold border-4 disabled:opacity-60"
           style={{
-            background: picked === 'O' ? (correct ? '#86efac' : '#fca5a5') : 'white',
+            background: picked === 'O' ? (correct ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'white',
             borderColor: 'var(--accent)',
           }}
         >⭕</button>
@@ -68,7 +68,7 @@ export default function OXGame({ questions, onComplete }: Props) {
           aria-label="아니에요"
           className="h-24 w-24 rounded-full text-5xl font-bold border-4 disabled:opacity-60"
           style={{
-            background: picked === 'X' ? (correct ? '#86efac' : '#fca5a5') : 'white',
+            background: picked === 'X' ? (correct ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'white',
             borderColor: 'var(--accent)',
           }}
         >❌</button>
