@@ -14,6 +14,13 @@ export const M2_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'concept',
     title: '잘 물어봐야 잘 답해줘',
+    objective: '프롬프트가 AI에게 하는 질문이나 부탁임을 말할 수 있다.',
+    standards: [
+      '[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.',
+      '[9정통01-04] 필요한 정보를 수집하고, 타인과 정보를 주고받는다.',
+    ],
+    wrapUpEasy: 'AI한테 하는 질문을 프롬프트라고 해요. 잘 물으면 좋은 답이 와요.',
+    wrapUpNormal: 'AI한테 던지는 질문이나 부탁을 프롬프트라고 해요. 어떻게 묻느냐에 따라 답이 달라져요.',
     bodyEasy: 'AI한테 잘 물어보면 좋은 답이 와요. 이걸 프롬프트라고 해요.',
     bodyNormal:
       'AI한테 어떻게 물어보는지에 따라 답이 달라져요. AI한테 던지는 질문이나 부탁을 프롬프트라고 해요.',
@@ -68,6 +75,10 @@ export const M2_LESSONS: LessonContent[] = [
     number: 2,
     kind: 'concept',
     title: '짧게 물어보기',
+    objective: '한 문장으로 짧게 묻는 프롬프트를 고를 수 있다.',
+    standards: ['[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.'],
+    wrapUpEasy: '한 문장으로 짧게 물어봐요.',
+    wrapUpNormal: '프롬프트는 짧고 분명할수록 좋아요. 한 번에 하나씩 물어봐요.',
     bodyEasy: '너무 길게 말하지 않아도 돼요. 한 문장으로 짧게 물어봐요.',
     bodyNormal:
       '프롬프트는 짧고 명확할수록 좋아요. 한 문장으로 원하는 걸 콕 집어 말하면 AI가 더 잘 답해줘요.',
@@ -119,6 +130,13 @@ export const M2_LESSONS: LessonContent[] = [
     number: 3,
     kind: 'concept',
     title: '궁금한 걸 콕 집어서',
+    objective: '원하는 것을 콕 집어 묻는 프롬프트를 만들 수 있다.',
+    standards: [
+      '[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.',
+      '[9정통02-02] 인터넷 검색을 통해 목적에 따라 필요한 정보를 찾는다.',
+    ],
+    wrapUpEasy: '궁금한 걸 콕 집어서 물어봐요.',
+    wrapUpNormal: '"아무거나" 대신 원하는 걸 콕 집어 물으면 AI가 정확하게 답해줘요.',
     bodyEasy: '"이거 알려줘" 처럼 콕 집어서 물으면 AI가 알아듣기 쉬워요.',
     bodyNormal:
       '"뭐든지 좋아" 대신 "떡볶이 만드는 법 알려줘" 처럼 궁금한 걸 콕 집으면 AI가 정확히 답해줘요.',
@@ -165,6 +183,10 @@ export const M2_LESSONS: LessonContent[] = [
     number: 4,
     kind: 'concept',
     title: '예시를 하나 보여줘요',
+    objective: '예시를 넣은 프롬프트가 더 좋은 답을 가져온다는 것을 말할 수 있다.',
+    standards: ['[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.'],
+    wrapUpEasy: '예시를 보여주면 AI가 더 잘 만들어요.',
+    wrapUpNormal: '원하는 모양을 예시로 하나 보여주면 AI가 그 모양대로 만들어줘요.',
     bodyEasy: '"이런 식으로 해줘" 하고 예시를 보여주면 AI가 더 잘 만들어요.',
     bodyNormal:
       '원하는 답 모양을 하나 예시로 먼저 보여주면 AI가 그 모양대로 만들어줘요.',
@@ -211,6 +233,10 @@ export const M2_LESSONS: LessonContent[] = [
     number: 5,
     kind: 'concept',
     title: '역할을 정해줘요',
+    objective: 'AI에게 역할을 정해주는 프롬프트를 사용할 수 있다.',
+    standards: ['[9국어01-04] 대화 예절을 지키며 상대방의 말에 적절한 질문과 대답으로 대화를 이어 간다.'],
+    wrapUpEasy: '"친구처럼 말해줘" 하면 말투가 바뀌어요.',
+    wrapUpNormal: 'AI한테 역할을 정해주면 그 역할의 말투로 답해줘요.',
     bodyEasy: '"친구처럼 말해줘" 하면 AI가 친구처럼 답해줘요.',
     bodyNormal:
       'AI한테 "이렇게 말해줘" 하고 역할을 정해주면 그 성격으로 답해줘요.',
@@ -257,6 +283,13 @@ export const M2_LESSONS: LessonContent[] = [
     number: 6,
     kind: 'concept',
     title: '단계를 나눠 물어보기',
+    objective: '큰 질문을 작은 단계로 나누어 물을 수 있다.',
+    standards: [
+      '[9정통02-03] 순차, 선택, 반복 구조를 통해 문제 해결 과정을 탐색한다.',
+      '[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.',
+    ],
+    wrapUpEasy: '큰 질문은 작게 나눠서 하나씩 물어봐요.',
+    wrapUpNormal: '큰 질문을 작은 단계로 나눠 하나씩 물으면 답이 훨씬 분명해져요.',
     bodyEasy: '큰 질문은 작게 나눠 물어봐요. 한 걸음씩 물으면 답이 잘 나와요.',
     bodyNormal:
       '한 번에 다 물어보면 답이 흐릿할 수 있어요. 큰 질문을 작은 단계로 나눠 하나씩 물어봐요.',
@@ -305,6 +338,10 @@ export const M2_LESSONS: LessonContent[] = [
     number: 7,
     kind: 'concept',
     title: '다시 물어봐도 돼요',
+    objective: '답이 마음에 들지 않을 때 다시 부탁하는 말을 할 수 있다.',
+    standards: ['[9국어01-04] 대화 예절을 지키며 상대방의 말에 적절한 질문과 대답으로 대화를 이어 간다.'],
+    wrapUpEasy: '답이 마음에 안 들면 다시 부탁해도 돼요.',
+    wrapUpNormal: '"다르게 해줘", "더 쉽게 해줘"처럼 다시 부탁하면 AI가 고쳐서 답해줘요.',
     bodyEasy: '답이 마음에 안 들면 다시 물어봐도 돼요.',
     bodyNormal:
       'AI 답이 원하는 게 아니면 "다르게 해줘", "좀 더 짧게 해줘" 하고 다시 부탁해도 괜찮아요.',
@@ -356,6 +393,10 @@ export const M2_LESSONS: LessonContent[] = [
     number: 8,
     kind: 'concept',
     title: '답을 짧게 해달라고 부탁',
+    objective: '답의 길이를 정해서 부탁하는 프롬프트를 사용할 수 있다.',
+    standards: ['[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.'],
+    wrapUpEasy: '"세 줄로 알려줘" 하면 짧게 답해줘요.',
+    wrapUpNormal: '"한 문장으로", "세 줄로"처럼 답의 길이를 정해서 부탁할 수 있어요.',
     bodyEasy: '"세 줄로 알려줘" 하면 짧게 답해줘요.',
     bodyNormal:
       '답이 길면 "짧게 세 줄로", "한 문장으로" 처럼 길이를 정해서 부탁해봐요.',
@@ -403,6 +444,10 @@ export const M2_LESSONS: LessonContent[] = [
     number: 9,
     kind: 'concept',
     title: '답이 이상하면?',
+    objective: 'AI의 답이 이상할 때 확인하는 방법을 말할 수 있다.',
+    standards: ['[9정통01-01] 정보통신의 의미를 이해하고, 다양한 형태와 방법으로 제공되는 정보를 살펴본다.'],
+    wrapUpEasy: '답이 이상하면 다시 물어보고, 선생님께 확인해요.',
+    wrapUpNormal: 'AI도 틀릴 수 있어요. 이상하면 "정말이야?" 하고 다시 묻거나 선생님께 확인해요.',
     bodyEasy: '답이 이상하면 선생님께 물어보고, 다시 부탁해요.',
     bodyNormal:
       'AI가 가끔 틀린 답을 줄 수 있어요. 답이 이상하면 "정말이야?" 하고 다시 물어보거나 선생님께 확인해봐요.',
@@ -456,6 +501,13 @@ export const M2_LESSONS: LessonContent[] = [
     number: 10,
     kind: 'experience',
     title: '진짜 AI랑 놀아보기',
+    objective: '배운 프롬프트 방법을 사용해 실제 AI와 대화할 수 있다.',
+    standards: [
+      '[9정통01-04] 필요한 정보를 수집하고, 타인과 정보를 주고받는다.',
+      '[9국어01-04] 대화 예절을 지키며 상대방의 말에 적절한 질문과 대답으로 대화를 이어 간다.',
+    ],
+    wrapUpEasy: '진짜 AI랑 이야기해봤어요. 짧게, 콕 집어 물어봐요.',
+    wrapUpNormal: '오늘은 배운 대로 진짜 AI랑 이야기했어요. 짧게, 콕 집어, 필요하면 다시 부탁해요.',
     bodyEasy: '오늘은 진짜 AI랑 여러 번 이야기해봐요.',
     bodyNormal:
       '오늘은 배운 대로 진짜 AI랑 여러 번 이야기해봐요. 짧게, 콕 집어, 필요하면 다시 부탁해봐요.',
@@ -501,6 +553,10 @@ export const M2_LESSONS: LessonContent[] = [
     number: 11,
     kind: 'activity',
     title: '다 배웠어요! (마무리 퀴즈)',
+    objective: '모듈 2에서 배운 프롬프트 방법 네 가지를 퀴즈로 확인할 수 있다.',
+    standards: ['[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.'],
+    wrapUpEasy: '모듈 2를 다 배웠어요! 물어보는 방법을 알게 됐어요.',
+    wrapUpNormal: '모듈 2를 마쳤어요! 짧게, 콕 집어, 예시 주기, 역할 정하기 — 네 가지 방법을 배웠어요.',
     bodyEasy: '지금까지 배운 프롬프트 잘 쓰는 법을 확인해봐요.',
     bodyNormal:
       '모듈 2에서 배운 것들 — 짧게, 콕 집어, 예시 주기, 역할 정하기 — 을 짧은 퀴즈로 확인해봐요.',

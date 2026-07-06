@@ -32,7 +32,7 @@ export interface SettingsState {
 
 export type LessonKind = 'concept' | 'activity' | 'experience';
 
-export type LessonStepKind = 'text' | 'ox' | 'card-pick' | 'matching' | 'sim-ai' | 'real-ai';
+export type LessonStepKind = 'text' | 'ox' | 'card-pick' | 'matching' | 'sequence' | 'sim-ai' | 'real-ai';
 
 export interface LessonStep {
   kind: LessonStepKind;
@@ -50,7 +50,14 @@ export interface LessonContent {
   number: number;         // 1-indexed order within the module
   title: string;
   kind: LessonKind;
+  /** 교사용 학습목표 — "~할 수 있다" 형식. 학생 화면에는 노출하지 않는다. */
+  objective: string;
+  /** 2022 개정 특수교육 기본교육과정 성취기준 — "[코드] 원문" 형식. */
+  standards?: string[];
   bodyEasy: string;
   bodyNormal: string;
+  /** 차시 정리 한 줄 — 마지막 정리 화면에 표시하고 TTS로 읽어준다. */
+  wrapUpEasy: string;
+  wrapUpNormal: string;
   steps: LessonStep[];
 }

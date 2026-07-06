@@ -14,6 +14,10 @@ export const M1_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'concept',
     title: 'AI는 우리 곁에 있어요',
+    objective: '생활 속에서 AI가 쓰이는 예를 찾아 말할 수 있다.',
+    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
+    wrapUpEasy: 'AI는 우리 곁에 있어요. 우리 말을 알아듣고 대답해줘요.',
+    wrapUpNormal: '오늘은 AI가 우리 곁 어디에 있는지 알아봤어요. AI는 우리 말을 알아듣고 대답해주는 기술이에요.',
     bodyEasy: '인공지능은 컴퓨터가 사람처럼 생각하는 거예요.',
     bodyNormal:
       '인공지능(AI)은 컴퓨터가 사람처럼 생각하고 답해주게 만든 기술이에요. 우리가 묻는 질문에 답을 해줘요.',
@@ -81,6 +85,13 @@ export const M1_LESSONS: LessonContent[] = [
     number: 2,
     kind: 'concept',
     title: '기계랑 AI는 뭐가 달라?',
+    objective: '정해진 일만 하는 기계와 말을 알아듣는 AI를 구별할 수 있다.',
+    standards: [
+      '[9정통01-02] 다양한 정보통신 기기의 종류를 알고, 기본 기능을 익힌다.',
+      '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.',
+    ],
+    wrapUpEasy: '그냥 기계는 정해진 일만 해요. AI는 말을 알아듣고 대답해요.',
+    wrapUpNormal: '보통 기계는 정해진 일만 반복하지만, AI는 우리 질문을 알아듣고 스스로 답을 만들어요.',
     bodyEasy: '그냥 기계는 정해진 일만 해요. AI는 우리 말을 알아듣고 답해줘요.',
     bodyNormal:
       '보통 기계는 미리 정해진 일만 반복해요. 하지만 AI는 우리가 하는 질문을 알아듣고 스스로 답을 만들어줘요.',
@@ -134,6 +145,13 @@ export const M1_LESSONS: LessonContent[] = [
     number: 3,
     kind: 'concept',
     title: 'AI는 어떻게 답해줄까?',
+    objective: 'AI에게 궁금한 것을 질문하면 답을 받을 수 있다는 것을 말할 수 있다.',
+    standards: [
+      '[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.',
+      '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.',
+    ],
+    wrapUpEasy: '궁금한 게 있으면 AI한테 물어봐요. 답을 해줘요.',
+    wrapUpNormal: 'AI한테 글이나 말로 물어보면 답을 만들어줘요. 궁금한 건 언제든 물어봐도 돼요.',
     bodyEasy: 'AI한테 물으면 답을 해줘요. 짧게 물어도 되고, 길게 물어도 돼요.',
     bodyNormal:
       'AI한테 궁금한 걸 글이나 말로 물어보면 답을 만들어줘요. 짧게 물어도 되고 자세하게 물어도 돼요.',
@@ -181,6 +199,10 @@ export const M1_LESSONS: LessonContent[] = [
     number: 4,
     kind: 'concept',
     title: 'AI는 눈이 있어? (그림을 알아봐요)',
+    objective: 'AI가 사진 속 사물을 알아볼 수 있다는 것을 예를 들어 말할 수 있다.',
+    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
+    wrapUpEasy: 'AI는 사진을 보고 뭐가 있는지 알아볼 수 있어요.',
+    wrapUpNormal: 'AI는 사진을 보고 무엇이 있는지 알아볼 수 있어요. 이것을 이미지 인식이라고 해요.',
     bodyEasy: 'AI는 사진을 보고 "이게 뭐야"를 알 수 있어요.',
     bodyNormal:
       'AI는 사진을 보여주면 "이건 강아지야, 저건 자동차야" 하고 알아볼 수 있어요. 이걸 이미지 인식이라고 해요.',
@@ -231,6 +253,13 @@ export const M1_LESSONS: LessonContent[] = [
     number: 5,
     kind: 'concept',
     title: 'AI는 귀가 있어? (말을 알아들어요)',
+    objective: 'AI가 목소리를 알아듣는 음성 인식의 예를 말할 수 있다.',
+    standards: [
+      '[9정통01-02] 다양한 정보통신 기기의 종류를 알고, 기본 기능을 익힌다.',
+      '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.',
+    ],
+    wrapUpEasy: 'AI는 우리 목소리를 듣고 알아들어요.',
+    wrapUpNormal: 'AI는 마이크로 우리 말을 듣고 알아들어요. 조용한 곳에서 또박또박 말하면 더 잘 알아들어요.',
     bodyEasy: 'AI는 우리가 하는 말을 듣고 알아들을 수 있어요.',
     bodyNormal:
       'AI는 마이크로 우리 목소리를 듣고 무슨 말을 했는지 알아들어요. 이걸 음성 인식이라고 해요.',
@@ -278,6 +307,10 @@ export const M1_LESSONS: LessonContent[] = [
     number: 6,
     kind: 'concept',
     title: 'AI는 어떻게 배울까?',
+    objective: 'AI가 많은 예시를 보고 배운다는 것을 말할 수 있다.',
+    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
+    wrapUpEasy: 'AI는 많은 예시를 보고 배워요. 우리가 연습하는 것처럼요.',
+    wrapUpNormal: 'AI는 아주 많은 예시를 보면서 배워요. 우리가 연습을 많이 하면 잘하게 되는 것과 비슷해요.',
     bodyEasy: 'AI는 아주 많은 예시를 보고 배워요. 우리가 연습하는 것처럼요.',
     bodyNormal:
       'AI는 사람이 만든 아주 많은 예시(사진, 글, 소리)를 보면서 배워요. 우리가 자꾸 연습하면 잘하게 되는 것과 비슷해요.',
@@ -331,6 +364,10 @@ export const M1_LESSONS: LessonContent[] = [
     number: 7,
     kind: 'concept',
     title: 'AI가 잘하는 것',
+    objective: 'AI가 잘하는 일을 두 가지 이상 말할 수 있다.',
+    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
+    wrapUpEasy: 'AI는 빠르게 답하고, 번역하고, 그림을 알아봐요.',
+    wrapUpNormal: 'AI는 빠르게 답하기, 번역하기, 사진 알아보기를 잘해요. 우리를 여러 가지로 도와줄 수 있어요.',
     bodyEasy: 'AI는 빠르게 답하기, 번역하기, 그림 알아보기를 잘해요.',
     bodyNormal:
       'AI는 아주 빠르게 답을 만들고, 다른 나라 말로 바꿔주고, 사진 속 물건을 알아봐요. 우리를 여러 가지로 도와줄 수 있어요.',
@@ -380,6 +417,10 @@ export const M1_LESSONS: LessonContent[] = [
     number: 8,
     kind: 'concept',
     title: 'AI가 못하는 것',
+    objective: 'AI가 할 수 없는 일을 두 가지 이상 말할 수 있다.',
+    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
+    wrapUpEasy: 'AI는 밥을 먹거나 진짜 마음을 느끼지 못해요.',
+    wrapUpNormal: 'AI는 몸과 마음이 없어서 밥을 먹거나 진짜로 슬퍼하지 못해요. 사람만 할 수 있는 일이 있어요.',
     bodyEasy: 'AI는 밥을 먹거나, 마음을 느끼지 못해요. 사람만 하는 일이 있어요.',
     bodyNormal:
       'AI는 사람처럼 배고픔이나 슬픔 같은 마음을 진짜로 느끼지 못해요. 몸이 없어서 뛰거나 밥 먹는 것도 못 해요.',
@@ -438,6 +479,13 @@ export const M1_LESSONS: LessonContent[] = [
     number: 9,
     kind: 'concept',
     title: '여러 가지 AI 친구들',
+    objective: '여러 가지 AI의 종류와 하는 일을 짝지을 수 있다.',
+    standards: [
+      '[9정통01-02] 다양한 정보통신 기기의 종류를 알고, 기본 기능을 익힌다.',
+      '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.',
+    ],
+    wrapUpEasy: 'AI는 여러 가지예요. 하는 일이 조금씩 달라요.',
+    wrapUpNormal: '글로 대화하는 AI, 말로 대화하는 AI, 그림 그리는 AI처럼 AI는 종류마다 하는 일이 달라요.',
     bodyEasy: 'AI는 여러 가지가 있어요. 이름도 하는 일도 조금씩 달라요.',
     bodyNormal:
       'AI는 종류가 여러 가지예요. 어떤 AI는 글로 대화하고, 어떤 AI는 그림을 그려요. 이름도 하는 일도 조금씩 달라요.',
@@ -487,6 +535,13 @@ export const M1_LESSONS: LessonContent[] = [
     number: 10,
     kind: 'experience',
     title: 'AI랑 놀아본 사람?',
+    objective: 'AI에게 짧은 질문을 보내고 답을 확인할 수 있다.',
+    standards: [
+      '[9정통01-04] 필요한 정보를 수집하고, 타인과 정보를 주고받는다.',
+      '[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.',
+    ],
+    wrapUpEasy: '오늘 AI랑 이야기해봤어요. 또박또박 물어보면 돼요.',
+    wrapUpNormal: '오늘 AI랑 진짜로 이야기해봤어요. 궁금한 걸 또박또박 물어보면 AI가 대답해줘요.',
     bodyEasy: 'AI랑 이야기해본 적 있어요? 오늘은 짧게 대화해봐요.',
     bodyNormal:
       'AI랑 이야기해본 적 있어요? 오늘은 짧은 대화를 해보면서 AI가 어떻게 답하는지 느껴봐요.',
@@ -531,6 +586,10 @@ export const M1_LESSONS: LessonContent[] = [
     number: 11,
     kind: 'activity',
     title: '다 배웠어요! (마무리 퀴즈)',
+    objective: '모듈 1에서 배운 AI의 특징을 퀴즈로 확인할 수 있다.',
+    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
+    wrapUpEasy: '모듈 1을 다 배웠어요! AI가 뭔지 알게 됐어요.',
+    wrapUpNormal: '모듈 1을 마쳤어요! AI가 무엇이고, 뭘 잘하고 못하는지 알게 됐어요. 다음 모듈에서 AI랑 직접 말해봐요.',
     bodyEasy: '지금까지 배운 걸 확인해봐요.',
     bodyNormal:
       '모듈 1에서 배운 내용을 짧은 퀴즈로 확인해봐요. 틀려도 괜찮아요, 다시 보면서 배워봐요!',

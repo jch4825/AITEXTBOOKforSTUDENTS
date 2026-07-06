@@ -58,9 +58,18 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
 
   const mod = getModule(lesson.moduleId)!;
   const theme = themeFor(lesson.moduleId);
-  const totalSteps = lesson.steps.length;
+  // 마지막은 항상 정리(wrap-up) 화면 — 도입·활동·정리의 수업 3단 구조.
+  const totalSteps = lesson.steps.length + 1;
+  const isWrapUp = step === lesson.steps.length;
   const currentStep = lesson.steps[step];
   const body = difficulty === 'easy' ? lesson.bodyEasy : lesson.bodyNormal;
+  const wrapUpText = difficulty === 'easy' ? lesson.wrapUpEasy : lesson.wrapUpNormal;
+
+  // 정리 화면에 들어오면 자동으로 한 번 읽어준다.
+  useEffect(() => {
+    if (isWrapUp) speak(wrapUpText);
+    // eslint 없음 — speak는 설정만 바뀌지 않으면 안정적.
+  }, [isWrapUp, wrapUpText]);
 
   function handleNext() {
     if (step + 1 >= totalSteps) {
@@ -176,8 +185,31 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     );
   }
 
+  function renderWrapUp() {
+    return (
+      <div className="max-w-2xl mx-auto text-center py-8">
+        <div className="text-5xl mb-4" aria-hidden>🌟</div>
+        <h2 className="text-2xl font-bold mb-4" style={{ color: theme.accent }}>오늘 배운 것</h2>
+        <p className="text-xl leading-relaxed mb-8">{wrapUpText}</p>
+        <div className="flex flex-col items-center gap-3">
+          <button
+            onClick={() => speak(wrapUpText)}
+            className="px-4 py-3 rounded font-semibold border-2"
+            style={{ borderColor: theme.accent, color: theme.accent }}
+          >🔊 읽어줘</button>
+          <button
+            onClick={handleNext}
+            className="px-8 py-4 rounded-lg text-xl font-bold text-white"
+            style={{ background: theme.accent }}
+          >🎉 다 했어요!</button>
+        </div>
+      </div>
+    );
+  }
+
   let body_el: JSX.Element;
-  if (currentStep.kind === 'text') body_el = renderText();
+  if (isWrapUp) body_el = renderWrapUp();
+  else if (currentStep.kind === 'text') body_el = renderText();
   else if (currentStep.kind === 'ox') body_el = renderOX();
   else if (currentStep.kind === 'card-pick') body_el = renderCardPick();
   else if (currentStep.kind === 'matching') body_el = renderMatching();
