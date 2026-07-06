@@ -1,6 +1,7 @@
 import { MODULES, lessonIdsForModule } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import { useProgress } from '../context/ProgressContext';
+import { getLesson } from '../data/lessons';
 import type { LessonId } from '../types';
 
 interface Props {
@@ -26,24 +27,36 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                 {doneInModule}/{lessons.length}
               </span>
             </h3>
-            <ul className="flex flex-wrap gap-1.5">
-              {lessons.map(lid => {
+            <ul className="flex flex-wrap">
+              {lessons.map((lid, i) => {
                 const done = isCompleted(lid);
                 const current = lid === currentLessonId;
+                const title = getLesson(lid)?.title;
+                const label =
+                  `${i + 1}차시${title ? `. ${title}` : ''}` +
+                  (done ? ' (완료)' : '') +
+                  (current ? ' — 지금 보는 중' : '');
                 return (
                   <li key={lid}>
+                    {/* 히트 영역 32px — 시각적 점은 그 안의 16px */}
                     <button
                       onClick={() => onPickLesson(lid)}
-                      title={lid}
+                      title={label}
+                      aria-label={label}
                       aria-current={current ? 'page' : undefined}
-                      className="h-4 w-4 rounded-full border-2 transition"
-                      style={{
-                        background: done ? theme.accent : current ? theme.accentSoft : 'white',
-                        borderColor: theme.accent,
-                        outline: current ? `2px solid ${theme.accent}` : 'none',
-                        outlineOffset: '2px',
-                      }}
-                    />
+                      className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--bg)]"
+                    >
+                      <span
+                        aria-hidden
+                        className="h-4 w-4 rounded-full border-2 block transition"
+                        style={{
+                          background: done ? theme.accent : current ? theme.accentSoft : 'white',
+                          borderColor: theme.accent,
+                          outline: current ? `2px solid ${theme.accent}` : 'none',
+                          outlineOffset: '2px',
+                        }}
+                      />
+                    </button>
                   </li>
                 );
               })}
