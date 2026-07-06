@@ -18,6 +18,7 @@ export default function TTSToggle() {
         borderColor: 'var(--accent)',
       }}
       title="읽어주기 켜기/끄기"
-    >🔊 {ttsEnabled ? '켜짐' : '꺼짐'}</button>
+      aria-label={`읽어주기 ${ttsEnabled ? '켜짐' : '꺼짐'}`}
+    >🔊<span className="hidden sm:inline"> {ttsEnabled ? '켜짐' : '꺼짐'}</span></button>
   );
 }

@@ -23,7 +23,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
   if (!open) return null;
 
   return (
-    <aside className="w-80 shrink-0 border-l border-[color:var(--border)] bg-white p-6 overflow-y-auto">
+    <aside className="w-80 max-w-[90vw] shrink-0 border-l border-[color:var(--border)] bg-white p-6 overflow-y-auto fixed inset-y-0 right-0 z-40 shadow-xl md:static md:shadow-none">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold">📖 쉬운 사전</h2>
         <button

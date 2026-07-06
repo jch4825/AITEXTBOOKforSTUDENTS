@@ -9,6 +9,7 @@ export default function DictionaryTrigger({ onClick }: Props) {
       className="h-12 px-4 rounded border-2 font-semibold bg-white"
       style={{ borderColor: 'var(--accent)', color: 'var(--fg)' }}
       title="쉬운 사전 열기"
-    >📖 사전</button>
+      aria-label="쉬운 사전 열기"
+    >📖<span className="hidden sm:inline"> 사전</span></button>
   );
 }
