@@ -100,7 +100,7 @@ export default function MicroLessonFrame({
           onClick={onNext}
           className="h-12 px-6 rounded font-semibold text-white"
           style={{ background: 'var(--accent)' }}
-        >{currentStep + 1 >= totalSteps ? '끝내기 ✓' : '다음 ▶'}</button>
+        >{currentStep + 1 >= totalSteps ? '🎉 다 했어요!' : '다음 ▶'}</button>
       </footer>
     </div>
   );
