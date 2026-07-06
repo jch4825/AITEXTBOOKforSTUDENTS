@@ -37,4 +37,14 @@
     cursor: help;
   }
   .dict-term:hover { background: rgba(90, 79, 207, 0.08); }
+
+  /* story scene card & speech bubble — 1회성 fade-in만 허용 (저자극 원칙: 반복 애니 금지) */
+  @keyframes story-fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+  .story-fade-in { animation: story-fade-in 0.3s ease-out; }
+  @media (prefers-reduced-motion: reduce) {
+    .story-fade-in { animation: none; }
+  }
 }

@@ -1,0 +1,59 @@
+import CharacterAvatar from './CharacterAvatar';
+import type { Expression } from './CharacterAvatar';
+import { CHARACTERS } from '../data/characters';
+import type { CharacterId } from '../data/characters';
+import { useSpeak } from '../hooks/useSpeak';
+
+interface Props {
+  speaker: CharacterId;
+  text: string;
+  expression?: Expression;
+  accent?: string;      // 모듈 테마 색 (이름표)
+  accentSoft?: string;  // 말풍선 배경
+  showSpeakButton?: boolean;
+  avatarSize?: number;
+}
+
+/**
+ * 캐릭터 말풍선 — 아바타 + 이름표 + 대사.
+ * sim-ai/real-ai의 AI 응답(아이미), 정리 화면의 캐릭터 반응 등에 사용.
+ */
+export default function SpeechBubble({
+  speaker,
+  text,
+  expression = 'happy',
+  accent = 'var(--accent)',
+  accentSoft = 'rgba(90, 79, 207, 0.08)',
+  showSpeakButton = false,
+  avatarSize = 52,
+}: Props) {
+  const meta = CHARACTERS[speaker];
+  const { speak } = useSpeak();
+
+  return (
+    <div className="flex items-start gap-3 story-fade-in">
+      <div className="shrink-0">
+        <CharacterAvatar character={speaker} expression={expression} size={avatarSize} />
+      </div>
+      <div className="relative flex-1 min-w-0">
+        {/* 말풍선 꼬리 */}
+        <div
+          className="absolute left-[-6px] top-4 w-3 h-3 rotate-45"
+          style={{ background: accentSoft }}
+          aria-hidden
+        />
+        <div className="rounded-2xl px-4 py-3" style={{ background: accentSoft }}>
+          <p className="text-sm font-bold mb-1" style={{ color: accent }}>{meta.shortName}</p>
+          <p className="text-lg leading-relaxed">{text}</p>
+          {showSpeakButton && (
+            <button
+              onClick={() => speak(text)}
+              className="mt-2 px-3 py-1.5 rounded text-sm font-semibold border-2"
+              style={{ borderColor: accent, color: accent }}
+            >🔊 읽어줘</button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
