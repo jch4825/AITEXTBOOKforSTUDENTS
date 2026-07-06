@@ -13,7 +13,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
   const { isCompleted } = useProgress();
 
   return (
-    <nav className="w-64 shrink-0 md:border-r border-[color:var(--border)] bg-white p-4 md:overflow-y-auto">
+    <nav className="w-64 shrink-0 md:h-full md:border-r border-[color:var(--border)] bg-white p-4 md:overflow-y-auto">
       {MODULES.map(mod => {
         const theme = themeFor(mod.id);
         const lessons = lessonIdsForModule(mod.id);

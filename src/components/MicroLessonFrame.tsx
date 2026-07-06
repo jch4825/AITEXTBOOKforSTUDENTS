@@ -40,7 +40,7 @@ export default function MicroLessonFrame({
       />
       <div className="flex flex-1 min-h-0">
         {/* PC: 고정 사이드바 / 모바일: 숨김 (아래 드로어로 대체) */}
-        <div className="hidden md:block">
+        <div className="hidden md:block self-stretch">
           <SidebarTree currentLessonId={lessonId} onPickLesson={onPickLesson} />
         </div>
         {navOpen && (
