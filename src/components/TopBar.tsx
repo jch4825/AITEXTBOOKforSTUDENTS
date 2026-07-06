@@ -12,7 +12,7 @@ interface Props {
 
 export default function TopBar({ crumb, onOpenDictionary, onGoHome, onOpenNav }: Props) {
   return (
-    <header className="h-16 shrink-0 border-b border-[color:var(--border)] bg-white px-3 md:px-6 flex items-center gap-2 md:gap-4">
+    <header className="h-16 shrink-0 border-b border-[color:var(--border)] bg-white px-3 md:px-6 flex items-center gap-1.5 md:gap-4">
       {onOpenNav && (
         <button
           onClick={onOpenNav}

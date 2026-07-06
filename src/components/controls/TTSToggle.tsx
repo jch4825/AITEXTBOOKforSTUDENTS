@@ -11,7 +11,7 @@ export default function TTSToggle() {
         if (!next) stopSpeaking();
       }}
       aria-pressed={ttsEnabled}
-      className="h-12 px-4 rounded border-2 font-semibold"
+      className="h-12 px-3 md:px-4 rounded border-2 font-semibold"
       style={{
         background: ttsEnabled ? 'var(--accent)' : 'white',
         color: ttsEnabled ? 'white' : 'var(--fg)',
