@@ -8,7 +8,8 @@ interface Props {
   speaker: CharacterId;
   text: string;
   expression?: Expression;
-  accent?: string;      // 모듈 테마 색 (이름표)
+  accent?: string;      // 모듈 테마 색 (버튼 테두리)
+  accentText?: string;  // 소형 텍스트용 어두운 변형 (이름표) — 없으면 accent 사용
   accentSoft?: string;  // 말풍선 배경
   showSpeakButton?: boolean;
   avatarSize?: number;
@@ -23,6 +24,7 @@ export default function SpeechBubble({
   text,
   expression = 'happy',
   accent = 'var(--accent)',
+  accentText,
   accentSoft = 'rgba(90, 79, 207, 0.08)',
   showSpeakButton = false,
   avatarSize = 52,
@@ -43,7 +45,7 @@ export default function SpeechBubble({
           aria-hidden
         />
         <div className="rounded-2xl px-4 py-3" style={{ background: accentSoft }}>
-          <p className="text-sm font-bold mb-1" style={{ color: accent }}>{meta.shortName}</p>
+          <p className="text-sm font-bold mb-1" style={{ color: accentText ?? accent }}>{meta.shortName}</p>
           <p className="text-lg leading-relaxed">{text}</p>
           {showSpeakButton && (
             <button

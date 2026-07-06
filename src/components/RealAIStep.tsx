@@ -10,6 +10,7 @@ interface Props {
   userInput: string;           // default text sent to Gemini (also the pre-filled value when allowFreeInput)
   fallbackResponse: string;    // shown when there's no key or all models fail
   accent: string;
+  accentText?: string;         // 소형 텍스트용 어두운 변형 (말풍선 이름표)
   accentSoft: string;
   allowFreeInput?: boolean;    // when true, student edits the text and/or dictates via mic before sending
   onDone: () => void;          // called after a response (real or fallback) so ProgressDots can advance manually
@@ -21,7 +22,7 @@ type State =
   | { kind: 'success'; text: string; modelUsed: string; sent: string }
   | { kind: 'fallback'; studentMessage: string; technicalDetail: string; sent: string };
 
-export default function RealAIStep({ prompt, userInput, fallbackResponse, accent, accentSoft, allowFreeInput, onDone }: Props) {
+export default function RealAIStep({ prompt, userInput, fallbackResponse, accent, accentText, accentSoft, allowFreeInput, onDone }: Props) {
   const { speak } = useSpeak();
   const [state, setState] = useState<State>({ kind: 'idle' });
   const [draft, setDraft] = useState<string>(userInput);
@@ -92,6 +93,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
           expression="thinking"
           text="음… 생각하고 있어요 ⏳"
           accent={accent}
+          accentText={accentText}
           accentSoft={accentSoft}
         />
       )}
@@ -106,6 +108,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
               expression="cheer"
               text={state.text}
               accent={accent}
+              accentText={accentText}
               accentSoft={accentSoft}
               showSpeakButton
             />
@@ -123,6 +126,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
                 expression="happy"
                 text={fallbackResponse}
                 accent={accent}
+                accentText={accentText}
                 accentSoft={accentSoft}
                 showSpeakButton
               />

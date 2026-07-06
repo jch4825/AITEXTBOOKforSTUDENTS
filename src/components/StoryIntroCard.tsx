@@ -7,6 +7,7 @@ interface Props {
   text: string;           // 상황 이야기 (난이도 반영본)
   episodeTitle?: string;  // 모듈 에피소드 제목 (작게 표시)
   accent: string;
+  accentText?: string;    // 소형 텍스트용 어두운 변형 — 없으면 accent 사용
   accentSoft: string;
 }
 
@@ -14,7 +15,7 @@ interface Props {
  * 차시 도입 장면 카드 — 사회상황이야기 프레임.
  * 회색 이미지 placeholder를 대체하는 캐릭터 장면 + 상황 서술.
  */
-export default function StoryIntroCard({ scene, text, episodeTitle, accent, accentSoft }: Props) {
+export default function StoryIntroCard({ scene, text, episodeTitle, accent, accentText, accentSoft }: Props) {
   const { speak } = useSpeak();
 
   return (
@@ -23,7 +24,7 @@ export default function StoryIntroCard({ scene, text, episodeTitle, accent, acce
       style={{ background: accentSoft, borderColor: accent }}
     >
       {episodeTitle && (
-        <p className="text-sm font-bold mb-3" style={{ color: accent }}>📖 {episodeTitle}</p>
+        <p className="text-sm font-bold mb-3" style={{ color: accentText ?? accent }}>📖 {episodeTitle}</p>
       )}
       <div className="flex items-center gap-4">
         <div className="flex shrink-0 -space-x-3">

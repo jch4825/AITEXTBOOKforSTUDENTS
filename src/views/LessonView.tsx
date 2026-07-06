@@ -107,6 +107,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
             text={storyIntro}
             episodeTitle={lesson.number === 1 ? MODULE_EPISODES[lesson.moduleId].title : undefined}
             accent={theme.accent}
+            accentText={theme.accentText}
             accentSoft={theme.accentSoft}
           />
         ) : data.imagePlaceholder && (
@@ -188,6 +189,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
               expression="cheer"
               text={data.aiResponse}
               accent={theme.accent}
+              accentText={theme.accentText}
               accentSoft={theme.accentSoft}
               showSpeakButton
             />
@@ -208,6 +210,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           fallbackResponse={data.fallbackResponse}
           allowFreeInput={data.allowFreeInput}
           accent={theme.accent}
+          accentText={theme.accentText}
           accentSoft={theme.accentSoft}
           onDone={() => { /* footer's "다음 ▶" is how the student advances */ }}
         />
@@ -228,6 +231,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
               text={story.reaction.text}
               expression="happy"
               accent={theme.accent}
+              accentText={theme.accentText}
               accentSoft={theme.accentSoft}
             />
           </div>

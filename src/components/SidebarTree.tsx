@@ -20,7 +20,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
         const doneInModule = lessons.filter(isCompleted).length;
         return (
           <section key={mod.id} className="mb-5">
-            <h3 className="text-sm font-bold mb-2 flex items-baseline gap-1" style={{ color: theme.accent }}>
+            <h3 className="text-sm font-bold mb-2 flex items-baseline gap-1" style={{ color: theme.accentText }}>
               <span>{theme.emoji}</span>
               <span>모듈 {mod.number}. {mod.title}</span>
               <span className="ml-auto text-xs font-semibold text-[color:var(--muted)]" aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료`}>
