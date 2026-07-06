@@ -8,6 +8,8 @@ import CardPick from '../components/games/CardPick';
 import type { CardChoice } from '../components/games/CardPick';
 import Matching from '../components/games/Matching';
 import type { MatchingPair } from '../components/games/Matching';
+import Sequence from '../components/games/Sequence';
+import type { SequenceItem } from '../components/games/Sequence';
 import RealAIStep from '../components/RealAIStep';
 import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
@@ -143,6 +145,16 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     );
   }
 
+  function renderSequence() {
+    const data = currentStep.data as { instruction: string; items: SequenceItem[] };
+    return (
+      <div className="max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold mb-2" style={{ color: theme.accent }}>순서대로 눌러봐요!</h2>
+        <Sequence instruction={data.instruction} items={data.items} onComplete={handleNext} />
+      </div>
+    );
+  }
+
   function renderSimAI() {
     const data = currentStep.data as { prompt: string; userInput: string; aiResponse: string };
     return (
@@ -213,6 +225,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   else if (currentStep.kind === 'ox') body_el = renderOX();
   else if (currentStep.kind === 'card-pick') body_el = renderCardPick();
   else if (currentStep.kind === 'matching') body_el = renderMatching();
+  else if (currentStep.kind === 'sequence') body_el = renderSequence();
   else if (currentStep.kind === 'sim-ai') body_el = renderSimAI();
   else if (currentStep.kind === 'real-ai') body_el = renderRealAI();
   else body_el = <p>(아직 만들지 않은 단계 종류: {currentStep.kind})</p>;
