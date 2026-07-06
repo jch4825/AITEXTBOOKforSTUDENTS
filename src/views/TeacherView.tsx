@@ -3,6 +3,9 @@ import { isTeacherSessionActive, tryUnlock, logout } from '../utils/teacherMode'
 import { getApiKey, setApiKey, clearApiKey, maskApiKey } from '../utils/apiKey';
 import { askGemini, GeminiError, MODEL_FALLBACK } from '../utils/gemini';
 import ErrorMessage from '../components/ErrorMessage';
+import { ALL_LESSONS } from '../data/lessons';
+import { MODULES, lessonIdsForModule } from '../data/modules';
+import { loadProgress } from '../utils/storage';
 
 interface Props {
   onExit: () => void;
@@ -70,7 +73,82 @@ export default function TeacherView({ onExit }: Props) {
       </header>
 
       <ApiKeyPanel />
+      <ProgressPanel />
+      <ObjectivesPanel />
     </main>
+  );
+}
+
+/** 이 기기(브라우저)의 학생 진도 — localStorage 기반. */
+function ProgressPanel() {
+  const [progress] = useState(() => loadProgress());
+  const completed = new Set(progress.completedLessons);
+  const totalLessons = MODULES.reduce((sum, m) => sum + m.lessonCount, 0);
+  const totalDone = MODULES.reduce(
+    (sum, m) => sum + lessonIdsForModule(m.id).filter(id => completed.has(id)).length,
+    0,
+  );
+  const pct = totalLessons === 0 ? 0 : Math.round((totalDone / totalLessons) * 100);
+
+  return (
+    <section className="p-6 bg-white rounded-lg border mb-6">
+      <h2 className="text-xl font-bold mb-2">학생 진도 (이 기기 기준)</h2>
+      <p className="text-sm text-[color:var(--muted)] mb-4">
+        진도는 이 브라우저의 localStorage에만 저장돼요. 다른 컴퓨터의 진도는 여기 보이지 않아요.
+      </p>
+      <p className="text-lg font-semibold mb-3">
+        전체 {totalDone} / {totalLessons}차시 완료 ({pct}%)
+      </p>
+      <ul className="space-y-1">
+        {MODULES.map(m => {
+          const done = lessonIdsForModule(m.id).filter(id => completed.has(id)).length;
+          return (
+            <li key={m.id} className="flex justify-between border-b py-1 text-sm">
+              <span>모듈 {m.number}. {m.title}</span>
+              <span className="font-mono">{done} / {m.lessonCount}</span>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+/** 차시별 학습목표·성취기준 열람 — 교사용. 학생 화면에는 노출되지 않는다. */
+function ObjectivesPanel() {
+  return (
+    <section className="p-6 bg-white rounded-lg border mb-6">
+      <h2 className="text-xl font-bold mb-2">차시별 학습목표 · 성취기준</h2>
+      <p className="text-sm text-[color:var(--muted)] mb-4">
+        성취기준은 2022 개정 특수교육 기본교육과정 기준이에요. 모듈을 눌러 펼쳐보세요.
+      </p>
+      {MODULES.map(m => {
+        const lessons = ALL_LESSONS.filter(l => l.moduleId === m.id);
+        return (
+          <details key={m.id} className="mb-2 border rounded">
+            <summary className="cursor-pointer p-3 font-semibold bg-gray-50">
+              모듈 {m.number}. {m.title} ({lessons.length}/{m.lessonCount}차시 구현)
+            </summary>
+            <div className="p-3 space-y-3">
+              {lessons.map(l => (
+                <div key={l.id} className="border-b pb-2">
+                  <p className="font-semibold">{l.number}. {l.title}</p>
+                  <p className="text-sm">🎯 {l.objective}</p>
+                  {l.standards && l.standards.length > 0 && (
+                    <ul className="text-xs text-[color:var(--muted)] mt-1 list-disc list-inside">
+                      {l.standards.map(s => <li key={s}>{s}</li>)}
+                    </ul>
+                  )}
+                </div>
+              ))}
+              {lessons.length === 0 && (
+                <p className="text-sm text-[color:var(--muted)]">아직 구현된 차시가 없어요.</p>
+              )}
+            </div>
+          </details>
+        );
+      })}
+    </section>
   );
 }
 
