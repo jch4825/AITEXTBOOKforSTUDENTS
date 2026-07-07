@@ -23,3 +23,7 @@ Thumbs.db
 dev-server.*
 vite-dev*.log
 vite.std*.log
+
+# Agent tool caches
+.gstack/
+.playwright-mcp/

@@ -20,15 +20,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 "AI 동아리" 4인 캐스트(강진우·서윤아·박민준쌤·아이미)가 사회상황이야기 방식으로 전 차시를 관통.
 디자인 스코어 C- → B (2026-07-07 감사·수정·재검증, 라이브 배포됨).
 
-## 다음 할 일 (2026-07-07 아침 세션 종료 시점)
+## 다음 할 일 (2026-07-07 오후 세션 — D1 완료 시점)
 
-1. **에셋 생성 (사용자 작업)** — `docs/asset-prompts/` 프롬프트로 Gemini에서 차시별 이미지·영상 생성.
-   캐릭터 시트 이미지 첨부 필수, 말풍선 공란 규칙 준수. 저장: `public/lessons/{차시ID}.png|.mp4`.
+1. **에셋 생성 (사용자 작업, 진행 중)** — `public/lessons/`에 이미지 17/68장 확보됨 (m1 전체 등).
+   캐릭터 설정 자료집 4종은 `docs/character-sheets/{id}-sheet.png`로 정리 완료 — 생성 시 첨부 필수.
+   말풍선 공란 규칙 준수. 영상은 `public/lessons/{차시ID}.mp4`.
    캐릭터 표정별 컷도 확보 시: `public/characters/{id}-{expression}.png` (512px, 투명배경).
-2. **디자인 로드맵 D1 — 토큰 v2** (`docs/design-upgrade-plan.md` §3) — 컬러/타이포/radius/모션 토큰
-   전면 적용 + 배경 종이 질감 + 버튼 4종 체계. *D1이 선행되지 않으면 이후 단계가 재작업이 됨.*
-3. **D2 — 무대(Stage) 컴포넌트** — 장면 카드를 전폭 히어로로 승격 (데스크톱 공백 해소),
-   1번에서 생성된 차시 이미지·영상을 여기서 일괄 연결.
+2. ~~**D1 — 토큰 v2**~~ **완료 (2026-07-07)** — index.css 토큰 v2(브랜드 잉크 `#2B3A55`로 --accent 전환,
+   warm-gray 종이 뉴트럴, 타이포·radius·elevation·모션 토큰) + 종이 질감(2% SVG 노이즈) +
+   버튼 4종 체계(`.btn-primary/secondary/ghost/choice` + `Button.tsx`) + accentSoft 솔리드 파스텔 재정의.
+   레거시 변수(--bg/--fg/--accent/--border/--muted)는 신규 토큰의 별칭으로 유지.
+3. **D2 — 무대(Stage) 컴포넌트 (다음 작업)** — 장면 카드를 전폭 히어로로 승격 (데스크톱 공백 해소),
+   `public/lessons/` 차시 이미지·영상 일괄 연결. 짧은 창(<944px)에서 사이드바가 페이지 스크롤을
+   만드는 문제(내부 스크롤 미작동)도 이 단계 레이아웃 정비에서 함께 해결.
 4. **D3~D5** — 이모지→커스텀 아이콘 세트, 배움 도장판(진도 시각화 v2), 캐릭터 SVG→일러스트 교체
    (`CharacterAvatar.tsx` 한 곳만 수정). 각 단계 후 design-review 재감사 (목표: D4 후 A-, D5 후 A).
 5. **교사 베타 검토 (M8 게이트)** — 실사용 교사 1~2명. 라이브: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
