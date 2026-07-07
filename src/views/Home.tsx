@@ -3,6 +3,7 @@ import { MODULES, lessonIdsForModule } from '../data/modules';
 import { getLesson } from '../data/lessons';
 import CharacterAvatar from '../components/CharacterAvatar';
 import Button from '../components/Button';
+import Icon from '../components/Icon';
 import type { LessonId } from '../types';
 
 interface Props {
@@ -53,7 +54,9 @@ export default function Home({ onStart }: Props) {
           지금까지 <strong>{doneCount}</strong> / {totalLessons} 차시 끝났어요
         </p>
         <Button size="lg" onClick={() => onStart(resumeLesson)} className="text-2xl">
-          {isResume ? '📖 이어서 하기' : '🚀 공부 시작!'}
+          {isResume
+            ? <><Icon name="book" size={26} /> 이어서 하기</>
+            : <><Icon name="rocket" size={26} /> 공부 시작!</>}
         </Button>
       </div>
     </main>

@@ -14,6 +14,8 @@ import RealAIStep from '../components/RealAIStep';
 import Stage from '../components/Stage';
 import SpeechBubble from '../components/SpeechBubble';
 import Button from '../components/Button';
+import Icon from '../components/Icon';
+import ModuleIcon from '../components/ModuleIcon';
 import { getLessonStory, MODULE_EPISODES } from '../data/story';
 import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
@@ -117,7 +119,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           <div className="max-w-2xl mx-auto">
             <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
             <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
-              🔊 읽어줘
+              <Icon name="speaker" size={20} /> 읽어줘
             </Button>
           </div>
         </>
@@ -138,7 +140,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
         )}
         <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
         <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
-          🔊 읽어줘
+          <Icon name="speaker" size={20} /> 읽어줘
         </Button>
       </div>
     );
@@ -205,7 +207,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
             onClick={() => { setSimRevealed(true); speak(data.aiResponse); }}
             className="px-6 text-xl font-bold"
             style={{ color: theme.accent, background: theme.accentSoft }}
-          >💬 "{data.userInput}" 보내기</Button>
+          ><Icon name="chat" size={22} /> "{data.userInput}" 보내기</Button>
         ) : (
           <div className="space-y-3">
             <div className="p-3 rounded-[var(--r-sm)] bg-[color:var(--paper-2)] text-right">내가: {data.userInput}</div>
@@ -246,7 +248,9 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   function renderWrapUp() {
     return (
       <div className="max-w-2xl mx-auto text-center py-8">
-        <div className="text-5xl mb-4" aria-hidden>🌟</div>
+        <div className="flex justify-center mb-4" aria-hidden>
+          <Icon name="star" size={52} filled color={theme.accent} />
+        </div>
         <h2 className="t-h2 mb-4" style={{ color: theme.accent }}>오늘 배운 것</h2>
         <p className="text-xl leading-relaxed mb-6">{wrapUpText}</p>
         {story && (
@@ -263,10 +267,10 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
         )}
         <div className="flex flex-col items-center gap-3">
           <Button variant="secondary" accent={theme.accent} onClick={() => speak(wrapUpText)}>
-            🔊 읽어줘
+            <Icon name="speaker" size={20} /> 읽어줘
           </Button>
           <Button size="lg" accent={theme.accent} onClick={handleNext} className="text-xl">
-            🎉 다 했어요!
+            <Icon name="sparkles" size={22} filled /> 다 했어요!
           </Button>
         </div>
       </div>
@@ -343,7 +347,9 @@ function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps)
       onPickLesson={onPickLesson}
     >
       <div className="max-w-xl mx-auto text-center py-16">
-        <div className="text-6xl mb-4" aria-hidden>{theme.emoji}</div>
+        <div className="flex justify-center mb-4" aria-hidden>
+          <ModuleIcon moduleId={modId ?? 'm1'} size={64} />
+        </div>
         <h1 className="text-3xl font-bold mb-3" style={{ color: theme.accent }}>
           곧 열려요!
         </h1>
@@ -351,7 +357,7 @@ function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps)
           이 차시는 아직 준비 중이에요. 첫 번째 차시부터 시작해봐요.
         </p>
         <Button size="lg" accent={theme.accent} onClick={() => onPickLesson('m1-l1')}>
-          🚀 첫 차시로 가기
+          <Icon name="rocket" size={24} /> 첫 차시로 가기
         </Button>
       </div>
     </MicroLessonFrame>

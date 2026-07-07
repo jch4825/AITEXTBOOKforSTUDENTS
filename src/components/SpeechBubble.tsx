@@ -3,6 +3,7 @@ import type { Expression } from './CharacterAvatar';
 import { CHARACTERS } from '../data/characters';
 import type { CharacterId } from '../data/characters';
 import { useSpeak } from '../hooks/useSpeak';
+import Icon from './Icon';
 
 interface Props {
   speaker: CharacterId;
@@ -52,7 +53,7 @@ export default function SpeechBubble({
               onClick={() => speak(text)}
               className="btn btn-secondary mt-2 px-3 text-sm"
               style={{ borderColor: accent, color: accentText ?? accent }}
-            >🔊 읽어줘</button>
+            ><Icon name="speaker" size={16} /> 읽어줘</button>
           )}
         </div>
       </div>

@@ -4,6 +4,7 @@ import TopBar from './TopBar';
 import DictionaryPanel from './DictionaryPanel';
 import ProgressDots from './ProgressDots';
 import Button from './Button';
+import Icon from './Icon';
 import type { LessonId } from '../types';
 
 interface Props {
@@ -61,8 +62,8 @@ export default function MicroLessonFrame({
                 <button
                   onClick={() => setNavOpen(false)}
                   aria-label="차례 닫기"
-                  className="h-10 w-10 rounded-[var(--r-sm)] hover:bg-[color:var(--paper-2)] text-xl"
-                >×</button>
+                  className="h-10 w-10 rounded-[var(--r-sm)] hover:bg-[color:var(--paper-2)] flex items-center justify-center"
+                ><Icon name="close" size={22} /></button>
               </div>
               <SidebarTree
                 currentLessonId={lessonId}
@@ -97,12 +98,14 @@ export default function MicroLessonFrame({
           onClick={onPrev}
           disabled={currentStep === 0}
           className="px-4 md:px-6"
-        >◀ 이전</Button>
+        ><Icon name="chevron-left" size={20} /> 이전</Button>
         <ProgressDots total={totalSteps} current={currentStep} />
         <Button
           onClick={onNext}
           className="px-4 md:px-6"
-        >{currentStep + 1 >= totalSteps ? '🎉 다 했어요!' : '다음 ▶'}</Button>
+        >{currentStep + 1 >= totalSteps
+          ? <><Icon name="sparkles" size={20} filled /> 다 했어요!</>
+          : <>다음 <Icon name="chevron-right" size={20} /></>}</Button>
       </footer>
     </div>
   );

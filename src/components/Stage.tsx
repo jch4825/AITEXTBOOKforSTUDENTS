@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import CharacterAvatar from './CharacterAvatar';
+import Icon from './Icon';
 import { useSpeak } from '../hooks/useSpeak';
 import type { CharacterId } from '../data/characters';
 import type { LessonId } from '../types';
@@ -60,7 +61,7 @@ export default function Stage({
           </div>
           <div className="lg:col-span-2">
             {episodeTitle && (
-              <p className="t-label mb-2" style={{ color: accentText ?? accent }}>📖 {episodeTitle}</p>
+              <p className="t-label mb-2 inline-flex items-center gap-1.5" style={{ color: accentText ?? accent }}><Icon name="book" size={16} /> {episodeTitle}</p>
             )}
             <h1 className="t-h1 mb-3" style={{ color: accentText ?? accent }}>{title}</h1>
             <p className="t-body-lg">{text}</p>
@@ -68,7 +69,7 @@ export default function Stage({
               onClick={() => speak(text)}
               className="btn btn-secondary mt-4 px-3 text-sm"
               style={{ borderColor: accent, color: accentText ?? accent }}
-            >🔊 이야기 들려줘</button>
+            ><Icon name="speaker" size={16} /> 이야기 들려줘</button>
           </div>
         </div>
       </div>

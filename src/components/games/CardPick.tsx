@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Button from '../Button';
+import Icon from '../Icon';
 
 export interface CardChoice {
   label: string;
@@ -36,9 +37,9 @@ export default function CardPick({ question, choices, onComplete }: Props) {
           type="button"
           onClick={() => speak(question)}
           aria-label="문제 다시 들려주기"
-          className="shrink-0 h-10 w-10 rounded-full border-2 text-lg"
+          className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
           style={{ borderColor: 'var(--accent)', color: 'var(--accent)', background: 'var(--paper-0)' }}
-        >🔊</button>
+        ><Icon name="speaker" size={20} /></button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {choices.map((c, i) => {
@@ -52,7 +53,7 @@ export default function CardPick({ question, choices, onComplete }: Props) {
               className="btn btn-choice p-4 text-lg disabled:opacity-60"
               style={{ background: bg }}
             >
-              {selected ? (c.isCorrect ? '✅ ' : '❌ ') : ''}{c.label}
+              {selected && <Icon name={c.isCorrect ? 'check' : 'cross'} size={20} strokeWidth={2.5} />}{c.label}
             </button>
           );
         })}
@@ -60,10 +61,12 @@ export default function CardPick({ question, choices, onComplete }: Props) {
 
       {picked && (
         <div className="mt-6 text-center">
-          <p className="text-lg font-bold">
-            {picked.isCorrect ? '🎉 정답!' : '💡 다시 한번 생각해봐요.'}
+          <p className="text-lg font-bold inline-flex items-center gap-1.5">
+            {picked.isCorrect
+              ? <><Icon name="sparkles" size={22} filled color="var(--ok)" /> 정답!</>
+              : <><Icon name="bulb" size={22} color="var(--warn)" /> 다시 한번 생각해봐요.</>}
           </p>
-          <Button size="lg" onClick={onComplete} className="mt-4 px-6">다음 ▶</Button>
+          <div><Button size="lg" onClick={onComplete} className="mt-4 px-6">다음 <Icon name="chevron-right" size={20} /></Button></div>
         </div>
       )}
     </div>

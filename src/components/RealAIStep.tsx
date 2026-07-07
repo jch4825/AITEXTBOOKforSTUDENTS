@@ -5,6 +5,7 @@ import ErrorMessage from './ErrorMessage';
 import MicButton from './MicButton';
 import SpeechBubble from './SpeechBubble';
 import Button from './Button';
+import Icon from './Icon';
 
 interface Props {
   prompt: string;              // shown to the student ("AI한테 __ 라고 물어봐요")
@@ -79,7 +80,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
               disabled={!draft.trim()}
               className="px-6 text-xl font-bold"
               style={{ color: accent, background: accentSoft }}
-            >💬 보내기</Button>
+            ><Icon name="chat" size={22} /> 보내기</Button>
           </div>
         ) : (
           <Button
@@ -88,7 +89,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
             onClick={send}
             className="px-6 text-xl font-bold"
             style={{ color: accent, background: accentSoft }}
-          >💬 "{userInput}" 보내기</Button>
+          ><Icon name="chat" size={22} /> "{userInput}" 보내기</Button>
         )
       )}
 

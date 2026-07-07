@@ -2,6 +2,7 @@ import TTSToggle from './controls/TTSToggle';
 import FontSizeToggle from './controls/FontSizeToggle';
 import DifficultyToggle from './controls/DifficultyToggle';
 import DictionaryTrigger from './controls/DictionaryTrigger';
+import Icon from './Icon';
 
 interface Props {
   crumb: string;          // e.g. "모듈 1 > AI가 뭐야?"
@@ -19,14 +20,14 @@ export default function TopBar({ crumb, onOpenDictionary, onGoHome, onOpenNav }:
           aria-label="차례 열기"
           className="md:hidden btn btn-secondary px-2.5"
           style={{ color: 'var(--fg)' }}
-        >☰ 차례</button>
+        ><Icon name="menu" size={20} /> 차례</button>
       )}
       <button
         onClick={onGoHome}
         className="inline-flex items-center min-h-11 px-2 -ml-2 rounded-[var(--r-sm)] text-lg font-bold hover:bg-[color:var(--paper-2)]"
         style={{ color: 'var(--accent)' }}
         aria-label="처음 화면으로"
-      >🏠<span className="hidden sm:inline"> AI 교과서</span></button>
+      ><Icon name="home" size={22} /><span className="hidden sm:inline"> AI 교과서</span></button>
       <span className="hidden md:inline text-base text-[color:var(--muted)] truncate" aria-label="현재 위치">{crumb}</span>
       <div className="ml-auto flex items-center gap-1.5 md:gap-2">
         <TTSToggle />

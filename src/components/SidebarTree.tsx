@@ -3,6 +3,8 @@ import { themeFor } from '../utils/moduleThemes';
 import { useProgress } from '../context/ProgressContext';
 import { getLesson } from '../data/lessons';
 import { hasApiKey } from '../utils/apiKey';
+import ModuleIcon from './ModuleIcon';
+import Icon from './Icon';
 import type { LessonId } from '../types';
 
 /** ?teacher=1 로 이동 — base path를 유지한 채 교사 모드(비번 게이트)로 진입한다. */
@@ -30,8 +32,8 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
         const doneInModule = lessons.filter(isCompleted).length;
         return (
           <section key={mod.id} className="mb-5">
-            <h3 className="t-label mb-2 flex items-baseline gap-1" style={{ color: theme.accentText }}>
-              <span>{theme.emoji}</span>
+            <h3 className="t-label mb-2 flex items-center gap-1.5" style={{ color: theme.accentText }}>
+              <ModuleIcon moduleId={mod.id} size={20} />
               <span>모듈 {mod.number}. {mod.title}</span>
               <span className="ml-auto text-xs font-semibold text-[color:var(--muted)]" aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료`}>
                 {doneInModule}/{lessons.length}
@@ -89,8 +91,9 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
             className="h-2.5 w-2.5 rounded-full shrink-0"
             style={{ background: aiConnected ? 'var(--ok)' : 'var(--warn)' }}
           />
+          <Icon name="settings" size={18} />
           <span className="truncate">
-            ⚙️ 선생님 · AI {aiConnected ? '연결됨' : '연결하기'}
+            선생님 · AI {aiConnected ? '연결됨' : '연결하기'}
           </span>
         </button>
       </div>

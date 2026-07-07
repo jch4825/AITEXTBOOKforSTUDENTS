@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { isSttSupported, startListening, type SttHandle } from '../utils/stt';
+import Icon from './Icon';
 
 interface Props {
   onResult: (text: string) => void;
@@ -19,9 +20,9 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
         disabled
         aria-label="음성 입력 미지원"
         title="이 브라우저에서는 음성 입력이 안 돼요. 글로 써주세요."
-        className="px-3 py-3 rounded-[var(--r-sm)] border-2 cursor-not-allowed text-2xl"
+        className="px-3 py-3 rounded-[var(--r-sm)] border-2 cursor-not-allowed flex items-center"
         style={{ borderColor: 'var(--line)', color: 'var(--ink-3)' }}
-      >🎤</button>
+      ><Icon name="mic" size={24} /></button>
     );
   }
 
@@ -62,13 +63,13 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
         disabled={disabled}
         aria-label={listening ? '녹음 중지' : '말로 입력하기'}
         title={listening ? '듣는 중… 눌러서 멈추기' : '눌러서 말하기'}
-        className={`px-3 py-3 rounded-[var(--r-sm)] border-2 text-2xl transition ${listening ? 'animate-pulse' : ''}`}
+        className={`px-3 py-3 rounded-[var(--r-sm)] border-2 flex items-center transition ${listening ? 'animate-pulse' : ''}`}
         style={{
           borderColor: accent,
           color: listening ? 'white' : accent,
           background: listening ? accent : 'var(--paper-0)',
         }}
-      >{listening ? '🔴' : '🎤'}</button>
+      ><Icon name={listening ? 'mic-on' : 'mic'} size={24} /></button>
       {error && <span className="text-xs text-red-600 max-w-[8rem] text-center">{error}</span>}
     </div>
   );

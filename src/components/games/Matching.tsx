@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
+import Icon from '../Icon';
 
 export interface MatchingPair {
   left: string;
@@ -76,7 +77,7 @@ export default function Matching({ pairs, onComplete }: Props) {
               background: matched[i] ? 'var(--ok-bg)' : picked.leftIdx === i ? 'var(--accent)' : 'var(--paper-0)',
               color: picked.leftIdx === i ? 'white' : 'var(--fg)',
             }}
-          >{matched[i] ? '✅ ' : ''}{p.left}</button>
+          >{matched[i] && <Icon name="check" size={20} strokeWidth={2.5} color="var(--ok)" />}{p.left}</button>
         ))}
       </div>
       <div className="space-y-2">
@@ -90,7 +91,7 @@ export default function Matching({ pairs, onComplete }: Props) {
               background: matched[origIdx] ? 'var(--ok-bg)' : picked.rightIdx === shuffleIdx ? 'var(--accent)' : 'var(--paper-0)',
               color: picked.rightIdx === shuffleIdx ? 'white' : 'var(--fg)',
             }}
-          >{matched[origIdx] ? '✅ ' : ''}{pairs[origIdx].right}</button>
+          >{matched[origIdx] && <Icon name="check" size={20} strokeWidth={2.5} color="var(--ok)" />}{pairs[origIdx].right}</button>
         ))}
       </div>
     </div>

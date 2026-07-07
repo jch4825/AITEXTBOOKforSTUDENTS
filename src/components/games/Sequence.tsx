@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
+import Icon from '../Icon';
 
 export interface SequenceItem {
   label: string;
@@ -61,7 +62,9 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
                 : { borderColor: 'var(--border)', borderStyle: 'dashed', color: 'var(--muted)' }
             }
           >
-            {i < placedCount ? `✅ ${i + 1}. ${item.label}` : `${i + 1}. ─`}
+            {i < placedCount
+              ? <span className="inline-flex items-center gap-1.5"><Icon name="check" size={18} strokeWidth={2.5} color="var(--ok)" />{i + 1}. {item.label}</span>
+              : `${i + 1}. ─`}
           </li>
         ))}
       </ol>
@@ -83,15 +86,15 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
                   background: used ? 'var(--done-bg)' : isWrong ? 'var(--warn-bg)' : 'var(--paper-0)',
                   color: 'var(--fg)',
                 }}
-              >{isWrong ? '🤔 ' : ''}{items[origIdx].label}</button>
+              >{isWrong && <Icon name="think" size={20} color="var(--warn)" />}{items[origIdx].label}</button>
             );
           })}
         </div>
       )}
 
       {done && (
-        <p className="text-xl font-bold text-center" style={{ color: 'var(--ok)' }}>
-          🎉 순서를 다 맞췄어요!
+        <p className="text-xl font-bold flex items-center justify-center gap-2" style={{ color: 'var(--ok)' }}>
+          <Icon name="sparkles" size={24} filled /> 순서를 다 맞췄어요!
         </p>
       )}
     </div>

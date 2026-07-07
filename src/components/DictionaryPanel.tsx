@@ -4,6 +4,7 @@ import type { DictionaryEntry } from '../types';
 import { findDictionaryEntry } from '../data/studentDictionary';
 import CharacterAvatar from './CharacterAvatar';
 import Button from './Button';
+import Icon from './Icon';
 
 interface Props {
   open: boolean;
@@ -27,7 +28,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
   return (
     <aside className="w-80 max-w-[90vw] shrink-0 border-l border-[color:var(--border)] bg-[color:var(--paper-0)] p-6 overflow-y-auto fixed inset-y-0 right-0 z-40 shadow-xl md:static md:shadow-none">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold">📖 쉬운 사전</h2>
+        <h2 className="text-xl font-bold inline-flex items-center gap-2"><Icon name="book" size={22} style={{ color: 'var(--accent)' }} /> 쉬운 사전</h2>
         <button
           onClick={onClose}
           aria-label="사전 닫기"
@@ -78,7 +79,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
             </div>
           )}
           <Button onClick={() => speak(entry.ttsVersion ?? entry.shortExplanation)} className="mt-4">
-            🔊 다시 들려줘
+            <Icon name="speaker" size={20} /> 다시 들려줘
           </Button>
         </article>
       )}
