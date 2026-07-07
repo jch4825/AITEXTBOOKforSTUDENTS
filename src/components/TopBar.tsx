@@ -23,7 +23,7 @@ export default function TopBar({ crumb, onOpenDictionary, onGoHome, onOpenNav }:
       )}
       <button
         onClick={onGoHome}
-        className="text-lg font-bold hover:underline"
+        className="inline-flex items-center min-h-11 px-2 -ml-2 rounded-[var(--r-sm)] text-lg font-bold hover:bg-[color:var(--paper-2)]"
         style={{ color: 'var(--accent)' }}
         aria-label="처음 화면으로"
       >🏠<span className="hidden sm:inline"> AI 교과서</span></button>
