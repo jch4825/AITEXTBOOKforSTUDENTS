@@ -11,7 +11,7 @@ import type { MatchingPair } from '../components/games/Matching';
 import Sequence from '../components/games/Sequence';
 import type { SequenceItem } from '../components/games/Sequence';
 import RealAIStep from '../components/RealAIStep';
-import StoryIntroCard from '../components/StoryIntroCard';
+import Stage from '../components/Stage';
 import SpeechBubble from '../components/SpeechBubble';
 import Button from '../components/Button';
 import { getLessonStory, MODULE_EPISODES } from '../data/story';
@@ -99,19 +99,35 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   function renderText() {
     const data = currentStep.data as { dictionaryTerms?: string[]; imagePlaceholder?: boolean };
     const terms = data.dictionaryTerms ?? [];
-    return (
-      <div className="max-w-2xl mx-auto">
-        <h1 className="t-h1 mb-4" style={{ color: theme.accent }}>{lesson.title}</h1>
-        {story && storyIntro ? (
-          <StoryIntroCard
+    // 무대 위(전폭 히어로) → 책상 위(본문) 2단 구성 — §4.1
+    if (story && storyIntro) {
+      return (
+        <>
+          <Stage
+            lessonId={lesson.id}
+            title={lesson.title}
             scene={story.scene}
             text={storyIntro}
             episodeTitle={lesson.number === 1 ? MODULE_EPISODES[lesson.moduleId].title : undefined}
             accent={theme.accent}
             accentText={theme.accentText}
             accentSoft={theme.accentSoft}
+            className="-mx-4 -mt-4 md:-mx-8 md:-mt-10 mb-6"
           />
-        ) : data.imagePlaceholder && (
+          <div className="max-w-2xl mx-auto">
+            <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
+            <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
+              🔊 읽어줘
+            </Button>
+          </div>
+        </>
+      );
+    }
+    // 스토리가 없는 예외 차시 — 기존 단일 칼럼 유지
+    return (
+      <div className="max-w-2xl mx-auto">
+        <h1 className="t-h1 mb-4" style={{ color: theme.accent }}>{lesson.title}</h1>
+        {data.imagePlaceholder && (
           <div
             className="w-full aspect-video rounded-[var(--r-lg)] border-2 border-dashed flex items-center justify-center text-[color:var(--muted)] mb-4"
             style={{ borderColor: 'var(--border)', background: 'var(--paper-2)' }}
@@ -133,7 +149,9 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     return (
       <div className="max-w-2xl mx-auto">
         <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>같이 풀어봐요!</h2>
-        <OXGame questions={data.questions} onComplete={handleNext} />
+        <div className="card p-4 md:p-6">
+          <OXGame questions={data.questions} onComplete={handleNext} />
+        </div>
       </div>
     );
   }
@@ -143,7 +161,9 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     return (
       <div className="max-w-2xl mx-auto">
         <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>골라봐요!</h2>
-        <CardPick question={data.question} choices={data.choices} onComplete={handleNext} />
+        <div className="card p-4 md:p-6">
+          <CardPick question={data.question} choices={data.choices} onComplete={handleNext} />
+        </div>
       </div>
     );
   }
@@ -153,7 +173,9 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     return (
       <div className="max-w-2xl mx-auto">
         <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>짝을 맞춰봐요!</h2>
-        <Matching pairs={data.pairs} onComplete={handleNext} />
+        <div className="card p-4 md:p-6">
+          <Matching pairs={data.pairs} onComplete={handleNext} />
+        </div>
       </div>
     );
   }
@@ -163,7 +185,9 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     return (
       <div className="max-w-2xl mx-auto">
         <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>순서대로 눌러봐요!</h2>
-        <Sequence instruction={data.instruction} items={data.items} onComplete={handleNext} />
+        <div className="card p-4 md:p-6">
+          <Sequence instruction={data.instruction} items={data.items} onComplete={handleNext} />
+        </div>
       </div>
     );
   }

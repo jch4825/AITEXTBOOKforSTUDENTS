@@ -30,11 +30,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    warm-gray 종이 뉴트럴, 타이포·radius·elevation·모션 토큰) + 종이 질감(2% SVG 노이즈) +
    버튼 4종 체계(`.btn-primary/secondary/ghost/choice` + `Button.tsx`) + accentSoft 솔리드 파스텔 재정의.
    레거시 변수(--bg/--fg/--accent/--border/--muted)는 신규 토큰의 별칭으로 유지.
-3. **D2 — 무대(Stage) 컴포넌트 (다음 작업)** — 장면 카드를 전폭 히어로로 승격 (데스크톱 공백 해소),
-   `public/lessons/` 차시 이미지·영상 일괄 연결. 짧은 창(<944px)에서 사이드바가 페이지 스크롤을
-   만드는 문제(내부 스크롤 미작동)도 이 단계 레이아웃 정비에서 함께 해결.
-4. **D3~D5** — 이모지→커스텀 아이콘 세트, 배움 도장판(진도 시각화 v2), 캐릭터 SVG→일러스트 교체
-   (`CharacterAvatar.tsx` 한 곳만 수정). 각 단계 후 design-review 재감사 (목표: D4 후 A-, D5 후 A).
+3. ~~**D2 — 무대(Stage)**~~ **완료 (2026-07-07)** — `Stage.tsx` 전폭 히어로 (차시 그림 자동 연결:
+   `public/lessons/{id}.png` 존재 시 표시, `onError` 시 아바타 장면 폴백 — 이미지가 추가되면 코드
+   수정 없이 반영됨). LessonView "무대 위→책상 위" 2단, 게임 4종 paper-0 카드화, 프레임 h-screen
+   전환(푸터 상시 노출·사이드바/본문 내부 스크롤), 히어로 2단은 lg(1024px+)에서만·태블릿은 스택.
+   StoryIntroCard는 Stage로 대체·삭제. **영상(mp4) 연결은 에셋 확보 후** (Stage에 추가 예정).
+4. **D3~D5 (다음 작업 = D3)** — 이모지→커스텀 아이콘 세트, 배움 도장판(진도 시각화 v2), 캐릭터
+   SVG→일러스트 교체 (`CharacterAvatar.tsx` 한 곳만 수정). 각 단계 후 design-review 재감사
+   (목표: D2 후 B+, D4 후 A-, D5 후 A). *D2 후 재감사 아직 미실시.*
 5. **교사 베타 검토 (M8 게이트)** — 실사용 교사 1~2명. 라이브: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
 
 ## Commands
@@ -83,7 +86,8 @@ src/
 │   ├── MicButton.tsx             — STT 마이크 버튼 (real-ai 자유입력용)
 │   ├── CharacterAvatar.tsx       — 4인 SVG 아바타 (표정 variant) — 캐릭터 비주얼 단일 지점
 │   ├── SpeechBubble.tsx          — 캐릭터 말풍선 (이름표 + TTS)
-│   ├── StoryIntroCard.tsx        — 차시 도입 장면 카드 (사회상황이야기)
+│   ├── Button.tsx                — 버튼 4종 체계 (primary/secondary/ghost/choice, 토큰 v2)
+│   ├── Stage.tsx                 — 차시 도입 전폭 히어로 (public/lessons/{id}.png 연결, 아바타 폴백)
 │   ├── controls/                 — TTS/FontSize/Difficulty/DictionaryTrigger
 │   └── games/                    — OXGame, CardPick, Matching, Sequence
 ├── context/

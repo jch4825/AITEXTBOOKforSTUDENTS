@@ -32,7 +32,8 @@ export default function MicroLessonFrame({
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    // h-screen 고정 — 푸터(다음/이전)가 항상 보이고, 본문·사이드바가 각자 내부 스크롤된다
+    <div className="h-screen flex flex-col">
       <TopBar
         crumb={crumb}
         onOpenDictionary={() => { setDictQuery(null); setDictOpen(true); }}
