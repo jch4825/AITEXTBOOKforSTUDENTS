@@ -54,7 +54,7 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
         {items.map((item, i) => (
           <li
             key={item.label}
-            className="p-3 rounded-lg border-2 text-lg"
+            className="p-3 rounded-[var(--r-md)] border-2 text-lg"
             style={
               i < placedCount
                 ? { borderColor: 'var(--ok)', background: 'var(--ok-bg)' }
@@ -77,10 +77,10 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
                 key={items[origIdx].label}
                 onClick={() => clickCard(shuffleIdx)}
                 disabled={used}
-                className="p-4 rounded-lg border-4 text-lg font-semibold disabled:opacity-40 min-h-[64px]"
+                className="btn btn-choice p-4 text-lg disabled:opacity-40"
                 style={{
-                  borderColor: isWrong ? 'var(--warn)' : 'var(--accent)',
-                  background: used ? 'var(--done-bg)' : isWrong ? 'var(--warn-bg)' : 'white',
+                  borderColor: isWrong ? 'var(--warn)' : undefined,
+                  background: used ? 'var(--done-bg)' : isWrong ? 'var(--warn-bg)' : 'var(--paper-0)',
                   color: 'var(--fg)',
                 }}
               >{isWrong ? '🤔 ' : ''}{items[origIdx].label}</button>

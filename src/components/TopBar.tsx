@@ -12,13 +12,13 @@ interface Props {
 
 export default function TopBar({ crumb, onOpenDictionary, onGoHome, onOpenNav }: Props) {
   return (
-    <header className="h-16 shrink-0 border-b border-[color:var(--border)] bg-white px-3 md:px-6 flex items-center gap-1.5 md:gap-4">
+    <header className="h-16 shrink-0 border-b border-[color:var(--border)] bg-[color:var(--paper-0)] px-3 md:px-6 flex items-center gap-1.5 md:gap-4">
       {onOpenNav && (
         <button
           onClick={onOpenNav}
           aria-label="차례 열기"
-          className="md:hidden h-12 px-2.5 rounded border-2 font-semibold bg-white whitespace-nowrap"
-          style={{ borderColor: 'var(--accent)', color: 'var(--fg)' }}
+          className="md:hidden btn btn-secondary px-2.5"
+          style={{ color: 'var(--fg)' }}
         >☰ 차례</button>
       )}
       <button
@@ -28,7 +28,7 @@ export default function TopBar({ crumb, onOpenDictionary, onGoHome, onOpenNav }:
         aria-label="처음 화면으로"
       >🏠<span className="hidden sm:inline"> AI 교과서</span></button>
       <span className="hidden md:inline text-base text-[color:var(--muted)] truncate" aria-label="현재 위치">{crumb}</span>
-      <div className="ml-auto flex gap-1.5 md:gap-2">
+      <div className="ml-auto flex items-center gap-1.5 md:gap-2">
         <TTSToggle />
         <FontSizeToggle />
         <DifficultyToggle />

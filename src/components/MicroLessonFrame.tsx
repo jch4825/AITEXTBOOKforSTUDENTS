@@ -3,6 +3,7 @@ import SidebarTree from './SidebarTree';
 import TopBar from './TopBar';
 import DictionaryPanel from './DictionaryPanel';
 import ProgressDots from './ProgressDots';
+import Button from './Button';
 import type { LessonId } from '../types';
 
 interface Props {
@@ -49,7 +50,8 @@ export default function MicroLessonFrame({
             onClick={() => setNavOpen(false)}
           >
             <div
-              className="absolute inset-y-0 left-0 w-72 max-w-[85vw] bg-white shadow-xl overflow-y-auto"
+              className="absolute inset-y-0 left-0 w-72 max-w-[85vw] overflow-y-auto"
+              style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-2)' }}
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-label="차례"
@@ -58,7 +60,7 @@ export default function MicroLessonFrame({
                 <button
                   onClick={() => setNavOpen(false)}
                   aria-label="차례 닫기"
-                  className="h-10 w-10 rounded hover:bg-gray-100 text-xl"
+                  className="h-10 w-10 rounded-[var(--r-sm)] hover:bg-[color:var(--paper-2)] text-xl"
                 >×</button>
               </div>
               <SidebarTree
@@ -88,19 +90,18 @@ export default function MicroLessonFrame({
           onSearch={setDictQuery}
         />
       </div>
-      <footer className="h-20 shrink-0 border-t border-[color:var(--border)] bg-white px-3 md:px-6 flex items-center justify-between gap-2">
-        <button
+      <footer className="h-20 shrink-0 border-t border-[color:var(--border)] bg-[color:var(--paper-0)] px-3 md:px-6 flex items-center justify-between gap-2">
+        <Button
+          variant="secondary"
           onClick={onPrev}
           disabled={currentStep === 0}
-          className="h-12 px-4 md:px-6 rounded border-2 font-semibold disabled:opacity-40 whitespace-nowrap"
-          style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
-        >◀ 이전</button>
+          className="px-4 md:px-6"
+        >◀ 이전</Button>
         <ProgressDots total={totalSteps} current={currentStep} />
-        <button
+        <Button
           onClick={onNext}
-          className="h-12 px-4 md:px-6 rounded font-semibold text-white whitespace-nowrap"
-          style={{ background: 'var(--accent)' }}
-        >{currentStep + 1 >= totalSteps ? '🎉 다 했어요!' : '다음 ▶'}</button>
+          className="px-4 md:px-6"
+        >{currentStep + 1 >= totalSteps ? '🎉 다 했어요!' : '다음 ▶'}</Button>
       </footer>
     </div>
   );

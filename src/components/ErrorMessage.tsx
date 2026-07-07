@@ -7,7 +7,7 @@ export default function ErrorMessage({ studentMessage, technicalDetail }: Props)
   return (
     <div
       role="alert"
-      className="my-4 p-4 rounded border-2 border-orange-300 bg-orange-50"
+      className="my-4 p-4 rounded-[var(--r-md)] border-2 border-orange-300 bg-orange-50"
     >
       <p className="text-lg font-semibold text-orange-900">⚠️ {studentMessage}</p>
       {technicalDetail && (

@@ -11,12 +11,8 @@ export default function TTSToggle() {
         if (!next) stopSpeaking();
       }}
       aria-pressed={ttsEnabled}
-      className="h-12 px-3 md:px-4 rounded border-2 font-semibold"
-      style={{
-        background: ttsEnabled ? 'var(--accent)' : 'white',
-        color: ttsEnabled ? 'white' : 'var(--fg)',
-        borderColor: 'var(--accent)',
-      }}
+      className={`btn px-3 md:px-4 ${ttsEnabled ? 'btn-primary' : 'btn-secondary'}`}
+      style={ttsEnabled ? undefined : { color: 'var(--fg)' }}
       title="읽어주기 켜기/끄기"
       aria-label={`읽어주기 ${ttsEnabled ? '켜짐' : '꺼짐'}`}
     >🔊<span className="hidden sm:inline"> {ttsEnabled ? '켜짐' : '꺼짐'}</span></button>

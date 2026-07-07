@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
+import Button from '../Button';
 
 export interface OXQuestion {
   question: string;
@@ -48,7 +49,7 @@ export default function OXGame({ questions, onComplete }: Props) {
           onClick={() => speak(q.question)}
           aria-label="문제 다시 들려주기"
           className="shrink-0 h-10 w-10 rounded-full border-2 text-lg"
-          style={{ borderColor: 'var(--accent)', color: 'var(--accent)', background: 'white' }}
+          style={{ borderColor: 'var(--accent)', color: 'var(--accent)', background: 'var(--paper-0)' }}
         >🔊</button>
       </div>
       <div className="flex gap-4 justify-center">
@@ -58,7 +59,7 @@ export default function OXGame({ questions, onComplete }: Props) {
           aria-label="맞아요"
           className="h-24 w-24 rounded-full text-5xl font-bold border-4 disabled:opacity-60"
           style={{
-            background: picked === 'O' ? (correct ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'white',
+            background: picked === 'O' ? (correct ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'var(--paper-0)',
             borderColor: 'var(--accent)',
           }}
         >⭕</button>
@@ -68,7 +69,7 @@ export default function OXGame({ questions, onComplete }: Props) {
           aria-label="아니에요"
           className="h-24 w-24 rounded-full text-5xl font-bold border-4 disabled:opacity-60"
           style={{
-            background: picked === 'X' ? (correct ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'white',
+            background: picked === 'X' ? (correct ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'var(--paper-0)',
             borderColor: 'var(--accent)',
           }}
         >❌</button>
@@ -80,11 +81,7 @@ export default function OXGame({ questions, onComplete }: Props) {
             {correct ? '🎉 정답!' : `💡 정답은 ${q.answer === 'O' ? '⭕' : '❌'} 였어요.`}
           </p>
           {q.feedback && <p className="text-base mt-2">{q.feedback}</p>}
-          <button
-            onClick={next}
-            className="mt-4 px-6 py-3 rounded font-bold text-white"
-            style={{ background: 'var(--accent)' }}
-          >다음 ▶</button>
+          <Button size="lg" onClick={next} className="mt-4 px-6">다음 ▶</Button>
         </div>
       )}
     </div>

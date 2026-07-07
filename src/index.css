@@ -2,11 +2,32 @@
 
 @layer base {
   :root {
-    --bg: #f7f6f3;
-    --fg: #2d2d2d;
-    --accent: #5a4fcf;
-    --border: #e5e4e0;
-    --muted: #6b6b6b;
+    /* ============================================================
+       디자인 토큰 v2 — "아이미의 교실" (docs/design-upgrade-plan.md §3)
+       이 :root가 단일 진실 원천. 컴포넌트는 토큰만 참조한다.
+       ============================================================ */
+
+    /* 브랜드 */
+    --brand-ink: #2B3A55;   /* 딥 네이비 — 아이미 스크린색. 제목/로고/기본 강조 */
+    --brand-pink: #F3D9E0;  /* 아이미 셸 — 배경 포인트, 브랜드 면 */
+    --brand-glow: #4FC3E8;  /* 아이미 LED — "AI가 실제로 말할 때"만 사용. 남용 금지 */
+
+    /* 뉴트럴 (Warm Gray — 종이 톤) */
+    --paper-0: #FDFCFA;
+    --paper-1: #F7F4EE;
+    --paper-2: #EFEAE2;
+    --ink-1: #2D2A26;
+    --ink-2: #5C564E;
+    --ink-3: #8A8378;       /* 14px 이상 텍스트 금지 — 장식 전용 */
+    --line: #E3DDD2;        /* 카드·구분선 테두리 */
+
+    /* 레거시 별칭 — v1 변수를 쓰는 기존 코드가 그대로 신규 토큰을 승계한다 */
+    --bg: var(--paper-1);
+    --fg: var(--ink-1);
+    --accent: var(--brand-ink);
+    --border: var(--line);
+    --muted: var(--ink-2);
+
     /* 시맨틱 피드백 컬러 — 게임 정답/오답은 반드시 이 변수만 사용 */
     --ok: #16a34a;
     --ok-bg: #86efac;
@@ -14,9 +35,35 @@
     --warn: #ea580c;
     --warn-bg: #fed7aa;
     --done-bg: #e5e7eb;
+
+    /* 타이포그래피 (Pretendard Variable) */
+    --fs-display: 2.5rem;   /* 40 / 1.3 / 800 — Home 타이틀 */
+    --fs-h1: 2rem;          /* 32 / 1.4 / 700 — 차시 제목 */
+    --fs-h2: 1.5rem;        /* 24 / 1.45 / 700 — 게임 헤더 */
+    --fs-body-lg: 1.25rem;  /* 20 / 1.8 — 본문 */
+    --fs-body: 1.125rem;    /* 18 / 1.8 — 일반 */
+    --fs-label: 0.9375rem;  /* 15 / 1.5 / 600 — 이름표·버튼 보조 */
     --font-base: 1.125rem;
     --font-large: 1.5rem;
     --leading: 1.8;
+
+    /* 형태 — 중첩 시 안쪽 radius = 바깥 radius − gap */
+    --r-sm: 10px;           /* 입력 */
+    --r-md: 16px;           /* 카드 */
+    --r-lg: 24px;           /* 장면·무대 */
+    --r-pill: 999px;        /* 버튼 */
+
+    /* 깊이 */
+    --e-1: 0 1px 3px rgba(43, 58, 85, 0.08);
+    --e-2: 0 4px 16px rgba(43, 58, 85, 0.10);
+
+    /* 모션 — ease-out 진입 전용, 1회성만 (저자극 원칙) */
+    --t-fast: 150ms;
+    --t-base: 250ms;
+  }
+
+  html {
+    background: var(--bg);
   }
 
   html, body, #root {
@@ -24,9 +71,17 @@
     padding: 0;
     min-height: 100vh;
     font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-    background: var(--bg);
     color: var(--fg);
     line-height: var(--leading);
+  }
+
+  /* 종이 질감 — paper-1 위 2% 노이즈 (§4.5). #root는 투명해야 질감이 비친다 */
+  body {
+    background-color: var(--bg);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.04'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  #root {
+    background: transparent;
   }
 
   /* font-size scale applied by SettingsContext via [data-font-size] on <html> */
@@ -49,7 +104,7 @@
     border-bottom: 2px dotted var(--accent);
     cursor: help;
   }
-  .dict-term:hover { background: rgba(90, 79, 207, 0.08); }
+  .dict-term:hover { background: rgba(43, 58, 85, 0.08); }
 
   /* story scene card & speech bubble — 1회성 fade-in만 허용 (저자극 원칙: 반복 애니 금지) */
   @keyframes story-fade-in {
@@ -59,5 +114,86 @@
   .story-fade-in { animation: story-fade-in 0.3s ease-out; }
   @media (prefers-reduced-motion: reduce) {
     .story-fade-in { animation: none; }
+  }
+}
+
+@layer components {
+  /* ============================================================
+     타이포 유틸 — §3.2 스케일
+     ============================================================ */
+  .t-display { font-size: var(--fs-display); line-height: 1.3; font-weight: 800; }
+  .t-h1 { font-size: var(--fs-h1); line-height: 1.4; font-weight: 700; }
+  .t-h2 { font-size: var(--fs-h2); line-height: 1.45; font-weight: 700; }
+  .t-body-lg { font-size: var(--fs-body-lg); line-height: 1.8; }
+  .t-label { font-size: var(--fs-label); line-height: 1.5; font-weight: 600; }
+  .nums { font-variant-numeric: tabular-nums; }
+
+  /* ============================================================
+     버튼 4종 체계 — primary / secondary / ghost / choice
+     모듈 테마색은 --btn-accent(-text)로 주입한다 (Button.tsx 참고)
+     ============================================================ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4em;
+    min-height: 3rem;              /* 44px+ 터치 기준 충족 */
+    padding: 0.5rem 1.25rem;
+    border: 2px solid transparent;
+    border-radius: var(--r-pill);
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
+    transition: background-color var(--t-fast) ease-out, filter var(--t-fast) ease-out;
+  }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* 핵심 학습 조작 — 64px */
+  .btn-lg {
+    min-height: 4rem;
+    padding: 0.75rem 2rem;
+    font-size: var(--fs-body-lg);
+  }
+
+  .btn-primary {
+    background: var(--btn-accent, var(--accent));
+    color: #fff;
+    box-shadow: var(--e-1);
+  }
+  .btn-primary:hover:not(:disabled) { filter: brightness(0.94); }
+
+  .btn-secondary {
+    background: var(--paper-0);
+    border-color: var(--btn-accent, var(--accent));
+    color: var(--btn-accent-text, var(--btn-accent, var(--accent)));
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--btn-accent, var(--accent)) 8%, var(--paper-0));
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-2);
+  }
+  .btn-ghost:hover:not(:disabled) { background: var(--paper-2); }
+
+  /* 선택지 카드 버튼 — 게임 답안. 색 피드백(ok/bad)은 게임이 inline style로 덧입힌다 */
+  .btn-choice {
+    justify-content: flex-start;
+    text-align: left;
+    white-space: normal;
+    min-height: 4rem;              /* 학습 핵심 조작 64px */
+    border-width: 3px;
+    border-color: var(--btn-accent, var(--accent));
+    border-radius: var(--r-md);
+    background: var(--paper-0);
+    font-weight: 600;
+  }
+
+  /* 카드 면 — 책상 위 교구 */
+  .card {
+    background: var(--paper-0);
+    border-radius: var(--r-md);
+    box-shadow: var(--e-1);
   }
 }

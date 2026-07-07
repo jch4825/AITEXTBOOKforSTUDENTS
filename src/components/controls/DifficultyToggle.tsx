@@ -5,13 +5,13 @@ export default function DifficultyToggle() {
   return (
     <button
       onClick={() => setDifficulty(difficulty === 'normal' ? 'easy' : 'normal')}
-      className="h-12 px-3 rounded border-2 font-semibold bg-white leading-tight whitespace-nowrap"
-      style={{ borderColor: 'var(--accent)', color: 'var(--fg)' }}
+      className="btn btn-secondary px-3 flex-col gap-0"
+      style={{ color: 'var(--fg)' }}
       title="난이도 바꾸기"
       aria-label={`난이도 바꾸기 (지금: ${difficulty === 'easy' ? '쉬움' : '보통'})`}
     >
-      <span className="block text-[11px] font-normal text-[color:var(--muted)]">난이도</span>
-      <span className="block">{difficulty === 'easy' ? '쉬움' : '보통'}</span>
+      <span className="block text-[11px] leading-none font-normal text-[color:var(--muted)]">난이도</span>
+      <span className="block leading-none">{difficulty === 'easy' ? '쉬움' : '보통'}</span>
     </button>
   );
 }

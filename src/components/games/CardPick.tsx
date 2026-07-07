@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
+import Button from '../Button';
 
 export interface CardChoice {
   label: string;
@@ -36,20 +37,20 @@ export default function CardPick({ question, choices, onComplete }: Props) {
           onClick={() => speak(question)}
           aria-label="문제 다시 들려주기"
           className="shrink-0 h-10 w-10 rounded-full border-2 text-lg"
-          style={{ borderColor: 'var(--accent)', color: 'var(--accent)', background: 'white' }}
+          style={{ borderColor: 'var(--accent)', color: 'var(--accent)', background: 'var(--paper-0)' }}
         >🔊</button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {choices.map((c, i) => {
           const selected = i === pickedIdx;
-          const bg = selected ? (c.isCorrect ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'white';
+          const bg = selected ? (c.isCorrect ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'var(--paper-0)';
           return (
             <button
               key={i}
               onClick={() => pick(i)}
               disabled={pickedIdx !== null}
-              className="min-h-16 p-4 rounded-lg border-4 text-lg font-semibold text-left disabled:opacity-60"
-              style={{ background: bg, borderColor: 'var(--accent)' }}
+              className="btn btn-choice p-4 text-lg disabled:opacity-60"
+              style={{ background: bg }}
             >
               {selected ? (c.isCorrect ? '✅ ' : '❌ ') : ''}{c.label}
             </button>
@@ -62,11 +63,7 @@ export default function CardPick({ question, choices, onComplete }: Props) {
           <p className="text-lg font-bold">
             {picked.isCorrect ? '🎉 정답!' : '💡 다시 한번 생각해봐요.'}
           </p>
-          <button
-            onClick={onComplete}
-            className="mt-4 px-6 py-3 rounded font-bold text-white"
-            style={{ background: 'var(--accent)' }}
-          >다음 ▶</button>
+          <Button size="lg" onClick={onComplete} className="mt-4 px-6">다음 ▶</Button>
         </div>
       )}
     </div>

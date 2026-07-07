@@ -25,7 +25,7 @@ export default function SpeechBubble({
   expression = 'happy',
   accent = 'var(--accent)',
   accentText,
-  accentSoft = 'rgba(90, 79, 207, 0.08)',
+  accentSoft = 'var(--paper-2)',
   showSpeakButton = false,
   avatarSize = 52,
 }: Props) {
@@ -44,14 +44,14 @@ export default function SpeechBubble({
           style={{ background: accentSoft }}
           aria-hidden
         />
-        <div className="rounded-2xl px-4 py-3" style={{ background: accentSoft }}>
-          <p className="text-sm font-bold mb-1" style={{ color: accentText ?? accent }}>{meta.shortName}</p>
+        <div className="rounded-[var(--r-md)] px-4 py-3" style={{ background: accentSoft }}>
+          <p className="t-label mb-1" style={{ color: accentText ?? accent }}>{meta.shortName}</p>
           <p className="text-lg leading-relaxed">{text}</p>
           {showSpeakButton && (
             <button
               onClick={() => speak(text)}
-              className="mt-2 px-3 py-1.5 rounded text-sm font-semibold border-2"
-              style={{ borderColor: accent, color: accent }}
+              className="btn btn-secondary mt-2 px-3 text-sm"
+              style={{ borderColor: accent, color: accentText ?? accent }}
             >🔊 읽어줘</button>
           )}
         </div>

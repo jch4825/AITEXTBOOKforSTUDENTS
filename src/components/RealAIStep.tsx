@@ -4,6 +4,7 @@ import { askGemini, GeminiError } from '../utils/gemini';
 import ErrorMessage from './ErrorMessage';
 import MicButton from './MicButton';
 import SpeechBubble from './SpeechBubble';
+import Button from './Button';
 
 interface Props {
   prompt: string;              // shown to the student ("AI한테 __ 라고 물어봐요")
@@ -48,7 +49,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4" style={{ color: accent }}>아이미랑 이야기해봐요</h2>
+      <h2 className="t-h2 mb-4" style={{ color: accent }}>아이미랑 이야기해봐요</h2>
       <p className="text-lg mb-4">{prompt}</p>
 
       {state.kind === 'idle' && (
@@ -60,8 +61,8 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
                 onChange={(e) => setDraft(e.target.value)}
                 rows={3}
                 aria-label="AI에게 보낼 말"
-                className="flex-1 p-3 rounded-lg border-2 text-lg resize-none"
-                style={{ borderColor: accent, background: 'white' }}
+                className="flex-1 p-3 rounded-[var(--r-sm)] border-2 text-lg resize-none"
+                style={{ borderColor: accent, background: 'var(--paper-0)' }}
               />
               <MicButton
                 accent={accent}
@@ -71,19 +72,23 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
             <p className="text-sm text-[color:var(--muted)]">
               🎤 를 누르고 말하거나, 위 글을 직접 고쳐도 돼요.
             </p>
-            <button
+            <Button
+              variant="choice"
+              accent={accent}
               onClick={send}
               disabled={!draft.trim()}
-              className="px-6 py-4 rounded-lg border-4 text-xl font-bold disabled:opacity-40"
-              style={{ borderColor: accent, color: accent, background: accentSoft }}
-            >💬 보내기</button>
+              className="px-6 text-xl font-bold"
+              style={{ color: accent, background: accentSoft }}
+            >💬 보내기</Button>
           </div>
         ) : (
-          <button
+          <Button
+            variant="choice"
+            accent={accent}
             onClick={send}
-            className="px-6 py-4 rounded-lg border-4 text-xl font-bold"
-            style={{ borderColor: accent, color: accent, background: accentSoft }}
-          >💬 "{userInput}" 보내기</button>
+            className="px-6 text-xl font-bold"
+            style={{ color: accent, background: accentSoft }}
+          >💬 "{userInput}" 보내기</Button>
         )
       )}
 
@@ -100,7 +105,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
 
       {(state.kind === 'success' || state.kind === 'fallback') && (
         <div className="space-y-3">
-          <div className="p-3 rounded bg-gray-100 text-right">내가: {state.sent}</div>
+          <div className="p-3 rounded-[var(--r-sm)] bg-[color:var(--paper-2)] text-right">내가: {state.sent}</div>
 
           {state.kind === 'success' ? (
             <SpeechBubble

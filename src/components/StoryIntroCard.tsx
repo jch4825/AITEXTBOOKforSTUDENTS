@@ -20,11 +20,11 @@ export default function StoryIntroCard({ scene, text, episodeTitle, accent, acce
 
   return (
     <div
-      className="rounded-2xl border-2 p-5 mb-4 story-fade-in"
-      style={{ background: accentSoft, borderColor: accent }}
+      className="rounded-[var(--r-lg)] border-2 p-5 mb-4 story-fade-in"
+      style={{ background: accentSoft, borderColor: accent, boxShadow: 'var(--e-1)' }}
     >
       {episodeTitle && (
-        <p className="text-sm font-bold mb-3" style={{ color: accentText ?? accent }}>📖 {episodeTitle}</p>
+        <p className="t-label mb-3" style={{ color: accentText ?? accent }}>📖 {episodeTitle}</p>
       )}
       <div className="flex items-center gap-4">
         <div className="flex shrink-0 -space-x-3">
@@ -38,8 +38,8 @@ export default function StoryIntroCard({ scene, text, episodeTitle, accent, acce
       </div>
       <button
         onClick={() => speak(text)}
-        className="mt-3 px-3 py-1.5 rounded text-sm font-semibold border-2 bg-white"
-        style={{ borderColor: accent, color: accent }}
+        className="btn btn-secondary mt-3 px-3 text-sm"
+        style={{ borderColor: accent, color: accentText ?? accent }}
       >🔊 이야기 들려줘</button>
     </div>
   );

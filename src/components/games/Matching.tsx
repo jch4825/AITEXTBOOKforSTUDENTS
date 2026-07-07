@@ -71,10 +71,9 @@ export default function Matching({ pairs, onComplete }: Props) {
             key={p.left}
             onClick={() => clickLeft(i)}
             disabled={matched[i]}
-            className="block w-full p-4 rounded-lg border-4 text-lg font-semibold disabled:opacity-50"
+            className="btn btn-choice w-full p-4 text-lg disabled:opacity-50"
             style={{
-              borderColor: 'var(--accent)',
-              background: matched[i] ? 'var(--ok-bg)' : picked.leftIdx === i ? 'var(--accent)' : 'white',
+              background: matched[i] ? 'var(--ok-bg)' : picked.leftIdx === i ? 'var(--accent)' : 'var(--paper-0)',
               color: picked.leftIdx === i ? 'white' : 'var(--fg)',
             }}
           >{matched[i] ? '✅ ' : ''}{p.left}</button>
@@ -86,10 +85,9 @@ export default function Matching({ pairs, onComplete }: Props) {
             key={pairs[origIdx].right}
             onClick={() => clickRight(shuffleIdx)}
             disabled={matched[origIdx]}
-            className="block w-full p-4 rounded-lg border-4 text-lg font-semibold disabled:opacity-50"
+            className="btn btn-choice w-full p-4 text-lg disabled:opacity-50"
             style={{
-              borderColor: 'var(--accent)',
-              background: matched[origIdx] ? 'var(--ok-bg)' : picked.rightIdx === shuffleIdx ? 'var(--accent)' : 'white',
+              background: matched[origIdx] ? 'var(--ok-bg)' : picked.rightIdx === shuffleIdx ? 'var(--accent)' : 'var(--paper-0)',
               color: picked.rightIdx === shuffleIdx ? 'white' : 'var(--fg)',
             }}
           >{matched[origIdx] ? '✅ ' : ''}{pairs[origIdx].right}</button>

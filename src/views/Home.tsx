@@ -2,6 +2,7 @@ import { useProgress } from '../context/ProgressContext';
 import { MODULES, lessonIdsForModule } from '../data/modules';
 import { getLesson } from '../data/lessons';
 import CharacterAvatar from '../components/CharacterAvatar';
+import Button from '../components/Button';
 import type { LessonId } from '../types';
 
 interface Props {
@@ -40,7 +41,7 @@ export default function Home({ onStart }: Props) {
           <CharacterAvatar character="aimi" expression="cheer" size={88} />
           <CharacterAvatar character="yoona" expression="happy" size={64} />
         </div>
-        <h1 className="text-5xl font-bold mb-4" style={{ color: 'var(--accent)' }}>
+        <h1 className="t-display mb-4" style={{ color: 'var(--accent)' }}>
           AI 교과서
         </h1>
         <p className="text-xl mb-2">
@@ -48,16 +49,12 @@ export default function Home({ onStart }: Props) {
             ? '아이미가 기다리고 있었어요!'
             : '진우, 윤아랑 같이 AI 친구 아이미를 만나러 가요'}
         </p>
-        <p className="text-base text-[color:var(--muted)] mb-8">
+        <p className="text-base text-[color:var(--muted)] mb-8 nums">
           지금까지 <strong>{doneCount}</strong> / {totalLessons} 차시 끝났어요
         </p>
-        <button
-          onClick={() => onStart(resumeLesson)}
-          className="px-8 py-4 rounded-xl text-2xl font-bold text-white shadow-lg"
-          style={{ background: 'var(--accent)' }}
-        >
+        <Button size="lg" onClick={() => onStart(resumeLesson)} className="text-2xl">
           {isResume ? '📖 이어서 하기' : '🚀 공부 시작!'}
-        </button>
+        </Button>
       </div>
     </main>
   );

@@ -13,6 +13,7 @@ import type { SequenceItem } from '../components/games/Sequence';
 import RealAIStep from '../components/RealAIStep';
 import StoryIntroCard from '../components/StoryIntroCard';
 import SpeechBubble from '../components/SpeechBubble';
+import Button from '../components/Button';
 import { getLessonStory, MODULE_EPISODES } from '../data/story';
 import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
@@ -100,7 +101,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     const terms = data.dictionaryTerms ?? [];
     return (
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4" style={{ color: theme.accent }}>{lesson.title}</h1>
+        <h1 className="t-h1 mb-4" style={{ color: theme.accent }}>{lesson.title}</h1>
         {story && storyIntro ? (
           <StoryIntroCard
             scene={story.scene}
@@ -112,19 +113,17 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           />
         ) : data.imagePlaceholder && (
           <div
-            className="w-full aspect-video rounded-lg border-2 border-dashed flex items-center justify-center text-[color:var(--muted)] mb-4"
-            style={{ borderColor: 'var(--border)', background: 'rgba(0,0,0,0.03)' }}
+            className="w-full aspect-video rounded-[var(--r-lg)] border-2 border-dashed flex items-center justify-center text-[color:var(--muted)] mb-4"
+            style={{ borderColor: 'var(--border)', background: 'var(--paper-2)' }}
             aria-label="이미지 자리"
           >
             <span className="text-base">(여기에 그림)</span>
           </div>
         )}
-        <p className="text-xl leading-relaxed">{wrapDictionaryTerms(body, terms)}</p>
-        <button
-          onClick={() => speak(body)}
-          className="mt-4 px-4 py-3 rounded font-semibold text-white"
-          style={{ background: theme.accent }}
-        >🔊 읽어줘</button>
+        <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
+        <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
+          🔊 읽어줘
+        </Button>
       </div>
     );
   }
@@ -133,7 +132,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     const data = currentStep.data as { questions: OXQuestion[] };
     return (
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold mb-2" style={{ color: theme.accent }}>같이 풀어봐요!</h2>
+        <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>같이 풀어봐요!</h2>
         <OXGame questions={data.questions} onComplete={handleNext} />
       </div>
     );
@@ -143,7 +142,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     const data = currentStep.data as { question: string; choices: CardChoice[] };
     return (
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold mb-2" style={{ color: theme.accent }}>골라봐요!</h2>
+        <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>골라봐요!</h2>
         <CardPick question={data.question} choices={data.choices} onComplete={handleNext} />
       </div>
     );
@@ -153,7 +152,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     const data = currentStep.data as { pairs: MatchingPair[] };
     return (
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold mb-2" style={{ color: theme.accent }}>짝을 맞춰봐요!</h2>
+        <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>짝을 맞춰봐요!</h2>
         <Matching pairs={data.pairs} onComplete={handleNext} />
       </div>
     );
@@ -163,7 +162,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     const data = currentStep.data as { instruction: string; items: SequenceItem[] };
     return (
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold mb-2" style={{ color: theme.accent }}>순서대로 눌러봐요!</h2>
+        <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>순서대로 눌러봐요!</h2>
         <Sequence instruction={data.instruction} items={data.items} onComplete={handleNext} />
       </div>
     );
@@ -173,17 +172,19 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     const data = currentStep.data as { prompt: string; userInput: string; aiResponse: string };
     return (
       <div className="max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold mb-4" style={{ color: theme.accent }}>AI랑 이야기해봐요</h2>
+        <h2 className="t-h2 mb-4" style={{ color: theme.accent }}>AI랑 이야기해봐요</h2>
         <p className="text-lg mb-4">{data.prompt}</p>
         {!simRevealed ? (
-          <button
+          <Button
+            variant="choice"
+            accent={theme.accent}
             onClick={() => { setSimRevealed(true); speak(data.aiResponse); }}
-            className="px-6 py-4 rounded-lg border-4 text-xl font-bold"
-            style={{ borderColor: theme.accent, color: theme.accent, background: theme.accentSoft }}
-          >💬 "{data.userInput}" 보내기</button>
+            className="px-6 text-xl font-bold"
+            style={{ color: theme.accent, background: theme.accentSoft }}
+          >💬 "{data.userInput}" 보내기</Button>
         ) : (
           <div className="space-y-3">
-            <div className="p-3 rounded bg-gray-100 text-right">내가: {data.userInput}</div>
+            <div className="p-3 rounded-[var(--r-sm)] bg-[color:var(--paper-2)] text-right">내가: {data.userInput}</div>
             <SpeechBubble
               speaker="aimi"
               expression="cheer"
@@ -222,7 +223,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     return (
       <div className="max-w-2xl mx-auto text-center py-8">
         <div className="text-5xl mb-4" aria-hidden>🌟</div>
-        <h2 className="text-2xl font-bold mb-4" style={{ color: theme.accent }}>오늘 배운 것</h2>
+        <h2 className="t-h2 mb-4" style={{ color: theme.accent }}>오늘 배운 것</h2>
         <p className="text-xl leading-relaxed mb-6">{wrapUpText}</p>
         {story && (
           <div className="text-left max-w-md mx-auto mb-6">
@@ -237,16 +238,12 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           </div>
         )}
         <div className="flex flex-col items-center gap-3">
-          <button
-            onClick={() => speak(wrapUpText)}
-            className="px-4 py-3 rounded font-semibold border-2"
-            style={{ borderColor: theme.accent, color: theme.accent }}
-          >🔊 읽어줘</button>
-          <button
-            onClick={handleNext}
-            className="px-8 py-4 rounded-lg text-xl font-bold text-white"
-            style={{ background: theme.accent }}
-          >🎉 다 했어요!</button>
+          <Button variant="secondary" accent={theme.accent} onClick={() => speak(wrapUpText)}>
+            🔊 읽어줘
+          </Button>
+          <Button size="lg" accent={theme.accent} onClick={handleNext} className="text-xl">
+            🎉 다 했어요!
+          </Button>
         </div>
       </div>
     );
@@ -329,13 +326,9 @@ function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps)
         <p className="text-lg text-[color:var(--muted)] mb-8">
           이 차시는 아직 준비 중이에요. 첫 번째 차시부터 시작해봐요.
         </p>
-        <button
-          onClick={() => onPickLesson('m1-l1')}
-          className="px-6 py-3 rounded-lg text-lg font-bold text-white"
-          style={{ background: theme.accent }}
-        >
+        <Button size="lg" accent={theme.accent} onClick={() => onPickLesson('m1-l1')}>
           🚀 첫 차시로 가기
-        </button>
+        </Button>
       </div>
     </MicroLessonFrame>
   );

@@ -3,6 +3,7 @@ import { isTeacherSessionActive, tryUnlock, logout } from '../utils/teacherMode'
 import { getApiKey, setApiKey, clearApiKey, maskApiKey } from '../utils/apiKey';
 import { askGemini, GeminiError, MODEL_FALLBACK } from '../utils/gemini';
 import ErrorMessage from '../components/ErrorMessage';
+import Button from '../components/Button';
 import { ALL_LESSONS } from '../data/lessons';
 import { MODULES, lessonIdsForModule } from '../data/modules';
 import { loadProgress } from '../utils/storage';
@@ -29,27 +30,21 @@ export default function TeacherView({ onExit }: Props) {
   if (!active) {
     return (
       <main className="min-h-screen flex items-center justify-center px-6">
-        <form onSubmit={handleUnlock} className="max-w-sm w-full bg-white p-8 rounded-lg shadow border">
+        <form onSubmit={handleUnlock} className="max-w-sm w-full card border border-[color:var(--border)] p-8">
           <h1 className="text-2xl font-bold mb-4">교사 모드</h1>
           <label className="block mb-2 font-semibold">비밀번호</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 border-2 rounded mb-4"
+            className="w-full p-3 border-2 border-[color:var(--border)] rounded-[var(--r-sm)] mb-4"
             autoFocus
           />
           {error && <p className="text-red-700 mb-3">{error}</p>}
-          <button
-            type="submit"
-            className="w-full px-4 py-3 rounded font-semibold text-white"
-            style={{ background: 'var(--accent)' }}
-          >들어가기</button>
-          <button
-            type="button"
-            onClick={onExit}
-            className="w-full mt-2 px-4 py-2 text-[color:var(--muted)]"
-          >학생 화면으로 돌아가기</button>
+          <Button type="submit" className="w-full">들어가기</Button>
+          <Button type="button" variant="ghost" onClick={onExit} className="w-full mt-2">
+            학생 화면으로 돌아가기
+          </Button>
         </form>
       </main>
     );
@@ -60,14 +55,10 @@ export default function TeacherView({ onExit }: Props) {
       <header className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">교사 화면</h1>
         <div className="flex gap-2">
-          <button
-            onClick={onExit}
-            className="px-4 py-2 rounded border-2 font-semibold"
-            style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
-          >학생 화면으로</button>
+          <Button variant="secondary" onClick={onExit}>학생 화면으로</Button>
           <button
             onClick={() => { logout(); setActive(false); }}
-            className="px-4 py-2 rounded border-2 font-semibold text-red-700 border-red-300"
+            className="btn px-4 text-red-700 border-red-300 bg-[color:var(--paper-0)]"
           >로그아웃</button>
         </div>
       </header>
@@ -91,7 +82,7 @@ function ProgressPanel() {
   const pct = totalLessons === 0 ? 0 : Math.round((totalDone / totalLessons) * 100);
 
   return (
-    <section className="p-6 bg-white rounded-lg border mb-6">
+    <section className="p-6 card border border-[color:var(--border)] mb-6">
       <h2 className="text-xl font-bold mb-2">학생 진도 (이 기기 기준)</h2>
       <p className="text-sm text-[color:var(--muted)] mb-4">
         진도는 이 브라우저의 localStorage에만 저장돼요. 다른 컴퓨터의 진도는 여기 보이지 않아요.
@@ -117,7 +108,7 @@ function ProgressPanel() {
 /** 차시별 학습목표·성취기준 열람 — 교사용. 학생 화면에는 노출되지 않는다. */
 function ObjectivesPanel() {
   return (
-    <section className="p-6 bg-white rounded-lg border mb-6">
+    <section className="p-6 card border border-[color:var(--border)] mb-6">
       <h2 className="text-xl font-bold mb-2">차시별 학습목표 · 성취기준</h2>
       <p className="text-sm text-[color:var(--muted)] mb-4">
         성취기준은 2022 개정 특수교육 기본교육과정 기준이에요. 모듈을 눌러 펼쳐보세요.
@@ -126,7 +117,7 @@ function ObjectivesPanel() {
         const lessons = ALL_LESSONS.filter(l => l.moduleId === m.id);
         return (
           <details key={m.id} className="mb-2 border rounded">
-            <summary className="cursor-pointer p-3 font-semibold bg-gray-50">
+            <summary className="cursor-pointer p-3 font-semibold bg-[color:var(--paper-1)]">
               모듈 {m.number}. {m.title} ({lessons.length}/{m.lessonCount}차시 구현)
             </summary>
             <div className="p-3 space-y-3">
@@ -197,7 +188,7 @@ function ApiKeyPanel() {
   }
 
   return (
-    <section className="p-6 bg-white rounded-lg border mb-6">
+    <section className="p-6 card border border-[color:var(--border)] mb-6">
       <h2 className="text-xl font-bold mb-2">Gemini API 키</h2>
       <p className="text-sm text-[color:var(--muted)] mb-4">
         키는 이 브라우저의 localStorage에만 저장돼요. 다른 사람 컴퓨터에서는 사용되지 않아요.
@@ -221,26 +212,18 @@ function ApiKeyPanel() {
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         placeholder="Gemini API 키 붙여넣기"
-        className="w-full p-3 border-2 rounded mb-3 font-mono text-sm"
+        className="w-full p-3 border-2 border-[color:var(--border)] rounded-[var(--r-sm)] mb-3 font-mono text-sm"
       />
       <div className="flex gap-2 mb-4">
-        <button
-          onClick={handleSave}
-          disabled={draft.trim().length === 0}
-          className="px-4 py-2 rounded font-semibold text-white disabled:opacity-40"
-          style={{ background: 'var(--accent)' }}
-        >저장</button>
+        <Button onClick={handleSave} disabled={draft.trim().length === 0}>저장</Button>
         <button
           onClick={handleClear}
           disabled={!saved}
-          className="px-4 py-2 rounded border-2 font-semibold text-red-700 border-red-300 disabled:opacity-40"
+          className="btn px-4 text-red-700 border-red-300 bg-[color:var(--paper-0)]"
         >지우기</button>
-        <button
-          onClick={handleTest}
-          disabled={!saved || testing}
-          className="ml-auto px-4 py-2 rounded font-semibold border-2 disabled:opacity-40"
-          style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
-        >{testing ? '호출 중…' : '테스트 호출'}</button>
+        <Button variant="secondary" onClick={handleTest} disabled={!saved || testing} className="ml-auto">
+          {testing ? '호출 중…' : '테스트 호출'}
+        </Button>
       </div>
 
       {testResult && (

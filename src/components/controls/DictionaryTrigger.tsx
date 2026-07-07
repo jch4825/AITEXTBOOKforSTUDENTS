@@ -6,8 +6,8 @@ export default function DictionaryTrigger({ onClick }: Props) {
   return (
     <button
       onClick={onClick}
-      className="h-12 px-3 md:px-4 rounded border-2 font-semibold bg-white"
-      style={{ borderColor: 'var(--accent)', color: 'var(--fg)' }}
+      className="btn btn-secondary px-3 md:px-4"
+      style={{ color: 'var(--fg)' }}
       title="쉬운 사전 열기"
       aria-label="쉬운 사전 열기"
     >📖<span className="hidden sm:inline"> 사전</span></button>
