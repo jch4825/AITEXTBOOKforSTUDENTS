@@ -65,17 +65,30 @@ export default function Stage({
     <section className={`story-fade-in ${className}`} aria-label="차시 장면">
       <div style={{ background: accentSoft }}>
         <div className="max-w-5xl mx-auto px-4 md:px-8 pt-6 md:pt-10 pb-2 md:pb-4 grid gap-5 lg:gap-8 lg:grid-cols-5 items-center">
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-2">
             {!imgMissing ? (
-              /* 장면 그림 — 이야기 텍스트가 내용을 전달하므로 장식 이미지로 처리 */
-              <img
-                src={candidates[srcIdx]}
-                alt=""
-                aria-hidden
-                onError={() => setSrcIdx(i => i + 1)}
-                className="w-full aspect-video object-cover rounded-[var(--r-lg)]"
+              /* 장면 그림 — 원본이 정사각(1024²)이라 프레임도 정사각으로 맞춰 잘림·여백 없이 채운다.
+                 크기는 max-w로 제한해 히어로가 과하게 커지지 않게 한다. 혹시 비정사각 그림이
+                 들어와도 contain으로 전체를 보여주고 남는 여백은 확대·블러 배경이 채운다. */
+              <div
+                className="relative w-full max-w-[420px] mx-auto aspect-square rounded-[var(--r-lg)] overflow-hidden"
                 style={{ boxShadow: 'var(--e-2)' }}
-              />
+              >
+                <img
+                  src={candidates[srcIdx]}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ filter: 'blur(24px)', transform: 'scale(1.12)' }}
+                />
+                <img
+                  src={candidates[srcIdx]}
+                  alt=""
+                  aria-hidden
+                  onError={() => setSrcIdx(i => i + 1)}
+                  className="absolute inset-0 w-full h-full object-contain"
+                />
+              </div>
             ) : (
               <div className="flex justify-center items-end -space-x-4 py-6" aria-hidden>
                 {scene.map(id => (
@@ -86,7 +99,7 @@ export default function Stage({
               </div>
             )}
           </div>
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             {episodeTitle && (
               <p className="t-label mb-2 inline-flex items-center gap-1.5" style={{ color: accentText ?? accent }}><Icon name="book" size={16} /> {episodeTitle}</p>
             )}
