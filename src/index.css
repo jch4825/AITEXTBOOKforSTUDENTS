@@ -120,9 +120,26 @@
   }
   .stamp-in { animation: stamp-in 250ms ease-out; }
 
+  /* 아이미 시그니처 모먼트 — "진짜 AI가 답한" 순간에만 brand-glow 1회 (§4.3).
+     sim-ai·준비된 답변에는 절대 쓰지 않는다: 이 색은 실제 AI 응답에 예약됨. */
+  @keyframes ai-glow {
+    0% { box-shadow: 0 0 0 0 rgba(79, 195, 232, 0); }
+    40% { box-shadow: 0 0 0 4px rgba(79, 195, 232, 0.45); }
+    100% { box-shadow: 0 0 0 0 rgba(79, 195, 232, 0); }
+  }
+  .ai-glow { animation: ai-glow 700ms ease-out 1; }
+  @keyframes ai-glow-avatar {
+    0% { filter: none; }
+    40% { filter: drop-shadow(0 0 6px rgba(79, 195, 232, 0.8)); }
+    100% { filter: none; }
+  }
+  .ai-glow-avatar { animation: ai-glow-avatar 700ms ease-out 1; }
+
   @media (prefers-reduced-motion: reduce) {
     .story-fade-in { animation: none; }
     .stamp-in { animation: none; }
+    .ai-glow { animation: none; }
+    .ai-glow-avatar { animation: none; }
   }
 }
 

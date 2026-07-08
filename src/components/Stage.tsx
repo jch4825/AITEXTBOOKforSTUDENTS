@@ -28,11 +28,16 @@ export default function Stage({
   accent, accentText, accentSoft, className = '',
 }: Props) {
   const { speak } = useSpeak();
-  const [imgMissing, setImgMissing] = useState(false);
-  const imgSrc = `${import.meta.env.BASE_URL}lessons/${lessonId}.png`;
+  // 장면 그림 후보 체인: webp(경량, 전 차시 존재) → png(원본) → 아바타 폴백
+  const candidates = [
+    `${import.meta.env.BASE_URL}lessons/${lessonId}.webp`,
+    `${import.meta.env.BASE_URL}lessons/${lessonId}.png`,
+  ];
+  const [srcIdx, setSrcIdx] = useState(0);
+  const imgMissing = srcIdx >= candidates.length;
 
   // 차시 이동 시 이미지 존재 여부를 다시 판단한다.
-  useEffect(() => { setImgMissing(false); }, [lessonId]);
+  useEffect(() => { setSrcIdx(0); }, [lessonId]);
 
   return (
     <section className={`story-fade-in ${className}`} aria-label="차시 장면">
@@ -42,10 +47,10 @@ export default function Stage({
             {!imgMissing ? (
               /* 장면 그림 — 이야기 텍스트가 내용을 전달하므로 장식 이미지로 처리 */
               <img
-                src={imgSrc}
+                src={candidates[srcIdx]}
                 alt=""
                 aria-hidden
-                onError={() => setImgMissing(true)}
+                onError={() => setSrcIdx(i => i + 1)}
                 className="w-full aspect-video object-cover rounded-[var(--r-lg)]"
                 style={{ boxShadow: 'var(--e-2)' }}
               />

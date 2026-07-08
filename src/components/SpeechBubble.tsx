@@ -14,6 +14,8 @@ interface Props {
   accentSoft?: string;  // 말풍선 배경
   showSpeakButton?: boolean;
   avatarSize?: number;
+  /** 아이미 시그니처 모먼트 (§4.3) — "진짜 AI 응답"에만 true. sim-ai·준비된 답변 금지 */
+  aiGlow?: boolean;
 }
 
 /**
@@ -29,13 +31,14 @@ export default function SpeechBubble({
   accentSoft = 'var(--paper-2)',
   showSpeakButton = false,
   avatarSize = 52,
+  aiGlow = false,
 }: Props) {
   const meta = CHARACTERS[speaker];
   const { speak } = useSpeak();
 
   return (
     <div className="flex items-start gap-3 story-fade-in">
-      <div className="shrink-0">
+      <div className={`shrink-0 ${aiGlow ? 'ai-glow-avatar' : ''}`}>
         <CharacterAvatar character={speaker} expression={expression} size={avatarSize} />
       </div>
       <div className="relative flex-1 min-w-0">
@@ -45,7 +48,7 @@ export default function SpeechBubble({
           style={{ background: accentSoft }}
           aria-hidden
         />
-        <div className="rounded-[var(--r-md)] px-4 py-3" style={{ background: accentSoft }}>
+        <div className={`rounded-[var(--r-md)] px-4 py-3 ${aiGlow ? 'ai-glow' : ''}`} style={{ background: accentSoft }}>
           <p className="t-label mb-1" style={{ color: accentText ?? accent }}>{meta.shortName}</p>
           <p className="text-lg leading-relaxed">{text}</p>
           {showSpeakButton && (

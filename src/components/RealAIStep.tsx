@@ -109,6 +109,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
           <div className="p-3 rounded-[var(--r-sm)] bg-[color:var(--paper-2)] text-right">내가: {state.sent}</div>
 
           {state.kind === 'success' ? (
+            /* 진짜 AI가 답한 순간 — 시그니처 글로우 1회 (준비된 답변에는 없음) */
             <SpeechBubble
               speaker="aimi"
               expression="cheer"
@@ -117,6 +118,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
               accentText={accentText}
               accentSoft={accentSoft}
               showSpeakButton
+              aiGlow
             />
           ) : (
             <>
