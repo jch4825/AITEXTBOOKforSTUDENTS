@@ -16,16 +16,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 디자인 업그레이드 플랜: `docs/design-upgrade-plan.md` (D1~D5 로드맵)
 차시별 이미지·영상 생성 프롬프트: `docs/asset-prompts/` (Gemini용, 68차시 전량 — 말풍선은 항상 공란 규칙)
 
-현재 마일스톤: **콘텐츠 전량 완료 (68/68차시) + 캐릭터·스토리 레이어 + 디자인 감사 수정 12건 배포 완료** —
+현재 마일스톤: **콘텐츠 전량 완료 (68/68차시) + 캐릭터·스토리 레이어 + 디자인 D1~D3 배포 완료** —
 "AI 동아리" 4인 캐스트(강진우·서윤아·박민준쌤·아이미)가 사회상황이야기 방식으로 전 차시를 관통.
-디자인 스코어 C- → B (2026-07-07 감사·수정·재검증, 라이브 배포됨).
+디자인 스코어 C- → B(D0 감사) → **B+(D2 재감사, 2026-07-08)**, 라이브 배포됨.
 
-## 다음 할 일 (2026-07-07 오후 세션 — D1 완료 시점)
+## 다음 할 일 (2026-07-08 세션 — D3 완료 시점)
 
-1. **에셋 생성 (사용자 작업, 진행 중)** — `public/lessons/`에 이미지 17/68장 확보됨 (m1 전체 등).
+1. **에셋 생성 (사용자 작업, 진행 중)** — `public/lessons/`에 이미지 **51/68장** 확보됨.
    캐릭터 설정 자료집 4종은 `docs/character-sheets/{id}-sheet.png`로 정리 완료 — 생성 시 첨부 필수.
    말풍선 공란 규칙 준수. 영상은 `public/lessons/{차시ID}.mp4`.
    캐릭터 표정별 컷도 확보 시: `public/characters/{id}-{expression}.png` (512px, 투명배경).
+   Stage가 id로 자동 연결하므로 이미지 추가·커밋만 하면 코드 수정 없이 반영됨.
 2. ~~**D1 — 토큰 v2**~~ **완료 (2026-07-07)** — index.css 토큰 v2(브랜드 잉크 `#2B3A55`로 --accent 전환,
    warm-gray 종이 뉴트럴, 타이포·radius·elevation·모션 토큰) + 종이 질감(2% SVG 노이즈) +
    버튼 4종 체계(`.btn-primary/secondary/ghost/choice` + `Button.tsx`) + accentSoft 솔리드 파스텔 재정의.
@@ -35,10 +36,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    수정 없이 반영됨). LessonView "무대 위→책상 위" 2단, 게임 4종 paper-0 카드화, 프레임 h-screen
    전환(푸터 상시 노출·사이드바/본문 내부 스크롤), 히어로 2단은 lg(1024px+)에서만·태블릿은 스택.
    StoryIntroCard는 Stage로 대체·삭제. **영상(mp4) 연결은 에셋 확보 후** (Stage에 추가 예정).
-4. **D3~D5 (다음 작업 = D3)** — 이모지→커스텀 아이콘 세트, 배움 도장판(진도 시각화 v2), 캐릭터
-   SVG→일러스트 교체 (`CharacterAvatar.tsx` 한 곳만 수정). 각 단계 후 design-review 재감사
-   (목표: D2 후 B+, D4 후 A-, D5 후 A). *D2 후 재감사 아직 미실시.*
-5. **교사 베타 검토 (M8 게이트)** — 실사용 교사 1~2명. 라이브: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
+4. ~~**D3 — 커스텀 아이콘**~~ **완료 (2026-07-08)** — `Icon.tsx`(UI 글리프 22종, Lucide 스타일
+   자체 SVG·currentColor·CDN 없음) + `ModuleIcon.tsx`(모듈 미니 일러스트 6종: 새싹/말풍선/책더미/
+   방패/퍼즐/집, 모듈 accent색). UI 크롬 이모지 전량 교체 (O/X 정답표도 자체 도형화 — OS 편차 제거,
+   색+아이콘+TTS 3중 피드백 유지). 콘텐츠 텍스트 이모지(프롬프트 🎤)·관리자 TeacherView는 유지.
+   `moduleThemes.emoji` 필드는 이제 미사용(레거시 fallback으로만 잔존).
+5. **D4~D5 (다음 작업 = D4)** — 배움 도장판(진도 시각화 v2: 사이드바 점→도장, 정리 화면 스탬프,
+   Home 배지 선반), 캐릭터 SVG→일러스트 교체 (`CharacterAvatar.tsx` 한 곳만 수정, 에셋 의존).
+   각 단계 후 design-review 재감사 (목표: D4 후 A-, D5 후 A). 현재 B+.
+6. **교사 베타 검토 (M8 게이트)** — 실사용 교사 1~2명. 라이브: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
 
 ## Commands
 
@@ -88,6 +94,8 @@ src/
 │   ├── SpeechBubble.tsx          — 캐릭터 말풍선 (이름표 + TTS)
 │   ├── Button.tsx                — 버튼 4종 체계 (primary/secondary/ghost/choice, 토큰 v2)
 │   ├── Stage.tsx                 — 차시 도입 전폭 히어로 (public/lessons/{id}.png 연결, 아바타 폴백)
+│   ├── Icon.tsx                  — UI 글리프 22종 (자체 SVG, currentColor) — UI 아이콘 단일 지점
+│   ├── ModuleIcon.tsx            — 모듈 미니 일러스트 6종 (모듈 accent색)
 │   ├── controls/                 — TTS/FontSize/Difficulty/DictionaryTrigger
 │   └── games/                    — OXGame, CardPick, Matching, Sequence
 ├── context/
