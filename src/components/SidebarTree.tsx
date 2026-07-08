@@ -1,11 +1,12 @@
-import { MODULES, lessonIdsForModule } from '../data/modules';
+import { useEffect, useState } from 'react';
+import { MODULES, lessonIdsForModule, moduleIdFromLessonId } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import { useProgress } from '../context/ProgressContext';
 import { getLesson } from '../data/lessons';
 import { hasApiKey } from '../utils/apiKey';
 import ModuleIcon from './ModuleIcon';
 import Icon from './Icon';
-import type { LessonId } from '../types';
+import type { LessonId, ModuleId } from '../types';
 
 /** ?teacher=1 로 이동 — base path를 유지한 채 교사 모드(비번 게이트)로 진입한다. */
 function goTeacherMode() {
@@ -22,67 +23,102 @@ interface Props {
 export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
   const { isCompleted } = useProgress();
   const aiConnected = hasApiKey();
+  const currentModule = currentLessonId ? moduleIdFromLessonId(currentLessonId) : null;
+
+  // 정보 과부하 방지 — 기본은 "지금 차시의 모듈"만 펼치고 나머지는 접어 둔다.
+  const [openModules, setOpenModules] = useState<Set<ModuleId>>(
+    () => new Set(currentModule ? [currentModule] : ['m1']),
+  );
+
+  // 다른 차시로 이동하면 그 모듈을 펼쳐 준다 (다른 모듈은 접힌 상태 유지).
+  useEffect(() => {
+    if (currentModule) setOpenModules(s => (s.has(currentModule) ? s : new Set(s).add(currentModule)));
+  }, [currentModule]);
+
+  function toggle(id: ModuleId) {
+    setOpenModules(s => {
+      const n = new Set(s);
+      n.has(id) ? n.delete(id) : n.add(id);
+      return n;
+    });
+  }
 
   return (
     <nav className="w-64 shrink-0 md:h-full md:border-r border-[color:var(--border)] bg-[color:var(--paper-0)] p-4 md:overflow-y-auto md:flex md:flex-col">
-      <div className="md:flex-1">
+      <div className="md:flex-1 space-y-1.5">
       {MODULES.map(mod => {
         const theme = themeFor(mod.id);
         const lessons = lessonIdsForModule(mod.id);
         const doneInModule = lessons.filter(isCompleted).length;
+        const moduleDone = doneInModule === lessons.length && lessons.length > 0;
+        const isOpen = openModules.has(mod.id);
         return (
-          <section key={mod.id} className="mb-5">
-            <h3 className="t-label mb-2 flex items-center gap-1.5" style={{ color: theme.accentText }}>
+          <section key={mod.id}>
+            {/* 모듈 헤더 — 누르면 아래 도장판이 접혔다 펼쳐진다 (정보량 축소) */}
+            <button
+              onClick={() => toggle(mod.id)}
+              aria-expanded={isOpen}
+              className="w-full text-left rounded-[var(--r-sm)] px-1.5 py-1.5 flex items-center gap-1.5 hover:bg-[color:var(--paper-2)]"
+              style={{ color: theme.accentText }}
+            >
               <ModuleIcon moduleId={mod.id} size={20} />
-              <span>모듈 {mod.number}. {mod.title}</span>
+              <span className="t-label truncate">모듈 {mod.number}. {mod.title}</span>
               <span
-                className="ml-auto text-xs font-semibold text-[color:var(--muted)] nums inline-flex items-center gap-1"
-                aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료${doneInModule === lessons.length ? ' — 모듈 완주!' : ''}`}
+                className="ml-auto text-xs font-semibold text-[color:var(--muted)] nums inline-flex items-center gap-1 shrink-0"
+                aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료${moduleDone ? ' — 모듈 완주!' : ''}`}
               >
-                {doneInModule === lessons.length && lessons.length > 0 && (
-                  <Icon name="star" size={13} filled color={theme.accent} />
-                )}
+                {moduleDone && <Icon name="star" size={13} filled color={theme.accent} />}
                 {doneInModule}/{lessons.length}
               </span>
-            </h3>
-            {/* 도장판 — 완료한 차시마다 모듈색 별 도장이 찍힌다 (§4.2) */}
-            <ul className="flex flex-wrap">
-              {lessons.map((lid, i) => {
-                const done = isCompleted(lid);
-                const current = lid === currentLessonId;
-                const title = getLesson(lid)?.title;
-                const label =
-                  `${i + 1}차시${title ? `. ${title}` : ''}` +
-                  (done ? ' (완료)' : '') +
-                  (current ? ' — 지금 보는 중' : '');
-                return (
-                  <li key={lid}>
-                    {/* 히트 영역 32px — 도장/빈 칸은 그 안에 */}
-                    <button
-                      onClick={() => onPickLesson(lid)}
-                      title={label}
-                      aria-label={label}
-                      aria-current={current ? 'page' : undefined}
-                      className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
-                      style={current ? { outline: `2px solid ${theme.accent}`, outlineOffset: '-2px' } : undefined}
-                    >
-                      {done ? (
-                        <Icon name="star" size={18} filled color={theme.accent} />
-                      ) : (
-                        <span
-                          aria-hidden
-                          className="h-4 w-4 rounded-full border-2 block"
-                          style={{
-                            background: current ? theme.accentSoft : 'var(--paper-0)',
-                            borderColor: theme.accent,
-                          }}
-                        />
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+              <span
+                aria-hidden
+                className="shrink-0 transition-transform"
+                style={{ transform: isOpen ? 'rotate(90deg)' : 'none', color: theme.accent }}
+              >
+                <Icon name="chevron-right" size={16} />
+              </span>
+            </button>
+
+            {/* 도장판 — 완료한 차시마다 모듈색 별 도장 (§4.2). 접힘 시 숨김 */}
+            {isOpen && (
+              <ul className="flex flex-wrap pl-1 pt-1 pb-2">
+                {lessons.map((lid, i) => {
+                  const done = isCompleted(lid);
+                  const current = lid === currentLessonId;
+                  const title = getLesson(lid)?.title;
+                  const label =
+                    `${i + 1}차시${title ? `. ${title}` : ''}` +
+                    (done ? ' (완료)' : '') +
+                    (current ? ' — 지금 보는 중' : '');
+                  return (
+                    <li key={lid}>
+                      {/* 히트 영역 32px — 도장/빈 칸은 그 안에 */}
+                      <button
+                        onClick={() => onPickLesson(lid)}
+                        title={label}
+                        aria-label={label}
+                        aria-current={current ? 'page' : undefined}
+                        className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
+                        style={current ? { outline: `2px solid ${theme.accent}`, outlineOffset: '-2px' } : undefined}
+                      >
+                        {done ? (
+                          <Icon name="star" size={18} filled color={theme.accent} />
+                        ) : (
+                          <span
+                            aria-hidden
+                            className="h-4 w-4 rounded-full border-2 block"
+                            style={{
+                              background: current ? theme.accentSoft : 'var(--paper-0)',
+                              borderColor: theme.accent,
+                            }}
+                          />
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </section>
         );
       })}

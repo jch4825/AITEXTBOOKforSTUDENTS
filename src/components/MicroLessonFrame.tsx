@@ -19,6 +19,8 @@ interface Props {
   children: ReactNode;
 }
 
+const SIDEBAR_COLLAPSED_KEY = 'ai-students-sidebar-collapsed';
+
 export default function MicroLessonFrame({
   lessonId, crumb, totalSteps, currentStep,
   onPrev, onNext, onPickLesson, onGoHome, children,
@@ -26,6 +28,18 @@ export default function MicroLessonFrame({
   const [dictOpen, setDictOpen] = useState(false);
   const [dictQuery, setDictQuery] = useState<string | null>(null);
   const [navOpen, setNavOpen] = useState(false);
+  // 데스크톱 사이드바 접기(집중 모드) — 선택을 기기에 기억한다.
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(
+    () => { try { return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1'; } catch { return false; } },
+  );
+
+  function toggleSidebar() {
+    setSidebarCollapsed(v => {
+      const next = !v;
+      try { localStorage.setItem(SIDEBAR_COLLAPSED_KEY, next ? '1' : '0'); } catch { /* ignore */ }
+      return next;
+    });
+  }
 
   function openTerm(term: string) {
     setDictQuery(term);
@@ -42,10 +56,36 @@ export default function MicroLessonFrame({
         onOpenNav={() => setNavOpen(true)}
       />
       <div className="flex flex-1 min-h-0">
-        {/* PC: 고정 사이드바 / 모바일: 숨김 (아래 드로어로 대체) */}
-        <div className="hidden md:block self-stretch">
-          <SidebarTree currentLessonId={lessonId} onPickLesson={onPickLesson} />
-        </div>
+        {/* PC: 접을 수 있는 사이드바 / 모바일: 숨김 (아래 드로어로 대체) */}
+        {sidebarCollapsed ? (
+          // 접힘 — 얇은 레일 + 펼치기 버튼 (집중 모드)
+          <div className="hidden md:flex self-stretch w-10 shrink-0 border-r border-[color:var(--border)] bg-[color:var(--paper-0)] flex-col items-center pt-3">
+            <button
+              onClick={toggleSidebar}
+              aria-label="차례 펼치기"
+              aria-expanded={false}
+              title="차례 펼치기"
+              className="h-9 w-9 rounded-[var(--r-sm)] flex items-center justify-center hover:bg-[color:var(--paper-2)]"
+              style={{ color: 'var(--accent)' }}
+            ><Icon name="chevron-right" size={20} /></button>
+          </div>
+        ) : (
+          <div className="hidden md:flex self-stretch flex-col">
+            <div className="flex justify-end px-2 pt-2">
+              <button
+                onClick={toggleSidebar}
+                aria-label="차례 접기"
+                aria-expanded
+                title="차례 접기 (집중 모드)"
+                className="h-9 px-2 rounded-[var(--r-sm)] inline-flex items-center gap-1 text-sm font-semibold hover:bg-[color:var(--paper-2)]"
+                style={{ color: 'var(--muted)' }}
+              ><Icon name="chevron-left" size={18} /> 접기</button>
+            </div>
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <SidebarTree currentLessonId={lessonId} onPickLesson={onPickLesson} />
+            </div>
+          </div>
+        )}
         {navOpen && (
           <div
             className="fixed inset-0 z-40 bg-black/30 md:hidden"
