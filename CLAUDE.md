@@ -16,11 +16,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 디자인 업그레이드 플랜: `docs/design-upgrade-plan.md` (D1~D5 로드맵)
 차시별 이미지·영상 생성 프롬프트: `docs/asset-prompts/` (Gemini용, 68차시 전량 — 말풍선은 항상 공란 규칙)
 
-현재 마일스톤: **콘텐츠 전량 완료 (68/68차시) + 캐릭터·스토리 레이어 + 디자인 D1~D3 배포 완료** —
+현재 마일스톤: **콘텐츠 전량 완료 (68/68차시) + 캐릭터·스토리 레이어 + 디자인 D1~D4 배포 완료** —
 "AI 동아리" 4인 캐스트(강진우·서윤아·박민준쌤·아이미)가 사회상황이야기 방식으로 전 차시를 관통.
-디자인 스코어 C- → B(D0 감사) → **B+(D2 재감사, 2026-07-08)**, 라이브 배포됨.
+디자인 스코어 C- → B(D0 감사) → B+(D2 재감사) → **A-(D4 재감사, 2026-07-08)**, 라이브 배포됨.
 
-## 다음 할 일 (2026-07-08 세션 — D3 완료 시점)
+## 다음 할 일 (2026-07-08 세션 — D4 완료 시점)
 
 1. **에셋 생성 (사용자 작업, 진행 중)** — `public/lessons/`에 이미지 **51/68장** 확보됨.
    캐릭터 설정 자료집 4종은 `docs/character-sheets/{id}-sheet.png`로 정리 완료 — 생성 시 첨부 필수.
@@ -41,10 +41,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
    방패/퍼즐/집, 모듈 accent색). UI 크롬 이모지 전량 교체 (O/X 정답표도 자체 도형화 — OS 편차 제거,
    색+아이콘+TTS 3중 피드백 유지). 콘텐츠 텍스트 이모지(프롬프트 🎤)·관리자 TeacherView는 유지.
    `moduleThemes.emoji` 필드는 이제 미사용(레거시 fallback으로만 잔존).
-5. **D4~D5 (다음 작업 = D4)** — 배움 도장판(진도 시각화 v2: 사이드바 점→도장, 정리 화면 스탬프,
-   Home 배지 선반), 캐릭터 SVG→일러스트 교체 (`CharacterAvatar.tsx` 한 곳만 수정, 에셋 의존).
-   각 단계 후 design-review 재감사 (목표: D4 후 A-, D5 후 A). 현재 B+.
-6. **교사 베타 검토 (M8 게이트)** — 실사용 교사 1~2명. 라이브: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
+5. ~~**D4 — 배움 도장판**~~ **완료 (2026-07-08)** — 사이드바 완료 점→모듈색 별 도장(+모듈 완주 별),
+   정리 화면 88px 도장 메달리온(stamp-in 250ms 1회성, reduced-motion 대응) + "다음 시간: {제목}"
+   예고 한 줄, Home 배지 선반(모듈 완주 시 ModuleIcon 배지 획득, 미획득은 muted). 재감사 **A-** 달성.
+6. **D5 (다음 작업, 에셋 의존)** — 캐릭터 SVG→일러스트 교체 (`CharacterAvatar.tsx` 한 곳만 수정,
+   `public/characters/{id}-{expression}.png` 확보 필요) + 아이미 시그니처 모먼트(brand-glow, real-ai
+   응답 순간에만). 목표: D5 후 A. 영상(mp4) Stage 연결도 에셋 오는 대로.
+7. **교사 베타 검토 (M8 게이트)** — 실사용 교사 1~2명. 라이브: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
 
 ## Commands
 
