@@ -64,6 +64,14 @@
 
   html {
     background: var(--bg);
+    /* 글자 크기 스케일 (접근성) — 루트 font-size를 키우면 rem 기반인 모든 본문
+       (Tailwind text-*, t-* 토큰)이 비례 확대된다. body만 바꾸면 본문에 닿지
+       않는다: 유틸리티는 :root 기준 rem으로 크기가 고정되기 때문. 아이콘·이미지는
+       px라서 그대로 유지된다. [data-font-size]는 SettingsContext가 <html>에 부여. */
+    font-size: 100%;              /* 보통: 16px 기준 */
+  }
+  html[data-font-size="large"] {
+    font-size: 125%;              /* 크게: 20px 기준 → 모든 rem 텍스트 +25% */
   }
 
   html, body, #root {
@@ -74,6 +82,9 @@
     color: var(--fg);
     line-height: var(--leading);
   }
+
+  /* 본문 기본 텍스트 크기 — rem이므로 루트 스케일을 따라간다 */
+  body { font-size: var(--font-base); }
 
   /* 종이 질감 — paper-1 위 2% 노이즈 (§4.5). #root는 투명해야 질감이 비친다 */
   body {
