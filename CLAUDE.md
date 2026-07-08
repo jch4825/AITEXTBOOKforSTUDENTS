@@ -80,12 +80,18 @@ real-ai 차시(10차시)에서 사용. 키가 없으면 각 차시의 `fallbackR
 
 ```
 src/
-├── App.tsx                       — URL 기반 라우터 (home / lesson / teacher)
+├── App.tsx                       — URL 기반 라우터 (home / contents / lesson / teacher)
+│                                   흐름: 프론트(Home) → 목차(Contents) → 차시(Lesson).
+│                                   차시의 홈 버튼·완료는 목차로 복귀(허브). ?contents=1
 ├── main.tsx                      — React 19 + Settings/Progress Provider 래핑
 ├── index.css                     — Pretendard, CSS 변수, 접근성 베이스
+│                                   글자 크기 토글은 <html> font-size 스케일(100→125%)
+│                                   — rem 기반 본문이 비례 확대됨(body만 바꾸면 안 닿음)
 ├── types.ts                      — Difficulty, FontSize, DictionaryEntry, LessonContent 등
 ├── views/
-│   ├── Home.tsx                  — 단일 CTA + 전역 진도 카운트
+│   ├── Home.tsx                  — 프론트(환영) 페이지: 캐릭터·배지 선반, CTA→목차
+│   ├── ContentsView.tsx          — 목차(차례): 링크 도서관 아코디언(모듈→차시 하이퍼링크)
+│   │                               + 상단 큰 "이어서 하기". 차시별 한 줄=wrapUpEasy
 │   ├── LessonView.tsx            — 차시 렌더 + 정리(wrap-up) 가상 최종 단계
 │   └── TeacherView.tsx           — ?teacher=1 + 비번 게이트 — API 키·진도·학습목표 패널
 ├── components/
