@@ -35,10 +35,17 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
             <h3 className="t-label mb-2 flex items-center gap-1.5" style={{ color: theme.accentText }}>
               <ModuleIcon moduleId={mod.id} size={20} />
               <span>모듈 {mod.number}. {mod.title}</span>
-              <span className="ml-auto text-xs font-semibold text-[color:var(--muted)]" aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료`}>
+              <span
+                className="ml-auto text-xs font-semibold text-[color:var(--muted)] nums inline-flex items-center gap-1"
+                aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료${doneInModule === lessons.length ? ' — 모듈 완주!' : ''}`}
+              >
+                {doneInModule === lessons.length && lessons.length > 0 && (
+                  <Icon name="star" size={13} filled color={theme.accent} />
+                )}
                 {doneInModule}/{lessons.length}
               </span>
             </h3>
+            {/* 도장판 — 완료한 차시마다 모듈색 별 도장이 찍힌다 (§4.2) */}
             <ul className="flex flex-wrap">
               {lessons.map((lid, i) => {
                 const done = isCompleted(lid);
@@ -50,24 +57,27 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                   (current ? ' — 지금 보는 중' : '');
                 return (
                   <li key={lid}>
-                    {/* 히트 영역 32px — 시각적 점은 그 안의 16px */}
+                    {/* 히트 영역 32px — 도장/빈 칸은 그 안에 */}
                     <button
                       onClick={() => onPickLesson(lid)}
                       title={label}
                       aria-label={label}
                       aria-current={current ? 'page' : undefined}
                       className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
+                      style={current ? { outline: `2px solid ${theme.accent}`, outlineOffset: '-2px' } : undefined}
                     >
-                      <span
-                        aria-hidden
-                        className="h-4 w-4 rounded-full border-2 block transition"
-                        style={{
-                          background: done ? theme.accent : current ? theme.accentSoft : 'var(--paper-0)',
-                          borderColor: theme.accent,
-                          outline: current ? `2px solid ${theme.accent}` : 'none',
-                          outlineOffset: '2px',
-                        }}
-                      />
+                      {done ? (
+                        <Icon name="star" size={18} filled color={theme.accent} />
+                      ) : (
+                        <span
+                          aria-hidden
+                          className="h-4 w-4 rounded-full border-2 block"
+                          style={{
+                            background: current ? theme.accentSoft : 'var(--paper-0)',
+                            borderColor: theme.accent,
+                          }}
+                        />
+                      )}
                     </button>
                   </li>
                 );

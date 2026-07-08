@@ -14,10 +14,14 @@ interface Props {
   className?: string;
   title?: string;
   style?: CSSProperties;
+  /** 미획득 배지 등 — 모듈색 대신 회색으로 그린다 */
+  muted?: boolean;
 }
 
-export default function ModuleIcon({ moduleId, size = 24, className, title, style }: Props) {
-  const { accent, accentSoft } = themeFor(moduleId);
+export default function ModuleIcon({ moduleId, size = 24, className, title, style, muted }: Props) {
+  const theme = themeFor(moduleId);
+  const accent = muted ? 'var(--ink-3)' : theme.accent;
+  const accentSoft = muted ? 'var(--paper-2)' : theme.accentSoft;
   const a11y = title
     ? { role: 'img' as const, 'aria-label': title }
     : { 'aria-hidden': true };

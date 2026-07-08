@@ -21,7 +21,7 @@ import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
 import { useSpeak } from '../hooks/useSpeak';
 import { getLesson } from '../data/lessons';
-import { getModule, moduleIdFromLessonId } from '../data/modules';
+import { getModule, moduleIdFromLessonId, MODULES, lessonIdsForModule } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import type { LessonContent, LessonId } from '../types';
 
@@ -246,10 +246,17 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   }
 
   function renderWrapUp() {
+    const next = nextLessonInfo(lesson.id);
     return (
       <div className="max-w-2xl mx-auto text-center py-8">
+        {/* 배움 도장 — 오늘의 별이 찍히는 순간 (1회성 250ms, §4.2) */}
         <div className="flex justify-center mb-4" aria-hidden>
-          <Icon name="star" size={52} filled color={theme.accent} />
+          <span
+            className="stamp-in inline-flex items-center justify-center rounded-full h-[88px] w-[88px]"
+            style={{ background: theme.accentSoft, boxShadow: 'var(--e-1)' }}
+          >
+            <Icon name="star" size={48} filled color={theme.accent} />
+          </span>
         </div>
         <h2 className="t-h2 mb-4" style={{ color: theme.accent }}>오늘 배운 것</h2>
         <p className="text-xl leading-relaxed mb-6">{wrapUpText}</p>
@@ -264,6 +271,11 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
               accentSoft={theme.accentSoft}
             />
           </div>
+        )}
+        {next && (
+          <p className="t-label mb-5 text-[color:var(--muted)]">
+            다음 시간: {next.title}
+          </p>
         )}
         <div className="flex flex-col items-center gap-3">
           <Button variant="secondary" accent={theme.accent} onClick={() => speak(wrapUpText)}>
@@ -321,6 +333,21 @@ function wrapDictionaryTerms(text: string, terms: string[]): ReactNode[] {
 
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * 정리 화면의 "다음 차시 예고" 한 줄 — 전체 차시 순서에서 다음으로 구현된 차시.
+ * (아직 콘텐츠가 없는 차시는 건너뛴다 — "곧 열려요"를 예고하지 않기 위해.)
+ */
+function nextLessonInfo(currentId: LessonId): { id: LessonId; title: string } | null {
+  const all: LessonId[] = MODULES.flatMap(m => lessonIdsForModule(m.id));
+  const idx = all.indexOf(currentId);
+  if (idx < 0) return null;
+  for (let i = idx + 1; i < all.length; i++) {
+    const l = getLesson(all[i]);
+    if (l) return { id: all[i], title: l.title };
+  }
+  return null;
 }
 
 interface ComingSoonProps {
