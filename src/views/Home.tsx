@@ -1,37 +1,19 @@
 import { useProgress } from '../context/ProgressContext';
 import { MODULES, lessonIdsForModule } from '../data/modules';
-import { getLesson } from '../data/lessons';
 import CharacterAvatar from '../components/CharacterAvatar';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 import ModuleIcon from '../components/ModuleIcon';
-import type { LessonId } from '../types';
 
 interface Props {
-  onStart: (lessonId: LessonId) => void;
+  /** 프론트 페이지 → 목차(차례)로 입장 */
+  onEnter: () => void;
 }
 
-/**
- * Order: m1-l1, m1-l2, ..., m6-l12. Only lessons that actually have content
- * (getLesson returns something) are eligible as a "next" target — otherwise
- * the resume button would jump into the "coming soon" placeholder.
- */
-function pickResumeLesson(completed: LessonId[]): LessonId {
-  const done = new Set(completed);
-  for (const mod of MODULES) {
-    for (const lid of lessonIdsForModule(mod.id)) {
-      if (done.has(lid)) continue;
-      if (getLesson(lid)) return lid;
-    }
-  }
-  return 'm1-l1'; // fallback: everything implemented is done, start over
-}
-
-export default function Home({ onStart }: Props) {
+export default function Home({ onEnter }: Props) {
   const { completedLessons } = useProgress();
   const totalLessons = MODULES.reduce((sum, m) => sum + m.lessonCount, 0);
   const doneCount = completedLessons.length;
-  const resumeLesson = pickResumeLesson(completedLessons);
   const isResume = doneCount > 0;
 
   // 배지 선반 — 모듈의 모든 차시를 마치면 그 모듈의 배지를 얻는다 (§4.2)
@@ -84,7 +66,7 @@ export default function Home({ onStart }: Props) {
         </div>
 
         <div>
-        <Button size="lg" onClick={() => onStart(resumeLesson)} className="text-2xl">
+        <Button size="lg" onClick={onEnter} className="text-2xl">
           {isResume
             ? <><Icon name="book" size={26} /> 이어서 하기</>
             : <><Icon name="rocket" size={26} /> 공부 시작!</>}

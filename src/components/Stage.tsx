@@ -28,10 +28,10 @@ export default function Stage({
   accent, accentText, accentSoft, className = '',
 }: Props) {
   const { speak } = useSpeak();
-  // 장면 그림 후보 체인: webp(경량, 전 차시 존재) → png(원본) → 아바타 폴백
+  // 장면 그림 후보 체인: webp(경량, 전 차시 존재) → png(원본, png/ 폴더) → 아바타 폴백
   const candidates = [
     `${import.meta.env.BASE_URL}lessons/${lessonId}.webp`,
-    `${import.meta.env.BASE_URL}lessons/${lessonId}.png`,
+    `${import.meta.env.BASE_URL}lessons/png/${lessonId}.png`,
   ];
   const [srcIdx, setSrcIdx] = useState(0);
   const imgMissing = srcIdx >= candidates.length;
