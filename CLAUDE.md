@@ -16,17 +16,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 디자인 업그레이드 플랜: `docs/design-upgrade-plan.md` (D1~D5 로드맵)
 차시별 이미지·영상 생성 프롬프트: `docs/asset-prompts/` (Gemini용, 68차시 전량 — 말풍선은 항상 공란 규칙)
 
-현재 마일스톤: **콘텐츠 전량 완료 (68/68차시) + 캐릭터·스토리 레이어 + 디자인 D1~D4 배포 완료** —
+현재 마일스톤: **콘텐츠·차시 이미지 전량 완료 (68/68) + 캐릭터·스토리 레이어 + 디자인 D1~D5 배포 완료** —
 "AI 동아리" 4인 캐스트(강진우·서윤아·박민준쌤·아이미)가 사회상황이야기 방식으로 전 차시를 관통.
 디자인 스코어 C- → B(D0 감사) → B+(D2 재감사) → **A-(D4 재감사, 2026-07-08)**, 라이브 배포됨.
+(A 승급은 실제 일러스트 컷 교체 후 재감사 — 아래 1번.)
 
-## 다음 할 일 (2026-07-08 세션 — D4 완료 시점)
+## 다음 할 일 (2026-07-08 세션 — D5 완료 시점)
 
-1. **에셋 생성 (사용자 작업, 진행 중)** — `public/lessons/`에 이미지 **51/68장** 확보됨.
-   캐릭터 설정 자료집 4종은 `docs/character-sheets/{id}-sheet.png`로 정리 완료 — 생성 시 첨부 필수.
-   말풍선 공란 규칙 준수. 영상은 `public/lessons/{차시ID}.mp4`.
-   캐릭터 표정별 컷도 확보 시: `public/characters/{id}-{expression}.png` (512px, 투명배경).
-   Stage가 id로 자동 연결하므로 이미지 추가·커밋만 하면 코드 수정 없이 반영됨.
+1. **에셋 생성 (사용자 작업, 남은 것)** — 차시 이미지는 **68/68 완료** (webp 페어 포함, Stage가
+   webp 우선 서빙). 남은 에셋 두 가지:
+   - **캐릭터 일러스트 컷**: 현재 `public/characters/{id}-{expression}.svg`는 코드 벡터의 추출본
+     (시각 동일). 시트(`docs/character-sheets/`) 첨부해 그림책풍 일러스트 컷을 생성한 뒤
+     `{id}-{expression}.png`(512px 투명)로 넣으면 **png가 svg보다 우선 로드** — 코드 수정 없음.
+     표정 7종: neutral/happy/surprised/thinking/cheer/curious/sleepy.
+   - **영상**: `public/lessons/{차시ID}.mp4` (8초, 저자극) — 확보 시 Stage에 연결 작업 필요.
 2. ~~**D1 — 토큰 v2**~~ **완료 (2026-07-07)** — index.css 토큰 v2(브랜드 잉크 `#2B3A55`로 --accent 전환,
    warm-gray 종이 뉴트럴, 타이포·radius·elevation·모션 토큰) + 종이 질감(2% SVG 노이즈) +
    버튼 4종 체계(`.btn-primary/secondary/ghost/choice` + `Button.tsx`) + accentSoft 솔리드 파스텔 재정의.
@@ -44,9 +47,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 5. ~~**D4 — 배움 도장판**~~ **완료 (2026-07-08)** — 사이드바 완료 점→모듈색 별 도장(+모듈 완주 별),
    정리 화면 88px 도장 메달리온(stamp-in 250ms 1회성, reduced-motion 대응) + "다음 시간: {제목}"
    예고 한 줄, Home 배지 선반(모듈 완주 시 ModuleIcon 배지 획득, 미획득은 muted). 재감사 **A-** 달성.
-6. **D5 (다음 작업, 에셋 의존)** — 캐릭터 SVG→일러스트 교체 (`CharacterAvatar.tsx` 한 곳만 수정,
-   `public/characters/{id}-{expression}.png` 확보 필요) + 아이미 시그니처 모먼트(brand-glow, real-ai
-   응답 순간에만). 목표: D5 후 A. 영상(mp4) Stage 연결도 에셋 오는 대로.
+6. ~~**D5 — 교체점·시그니처**~~ **코드 완료 (2026-07-08)** — `CharacterAvatar` 파일 우선 로딩
+   (png→svg→플레이스홀더, 세션 404 캐시), Stage webp 우선 체인(webp→png→아바타), 아이미
+   시그니처 모먼트(§4.3: real-ai **성공 응답에만** 말풍선+아바타 brand-glow 1회 700ms —
+   sim-ai·준비된 답변엔 절대 금지, reduced-motion 대응). **A 승급은 실제 일러스트 컷(1번) 교체
+   후 재감사로 확정.** 영상 연결은 mp4 확보 시.
 7. **교사 베타 검토 (M8 게이트)** — 실사용 교사 1~2명. 라이브: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
 
 ## Commands
@@ -93,10 +98,11 @@ src/
 │   ├── ErrorMessage.tsx          — 학생 1줄 + 교사 상세 2단
 │   ├── RealAIStep.tsx            — real-ai step 렌더 (아이미 말풍선 + fallback)
 │   ├── MicButton.tsx             — STT 마이크 버튼 (real-ai 자유입력용)
-│   ├── CharacterAvatar.tsx       — 4인 SVG 아바타 (표정 variant) — 캐릭터 비주얼 단일 지점
-│   ├── SpeechBubble.tsx          — 캐릭터 말풍선 (이름표 + TTS)
+│   ├── CharacterAvatar.tsx       — 4인 아바타, 캐릭터 비주얼 단일 지점 — public/characters/
+│   │                               {id}-{expression}.png→.svg→플레이스홀더 3단 폴백 (일러스트는 파일만 교체)
+│   ├── SpeechBubble.tsx          — 캐릭터 말풍선 (이름표 + TTS + aiGlow 시그니처)
 │   ├── Button.tsx                — 버튼 4종 체계 (primary/secondary/ghost/choice, 토큰 v2)
-│   ├── Stage.tsx                 — 차시 도입 전폭 히어로 (public/lessons/{id}.png 연결, 아바타 폴백)
+│   ├── Stage.tsx                 — 차시 도입 전폭 히어로 (lessons/{id}.webp→png→아바타 3단 폴백)
 │   ├── Icon.tsx                  — UI 글리프 22종 (자체 SVG, currentColor) — UI 아이콘 단일 지점
 │   ├── ModuleIcon.tsx            — 모듈 미니 일러스트 6종 (모듈 accent색)
 │   ├── controls/                 — TTS/FontSize/Difficulty/DictionaryTrigger
