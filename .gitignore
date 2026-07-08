@@ -29,3 +29,6 @@ vite.std*.log
 .playwright-mcp/
 .claude/*
 !.claude/launch.json
+
+# 로컬 원본 에셋 라이브러리 (게임 UI 팩·PSD 소스, 1.2GB) — 배포물 아님, 저장소에 부적합
+/assets/
