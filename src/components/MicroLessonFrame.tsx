@@ -56,7 +56,7 @@ export default function MicroLessonFrame({
         onOpenNav={() => setNavOpen(true)}
       />
       <div className="flex flex-1 min-h-0">
-        {/* PC: 접을 수 있는 사이드바 / 모바일: 숨김 (아래 드로어로 대체) */}
+        {/* PC: 접을 수 있는 사이드바 (localStorage: ai-students-sidebar-collapsed) / 모바일: ☰ 드로어 */}
         {sidebarCollapsed ? (
           // 접힘 — 얇은 레일 + 펼치기 버튼 (집중 모드)
           <div className="hidden md:flex self-stretch w-10 shrink-0 border-r border-[color:var(--border)] bg-[color:var(--paper-0)] flex-col items-center pt-3">

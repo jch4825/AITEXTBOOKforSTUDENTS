@@ -96,7 +96,7 @@ src/
 │   └── TeacherView.tsx           — ?teacher=1 + 비번 게이트 — API 키·진도·학습목표 패널
 ├── components/
 │   ├── TopBar.tsx                — 브레드크럼 + TTS/Font/Difficulty/Dict 4토글
-│   ├── SidebarTree.tsx           — 6모듈 68차시 진도 점 트리
+│   ├── SidebarTree.tsx           — 모듈 아코디언 진도 도장판(현재 모듈만 펼침, 정보 과부하 방지)
 │   ├── MicroLessonFrame.tsx      — 3단 PC 레이아웃 골격 + 사전 이벤트 위임
 │   ├── DictionaryPanel.tsx       — 우측 사전 패널 + 검색 + TTS
 │   ├── DictionaryTerm.tsx        — 점선 밑줄 표제어 (data-dict-term 위임)
