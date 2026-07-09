@@ -56,43 +56,43 @@ export default function PecsBoard({ moduleId }: Props) {
   if (expanded) {
     const label = PECS_LABELS[expanded] ?? expanded;
     return (
-      <div className="p-3 w-64">
+      <div className="p-3 w-64 md:w-[480px]">
         <div className="flex items-center justify-between mb-2">
           <button
             onClick={() => setExpanded(null)}
-            className="btn btn-ghost h-9 px-2 text-sm"
+            className="btn btn-ghost h-9 px-2 text-sm md:h-12 md:px-4 md:text-base"
           ><Icon name="chevron-left" size={18} /> 목록</button>
           <button
             onClick={() => printCard(expanded, label)}
-            className="btn btn-secondary h-9 px-3 text-sm"
+            className="btn btn-secondary h-9 px-3 text-sm md:h-12 md:px-4 md:text-base"
             aria-label={`${label} 카드 인쇄`}
           ><Icon name="printer" size={18} /> 인쇄</button>
         </div>
         <div
-          className="rounded-[var(--r-md)] p-3 flex flex-col items-center gap-2"
+          className="rounded-[var(--r-md)] p-3 flex flex-col items-center gap-4 md:p-6"
           style={{ background: 'var(--paper-2)' }}
         >
-          <img src={src(expanded)} alt="" className="w-40 h-40 object-contain" />
-          <span className="text-xl font-bold">{label}</span>
+          <img src={src(expanded)} alt="" className="w-40 h-40 md:w-80 md:h-80 object-contain" />
+          <span className="text-xl font-bold md:text-3xl">{label}</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-3 w-72">
-      <h3 className="text-lg font-bold mb-2" style={{ color: 'var(--accent)' }}>AAC 카드</h3>
-      <div className="grid grid-cols-4 gap-2 max-h-64 overflow-y-auto">
+    <div className="p-3 w-72 md:w-[500px]">
+      <h3 className="text-lg font-bold mb-2 md:text-2xl md:mb-4" style={{ color: 'var(--accent)' }}>AAC 카드</h3>
+      <div className="grid grid-cols-4 gap-2 md:gap-3 max-h-64 md:max-h-[500px] overflow-y-auto">
         {words.map((w) => (
           <button
             key={w}
             onClick={() => setExpanded(w)}
-            className="aspect-square rounded-[var(--r-sm)] flex flex-col items-center justify-center gap-1 p-1"
+            className="aspect-square rounded-[var(--r-sm)] flex flex-col items-center justify-center gap-1 p-1 md:p-2"
             style={{ background: 'var(--paper-2)' }}
             aria-label={PECS_LABELS[w] ?? w}
           >
-            <img src={src(w)} alt="" className="w-9 h-9 object-contain" />
-            <span className="text-[10px] font-semibold text-center leading-tight">{PECS_LABELS[w] ?? w}</span>
+            <img src={src(w)} alt="" className="w-9 h-9 md:w-16 md:h-16 object-contain" />
+            <span className="text-[10px] font-semibold text-center leading-tight md:text-sm md:mt-1">{PECS_LABELS[w] ?? w}</span>
           </button>
         ))}
       </div>

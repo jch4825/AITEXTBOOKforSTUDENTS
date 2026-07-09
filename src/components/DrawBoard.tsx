@@ -135,7 +135,7 @@ export default function DrawBoard({ onClose }: Props) {
           aria-pressed={erasing}
           className="h-9 w-9 rounded-full flex items-center justify-center shrink-0"
           style={{ background: erasing ? 'var(--paper-2)' : 'transparent' }}
-        ><Icon name="cross" size={18} /></button>
+        ><Icon name="eraser" size={18} /></button>
         <button
           onClick={clearAll}
           aria-label="전체 지우기"

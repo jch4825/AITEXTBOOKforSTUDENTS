@@ -29,7 +29,7 @@ export const CHARACTERS: Record<CharacterId, CharacterMeta> = {
   minjun: {
     id: 'minjun',
     name: '박민준 선생님',
-    shortName: '민준쌤',
+    shortName: '민준 선생님',
     role: '동아리 선생님',
   },
   aimi: {

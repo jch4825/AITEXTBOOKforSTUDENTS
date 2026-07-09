@@ -8,26 +8,14 @@ import ModuleIcon from '../components/ModuleIcon';
 import Icon from '../components/Icon';
 import Button from '../components/Button';
 import type { LessonId, ModuleId } from '../types';
+import { pickResumeLesson } from '../utils/lessonResume';
 
 interface Props {
   onPickLesson: (id: LessonId) => void;
   onGoHome: () => void; // 프론트(환영) 페이지로
 }
 
-/**
- * 다음에 이어서 할 차시 — 구현된 차시 중 아직 완료하지 않은 첫 차시.
- * (모두 끝났으면 첫 차시부터 다시.)
- */
-function pickResumeLesson(completed: LessonId[]): LessonId {
-  const done = new Set(completed);
-  for (const mod of MODULES) {
-    for (const lid of lessonIdsForModule(mod.id)) {
-      if (done.has(lid)) continue;
-      if (getLesson(lid)) return lid;
-    }
-  }
-  return 'm1-l1';
-}
+
 
 /**
  * 목차(차례) — 프론트 페이지 다음의 학습 허브.

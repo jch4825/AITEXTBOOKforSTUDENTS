@@ -1,4 +1,4 @@
-const PRESETS = [1, 3, 5, 10];
+const PRESETS = [1, 3, 5, 10, 15, 20];
 
 interface Props {
   remainingSec: number | null;
@@ -20,7 +20,7 @@ export default function ClassTimer({ remainingSec, running, onStart, onToggle, o
     <div className="p-3 w-64">
       <h3 className="mb-3 text-lg font-bold" style={{ color: 'var(--accent)' }}>타이머</h3>
       {remainingSec === null ? (
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           {PRESETS.map((m) => (
             <button
               key={m}

@@ -23,7 +23,7 @@ export const MODULE_EPISODES: Record<ModuleId, { title: string; synopsis: string
   m1: { title: '동아리 첫날 — 아이미를 만나다', synopsis: '진우와 윤아가 AI 동아리에서 로봇 친구 아이미를 처음 만나요.' },
   m2: { title: '아이미랑 말하는 법', synopsis: '아이미에게 어떻게 물어봐야 좋은 답이 오는지 연습해요.' },
   m3: { title: '아이미랑 공부하기', synopsis: '아이미가 공부 도우미가 되어 함께 배워요.' },
-  m4: { title: '우리들의 안전 약속', synopsis: '민준쌤과 함께 AI를 안전하게 쓰는 약속을 배워요.' },
+  m4: { title: '우리들의 안전 약속', synopsis: '민준 선생님과 함께 AI를 안전하게 쓰는 약속을 배워요.' },
   m5: { title: '문제해결 대작전', synopsis: '문제를 작게 나누고 순서를 세우는 힘을 길러요.' },
   m6: { title: '아이미와 마을로', synopsis: '배운 것을 들고 마을로! 생활 속에서 AI를 활용해요.' },
 };
@@ -48,7 +48,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['yoona', 'aimi'],
     introEasy: '윤아가 아이미에게 처음으로 질문해봤어요.',
     introNormal:
-      '윤아는 조용히 손을 들었어요. "아이미에게 질문해도 돼요?" 민준쌤이 웃으며 고개를 끄덕였어요.',
+      '윤아는 조용히 손을 들었어요. "아이미에게 질문해도 돼요?" 민준 선생님이 웃으며 고개를 끄덕였어요.',
     reaction: { speaker: 'yoona', text: '궁금한 걸 물어보니까 바로 답해줬어!' },
   },
   'm1-l4': {
@@ -97,14 +97,14 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['jinwoo', 'aimi'],
     introEasy: '오늘은 진우가 아이미랑 직접 이야기해보는 날이에요.',
     introNormal:
-      '민준쌤이 말했어요. "오늘은 아이미랑 직접 이야기해보자." 진우는 신이 나서 제일 먼저 손을 들었어요.',
+      '민준 선생님이 말했어요. "오늘은 아이미랑 직접 이야기해보자." 진우는 신이 나서 제일 먼저 손을 들었어요.',
     reaction: { speaker: 'jinwoo', text: '아이미랑 진짜로 이야기했어! 떨렸는데 재미있었어.' },
   },
   'm1-l11': {
     scene: ['minjun'],
-    introEasy: '민준쌤이 퀴즈를 준비했어요. 틀려도 괜찮아요.',
+    introEasy: '민준 선생님이 퀴즈를 준비했어요. 틀려도 괜찮아요.',
     introNormal:
-      '민준쌤이 웃으며 말했어요. "우리가 배운 걸 퀴즈로 확인해볼까? 틀려도 괜찮아." 진우와 윤아는 고개를 끄덕였어요.',
+      '민준 선생님이 웃으며 말했어요. "우리가 배운 걸 퀴즈로 확인해볼까? 틀려도 괜찮아." 진우와 윤아는 고개를 끄덕였어요.',
     reaction: { speaker: 'minjun', text: '모듈 1 완주! 우리 동아리 친구들, 정말 자랑스러워요.' },
   },
 
@@ -132,10 +132,10 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
   },
   'm2-l4': {
     scene: ['minjun'],
-    introEasy: '민준쌤이 좋은 방법을 알려줬어요. 예시를 보여주는 거예요.',
+    introEasy: '민준 선생님이 좋은 방법을 알려줬어요. 예시를 보여주는 거예요.',
     introNormal:
-      '민준쌤이 칠판에 적으며 말했어요. "아이미에게 예시를 하나 보여주면, 그 모양대로 만들어 준단다."',
-    reaction: { speaker: 'minjun', text: '예시 하나가 열 마디 설명보다 나을 때가 있어요.' },
+      '민준 선생님이 칠판에 적으며 말했어요. "아이미에게 예시를 하나 보여주면, 그 모양대로 만들어 준단다."',
+    reaction: { speaker: 'minjun', text: '예시 하나가 역할 설명보다 나을 때가 있어요.' },
   },
   'm2-l5': {
     scene: ['jinwoo', 'aimi'],
@@ -167,9 +167,9 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
   },
   'm2-l9': {
     scene: ['minjun'],
-    introEasy: '아이미의 답이 이상했어요. 민준쌤이 확인하는 법을 알려줬어요.',
+    introEasy: '아이미의 답이 이상했어요. 민준 선생님이 확인하는 법을 알려줬어요.',
     introNormal:
-      '아이미의 답이 조금 이상했어요. 민준쌤이 말했어요. "AI도 틀릴 수 있어. 이상하면 꼭 다시 확인하자."',
+      '아이미의 답이 조금 이상했어요. 민준 선생님이 말했어요. "AI도 틀릴 수 있어. 이상하면 꼭 다시 확인하자."',
     reaction: { speaker: 'minjun', text: '확인하는 습관이 여러분을 지켜줘요.' },
   },
   'm2-l10': {
@@ -181,9 +181,9 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
   },
   'm2-l11': {
     scene: ['minjun'],
-    introEasy: '민준쌤의 퀴즈 시간! 배운 걸 확인해봐요.',
+    introEasy: '민준 선생님의 퀴즈 시간! 배운 걸 확인해봐요.',
     introNormal:
-      '민준쌤이 물었어요. "아이미랑 말하는 방법, 몇 개나 기억나?" 진우와 윤아는 자신 있게 손을 들었어요.',
+      '민준 선생님이 물었어요. "아이미랑 말하는 방법, 몇 개나 기억나?" 진우와 윤아는 자신 있게 손을 들었어요.',
     reaction: { speaker: 'minjun', text: '이제 아이미랑 대화하는 방법을 다 배웠네요. 훌륭해요!' },
   },
 
@@ -260,32 +260,32 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
   },
   'm3-l11': {
     scene: ['minjun'],
-    introEasy: '민준쌤이 물었어요. 아이미랑 공부하니 어땠나요?',
+    introEasy: '민준 선생님이 물었어요. 아이미랑 공부하니 어땠나요?',
     introNormal:
-      '민준쌤이 물었어요. "아이미랑 공부해보니 어땠어?" 진우와 윤아는 동시에 외쳤어요. "재미있었어요!"',
+      '민준 선생님이 물었어요. "아이미랑 공부해보니 어땠어?" 진우와 윤아는 동시에 외쳤어요. "재미있었어요!"',
     reaction: { speaker: 'minjun', text: '아이미는 훌륭한 공부 짝꿍이에요. 여러분도 훌륭하고요!' },
   },
 
   // ─────────────────── 모듈 4 — 우리들의 안전 약속 ───────────────────
   'm4-l1': {
     scene: ['minjun', 'aimi'],
-    introEasy: '민준쌤이 중요한 이야기를 시작했어요. 아이미도 틀릴 수 있대요.',
+    introEasy: '민준 선생님이 중요한 이야기를 시작했어요. 아이미도 틀릴 수 있대요.',
     introNormal:
-      '민준쌤이 진지하게 말했어요. "오늘은 아주 중요한 걸 배울 거야. 아이미도 가끔 틀린단다." 진우와 윤아는 깜짝 놀랐어요.',
+      '민준 선생님이 진지하게 말했어요. "오늘은 아주 중요한 걸 배울 거야. 아이미도 가끔 틀린단다." 진우와 윤아는 깜짝 놀랐어요.',
     reaction: { speaker: 'minjun', text: 'AI의 말도 확인하는 사람이 진짜 똑똑한 사람이에요.' },
   },
   'm4-l2': {
     scene: ['yoona'],
     introEasy: '윤아는 이상한 이야기를 들으면 꼭 확인해요.',
     introNormal:
-      '윤아는 인터넷에서 이상한 이야기를 봤어요. 바로 믿지 않고, 민준쌤에게 물어보기로 했어요.',
+      '윤아는 인터넷에서 이상한 이야기를 봤어요. 바로 믿지 않고, 민준 선생님에게 물어보기로 했어요.',
     reaction: { speaker: 'yoona', text: '이상하면 믿기 전에 물어봐야 해.' },
   },
   'm4-l3': {
     scene: ['minjun'],
-    introEasy: '민준쌤이 소중한 것을 지키는 법을 알려줬어요.',
+    introEasy: '민준 선생님이 소중한 것을 지키는 법을 알려줬어요.',
     introNormal:
-      '민준쌤이 칠판에 크게 적었어요. "내 이름, 집 주소, 전화번호는 보물이야. 함부로 알려주지 않기!"',
+      '민준 선생님이 칠판에 크게 적었어요. "내 이름, 집 주소, 전화번호는 보물이야. 함부로 알려주지 않기!"',
     reaction: { speaker: 'minjun', text: '내 정보를 지키는 것이 나를 지키는 거예요.' },
   },
   'm4-l4': {
@@ -299,14 +299,14 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['yoona', 'minjun'],
     introEasy: '윤아는 사진을 보내기 전에 꼭 물어봐요.',
     introNormal:
-      '누가 윤아에게 사진을 보내달라고 했어요. 윤아는 보내기 전에 민준쌤에게 먼저 물어봤어요. 참 잘했지요?',
+      '누가 윤아에게 사진을 보내달라고 했어요. 윤아는 보내기 전에 민준 선생님에게 먼저 물어봤어요. 참 잘했지요?',
     reaction: { speaker: 'minjun', text: '보내기 전에 물어본 것, 정말 잘했어요.' },
   },
   'm4-l6': {
     scene: ['jinwoo', 'minjun'],
     introEasy: '진우가 기분 나쁜 말을 봤어요. 바로 선생님께 알렸어요.',
     introNormal:
-      '진우는 화면에서 기분 나쁜 말을 봤어요. 가슴이 두근거렸지만, 배운 대로 화면을 닫고 민준쌤에게 알렸어요.',
+      '진우는 화면에서 기분 나쁜 말을 봤어요. 가슴이 두근거렸지만, 배운 대로 화면을 닫고 민준 선생님에게 알렸어요.',
     reaction: { speaker: 'minjun', text: '알려줘서 고마워요. 그건 진우 잘못이 아니에요.' },
   },
   'm4-l7': {
@@ -327,7 +327,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['minjun'],
     introEasy: '이상한 일이 생기면? 어른에게 알려요!',
     introNormal:
-      '민준쌤이 약속했어요. "이상한 일이 생기면 언제든 선생님에게 와. 어떤 이야기든 들어줄게."',
+      '민준 선생님이 약속했어요. "이상한 일이 생기면 언제든 선생님에게 와. 어떤 이야기든 들어줄게."',
     reaction: { speaker: 'minjun', text: '알리는 것은 고자질이 아니라 용기예요.' },
   },
   'm4-l10': {
@@ -350,14 +350,14 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['jinwoo'],
     introEasy: '진우에게 고민이 생겼어요. 그런데 고민이 뭔지 말하기 어려웠어요.',
     introNormal:
-      '진우는 뭔가 답답했어요. 민준쌤이 물었어요. "무엇이 어려운지 말해볼래? 그걸 아는 게 첫걸음이야."',
+      '진우는 뭔가 답답했어요. 민준 선생님이 물었어요. "무엇이 어려운지 말해볼래? 그걸 아는 게 첫걸음이야."',
     reaction: { speaker: 'minjun', text: '문제를 알아차렸다면 벌써 반은 해결한 거예요.' },
   },
   'm5-l2': {
     scene: ['jinwoo', 'minjun'],
     introEasy: '진우의 방 청소는 너무 커 보였어요. 작게 나누니 쉬워졌어요.',
     introNormal:
-      '"방 청소를 어떻게 다 해요!" 진우가 울상을 지었어요. 민준쌤이 웃었어요. "작게 나누면 돼. 책부터, 그 다음 옷."',
+      '"방 청소를 어떻게 다 해요!" 진우가 울상을 지었어요. 민준 선생님이 웃었어요. "작게 나누면 돼. 책부터, 그 다음 옷."',
     reaction: { speaker: 'jinwoo', text: '작게 나누니까 하나도 안 무서워!' },
   },
   'm5-l3': {
@@ -411,23 +411,23 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
   },
   'm5-l10': {
     scene: ['jinwoo', 'minjun'],
-    introEasy: '진우가 퀴즈에서 틀렸어요. 민준쌤이 말했어요. 괜찮아!',
+    introEasy: '진우가 퀴즈에서 틀렸어요. 민준 선생님이 말했어요. 괜찮아!',
     introNormal:
-      '진우가 퀴즈에서 틀려서 시무룩해졌어요. 민준쌤이 어깨를 토닥였어요. "실수는 배우고 있다는 증거야."',
+      '진우가 퀴즈에서 틀려서 시무룩해졌어요. 민준 선생님이 어깨를 토닥였어요. "실수는 배우고 있다는 증거야."',
     reaction: { speaker: 'minjun', text: '틀려도 다시 하는 사람이 진짜 문제 해결사예요.' },
   },
   'm5-l11': {
     scene: ['jinwoo', 'yoona'],
     introEasy: '오늘은 라면 끓이기 대작전! 배운 걸 다 써봐요.',
     introNormal:
-      '동아리 요리 시간! 진우와 윤아는 배운 대로 라면 끓이기를 작게 나누고, 순서를 세웠어요. 민준쌤도 함께요.',
+      '동아리 요리 시간! 진우와 윤아는 배운 대로 라면 끓이기를 작게 나누고, 순서를 세웠어요. 민준 선생님도 함께요.',
     reaction: { speaker: 'jinwoo', text: '순서대로 하니까 라면이 완성됐어! 맛있다!' },
   },
   'm5-l12': {
     scene: ['minjun', 'jinwoo'],
     introEasy: '진우와 윤아는 이제 문제 해결사예요!',
     introNormal:
-      '민준쌤이 상장을 만들어 왔어요. "문제 해결사 임명장!" 진우와 윤아는 어깨가 으쓱했어요.',
+      '민준 선생님이 상장을 만들어 왔어요. "문제 해결사 임명장!" 진우와 윤아는 어깨가 으쓱했어요.',
     reaction: { speaker: 'minjun', text: '여러분은 이제 어떤 문제도 차근차근 풀 수 있어요.' },
   },
 
@@ -471,7 +471,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['jinwoo', 'aimi'],
     introEasy: '진우가 샌드위치를 만들었어요. 아이미가 순서를 알려줬어요.',
     introNormal:
-      '간식 시간! 진우는 아이미에게 샌드위치 만드는 법을 묻고, 한 단계씩 따라 만들었어요. 자를 땐 민준쌤과 함께요.',
+      '간식 시간! 진우는 아이미에게 샌드위치 만드는 법을 묻고, 한 단계씩 따라 만들었어요. 자를 땐 민준 선생님과 함께요.',
     reaction: { speaker: 'jinwoo', text: '내가 만든 샌드위치, 세상에서 제일 맛있어!' },
   },
   'm6-l7': {
@@ -485,7 +485,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['jinwoo', 'minjun'],
     introEasy: '진우가 배가 아팠어요. 바로 선생님께 말했어요.',
     introNormal:
-      '동아리 시간에 진우는 배가 아팠어요. 참지 않고 바로 민준쌤에게 말했어요. 아주 잘한 일이에요.',
+      '동아리 시간에 진우는 배가 아팠어요. 참지 않고 바로 민준 선생님에게 말했어요. 아주 잘한 일이에요.',
     reaction: { speaker: 'minjun', text: '아플 때 바로 말해줘서 고마워요. 그게 최고의 방법이에요.' },
   },
   'm6-l9': {
@@ -513,7 +513,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['minjun', 'aimi'],
     introEasy: '드디어 마지막 시간! 모두가 해냈어요. 축하해요!',
     introNormal:
-      'AI 동아리 마지막 시간이에요. 민준쌤과 아이미, 진우와 윤아, 그리고 여러분까지 — 모두 끝까지 해냈어요.',
+      'AI 동아리 마지막 시간이에요. 민준 선생님과 아이미, 진우와 윤아, 그리고 여러분까지 — 모두 끝까지 해냈어요.',
     reaction: { speaker: 'aimi', text: '여러분과 함께한 모든 시간이 소중했어. 언제든 또 만나!' },
   },
 };

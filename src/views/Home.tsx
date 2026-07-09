@@ -6,11 +6,15 @@ import Button from '../components/Button';
 import Icon from '../components/Icon';
 import ModuleIcon from '../components/ModuleIcon';
 
+import { pickResumeLesson } from '../utils/lessonResume';
+import type { LessonId } from '../types';
+
 interface Props {
   onEnter: () => void;
+  onEnterLesson?: (id: LessonId) => void;
 }
 
-export default function Home({ onEnter }: Props) {
+export default function Home({ onEnter, onEnterLesson }: Props) {
   const { completedLessons } = useProgress();
   const totalLessons = MODULES.reduce((sum, m) => sum + m.lessonCount, 0);
   const doneCount = completedLessons.length;
@@ -31,7 +35,7 @@ export default function Home({ onEnter }: Props) {
   // DOM Refs
   const shaderCanvasRef = useRef<HTMLCanvasElement>(null);
   const threejsContainerRef = useRef<HTMLDivElement>(null);
-  const cursorRef = useRef<HTMLDivElement>(null);
+  const trailCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // 1. WebGL Background Shader Effect
   useEffect(() => {
@@ -248,10 +252,10 @@ export default function Home({ onEnter }: Props) {
     let frameId: number;
     const animate = () => {
       frameId = requestAnimationFrame(animate);
-      sphere.rotation.y += 0.0015;
-      sphere.rotation.x += 0.0008;
-      sphere.rotation.y += mouseX * 0.008;
-      sphere.rotation.x += mouseY * 0.008;
+      sphere.rotation.y += 0.0002;
+      sphere.rotation.x += 0.0001;
+      sphere.rotation.y += mouseX * 0.001;
+      sphere.rotation.x += mouseY * 0.001;
 
       const scale = 1 + Math.sin(Date.now() * 0.0006) * 0.025;
       sphere.scale.set(scale, scale, scale);
@@ -272,32 +276,8 @@ export default function Home({ onEnter }: Props) {
     };
   }, []);
 
-  // 3. Custom Cursor & Click Ripple Effect
+  // 3. Click Ripple Effect
   useEffect(() => {
-    const cursor = cursorRef.current;
-    if (!cursor) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    };
-    document.addEventListener('mousemove', handleMouseMove);
-
-    const interactiveEls = document.querySelectorAll('button, a, input, [role="button"]');
-    const handleMouseEnter = () => {
-      cursor.style.transform = 'scale(2.5)';
-      cursor.style.backgroundColor = 'rgba(214, 253, 0, 0.45)';
-    };
-    const handleMouseLeave = () => {
-      cursor.style.transform = 'scale(1)';
-      cursor.style.backgroundColor = '#D6FD00';
-    };
-
-    interactiveEls.forEach(el => {
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
-    });
-
     const handleClick = (e: MouseEvent) => {
       const ripple = document.createElement('div');
       ripple.className = 'fixed rounded-full pointer-events-none z-[9998]';
@@ -320,29 +300,86 @@ export default function Home({ onEnter }: Props) {
     document.addEventListener('click', handleClick);
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('click', handleClick);
-      interactiveEls.forEach(el => {
-        el.removeEventListener('mouseenter', handleMouseEnter);
-        el.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
+  // 4. Mouse Trail Effect (2 seconds fade out)
+  useEffect(() => {
+    const canvas = trailCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let points: { x: number; y: number; time: number }[] = [];
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      points.push({
+        x: e.clientX,
+        y: e.clientY,
+        time: Date.now(),
       });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+
+    const drawTrail = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const now = Date.now();
+      const trailDuration = 2000; // 2 seconds
+
+      // Filter out points older than 2 seconds
+      points = points.filter(p => now - p.time < trailDuration);
+
+      if (points.length > 1) {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Draw custom line with fading alpha per segment
+        for (let i = 1; i < points.length; i++) {
+          const p1 = points[i - 1];
+          const p2 = points[i];
+
+          const age = now - p2.time;
+          const alpha = Math.max(0, 1 - age / trailDuration);
+
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+
+          // Low-stimulation, low-saturation pastel green
+          ctx.strokeStyle = `rgba(160, 200, 100, ${alpha * 0.45})`;
+          ctx.lineWidth = 10; // Slightly thinner line
+          ctx.stroke();
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(drawTrail);
+    };
+
+    drawTrail();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   return (
     <div className="min-h-screen text-on-surface select-none relative overflow-hidden bg-[#F8EEE1]">
-      {/* Custom Cursor */}
-      <div
-        ref={cursorRef}
-        id="custom-cursor"
-        className="fixed w-6 h-6 rounded-full pointer-events-none z-[9999] mix-blend-difference transition-transform duration-100 ease-out"
-        style={{
-          backgroundColor: '#D6FD00',
-          boxShadow: '0 0 15px #D6FD00',
-          transform: 'translate(-50%, -50%)',
-          top: '-100px',
-          left: '-100px'
-        }}
+
+      {/* Mouse Trail Canvas overlay */}
+      <canvas
+        ref={trailCanvasRef}
+        className="fixed inset-0 w-full h-full pointer-events-none z-40 bg-transparent"
       />
 
       {/* WebGL Background Canvas */}
@@ -397,7 +434,18 @@ export default function Home({ onEnter }: Props) {
             </p>
 
             <div className="pt-4 flex flex-wrap gap-4">
-              <Button size="lg" onClick={onEnter} className="btn-glow text-xl px-10 py-5 rounded-full shadow-lg flex items-center gap-3 group bg-[#caef00] text-[#181e00] hover:bg-[#ccf200]">
+              <Button
+                size="lg"
+                onClick={() => {
+                  if (onEnterLesson) {
+                    const resumeId = pickResumeLesson(completedLessons);
+                    onEnterLesson(resumeId);
+                  } else {
+                    onEnter();
+                  }
+                }}
+                className="btn-glow text-xl px-10 py-5 rounded-full shadow-lg flex items-center gap-3 group bg-[#caef00] text-[#181e00] hover:bg-[#ccf200]"
+              >
                 이어서 학습하기
                 <span className="material-symbols-outlined text-2xl group-hover:translate-x-1.5 transition-transform">arrow_forward</span>
               </Button>
@@ -410,7 +458,7 @@ export default function Home({ onEnter }: Props) {
               {/* Cover Image from public/cover.webp */}
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: "url('cover.webp')" }}
+                style={{ backgroundImage: "url('cover.png')" }}
                 aria-label="Aimi, Jinwoo, and Yoona together in a happy future AI society"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#2B3A55]/85 via-transparent to-transparent" />

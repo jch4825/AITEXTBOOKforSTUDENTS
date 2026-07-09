@@ -62,5 +62,5 @@ export default function App() {
   if (state.view === 'contents') {
     return <ContentsView onPickLesson={goLesson} onGoHome={goHome} />;
   }
-  return <Home onEnter={goContents} />;
+  return <Home onEnter={goContents} onEnterLesson={goLesson} />;
 }
