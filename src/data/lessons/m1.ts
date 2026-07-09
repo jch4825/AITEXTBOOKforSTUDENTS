@@ -50,10 +50,10 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: 'AI가 가장 잘하는 일은 무엇일까요?',
           choices: [
-            { label: '사람이 묻는 말에 답해주기', isCorrect: true },
-            { label: '빨래를 개기', isCorrect: false },
-            { label: '나무 심기', isCorrect: false },
-            { label: '비 오게 하기', isCorrect: false },
+            { label: '사람이 묻는 말에 답해주기', isCorrect: true, icon: 'chatbot' },
+            { label: '빨래를 개기', isCorrect: false, icon: 'clothes' },
+            { label: '축구공 차기', isCorrect: false, icon: 'soccer_ball' },
+            { label: '비 오게 하기', isCorrect: false, icon: 'rain' },
           ],
         },
       },
@@ -61,9 +61,9 @@ export const M1_LESSONS: LessonContent[] = [
         kind: 'matching',
         data: {
           pairs: [
-            { left: '시리·빅스비', right: '말로 대화하는 AI' },
-            { left: '챗봇', right: '글로 대화하는 AI' },
-            { left: '번역기', right: '말을 바꿔주는 AI' },
+            { left: '시리·빅스비', right: '말로 대화하는 AI', icon: 'ai_speaker' },
+            { left: '챗봇', right: '글로 대화하는 AI', icon: 'chatbot' },
+            { left: '번역기', right: '말을 바꿔주는 AI', icon: 'translate' },
           ],
         },
       },
