@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { createPortal } from 'react-dom';
 import Icon from './Icon';
 import { PECS_COMMON, PECS_BY_MODULE, PECS_LABELS } from '../data/pecs';
 import type { ModuleId } from '../types';
@@ -9,9 +8,44 @@ interface Props {
 }
 
 /**
+ * 그림 카드를 A4의 1/4(A6) 크기로 인쇄한다. 숨긴 iframe에 카드만 있는 문서를 만들어
+ * 인쇄하므로 브라우저 인쇄 미리보기가 정상 동작한다(display:none 요소를 인쇄하면 이미지가
+ * 디코딩되지 않아 미리보기가 비는 문제를 피한다). 카드 이미지에 단어가 인쇄돼 있어 이미지만 낸다.
+ */
+function printCard(name: string, label: string) {
+  const url = `${window.location.origin}${import.meta.env.BASE_URL}lessons/pecs/${name}.webp`;
+  const iframe = document.createElement('iframe');
+  iframe.setAttribute('aria-hidden', 'true');
+  iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
+  document.body.appendChild(iframe);
+  const win = iframe.contentWindow;
+  if (!win) { iframe.remove(); return; }
+  const doc = win.document;
+  doc.open();
+  doc.write(
+    '<!doctype html><html lang="ko"><head><meta charset="utf-8">' +
+    `<title>${label} · AAC 카드</title><style>` +
+    '@page{size:A6;margin:8mm;}' +
+    'html,body{margin:0;height:100%;}' +
+    'body{display:flex;align-items:center;justify-content:center;}' +
+    'img{width:88mm;height:88mm;object-fit:contain;}' +
+    '</style></head><body>' +
+    `<img src="${url}" alt="${label}">` +
+    '</body></html>',
+  );
+  doc.close();
+  const cleanup = () => setTimeout(() => iframe.remove(), 1000);
+  const doPrint = () => { win.focus(); win.print(); cleanup(); };
+  const img = doc.querySelector('img');
+  if (!img) { cleanup(); return; }
+  if (img.complete) doPrint();
+  else { img.onload = doPrint; img.onerror = cleanup; }
+}
+
+/**
  * AAC 카드 보드 — 교실 도구 도크의 의사소통 카드.
  * 카드 이미지 안에 단어가 인쇄되어 있고, 밖의 라벨(PECS_LABELS)은 그 글자와 싱크되어 있다.
- * 카드를 키우면 그 자리에서 인쇄할 수 있다(A4의 1/4=A6 크기, 이미지만 — 단어 중복 방지).
+ * 카드를 키우면 그 자리에서 인쇄(A6=A4의 1/4)할 수 있다.
  */
 export default function PecsBoard({ moduleId }: Props) {
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -29,7 +63,7 @@ export default function PecsBoard({ moduleId }: Props) {
             className="btn btn-ghost h-9 px-2 text-sm"
           ><Icon name="chevron-left" size={18} /> 목록</button>
           <button
-            onClick={() => window.print()}
+            onClick={() => printCard(expanded, label)}
             className="btn btn-secondary h-9 px-3 text-sm"
             aria-label={`${label} 카드 인쇄`}
           ><Icon name="printer" size={18} /> 인쇄</button>
@@ -41,14 +75,6 @@ export default function PecsBoard({ moduleId }: Props) {
           <img src={src(expanded)} alt="" className="w-40 h-40 object-contain" />
           <span className="text-xl font-bold">{label}</span>
         </div>
-
-        {/* 인쇄 전용 — 화면엔 숨김, 인쇄 시 A6(=A4의 1/4)로 카드 이미지만 (단어는 이미지에 있음) */}
-        {createPortal(
-          <div className="aac-print-card">
-            <img src={src(expanded)} alt={label} />
-          </div>,
-          document.body,
-        )}
       </div>
     );
   }
