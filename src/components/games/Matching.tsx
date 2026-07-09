@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
 import ActivityIcon from '../ActivityIcon';
@@ -28,29 +28,39 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
   const [wrongPair, setWrongPair] = useState<{ leftIdx: number; rightIdx: number } | null>(null);
   const [isChecking, setIsChecking] = useState(false);
   
-  // shuffle right column once per mount
-  const [rightOrder] = useState<number[]>(() => {
+  // Sync state when pairs change (e.g. step navigation)
+  useEffect(() => {
+    setMatched(pairs.map(() => false));
+    setPicked({ leftIdx: null, rightIdx: null });
+    setWrongPair(null);
+    setIsChecking(false);
+  }, [pairs]);
+
+  // Shuffle right column on mount/pairs change using useMemo
+  const rightOrder = useMemo(() => {
     const order = pairs.map((_, i) => i);
     for (let i = order.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [order[i], order[j]] = [order[j], order[i]];
     }
     return order;
-  });
+  }, [pairs]);
+
   const { speak } = useSpeak();
 
   function tryMatch(left: number, rightShuffleIdx: number) {
     const right = rightOrder[rightShuffleIdx];
     if (left === right) {
       setIsChecking(true);
-      setMatched(m => {
-        const next = [...m];
-        next[left] = true;
-        return next;
-      });
+      
+      // Update matched state and determine completion using the next array directly
+      const nextMatched = [...matched];
+      nextMatched[left] = true;
+      setMatched(nextMatched);
       setPicked({ leftIdx: null, rightIdx: null });
       speak('잘 맞췄어요!');
-      const allDone = matched.filter((_, i) => i !== left).every(Boolean);
+      
+      const allDone = nextMatched.every(Boolean);
       if (allDone) {
         setTimeout(onComplete, 800);
       } else {
@@ -153,6 +163,8 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
       <div className="space-y-3">
         {rightOrder.map((origIdx, shuffleIdx) => {
           const p = pairs[origIdx];
+          if (!p) return null; // Safe guard
+          
           const isPicked = picked.rightIdx === shuffleIdx;
           const isMatched = matched[origIdx];
           const isWrong = wrongPair?.rightIdx === shuffleIdx;

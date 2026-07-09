@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface Props {
   icon: string;
   size?: number;
@@ -5,9 +7,11 @@ interface Props {
 }
 
 export default function ActivityIcon({ icon, size = 40, className }: Props) {
+  const baseUrl = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) || '/';
+  
   return (
     <img
-      src={`${import.meta.env.BASE_URL}lessons/pecs/${icon}.webp`}
+      src={`${baseUrl}lessons/pecs/${icon}.webp`}
       alt=""
       aria-hidden
       width={size}

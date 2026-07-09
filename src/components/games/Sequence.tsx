@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
 import ActivityIcon from '../ActivityIcon';
@@ -22,8 +22,15 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
   const [placedCount, setPlacedCount] = useState(0);
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
   
-  // shuffle once per mount
-  const [shuffleOrder] = useState<number[]>(() => shuffleAvoidingIdentity(items.length));
+  // Sync state when items change
+  useEffect(() => {
+    setPlacedCount(0);
+    setWrongIdx(null);
+  }, [items]);
+
+  // shuffle once per mount / items change
+  const shuffleOrder = useMemo(() => shuffleAvoidingIdentity(items.length), [items]);
+
   const { speak } = useSpeak();
 
   const done = placedCount === items.length;
@@ -91,6 +98,7 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
         <div className="grid grid-cols-2 gap-3">
           {shuffleOrder.map((origIdx, shuffleIdx) => {
             const item = items[origIdx];
+            if (!item) return null; // Safe guard
             const used = origIdx < placedCount;
             const isWrong = wrongIdx === shuffleIdx;
             const palette = activityColor(item.icon ?? item.label);
