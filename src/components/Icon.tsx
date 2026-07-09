@@ -12,7 +12,7 @@ import type { CSSProperties, JSX } from 'react';
 
 export type IconName =
   | 'speaker' | 'book' | 'home' | 'settings' | 'mic' | 'mic-on'
-  | 'menu' | 'close' | 'chevron-left' | 'chevron-right'
+  | 'menu' | 'close' | 'chevron-left' | 'chevron-right' | 'chevron-up' | 'chevron-down'
   | 'chat' | 'check' | 'bulb' | 'rocket' | 'sparkles' | 'refresh'
   | 'star' | 'circle' | 'cross' | 'warning' | 'think' | 'hourglass'
   | 'pen' | 'timer' | 'printer' | 'cards' | 'link';
@@ -100,6 +100,8 @@ const GLYPHS: Record<IconName, (p: GlyphProps) => JSX.Element> = {
   close: () => <path d="M6 6l12 12M18 6L6 18" />,
   'chevron-left': () => <path d="M15 5l-7 7 7 7" />,
   'chevron-right': () => <path d="M9 5l7 7-7 7" />,
+  'chevron-up': () => <path d="M5 15l7-7 7 7" />,
+  'chevron-down': () => <path d="M5 9l7 7 7-7" />,
   chat: () => (
     <path d="M20 4H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3v3.5L12 16h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
   ),
