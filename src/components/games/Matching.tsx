@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
+import ActivityIcon from '../ActivityIcon';
+import { activityColor } from '../../utils/activityPalette';
+import type { Difficulty } from '../../types';
 
 export interface MatchingPair {
   left: string;
   right: string; // correct pair
+  icon?: string;
 }
 
 interface Props {
   pairs: MatchingPair[];
+  difficulty: Difficulty;
   onComplete: () => void;
 }
 
@@ -17,10 +22,12 @@ interface PickedState {
   rightIdx: number | null;
 }
 
-export default function Matching({ pairs, onComplete }: Props) {
+export default function Matching({ pairs, difficulty, onComplete }: Props) {
   const [matched, setMatched] = useState<boolean[]>(() => pairs.map(() => false));
   const [picked, setPicked] = useState<PickedState>({ leftIdx: null, rightIdx: null });
+  const [wrongPair, setWrongPair] = useState<{ leftIdx: number; rightIdx: number } | null>(null);
   const [isChecking, setIsChecking] = useState(false);
+  
   // shuffle right column once per mount
   const [rightOrder] = useState<number[]>(() => {
     const order = pairs.map((_, i) => i);
@@ -36,7 +43,11 @@ export default function Matching({ pairs, onComplete }: Props) {
     const right = rightOrder[rightShuffleIdx];
     if (left === right) {
       setIsChecking(true);
-      setMatched(m => { const next = [...m]; next[left] = true; return next; });
+      setMatched(m => {
+        const next = [...m];
+        next[left] = true;
+        return next;
+      });
       setPicked({ leftIdx: null, rightIdx: null });
       speak('잘 맞췄어요!');
       const allDone = matched.filter((_, i) => i !== left).every(Boolean);
@@ -47,8 +58,10 @@ export default function Matching({ pairs, onComplete }: Props) {
       }
     } else {
       setIsChecking(true);
+      setWrongPair({ leftIdx: left, rightIdx: rightShuffleIdx });
       speak('다시 골라볼까요?');
       setTimeout(() => {
+        setWrongPair(null);
         setPicked({ leftIdx: null, rightIdx: null });
         setIsChecking(false);
       }, 600);
@@ -76,33 +89,125 @@ export default function Matching({ pairs, onComplete }: Props) {
 
   return (
     <div className="my-6 grid grid-cols-2 gap-6">
-      <div className="space-y-2">
-        {pairs.map((p, i) => (
-          <button
-            key={p.left}
-            onClick={() => clickLeft(i)}
-            disabled={matched[i] || isChecking}
-            className="btn btn-choice w-full p-4 text-lg disabled:opacity-50"
-            style={{
-              background: matched[i] ? 'var(--ok-bg)' : picked.leftIdx === i ? 'var(--accent)' : 'var(--paper-0)',
-              color: picked.leftIdx === i ? 'white' : 'var(--fg)',
-            }}
-          >{matched[i] && <Icon name="check" size={20} strokeWidth={2.5} color="var(--ok)" />}{p.left}</button>
-        ))}
+      {/* Left Column */}
+      <div className="space-y-3">
+        {pairs.map((p, i) => {
+          const isPicked = picked.leftIdx === i;
+          const isMatched = matched[i];
+          const isWrong = wrongPair?.leftIdx === i;
+          
+          const palette = activityColor(p.icon ?? p.left);
+          
+          let borderStyle = '2px solid var(--line)';
+          let extraClass = '';
+          
+          if (isPicked) {
+            borderStyle = '4px solid var(--accent)';
+          } else if (isMatched) {
+            borderStyle = '4px solid var(--ok)';
+          } else if (isWrong) {
+            borderStyle = '4px solid var(--warn)';
+            extraClass = 'answer-shake';
+          }
+
+          return (
+            <button
+              key={p.left}
+              onClick={() => clickLeft(i)}
+              disabled={isMatched || isChecking}
+              className={`relative btn btn-choice w-full p-4 min-h-[96px] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 transition-all ${extraClass}`}
+              style={{
+                background: palette.bg,
+                color: palette.text,
+                border: borderStyle,
+                boxShadow: isPicked ? '0 0 12px rgba(43, 58, 85, 0.25)' : 'none',
+              }}
+            >
+              {difficulty === 'easy' && p.icon && (
+                <ActivityIcon icon={p.icon} size={48} className="mb-1" />
+              )}
+              <span>{p.left}</span>
+
+              {isMatched && (
+                <span
+                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                  style={{ background: 'var(--ok)' }}
+                >
+                  <Icon name="check" size={16} strokeWidth={3} />
+                </span>
+              )}
+              {isWrong && (
+                <span
+                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                  style={{ background: 'var(--warn)' }}
+                >
+                  <Icon name="close" size={14} strokeWidth={3} />
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
-      <div className="space-y-2">
-        {rightOrder.map((origIdx, shuffleIdx) => (
-          <button
-            key={pairs[origIdx].right}
-            onClick={() => clickRight(shuffleIdx)}
-            disabled={matched[origIdx] || isChecking}
-            className="btn btn-choice w-full p-4 text-lg disabled:opacity-50"
-            style={{
-              background: matched[origIdx] ? 'var(--ok-bg)' : picked.rightIdx === shuffleIdx ? 'var(--accent)' : 'var(--paper-0)',
-              color: picked.rightIdx === shuffleIdx ? 'white' : 'var(--fg)',
-            }}
-          >{matched[origIdx] && <Icon name="check" size={20} strokeWidth={2.5} color="var(--ok)" />}{pairs[origIdx].right}</button>
-        ))}
+
+      {/* Right Column */}
+      <div className="space-y-3">
+        {rightOrder.map((origIdx, shuffleIdx) => {
+          const p = pairs[origIdx];
+          const isPicked = picked.rightIdx === shuffleIdx;
+          const isMatched = matched[origIdx];
+          const isWrong = wrongPair?.rightIdx === shuffleIdx;
+          
+          const palette = activityColor(p.icon ?? p.right);
+          
+          let borderStyle = '2px solid var(--line)';
+          let extraClass = '';
+          
+          if (isPicked) {
+            borderStyle = '4px solid var(--accent)';
+          } else if (isMatched) {
+            borderStyle = '4px solid var(--ok)';
+          } else if (isWrong) {
+            borderStyle = '4px solid var(--warn)';
+            extraClass = 'answer-shake';
+          }
+
+          return (
+            <button
+              key={p.right}
+              onClick={() => clickRight(shuffleIdx)}
+              disabled={isMatched || isChecking}
+              className={`relative btn btn-choice w-full p-4 min-h-[96px] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 transition-all ${extraClass}`}
+              style={{
+                background: palette.bg,
+                color: palette.text,
+                border: borderStyle,
+                boxShadow: isPicked ? '0 0 12px rgba(43, 58, 85, 0.25)' : 'none',
+              }}
+            >
+              {difficulty === 'easy' && p.icon && (
+                <ActivityIcon icon={p.icon} size={48} className="mb-1" />
+              )}
+              <span>{p.right}</span>
+
+              {isMatched && (
+                <span
+                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                  style={{ background: 'var(--ok)' }}
+                >
+                  <Icon name="check" size={16} strokeWidth={3} />
+                </span>
+              )}
+              {isWrong && (
+                <span
+                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                  style={{ background: 'var(--warn)' }}
+                >
+                  <Icon name="close" size={14} strokeWidth={3} />
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

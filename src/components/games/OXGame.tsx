@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Button from '../Button';
 import Icon from '../Icon';
+import Burst from './Burst';
 
 export interface OXQuestion {
-  question: string;
+  text: string;
   answer: 'O' | 'X';
-  feedback?: string; // optional explanation shown after answer
+  feedback: string;
 }
 
 interface Props {
@@ -15,76 +16,196 @@ interface Props {
 }
 
 export default function OXGame({ questions, onComplete }: Props) {
-  const [idx, setIdx] = useState(0);
-  const [picked, setPicked] = useState<'O' | 'X' | null>(null);
+  const [currIdx, setCurrIdx] = useState(0);
+  const [selected, setSelected] = useState<'O' | 'X' | null>(null);
   const { speak } = useSpeak();
-  const q = questions[idx];
-  const correct = picked !== null && picked === q.answer;
 
-  // Auto-read the question when it appears (respects TTS toggle inside useSpeak).
-  useEffect(() => { speak(q.question); }, [idx, speak, q.question]);
+  const q = questions[currIdx];
 
-  function pick(choice: 'O' | 'X') {
-    if (picked) return;
-    setPicked(choice);
-    const isCorrect = choice === q.answer;
+  // Auto-read question on mount/change
+  useEffect(() => {
+    speak(q.text);
+  }, [speak, q.text]);
+
+  function choose(ans: 'O' | 'X') {
+    if (selected !== null) return;
+    setSelected(ans);
+    const isCorrect = ans === q.answer;
+    
+    // Speak feedback
     const feedbackLine = q.feedback ? ` ${q.feedback}` : '';
-    speak((isCorrect ? '정답이에요!' : '아쉬워요, 다시 생각해봐요.') + feedbackLine);
+    speak((isCorrect ? '정답이에요!' : '아쉬워요, 다시 생각해보세요.') + feedbackLine);
   }
 
+  const isCorrect = selected === q.answer;
+
   function next() {
-    if (idx + 1 < questions.length) {
-      setIdx(i => i + 1);
-      setPicked(null);
-    } else {
+    setSelected(null);
+    if (currIdx + 1 >= questions.length) {
       onComplete();
+    } else {
+      setCurrIdx(currIdx + 1);
     }
   }
 
   return (
     <div className="my-6">
-      <div className="flex items-start gap-2 mb-4">
-        <p className="text-xl font-semibold flex-1">{q.question}</p>
-        <button
-          type="button"
-          onClick={() => speak(q.question)}
-          aria-label="문제 다시 들려주기"
-          className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
-          style={{ borderColor: 'var(--accent)', color: 'var(--accent)', background: 'var(--paper-0)' }}
-        ><Icon name="speaker" size={20} /></button>
-      </div>
-      <div className="flex gap-4 justify-center">
-        <button
-          onClick={() => pick('O')}
-          disabled={picked !== null}
-          aria-label="맞아요"
-          className="h-24 w-24 rounded-full flex items-center justify-center border-4 disabled:opacity-60"
-          style={{
-            background: picked === 'O' ? (correct ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'var(--paper-0)',
-            borderColor: 'var(--accent)', color: 'var(--accent)',
-          }}
-        ><Icon name="circle" size={52} strokeWidth={3} /></button>
-        <button
-          onClick={() => pick('X')}
-          disabled={picked !== null}
-          aria-label="아니에요"
-          className="h-24 w-24 rounded-full flex items-center justify-center border-4 disabled:opacity-60"
-          style={{
-            background: picked === 'X' ? (correct ? 'var(--ok-bg)' : 'var(--bad-bg)') : 'var(--paper-0)',
-            borderColor: 'var(--accent)', color: 'var(--accent)',
-          }}
-        ><Icon name="cross" size={52} strokeWidth={3} /></button>
+      {/* Progress Dots */}
+      <div className="flex gap-1.5 mb-4 justify-center">
+        {questions.map((_, idx) => (
+          <span
+            key={idx}
+            className="w-2.5 h-2.5 rounded-full"
+            style={{
+              background:
+                idx === currIdx
+                  ? 'var(--accent)'
+                  : idx < currIdx
+                  ? 'var(--ok-bg)'
+                  : 'var(--paper-2)',
+            }}
+          />
+        ))}
       </div>
 
-      {picked !== null && (
+      {/* Question Text */}
+      <div className="flex items-start gap-2 mb-6">
+        <p className="text-xl font-semibold flex-1">{q.text}</p>
+        <button
+          type="button"
+          onClick={() => speak(q.text)}
+          aria-label="문제 다시 들려주기"
+          className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
+          style={{
+            borderColor: 'var(--accent)',
+            color: 'var(--accent)',
+            background: 'var(--paper-0)',
+          }}
+        >
+          <Icon name="speaker" size={20} />
+        </button>
+      </div>
+
+      {/* O / X Big Buttons */}
+      <div className="grid grid-cols-2 gap-4">
+        {(['O', 'X'] as const).map((choice) => {
+          const isChoicePicked = selected === choice;
+          
+          let borderStyle = '2px solid var(--line)';
+          let extraClass = '';
+          let bgStyle = 'var(--paper-0)';
+          
+          if (isChoicePicked) {
+            borderStyle = isCorrect
+              ? '4px solid var(--ok)'
+              : '4px solid var(--warn)';
+            if (!isCorrect) {
+              extraClass = 'answer-shake';
+            }
+          }
+
+          return (
+            <button
+              key={choice}
+              onClick={() => choose(choice)}
+              disabled={selected !== null}
+              className={`relative h-32 rounded-[var(--r-lg)] flex flex-col items-center justify-center font-black transition-all active:scale-95 disabled:opacity-65 ${extraClass}`}
+              style={{
+                border: borderStyle,
+                background: bgStyle,
+              }}
+            >
+              {/* O or X Shape rendering */}
+              {choice === 'O' ? (
+                <Icon
+                  name="circle"
+                  size={64}
+                  strokeWidth={4.5}
+                  color={
+                    isChoicePicked
+                      ? isCorrect
+                        ? 'var(--ok)'
+                        : 'var(--warn)'
+                      : 'var(--accent)'
+                  }
+                />
+              ) : (
+                <Icon
+                  name="cross"
+                  size={64}
+                  strokeWidth={4.5}
+                  color={
+                    isChoicePicked
+                      ? isCorrect
+                        ? 'var(--ok)'
+                        : 'var(--warn)'
+                      : 'var(--accent)'
+                  }
+                />
+              )}
+
+              {/* Correctness Overlay Badges */}
+              {isChoicePicked && (
+                <>
+                  {isCorrect ? (
+                    <>
+                      <Burst />
+                      <span
+                        className="absolute -top-2.5 -right-2.5 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"
+                        style={{ background: 'var(--ok)' }}
+                      >
+                        <Icon name="check" size={20} strokeWidth={3} />
+                      </span>
+                    </>
+                  ) : (
+                    <span
+                      className="absolute -top-2.5 -right-2.5 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"
+                      style={{ background: 'var(--warn)' }}
+                    >
+                      <Icon name="close" size={18} strokeWidth={3} />
+                    </span>
+                  )}
+                </>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Answer feedback panel */}
+      {selected !== null && (
         <div className="mt-6 text-center">
           <p className="text-lg font-bold inline-flex items-center gap-1.5">
-            {correct
-              ? <><Icon name="sparkles" size={22} filled color="var(--ok)" /> 정답!</>
-              : <><Icon name="bulb" size={22} color="var(--warn)" /> 정답은 <Icon name={q.answer === 'O' ? 'circle' : 'cross'} size={22} strokeWidth={3} /> 였어요.</>}
+            {isCorrect ? (
+              <>
+                <Icon name="sparkles" size={22} filled color="var(--ok)" /> 정답!
+              </>
+            ) : (
+              <>
+                <Icon name="bulb" size={22} color="var(--warn)" /> 정답은{' '}
+                <Icon
+                  name={q.answer === 'O' ? 'circle' : 'cross'}
+                  size={20}
+                  strokeWidth={3}
+                />
+                입니다.
+              </>
+            )}
           </p>
-          {q.feedback && <p className="text-base mt-2">{q.feedback}</p>}
-          <Button size="lg" onClick={next} className="mt-4 px-6">다음 <Icon name="chevron-right" size={20} /></Button>
+          {q.feedback && <p className="mt-2 text-[color:var(--muted)]">{q.feedback}</p>}
+          <div>
+            <Button size="lg" onClick={next} className="mt-4 px-6">
+              {currIdx + 1 >= questions.length ? (
+                <>
+                  완료 <Icon name="check" size={20} />
+                </>
+              ) : (
+                <>
+                  다음 <Icon name="chevron-right" size={20} />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       )}
     </div>

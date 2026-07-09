@@ -102,10 +102,10 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: '이 중에 AI를 쓰는 건 무엇일까요?',
           choices: [
-            { label: '스마트폰 음성비서에게 노래 틀어달라고 말하기', isCorrect: true },
-            { label: '선풍기 버튼 누르기', isCorrect: false },
-            { label: '전등 스위치 켜기', isCorrect: false },
-            { label: '수도꼭지 돌리기', isCorrect: false },
+            { label: '스마트폰 음성비서에게 노래 틀어달라고 말하기', isCorrect: true, icon: 'ai_speaker' },
+            { label: '선풍기 버튼 누르기', isCorrect: false, icon: 'fan' },
+            { label: '전등 스위치 켜기', isCorrect: false, icon: 'light_switch' },
+            { label: '수도꼭지 돌리기', isCorrect: false, icon: 'faucet' },
           ],
         },
       },
@@ -130,8 +130,8 @@ export const M1_LESSONS: LessonContent[] = [
         kind: 'matching',
         data: {
           pairs: [
-            { left: '그냥 기계', right: '정해진 일만 반복' },
-            { left: 'AI', right: '우리 말을 알아듣고 답해줌' },
+            { left: '그냥 기계', right: '정해진 일만 반복', icon: 'fan' },
+            { left: 'AI', right: '우리 말을 알아듣고 답해줌', icon: 'ai_speaker' },
           ],
         },
       },
@@ -170,10 +170,10 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: 'AI한테 물어보기 좋은 것은 무엇일까요?',
           choices: [
-            { label: '"고양이는 왜 울어?"', isCorrect: true },
-            { label: '아무 말 안 하기', isCorrect: false },
-            { label: '눈만 감고 기다리기', isCorrect: false },
-            { label: '화면 두드리기', isCorrect: false },
+            { label: '"고양이는 왜 울어?"', isCorrect: true, icon: 'cat' },
+            { label: '아무 말 안 하기', isCorrect: false, icon: 'sleep' },
+            { label: '눈만 감고 기다리기', isCorrect: false, icon: 'sleep' },
+            { label: '화면 두드리기', isCorrect: false, icon: 'faucet' },
           ],
         },
       },
@@ -237,9 +237,9 @@ export const M1_LESSONS: LessonContent[] = [
         kind: 'matching',
         data: {
           pairs: [
-            { left: '사진 속 강아지', right: 'AI가 "강아지"라고 알아봐요' },
-            { left: '사진 속 자동차', right: 'AI가 "자동차"라고 알아봐요' },
-            { left: '사진 속 사과', right: 'AI가 "사과"라고 알아봐요' },
+            { left: '사진 속 강아지', right: 'AI가 "강아지"라고 알아봐요', icon: 'dog' },
+            { left: '사진 속 자동차', right: 'AI가 "자동차"라고 알아봐요', icon: 'car' },
+            { left: '사진 속 사과', right: 'AI가 "사과"라고 알아봐요', icon: 'apple' },
           ],
         },
       },
@@ -278,10 +278,10 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: '말로 AI를 쓰는 예는 무엇일까요?',
           choices: [
-            { label: '"시리야, 알람 맞춰줘"', isCorrect: true },
-            { label: '종이에 그림 그리기', isCorrect: false },
-            { label: '창문 닫기', isCorrect: false },
-            { label: '가만히 있기', isCorrect: false },
+            { label: '"시리야, 알람 맞춰줘"', isCorrect: true, icon: 'alarm_clock' },
+            { label: '종이에 그림 그리기', isCorrect: false, icon: 'drawing' },
+            { label: '창문 닫기', isCorrect: false, icon: 'window' },
+            { label: '가만히 있기', isCorrect: false, icon: 'sleep' },
           ],
         },
       },
@@ -320,9 +320,9 @@ export const M1_LESSONS: LessonContent[] = [
         kind: 'matching',
         data: {
           pairs: [
-            { left: '고양이 사진 100장 보여주기', right: 'AI가 고양이를 알아봐요' },
-            { left: '노래 가사 많이 보여주기', right: 'AI가 노래를 만들어요' },
-            { left: '대화 많이 보여주기', right: 'AI가 대화를 잘해요' },
+            { left: '고양이 사진 100장 보여주기', right: 'AI가 고양이를 알아봐요', icon: 'cat' },
+            { left: '노래 가사 많이 보여주기', right: 'AI가 노래를 만들어요', icon: 'music' },
+            { left: '대화 많이 보여주기', right: 'AI가 대화를 잘해요', icon: 'chatbot' },
           ],
         },
       },
@@ -348,9 +348,9 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: 'AI는 어떤 것을 보고 배울까요?',
           choices: [
-            { label: '많은 예시(사진, 글, 소리)', isCorrect: true },
-            { label: '한 번만 스치듯 봐도 다 배움', isCorrect: false },
-            { label: '아무것도 안 보고 다 앎', isCorrect: false },
+            { label: '많은 예시(사진, 글, 소리)', isCorrect: true, icon: 'book' },
+            { label: '한 번만 스치듯 봐도 다 배움', isCorrect: false, icon: 'light_switch' },
+            { label: '아무것도 안 보고 다 앎', isCorrect: false, icon: 'sleep' },
           ],
         },
       },
@@ -378,10 +378,10 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: 'AI가 잘하는 일은 어떤 것일까요?',
           choices: [
-            { label: '영어를 한국어로 바꿔주기', isCorrect: true },
-            { label: '기분 나빠 하기', isCorrect: false },
-            { label: '배고파 하기', isCorrect: false },
-            { label: '잠자기', isCorrect: false },
+            { label: '영어를 한국어로 바꿔주기', isCorrect: true, icon: 'translate' },
+            { label: '기분 나빠 하기', isCorrect: false, icon: 'angry_face' },
+            { label: '배고파 하기', isCorrect: false, icon: 'hungry' },
+            { label: '잠자기', isCorrect: false, icon: 'sleep' },
           ],
         },
       },
@@ -389,9 +389,9 @@ export const M1_LESSONS: LessonContent[] = [
         kind: 'matching',
         data: {
           pairs: [
-            { left: '빠르게 답하기', right: '몇 초 만에 답해줘요' },
-            { left: '번역하기', right: '다른 나라 말로 바꿔줘요' },
-            { left: '요약하기', right: '긴 글을 짧게 정리해줘요' },
+            { left: '빠르게 답하기', right: '몇 초 만에 답해줘요', icon: 'chatbot' },
+            { left: '번역하기', right: '다른 나라 말로 바꿔줘요', icon: 'translate' },
+            { left: '요약하기', right: '긴 글을 짧게 정리해줘요', icon: 'book' },
           ],
         },
       },
@@ -462,10 +462,10 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: 'AI가 할 수 없는 것은 무엇일까요?',
           choices: [
-            { label: '진짜로 슬퍼하며 울기', isCorrect: true },
-            { label: '질문에 답해주기', isCorrect: false },
-            { label: '번역해주기', isCorrect: false },
-            { label: '사진 속 물건 알아보기', isCorrect: false },
+            { label: '진짜로 슬퍼하며 울기', isCorrect: true, icon: 'sad_crying' },
+            { label: '질문에 답해주기', isCorrect: false, icon: 'chatbot' },
+            { label: '번역해주기', isCorrect: false, icon: 'translate' },
+            { label: '사진 속 물건 알아보기', isCorrect: false, icon: 'dog' },
           ],
         },
       },
@@ -495,10 +495,10 @@ export const M1_LESSONS: LessonContent[] = [
         kind: 'matching',
         data: {
           pairs: [
-            { left: '챗GPT·제미나이', right: '글로 대화하는 AI' },
-            { left: '시리·빅스비', right: '말로 대화하는 AI' },
-            { left: '이미지 생성 AI', right: '그림을 그려주는 AI' },
-            { left: '번역 AI', right: '다른 나라 말로 바꿔주는 AI' },
+            { left: '챗GPT·제미나이', right: '글로 대화하는 AI', icon: 'chatbot' },
+            { left: '시리·빅스비', right: '말로 대화하는 AI', icon: 'ai_speaker' },
+            { left: '이미지 생성 AI', right: '그림을 그려주는 AI', icon: 'drawing' },
+            { left: '번역 AI', right: '다른 나라 말로 바꿔주는 AI', icon: 'translate' },
           ],
         },
       },
@@ -507,9 +507,9 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: '"이 강아지 사진을 그려줘"는 어떤 AI에게 물어볼까요?',
           choices: [
-            { label: '그림을 그려주는 AI', isCorrect: true },
-            { label: '말로만 대답하는 AI', isCorrect: false },
-            { label: '번역만 하는 AI', isCorrect: false },
+            { label: '그림을 그려주는 AI', isCorrect: true, icon: 'drawing' },
+            { label: '말로만 대답하는 AI', isCorrect: false, icon: 'chatbot' },
+            { label: '번역만 하는 AI', isCorrect: false, icon: 'translate' },
           ],
         },
       },
@@ -570,9 +570,9 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: 'AI랑 이야기할 때 어떻게 하면 좋을까요?',
           choices: [
-            { label: '궁금한 걸 또박또박 물어봐요', isCorrect: true },
-            { label: '아무 말도 안 해요', isCorrect: false },
-            { label: '큰 소리로 화내요', isCorrect: false },
+            { label: '궁금한 걸 또박또박 물어봐요', isCorrect: true, icon: 'chatbot' },
+            { label: '아무 말도 안 해요', isCorrect: false, icon: 'sleep' },
+            { label: '큰 소리로 화내요', isCorrect: false, icon: 'angry_face' },
           ],
         },
       },
@@ -627,10 +627,10 @@ export const M1_LESSONS: LessonContent[] = [
         data: {
           question: '다음 중 AI를 사용하는 것은 무엇일까요?',
           choices: [
-            { label: '스마트폰 음성비서', isCorrect: true },
-            { label: '연필', isCorrect: false },
-            { label: '종이컵', isCorrect: false },
-            { label: '지우개', isCorrect: false },
+            { label: '스마트폰 음성비서', isCorrect: true, icon: 'ai_speaker' },
+            { label: '연필', isCorrect: false, icon: 'pencil' },
+            { label: '종이컵', isCorrect: false, icon: 'paper_cup' },
+            { label: '지우개', isCorrect: false, icon: 'eraser' },
           ],
         },
       },
@@ -638,9 +638,9 @@ export const M1_LESSONS: LessonContent[] = [
         kind: 'matching',
         data: {
           pairs: [
-            { left: 'AI가 잘하는 것', right: '빠르게 답하고, 번역하고, 그림 알아보기' },
-            { left: 'AI가 못하는 것', right: '진짜로 슬퍼하거나, 밥 먹기' },
-            { left: 'AI가 배우는 방법', right: '많은 예시를 보고 배우기' },
+            { left: 'AI가 잘하는 것', right: '빠르게 답하고, 번역하고, 그림 알아보기', icon: 'translate' },
+            { left: 'AI가 못하는 것', right: '진짜로 슬퍼하거나, 밥 먹기', icon: 'sad_crying' },
+            { left: 'AI가 배우는 방법', right: '많은 예시를 보고 배우기', icon: 'book' },
           ],
         },
       },

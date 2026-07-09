@@ -164,7 +164,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       <div className="max-w-2xl mx-auto">
         <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>골라봐요!</h2>
         <div className="card p-4 md:p-6">
-          <CardPick question={data.question} choices={data.choices} onComplete={handleNext} />
+          <CardPick question={data.question} choices={data.choices} difficulty={difficulty} onComplete={handleNext} />
         </div>
       </div>
     );
@@ -176,7 +176,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       <div className="max-w-2xl mx-auto">
         <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>짝을 맞춰봐요!</h2>
         <div className="card p-4 md:p-6">
-          <Matching pairs={data.pairs} onComplete={handleNext} />
+          <Matching pairs={data.pairs} difficulty={difficulty} onComplete={handleNext} />
         </div>
       </div>
     );
@@ -188,7 +188,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       <div className="max-w-2xl mx-auto">
         <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>순서대로 눌러봐요!</h2>
         <div className="card p-4 md:p-6">
-          <Sequence instruction={data.instruction} items={data.items} onComplete={handleNext} />
+          <Sequence instruction={data.instruction} items={data.items} difficulty={difficulty} onComplete={handleNext} />
         </div>
       </div>
     );

@@ -276,3 +276,22 @@
     object-fit: contain;
   }
 }
+
+/* 게임 정답 폭죽(1회) / 오답 흔들림(1회) — 저자극: 반복·점멸 없음 */
+@keyframes answer-shake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-6px); }
+  40%,80% { transform: translateX(6px); }
+}
+.answer-shake { animation: answer-shake 0.4s ease-in-out 1; }
+
+/* 폭죽 파티클 — Burst.tsx가 각 점에 --dx/--dy(px) 인라인 지정 */
+@keyframes answer-burst {
+  0%   { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
+}
+.answer-burst-dot { animation: answer-burst 0.6s ease-out 1 forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .answer-shake, .answer-burst-dot { animation: none; }
+}

@@ -1,25 +1,28 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
+import ActivityIcon from '../ActivityIcon';
+import Burst from './Burst';
+import { activityColor } from '../../utils/activityPalette';
+import type { Difficulty } from '../../types';
 
 export interface SequenceItem {
   label: string;
+  icon?: string;
 }
 
 interface Props {
-  instruction: string; // 예: "라면 끓이는 순서대로 눌러봐요"
-  items: SequenceItem[]; // 정답 순서대로 전달 — 컴포넌트가 섞어서 보여줌
+  instruction: string;
+  items: SequenceItem[];
+  difficulty: Difficulty;
   onComplete: () => void;
 }
 
-/**
- * 순서 맞추기 게임 — 섞인 카드를 "다음 차례"라고 생각하는 순서대로 클릭.
- * 드래그 없음(접근성), 색+아이콘+TTS 3중 피드백. Matching과 동일한 상호작용 철학.
- */
-export default function Sequence({ instruction, items, onComplete }: Props) {
+export default function Sequence({ instruction, items, difficulty, onComplete }: Props) {
   const [placedCount, setPlacedCount] = useState(0);
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
-  // shuffle once per mount; 우연히 정답 순서 그대로면 한 번 더 섞는다.
+  
+  // shuffle once per mount
   const [shuffleOrder] = useState<number[]>(() => shuffleAvoidingIdentity(items.length));
   const { speak } = useSpeak();
 
@@ -28,7 +31,8 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
   function clickCard(shuffleIdx: number) {
     if (done) return;
     const origIdx = shuffleOrder[shuffleIdx];
-    if (origIdx < placedCount) return; // 이미 놓인 카드
+    if (origIdx < placedCount) return; // already placed
+    
     if (origIdx === placedCount) {
       const next = placedCount + 1;
       setPlacedCount(next);
@@ -50,43 +54,92 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
     <div className="my-6">
       <p className="text-lg font-semibold mb-4">{instruction}</p>
 
-      {/* 위쪽: 번호 슬롯 — 맞춘 순서대로 채워진다 */}
+      {/* Slots */}
       <ol className="space-y-2 mb-6">
-        {items.map((item, i) => (
-          <li
-            key={item.label}
-            className="p-3 rounded-[var(--r-md)] border-2 text-lg"
-            style={
-              i < placedCount
-                ? { borderColor: 'var(--ok)', background: 'var(--ok-bg)' }
-                : { borderColor: 'var(--border)', borderStyle: 'dashed', color: 'var(--muted)' }
-            }
-          >
-            {i < placedCount
-              ? <span className="inline-flex items-center gap-1.5"><Icon name="check" size={18} strokeWidth={2.5} color="var(--ok)" />{i + 1}. {item.label}</span>
-              : `${i + 1}. ─`}
-          </li>
-        ))}
+        {items.map((item, i) => {
+          const isFilled = i < placedCount;
+          const palette = isFilled ? activityColor(item.icon ?? item.label) : null;
+          return (
+            <li
+              key={item.label}
+              className="p-3 rounded-[var(--r-md)] border-2 text-lg font-bold flex items-center justify-between"
+              style={
+                isFilled
+                  ? { borderColor: 'var(--ok)', background: palette?.bg, color: palette?.text }
+                  : { borderColor: 'var(--border)', borderStyle: 'dashed', color: 'var(--muted)' }
+              }
+            >
+              {isFilled ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="bg-white/20 rounded-full w-6 h-6 flex items-center justify-center text-xs">{i + 1}</span>
+                  {difficulty === 'easy' && item.icon && (
+                    <ActivityIcon icon={item.icon} size={28} />
+                  )}
+                  {item.label}
+                </span>
+              ) : (
+                <span>{i + 1}. ─</span>
+              )}
+              {isFilled && <Icon name="check" size={18} strokeWidth={2.5} />}
+            </li>
+          );
+        })}
       </ol>
 
-      {/* 아래쪽: 섞인 카드 — 다음 차례라고 생각하는 카드를 눌러요 */}
+      {/* Shuffled choices */}
       {!done && (
         <div className="grid grid-cols-2 gap-3">
           {shuffleOrder.map((origIdx, shuffleIdx) => {
+            const item = items[origIdx];
             const used = origIdx < placedCount;
             const isWrong = wrongIdx === shuffleIdx;
+            const palette = activityColor(item.icon ?? item.label);
+            
+            let borderStyle = '2px solid var(--line)';
+            let extraClass = '';
+            
+            if (isWrong) {
+              borderStyle = '4px solid var(--warn)';
+              extraClass = 'answer-shake';
+            } else if (used) {
+              borderStyle = '2px solid var(--ok)';
+            }
+
             return (
               <button
-                key={items[origIdx].label}
+                key={item.label}
                 onClick={() => clickCard(shuffleIdx)}
                 disabled={used}
-                className="btn btn-choice p-4 text-lg disabled:opacity-40"
+                className={`relative rounded-[var(--r-md)] p-6 text-lg font-bold flex flex-col items-center justify-center gap-2 transition-transform active:scale-95 disabled:opacity-40 min-h-[120px] ${extraClass}`}
                 style={{
-                  borderColor: isWrong ? 'var(--warn)' : undefined,
-                  background: used ? 'var(--done-bg)' : isWrong ? 'var(--warn-bg)' : 'var(--paper-0)',
-                  color: 'var(--fg)',
+                  background: palette.bg,
+                  color: palette.text,
+                  border: borderStyle,
                 }}
-              >{isWrong && <Icon name="think" size={20} color="var(--warn)" />}{items[origIdx].label}</button>
+              >
+                {difficulty === 'easy' && item.icon && (
+                  <ActivityIcon icon={item.icon} size={56} className="mb-1" />
+                )}
+                <span>{item.label}</span>
+
+                {/* Badges */}
+                {used && (
+                  <span
+                    className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow animate-pulse"
+                    style={{ background: 'var(--ok)' }}
+                  >
+                    <Icon name="check" size={16} strokeWidth={3} />
+                  </span>
+                )}
+                {isWrong && (
+                  <span
+                    className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                    style={{ background: 'var(--warn)' }}
+                  >
+                    <Icon name="close" size={14} strokeWidth={3} />
+                  </span>
+                )}
+              </button>
             );
           })}
         </div>
@@ -94,6 +147,7 @@ export default function Sequence({ instruction, items, onComplete }: Props) {
 
       {done && (
         <p className="text-xl font-bold flex items-center justify-center gap-2" style={{ color: 'var(--ok)' }}>
+          <Burst />
           <Icon name="sparkles" size={24} filled /> 순서를 다 맞췄어요!
         </p>
       )}
