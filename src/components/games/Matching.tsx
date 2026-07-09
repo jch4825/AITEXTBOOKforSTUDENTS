@@ -20,6 +20,7 @@ interface PickedState {
 export default function Matching({ pairs, onComplete }: Props) {
   const [matched, setMatched] = useState<boolean[]>(() => pairs.map(() => false));
   const [picked, setPicked] = useState<PickedState>({ leftIdx: null, rightIdx: null });
+  const [isChecking, setIsChecking] = useState(false);
   // shuffle right column once per mount
   const [rightOrder] = useState<number[]>(() => {
     const order = pairs.map((_, i) => i);
@@ -34,19 +35,28 @@ export default function Matching({ pairs, onComplete }: Props) {
   function tryMatch(left: number, rightShuffleIdx: number) {
     const right = rightOrder[rightShuffleIdx];
     if (left === right) {
+      setIsChecking(true);
       setMatched(m => { const next = [...m]; next[left] = true; return next; });
       setPicked({ leftIdx: null, rightIdx: null });
       speak('잘 맞췄어요!');
       const allDone = matched.filter((_, i) => i !== left).every(Boolean);
-      if (allDone) setTimeout(onComplete, 800);
+      if (allDone) {
+        setTimeout(onComplete, 800);
+      } else {
+        setIsChecking(false);
+      }
     } else {
+      setIsChecking(true);
       speak('다시 골라볼까요?');
-      setTimeout(() => setPicked({ leftIdx: null, rightIdx: null }), 600);
+      setTimeout(() => {
+        setPicked({ leftIdx: null, rightIdx: null });
+        setIsChecking(false);
+      }, 600);
     }
   }
 
   function clickLeft(i: number) {
-    if (matched[i]) return;
+    if (matched[i] || isChecking) return;
     if (picked.rightIdx !== null) {
       tryMatch(i, picked.rightIdx);
     } else {
@@ -56,7 +66,7 @@ export default function Matching({ pairs, onComplete }: Props) {
 
   function clickRight(i: number) {
     const right = rightOrder[i];
-    if (matched[right]) return;
+    if (matched[right] || isChecking) return;
     if (picked.leftIdx !== null) {
       tryMatch(picked.leftIdx, i);
     } else {
@@ -71,7 +81,7 @@ export default function Matching({ pairs, onComplete }: Props) {
           <button
             key={p.left}
             onClick={() => clickLeft(i)}
-            disabled={matched[i]}
+            disabled={matched[i] || isChecking}
             className="btn btn-choice w-full p-4 text-lg disabled:opacity-50"
             style={{
               background: matched[i] ? 'var(--ok-bg)' : picked.leftIdx === i ? 'var(--accent)' : 'var(--paper-0)',
@@ -85,7 +95,7 @@ export default function Matching({ pairs, onComplete }: Props) {
           <button
             key={pairs[origIdx].right}
             onClick={() => clickRight(shuffleIdx)}
-            disabled={matched[origIdx]}
+            disabled={matched[origIdx] || isChecking}
             className="btn btn-choice w-full p-4 text-lg disabled:opacity-50"
             style={{
               background: matched[origIdx] ? 'var(--ok-bg)' : picked.rightIdx === shuffleIdx ? 'var(--accent)' : 'var(--paper-0)',

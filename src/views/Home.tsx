@@ -458,7 +458,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
               {/* Cover Image from public/cover.webp */}
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: "url('cover.png')" }}
+                style={{ backgroundImage: `url('${import.meta.env.BASE_URL}cover.png')` }}
                 aria-label="Aimi, Jinwoo, and Yoona together in a happy future AI society"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#2B3A55]/85 via-transparent to-transparent" />
