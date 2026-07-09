@@ -15,7 +15,7 @@ type PanelId = Exclude<ToolId, 'draw'>;
 const TOOLS: { id: ToolId; label: string; icon: IconName }[] = [
   { id: 'draw', label: '판서', icon: 'pen' },
   { id: 'timer', label: '타이머', icon: 'timer' },
-  { id: 'pecs', label: 'PECS', icon: 'cards' },
+  { id: 'pecs', label: 'AAC', icon: 'cards' },
   { id: 'worksheet', label: '학습지', icon: 'printer' },
   { id: 'resources', label: '교사 자료', icon: 'link' },
 ];

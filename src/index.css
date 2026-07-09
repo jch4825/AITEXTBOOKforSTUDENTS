@@ -234,3 +234,22 @@
     box-shadow: var(--e-1);
   }
 }
+
+/* AAC 카드 인쇄 — 화면엔 숨기고, 인쇄 시 A6(=A4의 1/4) 한 장에 카드 이미지만 (단어는 이미지에 인쇄됨) */
+.aac-print-card { display: none; }
+@media print {
+  @page { size: A6; margin: 8mm; }
+  html, body { background: #fff; }
+  #root { display: none !important; }
+  .aac-print-card {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 92vh;
+  }
+  .aac-print-card img {
+    width: 88mm;
+    height: 88mm;
+    object-fit: contain;
+  }
+}
