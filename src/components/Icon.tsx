@@ -14,7 +14,8 @@ export type IconName =
   | 'speaker' | 'book' | 'home' | 'settings' | 'mic' | 'mic-on'
   | 'menu' | 'close' | 'chevron-left' | 'chevron-right'
   | 'chat' | 'check' | 'bulb' | 'rocket' | 'sparkles' | 'refresh'
-  | 'star' | 'circle' | 'cross' | 'warning' | 'think' | 'hourglass';
+  | 'star' | 'circle' | 'cross' | 'warning' | 'think' | 'hourglass'
+  | 'pen' | 'timer' | 'printer' | 'cards' | 'link';
 
 interface Props {
   name: IconName;
@@ -150,6 +151,40 @@ const GLYPHS: Record<IconName, (p: GlyphProps) => JSX.Element> = {
     <>
       <path d="M6 3h12M6 21h12" />
       <path d="M7 3c0 4 4 5.5 5 9-1 3.5-5 5-5 9M17 3c0 4-4 5.5-5 9 1 3.5 5 5 5 9" />
+    </>
+  ),
+  pen: () => (
+    <>
+      <path d="M4 20l1-4.2L15.8 5l3.2 3.2L8.2 19H4z" />
+      <path d="M13.5 6.5l3.2 3.2" />
+    </>
+  ),
+  timer: () => (
+    <>
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 13V9.5" />
+      <path d="M9.5 2h5" />
+      <path d="M18 6.5l1.2-1.2" />
+    </>
+  ),
+  printer: () => (
+    <>
+      <path d="M6 9V4h12v5" />
+      <rect x="3" y="9" width="18" height="8" rx="1.5" />
+      <path d="M6 14h12v7H6z" />
+    </>
+  ),
+  cards: () => (
+    <>
+      <path d="M7 7V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2" />
+      <rect x="3" y="7" width="14" height="14" rx="2" />
+    </>
+  ),
+  link: () => (
+    <>
+      <path d="M9 15l6-6" />
+      <path d="M10.5 6.5l1-1a4 4 0 0 1 5.7 5.7l-1.2 1.2" />
+      <path d="M13.5 17.5l-1 1a4 4 0 0 1-5.7-5.7l1.2-1.2" />
     </>
   ),
 };

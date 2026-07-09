@@ -5,6 +5,7 @@ import DictionaryPanel from './DictionaryPanel';
 import ProgressDots from './ProgressDots';
 import Button from './Button';
 import Icon from './Icon';
+import ClassroomDock from './ClassroomDock';
 import type { LessonId } from '../types';
 
 interface Props {
@@ -132,6 +133,7 @@ export default function MicroLessonFrame({
           onSearch={setDictQuery}
         />
       </div>
+      <ClassroomDock lessonId={lessonId} />
       <footer className="h-20 shrink-0 border-t border-[color:var(--border)] bg-[color:var(--paper-0)] px-3 md:px-6 flex items-center justify-between gap-2">
         <Button
           variant="secondary"
