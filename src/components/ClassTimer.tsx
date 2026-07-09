@@ -1,3 +1,5 @@
+import { formatTime } from '../utils/time';
+
 const PRESETS = [1, 3, 5, 10, 15, 20];
 
 interface Props {
@@ -6,12 +8,6 @@ interface Props {
   onStart: (minutes: number) => void;
   onToggle: () => void;
   onReset: () => void;
-}
-
-export function formatTime(totalSec: number): string {
-  const m = Math.floor(totalSec / 60);
-  const s = totalSec % 60;
-  return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 export default function ClassTimer({ remainingSec, running, onStart, onToggle, onReset }: Props) {
