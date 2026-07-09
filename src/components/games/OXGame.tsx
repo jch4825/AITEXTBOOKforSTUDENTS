@@ -5,7 +5,7 @@ import Icon from '../Icon';
 import Burst from './Burst';
 
 export interface OXQuestion {
-  text: string;
+  question: string;
   answer: 'O' | 'X';
   feedback: string;
 }
@@ -24,8 +24,8 @@ export default function OXGame({ questions, onComplete }: Props) {
 
   // Auto-read question on mount/change
   useEffect(() => {
-    speak(q.text);
-  }, [speak, q.text]);
+    speak(q.question);
+  }, [speak, q.question]);
 
   function choose(ans: 'O' | 'X') {
     if (selected !== null) return;
@@ -70,10 +70,10 @@ export default function OXGame({ questions, onComplete }: Props) {
 
       {/* Question Text */}
       <div className="flex items-start gap-2 mb-6">
-        <p className="text-xl font-semibold flex-1">{q.text}</p>
+        <p className="text-xl font-semibold flex-1">{q.question}</p>
         <button
           type="button"
-          onClick={() => speak(q.text)}
+          onClick={() => speak(q.question)}
           aria-label="문제 다시 들려주기"
           className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
           style={{

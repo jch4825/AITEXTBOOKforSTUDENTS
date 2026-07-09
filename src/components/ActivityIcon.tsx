@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   icon: string;
@@ -7,8 +7,11 @@ interface Props {
 }
 
 export default function ActivityIcon({ icon, size = 40, className }: Props) {
+  const [error, setError] = useState(false);
   const baseUrl = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) || '/';
   
+  if (error) return null; // 로드 실패 시 DOM을 렌더링하지 않음 (100% 무해하게 숨김)
+
   return (
     <img
       src={`${baseUrl}lessons/pecs/${icon}.webp`}
@@ -18,9 +21,7 @@ export default function ActivityIcon({ icon, size = 40, className }: Props) {
       height={size}
       className={className}
       style={{ width: size, height: size, objectFit: 'contain' }}
-      onError={(e) => {
-        (e.currentTarget as HTMLImageElement).style.visibility = 'hidden';
-      }}
+      onError={() => setError(true)}
     />
   );
 }

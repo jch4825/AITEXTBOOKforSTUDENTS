@@ -11,6 +11,7 @@ import type { MatchingPair } from '../components/games/Matching';
 import Sequence from '../components/games/Sequence';
 import type { SequenceItem } from '../components/games/Sequence';
 import RealAIStep from '../components/RealAIStep';
+import StepErrorBoundary from '../components/StepErrorBoundary';
 import Stage from '../components/Stage';
 import SpeechBubble from '../components/SpeechBubble';
 import Button from '../components/Button';
@@ -311,7 +312,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       onGoHome={onGoHome}
       onPickLesson={onPickLesson}
     >
-      {body_el}
+      <StepErrorBoundary key={step}>{body_el}</StepErrorBoundary>
     </MicroLessonFrame>
   );
 }
