@@ -99,12 +99,13 @@ export default function ClassroomDock({ lessonId }: Props) {
 
   return (
     <>
-      {/* 이전/다음 바(footer) 바로 위에 정적으로 놓인 도구 바 — 스크롤·주소창과 무관하게 항상 붙어 있다.
-          (fixed 부유를 없애 모바일에서 점핑·사라짐·푸터에 붙는 현상 제거) */}
-      <div className="relative z-30 flex justify-center pointer-events-none">
+      {/* 이전/다음 바(footer, h-20) 중앙 위에 붙는 도구 바.
+          absolute + 프레임(relative, h-dvh)에 앵커 — 흐름에서 빠져 사이드바가 푸터까지 이어지고,
+          fixed와 달리 프레임 기준이라 모바일 주소창 변화에도 점핑·사라짐이 없다. */}
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-20 z-30 flex flex-col items-center gap-2 pointer-events-none">
         {!collapsed && panelTool && (
           <div
-            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 rounded-[var(--r-md)] overflow-hidden pointer-events-auto max-h-[60vh] overflow-y-auto"
+            className="rounded-[var(--r-md)] overflow-hidden pointer-events-auto max-h-[60vh] overflow-y-auto"
             style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-2)', border: '1px solid var(--border)' }}
           >
             <div className="flex justify-end p-1">

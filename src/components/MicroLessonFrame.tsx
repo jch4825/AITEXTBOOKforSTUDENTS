@@ -50,7 +50,8 @@ export default function MicroLessonFrame({
   return (
     // h-dvh 고정 — 푸터(다음/이전)가 항상 보이고, 본문·사이드바가 각자 내부 스크롤된다.
     // dvh(동적 뷰포트): 모바일 주소창이 보여도 푸터가 화면 밖으로 밀리지 않는다(vh는 밀림).
-    <div className="h-dvh flex flex-col">
+    // relative: 교사 도구 도크(absolute)의 앵커 — 프레임 기준이라 모바일에서도 안 흔들린다.
+    <div className="h-dvh flex flex-col relative">
       <TopBar
         crumb={crumb}
         onOpenDictionary={() => { setDictQuery(null); setDictOpen(true); }}
@@ -72,7 +73,7 @@ export default function MicroLessonFrame({
             ><Icon name="chevron-right" size={20} /></button>
           </div>
         ) : (
-          <div className="hidden md:flex self-stretch flex-col">
+          <div className="hidden md:flex self-stretch flex-col bg-[color:var(--paper-0)] border-r border-[color:var(--border)]">
             <div className="flex justify-end px-2 pt-2">
               <button
                 onClick={toggleSidebar}
