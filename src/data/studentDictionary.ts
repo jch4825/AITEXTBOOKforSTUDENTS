@@ -271,6 +271,52 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '자꾸 해서 몸에 밴 행동이에요.',
     example: '자기 전에 이를 닦는 것도 습관이에요.',
   },
+  // ─── 모듈 1 어려움(hard) 콘텐츠 신규 어휘 ───
+  {
+    term: '생성형 AI',
+    shortExplanation: '배운 것을 바탕으로 새로운 글이나 그림을 만들어내는 AI예요.',
+    example: '이야기를 써 달라고 하면 새로운 이야기를 만들어 줘요.',
+  },
+  {
+    term: '학습 데이터',
+    shortExplanation: 'AI가 배우려고 미리 모아 놓은 아주 많은 자료 묶음이에요.',
+    example: '강아지 사진을 아주 많이 모으면 학습 데이터가 돼요.',
+  },
+  {
+    term: '음성 인식',
+    shortExplanation: 'AI가 사람의 말소리를 듣고 글자로 바꾸는 거예요.',
+    example: '"알람 맞춰줘"라고 말하면 AI가 그 말을 알아들어요.',
+  },
+  {
+    term: '이미지 인식',
+    shortExplanation: 'AI가 사진이나 그림을 보고 무엇인지 알아내는 거예요.',
+    example: '사진을 보여주면 AI가 "이건 고양이예요"라고 답해요.',
+  },
+  {
+    term: '환각',
+    shortExplanation: 'AI가 그럴듯하지만 틀린 답을 자신 있게 말하는 것.',
+    example: 'AI가 없는 책 이름을 진짜처럼 말했어요. 그래서 꼭 확인해야 해요.',
+  },
+  {
+    term: '자동화',
+    shortExplanation: '사람이 정해준 순서대로만 똑같이 움직이는 거예요.',
+    example: '세탁기는 버튼을 누르면 항상 같은 순서로 빨래를 해요.',
+  },
+  {
+    term: '예측',
+    shortExplanation: 'AI가 다음에 올 말을 미리 짐작해서 고르는 거예요.',
+    example: '"오늘 날씨가" 다음에 "좋아요" 같은 말을 골라요.',
+  },
+  {
+    term: '훈련',
+    shortExplanation: 'AI가 자료를 반복해서 보며 더 잘하게 되는 과정이에요.',
+    example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞혀요.',
+  },
+  {
+    term: '패턴',
+    shortExplanation: '여러 자료에서 자주 반복되는 모양이나 규칙이에요.',
+    example: '고양이 사진마다 뾰족한 귀 모양이 자주 나오는 것도 패턴이에요.',
+  },
 ];
 
 function normalize(term: string): string {
