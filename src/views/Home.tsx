@@ -515,13 +515,13 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
 
             {/* Small Card: Soft Design */}
             <div className="bg-[#fdf8f6]/60 backdrop-blur-md p-8 rounded-2xl border border-[#4f5b90]/10 shadow-sm flex flex-col justify-center items-center text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-[#ccf200]/20 flex items-center justify-center text-[#546500]">
-                <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>psychology</span>
+              <div className="w-16 h-16 rounded-full bg-[#ccf200]/20 flex items-center justify-center text-[#546500] pulse-soft">
+                <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>celebration</span>
               </div>
               <div>
-                <h4 className="text-lg font-bold text-[#1c1b1b]">저자극 인터페이스</h4>
+                <h4 className="text-lg font-bold text-[#1c1b1b]">생동감 있는 화면</h4>
                 <p className="text-xs text-[#5C5B5A] mt-1">
-                  시각 피로도를 낮춘 파스텔 배색과 차분한 모션 가이드
+                  밝은 색과 경쾌한 애니메이션으로 즐겁게 몰입하는 학습 경험
                 </p>
               </div>
             </div>

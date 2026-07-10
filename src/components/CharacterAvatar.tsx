@@ -18,6 +18,7 @@ interface Props {
   expression?: Expression;
   size?: number; // px (정사각)
   className?: string;
+  idle?: boolean; // 은은히 떠오르는 idle 모션(기본 켬) — reduced-motion에선 자동 정지
 }
 
 /** 세션 내 404 캐시 — 없는 확장자를 매 마운트마다 다시 요청하지 않는다 */
@@ -30,8 +31,9 @@ function pickSrc(candidates: string[]): string | null {
   return null;
 }
 
-export default function CharacterAvatar({ character, expression = 'neutral', size = 64, className }: Props) {
+export default function CharacterAvatar({ character, expression = 'neutral', size = 64, className, idle = true }: Props) {
   const charMeta = CHARACTERS[character];
+  const cls = [idle ? 'float-soft' : '', className].filter(Boolean).join(' ') || undefined;
   const base = `${import.meta.env.BASE_URL}characters/${character}-${expression}`;
   const candidates = [`${base}.png`, `${base}.svg`];
   const [src, setSrc] = useState<string | null>(() => pickSrc(candidates));
@@ -60,7 +62,7 @@ export default function CharacterAvatar({ character, expression = 'neutral', siz
       alt={charMeta.name}
       width={size}
       height={size}
-      className={className}
+      className={cls}
       onError={() => {
         missingAssets.add(src);
         setSrc(pickSrc(candidates));

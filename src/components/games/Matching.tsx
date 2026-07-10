@@ -140,7 +140,7 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
 
               {isMatched && (
                 <span
-                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                  className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
                   style={{ background: 'var(--ok)' }}
                 >
                   <Icon name="check" size={16} strokeWidth={3} />
@@ -203,7 +203,7 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
 
               {isMatched && (
                 <span
-                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                  className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
                   style={{ background: 'var(--ok)' }}
                 >
                   <Icon name="check" size={16} strokeWidth={3} />

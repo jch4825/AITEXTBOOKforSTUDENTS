@@ -58,9 +58,11 @@
     --e-1: 0 1px 3px rgba(43, 58, 85, 0.08);
     --e-2: 0 4px 16px rgba(43, 58, 85, 0.10);
 
-    /* 모션 — ease-out 진입 전용, 1회성만 (저자극 원칙) */
+    /* 모션 — 생동감 있게. 반복·idle 모션 허용(저자극 원칙 폐지). 접근성은 prefers-reduced-motion으로 보장 */
     --t-fast: 150ms;
     --t-base: 250ms;
+    --t-slow: 500ms;
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* 살짝 튀는 오버슈트 */
   }
 
   html {
@@ -120,19 +122,42 @@
   }
   .dict-term:hover { background: rgba(43, 58, 85, 0.08); }
 
-  /* story scene card & speech bubble — 1회성 fade-in만 허용 (저자극 원칙: 반복 애니 금지) */
+  /* story scene card & speech bubble — 살짝 튀며 등장 (생동감) */
   @keyframes story-fade-in {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: none; }
+    0% { opacity: 0; transform: translateY(10px) scale(0.98); }
+    100% { opacity: 1; transform: none; }
   }
-  .story-fade-in { animation: story-fade-in 0.3s ease-out; }
+  .story-fade-in { animation: story-fade-in var(--t-base) var(--ease-bounce); }
 
-  /* 배움 도장 — 정리 화면에서 도장이 "찍히는" 1회성 모션 (§4.2, 250ms ease-out) */
+  /* 배움 도장 — 정리 화면에서 도장이 "쾅" 찍히는 모션 (§4.2) */
   @keyframes stamp-in {
-    from { opacity: 0; transform: scale(1.5); }
-    to { opacity: 1; transform: scale(1); }
+    0% { opacity: 0; transform: scale(1.6) rotate(-8deg); }
+    60% { opacity: 1; transform: scale(0.92) rotate(2deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0); }
   }
-  .stamp-in { animation: stamp-in 250ms ease-out; }
+  .stamp-in { animation: stamp-in var(--t-base) var(--ease-bounce); }
+
+  /* 생동감 유틸리티 — 반복 idle·강조 모션 (저자극 원칙 폐지 후 도입) */
+  /* 은은히 떠오르는 idle — 캐릭터 아바타·무대에 숨결을 준다 */
+  @keyframes float-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .float-soft { animation: float-soft 3.2s ease-in-out infinite; }
+
+  /* 튀며 등장 — 카드·배지 */
+  @keyframes pop-in {
+    0% { opacity: 0; transform: scale(0.6); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .pop-in { animation: pop-in var(--t-base) var(--ease-bounce); }
+
+  /* 부드러운 맥동 — CTA 시선 유도 */
+  @keyframes pulse-soft {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+  .pulse-soft { animation: pulse-soft 2.4s ease-in-out infinite; }
 
   /* 아이미 시그니처 모먼트 — "진짜 AI가 답한" 순간에만 brand-glow 1회 (§4.3).
      sim-ai·준비된 답변에는 절대 쓰지 않는다: 이 색은 실제 AI 응답에 예약됨. */
@@ -150,10 +175,13 @@
   .ai-glow-avatar { animation: ai-glow-avatar 700ms ease-out 1; }
 
   @media (prefers-reduced-motion: reduce) {
-    .story-fade-in { animation: none; }
-    .stamp-in { animation: none; }
-    .ai-glow { animation: none; }
-    .ai-glow-avatar { animation: none; }
+    .story-fade-in,
+    .stamp-in,
+    .ai-glow,
+    .ai-glow-avatar,
+    .float-soft,
+    .pop-in,
+    .pulse-soft { animation: none; }
   }
 }
 
@@ -279,7 +307,7 @@
   }
 }
 
-/* 게임 정답 폭죽(1회) / 오답 흔들림(1회) — 저자극: 반복·점멸 없음 */
+/* 게임 정답 축하 / 오답 흔들림 */
 @keyframes answer-shake {
   0%,100% { transform: translateX(0); }
   20%,60% { transform: translateX(-6px); }
@@ -287,13 +315,23 @@
 }
 .answer-shake { animation: answer-shake 0.4s ease-in-out 1; }
 
-/* 폭죽 파티클 — Burst.tsx가 각 점에 --dx/--dy(px) 인라인 지정 */
-@keyframes answer-burst {
-  0%   { transform: translate(0,0) scale(1); opacity: 1; }
-  100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
+/* 정답 배지·패널 — 신나게 튀어 오름 */
+@keyframes answer-pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  55% { transform: scale(1.18); opacity: 1; }
+  75% { transform: scale(0.94); }
+  100% { transform: scale(1); }
 }
-.answer-burst-dot { animation: answer-burst 0.6s ease-out 1 forwards; }
+.answer-pop { animation: answer-pop 0.5s var(--ease-bounce) 1; }
+
+/* 폭죽 파티클 — Burst.tsx가 각 점에 --dx/--dy(px)·--rot 인라인 지정. 날아가며 회전·낙하 */
+@keyframes answer-burst {
+  0%   { transform: translate(0,0) scale(1) rotate(0); opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translate(var(--dx), calc(var(--dy) + 10px)) scale(0.4) rotate(var(--rot, 180deg)); opacity: 0; }
+}
+.answer-burst-dot { animation: answer-burst 0.9s ease-out 1 forwards; }
 
 @media (prefers-reduced-motion: reduce) {
-  .answer-shake, .answer-burst-dot { animation: none; }
+  .answer-shake, .answer-burst-dot, .answer-pop { animation: none; }
 }

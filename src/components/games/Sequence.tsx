@@ -133,7 +133,7 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
                 {/* Badges */}
                 {used && (
                   <span
-                    className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow animate-pulse"
+                    className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
                     style={{ background: 'var(--ok)' }}
                   >
                     <Icon name="check" size={16} strokeWidth={3} />
