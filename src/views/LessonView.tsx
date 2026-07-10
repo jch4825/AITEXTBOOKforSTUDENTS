@@ -21,6 +21,9 @@ import { useSettings } from '../context/SettingsContext';
 import { useProgress } from '../context/ProgressContext';
 import { useSpeak } from '../hooks/useSpeak';
 import { getLesson } from '../data/lessons';
+import { getHardContent } from '../data/lessons/hard';
+import LessonGoal from '../components/LessonGoal';
+import HardLessonBody from '../components/HardLessonBody';
 import { getModule, moduleIdFromLessonId, MODULES, lessonIdsForModule } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import { wrapDictionaryTerms } from './lessonTextUtils';
@@ -71,9 +74,16 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   const totalSteps = lesson.steps.length + 1;
   const isWrapUp = step === lesson.steps.length;
   const currentStep = lesson.steps[step];
+  const hard = getHardContent(lesson.id);
+  // 어려움인데 hard 콘텐츠가 없으면 보통으로 폴백 (spec §4 — 절대 깨지지 않음)
+  const effectiveHard = difficulty === 'hard' && hard ? hard : null;
   const body = difficulty === 'easy' ? lesson.bodyEasy : lesson.bodyNormal;
-  const wrapUpText = difficulty === 'easy' ? lesson.wrapUpEasy : lesson.wrapUpNormal;
+  const wrapUpText = effectiveHard
+    ? effectiveHard.wrapUpHard
+    : difficulty === 'easy' ? lesson.wrapUpEasy : lesson.wrapUpNormal;
+  const goalText = hard ? hard.goal[difficulty] : null; // 전 난이도 노출 (hard 데이터에서)
   const story = getLessonStory(lesson.id);
+  // 스토리는 난이도와 직교 — 어려움은 introNormal 사용 (spec §5)
   const storyIntro = story ? (difficulty === 'easy' ? story.introEasy : story.introNormal) : null;
 
   // 정리 화면에 들어오면 자동으로 한 번 읽어준다.
@@ -118,10 +128,17 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
             className="-mx-4 -mt-4 md:-mx-8 md:-mt-10 mb-6"
           />
           <div className="max-w-2xl mx-auto">
-            <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
-            <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
-              <Icon name="speaker" size={20} /> 읽어줘
-            </Button>
+            {step === 0 && goalText && <LessonGoal text={goalText} accent={theme.accent} />}
+            {effectiveHard ? (
+              <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
+            ) : (
+              <>
+                <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
+                <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
+                  <Icon name="speaker" size={20} /> 읽어줘
+                </Button>
+              </>
+            )}
           </div>
         </>
       );
@@ -130,6 +147,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     return (
       <div className="max-w-2xl mx-auto">
         <h1 className="t-h1 mb-4" style={{ color: theme.accent }}>{lesson.title}</h1>
+        {step === 0 && goalText && <LessonGoal text={goalText} accent={theme.accent} />}
         {data.imagePlaceholder && (
           <div
             className="w-full aspect-video rounded-[var(--r-lg)] border-2 border-dashed flex items-center justify-center text-[color:var(--muted)] mb-4"
@@ -139,10 +157,16 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
             <span className="text-base">(여기에 그림)</span>
           </div>
         )}
-        <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
-        <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
-          <Icon name="speaker" size={20} /> 읽어줘
-        </Button>
+        {effectiveHard ? (
+          <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
+        ) : (
+          <>
+            <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
+            <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
+              <Icon name="speaker" size={20} /> 읽어줘
+            </Button>
+          </>
+        )}
       </div>
     );
   }
@@ -261,6 +285,11 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
         </div>
         <h2 className="t-h2 mb-4" style={{ color: theme.accent }}>오늘 배운 것</h2>
         <p className="text-xl leading-relaxed mb-6">{wrapUpText}</p>
+        {goalText && (
+          <div className="mb-6">
+            <LessonGoal text={goalText} accent={theme.accent} compact />
+          </div>
+        )}
         {story && (
           <div className="text-left max-w-md mx-auto mb-6">
             <SpeechBubble
