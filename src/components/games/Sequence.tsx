@@ -3,7 +3,7 @@ import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
 import ActivityIcon from '../ActivityIcon';
 import Burst from './Burst';
-import { activityColor, activitySurface } from '../../utils/activityPalette';
+import { activityColor } from '../../utils/activityPalette';
 import type { Difficulty } from '../../types';
 
 export interface SequenceItem {
@@ -72,7 +72,7 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
               className="p-3 rounded-[var(--r-md)] border-2 text-lg font-bold flex items-center justify-between"
               style={
                 isFilled
-                  ? { borderColor: 'var(--ok)', background: palette?.bg, color: palette?.text }
+                  ? { borderColor: 'var(--ok)', background: palette?.tint, color: 'var(--brand-ink)' }
                   : { borderColor: 'var(--border)', borderStyle: 'dashed', color: 'var(--muted)' }
               }
             >
@@ -102,9 +102,8 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
             const used = origIdx < placedCount;
             const isWrong = wrongIdx === shuffleIdx;
             const palette = activityColor(item.icon ?? item.label);
-            const surface = activitySurface(palette.bg);
 
-            let borderStyle = '2px solid var(--line)';
+            let borderStyle = `2.5px solid ${palette.accent}`;
             let extraClass = '';
             
             if (isWrong) {
@@ -121,10 +120,10 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
                 disabled={used}
                 className={`card3d relative rounded-[var(--r-md)] p-5 text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-40 min-h-[150px] ${extraClass}`}
                 style={{
-                  background: surface.gradient,
-                  color: palette.text,
+                  background: 'var(--paper-0)',
+                  color: 'var(--brand-ink)',
                   border: borderStyle,
-                  ['--edge' as string]: surface.edge,
+                  ['--edge' as string]: palette.accent,
                 }}
               >
                 {difficulty === 'easy' && item.icon && (

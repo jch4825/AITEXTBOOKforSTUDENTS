@@ -90,11 +90,12 @@ export default function OXGame({ questions, onComplete }: Props) {
       <div className="grid grid-cols-2 gap-4">
         {(['O', 'X'] as const).map((choice) => {
           const isChoicePicked = selected === choice;
-          
-          let borderStyle = '2px solid var(--line)';
+          // 종이 스티커 문법 — O 틸 / X 코랄 (활동 카드와 같은 팔레트 톤)
+          const accent = choice === 'O' ? '#3FAE8C' : '#E8825E';
+
+          let borderStyle = `2.5px solid ${accent}`;
           let extraClass = '';
-          let bgStyle = 'var(--paper-0)';
-          
+
           if (isChoicePicked) {
             borderStyle = isCorrect
               ? '4px solid var(--ok)'
@@ -109,10 +110,11 @@ export default function OXGame({ questions, onComplete }: Props) {
               key={choice}
               onClick={() => choose(choice)}
               disabled={selected !== null}
-              className={`relative h-32 rounded-[var(--r-lg)] flex flex-col items-center justify-center font-black transition-all active:scale-95 disabled:opacity-65 ${extraClass}`}
+              className={`card3d relative h-32 rounded-[var(--r-lg)] flex flex-col items-center justify-center font-black disabled:opacity-65 ${extraClass}`}
               style={{
                 border: borderStyle,
-                background: bgStyle,
+                background: 'var(--paper-0)',
+                ['--edge' as string]: accent,
               }}
             >
               {/* O or X Shape rendering */}
@@ -126,7 +128,7 @@ export default function OXGame({ questions, onComplete }: Props) {
                       ? isCorrect
                         ? 'var(--ok)'
                         : 'var(--warn)'
-                      : 'var(--accent)'
+                      : accent
                   }
                 />
               ) : (
@@ -139,7 +141,7 @@ export default function OXGame({ questions, onComplete }: Props) {
                       ? isCorrect
                         ? 'var(--ok)'
                         : 'var(--warn)'
-                      : 'var(--accent)'
+                      : accent
                   }
                 />
               )}

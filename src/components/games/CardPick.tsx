@@ -4,7 +4,7 @@ import Button from '../Button';
 import Icon from '../Icon';
 import ActivityIcon from '../ActivityIcon';
 import Burst from './Burst';
-import { activityColor, activitySurface } from '../../utils/activityPalette';
+import { activityColor } from '../../utils/activityPalette';
 import type { Difficulty } from '../../types';
 
 export interface CardChoice {
@@ -60,11 +60,10 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
         {choices.map((c, i) => {
           const selected = i === pickedIdx;
           const palette = activityColor(c.icon ?? c.label);
-          const surface = activitySurface(palette.bg);
 
-          let borderStyle = '2px solid var(--line)';
+          let borderStyle = `2.5px solid ${palette.accent}`;
           let extraClass = '';
-          
+
           if (selected) {
             borderStyle = c.isCorrect
               ? '4px solid var(--ok)'
@@ -81,10 +80,10 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
               disabled={pickedIdx !== null}
               className={`card3d relative rounded-[var(--r-md)] p-5 text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-60 min-h-[150px] ${extraClass}`}
               style={{
-                background: surface.gradient,
-                color: palette.text,
+                background: 'var(--paper-0)',
+                color: 'var(--brand-ink)',
                 border: borderStyle,
-                ['--edge' as string]: surface.edge,
+                ['--edge' as string]: palette.accent,
               }}
             >
               {/* Show icon only in easy difficulty */}
