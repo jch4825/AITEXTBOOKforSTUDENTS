@@ -1,7 +1,6 @@
-import type { JSX, ReactNode } from 'react';
+import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
 import MicroLessonFrame from '../components/MicroLessonFrame';
-import DictionaryTerm from '../components/DictionaryTerm';
 import OXGame from '../components/games/OXGame';
 import type { OXQuestion } from '../components/games/OXGame';
 import CardPick from '../components/games/CardPick';
@@ -24,6 +23,7 @@ import { useSpeak } from '../hooks/useSpeak';
 import { getLesson } from '../data/lessons';
 import { getModule, moduleIdFromLessonId, MODULES, lessonIdsForModule } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
+import { wrapDictionaryTerms } from './lessonTextUtils';
 import type { LessonContent, LessonId } from '../types';
 
 interface Props {
@@ -315,25 +315,6 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       <StepErrorBoundary key={step}>{body_el}</StepErrorBoundary>
     </MicroLessonFrame>
   );
-}
-
-/**
- * Renders the body with each occurrence of a listed term wrapped in a
- * DictionaryTerm (dotted-underline, opens the right-hand panel on click).
- */
-function wrapDictionaryTerms(text: string, terms: string[]): ReactNode[] {
-  if (terms.length === 0) return [text];
-  const pattern = new RegExp(`(${terms.map(escapeRegExp).join('|')})`, 'g');
-  const parts = text.split(pattern);
-  return parts.map((part, i) =>
-    terms.includes(part)
-      ? <span key={i}><DictionaryTerm term={part}>{part}</DictionaryTerm></span>
-      : <span key={i}>{part}</span>
-  );
-}
-
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
