@@ -335,3 +335,24 @@
 @media (prefers-reduced-motion: reduce) {
   .answer-shake, .answer-burst-dot, .answer-pop { animation: none; }
 }
+
+/* 입체(3D) 광택 버튼 — 아래 립(var(--edge))으로 두께감, 누르면 쑥 들어간다.
+   배경 그라데이션·--edge는 컴포넌트가 인라인으로 지정(activitySurface). */
+.card3d {
+  box-shadow: 0 5px 0 var(--edge, rgba(0,0,0,0.22)), 0 9px 16px rgba(30,25,40,0.16);
+  transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+.card3d:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 0 var(--edge, rgba(0,0,0,0.22)), 0 12px 20px rgba(30,25,40,0.2);
+}
+.card3d:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--edge, rgba(0,0,0,0.22)), 0 3px 7px rgba(30,25,40,0.16);
+}
+.card3d:disabled {
+  box-shadow: 0 4px 0 var(--edge, rgba(0,0,0,0.22));
+}
+@media (prefers-reduced-motion: reduce) {
+  .card3d, .card3d:hover, .card3d:active { transform: none; transition: none; }
+}

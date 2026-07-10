@@ -18,3 +18,24 @@ export function activityColor(key: string) {
   for (let i = 0; i < key.length; i++) h = ((h << 5) + h + key.charCodeAt(i)) >>> 0; // djb2
   return ACTIVITY_PALETTE[h % ACTIVITY_PALETTE.length];
 }
+
+// ── 입체(3D) 광택 버튼 표면 ─────────────────────────────────────────────
+// 평평한 단색은 심심하고 원색이 튄다. 위쪽 하이라이트→아래쪽 짙은 립 그라데이션으로
+// 광택 있는 캔디 버튼처럼 만들고, 아래 립(--edge)으로 눌리는 입체감을 준다.
+function mix(hex: string, t: [number, number, number], amt: number): string {
+  const c = hex.replace('#', '');
+  const r = parseInt(c.slice(0, 2), 16), g = parseInt(c.slice(2, 4), 16), b = parseInt(c.slice(4, 6), 16);
+  const m = (a: number, bb: number) => Math.round(a + (bb - a) * amt);
+  const h = (n: number) => n.toString(16).padStart(2, '0');
+  return `#${h(m(r, t[0]))}${h(m(g, t[1]))}${h(m(b, t[2]))}`;
+}
+const lighten = (hex: string, amt: number) => mix(hex, [255, 255, 255], amt);
+const darken = (hex: string, amt: number) => mix(hex, [0, 0, 0], amt);
+
+/** bg 원색에서 광택 그라데이션 배경 + 입체 립(edge) 색을 파생 */
+export function activitySurface(bg: string) {
+  return {
+    gradient: `linear-gradient(180deg, ${lighten(bg, 0.24)} 0%, ${bg} 52%, ${darken(bg, 0.1)} 100%)`,
+    edge: darken(bg, 0.26),
+  };
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
 import ActivityIcon from '../ActivityIcon';
-import { activityColor } from '../../utils/activityPalette';
+import { activityColor, activitySurface } from '../../utils/activityPalette';
 import type { Difficulty } from '../../types';
 
 export interface MatchingPair {
@@ -107,7 +107,8 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
           const isWrong = wrongPair?.leftIdx === i;
           
           const palette = activityColor(p.icon ?? p.left);
-          
+          const surface = activitySurface(palette.bg);
+
           let borderStyle = '2px solid var(--line)';
           let extraClass = '';
           
@@ -125,16 +126,16 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
               key={p.left}
               onClick={() => clickLeft(i)}
               disabled={isMatched || isChecking}
-              className={`relative btn btn-choice w-full p-4 min-h-[96px] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 transition-all ${extraClass}`}
+              className={`card3d relative w-full p-4 min-h-[112px] rounded-[var(--r-md)] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 ${extraClass}`}
               style={{
-                background: palette.bg,
+                background: surface.gradient,
                 color: palette.text,
                 border: borderStyle,
-                boxShadow: isPicked ? '0 0 12px rgba(43, 58, 85, 0.25)' : 'none',
+                ['--edge' as string]: surface.edge,
               }}
             >
               {difficulty === 'easy' && p.icon && (
-                <ActivityIcon icon={p.icon} size={48} className="mb-1" />
+                <ActivityIcon icon={p.icon} size={64} className="mb-1" />
               )}
               <span>{p.left}</span>
 
@@ -170,7 +171,8 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
           const isWrong = wrongPair?.rightIdx === shuffleIdx;
           
           const palette = activityColor(p.icon ?? p.right);
-          
+          const surface = activitySurface(palette.bg);
+
           let borderStyle = '2px solid var(--line)';
           let extraClass = '';
           
@@ -188,16 +190,16 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
               key={p.right}
               onClick={() => clickRight(shuffleIdx)}
               disabled={isMatched || isChecking}
-              className={`relative btn btn-choice w-full p-4 min-h-[96px] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 transition-all ${extraClass}`}
+              className={`card3d relative w-full p-4 min-h-[112px] rounded-[var(--r-md)] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 ${extraClass}`}
               style={{
-                background: palette.bg,
+                background: surface.gradient,
                 color: palette.text,
                 border: borderStyle,
-                boxShadow: isPicked ? '0 0 12px rgba(43, 58, 85, 0.25)' : 'none',
+                ['--edge' as string]: surface.edge,
               }}
             >
               {difficulty === 'easy' && p.icon && (
-                <ActivityIcon icon={p.icon} size={48} className="mb-1" />
+                <ActivityIcon icon={p.icon} size={64} className="mb-1" />
               )}
               <span>{p.right}</span>
 

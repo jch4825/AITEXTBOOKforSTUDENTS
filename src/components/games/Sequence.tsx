@@ -3,7 +3,7 @@ import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
 import ActivityIcon from '../ActivityIcon';
 import Burst from './Burst';
-import { activityColor } from '../../utils/activityPalette';
+import { activityColor, activitySurface } from '../../utils/activityPalette';
 import type { Difficulty } from '../../types';
 
 export interface SequenceItem {
@@ -102,7 +102,8 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
             const used = origIdx < placedCount;
             const isWrong = wrongIdx === shuffleIdx;
             const palette = activityColor(item.icon ?? item.label);
-            
+            const surface = activitySurface(palette.bg);
+
             let borderStyle = '2px solid var(--line)';
             let extraClass = '';
             
@@ -118,15 +119,16 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
                 key={item.label}
                 onClick={() => clickCard(shuffleIdx)}
                 disabled={used}
-                className={`relative rounded-[var(--r-md)] p-6 text-lg font-bold flex flex-col items-center justify-center gap-2 transition-transform active:scale-95 disabled:opacity-40 min-h-[120px] ${extraClass}`}
+                className={`card3d relative rounded-[var(--r-md)] p-5 text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-40 min-h-[150px] ${extraClass}`}
                 style={{
-                  background: palette.bg,
+                  background: surface.gradient,
                   color: palette.text,
                   border: borderStyle,
+                  ['--edge' as string]: surface.edge,
                 }}
               >
                 {difficulty === 'easy' && item.icon && (
-                  <ActivityIcon icon={item.icon} size={56} className="mb-1" />
+                  <ActivityIcon icon={item.icon} size={92} className="mb-1" />
                 )}
                 <span>{item.label}</span>
 
