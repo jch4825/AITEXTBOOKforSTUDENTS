@@ -1,4 +1,4 @@
-export type Difficulty = 'easy' | 'normal';
+export type Difficulty = 'easy' | 'normal' | 'hard';
 export type FontSize = 'normal' | 'large';
 
 export type ModuleId = 'm1' | 'm2' | 'm3' | 'm4' | 'm5' | 'm6';
@@ -60,4 +60,25 @@ export interface LessonContent {
   wrapUpEasy: string;
   wrapUpNormal: string;
   steps: LessonStep[];
+}
+
+/** '어려움' 레벨 — 오늘의 용어 항목. definition은 정확한 정의, example은 짧은 사용 예. */
+export interface HardTerm {
+  term: string;
+  definition: string;
+  example?: string;
+}
+
+/**
+ * '어려움' 레벨 차시 콘텐츠 (spec: 2026-07-10-hard-difficulty-design.md §4).
+ * 기존 LessonContent와 분리 — src/data/lessons/hard/ 모듈에 lessonId로 매핑.
+ * goal은 전 난이도에서 '오늘의 목표' 카드에 쓴다 (난이도별 문장).
+ */
+export interface HardLessonContent {
+  goal: { easy: string; normal: string; hard: string };
+  concept: string[];        // 개념 문단 (2~4개)
+  terms: HardTerm[];        // 오늘의 용어 (2~4개)
+  method?: string[];        // 어떻게 할까요 — 수행 절차 (해당 차시만)
+  limits: string;           // 꼭 기억해요 — 한계·주의
+  wrapUpHard: string;       // 어려움용 정리 한 줄 (정리 화면 자동 TTS)
 }
