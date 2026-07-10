@@ -10,8 +10,22 @@ import { CHARACTERS } from '../data/characters';
  */
 
 export type Expression =
-  | 'neutral' | 'happy' | 'surprised' | 'thinking' // 사람 캐릭터
-  | 'cheer' | 'curious' | 'sleepy';                // 아이미 전용 (사람 컷도 파일로 제공됨)
+  // 기존 7종 (하위 호환 유지)
+  | 'neutral' | 'happy' | 'surprised' | 'thinking'
+  | 'cheer' | 'curious' | 'sleepy'
+  // 사람 캐릭터 신규 28종 표정 키
+  | 'cold' | 'haha' | 'writing' | 'focus' | 'thought_deep' | 'smile_calm' 
+  | 'strict' | 'explain' | 'observe_logical' | 'observe_surprised' | 'error_check' 
+  | 'tired' | 'realization' | 'relief' | 'warning' | 'insight' | 'coding' | 'ethical'
+  | 'gentle' | 'bright' | 'greet' | 'frustrated' | 'sad' | 'angry' | 'embarrassed'
+  | 'wink' | 'bored' | 'stubborn' | 'shocked' | 'shy' | 'proud' | 'alternative'
+  // 아이미 로봇 신규 28종 표정 키
+  | 'aimi_happy' | 'aimi_bored' | 'aimi_sad' | 'aimi_crying' | 'aimi_tired' 
+  | 'aimi_charging' | 'aimi_low_battery' | 'aimi_error' | 'aimi_study' | 'aimi_curious'
+  | 'aimi_shy' | 'aimi_surprised' | 'aimi_scared' | 'aimi_angry' | 'aimi_wink' 
+  | 'aimi_glitch' | 'aimi_proud' | 'aimi_lonely' | 'aimi_friendly' | 'aimi_neutral' 
+  | 'aimi_sleepy' | 'aimi_cheer' | 'aimi_observe' | 'aimi_thought' | 'aimi_explain' 
+  | 'aimi_alert' | 'aimi_success' | 'aimi_fail';
 
 interface Props {
   character: CharacterId;
