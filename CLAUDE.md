@@ -29,7 +29,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
      (시각 동일). 시트(`docs/character-sheets/`) 첨부해 그림책풍 일러스트 컷을 생성한 뒤
      `{id}-{expression}.png`(512px 투명)로 넣으면 **png가 svg보다 우선 로드** — 코드 수정 없음.
      표정 7종: neutral/happy/surprised/thinking/cheer/curious/sleepy.
-   - **영상**: `public/lessons/{차시ID}.mp4` (8초, 저자극) — 확보 시 Stage에 연결 작업 필요.
+   - **영상**: `public/lessons/{차시ID}.mp4` (8초) — 확보 시 Stage에 연결 작업 필요.
 2. ~~**D1 — 토큰 v2**~~ **완료 (2026-07-07)** — index.css 토큰 v2(브랜드 잉크 `#2B3A55`로 --accent 전환,
    warm-gray 종이 뉴트럴, 타이포·radius·elevation·모션 토큰) + 종이 질감(2% SVG 노이즈) +
    버튼 4종 체계(`.btn-primary/secondary/ghost/choice` + `Button.tsx`) + accentSoft 솔리드 파스텔 재정의.
@@ -146,8 +146,9 @@ Step kinds: `text | ox | card-pick | matching | sequence | sim-ai | real-ai`.
 **스토리 레이어 규칙:** 차시를 추가하면 `story.ts`의 `LESSON_STORIES`에도 반드시 항목 추가
 (scene 1~2명, introEasy/introNormal, reaction). 사회상황이야기 작법: 서술+관점 문장, 지시는
 부드럽게("~하면 좋아요"). AI 응답은 전부 아이미 화자 — Gemini 시스템 프롬프트에 페르소나 포함.
-캐릭터 비주얼 변경은 CharacterAvatar.tsx 한 곳에서만. 애니메이션은 1회성 fade-in만 허용
-(반복·점멸 금지 — 저자극 원칙).
+캐릭터 비주얼 변경은 CharacterAvatar.tsx 한 곳에서만. 애니메이션은 생동감 있게 자유롭게 활용한다
+(과거 "저자극 원칙"의 반복·점멸·1회성 fade-in 한정 규칙은 폐지 — 프로그램이 너무 dull해졌기 때문).
+단, `prefers-reduced-motion` 사용자에게는 모션을 줄여 접근성은 지킨다(이건 저자극 원칙과 별개).
 
 ## Key Constraints
 
