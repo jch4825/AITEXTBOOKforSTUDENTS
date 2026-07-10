@@ -9,7 +9,7 @@ export const STORAGE_KEYS = {
 const DEFAULT_PROGRESS: ProgressState = { completedLessons: [] };
 
 const DEFAULT_SETTINGS: SettingsState = {
-  difficulty: 'normal',
+  difficulty: 'hard',   // 하향식 교수 흐름: 어려움에서 시작해 보통→쉬움으로 내린다 (spec §2)
   fontSize: 'normal',
   ttsEnabled: true,
 };
@@ -43,7 +43,10 @@ export function loadSettings(): SettingsState {
   if (!raw) return DEFAULT_SETTINGS;
   try {
     const parsed = JSON.parse(raw);
-    const difficulty: Difficulty = parsed?.difficulty === 'easy' ? 'easy' : 'normal';
+    const difficulty: Difficulty =
+      parsed?.difficulty === 'easy' ? 'easy'
+      : parsed?.difficulty === 'hard' ? 'hard'
+      : 'normal';
     const fontSize: FontSize = parsed?.fontSize === 'large' ? 'large' : 'normal';
     const ttsEnabled = parsed?.ttsEnabled !== false;
     return { difficulty, fontSize, ttsEnabled };
