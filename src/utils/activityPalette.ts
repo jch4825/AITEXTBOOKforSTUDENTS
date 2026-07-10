@@ -20,22 +20,41 @@ export function activityColor(key: string) {
 }
 
 // ── 입체(3D) 광택 버튼 표면 ─────────────────────────────────────────────
-// 평평한 단색은 심심하고 원색이 튄다. 위쪽 하이라이트→아래쪽 짙은 립 그라데이션으로
-// 광택 있는 캔디 버튼처럼 만들고, 아래 립(--edge)으로 눌리는 입체감을 준다.
-function mix(hex: string, t: [number, number, number], amt: number): string {
+// 평평한 단색은 심심하고 원색이 튄다. HSL로 (1) 살짝 파스텔화(채도↓·명도↑)하고
+// (2) 색상환을 조금 돌린 다색(iridescent) 그라데이션 + (3) 아래 짙은 립(--edge)으로
+// 눌리는 입체 캔디 버튼을 만든다. 글자는 어두운 잉크라 파스텔일수록 대비가 좋아진다.
+function hexToHsl(hex: string): [number, number, number] {
   const c = hex.replace('#', '');
-  const r = parseInt(c.slice(0, 2), 16), g = parseInt(c.slice(2, 4), 16), b = parseInt(c.slice(4, 6), 16);
-  const m = (a: number, bb: number) => Math.round(a + (bb - a) * amt);
-  const h = (n: number) => n.toString(16).padStart(2, '0');
-  return `#${h(m(r, t[0]))}${h(m(g, t[1]))}${h(m(b, t[2]))}`;
+  const r = parseInt(c.slice(0, 2), 16) / 255, g = parseInt(c.slice(2, 4), 16) / 255, b = parseInt(c.slice(4, 6), 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+  let h = 0;
+  if (d) {
+    if (max === r) h = ((g - b) / d) % 6;
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60; if (h < 0) h += 360;
+  }
+  const l = (max + min) / 2;
+  const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+  return [h, s * 100, l * 100];
 }
-const lighten = (hex: string, amt: number) => mix(hex, [255, 255, 255], amt);
-const darken = (hex: string, amt: number) => mix(hex, [0, 0, 0], amt);
+const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
+const hsl = (h: number, s: number, l: number) =>
+  `hsl(${((h % 360) + 360) % 360} ${clamp(s, 0, 100)}% ${clamp(l, 0, 100)}%)`;
 
-/** bg 원색에서 광택 그라데이션 배경 + 입체 립(edge) 색을 파생 */
+/** bg 원색에서 다색 광택 그라데이션 배경 + 입체 립(edge) 색을 파생 */
 export function activitySurface(bg: string) {
+  const [h, s, l] = hexToHsl(bg);
+  // 파스텔 베이스 — 채도 낮추고 명도 올림
+  const baseS = s * 0.78;
+  const baseL = clamp(l + 8, 0, 90);
+  // 다색: 하이라이트는 색상환 -22°(따뜻하게), 딥은 +22°(차갑게)로 살짝 무지갯빛
+  const hiColor = hsl(h - 22, baseS * 0.85, clamp(baseL + 18, 0, 97));
+  const midColor = hsl(h, baseS, baseL);
+  const loColor = hsl(h + 22, clamp(baseS * 1.08, 0, 100), clamp(baseL - 14, 0, 100));
   return {
-    gradient: `linear-gradient(180deg, ${lighten(bg, 0.24)} 0%, ${bg} 52%, ${darken(bg, 0.1)} 100%)`,
-    edge: darken(bg, 0.26),
+    gradient: `linear-gradient(150deg, ${hiColor} 0%, ${midColor} 50%, ${loColor} 100%)`,
+    // 립: 원색 색상 유지, 더 어둡게 — 그림자 두께감의 색
+    edge: hsl(h + 8, clamp(s * 0.92, 0, 100), clamp(l - 22, 0, 100)),
   };
 }
