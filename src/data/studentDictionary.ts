@@ -536,6 +536,64 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '틀린 곳을 고치는 거예요.',
     example: '거꾸로 적은 순서를 바로 고치는 게 수정이에요.',
   },
+  // ─── 모듈 6 어려움(hard) 콘텐츠 신규 어휘 ───
+  {
+    term: '예산',
+    shortExplanation: '쓸 수 있는 돈의 한계예요.',
+    example: '"오늘 예산은 5,000원이에요"라고 정해두면 돈을 아껴 써요.',
+  },
+  {
+    term: '위치 정보',
+    shortExplanation: '내가 지금 어디 있는지 알려주는 정보예요.',
+    example: '지도 앱은 위치 정보로 길을 알려줘요. 아무에게나 알리지 않아요.',
+    ttsVersion: '위치 정보는 내가 지금 어디 있는지 알려주는 정보예요. 아무에게나 알리지 않아요.',
+  },
+  {
+    term: '실시간 정보',
+    shortExplanation: '지금 이 순간의 정보예요.',
+    example: '"버스가 5분 뒤에 와요"가 실시간 정보예요.',
+  },
+  {
+    term: '예보',
+    shortExplanation: '날씨가 어떨지 미리 알려주는 거예요.',
+    example: '"내일은 비가 온대요"가 날씨 예보예요.',
+  },
+  {
+    term: '조리법',
+    shortExplanation: '요리하는 방법과 차례예요.',
+    example: 'AI한테 조리법을 물어보고 순서대로 만들어요.',
+  },
+  {
+    term: '루틴',
+    shortExplanation: '매일 반복하는 정해진 순서예요.',
+    example: '아침에 일어나서 씻고 밥 먹는 것도 루틴이에요.',
+  },
+  {
+    term: '증상',
+    shortExplanation: '아플 때 몸에 나타나는 거예요.',
+    example: '열이 나거나 배가 아픈 게 증상이에요.',
+  },
+  {
+    term: '응급',
+    shortExplanation: '빨리 도움이 필요한 급한 상황이에요.',
+    example: '갑자기 많이 아프면 바로 어른에게 알려요.',
+    ttsVersion: '응급은 빨리 도움이 필요한 급한 상황이에요. 아프면 어른에게 먼저 알려요.',
+  },
+  {
+    term: '소통',
+    shortExplanation: '서로 마음과 뜻을 주고받는 거예요.',
+    example: '고마운 마음을 말로 전하는 것도 소통이에요.',
+  },
+  {
+    term: '자기소개',
+    shortExplanation: '나를 남에게 알리는 말이에요.',
+    example: '"저는 그림 그리기를 좋아해요"가 자기소개예요.',
+  },
+  {
+    term: '퇴고',
+    shortExplanation: '쓴 글을 다시 고치는 거예요.',
+    example: 'AI한테 고칠 점을 물어보고 내가 직접 고쳐요.',
+  },
 ];
 
 function normalize(term: string): string {
