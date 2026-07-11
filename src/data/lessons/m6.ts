@@ -76,7 +76,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '물건값을 계산하고, 거스름돈도 확인해요.',
     wrapUpNormal: '물건값과 거스름돈은 계산으로 알 수 있어요. 어려우면 AI에게 묻고, 받은 돈은 꼭 확인해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['거스름돈'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['거스름돈', '예산', '검산'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -132,7 +132,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '길을 모르면 지도 앱한테 물어봐요.',
     wrapUpNormal: '가고 싶은 곳을 지도 앱에 말하면 길을 알려줘요. 그래도 모르겠으면 어른에게 도움을 청해요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['지도', '위치 정보'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -190,7 +190,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '버스는 순서대로, 안전하게 타요.',
     wrapUpNormal: '몇 번 버스를 탈지 미리 확인하고, 줄 서서 타고, 자리에 앉거나 손잡이를 잡아요. 안전이 최고예요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['실시간 정보'], imagePlaceholder: true } },
       {
         kind: 'sequence',
         data: {
@@ -246,7 +246,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '나가기 전에 날씨를 물어보고 옷을 골라요.',
     wrapUpNormal: '나가기 전에 AI한테 날씨를 물어보는 습관을 길러요. 비가 오면 우산, 추우면 두꺼운 옷!',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['예보'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -296,7 +296,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI한테 물어보고 순서대로 만들었어요.',
     wrapUpNormal: '요리도 순서예요. AI한테 만드는 법을 물어보고, 한 단계씩 따라 하면 돼요. 칼은 꼭 어른과 함께!',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['조리법', '순서'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -347,7 +347,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '하루 계획을 세우면 할 일을 잊지 않아요.',
     wrapUpNormal: '아침에 하루 계획을 세워봐요. 해야 할 일을 먼저, 놀이는 그 다음에 넣으면 하루가 잘 흘러가요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['계획'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['계획', '루틴'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -398,7 +398,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '아프면 바로 어른에게 말해요.',
     wrapUpNormal: '아플 때는 먼저 어른에게 알려요. AI는 병원 위치를 찾아줄 수 있지만, 아픈 건 의사 선생님께 보여야 해요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['증상', '응급', '치료'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -453,7 +453,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '"안녕하세요", "감사합니다"를 잘 쓰면 멋져요.',
     wrapUpNormal: '상황에 맞는 인사와 부탁의 말을 쓰면 어디서든 환영받아요. AI랑 미리 연습해두면 실전에서 술술 나와요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['소통'], imagePlaceholder: true } },
       {
         kind: 'matching',
         data: {
@@ -505,7 +505,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '여러 직업을 구경했어요. 궁금하면 AI한테 물어봐요.',
     wrapUpNormal: '세상에는 다양한 직업이 있고, 저마다 하는 일이 달라요. 궁금한 직업은 AI한테 물어보며 탐색해봐요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['직업'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['직업', '자동화'], imagePlaceholder: true } },
       {
         kind: 'matching',
         data: {
@@ -555,7 +555,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '좋아하는 것으로 나를 소개할 수 있어요.',
     wrapUpNormal: '내가 좋아하는 것, 잘하는 것으로 나를 소개해봤어요. 연습할수록 자신 있게 말할 수 있어요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['소개'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['소개', '자기소개', '퇴고', '초안'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -611,7 +611,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '전부 다 배웠어요! 이제 AI랑 똑똑하고 안전하게 지낼 수 있어요. 축하해요!',
     wrapUpNormal: '축하해요! AI 교과서를 끝까지 마쳤어요. AI를 알고, 잘 묻고, 안전하게 쓰고, 생활에 활용하는 힘 — 모두 여러분의 것이에요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['검산', '위치 정보', '계획', '도우미'] } },
       {
         kind: 'ox',
         data: {

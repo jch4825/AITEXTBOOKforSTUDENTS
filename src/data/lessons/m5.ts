@@ -23,7 +23,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '문제는 해결하고 싶은 일이에요. 먼저 알아차려요.',
     wrapUpNormal: '문제는 해결하고 싶은 일이에요. "지금 뭐가 어렵지?" 하고 알아차리는 것이 해결의 첫걸음이에요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['문제'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['문제', '목표'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -70,7 +70,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '큰 문제는 작게 나눠요. 그러면 쉬워져요.',
     wrapUpNormal: '큰 문제는 작은 조각으로 나눠요. 작은 것부터 하나씩 하면 큰 문제도 해결할 수 있어요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['분해'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -111,7 +111,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '일은 순서대로 해요. 순서를 생각하면 잘 돼요.',
     wrapUpNormal: '일의 순서를 먼저 생각하면 실수가 줄어요. "먼저 뭐, 그 다음 뭐" 하고 차례를 세워봐요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['순서'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['순서', '절차'], imagePlaceholder: true } },
       {
         kind: 'sequence',
         data: {
@@ -159,7 +159,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '중요한 일부터 먼저 해요.',
     wrapUpNormal: '할 일이 많을 때는 급하고 중요한 일부터 해요. 순서를 정하면 마음도 편해져요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['우선순위'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -239,7 +239,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '못 알아들으면 다른 말로 다시 물어봐요.',
     wrapUpNormal: 'AI가 엉뚱한 답을 하면 포기하지 말고 짧고 쉬운 말로 바꿔 다시 물어봐요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['명확화'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -275,7 +275,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI한테도 한 번에 하나씩 부탁해요.',
     wrapUpNormal: '복잡한 부탁은 한 단계씩 나눠서 해요. 하나가 끝나면 다음 것을 부탁하면 돼요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['단계'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['단계', '단계별 지시'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -313,7 +313,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '다 한 다음에는 맞는지 확인해요.',
     wrapUpNormal: '풀고 나서 확인하는 습관이 실수를 줄여요. 내 답도, AI의 답도 한 번 더 확인해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['확인'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['확인', '평가', '검증'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -368,7 +368,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '안 되면 다른 방법을 생각해봐요.',
     wrapUpNormal: '방법은 하나가 아니에요. 안 되면 "다른 방법은 없을까?" 하고 생각해보는 힘을 길러요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['대안'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -408,7 +408,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '실수해도 괜찮아요. 다시 해보면 돼요.',
     wrapUpNormal: '실수는 배우는 과정이에요. 틀려도 "다시 해보자!" 하고 일어나는 사람이 진짜 문제 해결사예요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['오류', '수정'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -455,7 +455,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '작게 나누고, 순서대로 하고, 확인했어요. 최고!',
     wrapUpNormal: '라면 끓이기도 작게 나누고 순서대로 하면 어렵지 않아요. 배운 방법은 다른 일에도 쓸 수 있어요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['분해', '순서', '확인', '검증'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -511,7 +511,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '단원 5를 다 배웠어요! 나는 문제 해결사예요.',
     wrapUpNormal: '단원 5를 마쳤어요! 문제를 알아차리고, 작게 나누고, 순서대로 하고, 확인하는 힘이 생겼어요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['순서', '우선순위', '힌트', '확인', '검증', '평가'] } },
       {
         kind: 'sequence',
         data: {
