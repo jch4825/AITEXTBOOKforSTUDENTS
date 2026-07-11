@@ -383,6 +383,53 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '답이 맞는지 확인하는 거예요.',
     example: '이상한 답이 있으면 책이나 어른한테 확인해요.',
   },
+  // ─── 모듈 3 어려움(hard) 콘텐츠 신규 어휘 ───
+  {
+    term: '정의',
+    shortExplanation: '어떤 말의 뜻을 콕 집어 설명한 문장이에요.',
+    example: '"친구"의 정의는 "가깝게 지내며 정을 나누는 사람"이에요.',
+  },
+  {
+    term: '난이도 조절',
+    shortExplanation: '내 수준에 맞게 설명을 쉽거나 어렵게 바꾸는 거예요.',
+    example: '"10살도 알아듣게 설명해줘" 하면 더 쉬워져요.',
+  },
+  {
+    term: '예문',
+    shortExplanation: '낱말을 넣어서 만든 문장이에요.',
+    example: '"행복"의 예문은 "나는 오늘 행복해요"예요.',
+  },
+  {
+    term: '창작',
+    shortExplanation: '새로운 이야기를 스스로 지어내는 거예요.',
+    example: '없던 이야기를 처음 만드는 것도 창작이에요.',
+  },
+  {
+    term: '검산',
+    shortExplanation: '계산을 다시 한번 해서 확인하는 거예요.',
+    example: '계산기로 검산하면 실수를 찾을 수 있어요.',
+  },
+  {
+    term: '핵심',
+    shortExplanation: '가장 중요한 부분이에요.',
+    example: '이야기의 핵심은 "주인공이 무엇을 배웠는가"예요.',
+  },
+  {
+    term: '문제 생성',
+    shortExplanation: 'AI한테 문제를 만들어 달라고 부탁하는 거예요.',
+    example: '"동물 퀴즈 세 개 내줘" 하면 AI가 문제를 만들어줘요.',
+  },
+  {
+    term: '이미지 설명',
+    shortExplanation: '그림을 보고 무엇인지 글로 설명하는 거예요.',
+    example: '강아지 사진을 보여주면 AI가 "갈색 강아지가 앉아 있어요"라고 말해줘요.',
+  },
+  {
+    term: '표절',
+    shortExplanation: '다른 사람이나 AI가 쓴 글을 그대로 베껴서 내 것처럼 내는 거예요. 하면 안 돼요.',
+    example: 'AI가 써준 글을 그대로 숙제로 내면 표절이에요. 내 말로 다시 써야 해요.',
+    ttsVersion: '표절은 남이 쓴 글을 그대로 베껴서 내 것처럼 내는 거예요. 숙제는 내가 직접 써야 해요.',
+  },
 ];
 
 function normalize(term: string): string {
