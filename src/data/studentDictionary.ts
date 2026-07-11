@@ -430,6 +430,61 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     example: 'AI가 써준 글을 그대로 숙제로 내면 표절이에요. 내 말로 다시 써야 해요.',
     ttsVersion: '표절은 남이 쓴 글을 그대로 베껴서 내 것처럼 내는 거예요. 숙제는 내가 직접 써야 해요.',
   },
+  // ─── 모듈 4 어려움(hard) 콘텐츠 신규 어휘 ───
+  {
+    term: '오답',
+    shortExplanation: '사실과 다른, 틀린 답이에요.',
+    example: '"세종대왕이 컴퓨터를 만들었다"는 오답이에요.',
+  },
+  {
+    term: '사실 확인',
+    shortExplanation: '정보가 진짜인지 여러 방법으로 알아보는 거예요.',
+    example: '같은 내용을 책에서도 찾아보는 게 사실 확인이에요.',
+  },
+  {
+    term: '출처',
+    shortExplanation: '정보가 어디서 나왔는지 알려주는 근거예요.',
+    example: '"학교 교과서에서 봤어요"가 출처를 밝히는 거예요.',
+  },
+  {
+    term: '계정',
+    shortExplanation: '이름과 비밀번호로 나만 들어갈 수 있는 인터넷 공간이에요.',
+    example: '게임이나 앱에 로그인할 때 계정이 필요해요.',
+  },
+  {
+    term: '초상권',
+    shortExplanation: '내 얼굴 사진이 함부로 쓰이지 않도록 지키는 권리예요.',
+    example: '허락 없이 내 사진을 퍼뜨리면 안 돼요.',
+    ttsVersion: '초상권은 내 얼굴 사진이 함부로 쓰이지 않도록 지키는 권리예요.',
+  },
+  {
+    term: '유해 콘텐츠',
+    shortExplanation: '보면 마음이 불편해지거나 무서워지는 나쁜 내용이에요.',
+    example: '무섭거나 나쁜 말이 나오면 유해 콘텐츠예요.',
+    ttsVersion: '유해 콘텐츠는 보면 마음이 불편해지는 나쁜 내용이에요. 만나면 어른에게 알려요.',
+  },
+  {
+    term: '신고',
+    shortExplanation: '나쁜 내용을 어른이나 담당자에게 알리는 거예요.',
+    example: '이상한 화면을 캡처해서 선생님께 보여주는 것도 신고예요.',
+    ttsVersion: '신고는 나쁜 내용을 어른에게 알리는 거예요. 알리는 건 용감한 행동이에요.',
+  },
+  {
+    term: '과의존',
+    shortExplanation: '스마트폰이나 AI를 너무 자주, 너무 오래 의지하게 되는 거예요.',
+    example: '자기 전까지 계속 화면을 보는 것도 과의존의 신호예요.',
+  },
+  {
+    term: '도움 요청',
+    shortExplanation: '혼자 해결하기 어려운 일을 어른에게 말하는 거예요.',
+    example: '"모르는 사람이 만나재요"라고 말하는 것도 도움 요청이에요.',
+    ttsVersion: '도움 요청은 어른에게 말하는 거예요. 도움을 요청하는 건 용감한 행동이에요.',
+  },
+  {
+    term: '추천 알고리즘',
+    shortExplanation: '내가 좋아할 만한 것을 골라 보여주는 AI 방식이에요.',
+    example: '영상 하나를 오래 보면 비슷한 영상을 계속 추천해줘요.',
+  },
 ];
 
 function normalize(term: string): string {
