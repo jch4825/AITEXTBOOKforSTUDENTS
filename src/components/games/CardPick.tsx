@@ -35,6 +35,12 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
     speak(choices[i].isCorrect ? '잘했어요!' : '아쉬워요, 다른 답을 골라봐요.');
   }
 
+  // 오답이어도 정답을 강제로 넘기지 않고, 다시 고를 수 있게 초기화한다.
+  function retry() {
+    setPickedIdx(null);
+    speakNow(question);
+  }
+
   const picked = pickedIdx !== null ? choices[pickedIdx] : null;
 
   return (
@@ -123,22 +129,29 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
 
       {picked && (
         <div className="mt-6 text-center">
-          <p className="text-lg font-bold inline-flex items-center gap-1.5">
-            {picked.isCorrect ? (
-              <>
+          {picked.isCorrect ? (
+            <>
+              <p className="text-lg font-bold inline-flex items-center gap-1.5">
                 <Icon name="sparkles" size={22} filled color="var(--ok)" /> 정답!
-              </>
-            ) : (
-              <>
-                <Icon name="bulb" size={22} color="var(--warn)" /> 다시 한번 생각해봐요.
-              </>
-            )}
-          </p>
-          <div>
-            <Button size="lg" onClick={onComplete} className="mt-4 px-6">
-              다음 <Icon name="chevron-right" size={20} />
-            </Button>
-          </div>
+              </p>
+              <div>
+                <Button size="lg" onClick={onComplete} className="mt-4 px-6">
+                  다음 <Icon name="chevron-right" size={20} />
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-lg font-bold inline-flex items-center gap-1.5">
+                <Icon name="bulb" size={22} color="var(--warn)" /> 아쉬워요, 다시 해볼까요?
+              </p>
+              <div>
+                <Button size="lg" variant="secondary" onClick={retry} className="mt-4 px-6">
+                  <Icon name="refresh" size={20} /> 다시 하기
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

@@ -48,6 +48,12 @@ export default function OXGame({ questions, onComplete }: Props) {
     }
   }
 
+  // 오답이어도 정답을 강제로 보여주지 않고, 다시 풀 수 있게 선택을 초기화한다.
+  function retry() {
+    setSelected(null);
+    speakNow(q.question);
+  }
+
   return (
     <div className="my-6">
       {/* Progress Dots */}
@@ -177,37 +183,35 @@ export default function OXGame({ questions, onComplete }: Props) {
       {/* Answer feedback panel */}
       {selected !== null && (
         <div className="mt-6 text-center">
-          <p className="text-lg font-bold inline-flex items-center gap-1.5">
-            {isCorrect ? (
-              <>
+          {isCorrect ? (
+            <>
+              <p className="text-lg font-bold inline-flex items-center gap-1.5">
                 <Icon name="sparkles" size={22} filled color="var(--ok)" /> 정답!
-              </>
-            ) : (
-              <>
-                <Icon name="bulb" size={22} color="var(--warn)" /> 정답은{' '}
-                <Icon
-                  name={q.answer === 'O' ? 'circle' : 'cross'}
-                  size={20}
-                  strokeWidth={3}
-                />
-                입니다.
-              </>
-            )}
-          </p>
-          {q.feedback && <p className="mt-2 text-[color:var(--muted)]">{q.feedback}</p>}
-          <div>
-            <Button size="lg" onClick={next} className="mt-4 px-6">
-              {currIdx + 1 >= questions.length ? (
-                <>
-                  완료 <Icon name="check" size={20} />
-                </>
-              ) : (
-                <>
-                  다음 <Icon name="chevron-right" size={20} />
-                </>
-              )}
-            </Button>
-          </div>
+              </p>
+              {q.feedback && <p className="mt-2 text-[color:var(--muted)]">{q.feedback}</p>}
+              <div>
+                <Button size="lg" onClick={next} className="mt-4 px-6">
+                  {currIdx + 1 >= questions.length ? (
+                    <>완료 <Icon name="check" size={20} /></>
+                  ) : (
+                    <>다음 <Icon name="chevron-right" size={20} /></>
+                  )}
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-lg font-bold inline-flex items-center gap-1.5">
+                <Icon name="bulb" size={22} color="var(--warn)" /> 아쉬워요, 다시 해볼까요?
+              </p>
+              {q.feedback && <p className="mt-2 text-[color:var(--muted)]">{q.feedback}</p>}
+              <div>
+                <Button size="lg" variant="secondary" onClick={retry} className="mt-4 px-6">
+                  <Icon name="refresh" size={20} /> 다시 하기
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
