@@ -485,6 +485,57 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '내가 좋아할 만한 것을 골라 보여주는 AI 방식이에요.',
     example: '영상 하나를 오래 보면 비슷한 영상을 계속 추천해줘요.',
   },
+  // ─── 모듈 5 어려움(hard) 콘텐츠 신규 어휘 ───
+  {
+    term: '목표',
+    shortExplanation: '내가 이루고 싶은 거예요.',
+    example: '"방을 깨끗하게 만들고 싶다"가 목표예요.',
+  },
+  {
+    term: '분해',
+    shortExplanation: '큰 문제를 작은 일들로 나누는 거예요.',
+    example: '"방 정리하기"를 "장난감 정리", "책 정리", "옷 정리"로 나눠요.',
+  },
+  {
+    term: '절차',
+    shortExplanation: '일을 하는 정해진 차례예요.',
+    example: '재료 준비 → 요리 → 정리, 이게 절차예요.',
+  },
+  {
+    term: '우선순위',
+    shortExplanation: '더 중요한 것을 먼저 하는 거예요.',
+    example: '숙제와 놀이 중에 숙제를 먼저 하기로 정하는 거예요.',
+  },
+  {
+    term: '명확화',
+    shortExplanation: '뜻을 더 분명하게 다시 말하는 거예요.',
+    example: '"그거 알려줘" 대신 "라면 끓이는 순서를 알려줘"라고 다시 말해요.',
+  },
+  {
+    term: '단계별 지시',
+    shortExplanation: '한 번에 하나씩 순서대로 시키는 거예요.',
+    example: '"먼저 1단계만 알려줘, 끝나면 다음 단계 알려줘"라고 부탁해요.',
+  },
+  {
+    term: '평가',
+    shortExplanation: '결과가 좋은지 따져보는 거예요.',
+    example: '방을 정리한 뒤 정말 깨끗해졌는지 따져보는 게 평가예요.',
+  },
+  {
+    term: '대안',
+    shortExplanation: '문제를 푸는 또 다른 방법이에요.',
+    example: '학교 갈 때 버스 말고 걸어가는 것도 대안이에요.',
+  },
+  {
+    term: '오류',
+    shortExplanation: '잘못되거나 틀린 부분이에요.',
+    example: '순서를 거꾸로 적은 것도 오류예요.',
+  },
+  {
+    term: '수정',
+    shortExplanation: '틀린 곳을 고치는 거예요.',
+    example: '거꾸로 적은 순서를 바로 고치는 게 수정이에요.',
+  },
 ];
 
 function normalize(term: string): string {
