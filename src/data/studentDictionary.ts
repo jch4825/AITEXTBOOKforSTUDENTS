@@ -436,6 +436,42 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '답이 맞는지 확인하는 거예요.',
     example: '이상한 답이 있으면 책이나 어른한테 확인해요.',
   },
+  // ─── 단원 2 기본 콘텐츠 개념어 확충 ───
+  {
+    term: '맥락',
+    shortExplanation: '어떤 상황인지 알려주는 말이에요.',
+    example: '"학교 발표회에서 쓸 거예요"처럼 상황을 알려줘요.',
+  },
+  {
+    term: '형식',
+    shortExplanation: '답을 어떤 모양으로 받고 싶은지 정하는 거예요.',
+    example: '"표로 보여줘"라고 하면 형식을 정하는 거예요.',
+  },
+  {
+    term: '요소',
+    shortExplanation: '무언가를 이루는 하나하나의 부분이에요.',
+    example: '좋은 프롬프트에는 지시, 맥락, 형식이라는 세 요소가 들어가요.',
+  },
+  {
+    term: '애매',
+    shortExplanation: '무슨 뜻인지 정확히 알기 어려운 거예요.',
+    example: '"그거 좀 해줘"는 애매해서 AI가 헷갈려요.',
+  },
+  {
+    term: '분위기',
+    shortExplanation: '그 자리에서 느껴지는 느낌이에요.',
+    example: '"친절하게 말해줘"라고 하면 부드러운 분위기가 돼요.',
+  },
+  {
+    term: '흐름',
+    shortExplanation: '일이 이어지는 차례예요.',
+    example: '순서대로 물어보면 이야기의 흐름을 따라가기 쉬워요.',
+  },
+  {
+    term: '말투',
+    shortExplanation: '말을 할 때 나오는 느낌이나 버릇이에요.',
+    example: '"친구처럼 말해줘" 하면 편안한 말투로 답해줘요.',
+  },
   // ─── 모듈 3 어려움(hard) 콘텐츠 신규 어휘 ───
   {
     term: '정의',
@@ -482,6 +518,32 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '다른 사람이나 AI가 쓴 글을 그대로 베껴서 내 것처럼 내는 거예요. 하면 안 돼요.',
     example: 'AI가 써준 글을 그대로 숙제로 내면 표절이에요. 내 말로 다시 써야 해요.',
     ttsVersion: '표절은 남이 쓴 글을 그대로 베껴서 내 것처럼 내는 거예요. 숙제는 내가 직접 써야 해요.',
+  },
+  // ─── 단원 3 기본 콘텐츠 개념어 확충 ───
+  {
+    term: '열린 질문',
+    shortExplanation: '"왜?"나 "어떻게?"로 시작해서 예/아니오로 끝나지 않는 질문이에요.',
+    example: '"이게 맞아?" 대신 "왜 이게 맞아요?"라고 물어봐요.',
+  },
+  {
+    term: '아이디어',
+    shortExplanation: '생각의 실마리가 되는 짧은 생각이에요.',
+    example: '"우주에 사는 고양이"도 하나의 아이디어예요.',
+  },
+  {
+    term: '계산기',
+    shortExplanation: '정확한 계산을 해주는 도구예요.',
+    example: '358 더하기 247은 계산기로 확인해요.',
+  },
+  {
+    term: '비교',
+    shortExplanation: '두 가지를 나란히 놓고 같은지 다른지 살펴보는 거예요.',
+    example: 'AI의 설명과 사전 뜻을 비교해서 확인해요.',
+  },
+  {
+    term: '정확도',
+    shortExplanation: '얼마나 정확한지 나타내는 정도예요.',
+    example: '쉽게 설명해달라고 하면 정확도가 조금 낮아질 수 있어요.',
   },
   // ─── 모듈 4 어려움(hard) 콘텐츠 신규 어휘 ───
   {
@@ -538,6 +600,37 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '내가 좋아할 만한 것을 골라 보여주는 AI 방식이에요.',
     example: '영상 하나를 오래 보면 비슷한 영상을 계속 추천해줘요.',
   },
+  // ─── 단원 4 기본 콘텐츠 개념어 확충 ───
+  {
+    term: '설계',
+    shortExplanation: '어떤 목적에 맞게 미리 짜 놓는 거예요.',
+    example: '추천 화면은 계속 보게 만들도록 설계되어 있어요.',
+  },
+  {
+    term: '권리',
+    shortExplanation: '마땅히 누려야 할 나의 몫이에요.',
+    example: '초상권은 내 사진을 지키는 권리예요.',
+  },
+  {
+    term: '서버',
+    shortExplanation: '정보를 모아 두고 관리하는 큰 컴퓨터예요.',
+    example: '내가 보낸 정보는 AI 회사의 서버에 남을 수 있어요.',
+  },
+  {
+    term: '체크리스트',
+    shortExplanation: '확인할 것들을 적어 놓은 목록이에요.',
+    example: '개인정보가 들어 있는지 체크리스트로 확인해요.',
+  },
+  {
+    term: '캡처',
+    shortExplanation: '화면에 보이는 것을 사진처럼 저장하는 거예요.',
+    example: '이상한 화면을 캡처해서 어른에게 보여줘요.',
+  },
+  {
+    term: '표시',
+    shortExplanation: '무엇인지 알 수 있게 나타낸 자국이나 글자예요.',
+    example: '광고에는 작게 "광고"라는 표시가 붙어 있어요.',
+  },
   // ─── 모듈 5 어려움(hard) 콘텐츠 신규 어휘 ───
   {
     term: '목표',
@@ -588,6 +681,22 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '수정',
     shortExplanation: '틀린 곳을 고치는 거예요.',
     example: '거꾸로 적은 순서를 바로 고치는 게 수정이에요.',
+  },
+  // ─── 단원 5 기본 콘텐츠 개념어 확충 ───
+  {
+    term: '상태',
+    shortExplanation: '지금 어떤 모습인지를 말해요.',
+    example: '"방이 어지러운 상태"처럼 지금 모습을 말해요.',
+  },
+  {
+    term: '결과',
+    shortExplanation: '어떤 일을 하고 난 뒤에 나온 것이에요.',
+    example: '방 정리를 한 결과 방이 깨끗해졌어요.',
+  },
+  {
+    term: '차이',
+    shortExplanation: '서로 다른 정도예요.',
+    example: '바라는 것과 지금 상태의 차이가 바로 문제예요.',
   },
   // ─── 모듈 6 어려움(hard) 콘텐츠 신규 어휘 ───
   {
@@ -646,6 +755,47 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '퇴고',
     shortExplanation: '쓴 글을 다시 고치는 거예요.',
     example: 'AI한테 고칠 점을 물어보고 내가 직접 고쳐요.',
+  },
+  // ─── 단원 6 기본 콘텐츠 개념어 확충 ───
+  {
+    term: '사정',
+    shortExplanation: '어떤 일이 그렇게 된 형편이나 까닭이에요.',
+    example: 'AI는 우리 집 냉장고 사정을 몰라요.',
+  },
+  {
+    term: '경로',
+    shortExplanation: '목적지까지 가는 길이에요.',
+    example: '지도 앱이 알려준 경로를 따라가요.',
+  },
+  {
+    term: '목적지',
+    shortExplanation: '내가 가려고 하는 곳이에요.',
+    example: '지도 앱에 목적지를 말하면 가는 길을 알려줘요.',
+  },
+  {
+    term: '안내판',
+    shortExplanation: '정류장이나 역에서 정보를 알려주는 판이에요.',
+    example: '버스 도착 시간은 정류장 안내판에서도 확인해요.',
+  },
+  {
+    term: '진찰',
+    shortExplanation: '의사가 아픈 곳을 살펴보는 거예요.',
+    example: '진짜 진찰은 AI가 아니라 병원에서 받아요.',
+  },
+  {
+    term: '치료',
+    shortExplanation: '아픈 곳을 낫게 하는 거예요.',
+    example: '병원에서 치료를 받아야 나을 수 있어요.',
+  },
+  {
+    term: '초안',
+    shortExplanation: '처음으로 써 본 글이에요.',
+    example: '자기소개 초안을 쓰고 나서 고쳐요.',
+  },
+  {
+    term: '의견',
+    shortExplanation: '어떤 것에 대한 나의 생각이에요.',
+    example: 'AI의 의견을 참고해서 내가 직접 고쳐요.',
   },
 ];
 
