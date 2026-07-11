@@ -25,7 +25,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI한테 어떻게 물어보는지에 따라 답이 달라져요. AI한테 던지는 질문이나 부탁을 프롬프트라고 해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['프롬프트'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['프롬프트', '지시', '맥락', '형식'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -83,7 +83,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       '프롬프트는 짧고 명확할수록 좋아요. 한 문장으로 원하는 걸 콕 집어 말하면 AI가 더 잘 답해줘요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['프롬프트'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['프롬프트', '간결'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -141,7 +141,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       '"뭐든지 좋아" 대신 "떡볶이 만드는 법 알려줘" 처럼 궁금한 걸 콕 집으면 AI가 정확히 답해줘요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['프롬프트', '구체적'] } },
       {
         kind: 'matching',
         data: {
@@ -191,7 +191,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       '원하는 답 모양을 하나 예시로 먼저 보여주면 AI가 그 모양대로 만들어줘요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['예시'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['예시', '예시 제시'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -241,7 +241,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI한테 "이렇게 말해줘" 하고 역할을 정해주면 그 성격으로 답해줘요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['역할'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['역할', '역할 지정', '말투', '분위기'], imagePlaceholder: true } },
       {
         kind: 'matching',
         data: {
@@ -294,7 +294,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       '한 번에 다 물어보면 답이 흐릿할 수 있어요. 큰 질문을 작은 단계로 나눠 하나씩 물어봐요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['단계'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['단계', '단계 나누기', '흐름'], imagePlaceholder: true } },
       {
         kind: 'matching',
         data: {
@@ -346,7 +346,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI 답이 원하는 게 아니면 "다르게 해줘", "좀 더 짧게 해줘" 하고 다시 부탁해도 괜찮아요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['부탁'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['부탁', '반복 개선'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -401,7 +401,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       '답이 길면 "짧게 세 줄로", "한 문장으로" 처럼 길이를 정해서 부탁해봐요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['형식', '형식 지정'] } },
       {
         kind: 'card-pick',
         data: {
@@ -452,7 +452,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI가 가끔 틀린 답을 줄 수 있어요. 답이 이상하면 "정말이야?" 하고 다시 물어보거나 선생님께 확인해봐요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['확인', '검증', '환각'] } },
       {
         kind: 'card-pick',
         data: {
@@ -512,7 +512,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       '오늘은 배운 대로 진짜 AI랑 여러 번 이야기해봐요. 짧게, 콕 집어, 필요하면 다시 부탁해봐요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['프롬프트', '역할 지정', '검증', '개인정보'] } },
       {
         kind: 'real-ai',
         data: {
@@ -561,7 +561,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       '단원 2에서 배운 것들 — 짧게, 콕 집어, 예시 주기, 역할 정하기 — 을 짧은 퀴즈로 확인해봐요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['프롬프트', '역할 지정', '반복 개선'] } },
       {
         kind: 'ox',
         data: {

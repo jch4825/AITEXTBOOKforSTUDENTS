@@ -22,7 +22,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI도 틀릴 수 있어요. 중요한 건 확인해요.',
     wrapUpNormal: 'AI는 틀린 답도 자신 있게 말할 수 있어요. 중요한 것은 선생님이나 책으로 확인해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['확인'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['확인', '환각', '오답'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -77,7 +77,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: '이상한 이야기는 어른에게 물어보고 확인해요.',
     wrapUpNormal: '정보가 진짜인지 확인하려면 다른 곳에서 찾아보고 어른에게 물어봐요. 확인하는 습관이 중요해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['정보'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['정보', '사실 확인', '출처'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -190,7 +190,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: '비밀번호는 비밀! 아무한테도 알려주지 않아요.',
     wrapUpNormal: '비밀번호는 내 것을 지키는 열쇠예요. 부모님 말고는 누구에게도 알려주지 않아요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['비밀번호'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['비밀번호', '계정'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -242,7 +242,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: '내 사진은 함부로 보내지 않아요.',
     wrapUpNormal: '얼굴이나 집이 나온 사진도 소중한 개인정보예요. 보내기 전에 부모님이나 선생님께 물어봐요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['개인정보', '초상권'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -297,7 +297,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: '기분 나쁜 말을 보면 닫고, 어른에게 알려요.',
     wrapUpNormal: '기분 나쁜 말이나 무서운 것을 보면 화면을 닫고 어른에게 알려요. 절대 내 잘못이 아니에요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['유해 콘텐츠', '신고'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -407,7 +407,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: '약속한 시간만큼만 쓰고, 다른 놀이도 해요.',
     wrapUpNormal: '스마트폰은 시간을 정해서 쓰고, 끝나면 몸을 움직이는 놀이도 해요. 그래야 몸도 마음도 건강해요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['스마트폰', '과의존'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -466,7 +466,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: '이상하면 바로 어른에게 알려요. 알리는 게 용감한 거예요.',
     wrapUpNormal: '이상한 일은 혼자 해결하지 않아요. 어른에게 알리는 것이 가장 용감하고 똑똑한 방법이에요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['도움 요청'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -521,7 +521,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: '"공짜", "최고"라는 말은 한 번 더 생각해요.',
     wrapUpNormal: '광고는 물건을 팔기 위한 글이에요. "공짜", "100%" 같은 말은 그대로 믿지 말고 어른과 확인해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['광고'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['광고', '추천 알고리즘'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -568,7 +568,7 @@ export const M4_LESSONS: LessonContent[] = [
     wrapUpEasy: '단원 4를 다 배웠어요! 안전 약속을 지켜요.',
     wrapUpNormal: '단원 4를 마쳤어요! 확인하기, 개인정보 지키기, 고운 말 쓰기, 시간 지키기, 어른에게 알리기 — 다섯 가지 안전 약속을 기억해요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['개인정보', '환각', '신고', '비밀번호'] } },
       {
         kind: 'matching',
         data: {

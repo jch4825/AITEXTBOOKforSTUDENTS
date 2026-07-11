@@ -23,7 +23,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: '궁금한 건 AI한테 물어봐요. 공부 도우미가 돼요.',
     wrapUpNormal: '공부하다 궁금한 게 생기면 AI한테 물어봐요. AI는 언제든 대답해주는 공부 도우미예요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['도우미'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['도우미', '열린 질문'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -80,7 +80,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: '모르는 단어는 "무슨 뜻이야?" 하고 물어봐요.',
     wrapUpNormal: '모르는 단어가 나오면 AI한테 뜻을 물어봐요. 물어보는 건 부끄러운 게 아니에요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['단어'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['단어', '정의', '비교'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -129,7 +129,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: '어려우면 "쉽게 설명해줘" 하고 말해요.',
     wrapUpNormal: '어려운 설명을 만나면 "더 쉽게 설명해줘"라고 부탁해요. AI가 쉬운 말로 바꿔줘요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['설명'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['설명', '난이도 조절'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -184,7 +184,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI랑 같이 낱말을 배웠어요.',
     wrapUpNormal: 'AI한테 낱말 뜻, 반대말, 비슷한 말을 물어보면서 재미있게 낱말 공부를 할 수 있어요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['낱말'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['낱말', '반대말', '예문'], imagePlaceholder: true } },
       {
         kind: 'matching',
         data: {
@@ -233,7 +233,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI랑 같이 이야기를 만들어봤어요.',
     wrapUpNormal: '주인공과 장소를 정해서 부탁하면 AI가 재미있는 이야기를 만들어줘요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['창작', '아이디어'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -273,7 +273,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: '계산이 어려우면 AI한테 물어봐요.',
     wrapUpNormal: '계산이 어려울 때 AI한테 물어보면 계산 방법까지 알려줘요. 그래도 내가 한 번 더 확인해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['계산'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['계산', '계산기', '검산'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -329,7 +329,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: '긴 글은 "짧게 줄여줘" 하고 부탁해요.',
     wrapUpNormal: '긴 글은 AI한테 요약을 부탁해요. 중요한 내용만 짧게 정리해줘요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['요약'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['요약', '핵심', '비교'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -384,7 +384,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI랑 퀴즈 놀이를 하면 공부가 재미있어요.',
     wrapUpNormal: 'AI한테 퀴즈를 내달라고 하면 놀면서 공부할 수 있어요. 배운 것도 퀴즈로 연습해봐요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['퀴즈'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['퀴즈', '문제 생성'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -433,7 +433,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI는 그림을 보고 설명해줘요.',
     wrapUpNormal: 'AI한테 그림을 보여주고 설명을 부탁하면 그림 속 내용을 말로 알려줘요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['설명', '이미지 설명'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -483,7 +483,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: '배운 건 AI랑 한 번 더 복습해요.',
     wrapUpNormal: '배운 것을 AI랑 다시 이야기하면 복습이 돼요. 복습하면 오래 기억할 수 있어요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['복습'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['복습', '요약', '검증', '정의'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -528,7 +528,7 @@ export const M3_LESSONS: LessonContent[] = [
     wrapUpEasy: '단원 3을 다 배웠어요! AI는 나의 공부 도우미예요.',
     wrapUpNormal: '단원 3을 마쳤어요! 물어보기, 쉽게 설명 부탁하기, 요약, 퀴즈, 복습 — AI 공부 활용법을 배웠어요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['도우미', '요약', '퀴즈', '복습', '정의', '표절'] } },
       {
         kind: 'matching',
         data: {
