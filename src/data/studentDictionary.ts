@@ -337,6 +337,52 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '글로 설명하면 그 내용에 맞는 새로운 그림을 만들어주는 AI예요.',
     example: '"파란 하늘 아래 강아지"라고 쓰면 그런 그림을 그려줘요.',
   },
+  // ─── 모듈 2 어려움(hard) 콘텐츠 신규 어휘 ───
+  {
+    term: '지시',
+    shortExplanation: '뭘 해달라고 정확하게 시키는 말이에요.',
+    example: '"이름 세 개를 추천해줘"가 지시예요.',
+  },
+  {
+    term: '간결',
+    shortExplanation: '한 번에 하나만 부탁하는 거예요.',
+    example: '여러 개를 한꺼번에 시키지 않고 하나씩 물어봐요.',
+  },
+  {
+    term: '구체적',
+    shortExplanation: '"그거" 대신 이름이나 숫자로 정확히 말하는 거예요.',
+    example: '"그 동물" 대신 "기린"이라고 말해요.',
+  },
+  {
+    term: '예시 제시',
+    shortExplanation: '원하는 답 모양을 먼저 보여주는 거예요.',
+    example: '"이런 식으로 해줘: 강아지가 뛰어요" 처럼요.',
+  },
+  {
+    term: '역할 지정',
+    shortExplanation: 'AI한테 "너는 ~라고 하자" 하고 역할을 정해주는 거예요.',
+    example: '"친절한 요리 선생님이라고 하자" 하면 그 말투로 답해줘요.',
+  },
+  {
+    term: '단계 나누기',
+    shortExplanation: '큰 질문을 작은 순서로 나눠 하나씩 물어보는 거예요.',
+    example: '"1단계로 재료 물어보고, 2단계로 순서 물어봐요."',
+  },
+  {
+    term: '반복 개선',
+    shortExplanation: '답을 보고 다시 고쳐서 물어보는 거예요.',
+    example: '"너무 길어. 짧게 다시 해줘" 하고 다시 부탁해요.',
+  },
+  {
+    term: '형식 지정',
+    shortExplanation: '답을 어떤 길이나 모양으로 받을지 미리 정하는 거예요.',
+    example: '"세 줄로", "표로" 처럼 정해서 부탁해요.',
+  },
+  {
+    term: '검증',
+    shortExplanation: '답이 맞는지 확인하는 거예요.',
+    example: '이상한 답이 있으면 책이나 어른한테 확인해요.',
+  },
 ];
 
 function normalize(term: string): string {
