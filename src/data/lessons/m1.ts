@@ -22,7 +22,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       '인공지능(AI)은 컴퓨터가 사람처럼 생각하고 답해주게 만든 기술이에요. 우리가 묻는 질문에 답을 해줘요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['인공지능'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['인공지능', '컴퓨터', '프로그램', '자료', '음성 비서', '번역', '앱', '도구'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -96,7 +96,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       '보통 기계는 미리 정해진 일만 반복해요. 하지만 AI는 우리가 하는 질문을 알아듣고 스스로 답을 만들어줘요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['기계', '인공지능'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['기계', '자동화', '학습', '자료'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -156,7 +156,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI한테 궁금한 걸 글이나 말로 물어보면 답을 만들어줘요. 짧게 물어도 되고 자세하게 물어도 돼요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['생성형 AI', '자료', '확률', '예측', '특징', '환각'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -207,7 +207,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI는 사진을 보여주면 "이건 강아지야, 저건 자동차야" 하고 알아볼 수 있어요. 이걸 이미지 인식이라고 해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['인식'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['이미지 인식', '학습', '패턴', '판단'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -264,7 +264,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI는 마이크로 우리 목소리를 듣고 무슨 말을 했는지 알아들어요. 이걸 음성 인식이라고 해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['음성', '인식'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['음성 인식', '마이크', '명령어'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -315,7 +315,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI는 사람이 만든 아주 많은 예시(사진, 글, 소리)를 보면서 배워요. 우리가 자꾸 연습하면 잘하게 되는 것과 비슷해요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['학습', '연습'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['학습 데이터', '자료', '훈련', '편향'], imagePlaceholder: true } },
       {
         kind: 'matching',
         data: {
@@ -372,7 +372,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI는 아주 빠르게 답을 만들고, 다른 나라 말로 바꿔주고, 사진 속 물건을 알아봐요. 우리를 여러 가지로 도와줄 수 있어요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['번역', '도움'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['요약', '번역'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -425,7 +425,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI는 사람처럼 배고픔이나 슬픔 같은 마음을 진짜로 느끼지 못해요. 몸이 없어서 뛰거나 밥 먹는 것도 못 해요.',
     steps: [
-      { kind: 'text', data: { imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['최신 정보', '감정'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
@@ -490,7 +490,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI는 종류가 여러 가지예요. 어떤 AI는 글로 대화하고, 어떤 AI는 그림을 그려요. 이름도 하는 일도 조금씩 달라요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['챗봇'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['이미지 생성 AI', '챗봇', '도구'], imagePlaceholder: true } },
       {
         kind: 'matching',
         data: {
@@ -546,7 +546,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI랑 이야기해본 적 있어요? 오늘은 짧은 대화를 해보면서 AI가 어떻게 답하는지 느껴봐요.',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['프롬프트'] } },
       {
         kind: 'sim-ai',
         data: {
@@ -594,7 +594,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       '단원 1에서 배운 내용을 짧은 퀴즈로 확인해봐요. 틀려도 괜찮아요, 다시 보면서 배워봐요!',
     steps: [
-      { kind: 'text', data: {} },
+      { kind: 'text', data: { dictionaryTerms: ['학습 데이터', '생성형 AI', '인공지능', '예측', '훈련', '환각', '도구'] } },
       {
         kind: 'ox',
         data: {

@@ -390,6 +390,11 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '어떤 일을 할 때 쓰는 물건이에요.',
     example: 'AI는 나를 도와주는 도구예요.',
   },
+  {
+    term: '편향',
+    shortExplanation: 'AI가 배운 자료가 한쪽으로 치우쳐서, 답도 치우치는 거예요.',
+    example: '한 종류 사진만 배우면 다른 것은 잘 못 알아봐요.',
+  },
   // ─── 모듈 2 어려움(hard) 콘텐츠 신규 어휘 ───
   {
     term: '지시',
