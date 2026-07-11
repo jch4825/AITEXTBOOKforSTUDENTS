@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function DictionaryPanel({ open, query, onClose, onSearch }: Props) {
-  const { speak } = useSpeak();
+  const { speak, speakNow } = useSpeak();
   const entry: DictionaryEntry | null = query ? findDictionaryEntry(query) : null;
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
               <p>{entry.example}</p>
             </div>
           )}
-          <Button onClick={() => speak(entry.ttsVersion ?? entry.shortExplanation)} className="mt-4">
+          <Button onClick={() => speakNow(entry.ttsVersion ?? entry.shortExplanation)} className="mt-4">
             <Icon name="speaker" size={20} /> 다시 들려줘
           </Button>
         </article>

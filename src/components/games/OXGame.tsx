@@ -18,7 +18,7 @@ interface Props {
 export default function OXGame({ questions, onComplete }: Props) {
   const [currIdx, setCurrIdx] = useState(0);
   const [selected, setSelected] = useState<'O' | 'X' | null>(null);
-  const { speak } = useSpeak();
+  const { speak, speakNow } = useSpeak();
 
   const q = questions[currIdx];
 
@@ -73,7 +73,7 @@ export default function OXGame({ questions, onComplete }: Props) {
         <p className="text-xl font-semibold flex-1">{q.question}</p>
         <button
           type="button"
-          onClick={() => speak(q.question)}
+          onClick={() => speakNow(q.question)}
           aria-label="문제 다시 들려주기"
           className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
           style={{

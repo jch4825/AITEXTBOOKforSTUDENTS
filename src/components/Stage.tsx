@@ -48,7 +48,7 @@ export default function Stage({
   lessonId, title, scene, text, episodeTitle,
   accent, accentText, accentSoft, className = '',
 }: Props) {
-  const { speak } = useSpeak();
+  const { speakNow } = useSpeak();
   const curve = MODULE_CURVE[moduleIdFromLessonId(lessonId) ?? 'm1'];
   // 장면 그림 후보 체인: webp(경량, 전 차시 존재) → png(원본, png/ 폴더) → 아바타 폴백
   const candidates = [
@@ -106,7 +106,7 @@ export default function Stage({
             <h1 className="t-h1 mb-3" style={{ color: accentText ?? accent }}>{title}</h1>
             <p className="t-body-lg">{text}</p>
             <button
-              onClick={() => speak(text)}
+              onClick={() => speakNow(text)}
               className="btn btn-secondary mt-4 px-3 text-sm"
               style={{ borderColor: accent, color: accentText ?? accent }}
             ><Icon name="speaker" size={16} /> 이야기 들려줘</button>

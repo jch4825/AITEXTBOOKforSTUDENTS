@@ -34,7 +34,7 @@ export default function SpeechBubble({
   aiGlow = false,
 }: Props) {
   const meta = CHARACTERS[speaker];
-  const { speak } = useSpeak();
+  const { speakNow } = useSpeak();
 
   return (
     <div className="flex items-start gap-3 story-fade-in">
@@ -53,7 +53,7 @@ export default function SpeechBubble({
           <p className="text-lg leading-relaxed">{text}</p>
           {showSpeakButton && (
             <button
-              onClick={() => speak(text)}
+              onClick={() => speakNow(text)}
               className="btn btn-secondary mt-2 px-3 text-sm"
               style={{ borderColor: accent, color: accentText ?? accent }}
             ><Icon name="speaker" size={16} /> 읽어줘</button>

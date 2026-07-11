@@ -12,7 +12,7 @@ interface Props {
 
 /** '어려움' 본문 — 개념 문단 → 오늘의 용어 카드 → 어떻게 할까요 → 꼭 기억해요 (spec §3.1). */
 export default function HardLessonBody({ content, accent, dictionaryTerms = [] }: Props) {
-  const { speak } = useSpeak();
+  const { speakNow } = useSpeak();
   const conceptAll = content.concept.join(' ');
   return (
     <div className="space-y-6">
@@ -21,7 +21,7 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
         {content.concept.map((para, i) => (
           <p key={i} className="t-body-lg mb-3">{wrapDictionaryTerms(para, dictionaryTerms)}</p>
         ))}
-        <Button variant="secondary" accent={accent} onClick={() => speak(conceptAll)}>
+        <Button variant="secondary" accent={accent} onClick={() => speakNow(conceptAll)}>
           <Icon name="speaker" size={20} /> 읽어줘
         </Button>
       </section>
@@ -39,7 +39,7 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
               <div className="flex items-center gap-2">
                 <span className="text-lg font-bold" style={{ color: accent }}>{t.term}</span>
                 <button
-                  onClick={() => speak(`${t.term}. ${t.definition}${t.example ? ` 예를 들면, ${t.example}` : ''}`)}
+                  onClick={() => speakNow(`${t.term}. ${t.definition}${t.example ? ` 예를 들면, ${t.example}` : ''}`)}
                   aria-label={`${t.term} 읽어주기`}
                   className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
                   style={{ color: accent }}

@@ -9,7 +9,7 @@ interface Props {
 
 /** 오늘의 목표 — 도입(제시)과 정리(재확인)에 쓰는 학습목표 카드. 전 난이도 노출 (spec §5). */
 export default function LessonGoal({ text, accent, compact }: Props) {
-  const { speak } = useSpeak();
+  const { speakNow } = useSpeak();
   return (
     <div
       className={`card3d rounded-[var(--r-md)] flex items-center gap-3 ${compact ? 'p-3 max-w-md mx-auto' : 'p-4 my-5'}`}
@@ -25,7 +25,7 @@ export default function LessonGoal({ text, accent, compact }: Props) {
         <p className={compact ? 'text-base' : 'text-lg font-semibold'}>{text}</p>
       </div>
       <button
-        onClick={() => speak(`오늘의 목표. ${text}`)}
+        onClick={() => speakNow(`오늘의 목표. ${text}`)}
         aria-label="목표 읽어주기"
         className="shrink-0 h-10 w-10 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
         style={{ color: accent }}

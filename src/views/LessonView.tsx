@@ -58,7 +58,7 @@ interface ImplementedProps {
 function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps) {
   const { difficulty } = useSettings();
   const { markCompleted } = useProgress();
-  const { speak } = useSpeak();
+  const { speak, speakNow } = useSpeak();
   const [step, setStep] = useState(0);
   const [simRevealed, setSimRevealed] = useState(false);
 
@@ -134,7 +134,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
             ) : (
               <>
                 <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
-                <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
+                <Button accent={theme.accent} onClick={() => speakNow(body)} className="mt-4">
                   <Icon name="speaker" size={20} /> 읽어줘
                 </Button>
               </>
@@ -229,7 +229,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           <Button
             variant="choice"
             accent={theme.accent}
-            onClick={() => { setSimRevealed(true); speak(data.aiResponse); }}
+            onClick={() => { setSimRevealed(true); speakNow(data.aiResponse); }}
             className="px-6 text-xl font-bold"
             style={{ color: theme.accent, background: theme.accentSoft }}
           ><Icon name="chat" size={22} /> "{data.userInput}" 보내기</Button>
@@ -308,7 +308,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           </p>
         )}
         <div className="flex flex-col items-center gap-3">
-          <Button variant="secondary" accent={theme.accent} onClick={() => speak(wrapUpText)}>
+          <Button variant="secondary" accent={theme.accent} onClick={() => speakNow(wrapUpText)}>
             <Icon name="speaker" size={20} /> 읽어줘
           </Button>
           <Button size="lg" accent={theme.accent} onClick={handleNext} className="text-xl">

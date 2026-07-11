@@ -22,7 +22,7 @@ interface Props {
 
 export default function CardPick({ question, choices, difficulty, onComplete }: Props) {
   const [pickedIdx, setPickedIdx] = useState<number | null>(null);
-  const { speak } = useSpeak();
+  const { speak, speakNow } = useSpeak();
 
   // Auto-read the question when this step mounts.
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
         <p className="text-xl font-semibold flex-1">{question}</p>
         <button
           type="button"
-          onClick={() => speak(question)}
+          onClick={() => speakNow(question)}
           aria-label="문제 다시 들려주기"
           className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
           style={{
