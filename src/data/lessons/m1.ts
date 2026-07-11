@@ -156,7 +156,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI한테 궁금한 걸 글이나 말로 물어보면 답을 만들어줘요. 짧게 물어도 되고 자세하게 물어도 돼요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['질문', '답'], imagePlaceholder: true } },
+      { kind: 'text', data: { imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {

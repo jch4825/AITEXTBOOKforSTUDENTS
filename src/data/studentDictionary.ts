@@ -14,16 +14,6 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     ttsVersion: '컴퓨터는 계산하고 화면을 보여주는 기계예요.',
   },
   {
-    term: '질문',
-    shortExplanation: '모르는 걸 물어보는 말이에요.',
-    example: '"이게 뭐예요?" 가 질문이에요.',
-  },
-  {
-    term: '답',
-    aliases: ['답변'],
-    shortExplanation: '질문에 대해 알려주는 말이에요.',
-  },
-  {
     term: '안전',
     shortExplanation: '다치지 않고, 나쁜 일이 안 생기는 거예요.',
   },
@@ -212,7 +202,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   // ─── 생활 속 기기·활동 어휘 ───
   {
     term: '음성비서',
-    aliases: ['시리', '빅스비'],
+    aliases: ['시리', '빅스비', '음성 비서', '비서'],
     shortExplanation: '말로 부탁하면 도와주는 AI예요.',
     example: '"시리야, 알람 맞춰줘" 하고 말하면 돼요.',
   },
@@ -336,6 +326,69 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '이미지 생성 AI',
     shortExplanation: '글로 설명하면 그 내용에 맞는 새로운 그림을 만들어주는 AI예요.',
     example: '"파란 하늘 아래 강아지"라고 쓰면 그런 그림을 그려줘요.',
+  },
+  // ─── 단원 1 기본 콘텐츠 개념어 확충 ───
+  {
+    term: '앱',
+    aliases: ['어플', '애플리케이션'],
+    shortExplanation: '스마트폰에서 한 가지 일을 하도록 만든 프로그램이에요.',
+    example: '지도 앱, 번역 앱처럼 종류가 많아요.',
+  },
+  {
+    term: '프로그램',
+    shortExplanation: '컴퓨터가 할 일을 미리 정해서 만든 거예요.',
+    example: 'AI도 사람이 만든 프로그램이에요.',
+  },
+  {
+    term: '자료',
+    shortExplanation: '배우거나 알아볼 때 쓰는 정보예요.',
+    example: 'AI는 아주 많은 자료를 보고 배워요.',
+  },
+  {
+    term: '확률',
+    shortExplanation: '어떤 일이 일어날 가능성을 나타낸 거예요.',
+    example: 'AI는 다음에 올 말을 확률로 골라요.',
+  },
+  {
+    term: '특징',
+    shortExplanation: '다른 것과 구별되는 그것만의 점이에요.',
+    example: '기린의 특징은 목이 긴 거예요.',
+  },
+  {
+    term: '이미지',
+    aliases: ['사진', '그림'],
+    shortExplanation: '눈으로 보는 사진이나 그림이에요.',
+    example: 'AI가 이미지를 보고 무엇인지 알아봐요.',
+  },
+  {
+    term: '원리',
+    shortExplanation: '어떤 것이 그렇게 되는 기본 이치예요.',
+    example: 'AI가 답하는 원리를 알면 더 잘 쓸 수 있어요.',
+  },
+  {
+    term: '오인식',
+    shortExplanation: 'AI가 잘못 알아보는 거예요.',
+    example: '고양이를 강아지로 잘못 아는 게 오인식이에요.',
+  },
+  {
+    term: '가능성',
+    shortExplanation: '어떤 일이 일어날 수 있는 정도예요.',
+    example: 'AI도 틀릴 가능성이 있어요.',
+  },
+  {
+    term: '판단',
+    shortExplanation: '무엇이 맞는지 스스로 정하는 거예요.',
+    example: '마지막 판단은 내가 해요.',
+  },
+  {
+    term: '규칙',
+    shortExplanation: '지켜야 할 정해진 약속이에요.',
+    example: 'AI는 정해진 규칙대로 계산해요.',
+  },
+  {
+    term: '도구',
+    shortExplanation: '어떤 일을 할 때 쓰는 물건이에요.',
+    example: 'AI는 나를 도와주는 도구예요.',
   },
   // ─── 모듈 2 어려움(hard) 콘텐츠 신규 어휘 ───
   {
