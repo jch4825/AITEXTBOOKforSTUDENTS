@@ -19,7 +19,7 @@ interface Props {
 
 /**
  * 목차(차례) — 프론트 페이지 다음의 학습 허브.
- * 링크 도서관 형식: 모듈명을 누르면 아래로 차시들이 열리고, 각 차시는 바로가기.
+ * 링크 도서관 형식: 단원명을 누르면 아래로 차시들이 열리고, 각 차시는 바로가기.
  * 상단에 큰 "이어서 하기" 버튼.
  */
 export default function ContentsView({ onPickLesson, onGoHome }: Props) {
@@ -30,7 +30,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
   const resumeMod = moduleIdFromLessonId(resume);
   const isResume = doneCount > 0;
 
-  // 이어서 할 차시가 속한 모듈을 기본으로 펼쳐 둔다.
+  // 이어서 할 차시가 속한 단원을 기본으로 펼쳐 둔다.
   const [open, setOpen] = useState<Set<ModuleId>>(() => new Set(resumeMod ? [resumeMod] : ['m1']));
 
   function toggle(id: ModuleId) {
@@ -78,7 +78,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
           </Button>
         </section>
 
-        {/* 링크 도서관 — 모듈 아코디언 */}
+        {/* 링크 도서관 — 단원 아코디언 */}
         <ol className="space-y-3">
           {MODULES.map(mod => {
             const theme = themeFor(mod.id);
@@ -89,7 +89,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
             const ep = MODULE_EPISODES[mod.id];
             return (
               <li key={mod.id} className="card overflow-hidden" style={{ background: 'var(--paper-0)' }}>
-                {/* 모듈 헤더 — 누르면 아래로 차시가 열린다 */}
+                {/* 단원 헤더 — 누르면 아래로 차시가 열린다 */}
                 <button
                   onClick={() => toggle(mod.id)}
                   aria-expanded={isOpen}
@@ -104,7 +104,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
                   <span className="flex-1 min-w-0">
                     <span className="flex items-center gap-2">
                       <span className="font-bold text-lg" style={{ color: theme.accentText }}>
-                        모듈 {mod.number}. {mod.title}
+                        단원 {mod.number}. {mod.title}
                       </span>
                       {moduleDone && <Icon name="star" size={16} filled color={theme.accent} />}
                     </span>
@@ -133,7 +133,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
                           <button
                             onClick={() => l && onPickLesson(lid)}
                             disabled={!l}
-                            aria-label={`${mod.number}모듈 ${i + 1}차시 ${l?.title ?? '준비 중'}${done ? ' (완료)' : ''}`}
+                            aria-label={`${mod.number}단원 ${i + 1}차시 ${l?.title ?? '준비 중'}${done ? ' (완료)' : ''}`}
                             className="w-full text-left px-4 md:px-5 py-3 flex items-center gap-3 hover:bg-[color:var(--paper-1)] disabled:opacity-45 disabled:cursor-not-allowed"
                           >
                             {/* 완료 별 도장 / 차시 번호 */}

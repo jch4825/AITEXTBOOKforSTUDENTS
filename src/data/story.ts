@@ -29,7 +29,7 @@ export const MODULE_EPISODES: Record<ModuleId, { title: string; synopsis: string
 };
 
 export const LESSON_STORIES: Record<string, LessonStory> = {
-  // ─────────────────── 모듈 1 — 동아리 첫날 ───────────────────
+  // ─────────────────── 단원 1 — 동아리 첫날 ───────────────────
   'm1-l1': {
     scene: ['jinwoo', 'aimi'],
     introEasy: '진우는 오늘 AI 동아리에 처음 왔어요. 작은 로봇 아이미가 반갑게 인사했어요.',
@@ -105,10 +105,10 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     introEasy: '민준 선생님이 퀴즈를 준비했어요. 틀려도 괜찮아요.',
     introNormal:
       '민준 선생님이 웃으며 말했어요. "우리가 배운 걸 퀴즈로 확인해볼까? 틀려도 괜찮아." 진우와 윤아는 고개를 끄덕였어요.',
-    reaction: { speaker: 'minjun', text: '모듈 1 완주! 우리 동아리 친구들, 정말 자랑스러워요.' },
+    reaction: { speaker: 'minjun', text: '단원 1 완주! 우리 동아리 친구들, 정말 자랑스러워요.' },
   },
 
-  // ─────────────────── 모듈 2 — 아이미랑 말하는 법 ───────────────────
+  // ─────────────────── 단원 2 — 아이미랑 말하는 법 ───────────────────
   'm2-l1': {
     scene: ['yoona', 'aimi'],
     introEasy: '윤아가 아이미에게 말을 걸었는데, 아이미가 고개를 갸웃했어요.',
@@ -187,7 +187,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     reaction: { speaker: 'minjun', text: '이제 아이미랑 대화하는 방법을 다 배웠네요. 훌륭해요!' },
   },
 
-  // ─────────────────── 모듈 3 — 아이미랑 공부하기 ───────────────────
+  // ─────────────────── 단원 3 — 아이미랑 공부하기 ───────────────────
   'm3-l1': {
     scene: ['jinwoo', 'aimi'],
     introEasy: '진우는 숙제를 하다가 궁금한 게 생겼어요. 아이미에게 물어보기로 했어요.',
@@ -266,7 +266,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     reaction: { speaker: 'minjun', text: '아이미는 훌륭한 공부 짝꿍이에요. 여러분도 훌륭하고요!' },
   },
 
-  // ─────────────────── 모듈 4 — 우리들의 안전 약속 ───────────────────
+  // ─────────────────── 단원 4 — 우리들의 안전 약속 ───────────────────
   'm4-l1': {
     scene: ['minjun', 'aimi'],
     introEasy: '민준 선생님이 중요한 이야기를 시작했어요. 아이미도 틀릴 수 있대요.',
@@ -345,7 +345,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     reaction: { speaker: 'aimi', text: '약속을 지키는 너희가 정말 멋져!' },
   },
 
-  // ─────────────────── 모듈 5 — 문제해결 대작전 ───────────────────
+  // ─────────────────── 단원 5 — 문제해결 대작전 ───────────────────
   'm5-l1': {
     scene: ['jinwoo'],
     introEasy: '진우에게 고민이 생겼어요. 그런데 고민이 뭔지 말하기 어려웠어요.',
@@ -431,7 +431,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     reaction: { speaker: 'minjun', text: '여러분은 이제 어떤 문제도 차근차근 풀 수 있어요.' },
   },
 
-  // ─────────────────── 모듈 6 — 아이미와 마을로 ───────────────────
+  // ─────────────────── 단원 6 — 아이미와 마을로 ───────────────────
   'm6-l1': {
     scene: ['yoona', 'aimi'],
     introEasy: '오늘은 동아리 장보기 날! 윤아가 목록을 만들었어요.',

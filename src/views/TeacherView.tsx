@@ -95,7 +95,7 @@ function ProgressPanel() {
           const done = lessonIdsForModule(m.id).filter(id => completed.has(id)).length;
           return (
             <li key={m.id} className="flex justify-between border-b py-1 text-sm">
-              <span>모듈 {m.number}. {m.title}</span>
+              <span>단원 {m.number}. {m.title}</span>
               <span className="font-mono">{done} / {m.lessonCount}</span>
             </li>
           );
@@ -111,14 +111,14 @@ function ObjectivesPanel() {
     <section className="p-6 card border border-[color:var(--border)] mb-6">
       <h2 className="text-xl font-bold mb-2">차시별 학습목표 · 성취기준</h2>
       <p className="text-sm text-[color:var(--muted)] mb-4">
-        성취기준은 2022 개정 특수교육 기본교육과정 기준이에요. 모듈을 눌러 펼쳐보세요.
+        성취기준은 2022 개정 특수교육 기본교육과정 기준이에요. 단원을 눌러 펼쳐보세요.
       </p>
       {MODULES.map(m => {
         const lessons = ALL_LESSONS.filter(l => l.moduleId === m.id);
         return (
           <details key={m.id} className="mb-2 border rounded">
             <summary className="cursor-pointer p-3 font-semibold bg-[color:var(--paper-1)]">
-              모듈 {m.number}. {m.title} ({lessons.length}/{m.lessonCount}차시 구현)
+              단원 {m.number}. {m.title} ({lessons.length}/{m.lessonCount}차시 구현)
             </summary>
             <div className="p-3 space-y-3">
               {lessons.map(l => (

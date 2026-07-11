@@ -25,12 +25,12 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
   const aiConnected = hasApiKey();
   const currentModule = currentLessonId ? moduleIdFromLessonId(currentLessonId) : null;
 
-  // 정보 과부하 방지 — 기본은 "지금 차시의 모듈"만 펼치고 나머지는 접어 둔다.
+  // 정보 과부하 방지 — 기본은 "지금 차시의 단원"만 펼치고 나머지는 접어 둔다.
   const [openModules, setOpenModules] = useState<Set<ModuleId>>(
     () => new Set(currentModule ? [currentModule] : ['m1']),
   );
 
-  // 다른 차시로 이동하면 그 모듈을 펼쳐 준다 (다른 모듈은 접힌 상태 유지).
+  // 다른 차시로 이동하면 그 단원을 펼쳐 준다 (다른 단원은 접힌 상태 유지).
   useEffect(() => {
     if (currentModule) setOpenModules(s => (s.has(currentModule) ? s : new Set(s).add(currentModule)));
   }, [currentModule]);
@@ -54,7 +54,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
         const isOpen = openModules.has(mod.id);
         return (
           <section key={mod.id}>
-            {/* 모듈 헤더 — 누르면 아래 도장판이 접혔다 펼쳐진다 (정보량 축소) */}
+            {/* 단원 헤더 — 누르면 아래 도장판이 접혔다 펼쳐진다 (정보량 축소) */}
             <button
               onClick={() => toggle(mod.id)}
               aria-expanded={isOpen}
@@ -62,10 +62,10 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
               style={{ color: theme.accentText }}
             >
               <ModuleIcon moduleId={mod.id} size={20} />
-              <span className="t-label truncate">모듈 {mod.number}. {mod.title}</span>
+              <span className="t-label truncate">단원 {mod.number}. {mod.title}</span>
               <span
                 className="ml-auto text-xs font-semibold text-[color:var(--muted)] nums inline-flex items-center gap-1 shrink-0"
-                aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료${moduleDone ? ' — 모듈 완주!' : ''}`}
+                aria-label={`${lessons.length}차시 중 ${doneInModule}차시 완료${moduleDone ? ' — 단원 완주!' : ''}`}
               >
                 {moduleDone && <Icon name="star" size={13} filled color={theme.accent} />}
                 {doneInModule}/{lessons.length}
@@ -79,7 +79,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
               </span>
             </button>
 
-            {/* 도장판 — 완료한 차시마다 모듈색 별 도장 (§4.2). 접힘 시 숨김 */}
+            {/* 도장판 — 완료한 차시마다 단원색 별 도장 (§4.2). 접힘 시 숨김 */}
             {isOpen && (
               <ul className="flex flex-wrap pl-1 pt-1 pb-2">
                 {lessons.map((lid, i) => {

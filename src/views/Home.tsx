@@ -487,9 +487,9 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                 <span className="bg-[#4f5b90]/10 text-[#4f5b90] px-3 py-1 rounded-full text-xs font-bold mb-4 inline-block">
                   수집 보상
                 </span>
-                <h3 className="text-2xl font-bold text-[#4f5b90] mb-2">획득한 모듈 완주 배지</h3>
+                <h3 className="text-2xl font-bold text-[#4f5b90] mb-2">획득한 단원 완주 배지</h3>
                 <p className="text-sm text-[#5C5B5A] max-w-md">
-                  각 모듈의 모든 차시 공부를 완료하면 예쁜 AI 친구들 배지를 모을 수 있어요.
+                  각 단원의 모든 차시 공부를 완료하면 예쁜 AI 친구들 배지를 모을 수 있어요.
                 </p>
               </div>
 

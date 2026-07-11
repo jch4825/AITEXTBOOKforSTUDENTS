@@ -1,7 +1,7 @@
 import type { LessonContent } from '../../types';
 
 /**
- * 모듈 3 — AI랑 같이 배우기
+ * 단원 3 — AI랑 같이 배우기
  *
  * 11차시. 학생이 AI를 "공부 도우미"로 쓰는 감각을 익히는 것이 목표.
  * 모르는 것 묻기, 쉽게 설명 부탁하기, 요약·퀴즈·복습까지.
@@ -452,7 +452,7 @@ export const M3_LESSONS: LessonContent[] = [
             {
               question: 'AI는 사진 속에 뭐가 있는지 말해줄 수 있어요?',
               answer: 'O',
-              feedback: '맞아요! 모듈 1에서 배운 이미지 인식이에요.',
+              feedback: '맞아요! 단원 1에서 배운 이미지 인식이에요.',
             },
           ],
         },
@@ -520,13 +520,13 @@ export const M3_LESSONS: LessonContent[] = [
     number: 11,
     kind: 'concept',
     title: '나만의 공부 도우미 (마무리)',
-    objective: '모듈 3에서 배운 AI 공부 활용법을 정리하여 말할 수 있다.',
+    objective: '단원 3에서 배운 AI 공부 활용법을 정리하여 말할 수 있다.',
     standards: ['[12정통02-04] 일상생활에서 인공지능 기기를 활용하여 생활의 편리함을 경험한다.'],
     bodyEasy: 'AI는 나의 공부 도우미예요. 배운 걸 확인해봐요.',
     bodyNormal:
-      '모듈 3에서 AI로 공부하는 방법을 배웠어요. 물어보기, 쉽게 부탁하기, 요약, 퀴즈, 복습까지 확인해봐요!',
-    wrapUpEasy: '모듈 3을 다 배웠어요! AI는 나의 공부 도우미예요.',
-    wrapUpNormal: '모듈 3을 마쳤어요! 물어보기, 쉽게 설명 부탁하기, 요약, 퀴즈, 복습 — AI 공부 활용법을 배웠어요.',
+      '단원 3에서 AI로 공부하는 방법을 배웠어요. 물어보기, 쉽게 부탁하기, 요약, 퀴즈, 복습까지 확인해봐요!',
+    wrapUpEasy: '단원 3을 다 배웠어요! AI는 나의 공부 도우미예요.',
+    wrapUpNormal: '단원 3을 마쳤어요! 물어보기, 쉽게 설명 부탁하기, 요약, 퀴즈, 복습 — AI 공부 활용법을 배웠어요.',
     steps: [
       { kind: 'text', data: {} },
       {

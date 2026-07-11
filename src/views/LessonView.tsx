@@ -333,7 +333,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   return (
     <MicroLessonFrame
       lessonId={lesson.id}
-      crumb={`모듈 ${mod.number} > ${lesson.number}. ${lesson.title}`}
+      crumb={`단원 ${mod.number} > ${lesson.number}. ${lesson.title}`}
       totalSteps={totalSteps}
       currentStep={step}
       onPrev={handlePrev}
@@ -371,7 +371,7 @@ function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps)
   const modId = moduleIdFromLessonId(lessonId);
   const mod = modId ? getModule(modId) : undefined;
   const theme = themeFor(modId ?? 'm1');
-  const crumb = mod ? `모듈 ${mod.number} > ${mod.title}` : lessonId;
+  const crumb = mod ? `단원 ${mod.number} > ${mod.title}` : lessonId;
 
   return (
     <MicroLessonFrame

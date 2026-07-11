@@ -5,7 +5,7 @@ import DictionaryTrigger from './controls/DictionaryTrigger';
 import Icon from './Icon';
 
 interface Props {
-  crumb: string;          // e.g. "모듈 1 > AI가 뭐야?"
+  crumb: string;          // e.g. "단원 1 > AI가 뭐야?"
   onOpenDictionary: () => void;
   onGoHome: () => void;
   onOpenNav?: () => void; // 모바일 차례 드로어 열기
