@@ -459,7 +459,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '분위기',
-    shortExplanation: '그 자리에서 느껴지는 느낌이에요.',
+    shortExplanation: '말이나 글에서 느껴지는 느낌이에요.',
     example: '"친절하게 말해줘"라고 하면 부드러운 분위기가 돼요.',
   },
   {
@@ -527,7 +527,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '아이디어',
-    shortExplanation: '생각의 실마리가 되는 짧은 생각이에요.',
+    shortExplanation: '새롭게 떠오른 생각이에요.',
     example: '"우주에 사는 고양이"도 하나의 아이디어예요.',
   },
   {
@@ -628,7 +628,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '표시',
-    shortExplanation: '무엇인지 알 수 있게 나타낸 자국이나 글자예요.',
+    shortExplanation: '무엇인지 알 수 있게 붙여 놓은 글자나 그림이에요.',
     example: '광고에는 작게 "광고"라는 표시가 붙어 있어요.',
   },
   // ─── 모듈 5 어려움(hard) 콘텐츠 신규 어휘 ───
@@ -794,7 +794,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '의견',
-    shortExplanation: '어떤 것에 대한 나의 생각이에요.',
+    shortExplanation: '어떤 것에 대한 생각이에요.',
     example: 'AI의 의견을 참고해서 내가 직접 고쳐요.',
   },
 ];
