@@ -294,7 +294,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '환각',
-    shortExplanation: 'AI가 그럴듯하지만 틀린 답을 자신 있게 말하는 것.',
+    shortExplanation: 'AI가 그럴듯하지만 틀린 답을 자신 있게 말하는 거예요.',
     example: 'AI가 없는 책 이름을 진짜처럼 말했어요. 그래서 꼭 확인해야 해요.',
   },
   {
@@ -316,6 +316,26 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '패턴',
     shortExplanation: '여러 자료에서 자주 반복되는 모양이나 규칙이에요.',
     example: '고양이 사진마다 뾰족한 귀 모양이 자주 나오는 것도 패턴이에요.',
+  },
+  {
+    term: '명령어',
+    shortExplanation: 'AI한테 어떤 일을 하라고 시키는 정해진 말이에요.',
+    example: '"타이머 시작"도 하나의 명령어예요.',
+  },
+  {
+    term: '감정',
+    shortExplanation: '기쁨이나 슬픔처럼 마음으로 느끼는 거예요. AI는 실제로 느끼지는 못해요.',
+    example: 'AI가 "슬퍼요"라고 답해도, 사람처럼 진짜 슬픔을 느끼는 건 아니에요.',
+  },
+  {
+    term: '최신 정보',
+    shortExplanation: 'AI가 학습을 마친 뒤에 새로 생긴 정보예요. AI는 이걸 모를 수 있어요.',
+    example: 'AI 학습이 끝난 다음에 일어난 일은 AI가 알지 못해요.',
+  },
+  {
+    term: '이미지 생성 AI',
+    shortExplanation: '글로 설명하면 그 내용에 맞는 새로운 그림을 만들어주는 AI예요.',
+    example: '"파란 하늘 아래 강아지"라고 쓰면 그런 그림을 그려줘요.',
   },
 ];
 
