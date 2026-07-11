@@ -284,6 +284,11 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
         example: '"숙제 도와줘"보다 "수학 나눗셈 문제 세 개 만들어줘"가 더 좋은 프롬프트다.',
       },
       {
+        term: '역할 지정',
+        definition: '"너는 ~라고 하자"처럼 AI에게 특정 역할을 정해주는 것.',
+        example: '"친절한 요리 선생님이라고 하자"라고 정하면 그 말투로 답한다.',
+      },
+      {
         term: '검증',
         definition: 'AI가 만든 답이 사실인지 다시 확인하는 것.',
         example: '책이나 어른에게 물어보는 것도 검증이다.',
