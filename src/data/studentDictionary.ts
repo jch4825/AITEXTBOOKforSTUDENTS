@@ -459,13 +459,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '유해 콘텐츠',
-    shortExplanation: '보면 마음이 불편해지거나 무서워지는 나쁜 내용이에요.',
+    shortExplanation: '보면 마음이 불편해지거나 무서워지는 나쁜 내용이에요. 만나도 내 잘못이 아니에요.',
     example: '무섭거나 나쁜 말이 나오면 유해 콘텐츠예요.',
-    ttsVersion: '유해 콘텐츠는 보면 마음이 불편해지는 나쁜 내용이에요. 만나면 어른에게 알려요.',
+    ttsVersion: '유해 콘텐츠는 보면 마음이 불편해지는 나쁜 내용이에요. 만나도 내 잘못이 아니니 어른에게 알려요.',
   },
   {
     term: '신고',
-    shortExplanation: '나쁜 내용을 어른이나 담당자에게 알리는 거예요.',
+    shortExplanation: '나쁜 내용을 어른에게 알리는 거예요.',
     example: '이상한 화면을 캡처해서 선생님께 보여주는 것도 신고예요.',
     ttsVersion: '신고는 나쁜 내용을 어른에게 알리는 거예요. 알리는 건 용감한 행동이에요.',
   },
