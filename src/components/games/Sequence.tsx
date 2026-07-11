@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
+import Button from '../Button';
 import ActivityIcon from '../ActivityIcon';
 import Burst from './Burst';
 import { activityColor } from '../../utils/activityPalette';
@@ -34,6 +35,12 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
   const { speak } = useSpeak();
 
   const done = placedCount === items.length;
+
+  // 처음부터 다시 — 지금까지 놓은 순서를 모두 지우고 처음부터 다시 놓는다.
+  function restart() {
+    setPlacedCount(0);
+    setWrongIdx(null);
+  }
 
   function clickCard(shuffleIdx: number) {
     if (done) return;
@@ -151,6 +158,14 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
               </button>
             );
           })}
+        </div>
+      )}
+
+      {!done && placedCount > 0 && (
+        <div className="mt-6 text-center">
+          <Button variant="ghost" onClick={restart}>
+            <Icon name="refresh" size={18} /> 처음부터 다시
+          </Button>
         </div>
       )}
 

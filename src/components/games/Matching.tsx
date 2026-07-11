@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
+import Button from '../Button';
 import ActivityIcon from '../ActivityIcon';
 import { activityColor } from '../../utils/activityPalette';
 import type { Difficulty } from '../../types';
@@ -78,6 +79,16 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
     }
   }
 
+  // 처음부터 다시 — 맞춘 짝·선택·오답 표시를 모두 초기화한다.
+  function restart() {
+    setMatched(pairs.map(() => false));
+    setPicked({ leftIdx: null, rightIdx: null });
+    setWrongPair(null);
+    setIsChecking(false);
+  }
+
+  const hasProgress = matched.some(Boolean) || picked.leftIdx !== null || picked.rightIdx !== null;
+
   function clickLeft(i: number) {
     if (matched[i] || isChecking) return;
     if (picked.rightIdx !== null) {
@@ -98,7 +109,8 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
   }
 
   return (
-    <div className="my-6 grid grid-cols-2 gap-6">
+    <div className="my-6">
+      <div className="grid grid-cols-2 gap-6">
       {/* Left Column */}
       <div className="space-y-3">
         {pairs.map((p, i) => {
@@ -221,6 +233,14 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
           );
         })}
       </div>
+      </div>
+      {hasProgress && (
+        <div className="mt-6 text-center">
+          <Button variant="ghost" onClick={restart}>
+            <Icon name="refresh" size={18} /> 처음부터 다시
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
