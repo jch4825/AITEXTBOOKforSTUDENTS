@@ -115,7 +115,9 @@ export default function MicroLessonFrame({
             </div>
           </div>
         )}
-        <main className="flex-1 min-w-0 p-4 md:px-8 md:py-10 overflow-y-auto" data-open-term={undefined}>
+        {/* pb-20: 교사 도구 도크(약 53px, absolute·footer 위 부상)가 스크롤 최하단 콘텐츠·버튼을
+            가리지 않도록 확보한 하단 여백. 도크는 프레임에 absolute라 흐름 밖 → main 여백으로만 비켜준다. */}
+        <main className="flex-1 min-w-0 p-4 pb-20 md:px-8 md:py-10 md:pb-20 overflow-y-auto" data-open-term={undefined}>
           {/* expose openTerm to children via a custom event */}
           <div onClickCapture={(e) => {
             const target = e.target as HTMLElement;
