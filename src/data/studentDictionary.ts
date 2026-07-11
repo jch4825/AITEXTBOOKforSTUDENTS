@@ -356,7 +356,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '예시 제시',
     shortExplanation: '원하는 답 모양을 먼저 보여주는 거예요.',
-    example: '"이런 식으로 해줘: 강아지가 뛰어요" 처럼요.',
+    example: '"이런 식으로 해줘: 강아지가 뛰어요"처럼요.',
   },
   {
     term: '역할 지정',
@@ -376,7 +376,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '형식 지정',
     shortExplanation: '답을 어떤 길이나 모양으로 받을지 미리 정하는 거예요.',
-    example: '"세 줄로", "표로" 처럼 정해서 부탁해요.',
+    example: '"세 줄로", "표로"처럼 정해서 부탁해요.',
   },
   {
     term: '검증',
