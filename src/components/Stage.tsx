@@ -52,6 +52,7 @@ export default function Stage({
   const curve = MODULE_CURVE[moduleIdFromLessonId(lessonId) ?? 'm1'];
   // 장면 그림 후보 체인: webp(경량, 전 차시 존재) → png(원본, png/ 폴더) → 아바타 폴백
   const candidates = [
+    `${import.meta.env.BASE_URL}lessons/webtoon/${lessonId}.webp`,
     `${import.meta.env.BASE_URL}lessons/${lessonId}.webp`,
     `${import.meta.env.BASE_URL}lessons/png/${lessonId}.png`,
   ];
