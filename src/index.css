@@ -410,3 +410,7 @@
 .comic-frame-footer { border-top: 2px solid var(--brand-ink); background:var(--paper-0); box-shadow:0 -4px 0 color-mix(in srgb, var(--brand-ink) 7%, transparent); }
 .comic-frame-footer .btn { min-width:7.25rem; }.comic-cut-progress { display:flex; flex-direction:column; align-items:center; gap:.15rem; font-weight:900; font-size:.78rem; color:var(--brand-ink); letter-spacing:.04em; }.comic-cut-progress > span { border:1px solid var(--brand-ink); border-radius:999px; padding:.05rem .4rem; }
 @media(max-width:767px){.comic-frame-footer .btn{min-width:0;padding-inline:.8rem}.comic-cut-progress{min-width:3.1rem}.comic-cut-progress .progress-dots{display:none}}
+.season-map > li { border:2px solid var(--brand-ink); border-radius:5px 14px 5px 14px; background:var(--paper-0); box-shadow:4px 4px 0 color-mix(in srgb,var(--episode-accent) 28%,var(--paper-2)); overflow:hidden; }
+.season-map > li:has(.season-episode-active) { background:var(--episode-soft); box-shadow:6px 6px 0 var(--episode-accent); }
+.season-episode { border:0; border-radius:0; box-shadow:none; }.season-episode-active { transform:none; box-shadow:none; }
+.season-lessons { border-top:2px solid var(--brand-ink); padding:0 .8rem .5rem; background:var(--paper-0); }

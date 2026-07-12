@@ -45,3 +45,7 @@ if (!frame.includes('comic-frame-footer')) {
 if (!document.includes('favicon.svg')) {
   throw new Error('The app must provide its own favicon.');
 }
+
+if (!contents.includes('renderLessons=') || !readFileSync(new URL('../src/components/SeasonMap.tsx', import.meta.url), 'utf8').includes('renderLessons')) {
+  throw new Error('Active module lessons must expand directly below the module card.');
+}

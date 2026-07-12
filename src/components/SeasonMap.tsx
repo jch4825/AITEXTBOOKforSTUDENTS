@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import ModuleIcon from './ModuleIcon';
 import Icon from './Icon';
 import type { ModuleId } from '../types';
@@ -18,10 +18,11 @@ interface Props {
   episodes: Episode[];
   activeId: ModuleId;
   onPick: (id: ModuleId) => void;
+  renderLessons: (id: ModuleId) => ReactNode;
 }
 
 /** 6개 모듈을 연재 에피소드 컷으로 보여 주는 시즌 지도. */
-export default function SeasonMap({ episodes, activeId, onPick }: Props) {
+export default function SeasonMap({ episodes, activeId, onPick, renderLessons }: Props) {
   return (
     <ol className="season-map" aria-label="AI 동아리 시즌 지도">
       {episodes.map((episode) => {
@@ -45,6 +46,7 @@ export default function SeasonMap({ episodes, activeId, onPick }: Props) {
                 {episode.complete ? <Icon name="star" size={18} filled color={theme.accent} /> : `${episode.done}/${episode.total}`}
               </span>
             </button>
+            {active && <div className="season-lessons">{renderLessons(episode.id)}</div>}
           </li>
         );
       })}

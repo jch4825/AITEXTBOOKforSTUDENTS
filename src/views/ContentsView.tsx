@@ -38,13 +38,15 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
         <div><p className="comic-kicker">{completedLessons.length ? '다음 컷에서 이어서' : '첫 번째 이야기를 시작해요'}</p><h1>{resumeTitle}</h1><p>한 장면씩 천천히, 아이미와 함께 배워요.</p></div>
         <Button size="lg" accent={activeTheme.accent} onClick={() => onPickLesson(resume)}><Icon name="book" size={22} /> {completedLessons.length ? '이어서 하기' : '첫 컷 보기'}</Button>
       </ComicPanel>
-      <section className="mt-9"><p className="comic-kicker mb-3">SEASON MAP</p><SeasonMap episodes={episodes} activeId={active.id} onPick={setActiveId} /></section>
-      <ComicPanel accent={activeTheme.accent} className="comic-lesson-list mt-8" label={`${active.title} 차시 목록`}>
-        <div className="comic-list-heading"><div><p className="comic-kicker">EP.{String(active.number).padStart(2, '0')}</p><h2>{active.title}</h2><p>{MODULE_EPISODES[active.id].synopsis}</p></div><span className="comic-count">{episodes.find((episode) => episode.id === active.id)?.done}/{lessons.length}</span></div>
-        <ol className="comic-lesson-cuts">
-          {lessons.map((id, index) => { const lesson = getLesson(id); const done = isCompleted(id); return <li key={id}><button onClick={() => lesson && onPickLesson(id)} disabled={!lesson} className="comic-lesson-cut"><span className="comic-cut-number">{done ? <Icon name="star" size={18} filled color={activeTheme.accent} /> : String(index + 1).padStart(2, '0')}</span><span><strong>{lesson?.title ?? '곧 열려요'}</strong>{lesson && <small>{lesson.wrapUpEasy}</small>}</span><Icon name="chevron-right" size={20} /></button></li>; })}
-        </ol>
-      </ComicPanel>
+      <section className="mt-9"><p className="comic-kicker mb-3">SEASON MAP</p><SeasonMap episodes={episodes} activeId={active.id} onPick={setActiveId} renderLessons={(moduleId) => {
+  const module = MODULES.find((item) => item.id === moduleId)!;
+  const moduleTheme = themeFor(moduleId);
+  return <ol className="comic-lesson-cuts">{lessonIdsForModule(moduleId).map((id, index) => {
+    const lesson = getLesson(id); const done = isCompleted(id);
+    return <li key={id}><button onClick={() => lesson && onPickLesson(id)} disabled={!lesson} className="comic-lesson-cut"><span className="comic-cut-number">{done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}</span><span><strong>{lesson?.title ?? '곧 열려요'}</strong>{lesson && <small>{lesson.wrapUpEasy}</small>}</span><Icon name="chevron-right" size={20} /></button></li>;
+  })}</ol>;
+}} /></section>
+
     </div>
   </main>;
 }
