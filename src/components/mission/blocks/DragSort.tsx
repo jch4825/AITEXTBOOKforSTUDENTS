@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import type { DragSortBlock } from '../../../types';
 import Icon from '../../Icon';
+import { useSpeak } from '../../../hooks/useSpeak';
+import { activityColor } from '../../../utils/activityPalette';
 
 interface Props {
   key?: any;
@@ -11,6 +13,7 @@ interface Props {
 }
 
 export default function DragSort({ block, value = {}, onChange, accent }: Props) {
+  const { speak, speakNow } = useSpeak();
   const [selectedCardIdx, setSelectedCardIdx] = useState<number | null>(null);
   const [errorCardIdx, setErrorCardIdx] = useState<number | null>(null);
   const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
@@ -34,22 +37,25 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
     } else {
       setSelectedCardIdx(originalIdx);
       setErrorCardIdx(null);
+      speak(block.cards[originalIdx].label); // 잡은 카드를 읽어준다
     }
   };
 
   const handleBinClick = (binIdx: number) => {
     if (selectedCardIdx === null) return;
-    
+
     const correctBin = block.cards[selectedCardIdx].bin;
     if (correctBin === binIdx) {
       // Correct!
       const newValue = { ...value, [selectedCardIdx]: binIdx };
       onChange(newValue);
       setSelectedCardIdx(null);
+      speak(Object.keys(newValue).length === block.cards.length ? '와, 모두 나눴어요!' : '잘 맞췄어요!');
     } else {
       // Wrong! Shake animation
       setErrorCardIdx(selectedCardIdx);
       setTimeout(() => setErrorCardIdx(null), 500);
+      speak('다시 골라볼까요?');
     }
   };
 
@@ -113,10 +119,12 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
         const newValue = { ...value, [originalIdx]: droppedBinIdx };
         onChange(newValue);
         setSelectedCardIdx(null);
+        speak(Object.keys(newValue).length === block.cards.length ? '와, 모두 나눴어요!' : '잘 맞췄어요!');
       } else {
         // Fail: Shake
         setErrorCardIdx(originalIdx);
         setTimeout(() => setErrorCardIdx(null), 500);
+        speak('다시 골라볼까요?');
       }
     }
 
@@ -137,7 +145,18 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
 
   return (
     <div className="w-full space-y-4 story-fade-in select-none">
-      <p className="text-lg font-bold text-neutral-800">{block.prompt}</p>
+      <div className="flex items-start gap-2">
+        <p className="text-xl font-semibold flex-1">{block.prompt}</p>
+        <button
+          type="button"
+          onClick={() => speakNow(block.prompt)}
+          aria-label="문제 다시 들려주기"
+          className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
+          style={{ borderColor: accent, color: accent, background: 'var(--paper-0)' }}
+        >
+          <Icon name="speaker" size={20} />
+        </button>
+      </div>
 
       {/* Bins Container */}
       <div className={`grid gap-3 ${block.bins.length === 3 ? 'grid-cols-3' : 'grid-cols-2'}`}>
@@ -148,25 +167,26 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
               key={idx}
               ref={(el) => { binRefs.current[idx] = el; }}
               onClick={() => handleBinClick(idx)}
-              className="border-2 border-dashed rounded-[var(--r-md)] p-4 flex flex-col items-center min-h-[160px] bg-neutral-100/50 transition-all cursor-pointer relative"
+              className="border-[2.5px] border-dashed rounded-[var(--r-md)] p-4 flex flex-col items-center min-h-[170px] transition-all cursor-pointer relative"
               style={{
                 borderColor: isTargetGlow ? accent : 'var(--border)',
-                background: 'var(--paper-1)',
+                background: isTargetGlow ? 'var(--paper-2)' : 'var(--paper-1)',
               }}
             >
-              <span className="text-3xl mb-1">{bin.emoji}</span>
-              <span className="text-sm font-bold text-neutral-800 mb-3">{bin.label}</span>
-              
+              <span className="text-3xl mb-1" aria-hidden>{bin.emoji}</span>
+              <span className="text-base font-bold mb-3" style={{ color: 'var(--brand-ink)' }}>{bin.label}</span>
+
               {/* Sorted items in this bin */}
               <div className="w-full flex flex-col gap-1.5 mt-auto">
                 {sortedByBin[idx].map((card, cIdx) => (
                   <div
                     key={cIdx}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-[var(--r-sm)] text-xs text-emerald-800 font-semibold shadow-sm"
+                    className="answer-pop flex items-center gap-1.5 px-3 py-2 rounded-[var(--r-sm)] text-sm font-semibold"
+                    style={{ background: 'var(--ok-bg)', border: '1px solid var(--ok)', color: 'var(--brand-ink)' }}
                   >
-                    <span>{card.emoji}</span>
+                    <span aria-hidden>{card.emoji}</span>
                     <span>{card.label}</span>
-                    <Icon name="star" size={12} filled color="var(--ok)" className="ml-auto" />
+                    <Icon name="check" size={14} strokeWidth={3} color="var(--ok)" className="ml-auto shrink-0" />
                   </div>
                 ))}
               </div>
@@ -177,16 +197,17 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
 
       {/* Unsorted Cards Pile */}
       {!isAllSorted && (
-        <div className="bg-neutral-100/30 border border-[color:var(--line)] rounded-[var(--r-md)] p-4 flex flex-col items-center gap-3 bg-[color:var(--paper-0)]">
-          <p className="text-xs font-semibold text-neutral-500">
-            👇 카드를 알맞은 상자로 끌어다 놓거나, 카드를 누른 후 상자를 눌러보세요!
+        <div className="border border-[color:var(--line)] rounded-[var(--r-md)] p-4 flex flex-col items-center gap-3 bg-[color:var(--paper-0)]">
+          <p className="text-base font-semibold" style={{ color: 'var(--muted)' }}>
+            카드를 알맞은 상자로 끌어다 놓거나, 카드를 누른 뒤 상자를 눌러 보세요.
           </p>
-          <div className="flex flex-wrap gap-2.5 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center">
             {unsortedCards.map((card) => {
               const isSelected = selectedCardIdx === card.originalIdx;
               const isDragging = draggingIdx === card.originalIdx;
               const isError = errorCardIdx === card.originalIdx;
-              
+              const palette = activityColor(card.label);
+
               return (
                 <div
                   key={card.originalIdx}
@@ -195,20 +216,21 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
                   onPointerMove={handlePointerMove}
                   onPointerUp={(e) => handlePointerUp(e, card.originalIdx)}
                   onClick={() => handleCardClick(card.originalIdx)}
-                  className={`flex items-center gap-2 px-4 py-2.5 bg-[color:var(--paper-0)] border-2 rounded-[20px] shadow-sm font-bold text-sm select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
-                    ${isDragging ? 'z-50 shadow-lg scale-105' : ''}
+                  className={`card3d flex items-center gap-2 px-5 py-3 rounded-[var(--r-md)] font-bold text-base select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
+                    ${isDragging ? 'z-50 scale-105' : ''}
                     ${isError ? 'answer-shake' : ''}
                   `}
                   style={{
-                    borderColor: isSelected ? accent : 'var(--border)',
-                    boxShadow: isSelected ? 'var(--e-2)' : 'var(--e-1)',
-                    transform: isDragging 
-                      ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` 
+                    border: isSelected ? `4px solid ${palette.accent}` : `2.5px solid ${palette.accent}`,
+                    background: isError ? 'var(--bad-bg)' : isSelected ? palette.tint : 'var(--paper-0)',
+                    color: 'var(--brand-ink)',
+                    ['--edge' as string]: palette.accent,
+                    transform: isDragging
+                      ? `translate(${dragOffset.x}px, ${dragOffset.y}px)`
                       : 'none',
-                    backgroundColor: isError ? 'var(--bad-bg)' : undefined,
                   }}
                 >
-                  <span className="text-xl">{card.emoji}</span>
+                  <span className="text-2xl" aria-hidden>{card.emoji}</span>
                   <span>{card.label}</span>
                 </div>
               );
@@ -218,9 +240,12 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
       )}
 
       {isAllSorted && (
-        <div className="flex items-center justify-center gap-2 py-3 bg-emerald-50 text-emerald-800 rounded-[var(--r-md)] border border-emerald-200 font-bold">
-          <Icon name="sparkles" size={20} filled color="var(--ok)" />
-          모든 카드를 알맞게 분류했습니다!
+        <div
+          className="answer-pop flex items-center justify-center gap-2 py-3 rounded-[var(--r-md)] font-bold text-lg"
+          style={{ background: 'var(--ok-bg)', border: '1px solid var(--ok)', color: 'var(--brand-ink)' }}
+        >
+          <Icon name="sparkles" size={22} filled color="var(--ok)" />
+          모든 카드를 알맞게 나눴어요!
         </div>
       )}
     </div>
