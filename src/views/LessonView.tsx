@@ -251,7 +251,9 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           accent={theme.accent}
           accentText={theme.accentText}
           accentSoft={theme.accentSoft}
-          onDone={handleNext}
+          // 응답을 자동으로 넘기지 않는다 — 학생이 AI 답을 읽고(들은 뒤) 하단 '다음'으로 진행.
+          // (handleNext로 두면 응답이 오는 즉시 스텝이 넘어가 답이 화면에 안 보인다.)
+          onDone={() => { /* no-op: 하단 푸터의 '다음'이 진행을 담당 */ }}
           systemInstruction={data.systemInstruction}
         />
       </span>

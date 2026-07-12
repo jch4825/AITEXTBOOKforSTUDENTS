@@ -89,7 +89,8 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
       const e = err instanceof GeminiError
         ? { studentMessage: err.studentMessage, technicalDetail: err.technicalDetail }
         : { studentMessage: '무언가 잘못됐어요.', technicalDetail: String(err) };
-      speak(fallbackResponse);
+      // fallbackResponse에도 [happy] 같은 감정 태그가 들어있으니 반드시 제거 후 읽는다.
+      speak(parseExpression(fallbackResponse).cleanText);
       setState({ kind: 'fallback', ...e, sent: toSend });
       onDone();
     }
@@ -112,11 +113,12 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
       expression: expression,
     });
   } else if (state.kind === 'fallback') {
+    const fb = parseExpression(fallbackResponse);
     messages.push({
       id: 'aimi-fallback',
       sender: 'aimi',
-      text: fallbackResponse,
-      expression: 'happy',
+      text: fb.cleanText,
+      expression: fb.expression === 'neutral' ? 'happy' : fb.expression,
     });
   }
 
