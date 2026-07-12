@@ -58,16 +58,6 @@ export const M1_LESSONS: LessonContent[] = [
         },
       },
       {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: '시리·빅스비', right: '말로 대화하는 AI', icon: 'ai_speaker' },
-            { left: '챗봇', right: '글로 대화하는 AI', icon: 'chatbot' },
-            { left: '번역기', right: '말을 바꿔주는 AI', icon: 'translate' },
-          ],
-        },
-      },
-      {
         kind: 'sim-ai',
         data: {
           prompt: 'AI한테 "안녕!" 이라고 인사해봐요.',
@@ -165,18 +155,6 @@ export const M1_LESSONS: LessonContent[] = [
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['기계', '자동화', '학습', '자료'], imagePlaceholder: true } },
       {
-        kind: 'card-pick',
-        data: {
-          question: '이 중에 AI를 쓰는 건 무엇일까요?',
-          choices: [
-            { label: '스마트폰 음성비서에게 노래 틀어달라고 말하기', isCorrect: true, icon: 'ai_speaker' },
-            { label: '선풍기 버튼 누르기', isCorrect: false, icon: 'fan' },
-            { label: '전등 스위치 켜기', isCorrect: false, icon: 'light_switch' },
-            { label: '수도꼭지 돌리기', isCorrect: false, icon: 'faucet' },
-          ],
-        },
-      },
-      {
         kind: 'ox',
         data: {
           questions: [
@@ -190,15 +168,6 @@ export const M1_LESSONS: LessonContent[] = [
               answer: 'O',
               feedback: '맞아요! AI 스피커는 우리 말을 듣고 이해할 수 있어요.',
             },
-          ],
-        },
-      },
-      {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: '그냥 기계', right: '정해진 일만 반복', icon: 'fan' },
-            { left: 'AI', right: '우리 말을 알아듣고 답해줌', icon: 'ai_speaker' },
           ],
         },
       },
@@ -310,18 +279,6 @@ export const M1_LESSONS: LessonContent[] = [
             { label: '아무 말 안 하기', isCorrect: false, icon: 'sleep' },
             { label: '눈만 감고 기다리기', isCorrect: false, icon: 'sleep' },
             { label: '화면 두드리기', isCorrect: false, icon: 'faucet' },
-          ],
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: 'AI한테는 궁금한 걸 아무 때나 물어봐도 될까요?',
-              answer: 'O',
-              feedback: '맞아요! 궁금할 때 언제든 물어봐도 돼요.',
-            },
           ],
         },
       },
@@ -445,16 +402,6 @@ export const M1_LESSONS: LessonContent[] = [
         },
       },
       {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: '사진 속 강아지', right: 'AI가 "강아지"라고 알아봐요', icon: 'dog' },
-            { left: '사진 속 자동차', right: 'AI가 "자동차"라고 알아봐요', icon: 'car' },
-            { left: '사진 속 사과', right: 'AI가 "사과"라고 알아봐요', icon: 'apple' },
-          ],
-        },
-      },
-      {
         kind: 'mission',
         data: {
           title: 'AI 눈 실험실',
@@ -567,18 +514,6 @@ export const M1_LESSONS: LessonContent[] = [
             { label: '종이에 그림 그리기', isCorrect: false, icon: 'drawing' },
             { label: '창문 닫기', isCorrect: false, icon: 'window' },
             { label: '가만히 있기', isCorrect: false, icon: 'sleep' },
-          ],
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: 'AI는 시끄러운 곳에서도 말을 잘 알아들을까요?',
-              answer: 'X',
-              feedback: '조용한 곳에서 또박또박 말하면 더 잘 알아들어요.',
-            },
           ],
         },
       },
@@ -700,17 +635,6 @@ export const M1_LESSONS: LessonContent[] = [
         },
       },
       {
-        kind: 'card-pick',
-        data: {
-          question: 'AI는 어떤 것을 보고 배울까요?',
-          choices: [
-            { label: '많은 예시(사진, 글, 소리)', isCorrect: true, icon: 'book' },
-            { label: '한 번만 스치듯 봐도 다 배움', isCorrect: false, icon: 'light_switch' },
-            { label: '아무것도 안 보고 다 앎', isCorrect: false, icon: 'sleep' },
-          ],
-        },
-      },
-      {
         kind: 'mission',
         data: {
           title: 'AI 학교 급식소',
@@ -797,28 +721,6 @@ export const M1_LESSONS: LessonContent[] = [
       'AI는 아주 빠르게 답을 만들고, 다른 나라 말로 바꿔주고, 사진 속 물건을 알아봐요. 우리를 여러 가지로 도와줄 수 있어요.',
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['요약', '번역'], imagePlaceholder: true } },
-      {
-        kind: 'card-pick',
-        data: {
-          question: 'AI가 잘하는 일은 어떤 것일까요?',
-          choices: [
-            { label: '영어를 한국어로 바꿔주기', isCorrect: true, icon: 'translate' },
-            { label: '기분 나빠 하기', isCorrect: false, icon: 'angry_face' },
-            { label: '배고파 하기', isCorrect: false, icon: 'hungry' },
-            { label: '잠자기', isCorrect: false, icon: 'sleep' },
-          ],
-        },
-      },
-      {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: '빠르게 답하기', right: '몇 초 만에 답해줘요', icon: 'chatbot' },
-            { left: '번역하기', right: '다른 나라 말로 바꿔줘요', icon: 'translate' },
-            { left: '요약하기', right: '긴 글을 짧게 정리해줘요', icon: 'book' },
-          ],
-        },
-      },
       {
         kind: 'ox',
         data: {
@@ -944,27 +846,6 @@ export const M1_LESSONS: LessonContent[] = [
         },
       },
       {
-        kind: 'sim-ai',
-        data: {
-          prompt: 'AI한테 "너 배고파?" 라고 물어봐요.',
-          userInput: '너 배고파?',
-          aiResponse:
-            '저는 컴퓨터라서 배가 고프거나 밥을 먹진 못해요. 하지만 궁금한 게 있으면 언제든 물어봐 주세요!',
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: 'AI가 할 수 없는 것은 무엇일까요?',
-          choices: [
-            { label: '진짜로 슬퍼하며 울기', isCorrect: true, icon: 'sad_crying' },
-            { label: '질문에 답해주기', isCorrect: false, icon: 'chatbot' },
-            { label: '번역해주기', isCorrect: false, icon: 'translate' },
-            { label: '사진 속 물건 알아보기', isCorrect: false, icon: 'dog' },
-          ],
-        },
-      },
-      {
         kind: 'mission',
         data: {
           title: '못하는 것 탐정',
@@ -1061,17 +942,6 @@ export const M1_LESSONS: LessonContent[] = [
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['이미지 생성 AI', '챗봇', '도구'], imagePlaceholder: true } },
       {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: '챗GPT·제미나이', right: '글로 대화하는 AI', icon: 'chatbot' },
-            { left: '시리·빅스비', right: '말로 대화하는 AI', icon: 'ai_speaker' },
-            { left: '이미지 생성 AI', right: '그림을 그려주는 AI', icon: 'drawing' },
-            { left: '번역 AI', right: '다른 나라 말로 바꿔주는 AI', icon: 'translate' },
-          ],
-        },
-      },
-      {
         kind: 'card-pick',
         data: {
           question: '"이 강아지 사진을 그려줘"는 어떤 AI에게 물어볼까요?',
@@ -1079,18 +949,6 @@ export const M1_LESSONS: LessonContent[] = [
             { label: '그림을 그려주는 AI', isCorrect: true, icon: 'drawing' },
             { label: '말로만 대답하는 AI', isCorrect: false, icon: 'chatbot' },
             { label: '번역만 하는 AI', isCorrect: false, icon: 'translate' },
-          ],
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '모든 AI는 다 똑같이 생겼고 이름도 같을까요?',
-              answer: 'X',
-              feedback: 'AI는 여러 가지가 있고 이름도 달라요.',
-            },
           ],
         },
       },
@@ -1185,15 +1043,6 @@ export const M1_LESSONS: LessonContent[] = [
       'AI랑 이야기해본 적 있어요? 오늘은 짧은 대화를 해보면서 AI가 어떻게 답하는지 느껴봐요.',
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['프롬프트'] } },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: 'AI한테 "오늘 기분이 어때?" 라고 물어봐요.',
-          userInput: '오늘 기분이 어때?',
-          aiResponse:
-            '저는 마음이 없어서 진짜로 기분을 느끼진 못해요. 그런데 여러분과 이야기할 수 있어서 반가워요!',
-        },
-      },
       {
         kind: 'real-ai',
         data: {
@@ -1335,28 +1184,6 @@ export const M1_LESSONS: LessonContent[] = [
               answer: 'X',
               feedback: '대부분의 냉장고는 그냥 차갑게 만드는 기계예요.',
             },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '다음 중 AI를 사용하는 것은 무엇일까요?',
-          choices: [
-            { label: '스마트폰 음성비서', isCorrect: true, icon: 'ai_speaker' },
-            { label: '연필', isCorrect: false, icon: 'pencil' },
-            { label: '종이컵', isCorrect: false, icon: 'paper_cup' },
-            { label: '지우개', isCorrect: false, icon: 'eraser' },
-          ],
-        },
-      },
-      {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: 'AI가 잘하는 것', right: '빠르게 답하고, 번역하고, 그림 알아보기', icon: 'translate' },
-            { left: 'AI가 못하는 것', right: '진짜로 슬퍼하거나, 밥 먹기', icon: 'sad_crying' },
-            { left: 'AI가 배우는 방법', right: '많은 예시를 보고 배우기', icon: 'book' },
           ],
         },
       },
