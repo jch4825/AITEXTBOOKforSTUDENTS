@@ -407,3 +407,6 @@
 @media(max-width:767px){.comic-contents-header{padding:.6rem 1rem}.comic-header-caption{display:none}.comic-resume{align-items:stretch;flex-direction:column}.season-map{grid-template-columns:1fr}.season-episode{min-height:6.1rem}.comic-resume .btn{width:100%}.comic-lesson-cut{min-height:4.75rem}.comic-lesson-cut small{white-space:normal;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}}
 .comic-stage > div:first-child { border: 2px solid var(--brand-ink); border-bottom: 0; box-shadow: 7px 7px 0 color-mix(in srgb, var(--brand-ink) 15%, var(--paper-2)); }
 .comic-stage h1 { letter-spacing: -.04em; }
+.comic-frame-footer { border-top: 2px solid var(--brand-ink); background:var(--paper-0); box-shadow:0 -4px 0 color-mix(in srgb, var(--brand-ink) 7%, transparent); }
+.comic-frame-footer .btn { min-width:7.25rem; }.comic-cut-progress { display:flex; flex-direction:column; align-items:center; gap:.15rem; font-weight:900; font-size:.78rem; color:var(--brand-ink); letter-spacing:.04em; }.comic-cut-progress > span { border:1px solid var(--brand-ink); border-radius:999px; padding:.05rem .4rem; }
+@media(max-width:767px){.comic-frame-footer .btn{min-width:0;padding-inline:.8rem}.comic-cut-progress{min-width:3.1rem}.comic-cut-progress .progress-dots{display:none}}

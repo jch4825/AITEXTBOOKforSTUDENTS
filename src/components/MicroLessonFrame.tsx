@@ -138,14 +138,14 @@ export default function MicroLessonFrame({
         />
       </div>
       <ClassroomDock lessonId={lessonId} />
-      <footer className="h-20 shrink-0 border-t border-[color:var(--border)] bg-[color:var(--paper-0)] px-3 md:px-6 flex items-center justify-between gap-2">
+      <footer className="comic-frame-footer h-20 shrink-0 px-3 md:px-6 flex items-center justify-between gap-2">
         <Button
           variant="secondary"
           onClick={onPrev}
           disabled={currentStep === 0}
           className="px-4 md:px-6"
         ><Icon name="chevron-left" size={20} /> 이전</Button>
-        <ProgressDots total={totalSteps} current={currentStep} />
+        <div className="comic-cut-progress" aria-label={`전체 ${totalSteps}컷 중 ${currentStep + 1}번째 컷`}><span>{String(currentStep + 1).padStart(2, '0')} / {String(totalSteps).padStart(2, '0')}</span><ProgressDots total={totalSteps} current={currentStep} /></div>
         <Button
           onClick={onNext}
           className="px-4 md:px-6"

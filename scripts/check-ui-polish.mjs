@@ -36,3 +36,8 @@ const lessonView = readFileSync(new URL('../src/views/LessonView.tsx', import.me
 if (!lessonView.includes('ComicPanel')) {
   throw new Error('Lesson activities and wrap-up must use comic panels.');
 }
+
+const frame = readFileSync(new URL('../src/components/MicroLessonFrame.tsx', import.meta.url), 'utf8');
+if (!frame.includes('comic-frame-footer')) {
+  throw new Error('Lesson navigation must use the comic cut navigator.');
+}
