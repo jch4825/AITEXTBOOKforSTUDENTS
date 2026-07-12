@@ -370,3 +370,40 @@
 @media (prefers-reduced-motion: reduce) {
   .card3d, .card3d:hover, .card3d:active { transform: none; transition: none; }
 }
+
+/* 웹툰 에디토리얼 — 한 장면은 한 컷. 넓은 화면에서는 나란히, 모바일에서는 자연스럽게 세로로 읽힌다. */
+.comic-panel {
+  --comic-accent: var(--accent);
+  position: relative;
+  border: 2px solid var(--brand-ink);
+  border-radius: 6px 18px 6px 18px;
+  background: var(--paper-0);
+  box-shadow: 7px 7px 0 color-mix(in srgb, var(--comic-accent) 24%, var(--paper-2));
+}
+.comic-panel::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid color-mix(in srgb, var(--comic-accent) 22%, transparent);
+  border-radius: 3px 12px 3px 12px;
+  pointer-events: none;
+}
+.comic-panel > * { position: relative; }
+.comic-kicker { font-size: var(--fs-label); font-weight: 800; letter-spacing: .08em; color: var(--comic-accent, var(--accent)); }
+.comic-speech { border: 2px solid var(--brand-ink); border-radius: 22px 22px 22px 4px; background: var(--paper-0); padding: .65rem .9rem; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .comic-panel { transition: none; } }
+
+.comic-contents { background: var(--paper-1); }
+.comic-contents-header { min-height: 4rem; padding: .6rem max(1rem, calc((100% - 80rem) / 2)); display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:2px solid var(--brand-ink); background:var(--paper-0); }
+.comic-home-link { min-height:2.75rem; display:inline-flex; align-items:center; gap:.45rem; border:0; background:none; color:var(--brand-ink); font-weight:800; }
+.comic-header-caption { font-size:var(--fs-label); font-weight:800; letter-spacing:.06em; color:var(--ink-2); }
+.comic-resume { margin-top: .25rem; padding: clamp(1.25rem, 4vw, 2.25rem); display:flex; align-items:center; justify-content:space-between; gap:1.25rem; background:linear-gradient(125deg, var(--paper-0) 60%, color-mix(in srgb, var(--comic-accent) 14%, var(--paper-0))); }
+.comic-resume h1,.comic-list-heading h2 { margin:.35rem 0; color:var(--brand-ink); }
+.comic-resume p,.comic-list-heading p { margin:0; color:var(--ink-2); }
+.season-map { margin:0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.75rem; }
+.season-episode { width:100%; min-height:8.5rem; padding:1rem; display:grid; grid-template-columns:auto 1fr auto; align-items:start; gap:.65rem; border:2px solid var(--brand-ink); border-radius:5px 14px 5px 14px; background:var(--paper-0); text-align:left; box-shadow:4px 4px 0 color-mix(in srgb, var(--episode-accent) 28%, var(--paper-2)); }
+.season-episode-active { background:var(--episode-soft); transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--episode-accent); }.season-number{font-weight:900;font-size:1.35rem;opacity:.65}.season-copy{min-width:0}.season-copy strong,.season-copy small{display:block}.season-copy small{margin-top:.25rem;color:var(--ink-2);font-size:.82rem;line-height:1.35}.season-progress{font-weight:800;color:var(--brand-ink)}
+.comic-lesson-list{padding:clamp(1rem,3vw,1.8rem)}.comic-list-heading{display:flex;justify-content:space-between;gap:1rem;align-items:start;padding-bottom:1rem;border-bottom:2px solid var(--brand-ink)}.comic-count{min-width:3.4rem;text-align:center;border:2px solid var(--brand-ink);border-radius:999px;padding:.35rem .5rem;font-weight:800}.comic-lesson-cuts{margin:0;padding:0;list-style:none}.comic-lesson-cut{width:100%;min-height:4.5rem;display:grid;grid-template-columns:2.6rem 1fr auto;gap:.8rem;align-items:center;padding:.7rem 0;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left}.comic-lesson-cut:hover:not(:disabled){background:color-mix(in srgb,var(--comic-accent) 8%,transparent)}.comic-cut-number{width:2rem;height:2rem;display:grid;place-items:center;border:2px solid var(--brand-ink);border-radius:4px;font-weight:900}.comic-lesson-cut strong,.comic-lesson-cut small{display:block}.comic-lesson-cut small{font-size:.84rem;color:var(--ink-2);margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:767px){.comic-contents-header{padding:.6rem 1rem}.comic-header-caption{display:none}.comic-resume{align-items:stretch;flex-direction:column}.season-map{grid-template-columns:1fr}.season-episode{min-height:6.1rem}.comic-resume .btn{width:100%}.comic-lesson-cut{min-height:4.75rem}.comic-lesson-cut small{white-space:normal;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}}
+.comic-stage > div:first-child { border: 2px solid var(--brand-ink); border-bottom: 0; box-shadow: 7px 7px 0 color-mix(in srgb, var(--brand-ink) 15%, var(--paper-2)); }
+.comic-stage h1 { letter-spacing: -.04em; }

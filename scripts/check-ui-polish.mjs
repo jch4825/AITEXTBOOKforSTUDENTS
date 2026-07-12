@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 const home = readFileSync(new URL('../src/views/Home.tsx', import.meta.url), 'utf8');
 const sidebar = readFileSync(new URL('../src/components/SidebarTree.tsx', import.meta.url), 'utf8');
@@ -21,4 +21,18 @@ if (home.includes('href="#home"') || home.includes('href="#accessibility"') || h
 }
 if (!home.includes('내 속도로 배우는') || css.includes('@import url(') || !document.includes('theme-color" content="#2B3A55"')) {
   throw new Error('Student copy, font loading, or browser theme color regressed.');
+}
+
+if (!existsSync(new URL('../src/components/ComicPanel.tsx', import.meta.url)) || !existsSync(new URL('../src/components/StoryAsset.tsx', import.meta.url))) {
+  throw new Error('Webtoon panel and WebP asset fallback components must exist.');
+}
+
+const contents = readFileSync(new URL('../src/views/ContentsView.tsx', import.meta.url), 'utf8');
+if (!existsSync(new URL('../src/components/SeasonMap.tsx', import.meta.url)) || !contents.includes('SeasonMap')) {
+  throw new Error('Contents must use the season map navigation.');
+}
+
+const lessonView = readFileSync(new URL('../src/views/LessonView.tsx', import.meta.url), 'utf8');
+if (!lessonView.includes('ComicPanel')) {
+  throw new Error('Lesson activities and wrap-up must use comic panels.');
 }

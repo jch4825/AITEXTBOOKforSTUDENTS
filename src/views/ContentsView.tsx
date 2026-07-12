@@ -1,178 +1,50 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { MODULES, lessonIdsForModule, moduleIdFromLessonId } from '../data/modules';
 import { getLesson } from '../data/lessons';
 import { MODULE_EPISODES } from '../data/story';
 import { themeFor } from '../utils/moduleThemes';
 import { useProgress } from '../context/ProgressContext';
-import ModuleIcon from '../components/ModuleIcon';
+import ComicPanel from '../components/ComicPanel';
+import SeasonMap from '../components/SeasonMap';
 import Icon from '../components/Icon';
 import Button from '../components/Button';
 import type { LessonId, ModuleId } from '../types';
 import { pickResumeLesson } from '../utils/lessonResume';
 
-interface Props {
-  onPickLesson: (id: LessonId) => void;
-  onGoHome: () => void; // 프론트(환영) 페이지로
-}
+interface Props { onPickLesson: (id: LessonId) => void; onGoHome: () => void; }
 
-
-
-/**
- * 목차(차례) — 프론트 페이지 다음의 학습 허브.
- * 링크 도서관 형식: 단원명을 누르면 아래로 차시들이 열리고, 각 차시는 바로가기.
- * 상단에 큰 "이어서 하기" 버튼.
- */
+/** AI 동아리의 여섯 모듈을 연재 에피소드와 차시 컷으로 보여 주는 학습 허브. */
 export default function ContentsView({ onPickLesson, onGoHome }: Props) {
   const { completedLessons, isCompleted } = useProgress();
-  const doneCount = completedLessons.length;
-  const totalLessons = MODULES.reduce((s, m) => s + m.lessonCount, 0);
   const resume = pickResumeLesson(completedLessons);
-  const resumeMod = moduleIdFromLessonId(resume);
-  const isResume = doneCount > 0;
+  const resumeModule = moduleIdFromLessonId(resume) ?? 'm1';
+  const [activeId, setActiveId] = useState<ModuleId>(resumeModule);
+  const active = MODULES.find((module) => module.id === activeId) ?? MODULES[0];
+  const activeTheme = themeFor(active.id);
+  const lessons = lessonIdsForModule(active.id);
+  const resumeTitle = getLesson(resume)?.title ?? 'AI는 우리 곁에 있어요';
+  const episodes = useMemo(() => MODULES.map((module) => {
+    const ids = lessonIdsForModule(module.id);
+    return { id: module.id, number: module.number, title: module.title, synopsis: MODULE_EPISODES[module.id].synopsis, done: ids.filter(isCompleted).length, total: ids.length, complete: ids.every(isCompleted) };
+  }), [completedLessons, isCompleted]);
 
-  // 이어서 할 차시가 속한 단원을 기본으로 펼쳐 둔다.
-  const [open, setOpen] = useState<Set<ModuleId>>(() => new Set(resumeMod ? [resumeMod] : ['m1']));
-
-  function toggle(id: ModuleId) {
-    setOpen(s => {
-      const n = new Set(s);
-      n.has(id) ? n.delete(id) : n.add(id);
-      return n;
-    });
-  }
-
-  const resumeTitle = getLesson(resume)?.title;
-
-  return (
-    <main className="min-h-screen">
-      {/* 헤더 — 브랜드(프론트로) + 제목 */}
-      <header className="h-16 border-b border-[color:var(--border)] bg-[color:var(--paper-0)] px-4 md:px-8 flex items-center gap-3">
-        <button
-          onClick={onGoHome}
-          className="inline-flex items-center gap-1.5 min-h-11 px-2 -ml-2 rounded-[var(--r-sm)] text-lg font-bold hover:bg-[color:var(--paper-2)]"
-          style={{ color: 'var(--accent)' }}
-          aria-label="처음 화면으로"
-        ><Icon name="home" size={22} /> AI 교과서</button>
-        <span className="text-base text-[color:var(--muted)]">차례</span>
-      </header>
-
-      <div className="max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-8">
-        {/* 이어서 하기 — 크게, 상단 */}
-        <section
-          className="card p-5 md:p-6 mb-6 flex flex-col sm:flex-row sm:items-center gap-4"
-          style={{ background: 'var(--paper-0)' }}
-        >
-          <div className="flex-1 min-w-0">
-            <p className="t-label text-[color:var(--muted)] mb-1">
-              {isResume ? '이어서 배울 차시' : '첫 차시부터 시작해요'}
-            </p>
-            <p className="text-xl font-bold truncate" style={{ color: 'var(--accent)' }}>
-              {resumeTitle ?? 'AI는 우리 곁에 있어요'}
-            </p>
-            <p className="text-sm text-[color:var(--muted)] mt-1 nums">
-              지금까지 {doneCount} / {totalLessons} 차시 끝났어요
-            </p>
-          </div>
-          <Button size="lg" onClick={() => onPickLesson(resume)} className="shrink-0 text-xl">
-            {isResume ? <><Icon name="book" size={24} /> 이어서 하기</> : <><Icon name="rocket" size={24} /> 시작하기</>}
-          </Button>
-        </section>
-
-        {/* 링크 도서관 — 단원 아코디언 */}
-        <ol className="space-y-3">
-          {MODULES.map(mod => {
-            const theme = themeFor(mod.id);
-            const lessons = lessonIdsForModule(mod.id);
-            const doneInModule = lessons.filter(isCompleted).length;
-            const moduleDone = doneInModule === lessons.length;
-            const isOpen = open.has(mod.id);
-            const ep = MODULE_EPISODES[mod.id];
-            return (
-              <li key={mod.id} className="card overflow-hidden" style={{ background: 'var(--paper-0)' }}>
-                {/* 단원 헤더 — 누르면 아래로 차시가 열린다 */}
-                <button
-                  onClick={() => toggle(mod.id)}
-                  aria-expanded={isOpen}
-                  className="w-full text-left px-4 md:px-5 py-4 flex items-center gap-3 hover:bg-[color:var(--paper-1)]"
-                >
-                  <span
-                    className="h-11 w-11 shrink-0 rounded-[var(--r-md)] flex items-center justify-center"
-                    style={{ background: theme.accentSoft }}
-                  >
-                    <ModuleIcon moduleId={mod.id} size={26} />
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="flex items-center gap-2">
-                      <span className="font-bold text-lg" style={{ color: theme.accentText }}>
-                        단원 {mod.number}. {mod.title}
-                      </span>
-                      {moduleDone && <Icon name="star" size={16} filled color={theme.accent} />}
-                    </span>
-                    <span className="block text-sm text-[color:var(--muted)] truncate">{ep.synopsis}</span>
-                  </span>
-                  <span className="shrink-0 flex items-center gap-2 text-sm font-semibold text-[color:var(--muted)]">
-                    <span className="nums">{doneInModule}/{lessons.length}</span>
-                    <span
-                      className="transition-transform"
-                      style={{ transform: isOpen ? 'rotate(90deg)' : 'none', color: theme.accent }}
-                      aria-hidden
-                    >
-                      <Icon name="chevron-right" size={20} />
-                    </span>
-                  </span>
-                </button>
-
-                {/* 차시 목록 — 하이퍼링크(누르면 그 차시로 이동) */}
-                {isOpen && (
-                  <ul className="border-t border-[color:var(--border)] divide-y divide-[color:var(--border)]">
-                    {lessons.map((lid, i) => {
-                      const l = getLesson(lid);
-                      const done = isCompleted(lid);
-                      return (
-                        <li key={lid}>
-                          <button
-                            onClick={() => l && onPickLesson(lid)}
-                            disabled={!l}
-                            aria-label={`${mod.number}단원 ${i + 1}차시 ${l?.title ?? '준비 중'}${done ? ' (완료)' : ''}`}
-                            className="w-full text-left px-4 md:px-5 py-3 flex items-center gap-3 hover:bg-[color:var(--paper-1)] disabled:opacity-45 disabled:cursor-not-allowed"
-                          >
-                            {/* 완료 별 도장 / 차시 번호 */}
-                            <span className="h-8 w-8 shrink-0 flex items-center justify-center">
-                              {done ? (
-                                <Icon name="star" size={22} filled color={theme.accent} />
-                              ) : (
-                                <span
-                                  className="h-7 w-7 rounded-full border-2 flex items-center justify-center text-sm font-bold nums"
-                                  style={{ borderColor: theme.accent, color: theme.accentText }}
-                                >{i + 1}</span>
-                              )}
-                            </span>
-                            <span className="flex-1 min-w-0">
-                              <span className="block font-semibold truncate">
-                                {l?.title ?? '곧 열려요'}
-                              </span>
-                              {l && (
-                                <span className="block text-sm text-[color:var(--muted)] line-clamp-1">
-                                  {l.wrapUpEasy}
-                                </span>
-                              )}
-                            </span>
-                            {l && (
-                              <span className="shrink-0" style={{ color: theme.accent }} aria-hidden>
-                                <Icon name="chevron-right" size={20} />
-                              </span>
-                            )}
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </li>
-            );
-          })}
+  return <main className="min-h-screen comic-contents">
+    <header className="comic-contents-header">
+      <button onClick={onGoHome} className="comic-home-link" aria-label="처음 화면으로"><Icon name="home" size={21} /> AI 교과서</button>
+      <span className="comic-header-caption">AI 동아리 · 시즌 1</span>
+    </header>
+    <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-10">
+      <ComicPanel accent={activeTheme.accent} className="comic-resume" label="이어서 배우기">
+        <div><p className="comic-kicker">{completedLessons.length ? '다음 컷에서 이어서' : '첫 번째 이야기를 시작해요'}</p><h1>{resumeTitle}</h1><p>한 장면씩 천천히, 아이미와 함께 배워요.</p></div>
+        <Button size="lg" accent={activeTheme.accent} onClick={() => onPickLesson(resume)}><Icon name="book" size={22} /> {completedLessons.length ? '이어서 하기' : '첫 컷 보기'}</Button>
+      </ComicPanel>
+      <section className="mt-9"><p className="comic-kicker mb-3">SEASON MAP</p><SeasonMap episodes={episodes} activeId={active.id} onPick={setActiveId} /></section>
+      <ComicPanel accent={activeTheme.accent} className="comic-lesson-list mt-8" label={`${active.title} 차시 목록`}>
+        <div className="comic-list-heading"><div><p className="comic-kicker">EP.{String(active.number).padStart(2, '0')}</p><h2>{active.title}</h2><p>{MODULE_EPISODES[active.id].synopsis}</p></div><span className="comic-count">{episodes.find((episode) => episode.id === active.id)?.done}/{lessons.length}</span></div>
+        <ol className="comic-lesson-cuts">
+          {lessons.map((id, index) => { const lesson = getLesson(id); const done = isCompleted(id); return <li key={id}><button onClick={() => lesson && onPickLesson(id)} disabled={!lesson} className="comic-lesson-cut"><span className="comic-cut-number">{done ? <Icon name="star" size={18} filled color={activeTheme.accent} /> : String(index + 1).padStart(2, '0')}</span><span><strong>{lesson?.title ?? '곧 열려요'}</strong>{lesson && <small>{lesson.wrapUpEasy}</small>}</span><Icon name="chevron-right" size={20} /></button></li>; })}
         </ol>
-      </div>
-    </main>
-  );
+      </ComicPanel>
+    </div>
+  </main>;
 }

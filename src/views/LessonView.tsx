@@ -12,6 +12,7 @@ import type { SequenceItem } from '../components/games/Sequence';
 import RealAIStep from '../components/RealAIStep';
 import StepErrorBoundary from '../components/StepErrorBoundary';
 import Stage from '../components/Stage';
+import ComicPanel from '../components/ComicPanel';
 import SpeechBubble from '../components/SpeechBubble';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
@@ -129,7 +130,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
             accent={theme.accent}
             accentText={theme.accentText}
             accentSoft={theme.accentSoft}
-            className="-mx-4 -mt-4 md:-mx-8 md:-mt-10 mb-6"
+            className="comic-stage -mx-4 -mt-4 md:-mx-8 md:-mt-10 mb-6"
           />
           <div className="max-w-2xl mx-auto">
             {step === 0 && goalText && <LessonGoal text={goalText} accent={theme.accent} />}
@@ -278,7 +279,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   function renderWrapUp() {
     const next = nextLessonInfo(lesson.id);
     return (
-      <div className="max-w-2xl mx-auto text-center py-8">
+      <div className="comic-panel max-w-2xl mx-auto text-center py-8 px-4 md:px-8">
         {/* 배움 도장 — 오늘의 별이 찍히는 순간 (1회성 250ms, §4.2) */}
         <div className="flex justify-center mb-4" aria-hidden>
           <span
