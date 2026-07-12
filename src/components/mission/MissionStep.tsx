@@ -438,7 +438,7 @@ export default function MissionStep({
               );
             default:
               return (
-                <div key={(block as any).id} className="text-rose-500 font-bold">
+                <div key={(block as any).id} className="font-bold" style={{ color: 'var(--warn)' }}>
                   알 수 없는 블록 종류: {(block as any).kind}
                 </div>
               );

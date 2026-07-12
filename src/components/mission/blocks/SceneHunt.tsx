@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function SceneHunt({ block, value = [], onChange, accent }: Props) {
-  const { speakNow } = useSpeak();
+  const { speak, speakNow } = useSpeak();
   const [srcIdx, setSrcIdx] = useState(0);
 
   const candidates = [
@@ -25,23 +25,37 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
 
     const nextValue = [...value, label];
     onChange(nextValue);
-    speakNow(`${label}을 찾았습니다!`);
+    const allDone = nextValue.length === block.targets.length;
+    speak(allDone ? `${label}. 와, 모두 찾았어요!` : `${label}. 찾았어요!`);
   };
 
   const isAllFound = value.length === block.targets.length;
 
   return (
     <div className="w-full space-y-4 story-fade-in select-none">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <p className="text-lg font-bold text-neutral-800">{block.prompt}</p>
-        <span className="text-sm font-bold text-neutral-500 shrink-0">
-          찾은 개수: {value.length} / {block.targets.length}
+      <div className="flex items-start gap-2">
+        <p className="text-xl font-semibold flex-1">{block.prompt}</p>
+        <span
+          className="text-base font-bold shrink-0 px-3 py-1.5 rounded-[var(--r-pill)]"
+          style={{ background: 'var(--paper-2)', color: 'var(--brand-ink)' }}
+        >
+          {value.length} / {block.targets.length}
         </span>
+        <button
+          type="button"
+          onClick={() => speakNow(block.prompt)}
+          aria-label="문제 다시 들려주기"
+          className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
+          style={{ borderColor: accent, color: accent, background: 'var(--paper-0)' }}
+        >
+          <Icon name="speaker" size={20} />
+        </button>
       </div>
 
       {/* Target image with hotspot buttons */}
-      <div 
-        className="relative w-full max-w-[500px] mx-auto aspect-square rounded-[var(--r-lg)] overflow-hidden border-2 border-neutral-300 shadow-md bg-neutral-100"
+      <div
+        className="relative w-full max-w-[500px] mx-auto aspect-square rounded-[var(--r-lg)] overflow-hidden border-2 border-[color:var(--line)]"
+        style={{ background: 'var(--paper-2)', boxShadow: 'var(--e-2)' }}
       >
         <img
           src={candidates[srcIdx]}
@@ -78,8 +92,8 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
               aria-label={isFound ? `${target.label} (찾음)` : '여기를 찾아보세요'}
             >
               {isFound && (
-                <span className="w-5 h-5 rounded-full bg-[color:var(--paper-0)] border border-emerald-500 flex items-center justify-center shadow-md animate-scaleUp">
-                  <Icon name="star" size={12} filled color="var(--ok)" />
+                <span className="answer-pop w-6 h-6 rounded-full bg-[color:var(--paper-0)] flex items-center justify-center shadow-md" style={{ border: '2px solid var(--ok)' }}>
+                  <Icon name="star" size={14} filled color="var(--ok)" />
                 </span>
               )}
             </button>
@@ -94,18 +108,18 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
           return (
             <div
               key={idx}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm border transition-all
-                ${isFound 
-                  ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-400'
-                }
-              `}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--r-pill)] text-sm font-bold transition-all"
+              style={
+                isFound
+                  ? { background: 'var(--ok-bg)', border: '1.5px solid var(--ok)', color: 'var(--brand-ink)' }
+                  : { background: 'var(--paper-1)', border: '1.5px solid var(--line)', color: 'var(--muted)' }
+              }
             >
-              <Icon 
-                name={isFound ? 'star' : 'star'} 
-                size={12} 
-                filled={isFound} 
-                color={isFound ? 'var(--ok)' : 'currentColor'} 
+              <Icon
+                name="star"
+                size={14}
+                filled={isFound}
+                color={isFound ? 'var(--ok)' : 'currentColor'}
               />
               <span>{target.label}</span>
             </div>
@@ -114,9 +128,12 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
       </div>
 
       {isAllFound && (
-        <div className="flex items-center justify-center gap-2 py-3 bg-emerald-50 text-emerald-800 rounded-[var(--r-md)] border border-emerald-200 font-bold text-center">
-          <Icon name="sparkles" size={20} filled color="var(--ok)" />
-          그림에서 찾을 것을 모두 찾았습니다! 대단해요!
+        <div
+          className="answer-pop flex items-center justify-center gap-2 py-3 rounded-[var(--r-md)] font-bold text-lg text-center"
+          style={{ background: 'var(--ok-bg)', border: '1px solid var(--ok)', color: 'var(--brand-ink)' }}
+        >
+          <Icon name="sparkles" size={22} filled color="var(--ok)" />
+          찾을 것을 모두 찾았어요! 대단해요!
         </div>
       )}
     </div>

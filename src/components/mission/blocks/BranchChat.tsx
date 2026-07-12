@@ -102,14 +102,15 @@ export default function BranchChat({ block, value = [], onChange, accent, accent
   // Choices footer
   const footer = !isFinished && !typing ? (
     <div className="flex flex-col gap-2">
-      <p className="text-xs md:text-sm text-neutral-500 font-bold text-center mb-1">
-        대답을 하나 골라보세요!
+      <p className="text-sm font-bold text-center mb-1" style={{ color: 'var(--muted)' }}>
+        대답을 하나 골라 보세요
       </p>
       {block.turns[currentTurnIdx].choices.map((choice, idx) => (
         <button
           key={idx}
           onClick={() => handleChoice(idx)}
-          className="w-full text-left p-2.5 bg-[color:var(--paper-0)] border border-neutral-300 hover:bg-neutral-50 rounded-[14px] text-sm md:text-base font-bold text-neutral-700 active:scale-[0.98] transition-all cursor-pointer shadow-sm leading-normal"
+          className="w-full text-left p-3 min-h-12 bg-[color:var(--paper-0)] border-2 rounded-[14px] text-base font-bold active:scale-[0.98] transition-all cursor-pointer leading-normal"
+          style={{ borderColor: accent, color: 'var(--brand-ink)', boxShadow: 'var(--e-1)' }}
         >
           {choice.label}
         </button>
@@ -119,8 +120,10 @@ export default function BranchChat({ block, value = [], onChange, accent, accent
 
   return (
     <div className="w-full flex flex-col items-center select-none story-fade-in">
-      <p className="text-lg font-bold text-neutral-800 text-center mb-1 w-full">{block.intro}</p>
-      
+      {block.intro && (
+        <p className="text-xl font-semibold text-center mb-1 w-full">{block.intro}</p>
+      )}
+
       <PhoneFrame
         messages={messages}
         typing={typing}

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import type { DrawBlock } from '../../../types';
 import Icon from '../../Icon';
+import { useSpeak } from '../../../hooks/useSpeak';
 
 interface Props {
   key?: any;
@@ -22,6 +23,7 @@ const COLORS = [
 const WIDTHS = [3, 8];
 
 export default function DrawPad({ block, value = '', onChange, accent }: Props) {
+  const { speakNow } = useSpeak();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawingRef = useRef(false);
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
@@ -112,10 +114,21 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
 
   return (
     <div className="w-full space-y-3 story-fade-in select-none">
-      <p className="text-lg font-bold text-neutral-800">{block.prompt}</p>
+      <div className="flex items-start gap-2">
+        <p className="text-xl font-semibold flex-1">{block.prompt}</p>
+        <button
+          type="button"
+          onClick={() => speakNow(block.prompt)}
+          aria-label="문제 다시 들려주기"
+          className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
+          style={{ borderColor: accent, color: accent, background: 'var(--paper-0)' }}
+        >
+          <Icon name="speaker" size={20} />
+        </button>
+      </div>
 
       {/* Editor Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-neutral-100 rounded-t-[var(--r-md)] border-t border-x border-[color:var(--line)]">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-t-[var(--r-md)] border-t border-x border-[color:var(--line)]" style={{ background: 'var(--paper-1)' }}>
         {/* Colors Selection */}
         <div className="flex items-center gap-2">
           {COLORS.map((col, idx) => (
@@ -134,16 +147,19 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
               aria-label={col.name}
             >
               {!isEraser && color === col.value && (
-                <span className="absolute inset-0 flex items-center justify-center text-white text-xs">✓</span>
+                <span className="absolute inset-0 flex items-center justify-center text-white">
+                  <Icon name="check" size={14} strokeWidth={3} />
+                </span>
               )}
             </button>
           ))}
           {/* Eraser */}
           <button
             onClick={() => setIsEraser(true)}
-            className="w-8 h-8 rounded-full border-2 bg-neutral-200 hover:bg-neutral-300 flex items-center justify-center transition-all cursor-pointer shrink-0"
+            className="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all cursor-pointer shrink-0"
             style={{
-              borderColor: isEraser ? 'var(--accent)' : 'transparent',
+              background: 'var(--paper-2)',
+              borderColor: isEraser ? accent : 'transparent',
             }}
             title="지우개"
             aria-label="지우개"
@@ -154,14 +170,15 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
 
         {/* Thickness & Clear */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 bg-white border border-neutral-300 rounded-[var(--r-sm)] p-1">
+          <div className="flex items-center gap-1 border border-[color:var(--line)] rounded-[var(--r-sm)] p-1" style={{ background: 'var(--paper-0)' }}>
             {WIDTHS.map((w, idx) => (
               <button
                 key={idx}
                 onClick={() => setWidth(w)}
-                className="w-7 h-7 rounded-[4px] font-bold text-xs flex items-center justify-center hover:bg-neutral-100 cursor-pointer"
+                className="px-2.5 h-9 rounded-[4px] font-bold text-sm flex items-center justify-center cursor-pointer"
                 style={{
-                  backgroundColor: width === w ? 'var(--paper-2)' : 'transparent',
+                  background: width === w ? 'var(--paper-2)' : 'transparent',
+                  color: 'var(--brand-ink)',
                 }}
               >
                 {w === WIDTHS[0] ? '얇게' : '굵게'}
@@ -171,7 +188,8 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
 
           <button
             onClick={clearAll}
-            className="px-3 py-1.5 rounded-[var(--r-sm)] border border-rose-300 hover:bg-rose-50 text-rose-600 font-bold text-xs flex items-center gap-1 cursor-pointer"
+            className="px-3 h-9 rounded-[var(--r-sm)] border-2 font-bold text-sm flex items-center gap-1 cursor-pointer"
+            style={{ borderColor: 'var(--warn)', color: 'var(--warn)', background: 'var(--paper-0)' }}
           >
             <Icon name="refresh" size={14} color="currentColor" /> 전체 지우기
           </button>
@@ -179,8 +197,9 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
       </div>
 
       {/* Canvas Area */}
-      <div 
-        className="w-full h-64 border-b border-x border-[color:var(--line)] rounded-b-[var(--r-md)] relative bg-[#FDFCFA] shadow-sm overflow-hidden"
+      <div
+        className="w-full h-64 border-b border-x border-[color:var(--line)] rounded-b-[var(--r-md)] relative overflow-hidden"
+        style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-1)' }}
       >
         <canvas
           ref={canvasRef}

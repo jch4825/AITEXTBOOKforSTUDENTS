@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { DragBuildBlock } from '../../../types';
 import Icon from '../../Icon';
-import CharacterAvatar from '../../CharacterAvatar';
+import SpeechBubble from '../../SpeechBubble';
+import { useSpeak } from '../../../hooks/useSpeak';
 
 interface Props {
   key?: any;
@@ -13,9 +14,10 @@ interface Props {
 }
 
 export default function DragBuild({ block, value, onChange, accent, accentSoft }: Props) {
+  const { speak, speakNow } = useSpeak();
   // Initialize slots
   const slotsValue = value || Array(block.slots.length).fill(null);
-  
+
   const [selectedPieceIdx, setSelectedPieceIdx] = useState<number | null>(null);
   const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -39,6 +41,7 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
       setSelectedPieceIdx(null);
     } else {
       setSelectedPieceIdx(idx);
+      speak(block.pieces[idx].label); // 잡은 조각을 읽어준다
     }
   };
 
@@ -138,16 +141,36 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
     return block.pieces[pieceIdx!].quality === 'good';
   });
 
-  const responseText = isFilled 
+  const responseText = isFilled
     ? (isAllGood ? block.response.good : block.response.weak)
     : null;
 
+  // 조립이 완성되는 순간 아이미의 답을 읽어준다 (복원 직후 재생 방지: 전이 시점만)
+  const prevFilled = useRef(isFilled);
+  useEffect(() => {
+    if (isFilled && !prevFilled.current && responseText) {
+      speakNow(responseText);
+    }
+    prevFilled.current = isFilled;
+  }, [isFilled, responseText]);
+
   return (
     <div className="w-full space-y-4 story-fade-in select-none">
-      <p className="text-lg font-bold text-neutral-800">{block.prompt}</p>
+      <div className="flex items-start gap-2">
+        <p className="text-xl font-semibold flex-1">{block.prompt}</p>
+        <button
+          type="button"
+          onClick={() => speakNow(block.prompt)}
+          aria-label="문제 다시 들려주기"
+          className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center"
+          style={{ borderColor: accent, color: accent, background: 'var(--paper-0)' }}
+        >
+          <Icon name="speaker" size={20} />
+        </button>
+      </div>
 
       {/* Slots Builder Panel */}
-      <div className="bg-neutral-100/50 border-2 border-dashed border-[color:var(--line)] rounded-[var(--r-md)] p-5 bg-[color:var(--paper-1)]">
+      <div className="border-2 border-dashed rounded-[var(--r-md)] p-5" style={{ borderColor: accent, background: 'var(--paper-1)' }}>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           {block.slots.map((slot, idx) => {
             const pieceIdx = slotsValue[idx];
@@ -156,11 +179,11 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
 
             return (
               <div key={idx} className="flex flex-col items-center gap-1.5 w-full sm:w-auto">
-                <span className="text-xs font-semibold text-neutral-500">{slot.label}</span>
+                <span className="text-base font-bold" style={{ color: accent }}>{slot.label}</span>
                 <div
                   ref={(el) => { slotRefs.current[idx] = el; }}
                   onClick={() => handleSlotClick(idx)}
-                  className="w-full sm:w-44 h-14 rounded-[var(--r-sm)] border-2 border-dashed flex items-center justify-center bg-[color:var(--paper-0)] cursor-pointer transition-all relative overflow-hidden"
+                  className="w-full sm:w-48 h-16 rounded-[var(--r-sm)] border-2 border-dashed flex items-center justify-center bg-[color:var(--paper-0)] cursor-pointer transition-all relative overflow-hidden"
                   style={{
                     borderColor: isTargetGlow ? accent : 'var(--border)',
                     boxShadow: isTargetGlow ? 'var(--e-2)' : 'none',
@@ -168,23 +191,24 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
                 >
                   {piece ? (
                     <div
-                      className="absolute inset-1 rounded-[var(--r-sm)] border flex items-center justify-center font-bold text-sm bg-neutral-50 shadow-sm"
+                      className="answer-pop absolute inset-1 rounded-[var(--r-sm)] border-2 flex items-center justify-center font-bold text-base"
                       style={{
                         borderColor: piece.quality === 'good' ? 'var(--ok)' : 'var(--warn)',
-                        backgroundColor: piece.quality === 'good' ? 'rgba(22, 163, 74, 0.05)' : 'rgba(234, 88, 12, 0.05)',
+                        background: piece.quality === 'good' ? 'var(--ok-bg)' : 'var(--warn-bg)',
+                        color: 'var(--brand-ink)',
                       }}
                     >
                       {piece.label}
-                      <Icon 
-                        name={piece.quality === 'good' ? 'star' : 'warning'} 
-                        size={12} 
-                        filled
-                        color={piece.quality === 'good' ? 'var(--ok)' : 'var(--warn)'} 
-                        className="ml-1.5 shrink-0" 
+                      <Icon
+                        name={piece.quality === 'good' ? 'check' : 'warning'}
+                        size={14}
+                        strokeWidth={3}
+                        color={piece.quality === 'good' ? 'var(--ok)' : 'var(--warn)'}
+                        className="ml-1.5 shrink-0"
                       />
                     </div>
                   ) : (
-                    <span className="text-xs text-neutral-400 font-medium">여기에 놓으세요</span>
+                    <span className="text-base font-medium" style={{ color: 'var(--muted)' }}>여기에 놓아요</span>
                   )}
                 </div>
               </div>
@@ -194,11 +218,11 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
       </div>
 
       {/* Pieces Pool */}
-      <div className="bg-neutral-100/30 border border-[color:var(--line)] rounded-[var(--r-md)] p-4 flex flex-col items-center gap-3 bg-[color:var(--paper-0)]">
-        <p className="text-xs font-semibold text-neutral-500">
-          👇 알맞은 슬롯으로 조각을 끌어다 놓거나, 조각을 누른 후 슬롯을 눌러 조립해 보세요!
+      <div className="border border-[color:var(--line)] rounded-[var(--r-md)] p-4 flex flex-col items-center gap-3 bg-[color:var(--paper-0)]">
+        <p className="text-base font-semibold" style={{ color: 'var(--muted)' }}>
+          조각을 알맞은 칸으로 끌어다 놓거나, 조각을 누른 뒤 칸을 눌러 보세요.
         </p>
-        <div className="flex flex-wrap gap-2.5 justify-center">
+        <div className="flex flex-wrap gap-3 justify-center">
           {block.pieces.map((piece, idx) => {
             const isPlaced = slotsValue.includes(idx);
             if (isPlaced) return null; // Hide from pool if placed
@@ -214,14 +238,16 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
                 onPointerMove={handlePointerMove}
                 onPointerUp={(e) => handlePointerUp(e, idx)}
                 onClick={() => handlePieceClick(idx)}
-                className={`flex items-center gap-1.5 px-4 py-2 bg-[color:var(--paper-0)] border-2 rounded-[var(--r-sm)] shadow-sm font-bold text-sm select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
-                  ${isDragging ? 'z-50 shadow-lg scale-105' : ''}
+                className={`card3d flex items-center gap-1.5 px-5 py-3 rounded-[var(--r-md)] font-bold text-base select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
+                  ${isDragging ? 'z-50 scale-105' : ''}
                 `}
                 style={{
-                  borderColor: isSelected ? accent : 'var(--border)',
-                  boxShadow: isSelected ? 'var(--e-2)' : 'var(--e-1)',
-                  transform: isDragging 
-                    ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` 
+                  border: isSelected ? `4px solid ${accent}` : `2.5px solid ${accent}`,
+                  background: isSelected ? accentSoft : 'var(--paper-0)',
+                  color: 'var(--brand-ink)',
+                  ['--edge' as string]: accent,
+                  transform: isDragging
+                    ? `translate(${dragOffset.x}px, ${dragOffset.y}px)`
                     : 'none',
                 }}
               >
@@ -232,19 +258,17 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
         </div>
       </div>
 
-      {/* Aimi's Response Bubble */}
+      {/* 아이미 응답 — 앱 공통 말풍선(SpeechBubble) 재사용, 읽어줘 버튼 포함 */}
       {isFilled && responseText && (
-        <div className="flex items-start gap-3 mt-4 p-4 rounded-[var(--r-md)] bg-[color:var(--paper-1)] border border-[color:var(--line)]">
-          <div className="shrink-0">
-            <CharacterAvatar character="aimi" expression={isAllGood ? 'cheer' : 'thinking'} size={40} idle={false} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-semibold text-neutral-500">아이미</p>
-            <p className="text-sm font-bold mt-0.5 leading-relaxed" style={{ color: isAllGood ? 'var(--ok)' : 'var(--warn)' }}>
-              {isAllGood ? '🎉 완성된 프롬프트입니다!' : '💡 조금 더 다듬어 볼까요?'}
-            </p>
-            <p className="text-sm leading-relaxed mt-1 text-neutral-700">{responseText}</p>
-          </div>
+        <div className="mt-4">
+          <SpeechBubble
+            speaker="aimi"
+            expression={isAllGood ? 'cheer' : 'thinking'}
+            text={responseText}
+            accent={accent}
+            accentSoft={accentSoft}
+            showSpeakButton
+          />
         </div>
       )}
     </div>
