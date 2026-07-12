@@ -28,7 +28,7 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
   const [picked, setPicked] = useState<PickedState>({ leftIdx: null, rightIdx: null });
   const [wrongPair, setWrongPair] = useState<{ leftIdx: number; rightIdx: number } | null>(null);
   const [isChecking, setIsChecking] = useState(false);
-  
+
   // Sync state when pairs change (e.g. step navigation)
   useEffect(() => {
     setMatched(pairs.map(() => false));
@@ -53,14 +53,14 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
     const right = rightOrder[rightShuffleIdx];
     if (left === right) {
       setIsChecking(true);
-      
+
       // Update matched state and determine completion using the next array directly
       const nextMatched = [...matched];
       nextMatched[left] = true;
       setMatched(nextMatched);
       setPicked({ leftIdx: null, rightIdx: null });
       speak('잘 맞췄어요!');
-      
+
       const allDone = nextMatched.every(Boolean);
       if (allDone) {
         setTimeout(onComplete, 800);
@@ -110,19 +110,19 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
 
   return (
     <div className="my-6">
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       {/* Left Column */}
       <div className="space-y-3">
         {pairs.map((p, i) => {
           const isPicked = picked.leftIdx === i;
           const isMatched = matched[i];
           const isWrong = wrongPair?.leftIdx === i;
-          
+
           const palette = activityColor(p.icon ?? p.left);
 
           let borderStyle = `2.5px solid ${palette.accent}`;
           let extraClass = '';
-          
+
           if (isPicked) {
             borderStyle = '4px solid var(--accent)';
           } else if (isMatched) {
@@ -176,16 +176,16 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
         {rightOrder.map((origIdx, shuffleIdx) => {
           const p = pairs[origIdx];
           if (!p) return null; // Safe guard
-          
+
           const isPicked = picked.rightIdx === shuffleIdx;
           const isMatched = matched[origIdx];
           const isWrong = wrongPair?.rightIdx === shuffleIdx;
-          
+
           const palette = activityColor(p.icon ?? p.right);
 
           let borderStyle = `2.5px solid ${palette.accent}`;
           let extraClass = '';
-          
+
           if (isPicked) {
             borderStyle = '4px solid var(--accent)';
           } else if (isMatched) {

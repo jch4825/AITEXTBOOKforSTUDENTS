@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useProgress } from '../context/ProgressContext';
 import { MODULES, lessonIdsForModule } from '../data/modules';
 import * as THREE from 'three';
@@ -14,8 +14,21 @@ interface Props {
   onEnterLesson?: (id: LessonId) => void;
 }
 
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  return reduced;
+}
 export default function Home({ onEnter, onEnterLesson }: Props) {
   const { completedLessons } = useProgress();
+  const reducedMotion = useReducedMotion();
   const totalLessons = MODULES.reduce((sum, m) => sum + m.lessonCount, 0);
   const doneCount = completedLessons.length;
   const isResume = doneCount > 0;
@@ -35,10 +48,10 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
   // DOM Refs
   const shaderCanvasRef = useRef<HTMLCanvasElement>(null);
   const threejsContainerRef = useRef<HTMLDivElement>(null);
-  const trailCanvasRef = useRef<HTMLCanvasElement>(null);
 
   // 1. WebGL Background Shader Effect
   useEffect(() => {
+    if (reducedMotion) return;
     const canvas = shaderCanvasRef.current;
     if (!canvas) return;
 
@@ -82,21 +95,21 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
       void main() {
           vec2 uv = v_texCoord;
           vec2 mouse = u_mouse / u_resolution;
-          
+
           vec3 colorBg = vec3(0.97, 0.93, 0.88); // #F8EEE1 기반
           vec3 colorPastelBlue = vec3(0.52, 0.56, 0.78); // primary soft
           vec3 colorNeon = vec3(0.84, 0.99, 0.0); // Neon Accent #D6FD00
-          
+
           float n = noise(uv * 3.0 + u_time * 0.15);
           vec3 finalColor = mix(colorBg, colorPastelBlue, n * 0.12);
-          
+
           float dist = distance(uv, mouse);
           float trail = smoothstep(0.2, 0.0, dist);
-          
+
           float glow = pow(0.015 / dist, 1.1);
           finalColor += colorNeon * glow * 0.35;
           finalColor = mix(finalColor, colorNeon, trail * 0.08);
-          
+
           gl_FragColor = vec4(finalColor, 1.0);
       }
     `;
@@ -173,10 +186,11 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', syncSize);
     };
-  }, []);
+  }, [reducedMotion]);
 
   // 2. Three.js Holographic Globe Effect
   useEffect(() => {
+    if (reducedMotion) return;
     const container = threejsContainerRef.current;
     if (!container) return;
 
@@ -274,10 +288,11 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
         container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [reducedMotion]);
 
   // 3. Click Ripple Effect
   useEffect(() => {
+    if (reducedMotion) return;
     const handleClick = (e: MouseEvent) => {
       const ripple = document.createElement('div');
       ripple.className = 'fixed rounded-full pointer-events-none z-[9998]';
@@ -302,106 +317,31 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
     return () => {
       document.removeEventListener('click', handleClick);
     };
-  }, []);
-
-  // 4. Mouse Trail Effect (2 seconds fade out)
-  useEffect(() => {
-    const canvas = trailCanvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let points: { x: number; y: number; time: number }[] = [];
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      points.push({
-        x: e.clientX,
-        y: e.clientY,
-        time: Date.now(),
-      });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
-    const drawTrail = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const now = Date.now();
-      const trailDuration = 2000; // 2 seconds
-
-      // Filter out points older than 2 seconds
-      points = points.filter(p => now - p.time < trailDuration);
-
-      if (points.length > 1) {
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-
-        // Draw custom line with fading alpha per segment
-        for (let i = 1; i < points.length; i++) {
-          const p1 = points[i - 1];
-          const p2 = points[i];
-
-          const age = now - p2.time;
-          const alpha = Math.max(0, 1 - age / trailDuration);
-
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-
-          // Low-stimulation, low-saturation pastel green
-          ctx.strokeStyle = `rgba(160, 200, 100, ${alpha * 0.45})`;
-          ctx.lineWidth = 10; // Slightly thinner line
-          ctx.stroke();
-        }
-      }
-
-      animationFrameId = requestAnimationFrame(drawTrail);
-    };
-
-    drawTrail();
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <div className="min-h-screen text-on-surface select-none relative overflow-hidden bg-[#F8EEE1]">
 
-      {/* Mouse Trail Canvas overlay */}
-      <canvas
-        ref={trailCanvasRef}
-        className="fixed inset-0 w-full h-full pointer-events-none z-40 bg-transparent"
-      />
-
       {/* WebGL Background Canvas */}
-      <div className="fixed inset-0 w-full h-full opacity-40 pointer-events-none">
+      {!reducedMotion && <div className="fixed inset-0 w-full h-full opacity-40 pointer-events-none">
         <canvas ref={shaderCanvasRef} className="w-full h-full block" />
-      </div>
+      </div>}
 
       {/* Three.js Hologram Planet */}
-      <div
+      {!reducedMotion && <div
         ref={threejsContainerRef}
         className="fixed inset-0 w-full h-full pointer-events-none bg-transparent z-0"
-      />
+      />}
 
       {/* Top Navigation Bar */}
-      <nav className="relative z-10 w-full bg-[#fdf8f6]/70 backdrop-blur-xl border-b border-[#4f5b90]/10 shadow-sm h-20">
-        <div className="flex justify-between items-center w-full px-6 max-w-[1200px] mx-auto h-full">
-          <div className="font-extrabold text-[#4f5b90] tracking-tight text-2xl flex items-center gap-2">
+      <nav className="relative z-10 w-full bg-[#fdf8f6]/70 backdrop-blur-xl border-b border-[#4f5b90]/10 shadow-sm h-auto min-h-20 py-3">
+        <div className="flex flex-wrap justify-between items-center gap-3 w-full px-4 sm:px-6 max-w-[1200px] mx-auto">
+          <div className="font-extrabold text-[#4f5b90] tracking-tight text-lg sm:text-2xl flex items-center gap-2">
             <span className="material-symbols-outlined text-3xl">auto_awesome</span>
             기본교육과정 중학 선택 교과
           </div>
           <div className="hidden md:flex items-center gap-2">
-            <a className="px-4 py-2 text-sm font-bold text-[#546500] border-b-2 border-[#546500]" href="#home">표지 페이지</a>
+            <span className="px-4 py-2 text-sm font-bold text-[#546500]">학생 학습 화면</span>
             <a className="px-4 py-2 text-sm font-semibold text-[#45464f] hover:text-[#4f5b90] transition-colors" href="?teacher=1">교사용 페이지</a>
           </div>
           <button
@@ -476,7 +416,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
         {/* Bento Grid Feature Section */}
         <section id="features" className="space-y-8">
           <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-3xl font-extrabold text-[#4f5b90]">느린 학습자들을 위한 인공지능 학습서</h2>
+            <h2 className="text-3xl font-extrabold text-[#4f5b90]">내 속도로 배우는 인공지능 학습서</h2>
             <p className="text-sm text-[#5C5B5A]">발달장애학생들을 위한 첫 인공지능 수업 자료</p>
           </div>
 
@@ -578,12 +518,12 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
               <span className="material-symbols-outlined text-xl">auto_awesome</span>
               인공지능 활용
             </div>
-            <p className="text-xs text-[#5C5B5A]">이 전자저작물은 바이브코딩으로 제작되었습니다.</p>
+            <p className="text-xs text-[#5C5B5A]">발달장애 학생을 위한 인공지능 학습 온라인 교과서입니다.</p>
           </div>
-          <div className="flex gap-6 text-xs text-[#5C5B5A]">
-            <a className="hover:text-[#4f5b90] hover:underline" href="#accessibility">접근성 선언</a>
-            <a className="hover:text-[#4f5b90] hover:underline" href="#privacy">개인정보 처리방침</a>
-            <a className="hover:text-[#4f5b90] hover:underline" href="#support">고객 센터</a>
+          <div className="flex flex-wrap justify-center gap-4 text-xs text-[#5C5B5A]">
+            <span>접근성 기능 제공</span>
+            <span>학습 기록은 이 기기에 저장돼요</span>
+            <span>도움이 필요하면 선생님께 알려 주세요</span>
           </div>
         </div>
       </footer>

@@ -22,7 +22,7 @@ interface Props {
 export default function Sequence({ instruction, items, difficulty, onComplete }: Props) {
   const [placedCount, setPlacedCount] = useState(0);
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
-  
+
   // Sync state when items change
   useEffect(() => {
     setPlacedCount(0);
@@ -46,7 +46,7 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
     if (done) return;
     const origIdx = shuffleOrder[shuffleIdx];
     if (origIdx < placedCount) return; // already placed
-    
+
     if (origIdx === placedCount) {
       const next = placedCount + 1;
       setPlacedCount(next);
@@ -102,7 +102,7 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
 
       {/* Shuffled choices */}
       {!done && (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {shuffleOrder.map((origIdx, shuffleIdx) => {
             const item = items[origIdx];
             if (!item) return null; // Safe guard
@@ -112,7 +112,7 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
 
             let borderStyle = `2.5px solid ${palette.accent}`;
             let extraClass = '';
-            
+
             if (isWrong) {
               borderStyle = '4px solid var(--warn)';
               extraClass = 'answer-shake';

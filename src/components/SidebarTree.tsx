@@ -89,7 +89,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                   const title = getLesson(lid)?.title;
                   const label =
                     `${i + 1}차시${title ? `. ${title}` : ''}` +
-                    (lessonHasAI ? ' (인공지능 API 활용 포함)' : '') +
+                    (lessonHasAI ? ' (아이미와 대화 활동 포함)' : '') +
                     (done ? ' (완료)' : '') +
                     (current ? ' — 지금 보는 중' : '');
                   return (
@@ -100,7 +100,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                         title={label}
                         aria-label={label}
                         aria-current={current ? 'page' : undefined}
-                        className="relative h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
+                        className="relative h-11 w-11 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
                         style={current ? { outline: `2px solid ${theme.accent}`, outlineOffset: '-2px' } : undefined}
                       >
                         {done ? (
