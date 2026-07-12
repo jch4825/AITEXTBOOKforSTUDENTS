@@ -65,6 +65,75 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '프롬프트 요리 준비 완료!',
+          chapters: [
+            {
+              title: '1장: AI 질문의 이름',
+              goal: 'AI에게 질문하는 올바른 이름을 고르세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'prompt_name',
+                  prompt: 'AI에게 건네는 질문이나 부탁을 뜻하는 낱말은 무엇일까요?',
+                  items: [
+                    { emoji: '🧑‍🍳', label: '프롬프트' },
+                    { emoji: '⚙️', label: '모니터' },
+                    { emoji: '🔌', label: '콘센트' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 좋은 질문 분류함',
+              goal: '좋은 프롬프트와 나쁜 프롬프트를 구분해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'prompt_sort',
+                  prompt: '좋은 질문(명확한 프롬프트)과 나쁜 질문(기호나 무의미한 낱말)을 알맞은 바구니에 담아 보세요.',
+                  bins: [
+                    { label: '좋은 질문', emoji: '🟢' },
+                    { label: '나쁜 질문', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '강아지 이름 추천해줘', emoji: '🐶', bin: 0 },
+                    { label: '어... 음...', emoji: '💬', bin: 1 },
+                    { label: '오늘 날씨 알려줘', emoji: '☀️', bin: 0 },
+                    { label: 'ㅠㅠ', emoji: '💧', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 요리사 선서',
+              goal: '다짐을 완성하고 카드를 획득하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l1',
+                  title: '프롬프트 요리사 선서 카드',
+                  rows: [
+                    { label: 'AI 질문의 뜻', from: 'prompt_name' },
+                    { label: '분류한 질문들', from: 'prompt_sort' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m2_l1',
+                  template: '나 {이름}는 AI에게 정확하게 묻는 멋진 프롬프트 요리사가 {빈칸} 다짐합니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '프롬프트 초보 요리사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -120,6 +189,73 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '짧고 명확한 한 문장',
+          chapters: [
+            {
+              title: '1장: 간결한 질문 고르기',
+              goal: '길고 꼬여있는 문장 대신 간결한 질문을 고르세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'short_prompt_select',
+                  prompt: 'AI가 가장 답하기 쉬운 가장 짧고 분명한 질문은 무엇일까요?',
+                  items: [
+                    { emoji: '🐘', label: '코끼리가 뭐 먹는지 설명해줘' },
+                    { emoji: '💬', label: '어... 저기 있잖아 코끼리라는 동물 있잖아 걔가 밥을 먹는데...' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 짧은 프롬프트 조립',
+              goal: '핵심 단어 조각을 조립해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'short_prompt_build',
+                  prompt: '조각을 끼워 짧고 분명한 프롬프트를 완성하세요.',
+                  slots: [
+                    { label: '무엇을' },
+                    { label: '부탁하는 말' }
+                  ],
+                  pieces: [
+                    { label: '사자 그려줘', slot: 0, quality: 'good' },
+                    { label: '어... 동물 그림 좀', slot: 0, quality: 'weak' },
+                    { label: '예쁘게', slot: 1, quality: 'good' },
+                    { label: '아무렇게나', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '멋진 사자 그림을 예쁘게 완성해 드릴게요!',
+                    weak: '음... 어떤 동물을 어떻게 그려줄까요? 자세히 말해 주세요.'
+                  }
+                }
+              ]
+            },
+            {
+              title: '3장: 완성 카드',
+              goal: '요약 카드를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l2',
+                  title: '나의 간결 프롬프트 카드',
+                  rows: [
+                    { label: '내가 고른 짧은 프롬프트', from: 'short_prompt_select' },
+                    { label: '조립한 프롬프트 결과', from: 'short_prompt_build' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '간결 요리사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -173,6 +309,78 @@ export const M2_LESSONS: LessonContent[] = [
           allowFreeInput: true,
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '콕 집어 요리법',
+          chapters: [
+            {
+              title: '1장: 구체적 조건 조립',
+              goal: '구체적인 질문 조각을 조립해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'specific_build',
+                  prompt: '조건을 조립해 무엇을 원하는지 콕 집은 프롬프트를 만드세요.',
+                  slots: [
+                    { label: '원하는 종류' },
+                    { label: '원하는 개수' }
+                  ],
+                  pieces: [
+                    { label: '재미있는 동화책 제목', slot: 0, quality: 'good' },
+                    { label: '책 이름 아무거나', slot: 0, quality: 'weak' },
+                    { label: '3개만 알려줘', slot: 1, quality: 'good' },
+                    { label: '많이 알려줘', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '추천 동화책 3개: 1.아기돼지 삼형제 2.신데렐라 3.피터팬 이에요!',
+                    weak: '책이 너무 많아요. 어떤 종류의 책을 몇 개 알고 싶나요?'
+                  }
+                }
+              ]
+            },
+            {
+              title: '2장: 대화로 콕 집어 묻기',
+              goal: '아이미와 이야기하며 콕 집어 묻는 연습을 하세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'specific_chat',
+                  intro: '아이미의 답변을 콕 집어 유도해 보세요.',
+                  turns: [
+                    {
+                      aimi: '안녕하세요! 저는 무엇이든 알려주는 AI예요. 오늘 어떤 걸 도와드릴까요?',
+                      choices: [
+                        { label: '맛있는 떡볶이 만드는 법을 알려줘.', reply: '네! 떡볶이를 만들기 위해서는 떡, 고추장, 어묵이 필요해요. 자세한 순서를 알려드릴까요?', good: true },
+                        { label: '음... 맛있는 거 아무거나 레시피 알려줘.', reply: '음... 세상에는 너무 많은 요리가 있어요. 어떤 요리를 드시고 싶으신지 콕 집어 주시겠어요?' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 요약 카드',
+              goal: '나의 발견 카드를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l3',
+                  title: '콕 집어 질문 카드',
+                  rows: [
+                    { label: '내가 조립한 질문', from: 'specific_build' },
+                    { label: '대화 선택 결과', from: 'specific_chat' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '콕집기 마스터 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -223,6 +431,79 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '예시 레시피 굽기',
+          chapters: [
+            {
+              title: '1장: 예시 질문 찾기',
+              goal: '예시가 포함된 질문을 분류해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'example_sort',
+                  prompt: '예시가 포함된 질문과 단순 질문을 알맞은 상자에 분류하세요.',
+                  bins: [
+                    { label: '예시 포함', emoji: '💡' },
+                    { label: '단순 질문', emoji: '✏️' }
+                  ],
+                  cards: [
+                    { label: '동물 단어로 짧은 문장 만들어줘. 예: 강아지가 짖는다', emoji: '🐶', bin: 0 },
+                    { label: '동물 단어로 문장 만들어줘', emoji: '🦁', bin: 1 },
+                    { label: '과일 문장 알려줘. 예: 사과는 맛있다', emoji: '🍎', bin: 0 },
+                    { label: '과일 문장 추천해줘', emoji: '🍇', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 예시 질문 조립',
+              goal: '예시 조각을 끼워 질문을 완성하세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'example_build',
+                  prompt: '예시 조각을 끼워 AI가 따라 할 힌트를 제공하세요.',
+                  slots: [
+                    { label: '원하는 일' },
+                    { label: '따라 할 예시' }
+                  ],
+                  pieces: [
+                    { label: '짧은 영어 인사말 알려줘', slot: 0, quality: 'good' },
+                    { label: '영어 알려줘', slot: 0, quality: 'weak' },
+                    { label: '예: 안녕은 Hello 야', slot: 1, quality: 'good' },
+                    { label: '아무거나 써줘', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '예시를 잘 보고 똑같이 만들어 드려요: 고마워는 Thank you 야!',
+                    weak: '예시가 없으면 제가 원하는 형식대로 답하기가 어려워요.'
+                  }
+                }
+              ]
+            },
+            {
+              title: '3장: 예시 요약',
+              goal: '완성 카드를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l4',
+                  title: '예시 활용 카드',
+                  rows: [
+                    { label: '분류한 예시들', from: 'example_sort' },
+                    { label: '내가 만든 예시 질문', from: 'example_build' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '예시 마법사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -273,6 +554,74 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: 'AI 직업 놀이',
+          chapters: [
+            {
+              title: '1장: 알맞은 역할 찾기',
+              goal: '상황에 맞는 AI의 역할을 골라 보세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'role_choice',
+                  prompt: '재미있는 동화 이야기를 들려주기 위해 지정할 AI의 가장 어울리는 역할은 무엇일까요?',
+                  items: [
+                    { emoji: '🧚', label: '상냥한 동화 작가' },
+                    { emoji: '🩺', label: '친절한 의사 선생님' },
+                    { emoji: '⚙️', label: '바쁜 기계 요리사' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 역할 프롬프트 조립',
+              goal: '역할 지정 프롬프트를 완성하세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'role_build',
+                  prompt: '역할과 질문을 함께 끼워 대화 프롬프트를 만드세요.',
+                  slots: [
+                    { label: '역할 정하기' },
+                    { label: '질문하기' }
+                  ],
+                  pieces: [
+                    { label: '너는 훌륭한 역사 선생님이야', slot: 0, quality: 'good' },
+                    { label: '너는 그냥 로봇이야', slot: 0, quality: 'weak' },
+                    { label: '세종대왕에 대해 한 줄로 알려줘', slot: 1, quality: 'good' },
+                    { label: '아무 말이나 해봐', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '역사 선생님 역할 접수! 세종대왕은 한글을 만드신 훌륭한 조선의 왕이랍니다.',
+                    weak: '역할이 명확하지 않아 보통 로봇처럼 딱딱하게 답변해 드려요.'
+                  }
+                }
+              ]
+            },
+            {
+              title: '3장: 역할 요약',
+              goal: '결과 카드를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l5',
+                  title: '역할 지정 작전판',
+                  rows: [
+                    { label: '선택한 AI 직업', from: 'role_choice' },
+                    { label: '역할 지정 결과', from: 'role_build' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '역할 지정자 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -328,6 +677,80 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '차근차근 단계 나누기',
+          chapters: [
+            {
+              title: '1장: 질문 쪼개기 분류',
+              goal: '한 번에 묻는 질문과 나눈 질문을 구별하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'step_sort',
+                  prompt: '한 번에 모두 묻는 복잡한 질문과, 단계를 나누어 묻는 똑똑한 질문을 구분하여 넣으세요.',
+                  bins: [
+                    { label: '나눠 묻기', emoji: '📶' },
+                    { label: '뭉쳐 묻기', emoji: '📦' }
+                  ],
+                  cards: [
+                    { label: '1단계:재료를 물어본 뒤, 2단계:순서를 물어본다', emoji: '🧑‍🍳', bin: 0 },
+                    { label: '라면 끓이는 법과 맛있게 먹는 법과 가격까지 다 말해줘', emoji: '🍜', bin: 1 },
+                    { label: '1단계:단어 뜻을 묻고, 2단계:예문을 물어본다', emoji: '📖', bin: 0 },
+                    { label: '세상에 대한 모든 것을 한 줄로 다 요약해줘', emoji: '🌍', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 단계별 대화',
+              goal: '아이미와 단계를 나누어 차례차례 대화해 보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'step_chat',
+                  intro: '한 단계씩 순차적으로 물어보세요.',
+                  turns: [
+                    {
+                      aimi: '안녕! 그림 그리기 공부를 도와줄게. 1단계로 무엇을 먼저 그릴까?',
+                      choices: [
+                        { label: '귀여운 아기 고양이 얼굴을 그릴래.', reply: '좋아! 그럼 아기 고양이 얼굴부터 차근차근 그려보자. 이제 2단계로 어떤 눈을 그릴까?', good: true },
+                        { label: '고양이랑 강아지랑 집이랑 바다랑 다 그릴래.', reply: '우와, 너무 많아! 한 번에 다 그리기는 힘들단다. 우리 한 단계씩 나눠서 하나만 먼저 골라볼까?' }
+                      ]
+                    },
+                    {
+                      aimi: '고양이 눈을 동그랗고 귀엽게 그려보자! 그다음 고양이 수염은 어떻게 그릴까?',
+                      choices: [
+                        { label: '양볼에 세 줄씩 쓱쓱 그릴래.', reply: '멋져! 수염까지 다 그렸어. 멋진 아기 고양이 그림이 단계별로 예쁘게 완성됐어!', good: true }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 단계별 요약',
+              goal: '결과 카드를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l6',
+                  title: '단계 나누기 계획표',
+                  rows: [
+                    { label: '분류한 질문 방식', from: 'step_sort' },
+                    { label: '단계 대화 완성', from: 'step_chat' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '단계 정복자 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -383,6 +806,83 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '마음에 안 들면 다시!',
+          chapters: [
+            {
+              title: '1장: 피드백 대화',
+              goal: 'AI의 답변이 어려울 때 다시 고쳐 말해달라고 요청하세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'retry_chat',
+                  intro: '답변을 수정하는 추가 요청 대화를 진행하세요.',
+                  turns: [
+                    {
+                      aimi: '우주의 블랙홀은 중력이 매우 강해서 모든 물질 and 빛조차 빠져나갈 수 없는 시공간의 영역입니다.',
+                      choices: [
+                        { label: '너무 어려워! 초등학생도 알기 쉽게 다시 설명해줘.', reply: '어려웠군요! 블랙홀은 우주에 있는 아주 강력한 우주 청소기라고 생각하면 돼요. 근처에 오면 뭐든 쏙 빨아들여요!', good: true },
+                        { label: '우와 신기하네. 블랙홀을 더 길고 어렵게 설명해줘.', reply: '중력 붕괴와 일반 상대성 이론에 따르면... 앗, 이러면 더 복잡해지겠죠?' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 고침 프롬프트 조립',
+              goal: '더 쉬운 표현을 요구하는 조각을 조립해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'retry_build',
+                  prompt: '다시 고쳐달라고 요청하는 프롬프트를 완성해 보세요.',
+                  slots: [
+                    { label: '어떤 말투로' },
+                    { label: '원하는 부탁' }
+                  ],
+                  pieces: [
+                    { label: '더 쉬운 말투로', slot: 0, quality: 'good' },
+                    { label: '어려운 단어 듬뿍 써서', slot: 0, quality: 'weak' },
+                    { label: '다시 알려줘', slot: 1, quality: 'good' },
+                    { label: '대충 설명해봐', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '알겠어요! 더욱 쉬운 예시와 단어로 다시 설명해 드릴게요.',
+                    weak: '부탁이 불분명하면 답을 고치기가 어려워요.'
+                  }
+                }
+              ]
+            },
+            {
+              title: '3장: 요약 및 다짐',
+              goal: '다짐 문장을 확인하고 완성하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l7',
+                  title: '다시 묻기 카드',
+                  rows: [
+                    { label: '대화 요청 선택', from: 'retry_chat' },
+                    { label: '조립한 수정 프롬프트', from: 'retry_build' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m2_l7',
+                  template: '나 {이름}는 AI가 준 답이 마음에 안 들면 주저하지 않고 {빈칸} 요청하겠습니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '끈기 요리사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -434,6 +934,74 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '원하는 길이만큼만',
+          chapters: [
+            {
+              title: '1장: 알맞은 조건 고르기',
+              goal: '원하는 길이를 요구하는 가장 알맞은 표현을 고르세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'length_choice',
+                  prompt: 'AI에게 답을 간략히 받고 싶을 때 프롬프트 끝에 덧붙이기 좋은 말은 무엇일까요?',
+                  items: [
+                    { emoji: '📏', label: '한 문장으로 짧게 요약해줘' },
+                    { emoji: '📚', label: '세상의 모든 세세한 정보까지 다 적어줘' },
+                    { emoji: '❌', label: '아무렇게나 대답해줘' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 길이 제약 조립',
+              goal: '길이 제한 조건 조각을 조립해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'length_build',
+                  prompt: '답변 길이를 구체적으로 정해 질문을 조립해 보세요.',
+                  slots: [
+                    { label: '원하는 주제' },
+                    { label: '길이 조건' }
+                  ],
+                  pieces: [
+                    { label: '바다 동물 종류를', slot: 0, quality: 'good' },
+                    { label: '아무 이야기나', slot: 0, quality: 'weak' },
+                    { label: '딱 세 줄로만 알려줘', slot: 1, quality: 'good' },
+                    { label: '알아서 대충 해줘', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '세 줄 답변: 1. 고래 2. 상어 3. 문어 예요!',
+                    weak: '길이 조건이 없으면 답이 지나치게 길어질 수 있어요.'
+                  }
+                }
+              ]
+            },
+            {
+              title: '3장: 요약판',
+              goal: '결과 요약을 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l8',
+                  title: '답변 길이 조절판',
+                  rows: [
+                    { label: '선택한 요약 조건', from: 'length_choice' },
+                    { label: '조립한 프롬프트 결과', from: 'length_build' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '길이 요술사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -452,7 +1020,7 @@ export const M2_LESSONS: LessonContent[] = [
     bodyNormal:
       'AI가 가끔 틀린 답을 줄 수 있어요. 답이 이상하면 "정말이야?" 하고 다시 물어보거나 선생님께 확인해봐요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['확인', '검증', '환각'] } },
+      { kind: 'text', data: { dictionaryTerms: ['확인', '검토', '지어낸 말'] } },
       {
         kind: 'card-pick',
         data: {
@@ -491,6 +1059,79 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '이상한 답 탐정 카드',
+          chapters: [
+            {
+              title: '1장: 진짜와 거짓 구별',
+              goal: 'AI가 지어낸 거짓말과 진짜 사실을 분리해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'hallucination_sort',
+                  prompt: '진짜 일어난 역사적 사실과, AI가 꾸며낸 그럴듯한 거짓말을 분류하여 바구니에 담으세요.',
+                  bins: [
+                    { label: '진짜 사실', emoji: '📖' },
+                    { label: '지어낸 거짓말', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '세종대왕이 한글을 창제하셨다', emoji: '👑', bin: 0 },
+                    { label: '조선시대 세종대왕이 맥북을 사용하셨다', emoji: '💻', bin: 1 },
+                    { label: '이순신 장군이 거북선을 만드셨다', emoji: '🐢', bin: 0 },
+                    { label: '이순신 장군이 전투기를 타고 싸우셨다', emoji: '✈️', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 탐정의 확인 대화',
+              goal: '이상한 답을 받았을 때 대처법을 실습해 보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'hallucination_chat',
+                  intro: '정보를 그대로 믿지 않고 확인하는 의사소통을 해보세요.',
+                  turns: [
+                    {
+                      aimi: '조선시대 세종대왕은 훈민정음을 맥북 프로로 작성하셨다는 기록이 있습니다.',
+                      choices: [
+                        { label: '세종대왕님 시절엔 컴퓨터가 없었어! 정말 사실이 맞아?', reply: '앗, 제 실수를 바로잡아 주셔서 감사합니다! 조선시대에는 맥북이 없었지요. 제가 잘못된 정보를 드렸어요.', good: true },
+                        { label: '우와, 세종대왕님은 정말 기계를 잘 다루셨구나!', reply: '어라? 역사를 오해하고 계시네요. 컴퓨터는 현대에 개발되었답니다. 그대로 믿으시면 안 돼요!' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 탐정 수첩 완성',
+              goal: '다짐을 세우고 완료하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l9',
+                  title: '탐정 팩트체크 카드',
+                  rows: [
+                    { label: '분류한 역사 정보', from: 'hallucination_sort' },
+                    { label: '탐정 대화 결과', from: 'hallucination_chat' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m2_l9',
+                  template: '나 {이름}는 AI가 엉뚱하고 이상한 소리를 하면 무조건 믿지 않고 꼭 {빈칸} 확인하겠습니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '안전 탐정 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -543,6 +1184,83 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '프롬프트 요리 실전!',
+          chapters: [
+            {
+              title: '1장: 질문 프롬프트 조립',
+              goal: '원하는 질문 조각을 직접 조립하세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'real_m2_build',
+                  prompt: 'AI에게 할 재미있는 질문과 형식을 지정하여 조립하세요.',
+                  slots: [
+                    { label: '질문할 주제' },
+                    { label: '원하는 형식' }
+                  ],
+                  pieces: [
+                    { label: '공룡에 관한 신기한 이야기를', slot: 0, quality: 'good' },
+                    { label: '아무 정보나 대충', slot: 0, quality: 'weak' },
+                    { label: '아주 쉽게 두 줄로 말해줘', slot: 1, quality: 'good' },
+                    { label: '어렵게 길게 말해봐', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '공룡 정보: 옛날 지구에는 거대한 티라노사우루스가 살았고, 이들은 조류(새)의 조상이 되었답니다!',
+                    weak: '질문이 애매하면 대답을 간결하게 해드리기 어려워요.'
+                  }
+                }
+              ]
+            },
+            {
+              title: '2장: 실전 대화 나누기',
+              goal: '아이미와 실전 프롬프트로 대화를 나눠 보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'real_m2_chat',
+                  intro: '내가 만든 프롬프트로 대화를 시작해 보세요.',
+                  turns: [
+                    {
+                      aimi: '우와! 프롬프트 레시피대로 잘 만들어진 질문이네요. 공룡에 대해 또 어떤 점이 알고 싶으신가요?',
+                      choices: [
+                        { label: '가장 덩치가 큰 공룡은 누구인지 알려줘.', reply: '가장 몸집이 컸던 공룡 중 하나는 "티타노사우루스류"예요! 몸무게가 버스 여러 대를 합친 것만큼 무거웠답니다.', good: true },
+                        { label: '아무거나 다른 이야기 아무 이야기나 또 해줘.', reply: '어떤 다른 동화나 공룡, 혹은 다른 것이 궁금하신가요? 콕 집어주시면 재미있게 알려드릴게요!' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 신기한 발견 기록',
+              goal: '오늘 발견한 멋진 이야기를 그리고 기록하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l10',
+                  title: '실전 프롬프트 기록장',
+                  rows: [
+                    { label: '내가 빌드한 프롬프트', from: 'real_m2_build' },
+                    { label: '실전 대화 결과', from: 'real_m2_chat' }
+                  ]
+                },
+                {
+                  kind: 'draw',
+                  id: 'draw_m2_l10',
+                  prompt: 'AI가 들려준 공룡이나 상상 속의 재미있는 장면을 그려 보세요.'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '프롬프트 전문가 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -611,6 +1329,80 @@ export const M2_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '프롬프트 요리사 졸업식',
+          chapters: [
+            {
+              title: '1장: 비법 열쇠 짝짓기',
+              goal: '배운 프롬프트 비법들을 알맞게 매칭하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'graduation_sort',
+                  prompt: '네 가지 프롬프트 비법 카드를 알맞은 상자에 담아 보관하세요.',
+                  bins: [
+                    { label: '좋은 질문법', emoji: '🧑‍🍳' },
+                    { label: '피해야 할 질문법', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '한 문장으로 콕 집어 질문하기', emoji: '📍', bin: 0 },
+                    { label: '예시를 들어 "이런 식으로 해줘" 말하기', emoji: '💡', bin: 0 },
+                    { label: '길고 꼬아서 애매하게 질문 던지기', emoji: '🌀', bin: 1 },
+                    { label: '마음에 안 들면 "더 쉽게 다시 해줘" 부탁하기', emoji: '🔄', bin: 0 },
+                    { label: '의미 없는 물음표(?)만 무한 반복해서 치기', emoji: '❓', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 최종 졸업 의식',
+              goal: '아이미와 마지막 인사를 나누세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'graduation_chat',
+                  intro: '요리사 졸업 축하 대화가 진행됩니다.',
+                  turns: [
+                    {
+                      aimi: '와! 대단해요! 4가지 맛있는 프롬프트 비법을 모두 완수했네요. 이제 스스로 훌륭한 프롬프트 요리사가 되었다고 생각하나요?',
+                      choices: [
+                        { label: '네! 이제 AI와 똑똑하게 대화할 수 있어요.', reply: '축하해요! 당신은 훌륭한 프롬프트 요리사예요. 언제든 맛있는 질문을 만들어 보세요!', good: true },
+                        { label: '아직은 조금 헷갈리지만 열심히 연습할게요!', reply: '멋진 태도예요! 계속 대화하다 보면 질문 요리 실력이 쑥쑥 늘어날 거랍니다. 응원할게요!', good: true }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 수료 선언',
+              goal: '나의 요리사 졸업장을 받으세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m2_l11',
+                  title: '프롬프트 요리사 졸업 계획서',
+                  rows: [
+                    { label: '내가 마스터한 질문법', from: 'graduation_sort' },
+                    { label: '졸업 소감', from: 'graduation_chat' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m2_l11',
+                  template: '나 {이름}는 배운 네 가지 프롬프트 비법을 사용해 AI와 {빈칸} 소통할 것을 선언합니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'certificate',
+            badgeLabel: '프롬프트 마스터 요리사 수료증 획득!'
+          }
+        }
+      }
     ],
   },
 ];

@@ -51,10 +51,57 @@ export const M6_LESSONS: LessonContent[] = [
             { label: '살 물건 목록을 만들어요' },
             { label: '마트에서 물건을 찾아 담아요' },
             { label: '계산대에서 계산해요' },
-            { label: '영수증과 물건을 확인해요' },
+            { label: '영수증 and 물건을 확인해요' },
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '스마트 장보기 작전',
+          chapters: [
+            {
+              title: '1장: 카레 장보기 조립',
+              goal: '카레 요리에 꼭 필요한 재료들만 분류하여 장바구니에 담으세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'grocery_sort',
+                  prompt: '카레 요리 재료와 관련 없는 학용품을 구별해 장바구니에 넣으세요.',
+                  bins: [
+                    { label: '카레 재료 장바구니', emoji: '🛒' },
+                    { label: '포함 안 되는 물건', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '맛있는 카레 가루', emoji: '🍛', bin: 0 },
+                    { label: '흙 묻은 둥근 감자', emoji: '🥔', bin: 0 },
+                    { label: '새 연필과 지우개 세트', emoji: '✏️', bin: 1 },
+                    { label: '신선한 소고기나 돼지고기', emoji: '🥩', bin: 0 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 장보기 목록 요약',
+              goal: '작성한 장보기 요약 목록 카드를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l1',
+                  title: '나의 마트 장보기 메모',
+                  rows: [
+                    { label: '내가 카트온 재료들', from: 'grocery_sort' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '알뜰 장꾼 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -114,6 +161,73 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '거스름돈 수호대',
+          chapters: [
+            {
+              title: '1장: 거스름돈 수학 계산',
+              goal: '거스름돈을 바르게 계산하여 우체통에 분류해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'money_calc_sort',
+                  prompt: '1000원짜리 과자를 사고 2000원을 냈을 때의 올바른 거스름돈 값을 구분하세요.',
+                  bins: [
+                    { label: '맞는 계산 결과', emoji: '🪙' },
+                    { label: '틀린 계산 결과', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '남는 돈은 1,000원이다', emoji: '💵', bin: 0 },
+                    { label: '남는 돈은 500원이다', emoji: '🪙', bin: 1 },
+                    { label: '남는 돈은 1,500원이다', emoji: '❌', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 가게 거스름돈 대화',
+              goal: '가게 점원에게 돈을 내고 거스름돈을 꼼꼼히 챙겨 대화하세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'money_calc_chat',
+                  intro: '물건을 구매하며 거스름돈을 확인하는 가상 놀이 대화입니다.',
+                  turns: [
+                    {
+                      aimi: '여깄습니다! 1,200원짜리 초콜릿을 사시면서 2,000원을 내주셨네요. 거스름돈 800원 여기 있습니다.',
+                      choices: [
+                        { label: '네, 감사합니다! 800원이 맞는지 그 자리에서 직접 세어 볼게요.', reply: '어머나! 정말 똑 부러지는군요. 돈을 지불하고 잔돈을 확인하는 습관은 경제생활에서 정말 중요해요!', good: true },
+                        { label: '대충 주머니에 마구 쑤셔 넣을게요.', reply: '안 돼요! 나중에 손해를 볼 수 있으니 잔돈이 맞는지 꼭 자리를 떠나기 전에 눈으로 더해 보세요.' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 계산서 확인',
+              goal: '오늘 기록한 지불 카드를 검토하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l2',
+                  title: '나의 지불 계산 영수증',
+                  rows: [
+                    { label: '내가 분류해 낸 잔돈', from: 'money_calc_sort' },
+                    { label: '잔돈 확인 대화 결과', from: 'money_calc_chat' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '경제박사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -169,6 +283,68 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '스마트 인간 네비게이션',
+          chapters: [
+            {
+              title: '1장: 가고 싶은 경로 확인',
+              goal: '지도 앱에 올바른 검색 목적지를 선택하세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'map_destination',
+                  prompt: '학교 앞 문방구에 갈 때, 지도 앱 검색창에 어떻게 치는 것이 검색이 가장 잘 될까요?',
+                  items: [
+                    { emoji: '🏫', label: '"우리 학교 정문 앞 사랑문방구"' },
+                    { emoji: '❌', label: '"그냥 거기 장난감 많이 파는 삼촌네 가게"' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 길 잃었을 때 대처 대화',
+              goal: '길을 잃어 낯선 길에 섰을 때의 대화 롤플레이를 합니다.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'map_lost_chat',
+                  intro: '낯선 곳에서 길을 잃었을 때의 대처 대화입니다.',
+                  turns: [
+                    {
+                      aimi: '어머나 꼬마야, 길을 잃어서 울고 있니? 아저씨가 맛있는 사탕 줄 테니까 아저씨 차 타고 같이 찾으러 갈래?',
+                      choices: [
+                        { label: '아니요, 모르는 분 차는 탈 수 없어요! 안전한 인근 가게에 들어가서 선생님께 전화할게요.', reply: '정말 대단하고 지혜로운 선택이에요! 낯선 사람의 호의는 정중히 거절하고, 큰 편의점이나 파출소에 들어가 도움을 청해야 안전하답니다.', good: true },
+                        { label: '응! 사탕 고마워요. 태워주세요.', reply: '절대 안 돼요! 모르는 사람의 차는 타고 가면 위험에 처할 수 있으니 즉시 자리를 피해 근처 어른(경찰관, 점원)에게 알려야 해요.' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 구출 계획서',
+              goal: '도착 계획서를 최종 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l3',
+                  title: '나의 길찾기 안심 일기',
+                  rows: [
+                    { label: '내가 입력할 목적지', from: 'map_destination' },
+                    { label: '길 잃은 대화 대처', from: 'map_lost_chat' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '도착 대장 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -228,6 +404,58 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '교통안전 보이스카우트',
+          chapters: [
+            {
+              title: '1장: 교통 정거장 질서 정렬',
+              goal: '안전한 승차와 위험한 승차 행동 카드를 분류하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'traffic_safety_sort',
+                  prompt: '버스를 이용할 때 지켜야 할 질서와 위반 행동을 알맞게 담아 보관하세요.',
+                  bins: [
+                    { label: '안전 질서 행동', emoji: '🛡️' },
+                    { label: '피해 행동 (위험)', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '버스가 완전히 정차하고 문이 열리면 타기', emoji: '🚌', bin: 0 },
+                    { label: '달려오는 버스 앞으로 무단 횡단하여 차 세우기', emoji: '⚡', bin: 1 },
+                    { label: '버스 안에서 흔들릴 때 손잡이를 꽉 잡기', emoji: '✊', bin: 0 },
+                    { label: '버스 창문 밖으로 내 양손과 머리 내밀기', emoji: '🖐️', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 승차 보고 수첩',
+              goal: '정리된 승차 규칙 보고서를 최종 검사하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l4',
+                  title: '대중교통 이용 계획표',
+                  rows: [
+                    { label: '내가 분류한 탑승 행위', from: 'traffic_safety_sort' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m6_l4',
+                  template: '나 {이름}는 버스나 지하철을 탈 때 밀지 않고 차례를 {빈칸} 안전을 실천하겠습니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '교통안전 지킴이 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -278,6 +506,58 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '스마트 날씨 캐스터',
+          chapters: [
+            {
+              title: '1장: 기후별 알맞은 착용 선택',
+              goal: '날씨에 맞춘 소품과 옷을 구별해 우체통에 보관하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'weather_gear_sort',
+                  prompt: '비가 올 때 쓸 물건과, 한여름 쨍쨍한 무더운 날씨에 유용한 물건을 알맞은 보관함에 넣으세요.',
+                  bins: [
+                    { label: '비 오는 장마 날씨', emoji: '☔' },
+                    { label: '한여름 쨍쨍 햇살', emoji: '☀️' }
+                  ],
+                  cards: [
+                    { label: '비를 막아 주는 예쁜 우산과 장화', emoji: '👢', bin: 0 },
+                    { label: '눈을 부시지 않게 돕는 선글라스', emoji: '🕶️', bin: 1 },
+                    { label: '얼굴을 그늘지게 만드는 밀짚모자', emoji: '👒', bin: 1 },
+                    { label: '몸이 젖지 않게 입는 투명 우비', emoji: '🧥', bin: 0 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약 및 코디 드로잉',
+              goal: '나의 패션 날씨 코디를 완성하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l5',
+                  title: '나의 날씨 코디 계획표',
+                  rows: [
+                    { label: '내가 정리한 기상 패션', from: 'weather_gear_sort' }
+                  ]
+                },
+                {
+                  kind: 'draw',
+                  id: 'draw_m6_l5',
+                  prompt: '오늘 날씨 예보를 듣고, 밖에 외출할 때 입고 나갈 어울리는 내 옷차림을 그려 보세요.'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '날씨 요정 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -329,6 +609,47 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '안전 주방 요리사',
+          chapters: [
+            {
+              title: '1장: 조리 도구 사용 판단',
+              goal: '주방 도구를 쓸 때의 안전 기준을 판단하세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'cook_safety_type',
+                  prompt: '샌드위치를 만들고 빵을 자르기 위해 주방용 칼을 사용할 때 가장 올바른 행동은 무엇일까요?',
+                  items: [
+                    { emoji: '👩‍🍳', label: '반드시 곁의 부모님이나 학교 선생님께 칼을 써 달라고 도움을 청한다.' },
+                    { emoji: '❌', label: '장난을 치며 내가 눈을 감고 칼을 마구 휘두른다.' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약판',
+              goal: '요리 안전 카드를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l6',
+                  title: '나의 주방 요리 안전장',
+                  rows: [
+                    { label: '내가 선택한 도구 수칙', from: 'cook_safety_type' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '꼬마 조리사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -380,6 +701,57 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '스마트 계획 빌더',
+          chapters: [
+            {
+              title: '1장: 일과 블록 조립',
+              goal: '방과 후의 균형 잡힌 타임라인 블록을 조립하세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'schedule_build',
+                  prompt: '방과 후 시간을 유익하게 보낼 계획 조각을 알맞은 칸에 맞춰 끼우세요.',
+                  slots: [
+                    { label: '1단계 (필수 일과)' },
+                    { label: '2단계 (자유 활동)' }
+                  ],
+                  pieces: [
+                    { label: '학교 숙제와 알림장 먼저 확인하고 적기', slot: 0, quality: 'good' },
+                    { label: '일단 끄고 무조건 잠자기', slot: 0, quality: 'weak' },
+                    { label: '약속한 시간만큼 신나게 컴퓨터 하기', slot: 1, quality: 'good' },
+                    { label: '학용품을 방바닥에 대충 어지르기', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '멋진 계획이에요! 오늘 숙제도 미리 끝내고 재밌게 놀 수도 있겠어요.',
+                    weak: '계획을 보완해 봐요. 먼저 할 일을 해 놓으면 마음이 훨씬 홀가분해져요.'
+                  }
+                }
+              ]
+            },
+            {
+              title: '2장: 요약 확인',
+              goal: '오늘 완성된 타임 테이블을 한눈에 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l7',
+                  title: '나의 스마트 일일 계획장',
+                  rows: [
+                    { label: '내가 빌드한 일과 조각', from: 'schedule_build' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '계획왕 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -435,6 +807,58 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '병원 탐험과 의사 선생님',
+          chapters: [
+            {
+              title: '1장: 병원 증상 분류함',
+              goal: '내 몸이 아플 때 찾아갈 알맞은 전문 병원을 분류해 짝지어 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'hospital_sort',
+                  prompt: '나타나는 몸의 증상 카드를 읽고 알맞은 병원 상자에 쏙쏙 넣어 보세요.',
+                  bins: [
+                    { label: '치과 병원 (이빨)', emoji: '🦷' },
+                    { label: '안과 병원 (눈)', emoji: '👁️' }
+                  ],
+                  cards: [
+                    { label: '사탕을 많이 먹어서 어금니가 쑤시고 아프다', emoji: '🦷', bin: 0 },
+                    { label: '스마트폰을 너무 오래 봐서 눈이 빨갛고 눈물이 난다', emoji: '👁️', bin: 1 },
+                    { label: '앞니가 흔들거려서 새로 뽑아야 한다', emoji: '🦷', bin: 0 },
+                    { label: '멀리 있는 칠판 글씨가 흐릿하게 잘 안 보인다', emoji: '👓', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약판 및 다짐',
+              goal: '나의 자가 수첩을 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l8',
+                  title: '나의 안심 건강 수첩',
+                  rows: [
+                    { label: '내가 분류한 아픈 증상', from: 'hospital_sort' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m6_l8',
+                  template: '나 {이름}는 몸이 열이 나거나 아플 때는 숨기지 않고 즉시 {빈칸} 여쭈어보겠습니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '튼튼 어린이 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -484,6 +908,47 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '멋쟁이 인사 예절단',
+          chapters: [
+            {
+              title: '1장: 장소별 상황 매칭',
+              goal: '상황에 맞춰 건네야 할 가장 알맞은 따뜻한 인사 대사를 고르세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'greet_type',
+                  prompt: '학교 교문에서 지키고 계시는 배움터 지킴이 아저씨나 교장 선생님을 마주했을 때 어떻게 인사해야 할까요?',
+                  items: [
+                    { emoji: '🙇', label: '허리를 바르게 숙이며 큰소리로 "안녕하세요!" 하고 웃으며 인사한다.' },
+                    { emoji: '❌', label: '눈을 피하고 모른 척하며 다른 곳으로 뛰어간다.' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약 보고',
+              goal: '예절 카드를 최종 검증하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l9',
+                  title: '나의 바른 생활 예절 카드',
+                  rows: [
+                    { label: '내가 선택한 인사 행동', from: 'greet_type' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '예절 지킴이 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -537,6 +1002,58 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '미래 직업 여행단',
+          chapters: [
+            {
+              title: '1장: 직무와 도구 매칭',
+              goal: '여러 직업과 그들이 일터에서 쓰는 도구 카드를 바르게 분류하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'job_tool_sort',
+                  prompt: '각 직업이 일을 완수하기 위해 꼭 다루어야 할 대표 도구 카드를 구분해서 넣어 보세요.',
+                  bins: [
+                    { label: '제빵사 (오븐)', emoji: '🍞' },
+                    { label: '소방관 (소방호스)', emoji: '🚒' }
+                  ],
+                  cards: [
+                    { label: '밀가루 반죽을 구워내는 뜨거운 전기 오븐', emoji: '🍞', bin: 0 },
+                    { label: '불을 끄기 위해 강한 수압의 물을 뿜는 소방호스', emoji: '🚒', bin: 1 },
+                    { label: '반죽을 밀어 모양을 둥글게 만드는 밀대', emoji: '🥖', bin: 0 },
+                    { label: '머리와 몸을 안전하게 감싸는 방화 헬멧과 옷', emoji: '👨‍🚒', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 미래 직업 드로잉',
+              goal: '나의 직업 소감을 요약하고 직접 그려 보세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l10',
+                  title: '나의 관심 직업 분석서',
+                  rows: [
+                    { label: '내가 분류해 낸 직업 도구', from: 'job_tool_sort' }
+                  ]
+                },
+                {
+                  kind: 'draw',
+                  id: 'draw_m6_l10',
+                  prompt: '내가 어른이 되어 멋지게 활약하고 일하는 꿈속의 미래 직업 모습을 멋지게 그려 보세요.'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '미래 인재 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -555,7 +1072,7 @@ export const M6_LESSONS: LessonContent[] = [
     wrapUpEasy: '좋아하는 것으로 나를 소개할 수 있어요.',
     wrapUpNormal: '내가 좋아하는 것, 잘하는 것으로 나를 소개해봤어요. 연습할수록 자신 있게 말할 수 있어요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['소개', '자기소개', '퇴고', '초안'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['소개', '자기소개', '고쳐 쓰기', '처음 쓴 글'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -593,6 +1110,47 @@ export const M6_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '자신감 뿜뿜 자기소개',
+          chapters: [
+            {
+              title: '1장: 자기소개 글감 선택',
+              goal: '소개서에 말해도 유익하고 안전한 자랑거리를 고르세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'self_intro_content',
+                  prompt: '처음 만난 짝꿍이나 선생님께 나를 표현하기 위해 말할 가장 알맞고 안전한 글감은 무엇일까요?',
+                  items: [
+                    { emoji: '🎨', label: '"저는 팽이치기 게임을 잘하고, 도화지에 공룡 그림 그리는 걸 좋아해요!"' },
+                    { emoji: '❌', label: '"우리 집의 신용카드 번호는 1234-5678 이고 비밀번호는..."' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약판',
+              goal: '나의 자기소개 요소를 최종 검증하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l11',
+                  title: '나의 자신감 자기소개 카드',
+                  rows: [
+                    { label: '내가 선택한 자기소개 내용', from: 'self_intro_content' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '스피치 리더 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -653,6 +1211,80 @@ export const M6_LESSONS: LessonContent[] = [
           aiResponse: '정말 축하해요! 처음부터 끝까지 해낸 여러분이 자랑스러워요. 이제 AI를 똑똑하고 안전하게 쓸 수 있는 멋진 사람이 됐어요. 앞으로도 궁금한 게 있으면 언제든 물어봐 주세요!',
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: 'AI 교과서 수료 졸업식',
+          chapters: [
+            {
+              title: '1장: 6대 단원 명칭 분류',
+              goal: '우리가 배운 6가지 인공지능 마법 열쇠를 바구니에 담으세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'entire_graduation_sort',
+                  prompt: 'AI 교과서에서 공부한 핵심 가치 카드를 졸업 명예의 전당 바구니에 넣으세요.',
+                  bins: [
+                    { label: '우리가 지킨 소중한 가치', emoji: '🎓' },
+                    { label: '버려야 할 나쁜 습관', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: 'AI를 사용해 일상에서 길을 찾고 계획 세우기', emoji: '🚌', bin: 0 },
+                    { label: '비밀번호와 집 주소 등 내 소중한 개인정보 지키기', emoji: '🔒', bin: 0 },
+                    { label: '어려운 일감은 작게 쪼개어 하나씩 순차 해결하기', emoji: '📶', bin: 0 },
+                    { label: '컴퓨터에 짜증 내고 욕설 마구 타자 쳐 보내기', emoji: '😡', bin: 1 },
+                    { label: '스마트폰 사용 시간 끝나도 끄지 않고 떼쓰기', emoji: '🎮', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 졸업 임명 대화',
+              goal: '이 책을 완전히 마친 꼬마 해결사의 우렁찬 졸업 선언을 들어보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'entire_graduation_chat',
+                  intro: '모든 과정을 졸업하는 축하 인사를 나눕니다.',
+                  turns: [
+                    {
+                      aimi: '정말 대단해요! 6개 대단원의 AI 지식과 안전 수칙을 마침내 모두 배웠군요. 이제 똑똑하고 바른 디지털 어린이가 될 준비가 마쳤나요?',
+                      choices: [
+                        { label: '응! 배운 것을 잊지 않고 착하고 지혜로운 AI 친구가 될게.', reply: '감동이에요! 당신의 지혜로운 눈망울과 따뜻한 심성이 AI와 함께 더 큰 행복을 만들기를 응원할게요. 안녕!', good: true },
+                        { label: '언제나 곁에서 안전과 시간 약속을 철저히 지킬게!', reply: '약속해 주어서 정말 든든해요. 당신은 이제 완전하고 멋진 디지털 세상의 당당한 주인공이랍니다. 축하해요!', good: true }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 수료 수여식',
+              goal: '이 책의 최종 학업 수료증 템플릿을 받으세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m6_l12',
+                  title: 'AI 교과서 최종 졸업장',
+                  rows: [
+                    { label: '내가 새겨 넣은 명예 행동', from: 'entire_graduation_sort' },
+                    { label: '졸업 다짐 소감', from: 'entire_graduation_chat' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m6_l12',
+                  template: '나 {이름}는 AI 교과서 전 과정을 훌륭히 마쳤으므로 {빈칸} 임명장을 드립니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'certificate',
+            badgeLabel: 'AI 교과서 전과정 명예 수료증 획득!'
+          }
+        }
+      }
     ],
   },
 ];

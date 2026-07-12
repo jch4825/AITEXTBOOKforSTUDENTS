@@ -52,6 +52,69 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '문제 탐정단',
+          chapters: [
+            {
+              title: '1장: 진짜 문제 알아차리기',
+              goal: '생활 속 불편한 상황에서 해결해야 할 문제를 짚어내세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'find_problem',
+                  prompt: '내 방바닥에 장난감이 어질러져 있어서 밟아 아플 때, 해결해야 할 핵심 문제는 무엇일까요?',
+                  items: [
+                    { emoji: '🧸', label: '장난감을 장난감 상자에 정리해야 한다.' },
+                    { emoji: '😢', label: '장난감을 밟고 계속 울기만 한다.' },
+                    { emoji: '❌', label: '장난감을 다 쓰레기통에 내버린다.' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 문제 정의 대화',
+              goal: '아이미와 함께 문제를 명확하게 한 줄로 정리하세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'problem_chat',
+                  intro: '문제 알아차리기 대화를 나눕니다.',
+                  turns: [
+                    {
+                      aimi: '불편한 상황을 마주했나요? 우리가 오늘 해결할 수 있는 문제가 무엇인지 말해볼까요?',
+                      choices: [
+                        { label: '방바닥의 물건을 정리정돈하는 문제를 풀고 싶어.', reply: '네! 문제를 아주 잘 찾으셨어요. 해결할 대상을 명확히 정하는 것이 문제 해결의 훌륭한 시작이에요!', good: true },
+                        { label: '그냥 기분이 너무 안 좋아.', reply: '속상한 마음에 그럴 수 있어요! 하지만 우리 기분을 바꾸기 위해 지금 당장 해결할 수 있는 작은 일(문제)을 같이 찾아볼까요?' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 탐정 수첩 보고',
+              goal: '오늘 기록한 문제를 최종 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l1',
+                  title: '나의 문제 발견 수첩',
+                  rows: [
+                    { label: '내가 짚어낸 진짜 문제', from: 'find_problem' },
+                    { label: '문제 정의 결과', from: 'problem_chat' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '문제 탐정 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -70,7 +133,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '큰 문제는 작게 나눠요. 그러면 쉬워져요.',
     wrapUpNormal: '큰 문제는 작은 조각으로 나눠요. 작은 것부터 하나씩 하면 큰 문제도 해결할 수 있어요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['분해'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['나누기'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -93,6 +156,58 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '생각 조각 쪼개기 작전',
+          chapters: [
+            {
+              title: '1장: 준비 조각 분류',
+              goal: '등교 준비라는 큰 미션을 달성할 작은 행동들을 분류해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'deconstruct_sort',
+                  prompt: '등교 준비에 포함되는 작은 문제 조각들을 알맞은 바구니에 나누어 담아 보세요.',
+                  bins: [
+                    { label: '등교 준비 조각', emoji: '🎒' },
+                    { label: '다른 엉뚱한 행동', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '학교 책가방 싸기', emoji: '📚', bin: 0 },
+                    { label: '이 닦고 얼굴 씻기', emoji: '🧼', bin: 0 },
+                    { label: '컴퓨터 게임 밤새 하기', emoji: '🎮', bin: 1 },
+                    { label: '옷장에서 외출복 꺼내 입기', emoji: '👕', bin: 0 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약 및 계획 그리기',
+              goal: '내가 쪼개어 완성한 계획을 상상하여 그려 보세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l2',
+                  title: '나의 쪼개기 분석 카드',
+                  rows: [
+                    { label: '내가 분류한 아침 조각', from: 'deconstruct_sort' }
+                  ]
+                },
+                {
+                  kind: 'draw',
+                  id: 'draw_m5_l2',
+                  prompt: '내가 아침에 등교하기 전 씩씩하게 준비하는 멋진 내 모습을 그려 보세요.'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '나누기 대장 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -141,6 +256,53 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '차례차례 타임라인',
+          chapters: [
+            {
+              title: '1장: 양치질 순서 정렬',
+              goal: '양치질의 자연스러운 순서를 조립하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'wash_teeth_sort',
+                  prompt: '양치질 단계를 순서대로 바구니에 분배하세요. (1단계부터 4단계까지)',
+                  bins: [
+                    { label: '1~2단계 (시작)', emoji: '🦷' },
+                    { label: '3~4단계 (마무리)', emoji: '💦' }
+                  ],
+                  cards: [
+                    { label: '칫솔에 치약 묻히기', emoji: '🪥', bin: 0 },
+                    { label: '치아와 혓바닥 구석구석 닦기', emoji: '🦷', bin: 0 },
+                    { label: '물로 입안 깨끗이 헹구기', emoji: '🥤', bin: 1 },
+                    { label: '칫솔을 씻어서 보관하기', emoji: '🧼', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약 카드',
+              goal: '차례대로 생각한 결과를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l3',
+                  title: '나의 순차 양치 계획표',
+                  rows: [
+                    { label: '내가 분류한 순서', from: 'wash_teeth_sort' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '순서 마스터 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -159,7 +321,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '중요한 일부터 먼저 해요.',
     wrapUpNormal: '할 일이 많을 때는 급하고 중요한 일부터 해요. 순서를 정하면 마음도 편해져요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['우선순위'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['급한 일 먼저'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -182,6 +344,53 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '급한 일 먼저 하기 작전',
+          chapters: [
+            {
+              title: '1장: 급한 일 사물함',
+              goal: '당장 해야 할 급한 일과 나중에 해도 좋은 일을 분리하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'priority_sort',
+                  prompt: '할 일 카드를 먼저 해야 할 급한 일과 나중에 해도 좋은 일로 나누어 담으세요.',
+                  bins: [
+                    { label: '먼저 할 일 (급함)', emoji: '🚨' },
+                    { label: '나중에 할 일 (여유)', emoji: '💤' }
+                  ],
+                  cards: [
+                    { label: '오늘 밤 제출해야 하는 학교 숙제', emoji: '📝', bin: 0 },
+                    { label: '친구들과 이따 저녁에 할 스마트폰 게임', emoji: '🎮', bin: 1 },
+                    { label: '불이 났을 때 대피하기', emoji: '🔥', bin: 0 },
+                    { label: '방에 굴러다니는 낙서 종이 치우기', emoji: '🧹', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약 보고',
+              goal: '정리한 일의 순서를 한눈에 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l4',
+                  title: '나의 급한 일 계획표',
+                  rows: [
+                    { label: '분류한 일감 목록', from: 'priority_sort' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '계획 대장 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -221,6 +430,68 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '지혜로운 힌트 구하기',
+          chapters: [
+            {
+              title: '1장: 힌트 프롬프트 선택',
+              goal: '단순 답 복사 대신 내 생각 능력을 도울 힌트 낱말 질문을 고르세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'hint_query_type',
+                  prompt: 'AI에게 수학 문제를 공부할 때 물어볼 가장 훌륭한 힌트 질문은 무엇일까요?',
+                  items: [
+                    { emoji: '💡', label: '"답은 말하지 말고, 어떻게 풀기 시작하는지 첫 단계 힌트만 줘."' },
+                    { emoji: '❌', label: '"그냥 정답 알려줘. 바로 공책에 베끼게."' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 힌트 우체통 대화',
+              goal: '아이미와 함께 수수께끼의 힌트만 요청하는 훈련을 하세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'hint_chat',
+                  intro: '힌트 대화를 진행합니다.',
+                  turns: [
+                    {
+                      aimi: '문제! 아침에는 네 발, 점심에는 두 발, 저녁에는 세 발로 걷는 것은 무엇일까요?',
+                      choices: [
+                        { label: '너무 어려워! 정답은 비밀로 하고, 힌트 글을 하나만 알려줘.', reply: '좋아요! 이 수수께끼의 답은 동물이나 물건이 아니라 우리 주변에서 아주 가까이 성장하는 "사람"과 관련이 있답니다. 한 번 더 생각해 보세요!', good: true },
+                        { label: '그냥 재미없으니까 바로 답 내놔.', reply: '어라? 답을 바로 알면 시시하잖아요! 힌트를 줄 테니 스스로 풀면 훨씬 뿌듯할 거예요.' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 요약판',
+              goal: '완성된 수첩을 최종 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l5',
+                  title: '나의 힌트 요청 카드',
+                  rows: [
+                    { label: '내가 선택한 질문법', from: 'hint_query_type' },
+                    { label: '힌트 대화 결과', from: 'hint_chat' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '지혜 주머니 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -239,7 +510,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '못 알아들으면 다른 말로 다시 물어봐요.',
     wrapUpNormal: 'AI가 엉뚱한 답을 하면 포기하지 말고 짧고 쉬운 말로 바꿔 다시 물어봐요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['명확화'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['정확히 말하기'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -257,6 +528,78 @@ export const M5_LESSONS: LessonContent[] = [
           allowFreeInput: true,
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '다시 말하기 챌린지',
+          chapters: [
+            {
+              title: '1장: 명확한 대체 프롬프트 조립',
+              goal: 'AI가 이해하기 어려운 모호한 질문을 훌륭한 문장으로 조립해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-build',
+                  id: 'reask_build',
+                  prompt: 'AI가 찰떡같이 알아들을 수 있도록 단어 조각을 조립하여 다시 묻는 질문을 만드세요.',
+                  slots: [
+                    { label: '구체적 질문 대상' },
+                    { label: '부탁하는 꼬리표' }
+                  ],
+                  pieces: [
+                    { label: '목이 아주 긴 육지 동물 이름을', slot: 0, quality: 'good' },
+                    { label: '아무 동물이나 대충 아무거나', slot: 0, quality: 'weak' },
+                    { label: '하나만 알려줘', slot: 1, quality: 'good' },
+                    { label: '많이 써줘', slot: 1, quality: 'weak' }
+                  ],
+                  response: {
+                    good: '네! 목이 가장 긴 육지 동물은 "기린"이에요!',
+                    weak: '음... 동물 종류가 너무 많아서 어떤 것을 원하는지 잘 모르겠어요.'
+                  }
+                }
+              ]
+            },
+            {
+              title: '2장: 바꾸어 질문하기 대화',
+              goal: '잘못된 인식 상황을 대화 속에서 바꾸어 해결하세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'reask_chat',
+                  intro: '오인식 상황에 대처하여 다른 말로 바꾸어 전송합니다.',
+                  turns: [
+                    {
+                      aimi: '어라? "그거 파란 거"라고만 말씀하시면 제가 어떤 컴퓨터 부품이나 물건을 원하는지 도통 알 수 없어요.',
+                      choices: [
+                        { label: '질문을 바꿀게! "하늘을 나는 탈것 중에서 제일 빠른 비행기" 알려줘.', reply: '아! 질문을 바꾸어 주셔서 바로 이해했어요. 제일 빠른 비행기는 음속보다 훨씬 빠르게 날아가는 초음속 전투기나 제트기예요!', good: true },
+                        { label: '파란 거 있잖아 파란 거! 왜 몰라!', reply: '죄송해요! 파란 물건은 세상에 너무 많아서 제가 콕 집어 설명해 드리기 어렵답니다. 더 구체적인 이름을 말해 주세요.' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 결과 보고',
+              goal: '계획 카드를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l6',
+                  title: '나의 유의어 대체 카드',
+                  rows: [
+                    { label: '내가 빌드한 재질문', from: 'reask_build' },
+                    { label: '질문 교정 대화 결과', from: 'reask_chat' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '설명 대장 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -295,6 +638,74 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '한 번에 하나씩만',
+          chapters: [
+            {
+              title: '1장: 단계별 질문 구별함',
+              goal: '한 번에 다 묻는 과부하 질문과, 단계를 쪼갠 지혜로운 질문을 구분하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'one_by_one_sort',
+                  prompt: '차례대로 하나씩 나누어 묻는 스마트한 방법과, 뭉뚱그려 묻는 질문을 바구니에 분류하세요.',
+                  bins: [
+                    { label: '차례대로 쪼개기', emoji: '📶' },
+                    { label: '한번에 몰아치기', emoji: '📦' }
+                  ],
+                  cards: [
+                    { label: '먼저 카레 재료를 묻고, 다 준비되면 끓이는 순서를 묻는다', emoji: '🍛', bin: 0 },
+                    { label: '카레 재료와 역사와 야채 터는 법과 가격까지 다 지금 한꺼번에 말해줘', emoji: '📦', bin: 1 },
+                    { label: '1단계로 학교 가는 버스 번호를 묻고, 2단계로 타는 법을 묻는다', emoji: '🚌', bin: 0 },
+                    { label: '버스 타는 법과 버스 회장님 이름과 고장 났을 때 대처법 전부 다 바로 써줘', emoji: '🌀', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 단계적 요리 레시피 대화',
+              goal: '김밥 만들기를 AI와 1단계부터 차근차근 대화해 보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'one_by_one_chat',
+                  intro: '한 번에 하나씩 질문하는 롤플레이를 합니다.',
+                  turns: [
+                    {
+                      aimi: '맛있는 김밥 요리를 도와드릴게요! 1단계로 어떤 재료가 필요한지 알려드릴까요?',
+                      choices: [
+                        { label: '응! 필수 재료 4가지만 먼저 리스트로 뽑아줘.', reply: '좋아요! 김밥용 김, 밥, 단무지, 햄이 필수 재료예요! 다 준비하셨다면 다음 2단계로 넘어갈까요?', good: true },
+                        { label: '재료랑 써는 법이랑 맛있게 마는 팁이랑 다 바로 한꺼번에 적어줘.', reply: '우와! 한 번에 다 말씀드리면 보기도 어렵고 헷갈리기 쉬워요. 우리 1단계 재료부터 차례차례 알아보기로 해요!' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 요약판',
+              goal: '단계 질문 요약 계획을 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l7',
+                  title: '나의 순차 대화 카드',
+                  rows: [
+                    { label: '내가 분류한 질문 기법', from: 'one_by_one_sort' },
+                    { label: '김밥 단계 대화 결과', from: 'one_by_one_chat' }
+                  ]
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '순차 지시관 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -350,6 +761,73 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '스스로 최종 검토관',
+          chapters: [
+            {
+              title: '1장: 검토 검증 수단 선택',
+              goal: '답을 다 적은 후에 확인하는 최상의 수단을 고르세요.',
+              blocks: [
+                {
+                  kind: 'single-pick',
+                  id: 'review_check_type',
+                  prompt: 'AI가 써 준 숙제나 받아쓰기 문제의 글씨가 틀리지 않았는지 검토할 때 할 가장 좋은 행동은 무엇일까요?',
+                  items: [
+                    { emoji: '🔎', label: '첫 줄부터 손가락으로 짚어가며 꼼꼼히 소리 내어 다시 읽어본다.' },
+                    { emoji: '❌', label: '확인하지 않고 맞겠거니 하며 바로 덮어 둔다.' }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 검토관의 수정 요청 대화',
+              goal: 'AI의 잘못된 수학 답에 팩트체크 피드백을 전달해 보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'review_check_chat',
+                  intro: '답변을 검증하여 수정해 주는 롤플레이 대화입니다.',
+                  turns: [
+                    {
+                      aimi: '계산 완료! "5 더하기 3은 9" 입니다! 다른 수학 문제도 도와드릴까요?',
+                      choices: [
+                        { label: '내가 손가락으로 세어 보니까 8이 맞아! 답을 다시 확인해봐.', reply: '어라! 정말 죄송해요. 제가 덧셈 실수를 했네요. 5 더하기 3은 8이 맞습니다! 꼼꼼하게 검토해 주셔서 정말 대단해요.', good: true },
+                        { label: '우와, 9가 맞구나. 역시 컴퓨터는 천재야!', reply: '앗, 그대로 믿으시면 오답 숙제를 내게 돼요! AI도 계산 실수를 자주 하니 꼭 한 번 더 직접 더해보세요.' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 검토 완료 보고',
+              goal: '나의 검토 계획 카드를 확인하고 다짐하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l8',
+                  title: '나의 스스로 검토 카드',
+                  rows: [
+                    { label: '내가 선택한 검토 수단', from: 'review_check_type' },
+                    { label: '계산 검증 대화 결과', from: 'review_check_chat' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m5_l8',
+                  template: '나 {이름}는 문제를 다 푼 뒤에는 귀찮아도 꼭 {빈칸} 다시 검토하겠습니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '팩트 검토관 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -368,7 +846,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '안 되면 다른 방법을 생각해봐요.',
     wrapUpNormal: '방법은 하나가 아니에요. 안 되면 "다른 방법은 없을까?" 하고 생각해보는 힘을 길러요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['대안'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['다른 방법'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
@@ -390,6 +868,58 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '우회로 우체통: 플랜 B',
+          chapters: [
+            {
+              title: '1장: 다른 방법 찾기 판정',
+              goal: '한 가지 도구를 쓸 수 없을 때 다른 대안(대체재)을 선택해 보세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'alternative_sort',
+                  prompt: '원래 방법이 막혔을 때 차선으로 선택할 수 있는 다른 방법(플랜 B)을 알맞게 나누어 담으세요.',
+                  bins: [
+                    { label: '다른 방법 (플랜 B)', emoji: '💡' },
+                    { label: '포기하거나 나쁜 행동', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '가려던 버스 정류장이 공사 중이면 옆 정류장으로 걸어가기', emoji: '🚌', bin: 0 },
+                    { label: '지우개가 없어서 내 공책을 찢어버리기', emoji: '📝', bin: 1 },
+                    { label: 'AI 답변이 계속 안 나오면 새로고침하고 다시 묻기', emoji: '🔄', bin: 0 },
+                    { label: '가게 문이 닫혀 있어서 울면서 주저앉기', emoji: '😭', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요약 및 다짐',
+              goal: '내가 고른 우회 계획을 최종 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l9',
+                  title: '나의 플랜 B 우회 수첩',
+                  rows: [
+                    { label: '선택한 다른 방법들', from: 'alternative_sort' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m5_l9',
+                  template: '나 {이름}는 계획대로 일이 풀리지 않아도 당황하지 않고 {빈칸} 방법을 생각하겠습니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '우회 해결사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -434,6 +964,79 @@ export const M5_LESSONS: LessonContent[] = [
           aiResponse: '괜찮아요! 틀린 건 배우고 있다는 뜻이에요. 다시 해보면 이번엔 더 잘할 수 있어요. 응원할게요!',
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '일곱 번 넘어져도 다시!',
+          chapters: [
+            {
+              title: '1장: 용기를 내는 대사 분류',
+              goal: '실수했을 때 기가 죽는 혼잣말 대신 용기를 내는 격려 말을 고르세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'courage_speech_sort',
+                  prompt: '실수로 속상할 때 마음에 힘을 주는 고운 대사와 피해야 할 좌절 대사를 구분하세요.',
+                  bins: [
+                    { label: '용기를 주는 예쁜 말', emoji: '💖' },
+                    { label: '좌절하는 속상한 말', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '괜찮아! 실수해도 다시 도전하면 돼!', emoji: '🔥', bin: 0 },
+                    { label: '나는 바보인가 봐. 다시는 안 할래.', emoji: '😭', bin: 1 },
+                    { label: '틀린 건 내가 배우고 있다는 뜻이야!', emoji: '💡', bin: 0 },
+                    { label: '컴퓨터 다 부숴버릴래!', emoji: '⚡', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 실수 위로 격려 대화',
+              goal: '에러를 마주했을 때 씩씩하게 새로고침하고 이어 가세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'courage_chat',
+                  intro: '퀴즈를 틀렸을 때 나를 다독이며 다시 시작하는 대화입니다.',
+                  turns: [
+                    {
+                      aimi: '삐익! 아쉽게도 퀴즈 정답이 아니에요. 점수가 깎여서 속상하지만 우리 한 번 더 복습해서 풀어볼까요?',
+                      choices: [
+                        { label: '괜찮아, 배우다 보면 실수할 수 있지! 다시 시작해서 맞혀볼게.', reply: '우와! 정말 놀라운 용기와 끈기예요. 그런 마음가짐이라면 세상 어떤 어려운 문제도 거뜬히 해결할 수 있어요!', good: true },
+                        { label: '나 이제 기분 나빠서 공부 그만할래.', reply: '속상한 마음에 그럴 수 있어요! 잠시 숨을 고르고, 힘을 내서 저와 함께 다시 1단계부터 차근차근 시작해 봐요. 할 수 있어요!' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 나의 마스코트 디자인',
+              goal: '용기 카드를 요약하고 나를 격려할 그림을 그리세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l10',
+                  title: '나의 오뚝이 용기 카드',
+                  rows: [
+                    { label: '내가 선택한 용기 말', from: 'courage_speech_sort' },
+                    { label: '재도전 대화 결과', from: 'courage_chat' }
+                  ]
+                },
+                {
+                  kind: 'draw',
+                  id: 'draw_m5_l10',
+                  prompt: '쓰러져도 다시 일어나는 귀여운 오뚝이나 나의 용기 캐릭터를 그려 보세요.'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '오뚝이 용기 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -455,7 +1058,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '작게 나누고, 순서대로 하고, 확인했어요. 최고!',
     wrapUpNormal: '라면 끓이기도 작게 나누고 순서대로 하면 어렵지 않아요. 배운 방법은 다른 일에도 쓸 수 있어요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['분해', '순서', '확인', '검증'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['나누기', '순서', '확인', '검토'], imagePlaceholder: true } },
       {
         kind: 'sim-ai',
         data: {
@@ -493,6 +1096,79 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '나만의 맛있는 요리 작전',
+          chapters: [
+            {
+              title: '1장: 라면 조리 타임라인 정렬',
+              goal: '라면 끓이기에 필요한 4가지 조각을 올바른 순서대로 분배하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'ramen_sort',
+                  prompt: '라면을 끓이는 앞 단계와 뒷 단계를 구분하여 바구니에 담으세요.',
+                  bins: [
+                    { label: '앞 순서 (조리 시작)', emoji: '🔥' },
+                    { label: '뒤 순서 (조리 마킹)', emoji: '🍜' }
+                  ],
+                  cards: [
+                    { label: '냄비에 물을 정량 붓고 팔팔 끓이기', emoji: '💧', bin: 0 },
+                    { label: '물이 끓으면 면과 분말수프 조심히 넣기', emoji: '🍜', bin: 0 },
+                    { label: '수프가 잘 배도록 3분 동안 더 끓이기', emoji: '⏱️', bin: 1 },
+                    { label: '불을 안전하게 끄고 그릇에 라면 옮겨 담기', emoji: '🥣', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 요리 계획 의논 대화',
+              goal: 'AI 셰프와 함께 뜨거운 불 조작의 안전을 의논하세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'ramen_chat',
+                  intro: '요리 순서를 확인하며 대화합니다.',
+                  turns: [
+                    {
+                      aimi: '꼬마 셰프님! 이제 순서대로 라면 끓이기 계획을 마쳤나요? 불을 켤 때는 뜨거우니 반드시 옆의 어른께 도움을 청해야 한답니다!',
+                      choices: [
+                        { label: '응! 가스레인지 불을 켤 때는 꼭 부모님이나 선생님과 함께 할게.', reply: '정말 대단해요! 안전까지 완벽히 챙기는 당신은 진짜 멋진 일류 셰프랍니다. 맛있게 끓여 봐요!', good: true },
+                        { label: '내가 혼자 불을 켜서 빨리 끓여 먹을래.', reply: '앗, 위험해요! 가스레인지나 뜨거운 냄비는 소중한 내 몸에 큰 화상을 입힐 수 있으니 반드시 어른과 함께 불을 다루어야 한답니다.' }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 요리 카드 확인',
+              goal: '계획 수첩 보고서를 확인하세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l11',
+                  title: '나의 요리 계획 요약서',
+                  rows: [
+                    { label: '조리 단계 순서', from: 'ramen_sort' },
+                    { label: '안전 요리 대화 결과', from: 'ramen_chat' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m5_l11',
+                  template: '나 {이름}는 요리를 계획하고 안전하게 실천할 수 있는 문제 해결 {빈칸} 되겠습니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'worksheet',
+            badgeLabel: '꼬마 요리사 배지 획득!'
+          }
+        }
+      }
     ],
   },
 
@@ -511,7 +1187,7 @@ export const M5_LESSONS: LessonContent[] = [
     wrapUpEasy: '단원 5를 다 배웠어요! 나는 문제 해결사예요.',
     wrapUpNormal: '단원 5를 마쳤어요! 문제를 알아차리고, 작게 나누고, 순서대로 하고, 확인하는 힘이 생겼어요.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['순서', '우선순위', '힌트', '확인', '검증', '평가'] } },
+      { kind: 'text', data: { dictionaryTerms: ['순서', '급한 일 먼저', '힌트', '확인', '검토', '평가'] } },
       {
         kind: 'sequence',
         data: {
@@ -546,6 +1222,80 @@ export const M5_LESSONS: LessonContent[] = [
           ],
         },
       },
+      {
+        kind: 'mission',
+        data: {
+          title: '문제 해결 특공대 졸업식',
+          chapters: [
+            {
+              title: '1장: 4대 해결 비법 매칭',
+              goal: '배운 핵심 문제 해결 4단계 카드를 정리 보관하세요.',
+              blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'solving_graduation_sort',
+                  prompt: '문제 해결사의 4원칙 비법 열쇠 카드를 알맞은 보관함에 넣으세요.',
+                  bins: [
+                    { label: '똑똑한 해결 행동', emoji: '👮' },
+                    { label: '피해야 할 피곤한 행동', emoji: '❌' }
+                  ],
+                  cards: [
+                    { label: '어려운 숙제는 작은 공부 조각으로 쪼개서 하기', emoji: '📖', bin: 0 },
+                    { label: '어떻게 할지 순서 타임라인 먼저 계획하기', emoji: '⏱️', bin: 0 },
+                    { label: '안 풀리면 짜증 내고 포기하고 공책 찢기', emoji: '😭', bin: 1 },
+                    { label: '다 해결한 뒤에 답이 맞는지 꼼꼼히 확인하기', emoji: '🔎', bin: 0 },
+                    { label: '막히면 AI에게 답을 그냥 베껴 달라고 조르기', emoji: '📋', bin: 1 }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '2장: 해결사 임명 대화',
+              goal: '단원 5를 무사히 수료한 소감을 나누세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'solving_graduation_chat',
+                  intro: '해결사 임명 축하 대화입니다.',
+                  turns: [
+                    {
+                      aimi: '축하해요! 이제 어떤 복잡하고 큰 일감을 마주해도 스스로 나누고 정렬해서 풀 수 있는 멋진 문제 해결사가 되었군요!',
+                      choices: [
+                        { label: '네! 문제를 쪼개고 차례대로 끈기 있게 풀어낼게요.', reply: '정말 든든하네요. 당신은 이제 어떤 난관도 스스로 극복할 수 있는 튼튼한 사고의 힘을 가졌답니다. 졸업을 축하해요!', good: true },
+                        { label: '어려울 땐 힌트도 구하고 다른 방법도 세워볼게요!', reply: '완벽한 백점짜리 소감이에요! 지혜롭게 대처하고 유연하게 다른 방법을 찾는 모습이 참 자랑스럽습니다.', good: true }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '3장: 수료 선언',
+              goal: '나의 문제 해결사 임명장 수료증을 받으세요.',
+              blocks: [
+                {
+                  kind: 'summary',
+                  id: 'summary_m5_l12',
+                  title: '문제 해결사 졸업 카드',
+                  rows: [
+                    { label: '내가 정립한 해결 원칙', from: 'solving_graduation_sort' },
+                    { label: '최종 졸업 다짐', from: 'solving_graduation_chat' }
+                  ]
+                },
+                {
+                  kind: 'vow',
+                  id: 'vow_m5_l12',
+                  template: '나 {이름}는 마주한 문제를 지혜롭고 씩씩하게 {빈칸} 마스터가 될 것을 다짐합니다!'
+                }
+              ]
+            }
+          ],
+          reward: {
+            printable: 'certificate',
+            badgeLabel: 'AI 문제 해결 마스터 수료증 획득!'
+          }
+        }
+      }
     ],
   },
 ];
