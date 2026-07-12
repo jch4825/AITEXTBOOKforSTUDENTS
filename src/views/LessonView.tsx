@@ -239,7 +239,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   }
 
   function renderRealAI() {
-    const data = currentStep.data as { prompt: string; userInput: string; fallbackResponse: string; allowFreeInput?: boolean };
+    const data = currentStep.data as { prompt: string; userInput: string; fallbackResponse: string; allowFreeInput?: boolean; systemInstruction?: string };
     // Wrapper span carries the key so the child fully remounts (fresh state) on step change.
     return (
       <span key={`real-ai-${step}`}>
@@ -252,6 +252,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           accentText={theme.accentText}
           accentSoft={theme.accentSoft}
           onDone={handleNext}
+          systemInstruction={data.systemInstruction}
         />
       </span>
     );

@@ -54,7 +54,7 @@ interface RawGeminiResponse {
  * safety-filtered text or throws GeminiError with student- and teacher-
  * facing messages already populated.
  */
-export async function askGemini(userText: string): Promise<GeminiSuccess> {
+export async function askGemini(userText: string, systemInstruction?: string): Promise<GeminiSuccess> {
   const apiKey = getApiKey();
   if (!apiKey) {
     throw new GeminiError(
@@ -67,7 +67,7 @@ export async function askGemini(userText: string): Promise<GeminiSuccess> {
   const attemptLog: string[] = [];
   for (const model of MODEL_FALLBACK) {
     try {
-      const raw = await callModel(model, apiKey, userText);
+      const raw = await callModel(model, apiKey, userText, systemInstruction);
       const candidate = raw.candidates?.[0];
       const rawText = candidate?.content?.parts?.map(p => p.text ?? '').join('').trim() ?? '';
 
@@ -99,10 +99,11 @@ export async function askGemini(userText: string): Promise<GeminiSuccess> {
   );
 }
 
-async function callModel(model: string, apiKey: string, userText: string): Promise<RawGeminiResponse> {
+async function callModel(model: string, apiKey: string, userText: string, systemInstructionOverride?: string): Promise<RawGeminiResponse> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const systemText = systemInstructionOverride || RESPONSE_HINT;
   const body = {
-    systemInstruction: { parts: [{ text: RESPONSE_HINT }] },
+    systemInstruction: { parts: [{ text: systemText }] },
     contents: [{ role: 'user', parts: [{ text: userText }] }],
     generationConfig: {
       temperature: 0.3,

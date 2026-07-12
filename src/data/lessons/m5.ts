@@ -411,11 +411,13 @@ export const M5_LESSONS: LessonContent[] = [
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['힌트'], imagePlaceholder: true } },
       {
-        kind: 'sim-ai',
+        kind: 'real-ai',
         data: {
-          prompt: '수수께끼가 어려워요. AI한테 힌트를 달라고 해봐요.',
+          prompt: '수수께끼가 어려워요. AI한테 힌트를 달라고 해봐요. 아래 문장 그대로 보내거나 🎤 를 눌러 말해보세요.',
           userInput: '답은 말하지 말고 힌트만 줘',
-          aiResponse: '좋아요, 힌트! 이 동물은 아주 천천히 걷고, 등에 딱딱한 집을 지고 다녀요.',
+          fallbackResponse: '좋아요, 힌트! 이 동물은 아주 천천히 걷고, 등에 딱딱한 집을 지고 다녀요. [thinking]',
+          allowFreeInput: true,
+          systemInstruction: '너는 초등학생들을 위한 친절한 힌트 도우미 AI "아이미"야. 학생이 거북이에 대한 힌트를 구하고 있어. 학생이 질문하면 절대 정답인 "거북이"라는 단어는 말하지 말고, "이 동물은 아주 천천히 걷고, 등에 딱딱하고 무거운 집을 평생 지고 다녀요"처럼 정답을 유추할 수 있는 재미있는 힌트만 100자 이하의 쉽고 다정한 한국어로 대답해줘. 마지막에 [thinking] 또는 [wink] 태그를 꼭 붙여줘.',
         },
       },
       {

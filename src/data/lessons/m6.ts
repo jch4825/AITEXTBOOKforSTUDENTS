@@ -142,11 +142,13 @@ export const M6_LESSONS: LessonContent[] = [
         },
       },
       {
-        kind: 'sim-ai',
+        kind: 'real-ai',
         data: {
-          prompt: '거스름돈 계산을 AI한테 물어봐요.',
+          prompt: '거스름돈 계산을 AI한테 물어봐요. 아래 질문을 보내거나 🎤 를 눌러 말해보세요.',
           userInput: '1500원짜리 우유를 사고 2000원을 냈어. 거스름돈은 얼마야?',
-          aiResponse: '2000 빼기 1500은 500! 거스름돈은 500원이에요.',
+          fallbackResponse: '2000 빼기 1500은 500! 거스름돈은 500원이에요. [happy]',
+          allowFreeInput: true,
+          systemInstruction: '너는 초등학생들을 위한 친절한 마트 점원 AI "아이미"야. 학생이 물건을 사고 낸 돈에 대해 거스름돈이 얼마인지 물어보고 있어. "00원 빼기 00원은 00원!"처럼 뺄셈 계산 과정을 설명해 주면서 거스름돈 금액을 100자 이하의 쉽고 다정한 한국어로 알려줘. 마지막에 꼭 [happy] 또는 [wink] 태그를 붙여줘.',
         },
       },
       {
@@ -248,11 +250,13 @@ export const M6_LESSONS: LessonContent[] = [
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['지도', '위치 정보'], imagePlaceholder: true } },
       {
-        kind: 'sim-ai',
+        kind: 'real-ai',
         data: {
-          prompt: '지도 앱에 도서관 가는 길을 물어봐요.',
+          prompt: '지도 앱에 도서관 가는 길을 물어봐요. 아래 질문을 그대로 보내거나 🎤 를 눌러 말해봐요.',
           userInput: '여기서 도서관까지 어떻게 가?',
-          aiResponse: '앞으로 쭉 걸어가다가 편의점에서 오른쪽으로 도세요. 걸어서 5분이면 도착해요!',
+          fallbackResponse: '앞으로 쭉 걸어가다가 편의점에서 오른쪽으로 도세요. 걸어서 5분이면 도착해요! [happy]',
+          allowFreeInput: true,
+          systemInstruction: '너는 초등학생들을 위한 친절한 가상 지도 앱 AI "아이미"야. 학생이 특정 장소(예: 도서관, 공원 등)로 가는 길을 물어보고 있어. "앞으로 쭉 걸어가다가 편의점(혹은 큰 건물)에서 오른쪽으로 도세요"와 같이 100자 이하의 쉽고 다정한 한국어로 가상의 안전한 경로를 안내해줘. 꼭 마지막에 [happy] 또는 [cheer] 태그를 붙여줘.',
         },
       },
       {
@@ -1089,8 +1093,9 @@ export const M6_LESSONS: LessonContent[] = [
         data: {
           prompt: '진짜 AI한테 나를 소개해봐요. 진짜 이름 말고 별명으로! 좋아하는 걸로 바꿔 써도 돼요.',
           userInput: '나는 그림 그리기를 좋아해. 내 소개를 멋지게 한 문장으로 만들어줘.',
-          fallbackResponse: '"안녕하세요! 저는 색연필만 있으면 세상을 그려내는 꼬마 화가입니다!" 어때요, 멋지죠?',
+          fallbackResponse: '"안녕하세요! 저는 색연필만 있으면 세상을 그려내는 꼬마 화가입니다!" 어때요, 멋지죠? [cheer]',
           allowFreeInput: true,
+          systemInstruction: '너의 이름은 "아이미"야. 너는 초등학생들을 위한 다정한 AI 친구야. 학생이 좋아하는 활동(예: 그림 그리기, 노래 부르기, 게임 등)을 말하면, 이를 바탕으로 자존감을 높여주는 멋진 한 문장 자기소개(예: "저는 색연필로 세상을 꾸미는 멋진 화가입니다!")를 작성해주고 칭찬을 건네줘. 100자 이하의 매우 다정하고 쉬운 한국어로 대답하고, 마지막에 [cheer] 또는 [happy] 태그를 붙여줘.',
         },
       },
       {

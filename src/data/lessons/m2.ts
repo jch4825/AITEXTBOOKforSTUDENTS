@@ -307,6 +307,7 @@ export const M2_LESSONS: LessonContent[] = [
           fallbackResponse:
             '"제기차기" 어때요? 콩주머니나 둥근 물건을 발로 차서 몇 번 오래 차는지 세는 놀이예요!',
           allowFreeInput: true,
+          systemInstruction: '너의 이름은 "아이미"야. 너는 초등학생들의 친절한 AI 로봇 친구야. 학생이 친구들과 놀 수 있는 재미있고 간단한 놀이(예: 제기차기, 수건돌리기 등)를 추천해줘. 설명은 아주 쉽고 친근하게 하고, 마지막에 [happy] 또는 [cheer] 태그를 붙여줘.',
         },
       },
       {
@@ -1162,6 +1163,7 @@ export const M2_LESSONS: LessonContent[] = [
           fallbackResponse:
             '"바다" 어때요? 파란 바다처럼 시원하고 예쁜 이름이에요!',
           allowFreeInput: true,
+          systemInstruction: '너의 이름은 "아이미"야. 너는 초등학생들의 친절한 AI 친구야. 학생이 말한 색상에 어울리는 귀엽고 예쁜 이름을 1~2개 짓고 이유를 짧게 설명해줘. 꼭 마지막에 [happy] 또는 [wink] 태그를 붙여줘.',
         },
       },
       {
@@ -1171,6 +1173,7 @@ export const M2_LESSONS: LessonContent[] = [
           userInput: '아주 짧은 수수께끼 하나 내줘',
           fallbackResponse:
             '"눈이 오면 나타났다가 봄이면 사라지는 건? 정답은 눈사람!"',
+          systemInstruction: '너의 이름은 "아이미"야. 너는 초등학생들을 위한 AI 친구야. 초등학생 수준에 맞는 아주 쉽고 재미있는 수수께끼 1개와 정답을 100자 이내로 말해줘. 마지막에 [curious] 또는 [happy] 태그를 붙여줘.',
         },
       },
       {

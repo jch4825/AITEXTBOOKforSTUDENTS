@@ -7,6 +7,7 @@ import Button from './Button';
 import Icon from './Icon';
 import PhoneFrame from './PhoneFrame';
 import type { PhoneMessage } from './PhoneFrame';
+import type { Expression } from './CharacterAvatar';
 
 interface Props {
   prompt: string;              // shown to the student ("AI한테 __ 라고 물어봐요")
@@ -17,6 +18,7 @@ interface Props {
   accentSoft: string;
   allowFreeInput?: boolean;    // when true, student edits the text and/or dictates via mic before sending
   onDone: () => void;          // called after a response (real or fallback) so ProgressDots can advance manually
+  systemInstruction?: string;  // system instruction override
 }
 
 type State =
@@ -25,7 +27,50 @@ type State =
   | { kind: 'success'; text: string; modelUsed: string; sent: string }
   | { kind: 'fallback'; studentMessage: string; technicalDetail: string; sent: string };
 
-export default function RealAIStep({ prompt, userInput, fallbackResponse, accent, accentText, accentSoft, allowFreeInput, onDone }: Props) {
+function parseExpression(text: string): { cleanText: string; expression: Expression } {
+  let expression: Expression = 'neutral';
+  let cleanText = text;
+
+  const engMap: Record<string, Expression> = {
+    happy: 'happy',
+    cheer: 'cheer',
+    think: 'thinking',
+    thinking: 'thinking',
+    wink: 'wink',
+    surprised: 'surprised',
+    curious: 'curious',
+    sleepy: 'sleepy'
+  };
+
+  const korMap: Record<string, Expression> = {
+    기쁨: 'happy',
+    웃음: 'happy',
+    응원: 'cheer',
+    화이팅: 'cheer',
+    생각: 'thinking',
+    고민: 'thinking',
+    윙크: 'wink',
+    놀람: 'surprised',
+    궁금: 'curious',
+    슬픔: 'sleepy'
+  };
+
+  const regex = /\[([a-zA-Z가-힣]+)\]/g;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    const flag = match[1].toLowerCase();
+    if (engMap[flag]) {
+      expression = engMap[flag];
+    } else if (korMap[flag]) {
+      expression = korMap[flag];
+    }
+  }
+
+  cleanText = text.replace(regex, '').trim();
+  return { cleanText, expression };
+}
+
+export default function RealAIStep({ prompt, userInput, fallbackResponse, accent, accentText, accentSoft, allowFreeInput, onDone, systemInstruction }: Props) {
   const { speak } = useSpeak();
   const [state, setState] = useState<State>({ kind: 'idle' });
   const [draft, setDraft] = useState<string>(userInput);
@@ -35,8 +80,9 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
     if (!toSend) return;
     setState({ kind: 'loading', sent: toSend });
     try {
-      const r = await askGemini(toSend);
-      speak(r.text);
+      const r = await askGemini(toSend, systemInstruction);
+      const { cleanText } = parseExpression(r.text);
+      speak(cleanText);
       setState({ kind: 'success', text: r.text, modelUsed: r.modelUsed, sent: toSend });
       onDone();
     } catch (err) {
@@ -58,11 +104,12 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
     });
   }
   if (state.kind === 'success') {
+    const { cleanText, expression } = parseExpression(state.text);
     messages.push({
       id: 'aimi-success',
       sender: 'aimi',
-      text: state.text,
-      expression: 'cheer',
+      text: cleanText,
+      expression: expression,
     });
   } else if (state.kind === 'fallback') {
     messages.push({
