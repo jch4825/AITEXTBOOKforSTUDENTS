@@ -82,14 +82,14 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
             {/* 도장판 — 완료한 차시마다 단원색 별 도장 (§4.2). 접힘 시 숨김 */}
             {isOpen && (
               <ul className="flex flex-wrap pl-1 pt-1 pb-2">
-                {lessons.map((lid, i) => {
+                 {lessons.map((lid, i) => {
                   const done = isCompleted(lid);
                   const current = lid === currentLessonId;
-                  const lessonHasAI = getLesson(lid)?.steps.some(s => s.kind === 'real-ai' || s.kind === 'sim-ai');
+                  const lessonHasAI = getLesson(lid)?.steps.some(s => s.kind === 'real-ai');
                   const title = getLesson(lid)?.title;
                   const label =
                     `${i + 1}차시${title ? `. ${title}` : ''}` +
-                    (lessonHasAI ? ' (인공지능 활동 포함)' : '') +
+                    (lessonHasAI ? ' (인공지능 API 활용 포함)' : '') +
                     (done ? ' (완료)' : '') +
                     (current ? ' — 지금 보는 중' : '');
                   return (
