@@ -197,7 +197,7 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
                   onClick={() => handleCardClick(card.originalIdx)}
                   className={`flex items-center gap-2 px-4 py-2.5 bg-[color:var(--paper-0)] border-2 rounded-[20px] shadow-sm font-bold text-sm select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
                     ${isDragging ? 'z-50 shadow-lg scale-105' : ''}
-                    ${isError ? 'animate-shake' : ''}
+                    ${isError ? 'answer-shake' : ''}
                   `}
                   style={{
                     borderColor: isSelected ? accent : 'var(--border)',

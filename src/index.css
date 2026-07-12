@@ -109,8 +109,8 @@
     cursor: pointer;
   }
 
-  /* 포커스 시 기본 아웃라인 해제 (마우스 클릭 시 사각형 실선 생김 방지) */
-  *:focus {
+  /* 마우스 클릭 시에만 기본 아웃라인 해제 — 키보드·스위치 사용자의 포커스는 남긴다 */
+  :focus:not(:focus-visible) {
     outline: none;
   }
 
@@ -338,8 +338,17 @@
 }
 .answer-burst-dot { animation: answer-burst 0.9s ease-out 1 forwards; }
 
+/* 미션 보상 종이 꽃가루 — 1회 낙하 후 사라짐 (무한 반복 금지) */
+@keyframes confetti-fall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(60vh) rotate(480deg); opacity: 0; }
+}
+.confetti-piece { opacity: 0; animation: confetti-fall 1.8s ease-in 1 forwards; }
+
 @media (prefers-reduced-motion: reduce) {
   .answer-shake, .answer-burst-dot, .answer-pop { animation: none; }
+  .confetti-piece { animation: none; opacity: 0; }
 }
 
 /* 종이 스티커 카드 — 흰 카드(paper-0) + 색 테두리 + 같은 색 립 하나.
