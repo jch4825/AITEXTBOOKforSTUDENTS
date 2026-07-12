@@ -11,8 +11,10 @@ import Sequence from '../components/games/Sequence';
 import type { SequenceItem } from '../components/games/Sequence';
 import RealAIStep from '../components/RealAIStep';
 import StepErrorBoundary from '../components/StepErrorBoundary';
-import Stage from '../components/Stage';
-import ComicPanel from '../components/ComicPanel';
+import ScreentoneBackdrop from '../components/lesson/ScreentoneBackdrop';
+import EpisodeHeroSpread from '../components/lesson/EpisodeHeroSpread';
+import ActivitySpread from '../components/lesson/ActivitySpread';
+import EpisodeEnding from '../components/lesson/EpisodeEnding';
 import SpeechBubble from '../components/SpeechBubble';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
@@ -117,111 +119,57 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   function renderText() {
     const data = currentStep.data as { dictionaryTerms?: string[]; imagePlaceholder?: boolean };
     const terms = data.dictionaryTerms ?? [];
-    // 무대 위(전폭 히어로) → 책상 위(본문) 2단 구성 — §4.1
-    if (story && storyIntro) {
-      return (
-        <>
-          <Stage
-            lessonId={lesson.id}
-            title={lesson.title}
-            scene={story.scene}
-            text={storyIntro}
-            episodeTitle={lesson.number === 1 ? MODULE_EPISODES[lesson.moduleId].title : undefined}
-            accent={theme.accent}
-            accentText={theme.accentText}
-            accentSoft={theme.accentSoft}
-            className="comic-stage -mx-4 -mt-4 md:-mx-8 md:-mt-10 mb-6"
-          />
-          <div className="max-w-2xl mx-auto">
-            {step === 0 && goalText && <LessonGoal text={goalText} accent={theme.accent} />}
-            {effectiveHard ? (
-              <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
-            ) : (
-              <>
-                <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
-                <Button accent={theme.accent} onClick={() => speakNow(body)} className="mt-4">
-                  <Icon name="speaker" size={20} /> 읽어줘
-                </Button>
-              </>
-            )}
-          </div>
-        </>
-      );
-    }
-    // 스토리가 없는 예외 차시 — 기존 단일 칼럼 유지
+
+    const goalNode = step === 0 && goalText ? (
+      <LessonGoal text={goalText} accent={theme.accent} />
+    ) : null;
+
+    const bodyNode = effectiveHard ? (
+      <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
+    ) : (
+      <>
+        <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
+        <Button accent={theme.accent} onClick={() => speakNow(body)} className="mt-4">
+          <Icon name="speaker" size={20} /> 읽어줘
+        </Button>
+      </>
+    );
+
     return (
-      <div className="max-w-2xl mx-auto">
-        <h1 className="t-h1 mb-4" style={{ color: theme.accent }}>{lesson.title}</h1>
-        {step === 0 && goalText && <LessonGoal text={goalText} accent={theme.accent} />}
-        {data.imagePlaceholder && (
-          <div
-            className="w-full aspect-video rounded-[var(--r-lg)] border-2 border-dashed flex items-center justify-center text-[color:var(--muted)] mb-4"
-            style={{ borderColor: 'var(--border)', background: 'var(--paper-2)' }}
-            aria-label="이미지 자리"
-          >
-            <span className="text-base">(여기에 그림)</span>
-          </div>
-        )}
-        {effectiveHard ? (
-          <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
-        ) : (
-          <>
-            <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
-            <Button accent={theme.accent} onClick={() => speak(body)} className="mt-4">
-              <Icon name="speaker" size={20} /> 읽어줘
-            </Button>
-          </>
-        )}
-      </div>
+      <EpisodeHeroSpread
+        lessonId={lesson.id}
+        title={lesson.title}
+        scene={story?.scene ?? []}
+        text={storyIntro ?? ''}
+        bodyText={bodyNode}
+        goalText={goalNode}
+        episodeTitle={lesson.number === 1 ? MODULE_EPISODES[lesson.moduleId].title : undefined}
+        accent={theme.accent}
+        accentText={theme.accentText}
+        accentSoft={theme.accentSoft}
+        isHardMode={effectiveHard !== null}
+      />
     );
   }
 
   function renderOX() {
     const data = currentStep.data as { questions: OXQuestion[] };
-    return (
-      <div className="max-w-2xl mx-auto">
-        <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>같이 풀어봐요!</h2>
-        <div className="card p-4 md:p-6">
-          <OXGame questions={data.questions} onComplete={handleNext} />
-        </div>
-      </div>
-    );
+    return <OXGame questions={data.questions} onComplete={handleNext} />;
   }
 
   function renderCardPick() {
     const data = currentStep.data as { question: string; choices: CardChoice[] };
-    return (
-      <div className="max-w-2xl mx-auto">
-        <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>골라봐요!</h2>
-        <div className="card p-4 md:p-6">
-          <CardPick question={data.question} choices={data.choices} difficulty={difficulty} onComplete={handleNext} />
-        </div>
-      </div>
-    );
+    return <CardPick question={data.question} choices={data.choices} difficulty={difficulty} onComplete={handleNext} />;
   }
 
   function renderMatching() {
     const data = currentStep.data as { pairs: MatchingPair[] };
-    return (
-      <div className="max-w-2xl mx-auto">
-        <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>짝을 맞춰봐요!</h2>
-        <div className="card p-4 md:p-6">
-          <Matching pairs={data.pairs} difficulty={difficulty} onComplete={handleNext} />
-        </div>
-      </div>
-    );
+    return <Matching pairs={data.pairs} difficulty={difficulty} onComplete={handleNext} />;
   }
 
   function renderSequence() {
     const data = currentStep.data as { instruction: string; items: SequenceItem[] };
-    return (
-      <div className="max-w-2xl mx-auto">
-        <h2 className="t-h2 mb-2" style={{ color: theme.accent }}>순서대로 눌러봐요!</h2>
-        <div className="card p-4 md:p-6">
-          <Sequence instruction={data.instruction} items={data.items} difficulty={difficulty} onComplete={handleNext} />
-        </div>
-      </div>
-    );
+    return <Sequence instruction={data.instruction} items={data.items} difficulty={difficulty} onComplete={handleNext} />;
   }
 
   function renderSimAI() {
@@ -279,49 +227,15 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   function renderWrapUp() {
     const next = nextLessonInfo(lesson.id);
     return (
-      <div className="comic-panel max-w-2xl mx-auto text-center py-8 px-4 md:px-8">
-        {/* 배움 도장 — 오늘의 별이 찍히는 순간 (1회성 250ms, §4.2) */}
-        <div className="flex justify-center mb-4" aria-hidden>
-          <span
-            className="stamp-in inline-flex items-center justify-center rounded-full h-[88px] w-[88px]"
-            style={{ background: theme.accentSoft, boxShadow: 'var(--e-1)' }}
-          >
-            <Icon name="star" size={48} filled color={theme.accent} />
-          </span>
-        </div>
-        <h2 className="t-h2 mb-4" style={{ color: theme.accent }}>오늘 배운 것</h2>
-        <p className="text-xl leading-relaxed mb-6">{wrapUpText}</p>
-        {goalText && (
-          <div className="mb-6">
-            <LessonGoal text={goalText} accent={theme.accent} compact />
-          </div>
-        )}
-        {story && (
-          <div className="text-left max-w-md mx-auto mb-6">
-            <SpeechBubble
-              speaker={story.reaction.speaker}
-              text={story.reaction.text}
-              expression="happy"
-              accent={theme.accent}
-              accentText={theme.accentText}
-              accentSoft={theme.accentSoft}
-            />
-          </div>
-        )}
-        {next && (
-          <p className="t-label mb-5 text-[color:var(--muted)]">
-            다음 시간: {next.title}
-          </p>
-        )}
-        <div className="flex flex-col items-center gap-3">
-          <Button variant="secondary" accent={theme.accent} onClick={() => speakNow(wrapUpText)}>
-            <Icon name="speaker" size={20} /> 읽어줘
-          </Button>
-          <Button size="lg" accent={theme.accent} onClick={handleNext} className="text-xl">
-            <Icon name="sparkles" size={22} filled /> 다 했어요!
-          </Button>
-        </div>
-      </div>
+      <EpisodeEnding
+        wrapUpText={wrapUpText}
+        goalText={goalText}
+        reaction={story?.reaction}
+        next={next}
+        theme={theme}
+        onSpeak={speakNow}
+        onFinish={handleNext}
+      />
     );
   }
 
@@ -348,7 +262,9 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       onGoHome={onGoHome}
       onPickLesson={onPickLesson}
     >
-      <StepErrorBoundary key={step}>{body_el}</StepErrorBoundary>
+      <ScreentoneBackdrop moduleId={lesson.moduleId}>
+        <StepErrorBoundary key={step}>{body_el}</StepErrorBoundary>
+      </ScreentoneBackdrop>
     </MicroLessonFrame>
   );
 }
@@ -466,10 +382,21 @@ function SimAIStep({ prompt, userInput, aiResponse, accent, accentSoft, accentTe
     </Button>
   ) : null;
 
+  const characterReaction = {
+    id: 'aimi' as const,
+    expression: stage === 'typing' ? 'thinking' as const : (stage === 'revealed' ? 'cheer' as const : 'curious' as const),
+    text: stage === 'idle'
+      ? '나에게 하고 싶은 말을 입력하고 전송 버튼을 눌러줘!'
+      : (stage === 'typing' ? '어떤 말인지 열심히 생각하고 있어. 잠시만 기다려줘!' : '너와 대화하니까 정말 기뻐!')
+  };
+
   return (
-    <div className="max-w-2xl mx-auto flex flex-col items-center">
-      <h2 className="t-h2 mb-2 w-full text-center" style={{ color: accent }}>AI랑 이야기해봐요</h2>
-      <p className="text-lg mb-4 text-center">{prompt}</p>
+    <ActivitySpread
+      kicker="AI랑 이야기해봐요"
+      title={prompt}
+      accent={accent}
+      character={characterReaction}
+    >
       <PhoneFrame
         messages={messages}
         typing={stage === 'typing'}
@@ -479,6 +406,6 @@ function SimAIStep({ prompt, userInput, aiResponse, accent, accentSoft, accentTe
         onSpeak={speakNow}
         footer={footer}
       />
-    </div>
+    </ActivitySpread>
   );
 }

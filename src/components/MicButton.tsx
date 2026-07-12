@@ -20,7 +20,7 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
         disabled
         aria-label="음성 입력 미지원 — 글로 써 주세요"
         title="이 브라우저에서는 음성 입력이 안 돼요. 글로 써주세요."
-        className="shrink-0 h-11 w-11 rounded-full border-2 cursor-not-allowed flex items-center justify-center"
+        className="shrink-0 h-13 w-13 rounded-full border-2 cursor-not-allowed flex items-center justify-center"
         style={{ borderColor: 'var(--line)', color: 'var(--ink-3)', background: 'var(--paper-2)' }}
       ><Icon name="mic" size={22} /></button>
     );
@@ -63,7 +63,7 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
         disabled={disabled}
         aria-label={listening ? '녹음 중지' : '말로 입력하기'}
         title={listening ? '듣는 중… 눌러서 멈추기' : '눌러서 말하기'}
-        className={`h-11 w-11 rounded-full border-2 flex items-center justify-center transition ${listening ? 'animate-pulse' : ''}`}
+        className={`h-13 w-13 rounded-full border-2 flex items-center justify-center transition ${listening ? 'motion-safe:animate-pulse' : ''}`}
         style={{
           borderColor: accent,
           color: listening ? 'white' : accent,

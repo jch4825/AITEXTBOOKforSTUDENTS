@@ -7,6 +7,7 @@ import Button from '../Button';
 import Icon from '../Icon';
 import CharacterAvatar from '../CharacterAvatar';
 import { ACTIVITY_PALETTE } from '../../utils/activityPalette';
+import LessonSpread from '../lesson/LessonSpread';
 
 import MultiPick from './blocks/MultiPick';
 import SinglePick from './blocks/SinglePick';
@@ -158,60 +159,98 @@ export default function MissionStep({
 
   // 1. 표지 (이름 입력) — 이름 없이도 시작할 수 있어야 한다(타이핑이 어려운 학생 대응).
   if (mission.askName !== false && !studentName) {
-    return (
-      <div className="max-w-md mx-auto py-8 px-4 text-center story-fade-in">
-        <div className="card p-6 md:p-8 flex flex-col items-center">
-          <span
-            className="inline-flex items-center justify-center rounded-full h-[88px] w-[88px] mb-4"
-            style={{ background: accentSoft, boxShadow: 'var(--e-1)' }}
-            aria-hidden
-          >
-            <CharacterAvatar character="aimi" expression="curious" size={68} idle={false} />
-          </span>
-          <p className="t-label mb-1" style={{ color: accentText }}>오늘의 미션</p>
-          <h2 className="t-h2 mb-2" style={{ color: accent }}>{mission.title}</h2>
-          <p className="text-base text-[color:var(--muted)] mb-6">이름을 쓰면 결과물에 내 이름이 들어가요.</p>
+    const coverLeft = (
+      <div className="flex flex-col items-center justify-center text-center p-4">
+        <span
+          className="inline-flex items-center justify-center rounded-full h-[100px] w-[100px] mb-4"
+          style={{ background: accentSoft, boxShadow: 'var(--e-1)' }}
+          aria-hidden
+        >
+          <CharacterAvatar character="aimi" expression="curious" size={76} idle={false} />
+        </span>
+        <p className="t-label mb-1 font-bold text-sm" style={{ color: accentText }}>오늘의 미션</p>
+        <h2 className="t-h2 text-2xl font-black" style={{ color: accent }}>{mission.title}</h2>
+      </div>
+    );
 
-          <form onSubmit={handleStart} className="w-full space-y-4">
-            <input
-              type="text"
-              value={tempName}
-              onChange={(e) => setTempName(e.target.value)}
-              placeholder="내 이름 쓰기"
-              className="w-full p-3 rounded-[var(--r-sm)] border-2 text-center text-lg font-bold"
-              style={{ borderColor: accent, background: 'var(--paper-0)' }}
-              maxLength={10}
-              aria-label="이름"
-            />
-            <Button
-              type="submit"
-              size="lg"
-              accent={accent}
-              disabled={!tempName.trim()}
-              className="w-full text-lg justify-center py-3 font-bold"
-            >
-              <Icon name="rocket" size={20} /> 시작하기
-            </Button>
-          </form>
-          <button
-            type="button"
-            onClick={() => setStudentName('친구')}
-            className="mt-4 text-base underline underline-offset-4"
-            style={{ color: 'var(--muted)' }}
+    const coverRight = (
+      <div className="flex flex-col justify-center p-4 space-y-4">
+        <p className="text-base text-[color:var(--ink-2)] text-center md:text-left">
+          이름을 쓰면 결과물에 내 이름이 들어가요.
+        </p>
+        <form onSubmit={handleStart} className="w-full space-y-4">
+          <input
+            type="text"
+            value={tempName}
+            onChange={(e) => setTempName(e.target.value)}
+            placeholder="내 이름 쓰기"
+            className="w-full p-3 rounded-[var(--r-sm)] border-2 text-center text-lg font-bold"
+            style={{ borderColor: accent, background: 'var(--paper-0)' }}
+            maxLength={10}
+            aria-label="이름"
+          />
+          <Button
+            type="submit"
+            size="lg"
+            accent={accent}
+            disabled={!tempName.trim()}
+            className="w-full text-lg justify-center py-3 font-bold cursor-pointer"
           >
-            이름 없이 시작하기
-          </button>
-        </div>
+            <Icon name="rocket" size={20} /> 시작하기
+          </Button>
+        </form>
+        <button
+          type="button"
+          onClick={() => setStudentName('친구')}
+          className="text-base underline underline-offset-4 cursor-pointer text-center md:text-left block w-full"
+          style={{ color: 'var(--muted)' }}
+        >
+          이름 없이 시작하기
+        </button>
+      </div>
+    );
+
+    return (
+      <div className="py-4 story-fade-in">
+        <LessonSpread
+          left={coverLeft}
+          right={coverRight}
+          reverse={false}
+          accent={accent}
+          label={`미션 표지: ${mission.title}`}
+        />
       </div>
     );
   }
 
   // 2. 보상 화면 — 앱 공통 보상 문법(D4 도장 메달리온 + 1회성 모션)으로.
-  //    무한 반복 애니·그라데이션·이모지 크롬 금지, prefers-reduced-motion 대응.
   if (showReward) {
-    return (
-      <div className="max-w-md mx-auto py-8 px-4 text-center story-fade-in relative">
-        {/* 종이 꽃가루 — 1회 떨어지고 끝 (reduced-motion이면 CSS가 감춤) */}
+    const rewardLeft = (
+      <div className="flex flex-col items-center justify-center text-center p-4">
+        <div className="relative mb-4" aria-hidden>
+          <span
+            className="stamp-in inline-flex items-center justify-center rounded-full h-[120px] w-[120px]"
+            style={{ background: accentSoft, boxShadow: 'var(--e-1)' }}
+          >
+            <CharacterAvatar character="aimi" expression="cheer" size={92} idle={false} />
+          </span>
+          <span
+            className="answer-pop absolute -top-1 -right-1 rounded-full h-10 w-10 flex items-center justify-center text-white shadow-md"
+            style={{ background: accent }}
+          >
+            <Icon name={mission.reward.printable === 'certificate' ? 'star' : 'check'} size={22} filled strokeWidth={3} />
+          </span>
+        </div>
+
+        <h2 className="t-h2 text-2xl font-black" style={{ color: accent }}>미션 완료!</h2>
+        <p className="text-lg">
+          <b>{studentName}</b>님, 참 잘했어요!
+        </p>
+      </div>
+    );
+
+    const rewardRight = (
+      <div className="flex flex-col justify-center p-4 space-y-4 items-center md:items-start relative">
         <div className="absolute inset-x-0 top-0 h-0 pointer-events-none z-30" aria-hidden>
           {confetti.map((c) => (
             <span
@@ -230,69 +269,64 @@ export default function MissionStep({
           ))}
         </div>
 
-        <div className="card p-6 md:p-8 flex flex-col items-center">
-          {/* 배움 도장 메달리온 — 정리 화면과 같은 문법, 미션용으로 조금 크게 */}
-          <div className="relative mb-4" aria-hidden>
-            <span
-              className="stamp-in inline-flex items-center justify-center rounded-full h-[120px] w-[120px]"
-              style={{ background: accentSoft, boxShadow: 'var(--e-1)' }}
-            >
-              <CharacterAvatar character="aimi" expression="cheer" size={92} idle={false} />
-            </span>
-            <span
-              className="answer-pop absolute -top-1 -right-1 rounded-full h-10 w-10 flex items-center justify-center text-white shadow-md"
-              style={{ background: accent }}
-            >
-              <Icon name={mission.reward.printable === 'certificate' ? 'star' : 'check'} size={22} filled strokeWidth={3} />
-            </span>
-          </div>
+        <span
+          className="inline-flex items-center gap-1.5 rounded-[var(--r-pill)] px-4 py-2 mb-2 text-base font-bold"
+          style={{ background: accentSoft, color: accentText }}
+        >
+          <Icon name="star" size={18} filled /> {mission.reward.badgeLabel}
+        </span>
 
-          <h2 className="t-h2 mb-1" style={{ color: accent }}>미션 완료!</h2>
-          <p className="text-lg mb-4">
-            <b>{studentName}</b>님, 참 잘했어요!
-          </p>
-
-          {/* 배지 리본 — 모듈색 솔리드 파스텔 */}
-          <span
-            className="inline-flex items-center gap-1.5 rounded-[var(--r-pill)] px-4 py-2 mb-6 text-base font-bold"
-            style={{ background: accentSoft, color: accentText }}
+        <div className="w-full space-y-3">
+          <Button
+            size="lg"
+            accent={accent}
+            onClick={handlePrint}
+            className="w-full text-lg justify-center font-bold cursor-pointer"
           >
-            <Icon name="star" size={18} filled /> {mission.reward.badgeLabel}
-          </span>
+            <Icon name="printer" size={20} />
+            {mission.reward.printable === 'certificate' ? '수료증 인쇄하기' : '활동지 인쇄하기'}
+          </Button>
 
-          <div className="w-full space-y-2">
-            <Button
-              size="lg"
-              accent={accent}
-              onClick={handlePrint}
-              className="w-full text-lg justify-center font-bold"
-            >
-              <Icon name="printer" size={20} />
-              {mission.reward.printable === 'certificate' ? '수료증 인쇄하기' : '활동지 인쇄하기'}
-            </Button>
-
-            <Button
-              variant="ghost"
-              onClick={() => {
-                resetMission();
-                setShowReward(false);
-                setTempName('');
-              }}
-              className="mx-auto"
-            >
-              <Icon name="refresh" size={16} /> 처음부터 다시 하기
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              resetMission();
+              setShowReward(false);
+              setTempName('');
+            }}
+            className="mx-auto md:mx-0 cursor-pointer"
+          >
+            <Icon name="refresh" size={16} /> 처음부터 다시 하기
+          </Button>
         </div>
+      </div>
+    );
+
+    return (
+      <div className="py-4 story-fade-in relative">
+        <LessonSpread
+          left={rewardLeft}
+          right={rewardRight}
+          reverse={false}
+          accent={accent}
+          label="미션 보상 완료"
+        />
       </div>
     );
   }
 
-  // 3. Regular Chapters View
-  return (
-    <div className="max-w-2xl mx-auto py-4 story-fade-in">
-      {/* 장(챕터) 탭 — 학습지의 "1장·2장·3장" 종이 탭 느낌, 터치 타깃 크게 */}
-      <div className="flex gap-1.5 mb-5 overflow-x-auto pb-0.5" role="tablist" aria-label="미션 장 목록">
+  // 3. Regular Chapters View using LessonSpread
+  const chapterTabs = (
+    <div className="flex flex-col space-y-4 h-full justify-center py-4 px-2 lg:px-6">
+      <span
+        className="text-xs font-black px-2 py-0.5 rounded-[var(--r-sm)] uppercase tracking-wider mb-2 self-start"
+        style={{ background: 'color-mix(in srgb, var(--accent) 12%, var(--paper-2))', color: accent }}
+      >
+        오늘의 미션
+      </span>
+      <h2 className="t-h2 text-xl lg:text-2xl font-black text-[color:var(--brand-ink)] mb-4">{mission.title}</h2>
+
+      <div className="flex flex-col space-y-2" role="tablist" aria-label="미션 장 목록">
         {mission.chapters.map((chapter, idx) => {
           const isActive = currentChapter === idx;
           const isChapDone = chapter.blocks.every(isBlockCompleted);
@@ -302,10 +336,10 @@ export default function MissionStep({
               role="tab"
               aria-selected={isActive}
               onClick={() => setCurrentChapter(idx)}
-              className="min-h-12 px-4 py-2.5 rounded-t-[var(--r-md)] font-bold text-base transition-all shrink-0 flex items-center gap-1.5 border-2 border-b-0"
+              className="min-h-12 px-4 py-2.5 rounded-[var(--r-md)] font-bold text-base transition-all shrink-0 flex items-center justify-between border cursor-pointer"
               style={{
                 borderColor: isActive ? accent : 'var(--line)',
-                background: isActive ? 'var(--paper-0)' : 'var(--paper-2)',
+                background: isActive ? 'var(--paper-0)' : 'var(--paper-1)',
                 color: isActive ? accent : 'var(--muted)',
               }}
             >
@@ -318,25 +352,27 @@ export default function MissionStep({
         })}
       </div>
 
-      {/* 장 목표 카드 */}
       {activeChapter?.goal && (
         <div
-          className="p-3.5 mb-4 rounded-[var(--r-md)] text-base font-semibold flex items-center gap-2.5"
+          className="p-3.5 mt-4 rounded-[var(--r-md)] text-sm font-semibold flex items-center gap-2.5"
           style={{ background: accentSoft, color: accentText }}
         >
-          <Icon name="star" size={18} filled color="currentColor" className="shrink-0" />
-          <span>{activeChapter.goal}</span>
+          <Icon name="star" size={16} filled color="currentColor" className="shrink-0" />
+          <span className="flex-1 text-xs lg:text-sm">{activeChapter.goal}</span>
           <button
             onClick={() => speakNow(activeChapter.goal!)}
             aria-label="장 목표 읽어주기"
-            className="ml-auto shrink-0 h-10 w-10 rounded-full flex items-center justify-center hover:bg-white/40"
+            className="shrink-0 h-13 w-13 rounded-full flex items-center justify-center hover:bg-white/40 cursor-pointer"
             style={{ color: 'currentColor' }}
-          ><Icon name="speaker" size={18} /></button>
+          ><Icon name="speaker" size={16} /></button>
         </div>
       )}
+    </div>
+  );
 
-      {/* Render Blocks in current chapter */}
-      <div className="space-y-6 my-4">
+  const chapterBlocks = (
+    <div className="flex flex-col justify-center h-full py-4 min-h-[300px] lg:min-h-[460px] space-y-6">
+      <div className="space-y-6 lg:max-h-[50vh] lg:overflow-y-auto lg:pr-2">
         {activeChapter?.blocks.map((block) => {
           const val = answers[block.id];
           const updateVal = (newVal: any) => setAnswer(block.id, newVal);
@@ -446,14 +482,13 @@ export default function MissionStep({
         })}
       </div>
 
-      {/* 미션 내부 이동 — 핵심 조작이므로 큰 버튼(64px) */}
-      <div className="flex justify-between items-center gap-3 mt-6 pt-4 border-t border-[color:var(--line)]">
+      <div className="flex justify-between items-center gap-3 pt-4 border-t border-[color:var(--line)]">
         <Button
           variant="secondary"
           accent={accent}
           onClick={() => currentChapter > 0 && setCurrentChapter(currentChapter - 1)}
           disabled={currentChapter === 0}
-          className="px-5"
+          className="px-5 cursor-pointer"
         >
           <Icon name="chevron-left" size={18} /> 이전 장
         </Button>
@@ -463,7 +498,7 @@ export default function MissionStep({
           accent={accent}
           onClick={handleNextTab}
           disabled={!isActiveChapterCompleted}
-          className="px-6 text-lg"
+          className="px-6 text-lg cursor-pointer"
           title={isActiveChapterCompleted ? undefined : '이 장의 활동을 끝내면 넘어갈 수 있어요'}
         >
           {currentChapter < mission.chapters.length - 1 ? (
@@ -473,6 +508,18 @@ export default function MissionStep({
           )}
         </Button>
       </div>
+    </div>
+  );
+
+  return (
+    <div className="py-4 story-fade-in">
+      <LessonSpread
+        left={chapterTabs}
+        right={chapterBlocks}
+        reverse={false}
+        accent={accent}
+        label={`미션 장: ${activeChapter?.title}`}
+      />
     </div>
   );
 }

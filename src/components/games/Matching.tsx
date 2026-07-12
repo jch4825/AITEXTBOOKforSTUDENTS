@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
 import Button from '../Button';
 import ActivityIcon from '../ActivityIcon';
 import { activityColor } from '../../utils/activityPalette';
 import type { Difficulty } from '../../types';
+import ActivitySpread from '../lesson/ActivitySpread';
 
 export interface MatchingPair {
   left: string;
@@ -88,6 +89,7 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
   }
 
   const hasProgress = matched.some(Boolean) || picked.leftIdx !== null || picked.rightIdx !== null;
+  const allDone = matched.every(Boolean);
 
   function clickLeft(i: number) {
     if (matched[i] || isChecking) return;
@@ -108,139 +110,165 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
     }
   }
 
+  const questionNode = (
+    <p className="text-base text-[color:var(--ink-2)]">
+      왼쪽 열과 오른쪽 열에서 알맞은 짝을 하나씩 차례로 골라보세요.
+    </p>
+  );
+
+  const characterReaction = {
+    id: 'aimi' as const,
+    expression: allDone ? 'cheer' as const : (picked.leftIdx !== null || picked.rightIdx !== null ? 'wink' as const : 'curious' as const),
+    text: allDone
+      ? '대단해! 모든 짝을 찾았어!'
+      : (wrongPair ? '어라? 그 둘은 짝이 아닌가 봐. 다시 해보자!' : '서로 어울리는 짝을 찾아봐!')
+  };
+
   return (
-    <div className="my-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      {/* Left Column */}
-      <div className="space-y-3">
-        {pairs.map((p, i) => {
-          const isPicked = picked.leftIdx === i;
-          const isMatched = matched[i];
-          const isWrong = wrongPair?.leftIdx === i;
+    <ActivitySpread
+      kicker="짝을 맞춰봐요!"
+      title="알맞은 짝을 찾아 연결해 볼까요?"
+      accent="var(--accent)"
+      character={characterReaction}
+      questionNode={questionNode}
+    >
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Left Column */}
+          <div className="space-y-3">
+            {pairs.map((p, i) => {
+              const isPicked = picked.leftIdx === i;
+              const isMatched = matched[i];
+              const isWrong = wrongPair?.leftIdx === i;
 
-          const palette = activityColor(p.icon ?? p.left);
+              const palette = activityColor(p.icon ?? p.left);
 
-          let borderStyle = `2.5px solid ${palette.accent}`;
-          let extraClass = '';
+              let borderStyle = `1px solid color-mix(in srgb, ${palette.accent} 30%, var(--line))`;
+              let bgColor = 'var(--paper-0)';
+              let extraClass = '';
 
-          if (isPicked) {
-            borderStyle = '4px solid var(--accent)';
-          } else if (isMatched) {
-            borderStyle = '4px solid var(--ok)';
-          } else if (isWrong) {
-            borderStyle = '4px solid var(--warn)';
-            extraClass = 'answer-shake';
-          }
+              if (isPicked) {
+                borderStyle = '2px solid var(--accent)';
+              } else if (isMatched) {
+                borderStyle = '2px solid var(--ok)';
+                bgColor = 'color-mix(in srgb, var(--ok) 8%, var(--paper-0))';
+              } else if (isWrong) {
+                borderStyle = '2px solid var(--warn)';
+                bgColor = 'color-mix(in srgb, var(--warn) 8%, var(--paper-0))';
+                extraClass = 'answer-shake';
+              }
 
-          return (
-            <button
-              key={p.left}
-              onClick={() => clickLeft(i)}
-              disabled={isMatched || isChecking}
-              className={`card3d relative w-full p-4 min-h-[112px] rounded-[var(--r-md)] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 ${extraClass}`}
-              style={{
-                background: 'var(--paper-0)',
-                color: 'var(--brand-ink)',
-                border: borderStyle,
-                ['--edge' as string]: palette.accent,
-              }}
-            >
-              {difficulty === 'easy' && p.icon && (
-                <ActivityIcon icon={p.icon} size={64} className="mb-1" />
-              )}
-              <span>{p.left}</span>
-
-              {isMatched && (
-                <span
-                  className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
-                  style={{ background: 'var(--ok)' }}
+              return (
+                <button
+                  key={p.left}
+                  onClick={() => clickLeft(i)}
+                  disabled={isMatched || isChecking}
+                  className={`relative w-full p-4 min-h-[112px] rounded-[var(--r-md)] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 transition-all hover:bg-black/[0.01] cursor-pointer ${extraClass}`}
+                  style={{
+                    background: bgColor,
+                    color: 'var(--brand-ink)',
+                    border: borderStyle,
+                  }}
                 >
-                  <Icon name="check" size={16} strokeWidth={3} />
-                </span>
-              )}
-              {isWrong && (
-                <span
-                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
-                  style={{ background: 'var(--warn)' }}
+                  {difficulty === 'easy' && p.icon && (
+                    <ActivityIcon icon={p.icon} size={64} className="mb-1" />
+                  )}
+                  <span>{p.left}</span>
+
+                  {isMatched && (
+                    <span
+                      className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                      style={{ background: 'var(--ok)' }}
+                    >
+                      <Icon name="check" size={16} strokeWidth={3} />
+                    </span>
+                  )}
+                  {isWrong && (
+                    <span
+                      className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                      style={{ background: 'var(--warn)' }}
+                    >
+                      <Icon name="close" size={14} strokeWidth={3} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right Column */}
+          <div className="space-y-3">
+            {rightOrder.map((origIdx, shuffleIdx) => {
+              const p = pairs[origIdx];
+              if (!p) return null; // Safe guard
+
+              const isPicked = picked.rightIdx === shuffleIdx;
+              const isMatched = matched[origIdx];
+              const isWrong = wrongPair?.rightIdx === shuffleIdx;
+
+              const palette = activityColor(p.icon ?? p.right);
+
+              let borderStyle = `1px solid color-mix(in srgb, ${palette.accent} 30%, var(--line))`;
+              let bgColor = 'var(--paper-0)';
+              let extraClass = '';
+
+              if (isPicked) {
+                borderStyle = '2px solid var(--accent)';
+              } else if (isMatched) {
+                borderStyle = '2px solid var(--ok)';
+                bgColor = 'color-mix(in srgb, var(--ok) 8%, var(--paper-0))';
+              } else if (isWrong) {
+                borderStyle = '2px solid var(--warn)';
+                bgColor = 'color-mix(in srgb, var(--warn) 8%, var(--paper-0))';
+                extraClass = 'answer-shake';
+              }
+
+              return (
+                <button
+                  key={p.right}
+                  onClick={() => clickRight(shuffleIdx)}
+                  disabled={isMatched || isChecking}
+                  className={`relative w-full p-4 min-h-[112px] rounded-[var(--r-md)] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 transition-all hover:bg-black/[0.01] cursor-pointer ${extraClass}`}
+                  style={{
+                    background: bgColor,
+                    color: 'var(--brand-ink)',
+                    border: borderStyle,
+                  }}
                 >
-                  <Icon name="close" size={14} strokeWidth={3} />
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+                  {difficulty === 'easy' && p.icon && (
+                    <ActivityIcon icon={p.icon} size={64} className="mb-1" />
+                  )}
+                  <span>{p.right}</span>
 
-      {/* Right Column */}
-      <div className="space-y-3">
-        {rightOrder.map((origIdx, shuffleIdx) => {
-          const p = pairs[origIdx];
-          if (!p) return null; // Safe guard
-
-          const isPicked = picked.rightIdx === shuffleIdx;
-          const isMatched = matched[origIdx];
-          const isWrong = wrongPair?.rightIdx === shuffleIdx;
-
-          const palette = activityColor(p.icon ?? p.right);
-
-          let borderStyle = `2.5px solid ${palette.accent}`;
-          let extraClass = '';
-
-          if (isPicked) {
-            borderStyle = '4px solid var(--accent)';
-          } else if (isMatched) {
-            borderStyle = '4px solid var(--ok)';
-          } else if (isWrong) {
-            borderStyle = '4px solid var(--warn)';
-            extraClass = 'answer-shake';
-          }
-
-          return (
-            <button
-              key={p.right}
-              onClick={() => clickRight(shuffleIdx)}
-              disabled={isMatched || isChecking}
-              className={`card3d relative w-full p-4 min-h-[112px] rounded-[var(--r-md)] text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-75 ${extraClass}`}
-              style={{
-                background: 'var(--paper-0)',
-                color: 'var(--brand-ink)',
-                border: borderStyle,
-                ['--edge' as string]: palette.accent,
-              }}
-            >
-              {difficulty === 'easy' && p.icon && (
-                <ActivityIcon icon={p.icon} size={64} className="mb-1" />
-              )}
-              <span>{p.right}</span>
-
-              {isMatched && (
-                <span
-                  className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
-                  style={{ background: 'var(--ok)' }}
-                >
-                  <Icon name="check" size={16} strokeWidth={3} />
-                </span>
-              )}
-              {isWrong && (
-                <span
-                  className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
-                  style={{ background: 'var(--warn)' }}
-                >
-                  <Icon name="close" size={14} strokeWidth={3} />
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-      </div>
-      {hasProgress && (
-        <div className="mt-6 text-center">
-          <Button variant="ghost" onClick={restart}>
-            <Icon name="refresh" size={18} /> 처음부터 다시
-          </Button>
+                  {isMatched && (
+                    <span
+                      className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                      style={{ background: 'var(--ok)' }}
+                    >
+                      <Icon name="check" size={16} strokeWidth={3} />
+                    </span>
+                  )}
+                  {isWrong && (
+                    <span
+                      className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                      style={{ background: 'var(--warn)' }}
+                    >
+                      <Icon name="close" size={14} strokeWidth={3} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      )}
-    </div>
+        {hasProgress && (
+          <div className="mt-4 text-center">
+            <Button variant="ghost" onClick={restart} className="cursor-pointer">
+              <Icon name="refresh" size={18} /> 처음부터 다시
+            </Button>
+          </div>
+        )}
+      </div>
+    </ActivitySpread>
   );
 }

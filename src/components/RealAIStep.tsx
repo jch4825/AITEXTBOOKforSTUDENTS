@@ -8,6 +8,7 @@ import Icon from './Icon';
 import PhoneFrame from './PhoneFrame';
 import type { PhoneMessage } from './PhoneFrame';
 import type { Expression } from './CharacterAvatar';
+import ActivitySpread from './lesson/ActivitySpread';
 
 interface Props {
   prompt: string;              // shown to the student ("AI한테 __ 라고 물어봐요")
@@ -111,6 +112,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
       sender: 'aimi',
       text: cleanText,
       expression: expression,
+      aiGlow: true,
     });
   } else if (state.kind === 'fallback') {
     const fb = parseExpression(fallbackResponse);
@@ -134,7 +136,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               placeholder="AI에게 물어볼 말"
-              className="flex-1 min-w-0 h-11 px-3 rounded-[var(--r-md)] border-2 text-base"
+              className="flex-1 min-w-0 h-13 px-3 rounded-[var(--r-md)] border-2 text-base"
               style={{ background: 'var(--paper-0)', borderColor: 'var(--line)', color: 'var(--brand-ink)' }}
               aria-label="AI에게 보낼 말"
             />
@@ -147,7 +149,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
             <button
               onClick={send}
               disabled={!draft.trim()}
-              className="shrink-0 h-11 w-11 rounded-full flex items-center justify-center transition-colors text-white cursor-pointer"
+              className="shrink-0 h-13 w-13 rounded-full flex items-center justify-center transition-colors text-white cursor-pointer"
               style={{ backgroundColor: accent, opacity: draft.trim() ? 1 : 0.5 }}
               aria-label="전송"
             >
@@ -174,32 +176,44 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
     }
   }
 
+  const characterReaction = {
+    id: 'aimi' as const,
+    expression: state.kind === 'loading' ? 'thinking' as const : (state.kind === 'success' ? 'happy' as const : 'curious' as const),
+    text: state.kind === 'idle'
+      ? '나에게 하고 싶은 말을 입력하고 전송 버튼을 눌러줘!'
+      : (state.kind === 'loading' ? '어떤 말인지 열심히 생각하고 있어. 잠시만 기다려줘!' : '너와 대화하니까 정말 기뻐!')
+  };
+
   return (
-    <div className="max-w-2xl mx-auto flex flex-col items-center">
-      <h2 className="t-h2 mb-2 w-full text-center" style={{ color: accent }}>아이미랑 이야기해봐요</h2>
-      <p className="text-lg mb-4 text-center">{prompt}</p>
+    <ActivitySpread
+      kicker="아이미랑 이야기해봐요"
+      title={prompt}
+      accent={accent}
+      character={characterReaction}
+    >
+      <div className="flex flex-col items-center w-full">
+        <PhoneFrame
+          messages={messages}
+          typing={state.kind === 'loading'}
+          accent={accent}
+          accentSoft={accentSoft}
+          accentText={accentText}
+          footer={footer}
+          onSpeak={speak}
+        />
 
-      <PhoneFrame
-        messages={messages}
-        typing={state.kind === 'loading'}
-        accent={accent}
-        accentSoft={accentSoft}
-        accentText={accentText}
-        footer={footer}
-        onSpeak={speak}
-      />
-
-      {state.kind === 'fallback' && (
-        <div className="w-full max-w-[360px] mt-4 space-y-2 text-center">
-          <ErrorMessage
-            studentMessage={state.studentMessage}
-            technicalDetail={state.technicalDetail}
-          />
-          <p className="text-xs text-[color:var(--muted)]">
-            지금은 미리 준비된 답변을 보여드릴게요.
-          </p>
-        </div>
-      )}
-    </div>
+        {state.kind === 'fallback' && (
+          <div className="w-full max-w-[360px] mt-4 space-y-2 text-center">
+            <ErrorMessage
+              studentMessage={state.studentMessage}
+              technicalDetail={state.technicalDetail}
+            />
+            <p className="text-xs text-[color:var(--muted)]">
+              지금은 미리 준비된 답변을 보여드릴게요.
+            </p>
+          </div>
+        )}
+      </div>
+    </ActivitySpread>
   );
 }

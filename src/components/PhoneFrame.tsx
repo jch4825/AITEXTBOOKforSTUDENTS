@@ -8,6 +8,7 @@ export interface PhoneMessage {
   sender: 'user' | 'aimi';
   text: string;
   expression?: Expression;
+  aiGlow?: boolean;
 }
 
 interface PhoneFrameProps {
@@ -33,7 +34,8 @@ export default function PhoneFrame({
 
   // Auto scroll to bottom when messages or typing status changes
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    chatEndRef.current?.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth' });
   }, [messages, typing]);
 
   return (
@@ -43,13 +45,9 @@ export default function PhoneFrame({
       <div
         className="relative mx-auto flex flex-col transition-all overflow-hidden
           w-full rounded-[var(--r-md)] border border-[color:var(--line)] bg-[color:var(--paper-1)]
-          md:w-[420px] md:h-[680px] md:border-[10px] md:border-[color:var(--brand-ink)] md:rounded-[40px] md:bg-[color:var(--brand-ink)]"
-        style={{ boxShadow: 'var(--e-2)' }}
+          md:w-[380px] md:h-[600px] md:border md:border-[color:var(--line)] md:rounded-[24px]"
+        style={{ boxShadow: '0 4px 20px rgba(43,58,85,0.08)' }}
       >
-        {/* Notch / Speaker (PC Only) — 베젤과 같은 브랜드 잉크 */}
-        <div className="hidden md:flex absolute top-0 left-1/2 -translate-x-1/2 w-[110px] h-[20px] rounded-b-xl z-20 items-center justify-center" style={{ background: 'var(--brand-ink)' }} aria-hidden>
-          <div className="w-12 h-1 rounded-full mb-1" style={{ background: 'rgba(255,255,255,0.25)' }}></div>
-        </div>
 
         {/* Status Bar (PC Only) */}
         <div className="hidden md:flex h-7 px-5 pt-1.5 justify-between items-center text-xs font-semibold select-none z-10 shrink-0" style={{ background: 'var(--paper-2)', color: 'var(--ink-2)' }}>
@@ -82,7 +80,7 @@ export default function PhoneFrame({
               >
                 {/* Avatar for Aimi */}
                 {!isUser && (
-                  <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center shrink-0 border border-[color:var(--line)]" style={{ background: 'var(--paper-2)' }}>
+                  <div className={`w-8 h-8 rounded-full overflow-hidden flex items-center justify-center shrink-0 border border-[color:var(--line)] ${msg.aiGlow ? 'ai-glow-avatar' : ''}`} style={{ background: 'var(--paper-2)' }}>
                     <CharacterAvatar character="aimi" expression={msg.expression || 'neutral'} size={28} idle={false} />
                   </div>
                 )}
@@ -93,7 +91,7 @@ export default function PhoneFrame({
                     <span className="text-[13px] md:text-sm font-semibold ml-1" style={{ color: 'var(--muted)' }}>아이미</span>
                   )}
                   <div 
-                    className={`rounded-[20px] px-4 py-2.5 text-base md:text-lg leading-relaxed shadow-sm relative break-words`}
+                    className={`rounded-[20px] px-4 py-2.5 text-base md:text-lg leading-relaxed shadow-sm relative break-words ${msg.aiGlow ? 'ai-glow' : ''}`}
                     style={{
                       backgroundColor: isUser ? accent : 'var(--paper-0)',
                       color: isUser ? '#ffffff' : 'var(--ink-1)',
@@ -132,9 +130,9 @@ export default function PhoneFrame({
                 <div
                   className="rounded-[18px] rounded-tl-[4px] px-4 py-3 bg-[color:var(--paper-0)] border border-[color:var(--line)] shadow-sm flex items-center gap-1 h-[34px]"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--muted)', animationDelay: '0ms' }}></span>
-                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--muted)', animationDelay: '150ms' }}></span>
-                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--muted)', animationDelay: '300ms' }}></span>
+                  <span className="w-1.5 h-1.5 rounded-full motion-safe:animate-bounce" style={{ background: 'var(--muted)', animationDelay: '0ms' }}></span>
+                  <span className="w-1.5 h-1.5 rounded-full motion-safe:animate-bounce" style={{ background: 'var(--muted)', animationDelay: '150ms' }}></span>
+                  <span className="w-1.5 h-1.5 rounded-full motion-safe:animate-bounce" style={{ background: 'var(--muted)', animationDelay: '300ms' }}></span>
                 </div>
               </div>
             </div>

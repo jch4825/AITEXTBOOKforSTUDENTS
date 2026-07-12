@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import Icon from '../Icon';
 import Button from '../Button';
@@ -6,6 +6,7 @@ import ActivityIcon from '../ActivityIcon';
 import Burst from './Burst';
 import { activityColor } from '../../utils/activityPalette';
 import type { Difficulty } from '../../types';
+import ActivitySpread from '../lesson/ActivitySpread';
 
 export interface SequenceItem {
   label: string;
@@ -64,118 +65,140 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
     }
   }
 
-  return (
-    <div className="my-6">
-      <p className="text-lg font-semibold mb-4">{instruction}</p>
-
+  const questionNode = (
+    <div className="space-y-4">
       {/* Slots */}
-      <ol className="space-y-2 mb-6">
+      <ol className="space-y-2">
         {items.map((item, i) => {
           const isFilled = i < placedCount;
           const palette = isFilled ? activityColor(item.icon ?? item.label) : null;
           return (
             <li
               key={item.label}
-              className="p-3 rounded-[var(--r-md)] border-2 text-lg font-bold flex items-center justify-between"
+              className="p-3 rounded-[var(--r-md)] border text-base font-bold flex items-center justify-between"
               style={
                 isFilled
-                  ? { borderColor: 'var(--ok)', background: palette?.tint, color: 'var(--brand-ink)' }
+                  ? { borderColor: 'var(--ok)', background: `color-mix(in srgb, var(--ok) 8%, var(--paper-0))`, color: 'var(--brand-ink)' }
                   : { borderColor: 'var(--border)', borderStyle: 'dashed', color: 'var(--muted)' }
               }
             >
               {isFilled ? (
                 <span className="inline-flex items-center gap-2">
-                  <span className="bg-white/20 rounded-full w-6 h-6 flex items-center justify-center text-xs">{i + 1}</span>
+                  <span className="bg-white/40 rounded-full w-6 h-6 flex items-center justify-center text-xs">{i + 1}</span>
                   {difficulty === 'easy' && item.icon && (
                     <ActivityIcon icon={item.icon} size={28} />
                   )}
                   {item.label}
                 </span>
               ) : (
-                <span>{i + 1}. ─</span>
+                <span className="opacity-70">{i + 1}. ─</span>
               )}
               {isFilled && <Icon name="check" size={18} strokeWidth={2.5} />}
             </li>
           );
         })}
       </ol>
-
-      {/* Shuffled choices */}
-      {!done && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {shuffleOrder.map((origIdx, shuffleIdx) => {
-            const item = items[origIdx];
-            if (!item) return null; // Safe guard
-            const used = origIdx < placedCount;
-            const isWrong = wrongIdx === shuffleIdx;
-            const palette = activityColor(item.icon ?? item.label);
-
-            let borderStyle = `2.5px solid ${palette.accent}`;
-            let extraClass = '';
-
-            if (isWrong) {
-              borderStyle = '4px solid var(--warn)';
-              extraClass = 'answer-shake';
-            } else if (used) {
-              borderStyle = '2px solid var(--ok)';
-            }
-
-            return (
-              <button
-                key={item.label}
-                onClick={() => clickCard(shuffleIdx)}
-                disabled={used}
-                className={`card3d relative rounded-[var(--r-md)] p-5 text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-40 min-h-[150px] ${extraClass}`}
-                style={{
-                  background: 'var(--paper-0)',
-                  color: 'var(--brand-ink)',
-                  border: borderStyle,
-                  ['--edge' as string]: palette.accent,
-                }}
-              >
-                {difficulty === 'easy' && item.icon && (
-                  <ActivityIcon icon={item.icon} size={92} className="mb-1" />
-                )}
-                <span>{item.label}</span>
-
-                {/* Badges */}
-                {used && (
-                  <span
-                    className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
-                    style={{ background: 'var(--ok)' }}
-                  >
-                    <Icon name="check" size={16} strokeWidth={3} />
-                  </span>
-                )}
-                {isWrong && (
-                  <span
-                    className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
-                    style={{ background: 'var(--warn)' }}
-                  >
-                    <Icon name="close" size={14} strokeWidth={3} />
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      {!done && placedCount > 0 && (
-        <div className="mt-6 text-center">
-          <Button variant="ghost" onClick={restart}>
-            <Icon name="refresh" size={18} /> 처음부터 다시
-          </Button>
-        </div>
-      )}
-
-      {done && (
-        <p className="text-xl font-bold flex items-center justify-center gap-2" style={{ color: 'var(--ok)' }}>
-          <Burst />
-          <Icon name="sparkles" size={24} filled /> 순서를 다 맞췄어요!
-        </p>
-      )}
     </div>
+  );
+
+  const characterReaction = {
+    id: 'aimi' as const,
+    expression: done ? 'cheer' as const : (placedCount > 0 ? 'wink' as const : 'curious' as const),
+    text: done
+      ? '대단해! 순서를 모두 맞췄어!'
+      : (wrongIdx !== null ? '순서가 조금 다른 것 같아. 다시 생각해볼까?' : '알맞은 순서대로 카드를 눌러봐!')
+  };
+
+  return (
+    <ActivitySpread
+      kicker="순서대로 눌러봐요!"
+      title={instruction}
+      accent="var(--accent)"
+      character={characterReaction}
+      questionNode={questionNode}
+    >
+      <div className="space-y-6">
+        {/* Shuffled choices */}
+        {!done && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {shuffleOrder.map((origIdx, shuffleIdx) => {
+              const item = items[origIdx];
+              if (!item) return null; // Safe guard
+              const used = origIdx < placedCount;
+              const isWrong = wrongIdx === shuffleIdx;
+              const palette = activityColor(item.icon ?? item.label);
+
+              let borderStyle = `1px solid color-mix(in srgb, ${palette.accent} 30%, var(--line))`;
+              let bgColor = 'var(--paper-0)';
+              let extraClass = '';
+
+              if (isWrong) {
+                borderStyle = '2px solid var(--warn)';
+                bgColor = 'color-mix(in srgb, var(--warn) 8%, var(--paper-0))';
+                extraClass = 'answer-shake';
+              } else if (used) {
+                borderStyle = '1px solid var(--ok)';
+                bgColor = 'color-mix(in srgb, var(--ok) 8%, var(--paper-0))';
+              }
+
+              return (
+                <button
+                  key={item.label}
+                  onClick={() => clickCard(shuffleIdx)}
+                  disabled={used}
+                  className={`relative rounded-[var(--r-md)] p-5 text-lg font-bold flex flex-col items-center justify-center gap-2 disabled:opacity-40 min-h-[150px] transition-all hover:bg-black/[0.01] cursor-pointer ${extraClass}`}
+                  style={{
+                    background: bgColor,
+                    color: 'var(--brand-ink)',
+                    border: borderStyle,
+                  }}
+                >
+                  {difficulty === 'easy' && item.icon && (
+                    <ActivityIcon icon={item.icon} size={92} className="mb-1" />
+                  )}
+                  <span>{item.label}</span>
+
+                  {/* Badges */}
+                  {used && (
+                    <span
+                      className="answer-pop absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                      style={{ background: 'var(--ok)' }}
+                    >
+                      <Icon name="check" size={16} strokeWidth={3} />
+                    </span>
+                  )}
+                  {isWrong && (
+                    <span
+                      className="absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-white shadow"
+                      style={{ background: 'var(--warn)' }}
+                    >
+                      <Icon name="close" size={14} strokeWidth={3} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {!done && placedCount > 0 && (
+          <div className="text-center">
+            <Button variant="ghost" onClick={restart} className="cursor-pointer">
+              <Icon name="refresh" size={18} /> 처음부터 다시
+            </Button>
+          </div>
+        )}
+
+        {done && (
+          <div className="text-center py-4">
+            <p className="text-xl font-bold flex items-center justify-center gap-2 text-[color:var(--ok)]">
+              <Burst />
+              <Icon name="sparkles" size={24} filled /> 순서를 다 맞췄어요!
+            </p>
+          </div>
+        )}
+      </div>
+    </ActivitySpread>
   );
 }
 
