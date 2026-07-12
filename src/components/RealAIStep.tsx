@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useSpeak } from '../hooks/useSpeak';
 import { askGemini, GeminiError } from '../utils/gemini';
 import ErrorMessage from './ErrorMessage';
 import MicButton from './MicButton';
-import SpeechBubble from './SpeechBubble';
 import Button from './Button';
 import Icon from './Icon';
+import PhoneFrame from './PhoneFrame';
+import type { PhoneMessage } from './PhoneFrame';
 
 interface Props {
   prompt: string;              // shown to the student ("AI한테 __ 라고 물어봐요")
@@ -20,7 +21,7 @@ interface Props {
 
 type State =
   | { kind: 'idle' }
-  | { kind: 'loading' }
+  | { kind: 'loading'; sent: string }
   | { kind: 'success'; text: string; modelUsed: string; sent: string }
   | { kind: 'fallback'; studentMessage: string; technicalDetail: string; sent: string };
 
@@ -32,7 +33,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
   async function send() {
     const toSend = (allowFreeInput ? draft : userInput).trim();
     if (!toSend) return;
-    setState({ kind: 'loading' });
+    setState({ kind: 'loading', sent: toSend });
     try {
       const r = await askGemini(toSend);
       speak(r.text);
@@ -48,98 +49,104 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
     }
   }
 
-  return (
-    <div className="max-w-2xl mx-auto">
-      <h2 className="t-h2 mb-4" style={{ color: accent }}>아이미랑 이야기해봐요</h2>
-      <p className="text-lg mb-4">{prompt}</p>
+  const messages: PhoneMessage[] = [];
+  if (state.kind !== 'idle') {
+    messages.push({
+      id: 'user-msg',
+      sender: 'user',
+      text: state.sent,
+    });
+  }
+  if (state.kind === 'success') {
+    messages.push({
+      id: 'aimi-success',
+      sender: 'aimi',
+      text: state.text,
+      expression: 'cheer',
+    });
+  } else if (state.kind === 'fallback') {
+    messages.push({
+      id: 'aimi-fallback',
+      sender: 'aimi',
+      text: fallbackResponse,
+      expression: 'happy',
+    });
+  }
 
-      {state.kind === 'idle' && (
-        allowFreeInput ? (
-          <div className="space-y-3">
-            <div className="flex items-start gap-2">
-              <textarea
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                rows={3}
-                aria-label="AI에게 보낼 말"
-                className="flex-1 p-3 rounded-[var(--r-sm)] border-2 text-lg resize-none"
-                style={{ borderColor: accent, background: 'var(--paper-0)' }}
-              />
-              <MicButton
-                accent={accent}
-                onResult={(text) => setDraft(text)}
-              />
-            </div>
-            <p className="text-sm text-[color:var(--muted)]">
-              🎤 를 누르고 말하거나, 위 글을 직접 고쳐도 돼요.
-            </p>
-            <Button
-              variant="choice"
+  // Footer depending on input mode
+  let footer: React.ReactNode = null;
+  if (state.kind === 'idle') {
+    if (allowFreeInput) {
+      footer = (
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-1.5 w-full">
+            <input
+              type="text"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder="AI에게 무엇이든 물어보세요..."
+              className="flex-1 p-2 rounded-[18px] border border-neutral-300 text-base focus:outline-none"
+              style={{ background: 'var(--paper-0)' }}
+              aria-label="AI에게 보낼 말"
+            />
+            <MicButton
               accent={accent}
+              onResult={(text) => setDraft(text)}
+            />
+            <button
               onClick={send}
               disabled={!draft.trim()}
-              className="px-6 text-xl font-bold"
-              style={{ color: accent, background: accentSoft }}
-            ><Icon name="chat" size={22} /> 보내기</Button>
+              className="w-8 h-8 rounded-full flex items-center justify-center transition-colors text-white shrink-0 cursor-pointer"
+              style={{ backgroundColor: accent, opacity: draft.trim() ? 1 : 0.5 }}
+              aria-label="전송"
+            >
+              <Icon name="chat" size={16} />
+            </button>
           </div>
-        ) : (
-          <Button
-            variant="choice"
-            accent={accent}
-            onClick={send}
-            className="px-6 text-xl font-bold"
-            style={{ color: accent, background: accentSoft }}
-          ><Icon name="chat" size={22} /> "{userInput}" 보내기</Button>
-        )
-      )}
-
-      {state.kind === 'loading' && (
-        <SpeechBubble
-          speaker="aimi"
-          expression="thinking"
-          text="음… 생각하고 있어요 ⏳"
+          <p className="text-xs text-neutral-500 text-center">
+            🎤 를 누르고 말하거나, 위 글을 직접 고쳐도 돼요.
+          </p>
+        </div>
+      );
+    } else {
+      footer = (
+        <Button
+          variant="choice"
           accent={accent}
-          accentText={accentText}
-          accentSoft={accentSoft}
-        />
-      )}
+          onClick={send}
+          className="w-full text-base font-bold justify-center"
+          style={{ color: accent, background: accentSoft }}
+        >
+          <Icon name="chat" size={18} /> "{userInput}" 보내기
+        </Button>
+      );
+    }
+  }
 
-      {(state.kind === 'success' || state.kind === 'fallback') && (
-        <div className="space-y-3">
-          <div className="p-3 rounded-[var(--r-sm)] bg-[color:var(--paper-2)] text-right">내가: {state.sent}</div>
+  return (
+    <div className="max-w-2xl mx-auto flex flex-col items-center">
+      <h2 className="t-h2 mb-2 w-full text-center" style={{ color: accent }}>아이미랑 이야기해봐요</h2>
+      <p className="text-lg mb-4 text-center">{prompt}</p>
 
-          {state.kind === 'success' ? (
-            /* 진짜 AI가 답한 순간 — 시그니처 글로우 1회 (준비된 답변에는 없음) */
-            <SpeechBubble
-              speaker="aimi"
-              expression="cheer"
-              text={state.text}
-              accent={accent}
-              accentText={accentText}
-              accentSoft={accentSoft}
-              showSpeakButton
-              aiGlow
-            />
-          ) : (
-            <>
-              <ErrorMessage
-                studentMessage={state.studentMessage}
-                technicalDetail={state.technicalDetail}
-              />
-              <p className="text-sm text-[color:var(--muted)] px-1">
-                지금은 미리 준비된 답변을 보여드릴게요.
-              </p>
-              <SpeechBubble
-                speaker="aimi"
-                expression="happy"
-                text={fallbackResponse}
-                accent={accent}
-                accentText={accentText}
-                accentSoft={accentSoft}
-                showSpeakButton
-              />
-            </>
-          )}
+      <PhoneFrame
+        messages={messages}
+        typing={state.kind === 'loading'}
+        accent={accent}
+        accentSoft={accentSoft}
+        accentText={accentText}
+        footer={footer}
+        onSpeak={speak}
+      />
+
+      {state.kind === 'fallback' && (
+        <div className="w-full max-w-[360px] mt-4 space-y-2 text-center">
+          <ErrorMessage
+            studentMessage={state.studentMessage}
+            technicalDetail={state.technicalDetail}
+          />
+          <p className="text-xs text-[color:var(--muted)]">
+            지금은 미리 준비된 답변을 보여드릴게요.
+          </p>
         </div>
       )}
     </div>

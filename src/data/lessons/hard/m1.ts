@@ -4,9 +4,9 @@ import type { HardLessonContent, LessonId } from '../../../types';
 export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
   'm1-l1': {
     goal: {
-      easy: 'AI가 어디에 있는지 찾아봐요.',
-      normal: '우리 생활 속에서 AI가 쓰이는 곳을 세 군데 찾아 말해요.',
-      hard: '생활 속에서 인공지능이 쓰이는 예를 세 가지 이상 찾고, 인공지능이 무엇인지 한 문장으로 설명할 수 있다.',
+      easy: 'AI를 찾아봐요.',
+      normal: '우리 주변에서 AI를 찾아봐요.',
+      hard: '오늘은 AI가 어디에 있는지 찾아보고, AI가 뭔지 내 말로 말해 봐요.',
     },
     concept: [
       '인공지능(AI)은 사람이 만든 컴퓨터 프로그램입니다. 아주 많은 자료를 배워서, 사람의 말을 알아듣고 답을 만듭니다.',
@@ -38,9 +38,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l2': {
     goal: {
-      easy: '기계랑 AI가 다른 걸 알아봐요.',
-      normal: '정해진 일만 하는 기계와 배워서 답하는 AI를 구별해 말해요.',
-      hard: '자동화 기계와 인공지능의 차이를 설명하고, 주변 물건을 두 가지로 분류할 수 있다.',
+      easy: 'AI가 다른 점을 알아봐요.',
+      normal: '기계와 AI가 어떻게 다른지 알아봐요.',
+      hard: '오늘은 정해진 일만 하는 기계와 배워서 답하는 AI가 어떻게 다른지 알아보고, 두 가지로 나눠 봐요.',
     },
     concept: [
       '세상에는 정해진 일만 반복하는 기계가 많습니다. 이것을 자동화라고 부릅니다. 자동화 기계는 미리 정해둔 순서대로만 움직입니다.',
@@ -72,9 +72,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l3': {
     goal: {
-      easy: 'AI가 답을 어떻게 만드는지 알아봐요.',
-      normal: 'AI가 다음 말을 예측해서 답을 만드는 과정을 말해요.',
-      hard: '생성형 AI가 학습한 자료를 바탕으로 다음 말을 예측해 답을 만드는 원리를 설명할 수 있다.',
+      easy: 'AI가 답을 만드는 걸 구경해요.',
+      normal: 'AI가 어떻게 답을 만드는지 알아봐요.',
+      hard: '오늘은 생성형 AI가 다음 말을 이어 붙여 답을 만드는 모습을 알아보고, 틀린 답도 있는지 살펴봐요.',
     },
     concept: [
       '생성형 AI는 글이나 그림처럼 새로운 것을 스스로 만들어내는 AI입니다. 질문을 하면 완전히 새로운 문장을 만들어 답합니다.',
@@ -106,9 +106,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l4': {
     goal: {
-      easy: 'AI가 그림을 어떻게 알아보는지 봐요.',
-      normal: 'AI가 사진 속 물건을 알아보는 방법을 말해요.',
-      hard: '이미지 인식 AI가 패턴을 이용해 사진을 알아보는 원리를 설명하고, 오인식 가능성을 말할 수 있다.',
+      easy: 'AI가 사진을 보는 걸 알아봐요.',
+      normal: 'AI가 사진 속 물건을 알아보는 모습을 알아봐요.',
+      hard: '오늘은 AI가 어떻게 사진을 알아보는지 배우고, 잘못 알아볼 때도 있는지 찾아봐요.',
     },
     concept: [
       'AI는 눈이 없지만, 사진을 보고 무엇인지 알아낼 수 있습니다. 이것을 이미지 인식이라고 부릅니다.',
@@ -140,9 +140,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l5': {
     goal: {
-      easy: 'AI가 말을 어떻게 알아듣는지 봐요.',
-      normal: 'AI가 목소리를 글자로 바꿔서 알아듣는 과정을 말해요.',
-      hard: '음성 인식 AI가 말소리를 명령어로 바꾸는 과정을 설명하고, 인식이 어려운 상황을 말할 수 있다.',
+      easy: 'AI가 목소리를 듣는 걸 알아봐요.',
+      normal: 'AI가 우리 목소리를 어떻게 알아듣는지 알아봐요.',
+      hard: '오늘은 AI가 목소리를 어떻게 알아듣는지 배우고, 어떤 상황에서 잘 못 알아듣는지 말해 봐요.',
     },
     concept: [
       'AI는 귀가 없지만, 사람의 말소리를 알아들을 수 있습니다. 이것을 음성 인식이라고 부릅니다.',
@@ -174,9 +174,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l6': {
     goal: {
-      easy: 'AI가 배우는 방법을 알아봐요.',
-      normal: 'AI가 많은 자료로 훈련해서 배우는 과정을 말해요.',
-      hard: 'AI가 학습 데이터로 훈련하며 배우는 과정을 설명하고, 데이터 편향의 위험을 말할 수 있다.',
+      easy: 'AI가 배우는 모습을 봐요.',
+      normal: 'AI가 자료를 보고 배우는 과정을 알아봐요.',
+      hard: '오늘은 AI가 학습 데이터로 배우는 방법을 알아보고, 자료가 치우치면 답도 치우치는지 확인해 봐요.',
     },
     concept: [
       'AI는 사람처럼 학교에 가지 않습니다. 대신 아주 많은 자료 묶음을 봅니다. 이 자료 묶음을 학습 데이터라고 부릅니다.',
@@ -208,9 +208,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l7': {
     goal: {
-      easy: 'AI가 잘하는 일을 알아봐요.',
-      normal: 'AI가 잘하는 일 세 가지를 찾아 말해요.',
-      hard: '요약, 번역 등 AI가 잘하는 일의 종류를 설명하고, 그 결과도 확인이 필요함을 말할 수 있다.',
+      easy: 'AI가 잘하는 걸 알아봐요.',
+      normal: 'AI가 잘하는 일들을 찾아봐요.',
+      hard: '오늘은 AI가 요약과 번역처럼 잘하는 일들을 알아보고, 답을 꼭 확인해야 하는 이유도 알아봐요.',
     },
     concept: [
       'AI는 특히 잘하는 일들이 있습니다. 많은 글을 빠르게 읽고 짧게 만드는 요약이 그 예입니다.',
@@ -242,9 +242,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l8': {
     goal: {
-      easy: 'AI가 못하는 일을 알아봐요.',
-      normal: 'AI가 못하는 일 세 가지를 찾아 말해요.',
-      hard: 'AI가 못하는 일의 종류를 설명하고, 모르는 것도 아는 척 답할 수 있음을 말할 수 있다.',
+      easy: 'AI가 못하는 걸 알아봐요.',
+      normal: 'AI가 못하는 일들을 찾아봐요.',
+      hard: '오늘은 AI가 못하는 일들을 알아보고, 모르는 것도 아는 척하며 거짓말을 할 수 있는지 살펴봐요.',
     },
     concept: [
       'AI가 잘하는 일이 있는 만큼, 못하는 일도 있습니다. AI는 감정을 느끼지 못합니다. 슬프거나 기쁜 척 말은 할 수 있지만, 실제로 마음으로 느끼는 것은 아닙니다.',
@@ -276,9 +276,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l9': {
     goal: {
-      easy: '여러 가지 AI를 알아봐요.',
-      normal: '챗봇과 이미지 생성 AI가 무엇을 하는지 말해요.',
-      hard: '챗봇, 이미지 생성 AI 등 여러 AI 도구의 쓰임을 구별해 설명할 수 있다.',
+      easy: '여러 AI를 알아봐요.',
+      normal: '챗봇과 이미지 생성 AI가 무엇인지 알아봐요.',
+      hard: '오늘은 챗봇과 이미지 생성 AI가 각각 무슨 일을 하는지 알아보고, 하려는 일에 맞게 골라 써 봐요.',
     },
     concept: [
       'AI에는 여러 종류가 있습니다. 각자 잘하는 일이 다릅니다.',
@@ -310,9 +310,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l10': {
     goal: {
-      easy: 'AI랑 인사하고 물어봐요.',
-      normal: 'AI에게 프롬프트로 질문하고 답을 확인해요.',
-      hard: '프롬프트로 AI에게 질문한 뒤 답을 확인하고, 필요하면 다시 물어볼 수 있다.',
+      easy: 'AI에게 질문해 봐요.',
+      normal: 'AI에게 프롬프트로 물어보고 답을 확인해 봐요.',
+      hard: '오늘은 AI에게 프롬프트로 질문한 뒤 답을 확인하고, 이상하면 다시 물어봐요.',
     },
     concept: [
       '이제 직접 AI와 대화해 볼 차례입니다. AI에게 하는 질문이나 부탁을 프롬프트라고 부릅니다.',
@@ -344,9 +344,9 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
 
   'm1-l11': {
     goal: {
-      easy: '배운 것을 다시 말해봐요.',
-      normal: '이번 단원에서 배운 용어를 내 말로 설명해요.',
-      hard: '인공지능, 학습 데이터, 생성형 AI, 환각의 뜻을 내 말로 설명하고 단원 내용을 종합할 수 있다.',
+      easy: '배운 것을 복습해요.',
+      normal: '이번 단원에서 배운 낱말들을 다시 알아봐요.',
+      hard: '오늘은 그동안 배운 중요한 낱말들을 다시 설명해 보고, 배운 내용을 모아서 정리해 봐요.',
     },
     concept: [
       '지금까지 인공지능이 무엇인지, 어떻게 배우고 답을 만드는지 배웠습니다. 오늘은 배운 내용을 다시 한번 정리합니다.',

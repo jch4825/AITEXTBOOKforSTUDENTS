@@ -15,6 +15,10 @@ import Stage from '../components/Stage';
 import SpeechBubble from '../components/SpeechBubble';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
+import PhoneFrame from '../components/PhoneFrame';
+import type { PhoneMessage } from '../components/PhoneFrame';
+import MissionStep from '../components/mission/MissionStep';
+import type { MissionContent } from '../types';
 import ModuleIcon from '../components/ModuleIcon';
 import { getLessonStory, MODULE_EPISODES } from '../data/story';
 import { useSettings } from '../context/SettingsContext';
@@ -222,32 +226,15 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   function renderSimAI() {
     const data = currentStep.data as { prompt: string; userInput: string; aiResponse: string };
     return (
-      <div className="max-w-2xl mx-auto">
-        <h2 className="t-h2 mb-4" style={{ color: theme.accent }}>AI랑 이야기해봐요</h2>
-        <p className="text-lg mb-4">{data.prompt}</p>
-        {!simRevealed ? (
-          <Button
-            variant="choice"
-            accent={theme.accent}
-            onClick={() => { setSimRevealed(true); speakNow(data.aiResponse); }}
-            className="px-6 text-xl font-bold"
-            style={{ color: theme.accent, background: theme.accentSoft }}
-          ><Icon name="chat" size={22} /> "{data.userInput}" 보내기</Button>
-        ) : (
-          <div className="space-y-3">
-            <div className="p-3 rounded-[var(--r-sm)] bg-[color:var(--paper-2)] text-right">내가: {data.userInput}</div>
-            <SpeechBubble
-              speaker="aimi"
-              expression="cheer"
-              text={data.aiResponse}
-              accent={theme.accent}
-              accentText={theme.accentText}
-              accentSoft={theme.accentSoft}
-              showSpeakButton
-            />
-          </div>
-        )}
-      </div>
+      <SimAIStep
+        prompt={data.prompt}
+        userInput={data.userInput}
+        aiResponse={data.aiResponse}
+        accent={theme.accent}
+        accentSoft={theme.accentSoft}
+        accentText={theme.accentText}
+        onDone={handleNext}
+      />
     );
   }
 
@@ -264,9 +251,24 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           accent={theme.accent}
           accentText={theme.accentText}
           accentSoft={theme.accentSoft}
-          onDone={() => { /* footer's "다음 ▶" is how the student advances */ }}
+          onDone={handleNext}
         />
       </span>
+    );
+  }
+
+  function renderMission() {
+    const data = currentStep.data as unknown as MissionContent;
+    return (
+      <MissionStep
+        mission={data}
+        lessonId={lesson.id}
+        lessonTitle={lesson.title}
+        moduleTitle={mod.title}
+        accent={theme.accent}
+        accentSoft={theme.accentSoft}
+        accentText={theme.accentText}
+      />
     );
   }
 
@@ -328,6 +330,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   else if (currentStep.kind === 'sequence') body_el = renderSequence();
   else if (currentStep.kind === 'sim-ai') body_el = renderSimAI();
   else if (currentStep.kind === 'real-ai') body_el = renderRealAI();
+  else if (currentStep.kind === 'mission') body_el = renderMission();
   else body_el = <p>(아직 만들지 않은 단계 종류: {currentStep.kind})</p>;
 
   return (
@@ -399,5 +402,79 @@ function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps)
         </Button>
       </div>
     </MicroLessonFrame>
+  );
+}
+
+interface SimAIStepProps {
+  prompt: string;
+  userInput: string;
+  aiResponse: string;
+  accent: string;
+  accentSoft: string;
+  accentText: string;
+  onDone: () => void;
+}
+
+function SimAIStep({ prompt, userInput, aiResponse, accent, accentSoft, accentText, onDone }: SimAIStepProps) {
+  const { speakNow } = useSpeak();
+  const [stage, setStage] = useState<'idle' | 'typing' | 'revealed'>('idle');
+
+  function handleSend() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) {
+      setStage('revealed');
+      speakNow(aiResponse);
+    } else {
+      setStage('typing');
+      setTimeout(() => {
+        setStage('revealed');
+        speakNow(aiResponse);
+      }, 1000);
+    }
+  }
+
+  const messages: PhoneMessage[] = [];
+  if (stage === 'typing' || stage === 'revealed') {
+    messages.push({ id: 'user-1', sender: 'user', text: userInput });
+  }
+  if (stage === 'revealed') {
+    messages.push({ id: 'aimi-1', sender: 'aimi', text: aiResponse, expression: 'cheer' });
+  }
+
+  const footer = stage === 'idle' ? (
+    <Button
+      variant="choice"
+      accent={accent}
+      onClick={handleSend}
+      className="w-full text-base font-bold justify-center"
+      style={{ color: accent, background: accentSoft }}
+    >
+      <Icon name="chat" size={18} /> "{userInput}" 보내기
+    </Button>
+  ) : stage === 'revealed' ? (
+    <Button
+      size="lg"
+      accent={accent}
+      onClick={onDone}
+      className="w-full justify-center font-bold"
+    >
+      다음 <Icon name="chevron-right" size={20} />
+    </Button>
+  ) : null;
+
+  return (
+    <div className="max-w-2xl mx-auto flex flex-col items-center">
+      <h2 className="t-h2 mb-2 w-full text-center" style={{ color: accent }}>AI랑 이야기해봐요</h2>
+      <p className="text-lg mb-4 text-center">{prompt}</p>
+      <PhoneFrame
+        messages={messages}
+        typing={stage === 'typing'}
+        accent={accent}
+        accentSoft={accentSoft}
+        accentText={accentText}
+        onSpeak={speakNow}
+        footer={footer}
+      />
+    </div>
   );
 }

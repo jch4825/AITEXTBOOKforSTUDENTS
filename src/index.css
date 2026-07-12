@@ -109,6 +109,11 @@
     cursor: pointer;
   }
 
+  /* 포커스 시 기본 아웃라인 해제 (마우스 클릭 시 사각형 실선 생김 방지) */
+  *:focus {
+    outline: none;
+  }
+
   /* 키보드·스위치 보조기기 사용자를 위한 포커스 링 — 절대 제거하지 않는다 */
   :focus-visible {
     outline: 3px solid var(--accent);
