@@ -41,3 +41,7 @@ const frame = readFileSync(new URL('../src/components/MicroLessonFrame.tsx', imp
 if (!frame.includes('comic-frame-footer')) {
   throw new Error('Lesson navigation must use the comic cut navigator.');
 }
+
+if (!document.includes('favicon.svg')) {
+  throw new Error('The app must provide its own favicon.');
+}
