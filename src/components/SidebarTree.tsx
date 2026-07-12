@@ -85,9 +85,11 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                 {lessons.map((lid, i) => {
                   const done = isCompleted(lid);
                   const current = lid === currentLessonId;
+                  const lessonHasAI = getLesson(lid)?.steps.some(s => s.kind === 'real-ai' || s.kind === 'sim-ai');
                   const title = getLesson(lid)?.title;
                   const label =
                     `${i + 1}차시${title ? `. ${title}` : ''}` +
+                    (lessonHasAI ? ' (인공지능 활동 포함)' : '') +
                     (done ? ' (완료)' : '') +
                     (current ? ' — 지금 보는 중' : '');
                   return (
@@ -98,7 +100,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                         title={label}
                         aria-label={label}
                         aria-current={current ? 'page' : undefined}
-                        className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
+                        className="relative h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
                         style={current ? { outline: `2px solid ${theme.accent}`, outlineOffset: '-2px' } : undefined}
                       >
                         {done ? (
@@ -112,6 +114,14 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                               borderColor: theme.accent,
                             }}
                           />
+                        )}
+                        {lessonHasAI && (
+                          <span
+                            className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full flex items-center justify-center bg-[color:var(--paper-0)] shadow-[0_1px_2px_rgba(0,0,0,0.15)] border border-[color:var(--line)]"
+                            style={{ zIndex: 10 }}
+                          >
+                            <Icon name="sparkles" size={9} color={theme.accent} filled />
+                          </span>
                         )}
                       </button>
                     </li>
