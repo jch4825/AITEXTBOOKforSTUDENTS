@@ -37,11 +37,12 @@ export default function PhoneFrame({
   }, [messages, typing]);
 
   return (
-    <div className="w-full max-w-lg md:max-w-[440px] mx-auto my-4 story-fade-in">
-      {/* Smartphone Outer Container */}
+    <div className="w-full md:max-w-[440px] mx-auto my-4 story-fade-in">
+      {/* 모바일: 폰 껍데기 없이 채팅 패널만(기기 자체가 폰 — '폰 속의 폰' 방지).
+          데스크톱: 폰 목업(베젤·노치·상태바). */}
       <div
         className="relative mx-auto flex flex-col transition-all overflow-hidden
-          w-full h-[500px] border border-[color:var(--line)] bg-[color:var(--paper-1)] rounded-2xl
+          w-full rounded-[var(--r-md)] border border-[color:var(--line)] bg-[color:var(--paper-1)]
           md:w-[420px] md:h-[680px] md:border-[10px] md:border-[color:var(--brand-ink)] md:rounded-[40px] md:bg-[color:var(--brand-ink)]"
         style={{ boxShadow: 'var(--e-2)' }}
       >
@@ -70,8 +71,8 @@ export default function PhoneFrame({
           </div>
         </div>
 
-        {/* Chat Area */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3" style={{ background: 'var(--paper-1)' }}>
+        {/* Chat Area — 모바일: 유연한 높이(내부 스크롤) / 데스크톱: 폰 안을 채움 */}
+        <div className="min-h-[120px] max-h-[48vh] overflow-y-auto p-4 flex flex-col gap-3 md:min-h-0 md:max-h-none md:flex-1" style={{ background: 'var(--paper-1)' }}>
           {messages.map((msg) => {
             const isUser = msg.sender === 'user';
             return (

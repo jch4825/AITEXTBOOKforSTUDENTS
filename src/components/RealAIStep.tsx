@@ -128,31 +128,33 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
     if (allowFreeInput) {
       footer = (
         <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-1.5 w-full">
+          <div className="flex items-center gap-2 w-full">
             <input
               type="text"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="AI에게 무엇이든 물어보세요..."
-              className="flex-1 p-2 rounded-[18px] border border-neutral-300 text-base focus:outline-none"
-              style={{ background: 'var(--paper-0)' }}
+              placeholder="AI에게 물어볼 말"
+              className="flex-1 min-w-0 h-11 px-3 rounded-[var(--r-md)] border-2 text-base"
+              style={{ background: 'var(--paper-0)', borderColor: 'var(--line)', color: 'var(--brand-ink)' }}
               aria-label="AI에게 보낼 말"
             />
-            <MicButton
-              accent={accent}
-              onResult={(text) => setDraft(text)}
-            />
+            <div className="shrink-0">
+              <MicButton
+                accent={accent}
+                onResult={(text) => setDraft(text)}
+              />
+            </div>
             <button
               onClick={send}
               disabled={!draft.trim()}
-              className="w-8 h-8 rounded-full flex items-center justify-center transition-colors text-white shrink-0 cursor-pointer"
+              className="shrink-0 h-11 w-11 rounded-full flex items-center justify-center transition-colors text-white cursor-pointer"
               style={{ backgroundColor: accent, opacity: draft.trim() ? 1 : 0.5 }}
               aria-label="전송"
             >
-              <Icon name="chat" size={16} />
+              <Icon name="chat" size={20} />
             </button>
           </div>
-          <p className="text-xs text-neutral-500 text-center">
+          <p className="text-sm text-center" style={{ color: 'var(--muted)' }}>
             🎤 를 누르고 말하거나, 위 글을 직접 고쳐도 돼요.
           </p>
         </div>

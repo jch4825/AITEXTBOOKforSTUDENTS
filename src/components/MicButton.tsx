@@ -18,11 +18,11 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
       <button
         type="button"
         disabled
-        aria-label="음성 입력 미지원"
+        aria-label="음성 입력 미지원 — 글로 써 주세요"
         title="이 브라우저에서는 음성 입력이 안 돼요. 글로 써주세요."
-        className="px-3 py-3 rounded-[var(--r-sm)] border-2 cursor-not-allowed flex items-center"
-        style={{ borderColor: 'var(--line)', color: 'var(--ink-3)' }}
-      ><Icon name="mic" size={24} /></button>
+        className="shrink-0 h-11 w-11 rounded-full border-2 cursor-not-allowed flex items-center justify-center"
+        style={{ borderColor: 'var(--line)', color: 'var(--ink-3)', background: 'var(--paper-2)' }}
+      ><Icon name="mic" size={22} /></button>
     );
   }
 
@@ -56,21 +56,26 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="relative shrink-0">
       <button
         type="button"
         onClick={toggle}
         disabled={disabled}
         aria-label={listening ? '녹음 중지' : '말로 입력하기'}
         title={listening ? '듣는 중… 눌러서 멈추기' : '눌러서 말하기'}
-        className={`px-3 py-3 rounded-[var(--r-sm)] border-2 flex items-center transition ${listening ? 'animate-pulse' : ''}`}
+        className={`h-11 w-11 rounded-full border-2 flex items-center justify-center transition ${listening ? 'animate-pulse' : ''}`}
         style={{
           borderColor: accent,
           color: listening ? 'white' : accent,
           background: listening ? accent : 'var(--paper-0)',
         }}
-      ><Icon name={listening ? 'mic-on' : 'mic'} size={24} /></button>
-      {error && <span className="text-xs text-red-600 max-w-[8rem] text-center">{error}</span>}
+      ><Icon name={listening ? 'mic-on' : 'mic'} size={22} /></button>
+      {error && (
+        <span
+          className="absolute top-full left-1/2 -translate-x-1/2 mt-1 whitespace-nowrap text-xs px-2 py-0.5 rounded z-10"
+          style={{ background: 'var(--warn-bg)', color: 'var(--warn)' }}
+        >{error}</span>
+      )}
     </div>
   );
 }
