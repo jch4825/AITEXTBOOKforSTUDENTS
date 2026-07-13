@@ -413,3 +413,421 @@
 .season-map > li:has(.season-episode-active) { background:var(--episode-soft); box-shadow:6px 6px 0 var(--episode-accent); }
 .season-episode { border:0; border-radius:0; box-shadow:none; }.season-episode-active { transform:none; box-shadow:none; }
 .season-lessons { border-top:2px solid var(--brand-ink); padding:0 .8rem .5rem; background:var(--paper-0); }
+
+/* 2026-07-13 polish: closable season drawer and symmetric book spread */
+.comic-contents-inner {
+  max-width: min(78rem, 100%);
+}
+
+.season-map {
+  align-items: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+.season-card {
+  border: 1.5px solid color-mix(in srgb, var(--episode-accent) 26%, var(--line));
+  border-radius: 6px 14px 6px 14px;
+  background: var(--paper-0);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--episode-accent) 18%, var(--paper-2));
+  overflow: hidden;
+}
+.season-card-active {
+  background: linear-gradient(140deg, var(--episode-soft), var(--paper-0) 72%);
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--episode-accent) 48%, var(--paper-2));
+}
+.season-episode {
+  min-height: 8rem;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  align-items: start;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.season-episode:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--episode-accent) 7%, transparent);
+}
+.season-episode-active {
+  transform: none;
+  box-shadow: none;
+}
+.season-toggle {
+  color: var(--episode-accent);
+  line-height: 1;
+}
+.season-drawer-row {
+  grid-column: 1 / -1;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+.season-lessons {
+  border-top: 1.5px solid color-mix(in srgb, var(--episode-accent) 34%, var(--line));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--episode-accent) 9%, var(--paper-0)), var(--paper-0) 62%),
+    var(--paper-0);
+}
+.season-lessons-inline {
+  display: none;
+}
+.season-lessons-drawer {
+  display: block;
+  border: 1.5px solid color-mix(in srgb, var(--episode-accent) 30%, var(--line));
+  border-radius: 6px 16px 6px 16px;
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--episode-accent) 18%, var(--paper-2));
+  overflow: hidden;
+}
+.season-lessons-drawer .comic-lesson-cuts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1.25rem;
+}
+.season-lessons-drawer .comic-lesson-cut {
+  min-height: 3.75rem;
+}
+
+.lesson-spread {
+  --spread-accent: var(--accent);
+  background:
+    linear-gradient(90deg, var(--paper-0), var(--paper-1) 49.8%, var(--paper-2) 50%, var(--paper-1) 50.2%, var(--paper-0)),
+    var(--paper-0);
+}
+.lesson-spread-pages {
+  min-height: clamp(34rem, 58vh, 42rem);
+}
+.lesson-page {
+  min-width: 0;
+  min-height: inherit;
+  padding: clamp(1rem, 2.6vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.lesson-page-left {
+  background: linear-gradient(110deg, color-mix(in srgb, var(--spread-accent) 5%, var(--paper-0)), var(--paper-0) 70%);
+}
+.lesson-page-right {
+  background: color-mix(in srgb, var(--paper-0) 88%, var(--paper-1));
+}
+.lesson-gutter {
+  display: none;
+}
+.spread-art-page,
+.spread-copy-page {
+  width: 100%;
+  height: 100%;
+}
+.spread-art-page {
+  min-height: clamp(24rem, 48vh, 36rem);
+  display: grid;
+  place-items: center;
+}
+.spread-art-field {
+  position: relative;
+  width: min(100%, 34rem);
+  min-height: clamp(22rem, 47vh, 34rem);
+  display: grid;
+  place-items: center;
+  padding: clamp(0.7rem, 2vw, 1.1rem);
+  border: 1.5px solid color-mix(in srgb, var(--hero-accent) 26%, var(--line));
+  border-radius: 18px 8px 18px 8px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--hero-accent) 14%, var(--paper-0)), var(--paper-0) 68%),
+    var(--paper-0);
+  overflow: hidden;
+}
+.spread-art-mark {
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--hero-accent) 22%, transparent);
+  opacity: 0.55;
+}
+.spread-art-mark-one {
+  width: 42%;
+  aspect-ratio: 1;
+  top: -14%;
+  right: -10%;
+  transform: rotate(18deg);
+}
+.spread-art-mark-two {
+  width: 24%;
+  aspect-ratio: 1 / 1.35;
+  left: -6%;
+  bottom: 8%;
+  border-radius: 999px;
+}
+.spread-hero-image-large {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 32rem);
+  height: min(31rem, 100%);
+  min-height: clamp(19rem, 42vh, 31rem);
+  display: grid;
+  place-items: center;
+}
+.spread-hero-characters {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 0;
+  margin-inline: auto;
+}
+.spread-hero-characters > span + span {
+  margin-left: -1.25rem;
+}
+.spread-copy-page {
+  position: relative;
+  padding: clamp(0.25rem, 1.4vw, 1rem) clamp(0.25rem, 1.8vw, 1.5rem);
+}
+.spread-copy-page::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 8rem;
+  height: 8rem;
+  border-right: 1px solid color-mix(in srgb, var(--hero-accent) 18%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--hero-accent) 18%, transparent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+.spread-copy-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+.spread-episode-chip {
+  min-height: 1.8rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--r-sm);
+  padding: 0.15rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+.spread-copy-title {
+  margin: 0 0 1rem;
+  font-weight: 900;
+  line-height: 1.28;
+}
+.spread-goal-slot .lesson-goal-card {
+  margin-block: 0 1rem;
+}
+.spread-copy-body {
+  display: grid;
+  gap: 1rem;
+  max-width: 34rem;
+}
+.spread-story-intro {
+  margin: 0;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--hero-accent);
+  color: var(--ink-2);
+}
+.spread-body-slot {
+  margin-top: 0.2rem;
+}
+.lesson-goal-card {
+  box-shadow: none;
+}
+
+@media (min-width: 1024px) {
+  .lesson-gutter {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    z-index: 5;
+    width: 1.5rem;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(43,58,85,0.08), transparent);
+  }
+  .lesson-gutter span {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: rgba(43,58,85,0.16);
+  }
+}
+
+@media (max-width: 1023px) {
+  .comic-contents-inner {
+    max-width: min(100%, 58rem);
+  }
+  .season-map {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .season-drawer-row {
+    grid-column: 1 / -1;
+  }
+  .season-lessons-drawer .comic-lesson-cuts {
+    grid-template-columns: 1fr;
+  }
+  .lesson-spread {
+    max-width: min(100%, 44rem);
+  }
+  .lesson-spread-pages {
+    min-height: 0;
+  }
+  .lesson-page {
+    min-height: 0;
+  }
+  .lesson-page-right {
+    border-top: 1px solid var(--line);
+  }
+  .spread-art-page {
+    min-height: 0;
+  }
+  .spread-art-field {
+    min-height: 0;
+  }
+  .spread-hero-image-large {
+    min-height: 0;
+    height: min(62vw, 28rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .comic-contents-inner {
+    padding-inline: 1rem;
+  }
+  .season-map {
+    grid-template-columns: 1fr;
+  }
+  .season-episode {
+    min-height: 6.25rem;
+    grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  }
+  .season-drawer-row,
+  .season-lessons-drawer {
+    display: none !important;
+  }
+  .season-lessons-inline {
+    display: block;
+  }
+  .season-lessons-inline .comic-lesson-list {
+    padding: 0.9rem;
+  }
+  .season-lessons-inline .comic-list-heading {
+    display: none;
+  }
+  .lesson-spread {
+    border-radius: var(--r-md);
+    box-shadow: var(--e-1);
+  }
+  .lesson-page {
+    padding: 0.9rem;
+  }
+  .spread-art-field {
+    width: 100%;
+    padding: 0.55rem;
+    border-radius: 14px 6px 14px 6px;
+  }
+  .spread-hero-image-large {
+    height: min(78vw, 20rem);
+  }
+  .spread-copy-page {
+    padding: 0.2rem 0.1rem 0.4rem;
+  }
+  .spread-copy-title {
+    font-size: clamp(1.45rem, 8vw, 2rem);
+  }
+  .spread-story-intro {
+    font-size: 1.05rem;
+  }
+}
+@media (min-width: 1024px) {
+  .season-lessons-drawer .comic-lesson-list {
+    padding: 0.85rem 1rem 0.75rem;
+  }
+  .season-lessons-drawer .comic-list-heading {
+    align-items: center;
+    padding-bottom: 0.55rem;
+  }
+  .season-lessons-drawer .comic-list-heading h2 {
+    margin: 0.1rem 0 0;
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+  .season-lessons-drawer .comic-count {
+    padding-block: 0.18rem;
+  }
+  .season-lessons-drawer .comic-lesson-cuts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 1rem;
+  }
+  .season-lessons-drawer .comic-lesson-cut {
+    min-height: 3.15rem;
+    padding: 0.35rem 0;
+    line-height: 1.35;
+  }
+  .season-lessons-drawer .comic-lesson-cut small {
+    display: -webkit-box;
+    white-space: normal;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .season-lessons-drawer .comic-lesson-list {
+    padding: 0.95rem 1rem 0.8rem;
+  }
+  .season-lessons-drawer .comic-list-heading {
+    align-items: center;
+    padding-bottom: 0.65rem;
+  }
+  .season-lessons-drawer .comic-list-heading h2 {
+    margin: 0.1rem 0 0;
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+  .season-lessons-drawer .comic-lesson-cuts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 0.75rem;
+  }
+  .season-lessons-drawer .comic-lesson-cut {
+    min-height: 3.25rem;
+    padding: 0.4rem 0;
+    line-height: 1.35;
+  }
+  .season-lessons-drawer .comic-lesson-cut small {
+    display: -webkit-box;
+    white-space: normal;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .season-map {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .season-episode {
+    min-height: 8.35rem;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 0.5rem;
+    padding: 0.8rem;
+  }
+  .season-icon {
+    display: none;
+  }
+  .season-copy strong {
+    line-height: 1.25;
+  }
+  .season-copy small {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
