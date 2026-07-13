@@ -54,8 +54,8 @@ export const M4_LESSONS: LessonContent[] = [
           question: 'AI의 답이 정말인지 알고 싶어요. 어떻게 할까요?',
           choices: [
             { label: '선생님이나 책으로 확인해요', isCorrect: true },
-            { label: '무조건 믿어요', isCorrect: false },
-            { label: '친구한테 자랑해요', isCorrect: false },
+            { label: '무조건 믿어요', isCorrect: false, icon: 'blind_trust' },
+            { label: '친구한테 자랑해요', isCorrect: false, icon: 'tell_friend' },
           ],
         },
       },

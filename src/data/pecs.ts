@@ -14,7 +14,8 @@ export const PECS_LABELS: Record<string, string> = {
   alarm_clock: '알람시계', window: '창문', bow_greeting: '인사하기', medicine: '약',
   cooking: '요리하기', job_chef: '요리사', job_driver: '운전기사', job_librarian: '사서',
   job_farmer: '농부', job_baker: '제빵사', job_firefighter: '소방관', job_vet: '수의사',
-  job_painter: '화가',
+  job_painter: '화가', blind_trust: '무조건 믿어요', tell_friend: '친구한테 자랑해요',
+  tap_screen: '화면 두드리기',
 };
 
 // 기본 의사소통 욕구 — 모든 모듈에서 항상 노출
@@ -22,10 +23,10 @@ export const PECS_COMMON: string[] = ['toilet', 'faucet', 'paper_cup', 'snack'];
 
 // 모듈별 관련 단어 (초안 — 교사 피드백으로 조정)
 export const PECS_BY_MODULE: Record<ModuleId, string[]> = {
-  m1: ['smartphone', 'ai_speaker', 'ai_aimi', 'refrigerator', 'cat', 'rabbit', 'elephant', 'dinosaur', 'alarm_clock', 'window'],
+  m1: ['smartphone', 'ai_speaker', 'ai_aimi', 'refrigerator', 'cat', 'rabbit', 'elephant', 'dinosaur', 'alarm_clock', 'window', 'tap_screen'],
   m2: ['ai_aimi', 'smartphone', 'book', 'pencil', 'sunglasses'],
   m3: ['book', 'pencil', 'eraser', 'apple', 'cat', 'dinosaur', 'ai_aimi'],
-  m4: ['smartphone', 'key', 'light_switch', 'book', 'bow_greeting'],
+  m4: ['smartphone', 'key', 'light_switch', 'book', 'bow_greeting', 'blind_trust', 'tell_friend'],
   m5: ['ramen', 'pot', 'toaster', 'bread', 'knife', 'lettuce', 'cheese', 'ham', 'soccer_ball', 'cooking'],
   m6: [
     'apple', 'bread', 'milk', 'cheese', 'ham', 'chocolate', 'bus', 'umbrella', 'cloud',

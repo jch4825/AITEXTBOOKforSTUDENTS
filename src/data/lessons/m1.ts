@@ -278,7 +278,7 @@ export const M1_LESSONS: LessonContent[] = [
             { label: '"고양이는 왜 울어?"', isCorrect: true, icon: 'cat' },
             { label: '아무 말 안 하기', isCorrect: false, icon: 'sleep' },
             { label: '눈만 감고 기다리기', isCorrect: false, icon: 'sleep' },
-            { label: '화면 두드리기', isCorrect: false, icon: 'faucet' },
+            { label: '화면 두드리기', isCorrect: false, icon: 'tap_screen' },
           ],
         },
       },
