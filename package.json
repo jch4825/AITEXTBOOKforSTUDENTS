@@ -10,7 +10,8 @@
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "check:encoding": "node scripts/check-encoding.mjs",
-    "check:ui-polish": "node scripts/check-ui-polish.mjs"
+    "check:ui-polish": "node scripts/check-ui-polish.mjs",
+    "check:activity-icons": "node scripts/check-activity-icons.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
