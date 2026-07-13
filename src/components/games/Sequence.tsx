@@ -5,6 +5,7 @@ import Button from '../Button';
 import ActivityIcon from '../ActivityIcon';
 import Burst from './Burst';
 import { activityColor } from '../../utils/activityPalette';
+import { resolveActivityIcon } from '../../utils/activityIconResolver';
 import type { Difficulty } from '../../types';
 import ActivitySpread from '../lesson/ActivitySpread';
 
@@ -71,7 +72,8 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
       <ol className="space-y-2">
         {items.map((item, i) => {
           const isFilled = i < placedCount;
-          const palette = isFilled ? activityColor(item.icon ?? item.label) : null;
+          const icon = resolveActivityIcon(item.icon, item.label);
+          const palette = isFilled ? activityColor(icon ?? item.label) : null;
           return (
             <li
               key={item.label}
@@ -85,8 +87,8 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
               {isFilled ? (
                 <span className="inline-flex items-center gap-2">
                   <span className="bg-white/40 rounded-full w-6 h-6 flex items-center justify-center text-xs">{i + 1}</span>
-                  {difficulty === 'easy' && item.icon && (
-                    <ActivityIcon icon={item.icon} size={28} />
+                  {difficulty === 'easy' && icon && (
+                    <ActivityIcon icon={icon} size={28} />
                   )}
                   {item.label}
                 </span>
@@ -124,9 +126,10 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
             {shuffleOrder.map((origIdx, shuffleIdx) => {
               const item = items[origIdx];
               if (!item) return null; // Safe guard
+              const icon = resolveActivityIcon(item.icon, item.label);
               const used = origIdx < placedCount;
               const isWrong = wrongIdx === shuffleIdx;
-              const palette = activityColor(item.icon ?? item.label);
+              const palette = activityColor(icon ?? item.label);
 
               let borderStyle = `1px solid color-mix(in srgb, ${palette.accent} 30%, var(--line))`;
               let bgColor = 'var(--paper-0)';
@@ -153,8 +156,8 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
                     border: borderStyle,
                   }}
                 >
-                  {difficulty === 'easy' && item.icon && (
-                    <ActivityIcon icon={item.icon} size={92} className="mb-1" />
+                  {difficulty === 'easy' && icon && (
+                    <ActivityIcon icon={icon} size={92} className="mb-1" />
                   )}
                   <span>{item.label}</span>
 
