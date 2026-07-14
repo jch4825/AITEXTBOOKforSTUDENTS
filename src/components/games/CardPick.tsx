@@ -5,6 +5,7 @@ import Icon from '../Icon';
 import ActivityIcon from '../ActivityIcon';
 import Burst from './Burst';
 import { activityColor } from '../../utils/activityPalette';
+import { resolveActivityIcon } from '../../utils/activityIconResolver';
 import type { Difficulty } from '../../types';
 import ActivitySpread from '../lesson/ActivitySpread';
 
@@ -79,8 +80,9 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {choices.map((c, i) => {
+            const icon = resolveActivityIcon(c.icon, c.label);
             const selected = i === pickedIdx;
-            const palette = activityColor(c.icon ?? c.label);
+            const palette = activityColor(icon ?? c.label);
 
             let borderStyle = `1px solid color-mix(in srgb, ${palette.accent} 30%, var(--line))`;
             let bgColor = 'var(--paper-0)';
@@ -111,8 +113,8 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
                 }}
               >
                 {/* Show icon only in easy difficulty */}
-                {difficulty === 'easy' && c.icon && (
-                  <ActivityIcon icon={c.icon} size={92} className="mb-1" />
+                {difficulty === 'easy' && icon && (
+                  <ActivityIcon icon={icon} size={92} className="mb-1" />
                 )}
 
                 <span>{c.label}</span>

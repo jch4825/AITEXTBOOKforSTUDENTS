@@ -4,6 +4,7 @@ import Icon from '../Icon';
 import Button from '../Button';
 import ActivityIcon from '../ActivityIcon';
 import { activityColor } from '../../utils/activityPalette';
+import { resolveActivityIcon } from '../../utils/activityIconResolver';
 import type { Difficulty } from '../../types';
 import ActivitySpread from '../lesson/ActivitySpread';
 
@@ -137,11 +138,12 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
           {/* Left Column */}
           <div className="space-y-3">
             {pairs.map((p, i) => {
+              const icon = p.icon ?? resolveActivityIcon(undefined, p.left);
               const isPicked = picked.leftIdx === i;
               const isMatched = matched[i];
               const isWrong = wrongPair?.leftIdx === i;
 
-              const palette = activityColor(p.icon ?? p.left);
+              const palette = activityColor(icon ?? p.left);
 
               let borderStyle = `1px solid color-mix(in srgb, ${palette.accent} 30%, var(--line))`;
               let bgColor = 'var(--paper-0)';
@@ -170,8 +172,8 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
                     border: borderStyle,
                   }}
                 >
-                  {difficulty === 'easy' && p.icon && (
-                    <ActivityIcon icon={p.icon} size={64} className="mb-1" />
+                  {difficulty === 'easy' && icon && (
+                    <ActivityIcon icon={icon} size={64} className="mb-1" />
                   )}
                   <span>{p.left}</span>
 
@@ -201,12 +203,13 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
             {rightOrder.map((origIdx, shuffleIdx) => {
               const p = pairs[origIdx];
               if (!p) return null; // Safe guard
+              const icon = p.icon ?? resolveActivityIcon(undefined, p.right);
 
               const isPicked = picked.rightIdx === shuffleIdx;
               const isMatched = matched[origIdx];
               const isWrong = wrongPair?.rightIdx === shuffleIdx;
 
-              const palette = activityColor(p.icon ?? p.right);
+              const palette = activityColor(icon ?? p.right);
 
               let borderStyle = `1px solid color-mix(in srgb, ${palette.accent} 30%, var(--line))`;
               let bgColor = 'var(--paper-0)';
@@ -235,8 +238,8 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
                     border: borderStyle,
                   }}
                 >
-                  {difficulty === 'easy' && p.icon && (
-                    <ActivityIcon icon={p.icon} size={64} className="mb-1" />
+                  {difficulty === 'easy' && icon && (
+                    <ActivityIcon icon={icon} size={64} className="mb-1" />
                   )}
                   <span>{p.right}</span>
 

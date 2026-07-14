@@ -12,11 +12,11 @@ export default function LessonGoal({ text, accent, compact }: Props) {
   const { speakNow } = useSpeak();
   return (
     <div
-      className={`card3d rounded-[var(--r-md)] flex items-center gap-3 ${compact ? 'p-3 max-w-md mx-auto' : 'p-4 my-5'}`}
+      className={`lesson-goal-card rounded-[var(--r-md)] flex items-center gap-3 ${compact ? 'p-3 max-w-md mx-auto' : 'p-4 my-5'}`}
       style={{
-        background: 'var(--paper-0)',
-        border: `2.5px solid ${accent}`,
-        ['--edge' as string]: accent,
+        background: `color-mix(in srgb, ${accent} 8%, var(--paper-0))`,
+        border: `1.5px solid color-mix(in srgb, ${accent} 36%, var(--line))`,
+        ['--goal-accent' as string]: accent,
       }}
     >
       <Icon name={compact ? 'check' : 'star'} size={compact ? 20 : 24} filled={!compact} color={accent} />

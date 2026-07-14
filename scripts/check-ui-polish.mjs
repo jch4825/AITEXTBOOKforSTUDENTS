@@ -50,8 +50,11 @@ if (!existsSync(new URL('../src/components/lesson/LessonSpread.tsx', import.meta
   throw new Error('LessonSpread component must exist.');
 }
 const lessonSpread = readFileSync(new URL('../src/components/lesson/LessonSpread.tsx', import.meta.url), 'utf8');
-if (!lessonSpread.includes('lg:grid-cols-[7fr_5fr]') && !lessonSpread.includes('lg:grid-cols-[5fr_7fr]')) {
-  throw new Error('LessonSpread must support 7:5 / 5:7 column grid layout.');
+if (!lessonSpread.includes('lg:grid-cols-2') || !lessonSpread.includes('lesson-gutter')) {
+  throw new Error('LessonSpread must use a symmetric 1:1 column grid with a centered gutter.');
+}
+if (lessonSpread.includes('lg:grid-cols-[7fr_5fr]') || lessonSpread.includes('lg:grid-cols-[5fr_7fr]')) {
+  throw new Error('LessonSpread must not use the old asymmetric 7:5 / 5:7 column grid.');
 }
 
 if (!existsSync(new URL('../src/components/lesson/EpisodeHeroSpread.tsx', import.meta.url))) {
@@ -102,8 +105,9 @@ if (!document.includes('favicon.svg')) {
   throw new Error('The app must provide its own favicon.');
 }
 
-if (!contents.includes('renderLessons=') || !readFileSync(new URL('../src/components/SeasonMap.tsx', import.meta.url), 'utf8').includes('renderLessons')) {
-  throw new Error('Active module lessons must expand directly below the module card.');
+const seasonMap = readFileSync(new URL('../src/components/SeasonMap.tsx', import.meta.url), 'utf8');
+if (!contents.includes('renderLessons=') || !seasonMap.includes('season-drawer-row') || !seasonMap.includes('aria-expanded')) {
+  throw new Error('Active module lessons must render through the accessible season drawer.');
 }
 
 
@@ -151,10 +155,10 @@ if (!ending.includes('motion-safe:animate-[spin_60s_linear_infinite]')) {
 
 
 if (
-  !lessonSpread.includes("reverse ? 'lg:col-start-2")
-  || !lessonSpread.includes("reverse ? 'lg:col-start-1")
+  heroSpread.includes('reverseLayout')
+  || heroSpread.includes('reverse={')
   || !heroSpread.includes('left={leftPage}')
   || !heroSpread.includes('right={rightPage}')
 ) {
-  throw new Error('Hero page order must stay image-first on mobile and alternate only on wide screens.');
+  throw new Error('Hero page order must stay fixed as image-left and text-right.');
 }

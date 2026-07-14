@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import type { LessonId } from '../../types';
 import type { CharacterId } from '../../data/characters';
 import CharacterAvatar from '../CharacterAvatar';
@@ -35,10 +35,8 @@ export default function EpisodeHeroSpread({
   className = '',
   isHardMode = false,
 }: Props) {
-  // Get lesson info to determine if we should reverse the spread (alternate layout based on lesson number)
   const lesson = getLesson(lessonId);
   const lessonNumber = lesson?.number ?? 1;
-  const reverseLayout = lessonNumber % 2 === 0;
 
   // Image candidates chain matching Stage.tsx logic
   const candidates = [
@@ -145,80 +143,77 @@ export default function EpisodeHeroSpread({
     );
   }
 
-  // Left Page: Big Stage Image / Characters Fallback
+  // Left Page: large artwork field / character fallback. The artwork remains crisp;
+  // the abstract field only organizes the surrounding page space.
   const leftPage = (
-    <div className="flex items-center justify-center h-full w-full py-4 min-h-[300px] lg:min-h-[460px]">
-      {!imgMissing ? (
-        <div
-          className="spread-hero-image relative w-full max-w-[440px] aspect-square rounded-[var(--r-lg)] overflow-hidden shadow-md"
-        >
-          <img
-            src={candidates[srcIdx]}
-            alt=""
-            aria-hidden
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: 'blur(20px)', transform: 'scale(1.1)' }}
-          />
-          <img
-            src={candidates[srcIdx]}
-            alt={title}
-            onError={() => setSrcIdx((i) => i + 1)}
-            className="absolute inset-0 w-full h-full object-contain"
-          />
-        </div>
-      ) : (
-        <div className="spread-hero-image flex justify-center items-end -space-x-4 py-8" aria-hidden>
-          {scene.map((id) => (
-            <span key={id}>
-              <CharacterAvatar character={id} expression="happy" size={130} />
-            </span>
-          ))}
-        </div>
-      )}
+    <div className="spread-art-page" style={{ '--hero-accent': accent, '--hero-soft': accentSoft } as CSSProperties}>
+      <div className="spread-art-field">
+        <span className="spread-art-mark spread-art-mark-one" aria-hidden />
+        <span className="spread-art-mark spread-art-mark-two" aria-hidden />
+        {!imgMissing ? (
+          <div className="spread-hero-image spread-hero-image-large">
+            <img
+              src={candidates[srcIdx]}
+              alt={title}
+              onError={() => setSrcIdx((i) => i + 1)}
+              className="w-full h-full object-contain"
+            />
+          </div>
+        ) : (
+          <div className="spread-hero-image spread-hero-characters" aria-hidden>
+            {scene.map((id) => (
+              <span key={id}>
+                <CharacterAvatar character={id} expression="happy" size={136} />
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 
   // Right Page: Episode Info, Title, Story Text, Body Text, Goal Text
   const rightPage = (
-    <div className="flex flex-col justify-center h-full text-left py-4 px-2 lg:px-6">
-      {episodeTitle && (
+    <div className="spread-copy-page" style={{ '--hero-accent': accent, '--hero-soft': accentSoft } as CSSProperties}>
+      <div className="spread-copy-meta">
+        {episodeTitle && (
+          <div
+            className="t-label inline-flex items-center gap-1.5 font-black text-sm uppercase"
+            style={{ color: accentText ?? accent }}
+          >
+            <Icon name="book" size={16} /> {episodeTitle}
+          </div>
+        )}
         <div
-          className="t-label mb-2 inline-flex items-center gap-1.5 font-black text-sm uppercase tracking-wider"
-          style={{ color: accentText ?? accent }}
+          className="spread-episode-chip"
+          style={{ background: accentSoft, color: accentText ?? accent }}
         >
-          <Icon name="book" size={16} /> {episodeTitle}
+          화 {lessonNumber}
         </div>
-      )}
-      <div
-        className="text-xs font-black px-2 py-0.5 rounded-[var(--r-sm)] mb-2 self-start uppercase tracking-wider"
-        style={{ background: accentSoft, color: accentText ?? accent }}
-      >
-        화 {lessonNumber}
       </div>
-      <h1 className="t-h1 mb-3 leading-tight font-black text-2xl lg:text-3xl" style={{ color: accentText ?? accent }}>
+      <h1 className="spread-copy-title t-h1" style={{ color: accentText ?? accent }}>
         {title}
       </h1>
 
-      {goalText && <div className="mb-4">{goalText}</div>}
+      {goalText && <div className="spread-goal-slot">{goalText}</div>}
 
-      <div className="space-y-4">
+      <div className="spread-copy-body">
         {text && (
-          <p className="t-body-lg text-lg leading-relaxed text-[color:var(--ink-2)] border-l-4 pl-3" style={{ borderColor: accentSoft }}>
+          <p className="spread-story-intro t-body-lg" style={{ borderColor: accent }}>
             {text}
           </p>
         )}
-        {bodyText && <div className="mt-2">{bodyText}</div>}
+        {bodyText && <div className="spread-body-slot">{bodyText}</div>}
       </div>
     </div>
   );
 
-  // Keep mobile reading order image-first; LessonSpread alternates the pages only on wide screens.
+  // Keep every introduction in the same reading order: artwork first, text second.
   return (
     <div className={`story-fade-in ${className}`}>
       <LessonSpread
         left={leftPage}
         right={rightPage}
-        reverse={reverseLayout}
         accent={accent}
         label={`차시 도입: ${title}`}
       />
