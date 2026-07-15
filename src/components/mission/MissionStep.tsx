@@ -38,7 +38,7 @@ export default function MissionStep({
   accentSoft,
   accentText,
 }: Props) {
-  const { speakNow } = useSpeak();
+  const { speak, speakNow } = useSpeak();
   const {
     studentName,
     setStudentName,
@@ -79,7 +79,7 @@ export default function MissionStep({
   // Play intro TTS on mount or when studentName is submitted
   useEffect(() => {
     if (studentName && mission.intro) {
-      speakNow(mission.intro);
+      speak(mission.intro);
     }
   }, [studentName]);
 
@@ -88,7 +88,7 @@ export default function MissionStep({
     if (studentName && !showReward) {
       const ch = mission.chapters[currentChapter];
       if (ch && ch.goal) {
-        speakNow(ch.goal);
+        speak(ch.goal);
       }
     }
   }, [currentChapter, studentName, showReward]);
@@ -142,7 +142,7 @@ export default function MissionStep({
       setCurrentChapter(currentChapter + 1);
     } else if (isMissionCompleted) {
       setShowReward(true);
-      speakNow(mission.reward.badgeLabel);
+      speak(mission.reward.badgeLabel);
     }
   };
 
