@@ -17,6 +17,7 @@ import BranchChat from './blocks/BranchChat';
 import SceneHunt from './blocks/SceneHunt';
 import DrawPad from './blocks/DrawPad';
 import JudgmentPreview from './blocks/JudgmentPreview';
+import JudgmentMain from './blocks/JudgmentMain';
 import SummaryTable from './blocks/SummaryTable';
 import Vow from './blocks/Vow';
 
@@ -131,6 +132,14 @@ export default function MissionStep({
             || val.firstThought.text?.trim()
             || val.firstThought.drawing
           ),
+        );
+      case 'judgment-main':
+        return Boolean(
+          Array.isArray(val?.importantInfoIds) && val.importantInfoIds.length > 0
+          && Array.isArray(val.exploredMethodIds) && val.exploredMethodIds.length >= 2
+          && val.aiDecision
+          && val.finalThought
+          && val.transferChoiceId,
         );
       default:
         return false;
@@ -463,6 +472,17 @@ export default function MissionStep({
             case 'judgment-preview':
               return (
                 <JudgmentPreview
+                  key={block.id}
+                  block={block}
+                  value={val}
+                  studentName={studentName}
+                  accent={accent}
+                  onChange={updateVal}
+                />
+              );
+            case 'judgment-main':
+              return (
+                <JudgmentMain
                   key={block.id}
                   block={block}
                   value={val}

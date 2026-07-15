@@ -244,14 +244,23 @@ export function printMission(
         } else if (block.kind === 'judgment-preview') {
           answerHtml = `<span class="badge">${expressionText(val.firstThought, block.choices)}</span>`;
           if (val.reason) answerHtml += `<br><span>${expressionText(val.reason, block.reasonCards || [])}</span>`;
+        } else if (block.kind === 'judgment-main') {
+          const info = (val.importantInfoIds || []).map((id: string) => block.importantInfo.find((item) => item.id === id)?.label || id).join(', ');
+          const methods = (val.exploredMethodIds || []).map((id: string) => block.methods.find((item) => item.id === id)?.label || id).join(', ');
+          const finalThought = expressionText(val.finalThought, block.finalChoices);
+          const transfer = block.transfer.choices.find((choice) => choice.id === val.transferChoiceId)?.label || '';
+          const decision = val.aiDecision === 'accept' ? '아이미의 방법을 받아들임' : val.aiDecision === 'modify' ? '아이미의 방법을 조금 바꿈' : '내 생각을 유지함';
+          answerHtml = `<strong>중요한 정보:</strong> ${info || '-'}<br><strong>살펴본 방법:</strong> ${methods || '-'}<br><strong>AI와 비교:</strong> ${decision}<br><strong>최종 생각:</strong> ${finalThought || '-'}<br><strong>새 장면:</strong> ${transfer || '-'}`;
         }
       }
 
       const promptText = block.kind === 'branch-chat'
-        ? block.intro
-        : block.kind === 'judgment-preview'
-          ? block.scenario.title
-          : (block as any).prompt;
+          ? block.intro
+          : block.kind === 'judgment-preview'
+            ? block.scenario.title
+            : block.kind === 'judgment-main'
+              ? block.changedScenario.title
+            : (block as any).prompt;
 
       contentRowsHtml += `
         <div class="block-section">
