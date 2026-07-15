@@ -1,263 +1,551 @@
-# 교차 차시 일반화 활동 구현 계획
+# Cross-Lesson Generalization Cycle Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 단원 중간의 첫 판단과 단원 마지막의 수정·전이 판단을 하나의 과정 증거로 연결하는 `judgment-preview`·`judgment-main` 미션 블록을 6단원에 적용한다.
+**Goal:** Build six cross-lesson judgment cycles that save a student's first thought in lesson 6 and revisit it with changed conditions, AI comparison, transfer practice, and teacher process assessment in each module's final lesson.
 
-**Architecture:** 기존 `MissionStep` 컨테이너와 차시별 미션 저장을 유지하되, 전용 블록 2종과 `cycleId` 기반 공통 localStorage 훅을 추가한다. 예고는 각 단원 6차시에, 본 활동은 각 단원 마무리 차시에 배치한다. 교사 관찰평가는 학생 완료 조건과 분리하고 인증된 교사 세션과 교사 화면에서만 편집한다.
+**Architecture:** Add two focused mission blocks, `judgment-preview` and `judgment-main`, backed by a versioned module-level localStorage record. Keep cross-lesson state and evaluation logic outside `MissionStep`; the mission container only renders the blocks and checks their completion. Build the full experience with module 1 as a browser-tested pilot, then migrate modules 2–6 using a structural validator.
 
-**Tech Stack:** React 19, TypeScript 5.8, Vite 6, Tailwind CSS 4, 기존 Web Speech API 래퍼, localStorage, Playwright CLI 수동 검증.
+**Tech Stack:** React 19, TypeScript 5.8, Vite 6, Tailwind CSS 4, browser localStorage, Web Speech API through the existing `MicButton`, Node validation scripts, Playwright CLI for manual browser automation.
 
 ## Global Constraints
 
-- 이 브라우저에서 학생 1명이 사용하는 localStorage 기록만 지원한다.
-- 실제 Gemini 호출 없이도 전체 활동이 진행되어야 한다.
-- 예고에서는 정답·점수·즉시 해설을 표시하지 않는다.
-- 첫 선택을 바꾸지 않아도 타당한 비교·이유가 있으면 성공 증거로 인정한다.
-- 기존 미션 블록·TTS 토글·인쇄·UTF-8·TypeScript strict 규칙을 보존한다.
-- 한 문장 한 정보, 선택·AAC·말/글·그림 표현, reduced-motion을 유지한다.
-- 관련 파일만 커밋하고 기존 미추적 파일은 건드리지 않는다.
+- One student per browser; no student profiles, server synchronization, class dashboard, or multi-device merge.
+- The core activity must work without a Gemini API key or network response.
+- Preview activities show no correctness, score, praise feedback, or recommended answer.
+- Changing an answer is not inherently better than keeping it.
+- Optional reason, drawing, and teacher assessment never block student completion.
+- Automatic speech must respect the global TTS toggle; explicit replay buttons may use `speakNow`.
+- Preserve all unrelated dirty and untracked workspace files.
+- UTF-8 Korean content and strict TypeScript build must pass.
 
 ---
 
-### Task 1: 공통 타입과 저장 계약
+## File Map
+
+### Create
+
+- `src/components/mission/generalization/generalizationTypes.ts` — student evidence and teacher assessment types shared by storage and UI.
+- `src/components/mission/generalization/generalizationStorage.ts` — versioned localStorage parsing, saving, partial update, and module reset.
+- `src/components/mission/generalization/useGeneralizationCycle.ts` — React state hook that synchronizes a single cycle.
+- `src/components/mission/generalization/ExpressionInput.tsx` — choice, AAC, text/STT, and optional drawing expression UI.
+- `src/components/mission/generalization/JudgmentPreview.tsx` — unresolved first-thought activity.
+- `src/components/mission/generalization/JudgmentMain.tsx` — ten-phase changed-condition activity and evidence comparison.
+- `src/components/mission/generalization/TeacherObservation.tsx` — four rubric fields and one help-level field.
+- `src/components/mission/generalization/GeneralizationRecordsPanel.tsx` — teacher-page viewer/editor for six cycles.
+- `scripts/generalization-storage.test.ts` — storage contract tests executed with `tsx` and Node's test runner.
+- `scripts/check-generalization-cycles.mjs` — source-data structural validator for six paired cycles.
+
+### Modify
+
+- `src/types.ts` — add the two mission block schemas and union members.
+- `src/components/mission/MissionStep.tsx` — render new blocks and define their completion conditions.
+- `src/components/mission/printMission.ts` — print a readable evidence summary for the new blocks.
+- `src/views/TeacherView.tsx` — mount the generalization records panel.
+- `src/data/lessons/m1.ts` through `src/data/lessons/m6.ts` — move previews to lesson 6 and replace final consecutive studios with main cycles.
+- `package.json` — add `test:generalization-storage` and `check:generalization` commands.
+- `docs/worker-guides/mission-authoring-guide.md` — document both new blocks and the no-feedback rule.
+
+---
+
+### Task 1: Storage contract and block types
 
 **Files:**
+
+- Create: `src/components/mission/generalization/generalizationTypes.ts`
+- Create: `src/components/mission/generalization/generalizationStorage.ts`
+- Create: `src/components/mission/generalization/useGeneralizationCycle.ts`
+- Create: `scripts/generalization-storage.test.ts`
 - Modify: `src/types.ts`
-- Create: `src/utils/generalizationStorage.ts`
-- Create: `src/components/mission/useGeneralizationCycle.ts`
-- Create: `scripts/check-generalization-contract.mjs`
 - Modify: `package.json`
 
 **Interfaces:**
-- `MissionBlock`에 `JudgmentPreviewBlock | JudgmentMainBlock`을 추가한다.
-- `useGeneralizationCycle(cycleId)`는 `{ record, update, reset, storageError }`를 반환한다.
-- 저장 유틸은 `readGeneralizationRecords`, `writeGeneralizationRecords`, `updateGeneralizationRecord`를 export한다.
 
-- [ ] **Step 1: 실패하는 계약 검사를 작성한다.**
+- Produces: `GeneralizationCycleRecord`, `ExpressionResponse`, `TeacherAssessment`, `loadGeneralizationRecords(storage)`, `saveGeneralizationRecords(storage, records)`, `updateGeneralizationCycle(storage, cycleId, moduleId, update)`, `clearGeneralizationCycle(storage, cycleId)`, and `useGeneralizationCycle(cycleId, moduleId)`.
+- Consumes: browser `Storage`, React `useEffect`/`useState`, and `ModuleId` from `src/types.ts`.
 
-검사 스크립트가 다음 파일과 타입 표식을 요구하도록 작성한다.
+- [ ] **Step 1: Write storage tests before implementation**
 
-```js
-import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-const root = resolve(import.meta.dirname, '..');
-const types = readFileSync(resolve(root, 'src/types.ts'), 'utf8');
-for (const file of ['src/utils/generalizationStorage.ts', 'src/components/mission/useGeneralizationCycle.ts']) {
-  if (!existsSync(resolve(root, file))) throw new Error(`missing ${file}`);
+Create tests using a small in-memory `Storage` implementation. Cover empty storage, valid round-trip, corrupt JSON recovery, partial update preservation, and one-cycle reset preservation.
+
+```ts
+test('update preserves preview when main evidence is added', () => {
+  const storage = memoryStorage();
+  updateGeneralizationCycle(storage, 'generalization-m1', 'm1', {
+    preview: { response: { mode: 'choice', choiceIds: ['check-first'] }, capturedAt: '2026-07-15T00:00:00.000Z', capturedAtMain: false },
+  });
+  updateGeneralizationCycle(storage, 'generalization-m1', 'm1', {
+    main: { importantInfoIds: ['network'], exploredMethodIds: ['ask', 'observe'] },
+  });
+  assert.deepEqual(loadGeneralizationRecords(storage)['generalization-m1'].preview?.response.choiceIds, ['check-first']);
+});
+
+test('clearing one cycle preserves the other five records', () => {
+  const storage = memoryStorage();
+  updateGeneralizationCycle(storage, 'generalization-m1', 'm1', { studentName: '학생' });
+  updateGeneralizationCycle(storage, 'generalization-m2', 'm2', { studentName: '학생' });
+  clearGeneralizationCycle(storage, 'generalization-m1');
+  assert.equal(loadGeneralizationRecords(storage)['generalization-m1'], undefined);
+  assert.equal(loadGeneralizationRecords(storage)['generalization-m2'].studentName, '학생');
+});
+```
+
+- [ ] **Step 2: Run the tests and verify RED**
+
+Run: `npx --yes tsx --test scripts/generalization-storage.test.ts`
+
+Expected: FAIL because `generalizationStorage.ts` and its exported functions do not exist.
+
+- [ ] **Step 3: Add the evidence types**
+
+Define the shared contracts without UI-specific state.
+
+```ts
+export type ExpressionMode = 'choice' | 'aac' | 'text' | 'speech' | 'draw';
+export interface ExpressionResponse {
+  mode: ExpressionMode;
+  choiceIds?: string[];
+  text?: string;
+  drawing?: string;
 }
-for (const marker of ['JudgmentPreviewBlock', 'JudgmentMainBlock', 'GeneralizationCycleRecord']) {
-  if (!types.includes(marker)) throw new Error(`missing type marker: ${marker}`);
+export type RubricStatus = 'not-observed' | 'with-help' | 'independent';
+export type HelpLevel = 'independent' | 'visual-verbal' | 'reduced-choices' | 'co-performed';
+export interface TeacherAssessment {
+  importantInformation: RubricStatus;
+  selfAttempt: RubricStatus;
+  aiComparison: RubricStatus;
+  conditionAdjustment: RubricStatus;
+  helpLevel?: HelpLevel;
+  note?: string;
 }
-console.log('generalization contract passed');
+export interface PreviewEvidence {
+  response: ExpressionResponse;
+  reason?: ExpressionResponse;
+  capturedAt: string;
+  capturedAtMain: boolean;
+}
+export interface MainEvidence {
+  importantInfoIds: string[];
+  exploredMethodIds: string[];
+  preferredMethodId?: string;
+  aiDecision?: 'accept' | 'modify' | 'keep';
+  finalResponse?: ExpressionResponse;
+  reason?: ExpressionResponse;
+  transferChoiceId?: string;
+  completedAt?: string;
+}
+export interface GeneralizationCycleRecord {
+  version: 1;
+  cycleId: string;
+  moduleId: ModuleId;
+  studentName?: string;
+  preview?: PreviewEvidence;
+  main?: MainEvidence;
+  assessment?: TeacherAssessment;
+}
 ```
 
-Run: `node scripts/check-generalization-contract.mjs`  
-Expected: FAIL with a missing-file error.
+Add `JudgmentPreviewBlock` and `JudgmentMainBlock` to `MissionBlock` using these exact content shapes.
 
-- [ ] **Step 2: 최소 타입과 저장 유틸을 구현한다.**
-
-`src/types.ts`에 `GeneralizationExpressionMode`, `GeneralizationAiDecision`, `GeneralizationHelpLevel`, `GeneralizationObservationStatus`, `GeneralizationExpression`, `GeneralizationObservation`, `GeneralizationCycleRecord`, `JudgmentPreviewBlock`, `JudgmentMainBlock`을 추가한다. 표현 응답은 `mode`, 선택 id, 선택적 text/drawing을 가진다. 본 활동 record는 중요 정보, 두 개 이상의 탐색 방법, AI 판단, 최종 생각, 전이 선택을 가진다.
-
-`src/utils/generalizationStorage.ts`는 `STORAGE_KEY = 'ai-students-generalization-v1'`을 사용하고, storage 미지원·JSON 손상 시 빈 객체로 복구한다. `updateGeneralizationRecord(cycleId, patch)`는 기존 중첩 필드를 보존한다.
-
-- [ ] **Step 3: 검사 명령을 연결하고 통과시킨다.**
-
-`package.json`에 `"check:generalization": "node scripts/check-generalization-contract.mjs"`를 추가한다.
-
-Run: `npm run check:generalization && npm run lint`  
-Expected: 계약 통과와 TypeScript 오류 0개.
-
-- [ ] **Step 4: 커밋한다.**
-
-```bash
-git add src/types.ts src/utils/generalizationStorage.ts src/components/mission/useGeneralizationCycle.ts scripts/check-generalization-contract.mjs package.json
-git commit -m "feat: add generalization cycle data contract"
+```ts
+export interface JudgmentOption { id: string; emoji: string; label: string; }
+export interface JudgmentPreviewBlock {
+  kind: 'judgment-preview'; id: string; cycleId: string; moduleId: ModuleId;
+  title: string; scenario: string; prompt: string; options: JudgmentOption[];
+  aacReasons?: JudgmentOption[]; allowedModes: ExpressionMode[]; revisitLessonId: LessonId;
+}
+export interface JudgmentMainBlock {
+  kind: 'judgment-main'; id: string; cycleId: string; moduleId: ModuleId;
+  title: string; changedScenario: string;
+  changedConditions: { id: string; label: string }[];
+  importantInfo: JudgmentOption[]; methods: JudgmentOption[];
+  aiContribution: { kind: 'alternative' | 'question'; text: string };
+  finalOptions: JudgmentOption[]; aacReasons?: JudgmentOption[];
+  allowedModes: ExpressionMode[]; transferScenario: string; transferOptions: JudgmentOption[];
+}
 ```
 
-### Task 2: 표현 입력과 예고 블록
+- [ ] **Step 4: Implement versioned storage and hook**
+
+Use the exact key `ai-students-generalization-v1`. Parse only records with `version === 1`, known module IDs, and matching string `cycleId`; return `{}` for corrupt data. `updateGeneralizationCycle` must merge nested `preview`, `main`, and `assessment` objects instead of replacing sibling evidence.
+
+```ts
+export const GENERALIZATION_STORAGE_KEY = 'ai-students-generalization-v1';
+
+export function updateGeneralizationCycle(
+  storage: Storage,
+  cycleId: string,
+  moduleId: ModuleId,
+  update: GeneralizationCycleUpdate,
+): GeneralizationCycleRecord {
+  const records = loadGeneralizationRecords(storage);
+  const previous = records[cycleId];
+  const next = mergeCycleRecord(previous, cycleId, moduleId, update);
+  saveGeneralizationRecords(storage, { ...records, [cycleId]: next });
+  return next;
+}
+```
+
+The hook returns `{ record, updatePreview, updateMain, updateAssessment, resetCycle, saveError, drawingDropped }`. Before saving, resize drawings to at most 640×360 and encode them as JPEG quality 0.72. If storage rejects a write, retry once after removing only the new drawing value; set `drawingDropped` when the retry succeeds. If the second write also fails, retain the React state and set `saveError` to the student-safe message from the spec.
+
+Add the package script exactly as follows:
+
+```json
+"test:generalization-storage": "npx --yes tsx --test scripts/generalization-storage.test.ts"
+```
+
+- [ ] **Step 5: Run storage tests and build**
+
+Run: `npx --yes tsx --test scripts/generalization-storage.test.ts`
+
+Expected: all storage tests PASS.
+
+Run: `npm run build`
+
+Expected: TypeScript and Vite build PASS.
+
+- [ ] **Step 6: Commit the storage foundation**
+
+```powershell
+git add package.json src/types.ts src/components/mission/generalization/generalizationTypes.ts src/components/mission/generalization/generalizationStorage.ts src/components/mission/generalization/useGeneralizationCycle.ts scripts/generalization-storage.test.ts
+git commit -m "feat: add cross-lesson judgment storage"
+```
+
+---
+
+### Task 2: Shared expression input and unresolved preview
 
 **Files:**
-- Create: `src/components/mission/blocks/ExpressionInput.tsx`
-- Create: `src/components/mission/blocks/JudgmentPreview.tsx`
+
+- Create: `src/components/mission/generalization/ExpressionInput.tsx`
+- Create: `src/components/mission/generalization/JudgmentPreview.tsx`
 - Modify: `src/components/mission/MissionStep.tsx`
-- Modify: `src/components/mission/printMission.ts`
-- Modify: `scripts/check-generalization-contract.mjs`
-
-**Interfaces:**
-- `ExpressionInput`은 선택·AAC·말/글·그림 입력을 통합하고 `value`와 `onChange`를 받는다.
-- `JudgmentPreview`는 `block`, `value`, `studentName`, `accent`, `onChange`, `cycle`을 받는다.
-- 예고 변경은 차시 미션 응답과 cycle record에 동시에 반영한다.
-
-- [ ] **Step 1: RED 계약을 추가한다.**
-
-`JudgmentPreview.tsx`가 없거나 `첫 생각을 저장했어요` 문구가 없으면 실패하고, `정답이에요`가 포함되면 실패하도록 검사한다.
-
-Run: `npm run check:generalization`  
-Expected: FAIL with missing component.
-
-- [ ] **Step 2: `ExpressionInput`을 구현한다.**
-
-선택 카드와 AAC 이유 카드를 기본 제공하고, block의 `expressionModes`에 따라 텍스트/STT와 기존 `DrawPad`를 선택적으로 보여 준다. 이유는 건너뛸 수 있으며 첫 생각만으로 완료된다. 기존 `MicButton`의 권한·오류 UI를 재사용한다.
-
-- [ ] **Step 3: `JudgmentPreview`를 구현한다.**
-
-첫 방법을 저장하고 `capturedAt`과 학생 이름을 cycle record에 기록한다. 선택 직후 정오색, 점수, 선택별 해설을 렌더하지 않는다. 완료 문구는 “첫 생각을 저장했어요. 단원 마지막에 조건이 달라진 장면으로 다시 만나요.”로 통일한다.
-
-- [ ] **Step 4: `MissionStep`과 인쇄를 연결한다.**
-
-`isBlockCompleted`에서 예고는 `firstThought`가 있을 때 완료로 판단하고 render switch에 새 블록을 추가한다. `printMission`에는 예고 응답을 “첫 생각” 행으로 포함한다.
-
-- [ ] **Step 5: GREEN을 확인하고 커밋한다.**
-
-Run: `npm run check:generalization && npm run build`  
-Expected: 통과. 브라우저 예고 화면에서 선택 후 즉시 해설·점수·정답표가 없어야 한다.
-
-```bash
-git add src/components/mission/blocks/ExpressionInput.tsx src/components/mission/blocks/JudgmentPreview.tsx src/components/mission/MissionStep.tsx src/components/mission/printMission.ts scripts/check-generalization-contract.mjs
-git commit -m "feat: add unresolved judgment preview activity"
-```
-
-### Task 3: 단계형 본 활동과 과정평가
-
-**Files:**
-- Create: `src/components/mission/blocks/JudgmentMain.tsx`
-- Create: `src/components/mission/blocks/TeacherObservation.tsx`
-- Modify: `src/components/mission/MissionStep.tsx`
-- Modify: `src/components/mission/printMission.ts`
-- Modify: `scripts/check-generalization-contract.mjs`
-
-**Interfaces:**
-- `JudgmentMain`은 `block`, `value`, `cycle`, `studentName`, `accent`, `isTeacherSession`, `onChange`를 받는다.
-- `TeacherObservation`은 `value`, `onChange`, `accent`를 받는다.
-- 완료 조건은 중요 정보 1개 이상, 탐색 방법 2개 이상, AI 판단, 최종 생각, 전이 선택이다.
-
-- [ ] **Step 1: RED 계약을 추가한다.**
-
-검사 스크립트가 본 활동 컴포넌트에서 `중요한 정보를 찾아요`, `아이미의 다른 생각`, `받아들일래요`, `내 생각을 유지할래요`, `새 장면`을 찾도록 한다.
-
-Run: `npm run check:generalization`  
-Expected: FAIL with missing component/phase.
-
-- [ ] **Step 2: 단계 상태를 구현한다.**
-
-`preview | conditions | info | methods | ai | decision | final | transfer | record` 단계를 관리한다. 이전 단계 이동 시 선택을 보존하며 methods가 두 개 미만이면 다음 단계 버튼을 비활성화한다.
-
-- [ ] **Step 3: 회상과 fallback을 구현한다.**
-
-기존 cycle record가 있으면 “그때의 생각”으로 보여 준다. 없으면 AI 의견 전에 현재 첫 생각을 받으며 `capturedAtMain: true`로 저장한다. 예고 미참여를 실패로 표시하지 않는다.
-
-- [ ] **Step 4: AI 비교·수용·수정·거절을 구현한다.**
-
-저자 작성 `aiContribution`을 대안 또는 확인 질문으로 보여 준다. `accept | modify | keep` 세 버튼은 동일한 시각적 무게로 만들고 모든 선택이 다음 단계로 진행되게 한다.
-
-- [ ] **Step 5: 전이 증거 카드를 구현한다.**
-
-유사하지만 다른 장면을 보여 주고, `첫 생각 → AI와 비교 → 최종 생각 → 새 장면` 순으로 중립적인 비교 문구를 렌더한다. 유지·변경 모두 실패 문구를 사용하지 않는다.
-
-- [ ] **Step 6: 교사 관찰을 구현한다.**
-
-`isTeacherSession`이 true일 때만 접을 수 있는 관찰 영역을 표시한다. 네 평가 항목은 `unobserved | prompted | independent`, 도움 수준은 `independent | cue | choice-support | co-perform`으로 저장한다. 평가 미입력 상태도 학생 완료를 막지 않는다.
-
-- [ ] **Step 7: 연결·검사·커밋한다.**
-
-`MissionStep` switch와 완료 판정, 인쇄 비교 증거를 연결한다.
-
-Run: `npm run check:generalization && npm run build`  
-Expected: 통과. 두 방법을 선택하지 않으면 AI 단계로 갈 수 없고 세 AI 판단 버튼 모두 작동한다.
-
-```bash
-git add src/components/mission/blocks/JudgmentMain.tsx src/components/mission/blocks/TeacherObservation.tsx src/components/mission/MissionStep.tsx src/components/mission/printMission.ts scripts/check-generalization-contract.mjs
-git commit -m "feat: add judgment comparison and process observation"
-```
-
-### Task 4: 6단원 콘텐츠와 교사 기록 패널
-
-**Files:**
-- Create: `src/data/generalizationCycles.ts`
 - Modify: `src/data/lessons/m1.ts`
+
+**Interfaces:**
+
+- Consumes: `JudgmentPreviewBlock`, `ExpressionResponse`, `useGeneralizationCycle`, existing `MicButton`, existing `DrawPad`, mission `studentName`, and mission colors.
+- Produces: `JudgmentPreview` with `onChange(answerSummary)` so `MissionStep` can save ordinary per-lesson completion state.
+
+- [ ] **Step 1: Record the failing browser behavior**
+
+Start the dev server and open `?lesson=m1-l6`. Navigate to its mission and inspect the final chapter.
+
+Expected RED: no chapter named `예고 활동 | 첫 생각 저장`, no `judgment-preview` renderer, and no `generalization-m1` record in localStorage.
+
+- [ ] **Step 2: Build `ExpressionInput`**
+
+Render picture-supported choice cards first. Add a disclosure labeled `다른 방법으로 남겨도 돼요` containing AAC chips, a short text input plus `MicButton`, and optional `DrawPad`. Only one primary response is required; changing mode preserves earlier text/drawing in local component state until save.
+
+```tsx
+<ExpressionInput
+  prompt={block.prompt}
+  options={block.options}
+  aacReasons={block.aacReasons}
+  allowedModes={block.allowedModes}
+  value={draft}
+  onChange={setDraft}
+  accent={accent}
+/>
+```
+
+- [ ] **Step 3: Build `JudgmentPreview` with no answer feedback**
+
+The component shows the scene, optional reason prompt, and `첫 생각 저장하기`. After saving it shows only the neutral unresolved message and a `첫 생각 다시 보기` action. Do not render `good`, `correct`, score, green success language, or per-option replies.
+
+```tsx
+updatePreview({
+  response: draft,
+  reason: reasonIsPresent ? reason : undefined,
+  capturedAt: new Date().toISOString(),
+  capturedAtMain: false,
+});
+onChange({ cycleId: block.cycleId, saved: true, response: draft });
+```
+
+- [ ] **Step 4: Add the renderer and completion rule**
+
+In `MissionStep`, render `JudgmentPreview` and consider it complete only when `answers[block.id]?.saved === true`. Pass `studentName` so the cycle record identifies the current learner.
+
+- [ ] **Step 5: Add the module 1 preview to `m1-l6`**
+
+Add a final mission chapter titled `예고 활동 | 첫 생각 저장` with `cycleId: 'generalization-m1'`. The scene asks whether a newly installed speaking device is AI, with neutral options `AI일 수 있어요`, `그냥 기계일 수 있어요`, and `아직 모르겠어요. 더 살펴볼래요`. No option contains a correct marker or feedback.
+
+- [ ] **Step 6: Verify GREEN in the browser**
+
+With TTS off, select a first thought, add one AAC reason, save, reload, and leave/re-enter the lesson.
+
+Expected: no automatic speech, no correctness feedback, the unresolved closing appears, and `ai-students-generalization-v1.generalization-m1.preview` survives reload.
+
+- [ ] **Step 7: Commit the preview pilot**
+
+```powershell
+git add src/components/mission/generalization/ExpressionInput.tsx src/components/mission/generalization/JudgmentPreview.tsx src/components/mission/MissionStep.tsx src/data/lessons/m1.ts
+git commit -m "feat: add unresolved first-thought preview"
+```
+
+---
+
+### Task 3: Main judgment flow and teacher observation
+
+**Files:**
+
+- Create: `src/components/mission/generalization/JudgmentMain.tsx`
+- Create: `src/components/mission/generalization/TeacherObservation.tsx`
+- Modify: `src/components/mission/MissionStep.tsx`
+- Modify: `src/data/lessons/m1.ts`
+
+**Interfaces:**
+
+- Consumes: `JudgmentMainBlock`, `useGeneralizationCycle`, `isTeacherSessionActive`, and `ExpressionInput`.
+- Produces: a combined answer summary with `importantInfoIds`, `exploredMethodIds`, `preferredMethodId`, `aiDecision`, `finalResponse`, `transferChoiceId`, and the copied preview response.
+
+- [ ] **Step 1: Record the failing final-lesson behavior**
+
+Open `?lesson=m1-l11`, enter the mission, and navigate past the review chapters.
+
+Expected RED: the old consecutive `예고: 새 장면 만나기` and `본 활동: 나의 판단 만들기` chapters remain; the l6 first thought is not recalled and no AI accept/modify/reject control exists.
+
+- [ ] **Step 2: Implement the ten-phase main activity**
+
+Use internal phase navigation with a visible `1 / 7` style progress label. Combine the ten pedagogical actions into seven student screens: recall, changed conditions, information, methods, AI comparison, final choice, transfer/evidence.
+
+Require at least two method IDs before leaving the methods phase. Require exactly one `accept | modify | keep` decision. Final reason remains optional.
+
+```ts
+const complete =
+  importantInfoIds.length > 0 &&
+  exploredMethodIds.length >= 2 &&
+  Boolean(preferredMethodId) &&
+  Boolean(aiDecision) &&
+  hasExpression(finalResponse) &&
+  Boolean(transferChoiceId);
+```
+
+If the preview is missing, show `저장된 첫 생각이 아직 없어요` and reuse the preview response control before revealing changed conditions. Save it with `capturedAtMain: true`.
+
+- [ ] **Step 3: Implement neutral comparison language**
+
+Compare stable choice IDs only when both preview and final responses use choices. If IDs match, show `같은 생각을 더 분명하게 했어요`. Otherwise show `새 정보를 보고 생각을 조정했어요`. Free-form or drawing comparisons use `첫 생각과 지금 생각을 나란히 살펴봤어요`.
+
+- [ ] **Step 4: Implement `TeacherObservation`**
+
+Render four three-state controls (`관찰 전`, `도움받아 시도`, `스스로 시도`), one help-level selector, and an optional note. Save every change immediately through `updateAssessment`. Do not include this state in student completion.
+
+- [ ] **Step 5: Show teacher controls only in an authenticated session**
+
+Call `isTeacherSessionActive()` when the main block renders. Authenticated sessions see a closed `<details>` labeled `교사 관찰 기록`; unauthenticated sessions do not receive the controls in the DOM.
+
+- [ ] **Step 6: Replace module 1's old consecutive studio**
+
+Delete `studio_preview_m1_l11`, `studio_plan_m1_l11`, and `studio_draw_m1_l11`. Add one `judgment-main` chapter using `generalization-m1`, at least two changed conditions, four possible methods, a scripted alternative from 아이미, and one transfer scene. Update the final summary row to reference the new main block.
+
+- [ ] **Step 7: Verify RED-to-GREEN end to end**
+
+Play `m1-l6` preview, navigate to `m1-l11`, explore two methods, choose `내 생각을 유지할래요`, add a reason, and complete the transfer scene.
+
+Expected: the saved first thought appears; keeping the same decision is not marked wrong; the evidence card contains all four stages; main completion becomes true only after transfer.
+
+Repeat after deleting the cycle record.
+
+Expected: fallback first-thought capture appears and the teacher record shows `예고 미참여`.
+
+- [ ] **Step 8: Commit the main pilot**
+
+```powershell
+git add src/components/mission/generalization/JudgmentMain.tsx src/components/mission/generalization/TeacherObservation.tsx src/components/mission/MissionStep.tsx src/data/lessons/m1.ts
+git commit -m "feat: add judgment replay and process assessment"
+```
+
+---
+
+### Task 4: Teacher dashboard and printing
+
+**Files:**
+
+- Create: `src/components/mission/generalization/GeneralizationRecordsPanel.tsx`
+- Modify: `src/views/TeacherView.tsx`
+- Modify: `src/components/mission/printMission.ts`
+
+**Interfaces:**
+
+- Consumes: all records from `loadGeneralizationRecords(window.localStorage)`, `TeacherObservation`, and mission answer summaries.
+- Produces: six teacher-facing record cards and printable comparison rows.
+
+- [ ] **Step 1: Record missing teacher evidence**
+
+Open `?teacher=1`, authenticate, and inspect the page.
+
+Expected RED: no `일반화 과정 기록` section and no first-thought evidence from module 1.
+
+- [ ] **Step 2: Build the teacher records panel**
+
+Display six module cards in order. Each card shows participation status, first thought, AI decision, final thought, transfer choice, four rubric statuses, and help level. Empty records show `아직 기록이 없어요`. Editing uses the same `TeacherObservation` component and persists immediately.
+
+- [ ] **Step 3: Mount the panel in `TeacherView`**
+
+Place it after `ProgressPanel` and before `ObjectivesPanel`. The existing password gate remains the only route into the page.
+
+- [ ] **Step 4: Add printable evidence summaries**
+
+For `judgment-preview`, print `첫 생각` and optional reason. For `judgment-main`, print `첫 생각`, `AI 의견에 대한 판단`, `최종 생각`, `새 장면 선택`, and teacher help level. Escape all free-form text before interpolating it into print HTML. Worksheets receive a normal evidence section; certificates receive a compact evidence strip under the certificate body so the final-lesson record is not discarded.
+
+- [ ] **Step 5: Verify dashboard and print**
+
+Expected: module 1 data appears after authentication, edits persist after reload, student mode does not expose the editor, and print preview contains readable text without a base64 drawing dump.
+
+- [ ] **Step 6: Commit teacher evidence support**
+
+```powershell
+git add src/components/mission/generalization/GeneralizationRecordsPanel.tsx src/views/TeacherView.tsx src/components/mission/printMission.ts
+git commit -m "feat: expose generalization evidence to teachers"
+```
+
+---
+
+### Task 5: Migrate modules 2–6 and add structural validation
+
+**Files:**
+
+- Create: `scripts/check-generalization-cycles.mjs`
+- Modify: `package.json`
 - Modify: `src/data/lessons/m2.ts`
 - Modify: `src/data/lessons/m3.ts`
 - Modify: `src/data/lessons/m4.ts`
 - Modify: `src/data/lessons/m5.ts`
 - Modify: `src/data/lessons/m6.ts`
-- Modify: `src/views/TeacherView.tsx`
-- Modify: `scripts/check-generalization-contract.mjs`
+- Modify: `docs/worker-guides/mission-authoring-guide.md`
 
 **Interfaces:**
-- `GENERALIZATION_CYCLES`는 `m1`~`m6`의 `cycleId`별 preview/main 블록을 export한다.
-- 각 `m*-l6`에는 preview 하나, 각 `m1~m4-l11`, `m5-l12`, `m6-l12`에는 main 하나를 배치한다.
-- 교사 패널은 저장 유틸을 통해 같은 record를 읽고 수정한다.
 
-- [ ] **Step 1: 콘텐츠 RED 검사를 추가한다.**
+- Consumes: the two block schemas proven by module 1.
+- Produces: paired cycle IDs `generalization-m1` through `generalization-m6` and a deterministic validation command.
 
-각 모듈 파일에서 preview 차시와 main 차시의 `judgment-preview`·`judgment-main`·동일 cycleId를 검사한다.
+- [ ] **Step 1: Write the structural checker before migration**
 
-Run: `npm run check:generalization`  
-Expected: FAIL until six pairs are wired.
+The script reads all six lesson files and asserts:
 
-- [ ] **Step 2: 공통 콘텐츠를 작성한다.**
-
-각 단원은 첫 선택 3개 이상, 조건 변경 태그 2개 이상, 대응 방법 3개 이상, AI 대안/확인 질문 1개, 최종 선택 3개 이상, 전이 선택 2개 이상을 가진다. m5는 버스 지연, m6는 품절 장면을 포함한다. m4 안전 장면은 확인·거절·어른 도움 흐름만 사용한다.
-
-- [ ] **Step 3: 중간 차시 preview를 배치한다.**
-
-각 `m*-l6` 미션에 3~5분 preview 장을 추가하고, 내용이 겹치는 폐쇄형 퀴즈 하나만 줄여 총량을 조정한다.
-
-- [ ] **Step 4: 마무리 차시 main을 배치한다.**
-
-기존 연속형 `studio_preview_*`, `studio_plan_*`, `studio_draw_*`를 삭제하고 main 하나로 교체한다. summary는 새 비교 증거를 참조하고 기존 수료·보상은 보존한다.
-
-- [ ] **Step 5: `TeacherView` 기록 패널을 연결한다.**
-
-단원별 첫 생각, AI 판단, 최종 생각, 전이 선택, 네 평가 항목, 도움 수준을 확인·수정한다. 빈 record는 “아직 기록이 없어요”로 표시한다.
-
-- [ ] **Step 6: 검사·빌드·커밋한다.**
-
-Run: `npm run check:generalization && npm run lint && npm run check:encoding`  
-Expected: 여섯 쌍 통과, 오류 0개.
-
-```bash
-git add src/data/generalizationCycles.ts src/data/lessons/m1.ts src/data/lessons/m2.ts src/data/lessons/m3.ts src/data/lessons/m4.ts src/data/lessons/m5.ts src/data/lessons/m6.ts src/views/TeacherView.tsx scripts/check-generalization-contract.mjs
-git commit -m "content: connect six module judgment cycles"
+```js
+const pairs = [
+  ['m1', 'm1-l6', 'm1-l11'],
+  ['m2', 'm2-l6', 'm2-l11'],
+  ['m3', 'm3-l6', 'm3-l11'],
+  ['m4', 'm4-l6', 'm4-l11'],
+  ['m5', 'm5-l6', 'm5-l12'],
+  ['m6', 'm6-l6', 'm6-l12'],
+];
 ```
 
-### Task 5: 브라우저·정적 회귀 검증
+For each module, require one `judgment-preview`, one `judgment-main`, two or more `changedConditions`, four or more main methods, two or more transfer options, matching cycle IDs, and no `studio_preview_`, `studio_plan_`, or `studio_draw_` identifiers.
+
+Add the package script exactly as follows:
+
+```json
+"check:generalization": "node scripts/check-generalization-cycles.mjs"
+```
+
+- [ ] **Step 2: Run the checker and verify RED**
+
+Run: `node scripts/check-generalization-cycles.mjs`
+
+Expected: FAIL for modules 2–6 because their previews remain in final lessons and use old studio IDs.
+
+- [ ] **Step 3: Migrate module 2**
+
+Place the birthday-invitation first thought in `m2-l6`. In `m2-l11`, change recipient, length, and medium; provide methods for adding audience, desired length, example, and tone. AI asks which condition matters most. Transfer to a club recruitment message.
+
+- [ ] **Step 4: Migrate module 3**
+
+Place the stuck-math-problem first thought in `m3-l6`. In `m3-l11`, change deadline, available tool, and explanation requirement; methods include answer request, step hint, example problem, and teacher help. AI proposes asking for one hint without the final answer. Transfer to understanding a long passage.
+
+- [ ] **Step 5: Migrate module 4**
+
+Place the school-logo stranger-account first thought in `m4-l6`. In `m4-l11`, change claimed identity, contact time, and verification tool; methods include pausing, checking through another channel, asking a trusted adult, and blocking/reporting. AI asks how identity can be confirmed without sending information. Transfer to a delivery-style password request.
+
+- [ ] **Step 6: Migrate module 5**
+
+Place the late-bus first thought in `m5-l6`. In `m5-l12`, change appointment time, phone battery, and companion; methods include waiting with a time limit, checking another route, contacting the waiting person, and asking nearby staff. AI proposes preserving battery while confirming one safe alternative. Transfer to a blocked familiar route.
+
+- [ ] **Step 7: Migrate module 6**
+
+Place the out-of-stock item first thought in `m6-l6`. In `m6-l12`, change needed date, budget, and available helper; methods include choosing an alternative, checking another store, asking when stock returns, and changing the plan. AI asks which condition cannot change. Transfer to a sold-out kiosk menu.
+
+- [ ] **Step 8: Update the authoring guide**
+
+Document both new block schemas, cross-lesson `cycleId` rules, the preview no-feedback rule, minimum two methods, neutral comparison language, optional reasons, and teacher assessment independence.
+
+- [ ] **Step 9: Run the checker and build**
+
+Run: `npm run check:generalization`
+
+Expected: PASS with six preview/main pairs.
+
+Run: `npm run build`
+
+Expected: PASS.
+
+- [ ] **Step 10: Commit all six paired cycles**
+
+```powershell
+git add package.json scripts/check-generalization-cycles.mjs src/data/lessons/m2.ts src/data/lessons/m3.ts src/data/lessons/m4.ts src/data/lessons/m5.ts src/data/lessons/m6.ts docs/worker-guides/mission-authoring-guide.md
+git commit -m "content: pair six first-thought judgment cycles"
+```
+
+---
+
+### Task 6: Full verification and cleanup
 
 **Files:**
-- Modify: `scripts/check-generalization-contract.mjs` only when a demonstrated contract is missing.
-- Modify: `package.json` only when a required check command is missing.
 
-- [ ] **Step 1: 대표 RED 시나리오를 재현한다.**
+- Modify only files changed by Tasks 1–5 when verification identifies an in-scope defect.
 
-`?lesson=m5-l6`에서 예고 선택 후 `localStorage.getItem('ai-students-generalization-v1')`에 m5 record가 생기는지 확인한다. 구현 전에는 실패하고 구현 후에는 성공해야 한다.
+**Interfaces:**
 
-- [ ] **Step 2: 예고→본 활동 GREEN 시나리오를 실행한다.**
+- Consumes: complete six-cycle implementation.
+- Produces: verified production build and evidence that the core student and teacher flows work.
 
-m5-l6 선택 → 차시 이동 → m5-l12 회상 → 조건 태그 2개 → 방법 2개 → AI 판단 `조금 바꿀래요` → 최종 선택 → 전이 선택 → 일곱 단계 증거 카드 순으로 확인한다.
+- [ ] **Step 1: Run all static checks**
 
-- [ ] **Step 3: 중립성·접근성을 확인한다.**
-
-예고에 해설·점수·정답표가 없는지, 유지·변경 모두 실패 문구가 없는지, TTS off에서 자동 음성 0회인지, AAC·텍스트/STT·그림 중 하나로 완료되는지 확인한다.
-
-- [ ] **Step 4: 교사 기록을 확인한다.**
-
-학생 세션에서 관찰 영역이 숨겨지고, 교사 세션에서 나타나며, 교사 화면 새로고침 후 네 항목과 도움 수준이 유지되는지 확인한다.
-
-- [ ] **Step 5: 전체 검사를 실행한다.**
-
-Run: `npm run check:generalization && npm run build && npm run check:encoding && npm run check:ui-polish && npm run check:activity-icons && git diff --check`  
-Expected: 모두 통과. 기존 Vite chunk-size warning은 실패로 처리하지 않는다.
-
-- [ ] **Step 6: 상태를 확인한다.**
-
-```bash
-git status --short --branch
-git log -8 --oneline
+```powershell
+npm run test:generalization-storage
+npm run check:generalization
+npm run build
+npm run check:encoding
+npm run check:ui-polish
+npm run check:activity-icons
+git diff --check
 ```
 
-Expected: 관련 커밋만 추가되고 기존 미추적 파일은 변경되지 않는다.
+Expected: all commands PASS; only the existing Vite large-chunk warning may remain.
 
-## 실행 순서
+- [ ] **Step 2: Browser-test the complete module 1 flow**
 
-Task 1부터 5까지 순서대로 실행한다. 각 Task의 RED를 확인한 뒤 GREEN을 확인하고 다음 Task로 넘어간다. 별도 테스트 프레임워크가 없으므로 계약 스크립트와 실제 브라우저 상호작용을 함께 사용한다.
+At 1280×900, test choice+AAC preview, reload persistence, changed conditions, two-method gating, AI keep/modify/accept controls, optional reason, transfer, evidence card, authenticated teacher observation, teacher dashboard, and print preview.
+
+Expected: all required stages work and no student-facing correctness judgment appears.
+
+- [ ] **Step 3: Smoke-test modules 2–6**
+
+For every preview lesson, save one first thought. For every final lesson, confirm the matching first thought is recalled, changed-condition tags render, at least four methods are available, and the module-specific transfer scene appears.
+
+- [ ] **Step 4: Verify the TTS regression condition**
+
+With `ai-students-settings.ttsEnabled` set to `false`, enter the final mission and navigate through both new block types.
+
+Expected: zero automatic `speechSynthesis.speak` calls. Explicit speaker buttons still call speech once.
+
+- [ ] **Step 5: Review the worktree scope**
+
+Run: `git status --short` and `git diff --stat HEAD~4..HEAD`.
+
+Expected: unrelated pre-existing untracked files remain untouched; implementation commits contain only plan-scoped files.
+
+- [ ] **Step 6: Commit any verification-only corrections**
+
+If verification required an in-scope correction, stage only that file and commit:
+
+```powershell
+git commit -m "fix: polish judgment cycle interactions"
+```
+
+If no correction was necessary, do not create an empty commit.
