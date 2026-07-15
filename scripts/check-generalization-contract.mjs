@@ -15,4 +15,10 @@ for (const marker of ['JudgmentPreviewBlock', 'JudgmentMainBlock', 'Generalizati
   if (!types.includes(marker)) throw new Error(`missing type marker: ${marker}`);
 }
 
+const previewPath = resolve(root, 'src/components/mission/blocks/JudgmentPreview.tsx');
+if (!existsSync(previewPath)) throw new Error('missing JudgmentPreview.tsx');
+const preview = readFileSync(previewPath, 'utf8');
+if (!preview.includes('첫 생각을 저장했어요')) throw new Error('preview must defer feedback');
+if (preview.includes('정답이에요')) throw new Error('preview must not mark answers correct');
+
 console.log('generalization contract passed');

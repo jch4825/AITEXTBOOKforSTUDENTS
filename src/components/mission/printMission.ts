@@ -1,5 +1,17 @@
 import type { MissionBlock } from '../../types';
 
+function expressionText(value: any, choices: { id: string; label: string }[] = []): string {
+  if (!value) return '';
+  if (Array.isArray(value.choiceIds)) {
+    return value.choiceIds
+      .map((id: string) => choices.find((choice) => choice.id === id)?.label || id)
+      .join(', ');
+  }
+  if (typeof value.text === 'string' && value.text.trim()) return value.text;
+  if (value.drawing) return '그림으로 표현했어요.';
+  return '표현했어요.';
+}
+
 export function printMission(
   type: 'worksheet' | 'certificate',
   studentName: string,
@@ -229,10 +241,17 @@ export function printMission(
           answerHtml = `<span style="font-size:16px; font-weight:bold;">${vowSentence}</span>`;
         } else if (block.kind === 'draw') {
           answerHtml = `<div class="drawing-img-box"><img src="${val}" style="max-height:220px; max-width:100%; object-fit:contain; border:1px solid #ddd; background:#fff; padding:4px; border-radius:8px;" /></div>`;
+        } else if (block.kind === 'judgment-preview') {
+          answerHtml = `<span class="badge">${expressionText(val.firstThought, block.choices)}</span>`;
+          if (val.reason) answerHtml += `<br><span>${expressionText(val.reason, block.reasonCards || [])}</span>`;
         }
       }
 
-      const promptText = block.kind === 'branch-chat' ? block.intro : (block as any).prompt;
+      const promptText = block.kind === 'branch-chat'
+        ? block.intro
+        : block.kind === 'judgment-preview'
+          ? block.scenario.title
+          : (block as any).prompt;
 
       contentRowsHtml += `
         <div class="block-section">

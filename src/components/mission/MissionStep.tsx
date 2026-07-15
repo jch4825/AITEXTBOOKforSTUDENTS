@@ -16,6 +16,7 @@ import DragBuild from './blocks/DragBuild';
 import BranchChat from './blocks/BranchChat';
 import SceneHunt from './blocks/SceneHunt';
 import DrawPad from './blocks/DrawPad';
+import JudgmentPreview from './blocks/JudgmentPreview';
 import SummaryTable from './blocks/SummaryTable';
 import Vow from './blocks/Vow';
 
@@ -123,6 +124,14 @@ export default function MissionStep({
         return typeof val === 'string' && val.trim() !== '';
       case 'vow':
         return typeof val === 'string' && val.trim() !== '';
+      case 'judgment-preview':
+        return Boolean(
+          val?.firstThought && (
+            (Array.isArray(val.firstThought.choiceIds) && val.firstThought.choiceIds.length > 0)
+            || val.firstThought.text?.trim()
+            || val.firstThought.drawing
+          ),
+        );
       default:
         return false;
     }
@@ -449,6 +458,17 @@ export default function MissionStep({
                   value={val}
                   onChange={updateVal}
                   accent={accent}
+                />
+              );
+            case 'judgment-preview':
+              return (
+                <JudgmentPreview
+                  key={block.id}
+                  block={block}
+                  value={val}
+                  studentName={studentName}
+                  accent={accent}
+                  onChange={updateVal}
                 />
               );
             case 'summary':
