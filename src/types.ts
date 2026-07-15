@@ -115,7 +115,9 @@ export type MissionBlock =
   | SceneHuntBlock
   | DrawBlock
   | SummaryBlock
-  | VowBlock;
+  | VowBlock
+  | JudgmentPreviewBlock
+  | JudgmentMainBlock;
 
 export interface MultiPickBlock {
   kind: 'multi-pick';
@@ -183,4 +185,74 @@ export interface VowBlock {
   kind: 'vow';
   id: string;
   template: string; // "나 {이름}는 AI의 답이 맞는지 {빈칸} 확인하겠습니다!"
+}
+
+export type GeneralizationExpressionMode = 'choice' | 'aac' | 'text' | 'speech' | 'draw';
+export type GeneralizationAiDecision = 'accept' | 'modify' | 'keep';
+export type GeneralizationHelpLevel = 'independent' | 'cue' | 'choice-support' | 'co-perform';
+export type GeneralizationObservationStatus = 'unobserved' | 'prompted' | 'independent';
+
+export interface GeneralizationExpression {
+  mode: GeneralizationExpressionMode;
+  choiceIds?: string[];
+  text?: string;
+  drawing?: string;
+}
+
+export interface GeneralizationObservation {
+  importantInfo: GeneralizationObservationStatus;
+  attemptedMethod: GeneralizationObservationStatus;
+  comparedAi: GeneralizationObservationStatus;
+  adjustedToCondition: GeneralizationObservationStatus;
+  helpLevel: GeneralizationHelpLevel;
+  note?: string;
+}
+
+export interface GeneralizationCycleRecord {
+  version: 1;
+  cycleId: string;
+  moduleId: ModuleId;
+  studentName: string;
+  preview?: {
+    firstThought: GeneralizationExpression;
+    reason?: GeneralizationExpression;
+    capturedAt: string;
+    capturedAtMain?: boolean;
+  };
+  main?: {
+    importantInfoIds: string[];
+    exploredMethodIds: string[];
+    aiDecision: GeneralizationAiDecision;
+    finalThought: GeneralizationExpression;
+    transferChoiceId: string;
+    capturedAt: string;
+  };
+  observation?: GeneralizationObservation;
+}
+
+export interface JudgmentPreviewBlock {
+  kind: 'judgment-preview';
+  id: string;
+  cycleId: string;
+  moduleId: ModuleId;
+  scenario: { title: string; description: string };
+  choices: { id: string; emoji: string; label: string }[];
+  reasonCards?: { id: string; emoji: string; label: string }[];
+  expressionModes?: GeneralizationExpressionMode[];
+  closing: string;
+}
+
+export interface JudgmentMainBlock {
+  kind: 'judgment-main';
+  id: string;
+  cycleId: string;
+  moduleId: ModuleId;
+  changedScenario: { title: string; description: string; changedConditions: string[] };
+  importantInfo: { id: string; emoji: string; label: string }[];
+  methods: { id: string; emoji: string; label: string }[];
+  aiContribution: { title: string; text: string; alternativeMethodId?: string; question?: string };
+  finalChoices: { id: string; emoji: string; label: string }[];
+  reasonCards?: { id: string; emoji: string; label: string }[];
+  transfer: { title: string; description: string; choices: { id: string; emoji: string; label: string }[] };
+  expressionModes?: GeneralizationExpressionMode[];
 }
