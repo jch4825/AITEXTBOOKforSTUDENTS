@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { DrawBlock, GeneralizationExpression, GeneralizationExpressionMode } from '../../../types';
 import DrawPad from './DrawPad';
 import MicButton from '../../MicButton';
@@ -37,10 +37,16 @@ export default function ExpressionInput({
   onChange,
 }: Props) {
   const { speakNow, speak } = useSpeak();
-  const activeMode = value?.mode ?? expressionModes[0] ?? 'choice';
+  const [selectedMode, setSelectedMode] = useState<GeneralizationExpressionMode>(value?.mode ?? expressionModes[0] ?? 'choice');
+  const activeMode = selectedMode;
   const drawBlock: DrawBlock = { kind: 'draw', id: 'generalization-expression', prompt: '내 생각을 그림으로 표현해 보세요.' };
 
+  useEffect(() => {
+    if (value?.mode && expressionModes.includes(value.mode)) setSelectedMode(value.mode);
+  }, [value?.mode, expressionModes]);
+
   function selectMode(mode: GeneralizationExpressionMode) {
+    setSelectedMode(mode);
     onChange({ mode, choiceIds: mode === 'choice' || mode === 'aac' ? value?.choiceIds : undefined, text: mode === 'text' || mode === 'speech' ? value?.text : undefined, drawing: mode === 'draw' ? value?.drawing : undefined });
   }
 

@@ -70,6 +70,10 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
   }
 
   function chooseFinal(finalThought: GeneralizationExpression) {
+    const hasExpression = Boolean(
+      finalThought.choiceIds?.length || finalThought.text?.trim() || finalThought.drawing,
+    );
+    if (!hasExpression) return;
     updateValue({ ...local, finalThought });
     setPhase('transfer');
   }

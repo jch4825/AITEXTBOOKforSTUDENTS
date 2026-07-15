@@ -21,6 +21,10 @@ export default function JudgmentPreview({ block, value = {}, studentName, accent
   const reasonCards = block.reasonCards ?? [];
 
   function saveThought(firstThought: GeneralizationExpression) {
+    const hasExpression = Boolean(
+      firstThought.choiceIds?.length || firstThought.text?.trim() || firstThought.drawing,
+    );
+    if (!hasExpression) return;
     const next = { ...value, firstThought };
     onChange(next);
     cycle.update({
