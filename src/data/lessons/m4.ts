@@ -1357,7 +1357,56 @@ export const M4_LESSONS: LessonContent[] = [
               ]
             },
             {
-              title: '3장: 수료 선언',
+              title: '3장: 예고: 낯선 요청 만나기',
+              goal: '낯선 사람이 말을 걸거나 정보를 달라고 할 때 여러 변수를 살펴보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'studio_preview_m4_l11',
+                  intro: '안전 판단이 필요한 낯선 장면을 먼저 봅니다.',
+                  turns: [
+                    {
+                      aimi: '게임 채팅에서 모르는 사람이 "아이템 줄게. 사는 동네랑 학교 이름 알려줘"라고 했어요. 어떻게 하는 게 좋을까요?',
+                      choices: [
+                        { label: '알려주지 않고 채팅을 멈춘 뒤 어른에게 말해요.', reply: '가장 안전한 선택이에요. 개인정보는 선물과 바꾸는 것이 아니에요.', good: true },
+                        { label: '왜 필요한지 묻기보다 먼저 화면을 닫고 도움을 요청해요.', reply: '좋아요. 위험할 수 있는 요청은 자세히 대화하지 않아도 돼요.', good: true }
+                      ]
+                    },
+                    {
+                      aimi: 'AI 그림 사이트가 내 얼굴 사진을 올리면 멋지게 바꿔 준다고 해요. 마음이 흔들릴 때 어떻게 할까요?',
+                      choices: [
+                        { label: '내 얼굴 사진은 혼자 올리지 않고 보호자와 먼저 확인해요.', reply: '좋아요. 얼굴 사진은 소중한 개인정보예요.', good: true },
+                        { label: '사진 대신 얼굴이 나오지 않는 그림으로 연습해요.', reply: '좋은 우회 방법이에요. 안전한 대안을 찾는 것도 실력이에요.', good: true }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '4장: 본 활동: 안전 대응 고르기',
+              goal: '정답 하나를 외우기보다 위험 신호와 도움 요청 방법을 골라 보세요.',
+              blocks: [
+                {
+                  kind: 'multi-pick',
+                  id: 'studio_plan_m4_l11',
+                  prompt: '낯선 요청을 만났을 때 내가 할 수 있는 안전 행동을 골라 보세요.',
+                  items: [
+                    { emoji: '🛑', label: '대화를 잠깐 멈추기' },
+                    { emoji: '🔒', label: '이름, 주소, 학교, 사진을 보내지 않기' },
+                    { emoji: '📸', label: '필요하면 화면을 캡처해 어른에게 보여주기' },
+                    { emoji: '👨‍👩‍👧', label: '선생님이나 보호자에게 말하기' }
+                  ]
+                },
+                {
+                  kind: 'draw',
+                  id: 'studio_draw_m4_l11',
+                  prompt: '내가 위험하다고 느끼는 온라인 장면과, 도움을 요청할 사람을 그려 보세요.'
+                }
+              ]
+            },
+            {
+              title: '5장: 수료 선언',
               goal: '나의 보안관 임명장을 획득하세요.',
               blocks: [
                 {
@@ -1366,7 +1415,10 @@ export const M4_LESSONS: LessonContent[] = [
                   title: '스마트 보안관 수료 요약',
                   rows: [
                     { label: '내가 지켜낼 보안관 행동', from: 'safety_graduation_sort' },
-                    { label: '보안관 임명 다짐', from: 'safety_graduation_chat' }
+                    { label: '보안관 임명 다짐', from: 'safety_graduation_chat' },
+                    { label: '낯선 요청에서 고른 말', from: 'studio_preview_m4_l11' },
+                    { label: '내가 고른 안전 행동', from: 'studio_plan_m4_l11' },
+                    { label: '위험 장면과 도움 요청 그림', from: 'studio_draw_m4_l11' }
                   ]
                 },
                 {

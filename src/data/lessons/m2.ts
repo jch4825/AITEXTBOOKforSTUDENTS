@@ -1380,7 +1380,56 @@ export const M2_LESSONS: LessonContent[] = [
               ]
             },
             {
-              title: '3장: 수료 선언',
+              title: '3장: 예고: 애매한 답 만나기',
+              goal: 'AI 답이 마음과 다를 때 바로 틀렸다고 끝내지 않고 다시 묻는 장면을 살펴보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'studio_preview_m2_l11',
+                  intro: 'AI와 대화할 때 생기는 애매한 상황을 미리 봅니다.',
+                  turns: [
+                    {
+                      aimi: '친구 생일 초대장을 써 달라고 했더니 AI가 너무 딱딱한 말투로 길게 써 주었어요. 어떻게 이어서 말하면 좋을까요?',
+                      choices: [
+                        { label: '초등학생 친구에게 보내는 짧고 따뜻한 말로 다시 써 달라고 해요.', reply: '좋아요. 대상, 길이, 말투를 알려 주면 답이 더 가까워져요.', good: true },
+                        { label: '예시 한 문장을 보여 주고 이런 느낌으로 부탁해요.', reply: '아주 좋아요. 예시를 주면 AI가 원하는 모양을 더 잘 이해해요.', good: true }
+                      ]
+                    },
+                    {
+                      aimi: 'AI가 내 질문을 잘못 알아듣고 엉뚱한 답을 했어요. 어떤 마음으로 다시 말하면 좋을까요?',
+                      choices: [
+                        { label: '화내기보다 빠진 조건을 하나 더 넣어 다시 물어봐요.', reply: '멋진 태도예요. 조건을 보태면 대화가 더 좋아져요.', good: true },
+                        { label: '내가 원하는 답의 모양을 짧게 알려 줘요.', reply: '좋아요. 답의 모양을 알려 주는 것도 좋은 프롬프트예요.', good: true }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '4장: 본 활동: 다시 묻기 만들기',
+              goal: '내가 원하는 답을 얻기 위해 바꿔 말하는 방법을 골라 보세요.',
+              blocks: [
+                {
+                  kind: 'multi-pick',
+                  id: 'studio_plan_m2_l11',
+                  prompt: 'AI 답이 애매할 때 다시 부탁하는 방법을 골라 보세요.',
+                  items: [
+                    { emoji: '📏', label: '더 짧게 말해 달라고 하기' },
+                    { emoji: '🎭', label: '친구 말투나 선생님 말투처럼 역할 정하기' },
+                    { emoji: '💡', label: '예시를 하나 보여 주기' },
+                    { emoji: '🔄', label: '빠진 조건을 넣어 다시 묻기' }
+                  ]
+                },
+                {
+                  kind: 'draw',
+                  id: 'studio_draw_m2_l11',
+                  prompt: 'AI가 내 말을 잘못 알아들었을 때, 다시 부탁하는 말풍선을 만들어 보세요.'
+                }
+              ]
+            },
+            {
+              title: '5장: 수료 선언',
               goal: '나의 요리사 졸업장을 받으세요.',
               blocks: [
                 {
@@ -1389,7 +1438,10 @@ export const M2_LESSONS: LessonContent[] = [
                   title: '프롬프트 요리사 졸업 계획서',
                   rows: [
                     { label: '내가 마스터한 질문법', from: 'graduation_sort' },
-                    { label: '졸업 소감', from: 'graduation_chat' }
+                    { label: '졸업 소감', from: 'graduation_chat' },
+                    { label: '애매한 답에서 고른 말', from: 'studio_preview_m2_l11' },
+                    { label: '내가 고른 다시 묻기', from: 'studio_plan_m2_l11' },
+                    { label: '다시 부탁하는 말풍선', from: 'studio_draw_m2_l11' }
                   ]
                 },
                 {

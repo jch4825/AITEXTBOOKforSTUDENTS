@@ -1289,7 +1289,56 @@ export const M3_LESSONS: LessonContent[] = [
               ]
             },
             {
-              title: '3장: 최종 공부짱 선언',
+              title: '3장: 예고: 공부가 막힌 장면',
+              goal: 'AI가 답을 다 해 주기보다 내가 생각할 수 있게 돕는 장면을 살펴보세요.',
+              blocks: [
+                {
+                  kind: 'branch-chat',
+                  id: 'studio_preview_m3_l11',
+                  intro: '공부 중 막히는 장면을 먼저 봅니다.',
+                  turns: [
+                    {
+                      aimi: '수학 문제가 어려워서 AI에게 물어봤더니 바로 정답을 말해 주려고 해요. 내 공부에 더 도움이 되려면 어떻게 부탁할까요?',
+                      choices: [
+                        { label: '정답 말고 첫 번째 힌트만 달라고 해요.', reply: '좋아요. 힌트만 받으면 내가 생각할 자리가 남아요.', good: true },
+                        { label: '비슷한 쉬운 예시로 먼저 설명해 달라고 해요.', reply: '좋아요. 쉬운 예시는 어려운 개념으로 가는 다리가 될 수 있어요.', good: true }
+                      ]
+                    },
+                    {
+                      aimi: 'AI 설명이 너무 길어서 읽기 힘들어요. 어떤 도움을 다시 요청하면 좋을까요?',
+                      choices: [
+                        { label: '세 문장으로 쉽게 줄여 달라고 해요.', reply: '좋아요. 길이와 난이도를 말하면 내게 맞는 설명이 돼요.', good: true },
+                        { label: '중요한 낱말 세 개만 골라 달라고 해요.', reply: '좋아요. 핵심 낱말부터 잡으면 공부가 덜 복잡해져요.', good: true }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              title: '4장: 본 활동: 나의 공부 도움 요청',
+              goal: 'AI에게 답을 맡기지 않고 내 생각을 키우는 요청을 만들어 보세요.',
+              blocks: [
+                {
+                  kind: 'multi-pick',
+                  id: 'studio_plan_m3_l11',
+                  prompt: '공부할 때 AI에게 부탁해 볼 수 있는 도움을 골라 보세요.',
+                  items: [
+                    { emoji: '💡', label: '힌트만 달라고 하기' },
+                    { emoji: '🧩', label: '작은 단계로 나누어 설명해 달라고 하기' },
+                    { emoji: '📚', label: '쉬운 예시를 하나 들어 달라고 하기' },
+                    { emoji: '✅', label: '내가 푼 뒤 맞는지 확인해 달라고 하기' }
+                  ]
+                },
+                {
+                  kind: 'draw',
+                  id: 'studio_draw_m3_l11',
+                  prompt: '내가 공부하다 막혔을 때 AI에게 부탁하고 싶은 도움 카드를 그려 보세요.'
+                }
+              ]
+            },
+            {
+              title: '5장: 최종 공부짱 선언',
               goal: '수료 다짐 카드를 완성하세요.',
               blocks: [
                 {
@@ -1298,7 +1347,10 @@ export const M3_LESSONS: LessonContent[] = [
                   title: '공부짱 졸업 요약서',
                   rows: [
                     { label: '나의 바른 공부 습관', from: 'study_behavior_sort' },
-                    { label: '졸업 소감 대화', from: 'study_graduation_chat' }
+                    { label: '졸업 소감 대화', from: 'study_graduation_chat' },
+                    { label: '막힌 공부 장면의 선택', from: 'studio_preview_m3_l11' },
+                    { label: '내가 고른 공부 도움', from: 'studio_plan_m3_l11' },
+                    { label: '나의 공부 도움 카드', from: 'studio_draw_m3_l11' }
                   ]
                 },
                 {
