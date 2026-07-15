@@ -1,4 +1,5 @@
 import type { LessonContent } from '../../types';
+import { GENERALIZATION_CYCLES } from '../generalizationCycles';
 
 /**
  * 단원 5 — AI로 문제해결하기
@@ -594,6 +595,11 @@ export const M5_LESSONS: LessonContent[] = [
                   ]
                 }
               ]
+            },
+            {
+              title: '4장: 예고: 첫 생각 저장',
+              goal: '버스가 늦은 장면에서 처음 생각한 방법을 기록해 보세요.',
+              blocks: [GENERALIZATION_CYCLES.m5.preview]
             }
           ],
           reward: {
@@ -1272,56 +1278,12 @@ export const M5_LESSONS: LessonContent[] = [
               ]
             },
             {
-              title: '3장: 예고: 계획이 바뀐 날',
-              goal: '버스가 늦거나 원하는 물건이 없을 때 문제를 작게 나누어 살펴보세요.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'studio_preview_m5_l12',
-                  intro: '예상과 다른 일이 생긴 장면을 먼저 봅니다.',
-                  turns: [
-                    {
-                      aimi: '약속 장소에 가야 하는데 버스가 20분 늦게 온대요. 마음이 급해졌어요. 먼저 무엇을 생각하면 좋을까요?',
-                      choices: [
-                        { label: '지금 할 수 있는 일과 기다려야 하는 일을 나눠 봐요.', reply: '좋아요. 문제를 나누면 마음도 조금 차분해져요.', good: true },
-                        { label: '도착 시간이 늦어질지 확인하고 연락할 사람을 떠올려요.', reply: '좋아요. 상황을 알리는 것도 문제 해결의 한 부분이에요.', good: true }
-                      ]
-                    },
-                    {
-                      aimi: '마트에 갔는데 사려던 우유가 품절이에요. 꼭 오늘 필요해요. 어떻게 해결해 볼까요?',
-                      choices: [
-                        { label: '비슷한 다른 우유가 있는지 찾아보고 직원에게 물어봐요.', reply: '좋아요. 다른 방법을 찾는 플랜 B예요.', good: true },
-                        { label: '가족에게 전화해서 다른 물건으로 바꿔도 되는지 확인해요.', reply: '좋아요. 혼자 결정하기 어려울 때 도움을 구할 수 있어요.', good: true }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              title: '3장: 본 활동: 생각 리플레이',
+              goal: '첫 생각과 달라진 조건을 비교하고, 나만의 다음 행동을 만들어 보세요.',
+              blocks: [GENERALIZATION_CYCLES.m5.main]
             },
             {
-              title: '4장: 본 활동: 플랜 B 만들기',
-              goal: '예상과 다른 일이 생겼을 때 나만의 다음 행동을 만들어 보세요.',
-              blocks: [
-                {
-                  kind: 'multi-pick',
-                  id: 'studio_plan_m5_l12',
-                  prompt: '계획이 바뀐 날 내가 해볼 수 있는 문제 해결 행동을 골라 보세요.',
-                  items: [
-                    { emoji: '🧩', label: '문제를 작은 조각으로 나누기' },
-                    { emoji: '📞', label: '늦거나 바뀐 일을 알려야 할 사람에게 말하기' },
-                    { emoji: '🔁', label: '다른 방법이나 비슷한 물건 찾기' },
-                    { emoji: '✅', label: '해결한 뒤 괜찮은 선택이었는지 확인하기' }
-                  ]
-                },
-                {
-                  kind: 'draw',
-                  id: 'studio_draw_m5_l12',
-                  prompt: '버스가 늦거나 물건이 없을 때, 내가 할 수 있는 플랜 B 길을 그려 보세요.'
-                }
-              ]
-            },
-            {
-              title: '5장: 수료 선언',
+              title: '4장: 수료 선언',
               goal: '나의 문제 해결사 임명장 수료증을 받으세요.',
               blocks: [
                 {
@@ -1331,9 +1293,7 @@ export const M5_LESSONS: LessonContent[] = [
                   rows: [
                     { label: '내가 정립한 해결 원칙', from: 'solving_graduation_sort' },
                     { label: '최종 졸업 다짐', from: 'solving_graduation_chat' },
-                    { label: '계획이 바뀐 장면의 선택', from: 'studio_preview_m5_l12' },
-                    { label: '내가 고른 플랜 B 행동', from: 'studio_plan_m5_l12' },
-                    { label: '나의 플랜 B 그림', from: 'studio_draw_m5_l12' }
+                    { label: '판단 비교와 새 장면 기록', from: 'judgment_main_m5_l12' }
                   ]
                 },
                 {

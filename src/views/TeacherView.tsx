@@ -7,6 +7,7 @@ import Button from '../components/Button';
 import { ALL_LESSONS } from '../data/lessons';
 import { MODULES, lessonIdsForModule } from '../data/modules';
 import { loadProgress } from '../utils/storage';
+import GeneralizationRecordsPanel from '../components/mission/GeneralizationRecordsPanel';
 
 interface Props {
   onExit: () => void;
@@ -65,6 +66,7 @@ export default function TeacherView({ onExit }: Props) {
 
       <ApiKeyPanel />
       <ProgressPanel />
+      <GeneralizationRecordsPanel />
       <ObjectivesPanel />
     </main>
   );

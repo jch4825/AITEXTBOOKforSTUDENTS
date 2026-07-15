@@ -1,4 +1,5 @@
 import type { LessonContent } from '../../types';
+import { GENERALIZATION_CYCLES } from '../generalizationCycles';
 
 /**
  * 단원 6 — AI랑 일상생활
@@ -646,6 +647,11 @@ export const M6_LESSONS: LessonContent[] = [
                   ]
                 }
               ]
+            },
+            {
+              title: '4장: 예고: 첫 생각 저장',
+              goal: '원하는 물건이 없을 때 처음 생각한 방법을 기록해 보세요.',
+              blocks: [GENERALIZATION_CYCLES.m6.preview]
             }
           ],
           reward: {
@@ -1264,56 +1270,12 @@ export const M6_LESSONS: LessonContent[] = [
               ]
             },
             {
-              title: '3장: 예고: 진짜 생활 장면',
-              goal: 'AI와 배운 생활 기술을 낯선 하루 장면에 옮겨 생각해 보세요.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'studio_preview_m6_l12',
-                  intro: '실제 하루에서 만날 수 있는 복합 상황을 먼저 봅니다.',
-                  turns: [
-                    {
-                      aimi: '비가 오는데 버스가 늦고, 휴대폰 배터리도 조금 남았어요. 집에 연락해야 할지, 지도 앱을 더 봐야 할지 헷갈려요. 어떻게 해볼까요?',
-                      choices: [
-                        { label: '먼저 안전한 곳에서 보호자에게 상황을 짧게 알려요.', reply: '좋아요. 안전과 연락을 먼저 챙기는 판단이에요.', good: true },
-                        { label: '배터리를 아끼며 도착 시간만 확인하고 기다릴 장소를 정해요.', reply: '좋아요. 필요한 정보만 보고 힘을 아끼는 방법이에요.', good: true }
-                      ]
-                    },
-                    {
-                      aimi: '마트에서 물건을 찾다가 모르는 어른이 "내가 대신 사 줄게, 따라와"라고 말했어요. 친절한 것 같기도 해서 애매해요.',
-                      choices: [
-                        { label: '따라가지 않고 직원이나 계산대 근처로 가요.', reply: '좋아요. 친절해 보여도 낯선 사람을 따라가지는 않아요.', good: true },
-                        { label: '혼자 해결하지 않고 보호자나 선생님께 바로 알려요.', reply: '좋아요. 애매한 상황에서는 믿을 수 있는 어른에게 연결해요.', good: true }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              title: '3장: 본 활동: 생각 리플레이',
+              goal: '첫 생각과 달라진 조건을 비교하고, 생활 속 대응을 다시 골라 보세요.',
+              blocks: [GENERALIZATION_CYCLES.m6.main]
             },
             {
-              title: '4장: 본 활동: 나의 생활 대응 카드',
-              goal: '교통, 장보기, 안전, AI 사용을 함께 생각해 나의 대응 카드를 완성하세요.',
-              blocks: [
-                {
-                  kind: 'multi-pick',
-                  id: 'studio_plan_m6_l12',
-                  prompt: '예상과 다른 하루를 만났을 때 내가 챙길 행동을 골라 보세요.',
-                  items: [
-                    { emoji: '📍', label: '내가 있는 안전한 장소 확인하기' },
-                    { emoji: '📞', label: '보호자나 선생님께 짧게 알리기' },
-                    { emoji: '🧠', label: 'AI나 앱의 도움은 필요한 만큼만 쓰기' },
-                    { emoji: '🛑', label: '낯선 사람을 따라가지 않기' }
-                  ]
-                },
-                {
-                  kind: 'draw',
-                  id: 'studio_draw_m6_l12',
-                  prompt: '내가 앞으로 AI와 생활 기술을 안전하게 쓰는 하루 장면을 그려 보세요.'
-                }
-              ]
-            },
-            {
-              title: '5장: 수료 수여식',
+              title: '4장: 수료 수여식',
               goal: '이 책의 최종 학업 수료증 템플릿을 받으세요.',
               blocks: [
                 {
@@ -1323,9 +1285,7 @@ export const M6_LESSONS: LessonContent[] = [
                   rows: [
                     { label: '내가 새겨 넣은 명예 행동', from: 'entire_graduation_sort' },
                     { label: '졸업 다짐 소감', from: 'entire_graduation_chat' },
-                    { label: '진짜 생활 장면의 선택', from: 'studio_preview_m6_l12' },
-                    { label: '내가 고른 생활 대응', from: 'studio_plan_m6_l12' },
-                    { label: 'AI와 안전한 하루 그림', from: 'studio_draw_m6_l12' }
+                    { label: '판단 비교와 새 장면 기록', from: 'judgment_main_m6_l12' }
                   ]
                 },
                 {

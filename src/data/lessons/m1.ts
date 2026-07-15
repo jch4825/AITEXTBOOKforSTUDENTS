@@ -1,4 +1,5 @@
 import type { LessonContent } from '../../types';
+import { GENERALIZATION_CYCLES } from '../generalizationCycles';
 
 /**
  * 단원 1 — AI가 뭐야?
@@ -694,6 +695,11 @@ export const M1_LESSONS: LessonContent[] = [
                   prompt: '내가 AI에게 골고루 보여주고 가르치고 싶은 대상을 그려 보세요.'
                 }
               ]
+            },
+            {
+              title: '4장: 예고: 첫 생각 저장',
+              goal: '새로운 생활 장면에서 처음 생각한 방법을 기록해 보세요.',
+              blocks: [GENERALIZATION_CYCLES.m1.preview]
             }
           ],
           reward: {
@@ -1231,56 +1237,12 @@ export const M1_LESSONS: LessonContent[] = [
               ]
             },
             {
-              title: '3장: 예고: 새 장면 만나기',
-              goal: '처음 보는 물건을 만났을 때 바로 정답을 정하지 않고 살펴보세요.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'studio_preview_m1_l11',
-                  intro: '새로운 생활 장면을 먼저 살펴봅니다.',
-                  turns: [
-                    {
-                      aimi: '동아리방에 새 기계가 왔어요. 버튼도 있고, 말을 걸면 대답도 해요. 그런데 인터넷이 꺼지면 대답을 못 해요. 이건 어떤 물건일까요?',
-                      choices: [
-                        { label: 'AI일 수도 있어요. 말에 맞춰 대답하는지 더 살펴볼래요.', reply: '좋아요. 바로 단정하지 않고 특징을 더 보는 태도예요.', good: true },
-                        { label: '그냥 기계일 수도 있어요. 어떤 기능이 자동인지 확인할래요.', reply: '맞아요. AI와 기계는 겉모습만 보고 정하기 어려울 때가 있어요.', good: true }
-                      ]
-                    },
-                    {
-                      aimi: '친구가 "이건 무조건 AI야!"라고 말했어요. 나는 아직 헷갈려요. 어떻게 말하면 좋을까요?',
-                      choices: [
-                        { label: '무엇을 보고 AI라고 생각했는지 같이 확인해 보자고 말해요.', reply: '좋은 질문이에요. 이유를 묻는 것은 안전한 확인 방법이에요.', good: true },
-                        { label: '선생님께 여쭤보고, AI가 하는 일을 하나씩 찾아봐요.', reply: '좋아요. 어른과 함께 확인하면 더 정확하게 배울 수 있어요.', good: true }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              title: '3장: 본 활동: 생각 리플레이',
+              goal: '첫 생각과 달라진 조건을 비교하고, 나의 판단을 다시 만들어 보세요.',
+              blocks: [GENERALIZATION_CYCLES.m1.main]
             },
             {
-              title: '4장: 본 활동: 나의 판단 만들기',
-              goal: '정답 하나보다 내가 본 단서와 다음 행동을 기록해 보세요.',
-              blocks: [
-                {
-                  kind: 'multi-pick',
-                  id: 'studio_plan_m1_l11',
-                  prompt: '처음 보는 AI 같은 물건을 만났을 때 내가 해볼 수 있는 행동을 골라 보세요.',
-                  items: [
-                    { emoji: '🔎', label: '어떤 일을 스스로 하는지 살펴보기' },
-                    { emoji: '💬', label: '말을 알아듣고 다르게 대답하는지 확인하기' },
-                    { emoji: '👩‍🏫', label: '선생님이나 가족에게 함께 물어보기' },
-                    { emoji: '⏸️', label: '잘 모르겠으면 잠깐 멈추고 다시 보기' }
-                  ]
-                },
-                {
-                  kind: 'draw',
-                  id: 'studio_draw_m1_l11',
-                  prompt: '내 주변에서 "AI일까? 아닐까?" 궁금한 물건 하나를 그리고, 살펴볼 단서를 떠올려 보세요.'
-                }
-              ]
-            },
-            {
-              title: '5장: 수료 선서',
+              title: '4장: 수료 선서',
               goal: '수료증 문구를 다짐과 함께 채워 완성하세요.',
               blocks: [
                 {
@@ -1290,9 +1252,7 @@ export const M1_LESSONS: LessonContent[] = [
                   rows: [
                     { label: '내가 해낸 일들', from: 'self_check' },
                     { label: '최종 퀴즈 확인', from: 'final_quiz' },
-                    { label: '새 장면에서 생각한 말', from: 'studio_preview_m1_l11' },
-                    { label: '내가 고른 확인 행동', from: 'studio_plan_m1_l11' },
-                    { label: '내 주변 AI 판단 그림', from: 'studio_draw_m1_l11' }
+                    { label: '판단 비교와 새 장면 기록', from: 'judgment_main_m1_l11' }
                   ]
                 },
                 {
