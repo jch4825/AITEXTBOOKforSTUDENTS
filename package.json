@@ -18,7 +18,8 @@
     "check:editorial-theme": "node scripts/check-editorial-theme-contract.mjs",
     "check:teacher-recording": "node scripts/check-teacher-recording-contract.mjs",
     "check:pilot": "node scripts/check-m5-pilot.mjs",
-    "check:studio-expansion": "node scripts/check-studio-expansion-contract.mjs"
+    "check:studio-expansion": "node scripts/check-studio-expansion-contract.mjs",
+    "check:studio-expansion-all": "node scripts/check-studio-expansion.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",

@@ -140,4 +140,33 @@ for (const title of ['오늘 하루의 AI 찾기', 'AI의 눈과 귀 실험실',
   if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
 }
 
-console.log('studio expansion contract: TTS entry guard passed');
+const studioIndex = fs.readFileSync('src/data/studios/index.ts', 'utf8');
+for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M5_STUDIOS']) {
+  if (!studioIndex.includes(spread)) throw new Error(`ready studio group missing: ${spread}`);
+}
+for (const [source, expected, label] of [
+  [m1, 3, 'M1'],
+  [m2, 3, 'M2'],
+  [fs.readFileSync('src/data/studios/m5.ts', 'utf8'), 3, 'M5'],
+]) {
+  const count = (source.match(/lessonId: 'm\d-l\d+'/g) ?? []).length;
+  if (count !== expected) throw new Error(`${label} ready studio count must be ${expected}, got ${count}`);
+}
+
+for (const spread of ['...M1_SUPPORT_BRIDGES', '...M2_SUPPORT_BRIDGES', '...M5_SUPPORT_BRIDGES']) {
+  if (!bridgeIndex.includes(spread)) throw new Error(`ready bridge group missing: ${spread}`);
+}
+for (const [source, expected, label] of [
+  [m1Bridges, 7, 'M1'],
+  [m2Bridges, 7, 'M2'],
+  [fs.readFileSync('src/data/supportBridges/m5.ts', 'utf8'), 8, 'M5'],
+]) {
+  const count = (source.match(/lessonId: 'm\d-l\d+'/g) ?? []).length;
+  if (count !== expected) throw new Error(`${label} ready bridge count must be ${expected}, got ${count}`);
+}
+
+for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M5_PORTFOLIO']) {
+  if (!portfolioIndex.includes(portfolio)) throw new Error(`ready portfolio missing: ${portfolio}`);
+}
+
+console.log('studio expansion contract: 9 studios, 22 bridges, 3 portfolios ready');
