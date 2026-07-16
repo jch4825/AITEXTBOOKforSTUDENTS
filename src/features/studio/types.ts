@@ -73,3 +73,45 @@ export interface StudioDefinition {
   };
   safetyNote?: string;
 }
+
+export interface TeacherRecordingSettings {
+  learnerAlias: string;
+  progressPersistence: boolean;
+  processRecording: boolean;
+  portfolioMedia: boolean;
+  aiText: boolean;
+  aiVision: boolean;
+  aiImageGeneration: boolean;
+  acknowledgedAt?: string;
+}
+
+export type ObservationLevel = 'not-observed' | 'with-support' | 'independent';
+
+export interface StudioObservation {
+  importantInformation: ObservationLevel;
+  firstAttempt: ObservationLevel;
+  aiComparison: ObservationLevel;
+  conditionAdjustment: ObservationLevel;
+  note: string;
+}
+
+export interface StudioEvidenceV2 {
+  version: 2;
+  id: string;
+  learnerAlias: string;
+  studioId: string;
+  lessonId: LessonId;
+  firstAttempt?: StudioExpression;
+  supportLevel: SupportLevel;
+  supportModesUsed: string[];
+  aiSource: AiSource;
+  aiRole: string;
+  aiDecision?: AiDecision;
+  finalExpression?: StudioExpression;
+  artifactSummary?: string;
+  transferExpression?: StudioExpression;
+  observation: StudioObservation;
+  startedAt: string;
+  completedAt: string;
+  updatedAt: string;
+}
