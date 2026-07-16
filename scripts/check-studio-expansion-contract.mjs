@@ -127,4 +127,17 @@ for (const token of ["lessonId: 'm2-l11'", "'m2-l1', 'm2-l6', 'm2-l10'", '2단�
   if (!m2Portfolio.includes(token)) throw new Error(`M2 portfolio missing: ${token}`);
 }
 
+const expansionGuidePath = 'docs/teacher-guide/m1-m2-studio-expansion.md';
+if (!fs.existsSync(expansionGuidePath)) throw new Error('M1/M2 teacher expansion guide is missing');
+const teacherHub = fs.readFileSync('src/features/teacher/TeacherHub.tsx', 'utf8');
+const expansionGuide = fs.readFileSync(expansionGuidePath, 'utf8');
+for (const text of ['1·2·5단원', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+  if (!teacherHub.includes(text) && !expansionGuide.includes(text)) {
+    throw new Error(`teacher expansion guidance missing: ${text}`);
+  }
+}
+for (const title of ['오늘 하루의 AI 찾기', 'AI의 눈과 귀 실험실', '요청 공동 제작소', 'AI 고쳐 묻기 실험실']) {
+  if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
+}
+
 console.log('studio expansion contract: TTS entry guard passed');

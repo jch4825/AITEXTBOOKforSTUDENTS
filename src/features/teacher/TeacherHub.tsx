@@ -100,7 +100,7 @@ export default function TeacherHub({ onExit, onLogout }: Props) {
               <h2 className="text-2xl font-extrabold">경험 중심 교과서 운영 원리</h2>
               <div className="mt-5 grid gap-4 md:grid-cols-2">
                 <article className="studio-fact-card"><h3 className="font-bold">68차시와 18개 핵심 경험</h3><p className="mt-1 text-sm leading-relaxed">행정적 차시 수는 유지하고, 단원마다 세 개의 핵심 경험을 중심으로 준비·연습·전이 활동을 연결합니다.</p></article>
-                <article className="studio-fact-card"><h3 className="font-bold">5단원 파일럿</h3><p className="mt-1 text-sm leading-relaxed">버스 지연, AI의 오해, 조건이 바뀐 조리 계획 세 장면을 먼저 운영합니다.</p></article>
+                <article className="studio-fact-card"><h3 className="font-bold">현재 운영 중인 핵심 경험</h3><p className="mt-1 text-sm leading-relaxed">1·2·5단원의 아홉 핵심 경험이 완성되어 있습니다. 이미지·소리·AI 응답은 준비된 AI 예시이며 카메라·마이크 권한 없이 모든 활동을 진행할 수 있습니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">평가 흐름</h3><p className="mt-1 text-sm leading-relaxed">첫 생각 → 조건 변화 → AI 비교 → 내 판단 → 새 상황의 전이를 살펴봅니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">지원 수준</h3><p className="mt-1 text-sm leading-relaxed">충분한 지원, 약한 지원, 도전적 수준은 정보 수·선택지·힌트·AI 역할의 깊이를 바꿉니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">저장 원칙</h3><p className="mt-1 text-sm leading-relaxed">교사가 켠 경우에만 정제된 과정증거를 저장하며 음성·사진·그림 원본과 전체 AI 대화는 남기지 않습니다.</p></article>
