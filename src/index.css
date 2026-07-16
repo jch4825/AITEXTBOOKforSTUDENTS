@@ -299,6 +299,24 @@
   }
 }
 
+@media print {
+  .teacher-hub-chrome,
+  .comic-frame-footer,
+  .classroom-dock {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+  }
+
+  .studio-editorial,
+  .studio-artifact-sheet {
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+}
+
 /* AAC 카드 인쇄 — 화면엔 숨기고, 인쇄 시 A6(=A4의 1/4) 한 장에 카드 이미지만 (단어는 이미지에 인쇄됨) */
 .aac-print-card { display: none; }
 @media print {
