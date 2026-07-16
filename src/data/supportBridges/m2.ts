@@ -1,0 +1,60 @@
+import type { SupportBridgeDefinition } from './types';
+
+export const M2_SUPPORT_BRIDGES: SupportBridgeDefinition[] = [
+  {
+    lessonId: 'm2-l2',
+    recallLessonId: 'm2-l1',
+    recallPrompt: 'AI가 “그거 알려 줘”라는 말을 다르게 알아들었을 때 필요한 정보를 더했어요.',
+    practicePurpose: '한 번에 한 가지 목적을 짧고 분명하게 묻는 연습을 해요.',
+    nextStudioLessonId: 'm2-l6',
+    nextPreview: '요청 공동 제작소에서 짧은 목적 문장을 첫 조각으로 사용해요.',
+  },
+  {
+    lessonId: 'm2-l3',
+    recallLessonId: 'm2-l1',
+    recallPrompt: '원하는 대상과 날짜를 덧붙이자 요청의 뜻이 더 분명해졌어요.',
+    practicePurpose: '정확한 이름, 시간, 수량처럼 필요한 조건을 콕 집어 말해요.',
+    nextStudioLessonId: 'm2-l6',
+    nextPreview: '여러 조건 중 요청에 꼭 필요한 것만 골라 제작 레시피에 넣어요.',
+  },
+  {
+    lessonId: 'm2-l4',
+    recallLessonId: 'm2-l1',
+    recallPrompt: 'AI가 다르게 이해했을 때 내가 원하는 답의 모습을 더 설명했어요.',
+    practicePurpose: '원하는 답과 비슷한 예시를 하나 보여 주어 뜻을 전달해요.',
+    nextStudioLessonId: 'm2-l6',
+    nextPreview: '요청 공동 제작소에서 예시 조각을 목적과 순서에 연결해요.',
+  },
+  {
+    lessonId: 'm2-l5',
+    recallLessonId: 'm2-l1',
+    recallPrompt: '필요한 정보를 더해 AI가 어떤 도움을 해야 하는지 분명하게 만들었어요.',
+    practicePurpose: '선생님, 번역가, 일정 도우미처럼 상황에 맞는 역할을 정해요.',
+    nextStudioLessonId: 'm2-l6',
+    nextPreview: '요청 목적에 맞는 AI 역할과 답의 모양을 함께 제작해요.',
+  },
+  {
+    lessonId: 'm2-l7',
+    recallLessonId: 'm2-l6',
+    recallPrompt: '목적·예시·순서·답의 모양을 조합하고 AI의 확인 질문과 비교했어요.',
+    practicePurpose: 'AI 답이 마음과 다를 때 바꾸고 싶은 점을 말해 다시 물어요.',
+    nextStudioLessonId: 'm2-l10',
+    nextPreview: '첫 연습 응답과 수정된 두 번째 응답을 실제로 비교해 봐요.',
+  },
+  {
+    lessonId: 'm2-l8',
+    recallLessonId: 'm2-l6',
+    recallPrompt: '요청 제작소에서 원하는 답의 모양과 한 단계씩 진행할 조건을 정했어요.',
+    practicePurpose: '한 줄, 세 문장, 표처럼 읽기 편한 답의 길이와 형식을 부탁해요.',
+    nextStudioLessonId: 'm2-l10',
+    nextPreview: '너무 긴 첫 답을 더 짧고 쉬운 형태로 고쳐 달라고 요청해요.',
+  },
+  {
+    lessonId: 'm2-l9',
+    recallLessonId: 'm2-l6',
+    recallPrompt: 'AI가 제안한 요청도 그대로 따르지 않고 내 목적과 조건에 맞는지 판단했어요.',
+    practicePurpose: 'AI 답이 사실인지, 빠진 조건은 없는지 다른 자료와 확인해요.',
+    nextStudioLessonId: 'm2-l10',
+    nextPreview: '고쳐진 답도 완벽하다고 가정하지 않고 다시 수용·수정·거절해요.',
+  },
+];

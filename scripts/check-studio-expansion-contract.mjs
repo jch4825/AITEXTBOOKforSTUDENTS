@@ -113,4 +113,18 @@ for (const disclosure of ['준비된 AI 예시', '안전한 연습 응답']) {
   if (!m2.includes(disclosure)) throw new Error(`prepared AI disclosure missing: ${disclosure}`);
 }
 
+const m2BridgePath = 'src/data/supportBridges/m2.ts';
+const m2PortfolioPath = 'src/data/modulePortfolios/m2.ts';
+for (const required of [m2BridgePath, m2PortfolioPath]) {
+  if (!fs.existsSync(required)) throw new Error(`M2 learning connection missing: ${required}`);
+}
+const m2Bridges = fs.readFileSync(m2BridgePath, 'utf8');
+for (const lessonId of ['m2-l2', 'm2-l3', 'm2-l4', 'm2-l5', 'm2-l7', 'm2-l8', 'm2-l9']) {
+  if (!m2Bridges.includes(`lessonId: '${lessonId}'`)) throw new Error(`M2 bridge missing: ${lessonId}`);
+}
+const m2Portfolio = fs.readFileSync(m2PortfolioPath, 'utf8');
+for (const token of ["lessonId: 'm2-l11'", "'m2-l1', 'm2-l6', 'm2-l10'", '2단원 성장 포트폴리오']) {
+  if (!m2Portfolio.includes(token)) throw new Error(`M2 portfolio missing: ${token}`);
+}
+
 console.log('studio expansion contract: TTS entry guard passed');
