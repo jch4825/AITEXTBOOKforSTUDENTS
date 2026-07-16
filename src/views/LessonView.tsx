@@ -29,6 +29,8 @@ import { useProgress } from '../context/ProgressContext';
 import { useSpeak } from '../hooks/useSpeak';
 import { getLesson } from '../data/lessons';
 import { getHardContent } from '../data/lessons/hard';
+import { getStudioDefinition } from '../data/studios';
+import StudioLessonView from '../features/studio/StudioLessonView';
 import LessonGoal from '../components/LessonGoal';
 import HardLessonBody from '../components/HardLessonBody';
 import { getModule, moduleIdFromLessonId, MODULES, lessonIdsForModule } from '../data/modules';
@@ -46,6 +48,18 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
   const lesson = getLesson(lessonId);
   if (!lesson) {
     return <ComingSoonLesson lessonId={lessonId} onGoHome={onGoHome} onPickLesson={onPickLesson} />;
+  }
+  const studioDefinition = getStudioDefinition(lessonId);
+  if (studioDefinition) {
+    return (
+      <StudioLessonView
+        definition={studioDefinition}
+        lesson={lesson}
+        hard={getHardContent(lesson.id)}
+        onGoHome={onGoHome}
+        onPickLesson={onPickLesson}
+      />
+    );
   }
   return (
     <ImplementedLesson

@@ -101,4 +101,13 @@ for (const forbidden of ['speechSynthesis', 'speak(']) {
 }
 if (!lessonViewSource.includes('markCompleted(definition.lessonId)')) throw new Error('studio completion must use existing progress');
 
+const rootLessonViewPath = 'src/views/LessonView.tsx';
+const rootLessonView = fs.readFileSync(rootLessonViewPath, 'utf8');
+for (const token of ['getStudioDefinition', '<StudioLessonView', 'if (studioDefinition)', '<ImplementedLesson']) {
+  if (!rootLessonView.includes(token)) throw new Error(`safe studio routing is missing: ${token}`);
+}
+if (rootLessonView.includes("getLessonRole(lessonId) === 'studio'")) {
+  throw new Error('unimplemented studio anchors must not be routed by role alone');
+}
+
 console.log('M5 studio content contract: 3 definitions ready');
