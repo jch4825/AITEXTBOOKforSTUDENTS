@@ -1,0 +1,68 @@
+import type { SupportBridgeDefinition } from './types';
+
+export const M6_SUPPORT_BRIDGES: SupportBridgeDefinition[] = [
+  {
+    lessonId: 'm6-l2',
+    recallLessonId: 'm6-l1',
+    recallPrompt: '장보기 선택 스튜디오에서 필요한 물건과 예산을 함께 확인했어요.',
+    practicePurpose: '물건값과 낼 돈, 거스름돈을 차례로 계산하고 실제 표시와 비교해요.',
+    nextStudioLessonId: 'm6-l4',
+    nextPreview: '교통 상황에서도 시간과 남은 배터리처럼 중요한 수치를 확인해 봐요.',
+  },
+  {
+    lessonId: 'm6-l3',
+    recallLessonId: 'm6-l1',
+    recallPrompt: '품절과 예산처럼 조건이 달라졌을 때 장보기 계획을 바꿨어요.',
+    practicePurpose: '목적지 이름과 주변 표지, 공식 지도를 확인하며 안전하게 길을 물어요.',
+    nextStudioLessonId: 'm6-l4',
+    nextPreview: '버스 노선이 달라질 때도 위치와 공식 안내를 다시 확인해요.',
+  },
+  {
+    lessonId: 'm6-l5',
+    recallLessonId: 'm6-l4',
+    recallPrompt: '교통 정보가 달라졌을 때 최신 안내와 도움을 받을 사람을 찾았어요.',
+    practicePurpose: '날씨 정보를 확인하고 장소와 활동에 맞게 옷차림을 조정해요.',
+    nextStudioLessonId: 'm6-l11',
+    nextPreview: '자기소개도 만나는 사람과 장소에 맞게 정보 범위를 바꿔 봐요.',
+  },
+  {
+    lessonId: 'm6-l6',
+    recallLessonId: 'm6-l4',
+    recallPrompt: '낯선 상황에서 혼자 결정하지 않고 공식 안내와 어른의 도움을 확인했어요.',
+    practicePurpose: '재료·도구·시간·안전을 확인하고 실제 조리는 어른과 함께 계획해요.',
+    nextStudioLessonId: 'm6-l11',
+    nextPreview: '사람에게 나를 소개할 때도 안전하게 말할 정보부터 계획해요.',
+  },
+  {
+    lessonId: 'm6-l7',
+    recallLessonId: 'm6-l4',
+    recallPrompt: '버스가 늦고 노선이 바뀌자 해야 할 일의 순서를 다시 정했어요.',
+    practicePurpose: '하루 일과의 시간과 중요한 일을 살피고 바뀔 수 있는 여유를 남겨요.',
+    nextStudioLessonId: 'm6-l11',
+    nextPreview: '소개할 내용도 상대와 목적에 따라 순서와 범위를 정해 봐요.',
+  },
+  {
+    lessonId: 'm6-l8',
+    recallLessonId: 'm6-l4',
+    recallPrompt: '안전과 관련된 이동 판단은 보호자와 직원에게 도움을 요청했어요.',
+    practicePurpose: '아픈 곳과 증상을 믿을 만한 어른에게 알리고 의료 도움을 받아요.',
+    nextStudioLessonId: 'm6-l11',
+    nextPreview: '자기소개에서도 건강 정보처럼 필요한 상대에게만 말할 내용을 구별해요.',
+  },
+  {
+    lessonId: 'm6-l9',
+    recallLessonId: 'm6-l4',
+    recallPrompt: '직원과 보호자에게 현재 상황을 알맞게 설명하며 도움을 요청했어요.',
+    practicePurpose: '장소와 상대에 맞는 인사말과 부탁의 말을 직접 골라 사용해요.',
+    nextStudioLessonId: 'm6-l11',
+    nextPreview: '처음 만난 사람에게도 안전하고 편안한 자기소개 표현을 골라 봐요.',
+  },
+  {
+    lessonId: 'm6-l10',
+    recallLessonId: 'm6-l4',
+    recallPrompt: '상황에 맞는 도움을 받으려면 누구에게 무엇을 말할지 정했어요.',
+    practicePurpose: '여러 직업의 역할과 도구를 살피며 내가 관심 있는 일을 표현해요.',
+    nextStudioLessonId: 'm6-l11',
+    nextPreview: '관심 직업과 나의 강점을 안전한 자기소개에 넣어 봐요.',
+  },
+];

@@ -5,9 +5,10 @@ import { M2_STUDIOS } from './m2';
 import { M3_STUDIOS } from './m3';
 import { M4_STUDIOS } from './m4';
 import { M5_STUDIOS } from './m5';
+import { M6_STUDIOS } from './m6';
 
 const READY_STUDIOS = new Map<LessonId, StudioDefinition>(
-  [...M1_STUDIOS, ...M2_STUDIOS, ...M3_STUDIOS, ...M4_STUDIOS, ...M5_STUDIOS]
+  [...M1_STUDIOS, ...M2_STUDIOS, ...M3_STUDIOS, ...M4_STUDIOS, ...M5_STUDIOS, ...M6_STUDIOS]
     .map((studio) => [studio.lessonId, studio]),
 );
 
