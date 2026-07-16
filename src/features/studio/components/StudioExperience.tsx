@@ -4,6 +4,7 @@ import { useSpeak } from '../../../hooks/useSpeak';
 import type { HardLessonContent, LessonContent } from '../../../types';
 import AiDecisionPanel from './AiDecisionPanel';
 import EditorialStudioFrame from './EditorialStudioFrame';
+import PreparedStimulusPanel from './PreparedStimulusPanel';
 import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
 import SupportSelector from './SupportSelector';
@@ -64,6 +65,11 @@ export default function StudioExperience({
     : showingChangedContext
       ? changedFacts
       : definition.encounter.facts.slice(0, profile.visibleFactCount);
+  const contextStimuli = state.stage === 'transfer' || state.stage === 'complete'
+    ? undefined
+    : showingChangedContext
+      ? definition.conditionChange.stimuli
+      : definition.encounter.stimuli;
 
   function toggleHint() {
     if (!hintOpen) dispatch({ type: 'record-support-mode', value: 'hint' });
@@ -77,6 +83,10 @@ export default function StudioExperience({
         <h2 className="mt-1 text-xl font-extrabold">{state.stage === 'transfer' ? definition.transfer.title : definition.encounter.title}</h2>
         <p className="mt-3 leading-relaxed">{contextDescription}</p>
       </div>
+
+      {contextStimuli?.length ? (
+        <PreparedStimulusPanel stimuli={contextStimuli} accent={accent} />
+      ) : null}
 
       {contextFacts.length > 0 && (
         <ul className="space-y-2" aria-label="상황의 중요한 정보">

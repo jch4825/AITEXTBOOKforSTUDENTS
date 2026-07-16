@@ -19,6 +19,21 @@ export interface StudioChoice {
   label: string;
 }
 
+export type PreparedStimulus =
+  | {
+      id: string;
+      kind: 'image';
+      src: string;
+      alt: string;
+      caption: string;
+    }
+  | {
+      id: string;
+      kind: 'speech';
+      text: string;
+      label: string;
+    };
+
 export interface StudioExpression {
   mode: ExpressionMode;
   choiceIds?: string[];
@@ -43,6 +58,7 @@ export interface StudioDefinition {
     title: string;
     description: string;
     facts: string[];
+    stimuli?: PreparedStimulus[];
   };
   firstAttempt: {
     prompt: string;
@@ -54,6 +70,7 @@ export interface StudioDefinition {
   conditionChange: {
     description: string;
     facts: string[];
+    stimuli?: PreparedStimulus[];
   };
   aiContribution: {
     source: AiSource;
