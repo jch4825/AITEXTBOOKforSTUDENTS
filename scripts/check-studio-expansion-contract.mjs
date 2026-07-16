@@ -96,4 +96,21 @@ for (const token of ["lessonId: 'm1-l11'", "'m1-l1', 'm1-l4', 'm1-l10'", '1단�
   if (!m1Portfolio.includes(token)) throw new Error(`M1 portfolio missing: ${token}`);
 }
 
+const m2StudioPath = 'src/data/studios/m2.ts';
+if (!fs.existsSync(m2StudioPath)) throw new Error('M2 studio definitions are missing');
+const m2 = fs.readFileSync(m2StudioPath, 'utf8');
+for (const id of ['m2-misunderstood-request', 'm2-request-workshop', 'm2-repair-dialogue']) {
+  if (!m2.includes(`id: '${id}'`)) throw new Error(`M2 studio missing: ${id}`);
+}
+for (const lessonId of ['m2-l1', 'm2-l6', 'm2-l10']) {
+  if (!m2.includes(`lessonId: '${lessonId}'`)) throw new Error(`M2 lesson mapping missing: ${lessonId}`);
+}
+if ((m2.match(/source: 'prepared'/g) ?? []).length !== 3) throw new Error('M2 AI source must be prepared');
+for (const artifact of ['요청 고치기 카드', '나의 요청 제작 레시피', '고쳐 묻기 대화 기록']) {
+  if (!m2.includes(artifact)) throw new Error(`M2 artifact missing: ${artifact}`);
+}
+for (const disclosure of ['준비된 AI 예시', '안전한 연습 응답']) {
+  if (!m2.includes(disclosure)) throw new Error(`prepared AI disclosure missing: ${disclosure}`);
+}
+
 console.log('studio expansion contract: TTS entry guard passed');
