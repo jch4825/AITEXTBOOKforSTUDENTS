@@ -13,7 +13,8 @@
     "check:ui-polish": "node scripts/check-ui-polish.mjs",
     "check:activity-icons": "node scripts/check-activity-icons.mjs",
     "check:generalization": "node scripts/check-generalization-contract.mjs",
-    "check:lesson-roles": "node scripts/check-lesson-role-contract.mjs"
+    "check:lesson-roles": "node scripts/check-lesson-role-contract.mjs",
+    "check:studio-pilot": "node scripts/check-studio-pilot-contract.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
