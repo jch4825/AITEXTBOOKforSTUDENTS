@@ -27,4 +27,23 @@ for (const token of ['이미지를 불러오지 못했어요', '소리 듣기', 
 if (!experience.includes('<PreparedStimulusPanel')) throw new Error('studio does not render prepared stimuli');
 if (panel.includes('useEffect')) throw new Error('prepared speech must not auto-play');
 
+const studioSharedPath = 'src/data/studios/shared.ts';
+const bridgeIndexPath = 'src/data/supportBridges/index.ts';
+const bridgeTypesPath = 'src/data/supportBridges/types.ts';
+for (const required of [studioSharedPath, bridgeIndexPath, bridgeTypesPath]) {
+  if (!fs.existsSync(required)) throw new Error(`shared studio registry file missing: ${required}`);
+}
+const studioShared = fs.readFileSync(studioSharedPath, 'utf8');
+const bridgeIndex = fs.readFileSync(bridgeIndexPath, 'utf8');
+const bridgeComponent = fs.readFileSync('src/features/studio/SupportLessonBridge.tsx', 'utf8');
+const rootLesson = fs.readFileSync('src/views/LessonView.tsx', 'utf8');
+for (const token of ['STUDIO_SUPPORT_PROFILES', 'STUDIO_EXPRESSION_MODES']) {
+  if (!studioShared.includes(token)) throw new Error(`shared studio constant missing: ${token}`);
+}
+for (const token of ['M5_SUPPORT_BRIDGES', 'getSupportBridge']) {
+  if (!bridgeIndex.includes(token)) throw new Error(`generic bridge registry missing: ${token}`);
+}
+if (bridgeComponent.includes('supportBridges/m5')) throw new Error('bridge component must use the common type');
+if (!rootLesson.includes("from '../data/supportBridges'")) throw new Error('LessonView must use the bridge registry');
+
 console.log('studio expansion contract: TTS entry guard passed');

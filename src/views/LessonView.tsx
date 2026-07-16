@@ -32,7 +32,7 @@ import { getHardContent } from '../data/lessons/hard';
 import { getStudioDefinition } from '../data/studios';
 import StudioLessonView from '../features/studio/StudioLessonView';
 import { getLessonRole } from '../data/lessonRoles';
-import { getSupportBridge } from '../data/supportBridges/m5';
+import { getSupportBridge } from '../data/supportBridges';
 import SupportLessonBridge from '../features/studio/SupportLessonBridge';
 import ModuleCloseLessonView from '../features/studio/ModuleCloseLessonView';
 import LessonGoal from '../components/LessonGoal';

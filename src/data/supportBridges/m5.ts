@@ -1,13 +1,4 @@
-import type { LessonId } from '../../types';
-
-export interface SupportBridgeDefinition {
-  lessonId: LessonId;
-  recallLessonId: LessonId;
-  recallPrompt: string;
-  practicePurpose: string;
-  nextStudioLessonId: LessonId;
-  nextPreview: string;
-}
+import type { SupportBridgeDefinition } from './types';
 
 export const M5_SUPPORT_BRIDGES: SupportBridgeDefinition[] = [
   {
@@ -75,9 +66,3 @@ export const M5_SUPPORT_BRIDGES: SupportBridgeDefinition[] = [
     nextPreview: '처음 계획과 조건이 달라도 안전하게 계획을 다시 세워 봐요.',
   },
 ];
-
-const BRIDGE_BY_LESSON = new Map(M5_SUPPORT_BRIDGES.map((bridge) => [bridge.lessonId, bridge]));
-
-export function getSupportBridge(lessonId: LessonId): SupportBridgeDefinition | undefined {
-  return BRIDGE_BY_LESSON.get(lessonId);
-}

@@ -4,6 +4,7 @@ import ts from 'typescript';
 const file = 'src/data/studios/m5.ts';
 if (!fs.existsSync(file)) throw new Error('M5 studio definitions are missing');
 const source = fs.readFileSync(file, 'utf8');
+const sharedSource = fs.readFileSync('src/data/studios/shared.ts', 'utf8');
 
 for (const id of ['m5-ambiguous-problem', 'm5-clarify-request', 'm5-changing-cooking-plan']) {
   if (!source.includes(`id: '${id}'`)) throw new Error(`missing studio: ${id}`);
@@ -12,7 +13,7 @@ for (const lessonId of ['m5-l1', 'm5-l6', 'm5-l11']) {
   if (!source.includes(`lessonId: '${lessonId}'`)) throw new Error(`missing lesson mapping: ${lessonId}`);
 }
 for (const mode of ['choice', 'aac', 'text', 'speech', 'draw']) {
-  if (!source.includes(`'${mode}'`)) throw new Error(`missing expression mode: ${mode}`);
+  if (!sharedSource.includes(`'${mode}'`)) throw new Error(`missing expression mode: ${mode}`);
 }
 for (const artifact of ['action-card', 'repair-card', 'visual-plan']) {
   if (!source.includes(`kind: '${artifact}'`)) throw new Error(`missing artifact kind: ${artifact}`);

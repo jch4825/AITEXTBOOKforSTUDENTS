@@ -1,26 +1,5 @@
 import type { StudioDefinition } from '../../features/studio/types';
-
-const SUPPORT_PROFILES = {
-  full: {
-    visibleFactCount: 2,
-    choiceLimit: 2,
-    hint: '중요한 정보 두 가지부터 함께 찾아봐요.',
-    aiRoleDepth: 'direct',
-  },
-  light: {
-    visibleFactCount: 3,
-    choiceLimit: 3,
-    hint: '달라진 조건을 보고 내 방법을 다시 살펴봐요.',
-    aiRoleDepth: 'prompting',
-  },
-  challenge: {
-    visibleFactCount: 4,
-    hint: 'AI 의견의 장점과 한계를 비교해 내 판단을 설명해 봐요.',
-    aiRoleDepth: 'counterpoint',
-  },
-} satisfies StudioDefinition['supportProfiles'];
-
-const EXPRESSION_MODES = ['choice', 'aac', 'text', 'speech', 'draw'] as const;
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
 
 export const M5_STUDIOS: StudioDefinition[] = [
   {
@@ -44,10 +23,10 @@ export const M5_STUDIOS: StudioDefinition[] = [
         { id: 'contact', emoji: '💬', label: '친구에게 늦는다고 알려요.' },
         { id: 'alternate', emoji: '🗺️', label: '다른 길을 찾아봐요.' },
       ],
-      modes: [...EXPRESSION_MODES],
+      modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '왜 그렇게 생각했나요? 말하고 싶으면 표현해 보세요.',
     },
-    supportProfiles: SUPPORT_PROFILES,
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
       description: '기다리는 동안 새로운 정보를 알게 되었어요.',
       facts: [
@@ -98,10 +77,10 @@ export const M5_STUDIOS: StudioDefinition[] = [
         { id: 'add-clue', emoji: '🔎', label: '알고 있는 단서를 더 말해요.' },
         { id: 'follow', emoji: '➡️', label: 'AI 답을 그대로 따라가요.' },
       ],
-      modes: [...EXPRESSION_MODES],
+      modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '내가 고른 방법의 이유를 말하고 싶으면 표현해 보세요.',
     },
-    supportProfiles: SUPPORT_PROFILES,
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
       description: '목적지를 설명할 때 지켜야 할 조건도 생겼어요.',
       facts: [
@@ -152,10 +131,10 @@ export const M5_STUDIOS: StudioDefinition[] = [
         { id: 'check-items', emoji: '✅', label: '재료와 도구를 먼저 확인해요.' },
         { id: 'plan-with-teacher', emoji: '👩‍🏫', label: '교사에게 함께 계획해 달라고 해요.' },
       ],
-      modes: [...EXPRESSION_MODES],
+      modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '내가 먼저 확인하고 싶은 것을 표현해 보세요.',
     },
-    supportProfiles: SUPPORT_PROFILES,
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
       description: '처음 생각한 계획과 다른 조건이 생겼어요.',
       facts: [

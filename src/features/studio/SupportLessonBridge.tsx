@@ -1,7 +1,7 @@
 import Button from '../../components/Button';
 import Icon from '../../components/Icon';
 import type { LessonId } from '../../types';
-import type { SupportBridgeDefinition } from '../../data/supportBridges/m5';
+import type { SupportBridgeDefinition } from '../../data/supportBridges/types';
 
 interface Props {
   bridge: SupportBridgeDefinition;
