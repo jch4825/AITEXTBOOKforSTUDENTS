@@ -65,4 +65,21 @@ for (const forbidden of ["themeFor('m5')", "['m5-l1', 'm5-l6', 'm5-l11']", "less
   }
 }
 
+const m1StudioPath = 'src/data/studios/m1.ts';
+if (!fs.existsSync(m1StudioPath)) throw new Error('M1 studio definitions are missing');
+const m1 = fs.readFileSync(m1StudioPath, 'utf8');
+for (const id of ['m1-daily-ai-finder', 'm1-eyes-ears-lab', 'm1-ability-test']) {
+  if (!m1.includes(`id: '${id}'`)) throw new Error(`M1 studio missing: ${id}`);
+}
+for (const lessonId of ['m1-l1', 'm1-l4', 'm1-l10']) {
+  if (!m1.includes(`lessonId: '${lessonId}'`)) throw new Error(`M1 lesson mapping missing: ${lessonId}`);
+}
+if ((m1.match(/source: 'prepared'/g) ?? []).length !== 3) throw new Error('M1 AI source must be prepared');
+for (const artifact of ['나의 AI 발견 카드', 'AI 인식 실험 기록', 'AI 사용 판단 설명서']) {
+  if (!m1.includes(artifact)) throw new Error(`M1 artifact missing: ${artifact}`);
+}
+if (!m1.includes("kind: 'image'") || !m1.includes("kind: 'speech'")) {
+  throw new Error('M1 recognition studio needs image and speech stimuli');
+}
+
 console.log('studio expansion contract: TTS entry guard passed');
