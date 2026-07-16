@@ -27,6 +27,7 @@ vite.std*.log
 # Agent tool caches
 .gstack/
 .playwright-mcp/
+.worktrees/
 .claude/*
 !.claude/launch.json
 
