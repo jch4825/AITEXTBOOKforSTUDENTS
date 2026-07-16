@@ -1,0 +1,60 @@
+import type { SupportBridgeDefinition } from './types';
+
+export const M1_SUPPORT_BRIDGES: SupportBridgeDefinition[] = [
+  {
+    lessonId: 'm1-l2',
+    recallLessonId: 'm1-l1',
+    recallPrompt: '오늘 만난 물건이 AI인지 겉모습이 아니라 기능과 결과를 보고 판단했어요.',
+    practicePurpose: '정해진 일만 하는 기계와 입력에 따라 결과가 달라지는 AI를 구분해요.',
+    nextStudioLessonId: 'm1-l4',
+    nextPreview: 'AI가 그림과 소리를 알아볼 때도 입력과 결과를 직접 비교해 봐요.',
+  },
+  {
+    lessonId: 'm1-l3',
+    recallLessonId: 'm1-l1',
+    recallPrompt: 'AI라고 판단한 물건이 어떤 입력을 받고 어떤 결과를 보여 주는지 살펴봤어요.',
+    practicePurpose: 'AI가 많은 자료를 바탕으로 다음 말과 답을 만드는 방법을 알아봐요.',
+    nextStudioLessonId: 'm1-l4',
+    nextPreview: 'AI가 만든 답처럼 이미지와 소리 인식 결과도 틀릴 수 있는지 실험해요.',
+  },
+  {
+    lessonId: 'm1-l5',
+    recallLessonId: 'm1-l4',
+    recallPrompt: 'AI가 그림과 소리를 알아본 결과를 실제 자료와 다시 비교했어요.',
+    practicePurpose: '목소리 크기와 주변 소음처럼 음성 인식을 어렵게 하는 조건을 찾아요.',
+    nextStudioLessonId: 'm1-l10',
+    nextPreview: 'AI가 잘 알아듣는 일도 언제 다시 확인해야 하는지 판단해 봐요.',
+  },
+  {
+    lessonId: 'm1-l6',
+    recallLessonId: 'm1-l4',
+    recallPrompt: 'AI가 입력 조건에 따라 그림과 소리를 다르게 알아볼 수 있음을 확인했어요.',
+    practicePurpose: 'AI가 어떤 자료를 보고 배우며, 자료가 한쪽으로 치우치면 어떤 일이 생기는지 알아봐요.',
+    nextStudioLessonId: 'm1-l10',
+    nextPreview: 'AI에게 일을 맡길 때 배운 자료와 한계도 함께 생각해 봐요.',
+  },
+  {
+    lessonId: 'm1-l7',
+    recallLessonId: 'm1-l4',
+    recallPrompt: 'AI가 빠르게 인식해도 사람의 확인이 필요한 장면을 찾아봤어요.',
+    practicePurpose: 'AI가 빠르게 정리하고 번역하고 추천하는 등 잘하는 일을 살펴봐요.',
+    nextStudioLessonId: 'm1-l10',
+    nextPreview: 'AI가 잘하는 일이라도 그대로 맡길지 확인하고 쓸지 판단해요.',
+  },
+  {
+    lessonId: 'm1-l8',
+    recallLessonId: 'm1-l4',
+    recallPrompt: 'AI가 확실하지 않은데도 하나의 인식 결과를 말할 수 있음을 확인했어요.',
+    practicePurpose: 'AI가 진짜 마음을 느끼거나 몸으로 직접 할 수 없는 일을 구분해요.',
+    nextStudioLessonId: 'm1-l10',
+    nextPreview: 'AI가 못하는 일과 사람이 맡아야 할 일을 능력 시험소에서 나누어요.',
+  },
+  {
+    lessonId: 'm1-l9',
+    recallLessonId: 'm1-l4',
+    recallPrompt: 'AI가 보는 일과 듣는 일도 서로 다른 기능과 조건이 필요했어요.',
+    practicePurpose: '대화, 번역, 이미지 생성처럼 하려는 일에 맞는 AI 종류를 골라요.',
+    nextStudioLessonId: 'm1-l10',
+    nextPreview: '처음 보는 AI 기능을 어떤 일에 쓰고 어디까지 확인할지 판단해요.',
+  },
+];

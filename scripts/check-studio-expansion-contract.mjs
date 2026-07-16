@@ -82,4 +82,18 @@ if (!m1.includes("kind: 'image'") || !m1.includes("kind: 'speech'")) {
   throw new Error('M1 recognition studio needs image and speech stimuli');
 }
 
+const m1BridgePath = 'src/data/supportBridges/m1.ts';
+const m1PortfolioPath = 'src/data/modulePortfolios/m1.ts';
+for (const required of [m1BridgePath, m1PortfolioPath]) {
+  if (!fs.existsSync(required)) throw new Error(`M1 learning connection missing: ${required}`);
+}
+const m1Bridges = fs.readFileSync(m1BridgePath, 'utf8');
+for (const lessonId of ['m1-l2', 'm1-l3', 'm1-l5', 'm1-l6', 'm1-l7', 'm1-l8', 'm1-l9']) {
+  if (!m1Bridges.includes(`lessonId: '${lessonId}'`)) throw new Error(`M1 bridge missing: ${lessonId}`);
+}
+const m1Portfolio = fs.readFileSync(m1PortfolioPath, 'utf8');
+for (const token of ["lessonId: 'm1-l11'", "'m1-l1', 'm1-l4', 'm1-l10'", '1단원 성장 포트폴리오']) {
+  if (!m1Portfolio.includes(token)) throw new Error(`M1 portfolio missing: ${token}`);
+}
+
 console.log('studio expansion contract: TTS entry guard passed');
