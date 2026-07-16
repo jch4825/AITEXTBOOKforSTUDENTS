@@ -7,6 +7,7 @@ const checks = [
   'scripts/check-teacher-recording-contract.mjs',
   'scripts/check-editorial-theme-contract.mjs',
   'scripts/check-generalization-contract.mjs',
+  'scripts/check-complete-studio-rollout-contract.mjs',
 ];
 
 for (const check of checks) {
@@ -14,4 +15,4 @@ for (const check of checks) {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
-console.log('M1/M2 studio expansion: all contracts passed');
+console.log('six-module studio rollout: all contracts passed');
