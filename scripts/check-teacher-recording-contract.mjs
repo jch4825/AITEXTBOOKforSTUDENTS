@@ -25,4 +25,23 @@ for (const key of ['ai-students-progress', 'ai-students-settings', 'ai-students-
 if (backup.includes('ai-students-gemini-key')) throw new Error('API key must not be included in backup');
 if (!backup.includes('rollback')) throw new Error('atomic restore rollback is missing');
 
+const hubPath = 'src/features/teacher/TeacherHub.tsx';
+const onboardingPath = 'src/features/teacher/TeacherOnboarding.tsx';
+const legacyPath = 'src/features/teacher/LegacyTeacherPanels.tsx';
+const teacherViewPath = 'src/views/TeacherView.tsx';
+for (const itemPath of [hubPath, onboardingPath, legacyPath]) {
+  if (!fs.existsSync(itemPath)) throw new Error(`teacher hub component is missing: ${itemPath}`);
+}
+const hub = fs.readFileSync(hubPath, 'utf8');
+const onboarding = fs.readFileSync(onboardingPath, 'utf8');
+const teacherView = fs.readFileSync(teacherViewPath, 'utf8');
+for (const tab of ['운영 안내', '학생 기록', '포트폴리오', 'AI 연결', '학습목표·성취기준', '데이터 관리']) {
+  if (!hub.includes(tab)) throw new Error(`teacher hub tab is missing: ${tab}`);
+}
+if (!hub.includes('데이터 암호화 기능이 아닙니다')) throw new Error('teacher password boundary copy is missing');
+for (const checkText of ['이 브라우저에만 기록', '음성·사진·그림 원본', '기록을 삭제하고 백업', '학생과 보호자']) {
+  if (!onboarding.includes(checkText)) throw new Error(`teacher acknowledgement is missing: ${checkText}`);
+}
+if (!teacherView.includes('<TeacherHub')) throw new Error('TeacherView must route unlocked sessions to TeacherHub');
+
 console.log('teacher recording contract: opt-in and sanitized evidence ready');
