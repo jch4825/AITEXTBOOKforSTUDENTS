@@ -110,4 +110,18 @@ if (rootLessonView.includes("getLessonRole(lessonId) === 'studio'")) {
   throw new Error('unimplemented studio anchors must not be routed by role alone');
 }
 
+const bridgeDataPath = 'src/data/supportBridges/m5.ts';
+const bridgeComponentPath = 'src/features/studio/SupportLessonBridge.tsx';
+const closeComponentPath = 'src/features/studio/ModuleCloseLessonView.tsx';
+for (const itemPath of [bridgeDataPath, bridgeComponentPath, closeComponentPath]) {
+  if (!fs.existsSync(itemPath)) throw new Error(`M5 learning connection is missing: ${itemPath}`);
+}
+const bridgeData = fs.readFileSync(bridgeDataPath, 'utf8');
+for (const lessonId of ['m5-l2','m5-l3','m5-l4','m5-l5','m5-l7','m5-l8','m5-l9','m5-l10']) {
+  if (!bridgeData.includes(`lessonId: '${lessonId}'`)) throw new Error(`M5 support bridge is missing: ${lessonId}`);
+}
+for (const token of ['getSupportBridge', '<SupportLessonBridge', "lessonId === 'm5-l12'", '<ModuleCloseLessonView']) {
+  if (!rootLessonView.includes(token)) throw new Error(`M5 route connection is missing: ${token}`);
+}
+
 console.log('M5 studio content contract: 3 definitions ready');
