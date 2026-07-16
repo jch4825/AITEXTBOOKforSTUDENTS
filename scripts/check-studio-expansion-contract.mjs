@@ -46,4 +46,23 @@ for (const token of ['M5_SUPPORT_BRIDGES', 'getSupportBridge']) {
 if (bridgeComponent.includes('supportBridges/m5')) throw new Error('bridge component must use the common type');
 if (!rootLesson.includes("from '../data/supportBridges'")) throw new Error('LessonView must use the bridge registry');
 
+const portfolioIndexPath = 'src/data/modulePortfolios/index.ts';
+const portfolioTypesPath = 'src/data/modulePortfolios/types.ts';
+const portfolioM5Path = 'src/data/modulePortfolios/m5.ts';
+for (const required of [portfolioIndexPath, portfolioTypesPath, portfolioM5Path]) {
+  if (!fs.existsSync(required)) throw new Error(`module portfolio file missing: ${required}`);
+}
+const portfolioIndex = fs.readFileSync(portfolioIndexPath, 'utf8');
+const portfolioView = fs.readFileSync('src/features/studio/ModuleCloseLessonView.tsx', 'utf8');
+for (const token of ['ModulePortfolioDefinition', 'getModulePortfolioDefinition']) {
+  if (!portfolioIndex.includes(token) && !portfolioView.includes(token)) {
+    throw new Error(`module portfolio interface missing: ${token}`);
+  }
+}
+for (const forbidden of ["themeFor('m5')", "['m5-l1', 'm5-l6', 'm5-l11']", "lessonId === 'm5-l12'"]) {
+  if (portfolioView.includes(forbidden) || rootLesson.includes(forbidden)) {
+    throw new Error(`M5 portfolio hardcoding remains: ${forbidden}`);
+  }
+}
+
 console.log('studio expansion contract: TTS entry guard passed');

@@ -2,15 +2,16 @@ import { useMemo, useState } from 'react';
 import MicroLessonFrame from '../../components/MicroLessonFrame';
 import ScreentoneBackdrop from '../../components/lesson/ScreentoneBackdrop';
 import { useProgress } from '../../context/ProgressContext';
+import type { ModulePortfolioDefinition } from '../../data/modulePortfolios/types';
 import { getStudioDefinition } from '../../data/studios';
 import type { LessonId } from '../../types';
 import { themeFor } from '../../utils/moduleThemes';
 import StudioExpressionInput from './components/StudioExpressionInput';
 import { loadStudioEvidence } from './evidenceStorage';
-import type { ExpressionMode, StudioChoice, StudioEvidenceV2, StudioExpression } from './types';
+import type { ExpressionMode, StudioEvidenceV2, StudioExpression } from './types';
 
 interface Props {
-  lessonId: LessonId;
+  definition: ModulePortfolioDefinition;
   onGoHome: () => void;
   onPickLesson: (id: LessonId) => void;
 }
@@ -20,12 +21,6 @@ const CRITERIA = [
   '내 방법을 먼저 시도했어요.',
   'AI 의견을 비교하고 판단했어요.',
   '조건이 달라졌을 때 방법을 조정했어요.',
-];
-
-const NEXT_CHOICES: StudioChoice[] = [
-  { id: 'find-info', emoji: '🔎', label: '중요한 정보를 먼저 찾아볼 거예요.' },
-  { id: 'ask-ai', emoji: '💬', label: 'AI에게 다른 방법이나 확인 질문을 부탁할 거예요.' },
-  { id: 'adjust', emoji: '🔄', label: '조건이 달라지면 계획을 다시 살펴볼 거예요.' },
 ];
 
 const NEXT_MODES: ExpressionMode[] = ['choice', 'aac', 'text', 'speech'];
@@ -51,14 +46,14 @@ function expressionText(record: StudioEvidenceV2, field: 'firstAttempt' | 'final
   return value.text || '말이나 글로 표현함';
 }
 
-export default function ModuleCloseLessonView({ lessonId, onGoHome, onPickLesson }: Props) {
+export default function ModuleCloseLessonView({ definition, onGoHome, onPickLesson }: Props) {
   const { markCompleted } = useProgress();
-  const theme = themeFor('m5');
+  const theme = themeFor(definition.moduleId);
   const [selectedCriteria, setSelectedCriteria] = useState<string[]>([]);
   const [nextMethod, setNextMethod] = useState<StudioExpression>();
   const evidence = useMemo(
-    () => loadStudioEvidence().filter((record) => ['m5-l1', 'm5-l6', 'm5-l11'].includes(record.lessonId)),
-    [],
+    () => loadStudioEvidence().filter((record) => definition.studioLessonIds.includes(record.lessonId)),
+    [definition.studioLessonIds],
   );
 
   function toggleCriterion(criterion: string) {
@@ -68,14 +63,14 @@ export default function ModuleCloseLessonView({ lessonId, onGoHome, onPickLesson
   }
 
   function finish() {
-    markCompleted(lessonId);
+    markCompleted(definition.lessonId);
     onGoHome();
   }
 
   return (
     <MicroLessonFrame
-      lessonId={lessonId}
-      crumb="5단원 · 나는 문제 해결사!"
+      lessonId={definition.lessonId}
+      crumb={definition.crumb}
       totalSteps={1}
       currentStep={0}
       onPrev={() => undefined}
@@ -84,12 +79,12 @@ export default function ModuleCloseLessonView({ lessonId, onGoHome, onPickLesson
       onPickLesson={onPickLesson}
       nextDisabled={selectedCriteria.length === 0 || !expressionComplete(nextMethod)}
     >
-      <ScreentoneBackdrop moduleId="m5">
+      <ScreentoneBackdrop moduleId={definition.moduleId}>
         <main className="mx-auto max-w-6xl space-y-6 py-2">
           <header className="studio-editorial p-6 md:p-8">
-            <p className="studio-kicker" style={{ color: theme.secondary }}>5단원 마무리 포트폴리오</p>
-            <h1 className="mt-1 text-3xl font-extrabold" style={{ color: theme.accent }}>나는 문제 해결사!</h1>
-            <p className="mt-3 leading-relaxed">세 장면에서 처음 생각하고, AI와 비교하고, 조건에 맞게 판단한 과정을 돌아봐요.</p>
+            <p className="studio-kicker" style={{ color: theme.secondary }}>{definition.kicker}</p>
+            <h1 className="mt-1 text-3xl font-extrabold" style={{ color: theme.accent }}>{definition.title}</h1>
+            <p className="mt-3 leading-relaxed">{definition.description}</p>
           </header>
 
           <section className="studio-editorial p-6">
@@ -144,7 +139,7 @@ export default function ModuleCloseLessonView({ lessonId, onGoHome, onPickLesson
             <h2 className="mb-4 text-xl font-extrabold">다음에 써 볼 방법</h2>
             <StudioExpressionInput
               value={nextMethod}
-              choices={NEXT_CHOICES}
+              choices={definition.nextChoices}
               modes={NEXT_MODES}
               prompt="다른 문제가 생기면 어떤 방법을 다시 써 볼까요?"
               accent={theme.accent}
