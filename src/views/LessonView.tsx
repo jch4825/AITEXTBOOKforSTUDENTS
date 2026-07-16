@@ -92,7 +92,7 @@ interface ImplementedProps {
 function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps) {
   const { difficulty } = useSettings();
   const { markCompleted } = useProgress();
-  const { speak, speakNow } = useSpeak();
+  const { speakNow } = useSpeak();
   const [step, setStep] = useState(0);
   const [simRevealed, setSimRevealed] = useState(false);
 
@@ -119,12 +119,6 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   const story = getLessonStory(lesson.id);
   // 스토리는 난이도와 직교 — 어려움은 introNormal 사용 (spec §5)
   const storyIntro = story ? (difficulty === 'easy' ? story.introEasy : story.introNormal) : null;
-
-  // 정리 화면에 들어오면 자동으로 한 번 읽어준다.
-  useEffect(() => {
-    if (isWrapUp) speak(wrapUpText);
-    // eslint 없음 — speak는 설정만 바뀌지 않으면 안정적.
-  }, [isWrapUp, wrapUpText]);
 
   function handleNext() {
     if (step + 1 >= totalSteps) {
