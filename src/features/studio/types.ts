@@ -115,3 +115,29 @@ export interface StudioEvidenceV2 {
   completedAt: string;
   updatedAt: string;
 }
+
+export interface StudioSessionState {
+  stage: StudioStage;
+  startedAt: string;
+  supportLevel: SupportLevel;
+  supportModesUsed: string[];
+  firstAttempt?: StudioExpression;
+  reason?: string;
+  aiDecision?: AiDecision;
+  finalExpression?: StudioExpression;
+  artifactSummary?: string;
+  transferExpression?: StudioExpression;
+}
+
+export type StudioAction =
+  | { type: 'set-support'; value: SupportLevel }
+  | { type: 'set-first-attempt'; value: StudioExpression }
+  | { type: 'set-reason'; value: string }
+  | { type: 'record-support-mode'; value: string }
+  | { type: 'set-ai-decision'; value: AiDecision }
+  | { type: 'set-final-expression'; value: StudioExpression }
+  | { type: 'set-artifact'; value: string }
+  | { type: 'set-transfer'; value: StudioExpression }
+  | { type: 'next' }
+  | { type: 'previous' }
+  | { type: 'reset'; supportLevel: SupportLevel };
