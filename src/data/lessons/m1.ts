@@ -15,13 +15,12 @@ export const M1_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'concept',
     title: 'AI는 우리 곁에 있습니다',
-    objective: '우리 주변에서 AI를 찾아봅니다.',
+    objective: 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.',
     standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
-    wrapUpEasy: 'AI는 우리 곁에 있습니다. 우리 말을 알아듣고 대답해 주십시오.',
-    wrapUpNormal: '오늘은 AI가 우리 곁 어디에 있는지 알아봤습니다. AI는 우리 말을 알아듣고 대답해주는 기술입니다.',
-    bodyEasy: '인공지능은 컴퓨터가 사람처럼 생각하는 것입니다.',
-    bodyNormal:
-      '인공지능(AI)은 컴퓨터가 사람처럼 생각하고 답해주게 만든 기술입니다. 우리가 묻는 질문에 답을 해 주십시오.',
+    wrapUpEasy: 'AI는 자료를 보고 답을 만드는 컴퓨터 기술입니다.',
+    wrapUpNormal: 'AI는 자료를 보고 답이나 추천을 만듭니다. 중요한 내용은 사람이 다시 확인합니다.',
+    bodyEasy: 'AI는 사람이 만든 컴퓨터 기술입니다.',
+    bodyNormal: 'AI는 글·말·사진 같은 자료를 보고 답이나 추천을 만드는 컴퓨터 기술입니다.',
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['인공지능', '컴퓨터', '프로그램', '자료', '음성 비서', '번역', '앱', '도구'], imagePlaceholder: true } },
       {

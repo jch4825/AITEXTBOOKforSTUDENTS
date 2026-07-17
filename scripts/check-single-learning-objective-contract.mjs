@@ -76,6 +76,9 @@ m6-l12\t그동안 배운 생활 약속을 다시 모아 확인해 봐요.
   return [lessonId, objective];
 }));
 
+// m1-l1은 비주얼 노벨 기준형에서 승인된 공통 목표로 갱신합니다.
+EXPECTED_OBJECTIVES.set('m1-l1', 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.');
+
 if (EXPECTED_OBJECTIVES.size !== 68) {
   throw new Error(`objective baseline must contain 68 lessons, got ${EXPECTED_OBJECTIVES.size}`);
 }
@@ -126,7 +129,7 @@ for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
     .replaceAll('알아봐요', '알아봅니다')
     .replaceAll('알려요', '알립니다');
   if (actual !== formalExpected) {
-    throw new Error(`${lessonId} must use the former weak-support objective\nexpected: ${formalExpected}\nactual: ${actual}`);
+    throw new Error(`${lessonId} must use the canonical shared objective\nexpected: ${formalExpected}\nactual: ${actual}`);
   }
 }
 

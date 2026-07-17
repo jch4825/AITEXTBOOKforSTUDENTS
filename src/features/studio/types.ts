@@ -48,12 +48,46 @@ export interface SupportProfile {
   aiRoleDepth: 'direct' | 'prompting' | 'counterpoint';
 }
 
+export interface VisualNovelCopy {
+  speaker: string;
+  text: string;
+  perspective?: string;
+}
+
+export interface VisualNovelScene {
+  id: string;
+  label: string;
+  imageSrc: string;
+  alt: string;
+  knowledgeStep: 0 | 1 | 2;
+  copy: Record<SupportLevel, VisualNovelCopy>;
+}
+
+export interface VisualNovelKnowledge {
+  title: string;
+  core: string;
+  detail: Record<SupportLevel, string>;
+  flow?: {
+    input: string;
+    process: string;
+    output: string;
+  };
+}
+
+export interface VisualNovelStory {
+  title: string;
+  objective: string;
+  scenes: VisualNovelScene[];
+  knowledge: [VisualNovelKnowledge, VisualNovelKnowledge, VisualNovelKnowledge];
+}
+
 export interface StudioDefinition {
   id: string;
   lessonId: LessonId;
   moduleId: ModuleId;
   title: string;
   subtitle: string;
+  visualNovel?: VisualNovelStory;
   encounter: {
     title: string;
     description: string;
