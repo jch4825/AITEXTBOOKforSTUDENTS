@@ -128,10 +128,6 @@ export default function VisualNovelExperience({
           </article>
         ))}
       </div>
-      <aside className="studio-margin-note visual-novel-current-note">
-        <strong>지금 볼 것</strong>
-        <p>{activeKnowledge.detail[supportLevel]}</p>
-      </aside>
     </section>
   );
 

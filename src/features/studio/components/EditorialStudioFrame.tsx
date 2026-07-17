@@ -47,7 +47,7 @@ export default function EditorialStudioFrame({
           className="rounded-full px-3 py-1 text-sm font-bold"
           style={{ color: accent, background: 'var(--editorial-quiet)' }}
         >
-          핵심 경험 스튜디오
+          이야기로 경험하기
         </span>
       </header>
 
