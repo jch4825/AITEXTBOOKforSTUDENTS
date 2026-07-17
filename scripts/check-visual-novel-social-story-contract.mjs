@@ -54,6 +54,15 @@ for (const token of [
 ]) {
   if (!visualNovel.includes(token)) throw new Error(`missing visual novel UI token: ${token}`);
 }
+if (!/className="visual-novel-dialogue"[\s\S]*?<\/div>\s*<\/div>\s*<div className="visual-novel-controls"[\s\S]*?className="visual-novel-next"/.test(visualNovel)) {
+  throw new Error('next scene action must live in the navigation rail after the dialogue');
+}
+if (/className="visual-novel-dialogue"[\s\S]*?className="visual-novel-next"[\s\S]*?<\/div>\s*<\/div>\s*<div className="visual-novel-controls"/.test(visualNovel)) {
+  throw new Error('next scene action must not float inside the variable-height dialogue');
+}
+for (const label of ["'다음 장면'", "'처음부터'"]) {
+  if (!visualNovel.includes(label)) throw new Error(`missing stable scene action label: ${label}`);
+}
 if (!/className="visual-novel-image-frame"[\s\S]*?className="visual-novel-listen"[\s\S]*?<\/button>\s*<\/div>\s*<div className="visual-novel-dialogue">/.test(visualNovel)) {
   throw new Error('scene image and dialogue must render as separate sibling blocks');
 }
@@ -109,6 +118,18 @@ if (!/\.visual-novel-dialogue\s*\{[\s\S]*?position:\s*relative;[\s\S]*?\}/.test(
 }
 if (/\.visual-novel-dialogue\s*\{[^}]*position:\s*absolute;/s.test(styles)) {
   throw new Error('visual story dialogue must not overlay the scene image');
+}
+if (/\.visual-novel-next\s*\{[^}]*position:\s*absolute;/s.test(styles)) {
+  throw new Error('next scene action must participate in the independent navigation rail');
+}
+for (const pattern of [
+  /@media \(min-width: 1024px\)[\s\S]*?\.studio-editorial \.lesson-spread-pages\s*\{[^}]*min-height:\s*46rem;/,
+  /\.visual-novel-controls\s*\{[^}]*margin-top:\s*auto;/s,
+  /\.visual-novel-scene-picker button\s*\{[^}]*width:\s*44px;[^}]*height:\s*44px;/s,
+  /\.visual-novel-next\s*\{[^}]*min-height:\s*44px;[^}]*justify-self:\s*end;[^}]*white-space:\s*nowrap;/s,
+  /@media \(max-width: 430px\)[\s\S]*?\.visual-novel-next\s*\{[^}]*grid-column:\s*1\s*\/\s*-1;[^}]*width:\s*100%;/,
+]) {
+  if (!pattern.test(styles)) throw new Error(`missing responsive scene navigation rule: ${pattern}`);
 }
 
 console.log('visual novel social story assets: 4 scenes ready');

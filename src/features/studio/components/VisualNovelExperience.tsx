@@ -61,18 +61,10 @@ export default function VisualNovelExperience({
         <div className="visual-novel-dialogue">
           <p>{copy.text}</p>
           {copy.perspective && <p className="visual-novel-perspective">{copy.perspective}</p>}
-          <button
-            type="button"
-            className="visual-novel-next"
-            onClick={() => selectScene(sceneIndex === story.scenes.length - 1 ? 0 : sceneIndex + 1)}
-            aria-label={sceneIndex === story.scenes.length - 1 ? '이야기 처음부터 보기' : '다음 장면 보기'}
-          >
-            <Icon name={sceneIndex === story.scenes.length - 1 ? 'refresh' : 'chevron-right'} size={20} />
-          </button>
         </div>
       </div>
       <div className="visual-novel-controls" aria-label="이야기 장면 선택">
-        <div>
+        <div className="visual-novel-scene-picker">
           {story.scenes.map((item, index) => (
             <button
               type="button"
@@ -85,7 +77,16 @@ export default function VisualNovelExperience({
             </button>
           ))}
         </div>
-        <span>{sceneIndex + 1} / {story.scenes.length}</span>
+        <span className="visual-novel-scene-count">{sceneIndex + 1} / {story.scenes.length}</span>
+        <button
+          type="button"
+          className="visual-novel-next"
+          onClick={() => selectScene(sceneIndex === story.scenes.length - 1 ? 0 : sceneIndex + 1)}
+          aria-label={sceneIndex === story.scenes.length - 1 ? '이야기 처음부터 보기' : '다음 장면 보기'}
+        >
+          <span>{sceneIndex === story.scenes.length - 1 ? '처음부터' : '다음 장면'}</span>
+          <Icon name={sceneIndex === story.scenes.length - 1 ? 'refresh' : 'chevron-right'} size={20} />
+        </button>
       </div>
     </section>
   );
