@@ -17,11 +17,7 @@ export default function StudioExplanationPanel({ lesson, hard, supportLevel, acc
   const [open, setOpen] = useState(false);
   const { speakNow } = useSpeak();
   const challengeConcept = hard ? hard.concept : [lesson.bodyNormal];
-  const goal = supportLevel === 'full'
-    ? hard?.goal.easy ?? lesson.objective
-    : supportLevel === 'light'
-      ? hard?.goal.normal ?? lesson.objective
-      : hard?.goal.hard ?? lesson.objective;
+  const goal = lesson.objective;
   const paragraphs = supportLevel === 'full'
     ? [lesson.bodyEasy]
     : supportLevel === 'light'

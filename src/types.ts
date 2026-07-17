@@ -50,7 +50,7 @@ export interface LessonContent {
   number: number;         // 1-indexed order within the module
   title: string;
   kind: LessonKind;
-  /** 교사용 학습목표 — "~할 수 있다" 형식. 학생 화면에는 노출하지 않는다. */
+  /** 차시 공통 학습목표 — 지원 수준과 관계없이 학생·교사 화면에 동일하게 제시한다. */
   objective: string;
   /** 2022 개정 특수교육 기본교육과정 성취기준 — "[코드] 원문" 형식. */
   standards?: string[];
@@ -72,10 +72,9 @@ export interface HardTerm {
 /**
  * '어려움' 레벨 차시 콘텐츠 (spec: 2026-07-10-hard-difficulty-design.md §4).
  * 기존 LessonContent와 분리 — src/data/lessons/hard/ 모듈에 lessonId로 매핑.
- * goal is used across all difficulties in the goal card.
+ * 학습목표는 LessonContent.objective 하나만 사용하며, 이 구조에는 수준별 목표를 두지 않는다.
  */
 export interface HardLessonContent {
-  goal: { easy: string; normal: string; hard: string };
   concept: string[];        // 개념 문단 (2~4개)
   terms: HardTerm[];        // 오늘의 용어 (2~4개)
   method?: string[];        // 어떻게 할까요 — 수행 절차 (해당 차시만)

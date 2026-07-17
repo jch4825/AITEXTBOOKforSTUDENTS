@@ -116,7 +116,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   const wrapUpText = effectiveHard
     ? effectiveHard.wrapUpHard
     : difficulty === 'easy' ? lesson.wrapUpEasy : lesson.wrapUpNormal;
-  const goalText = hard ? hard.goal[difficulty] : null; // 전 난이도 노출 (hard 데이터에서)
+  const goalText = lesson.objective;
   const story = getLessonStory(lesson.id);
   // 스토리는 난이도와 직교 — 어려움은 introNormal 사용 (spec §5)
   const storyIntro = story ? (difficulty === 'easy' ? story.introEasy : story.introNormal) : null;

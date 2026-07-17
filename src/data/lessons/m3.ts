@@ -16,7 +16,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'experience',
     title: 'AI에게 궁금한 것 물어보기',
-    objective: '공부하다가 궁금한 것을 AI에게 질문하여 답을 얻을 수 있다.',
+    objective: '예나 아니오로 끝나지 않는 질문을 만들어 물어봐요.',
     standards: ['[9정통02-02] 인터넷 검색을 통해 목적에 따라 필요한 정보를 찾는다.'],
     bodyEasy: '공부하다 궁금한 게 있으면 AI한테 물어봐요.',
     bodyNormal:
@@ -142,7 +142,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 2,
     kind: 'activity',
     title: '모르는 단어는 AI에게',
-    objective: '모르는 단어의 뜻을 AI에게 물어볼 수 있다.',
+    objective: 'AI에게 단어 뜻을 물어보고 사전과 비교해 봐요.',
     standards: ['[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.'],
     bodyEasy: '모르는 단어가 나오면 "이게 무슨 뜻이야?" 하고 물어봐요.',
     bodyNormal:
@@ -259,7 +259,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 3,
     kind: 'activity',
     title: '"쉽게 설명해줘"라고 말해요',
-    objective: '설명이 어려울 때 "쉽게 설명해줘"라고 부탁할 수 있다.',
+    objective: '이해하기 쉽게 예를 들어 설명해 달라고 부탁해 봐요.',
     standards: ['[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.'],
     bodyEasy: '어려우면 "쉽게 설명해줘" 하고 부탁해요.',
     bodyNormal:
@@ -382,7 +382,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 4,
     kind: 'activity',
     title: 'AI랑 낱말 공부',
-    objective: 'AI를 활용해 새로운 낱말을 익힐 수 있다.',
+    objective: '배우고 싶은 낱말이 들어간 문장을 AI에게 만들어 달라고 해요.',
     standards: ['[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.'],
     bodyEasy: 'AI랑 같이 새 낱말을 배워봐요.',
     bodyNormal:
@@ -504,7 +504,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 5,
     kind: 'experience',
     title: 'AI랑 이야기 만들기',
-    objective: 'AI와 함께 짧은 이야기를 만들 수 있다.',
+    objective: '내가 생각한 줄거리를 AI에게 말하고 이야기를 만들어 봐요.',
     standards: ['[9정통01-04] 필요한 정보를 수집하고, 타인과 정보를 주고받는다.'],
     bodyEasy: 'AI랑 같이 재미있는 이야기를 만들어봐요.',
     bodyNormal:
@@ -612,7 +612,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 6,
     kind: 'activity',
     title: '계산이 어려울 때',
-    objective: '계산이 어려울 때 AI에게 도움을 요청할 수 있다.',
+    objective: '계산은 계산기로 확인하고, 풀이 방법은 AI에게 물어봐요.',
     standards: ['[12수학01-14] 실생활의 다양한 상황에서 필요한 화폐를 활용한다.'],
     bodyEasy: '계산이 어려우면 AI한테 도와달라고 해요.',
     bodyNormal:
@@ -741,7 +741,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 7,
     kind: 'concept',
     title: '긴 글을 짧게 줄여줘요',
-    objective: '긴 글을 AI에게 요약해달라고 부탁할 수 있다.',
+    objective: '긴 글을 세 문장으로 짧게 요약해 달라고 해 봐요.',
     standards: ['[9정통02-02] 인터넷 검색을 통해 목적에 따라 필요한 정보를 찾는다.'],
     bodyEasy: '긴 글이 힘들면 "짧게 줄여줘" 하고 부탁해요.',
     bodyNormal:
@@ -859,7 +859,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 8,
     kind: 'activity',
     title: 'AI랑 퀴즈 놀이',
-    objective: 'AI에게 퀴즈를 내달라고 부탁하여 배운 내용을 연습할 수 있다.',
+    objective: 'AI에게 문제를 만들어 달라고 해서 스스로 풀어 봐요.',
     standards: ['[9정통01-04] 필요한 정보를 수집하고, 타인과 정보를 주고받는다.'],
     bodyEasy: 'AI한테 퀴즈를 내달라고 해봐요. 재미있어요!',
     bodyNormal:
@@ -971,7 +971,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 9,
     kind: 'concept',
     title: '그림을 설명해줘요',
-    objective: 'AI가 그림이나 사진을 설명해줄 수 있다는 것을 말할 수 있다.',
+    objective: 'AI에게 그림을 보여주고 무슨 그림인지 설명해 달라고 해요.',
     standards: ['[9정통01-01] 정보통신의 의미를 이해하고, 다양한 형태와 방법으로 제공되는 정보를 살펴본다.'],
     bodyEasy: 'AI는 그림을 보고 설명해줄 수 있어요.',
     bodyNormal:
@@ -1094,7 +1094,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 10,
     kind: 'experience',
     title: '오늘 배운 것을 AI랑 복습해요',
-    objective: '배운 내용을 AI와 함께 복습할 수 있다.',
+    objective: 'AI에게 오늘 배운 것을 짧게 줄여 달라고 하고 읽어 봐요.',
     standards: ['[9정통02-02] 인터넷 검색을 통해 목적에 따라 필요한 정보를 찾는다.'],
     bodyEasy: '배운 걸 AI랑 한 번 더 이야기하면 오래 기억나요.',
     bodyNormal:
@@ -1208,7 +1208,7 @@ export const M3_LESSONS: LessonContent[] = [
     number: 11,
     kind: 'concept',
     title: '나만의 공부 도우미 (마무리)',
-    objective: '단원 3에서 배운 AI 공부 활용법을 정리하여 말할 수 있다.',
+    objective: '공부할 때 AI를 어떻게 쓸지 약속을 만들어 봐요.',
     standards: ['[12정통02-04] 일상생활에서 인공지능 기기를 활용하여 생활의 편리함을 경험한다.'],
     bodyEasy: 'AI는 나의 공부 도우미예요. 배운 걸 확인해봐요.',
     bodyNormal:

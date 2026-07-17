@@ -16,7 +16,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'activity',
     title: '마트에서 장보기',
-    objective: 'AI의 도움을 받아 장보기 목록을 만들 수 있다.',
+    objective: 'AI에게 재료 목록을 짜 달라고 하고 확인해 봐요.',
     standards: ['[6사회01-02] 일상생활에서 활동이나 물건을 선택하고 나의 선택을 중요하게 여기는 태도를 기른다.'],
     bodyEasy: '마트 가기 전에 살 것을 정해요. AI가 도와줘요.',
     bodyNormal:
@@ -113,7 +113,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 2,
     kind: 'activity',
     title: '얼마예요? 돈 계산',
-    objective: '물건값을 계산할 때 AI의 도움을 받을 수 있다.',
+    objective: '살 물건들의 값을 알아보고 계산기로 직접 확인해 봐요.',
     standards: [
       '[9수학01-14] 대용 화폐를 활용하여 상품을 교환한다.',
       '[12수학01-14] 실생활의 다양한 상황에서 필요한 화폐를 활용한다.',
@@ -241,7 +241,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 3,
     kind: 'activity',
     title: '길을 찾아요',
-    objective: '길을 모를 때 AI 지도의 도움을 받는 방법을 말할 수 있다.',
+    objective: '지도로 가는 길을 확인하고 내 위치 정보도 조심해요.',
     standards: ['[12진로04-03] 집에서 직장까지 교통 수단을 활용하여 이동한다.'],
     bodyEasy: '길을 모르면 지도 앱이 알려줘요.',
     bodyNormal:
@@ -360,7 +360,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 4,
     kind: 'activity',
     title: '버스와 지하철 타기',
-    objective: '버스 타는 순서를 차례대로 말할 수 있다.',
+    objective: '버스나 지하철이 언제 도착하는지 앱으로 알아봐요.',
     standards: [
       '[12진로04-03] 집에서 직장까지 교통 수단을 활용하여 이동한다.',
       '[9보건04-03] 교통사고의 위험 요인을 알고 사고 예방을 위한 안전 수칙을 실천한다.',
@@ -471,7 +471,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 5,
     kind: 'experience',
     title: '오늘 날씨와 옷차림',
-    objective: 'AI에게 날씨를 물어보고 알맞은 옷차림을 고를 수 있다.',
+    objective: '오늘 날씨 예보를 알아보고 어울리는 옷을 골라 봐요.',
     standards: ['[12정통02-04] 일상생활에서 인공지능 기기를 활용하여 생활의 편리함을 경험한다.'],
     bodyEasy: 'AI한테 날씨를 물어보고 옷을 골라요.',
     bodyNormal:
@@ -573,7 +573,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 6,
     kind: 'activity',
     title: '요리 도우미 AI',
-    objective: 'AI의 도움을 받아 간단한 음식 만드는 순서를 익힐 수 있다.',
+    objective: '요리하는 순서를 AI에게 물어보고 하나씩 알아봐요.',
     standards: ['[9정통03-03] 가정생활에서 디지털 기술이 적용된 사례를 살펴보고 경험한다.'],
     bodyEasy: 'AI한테 만드는 법을 물어보고 샌드위치를 만들어요.',
     bodyNormal:
@@ -670,7 +670,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 7,
     kind: 'activity',
     title: '하루 계획 세우기',
-    objective: 'AI의 도움을 받아 하루 일과 계획을 세울 수 있다.',
+    objective: '오늘 할 일들의 알림을 맞추고 실천해 봐요.',
     standards: ['[12정통02-04] 일상생활에서 인공지능 기기를 활용하여 생활의 편리함을 경험한다.'],
     bodyEasy: '오늘 할 일을 순서대로 계획해봐요.',
     bodyNormal:
@@ -772,7 +772,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 8,
     kind: 'concept',
     title: '아플 때는 어떻게?',
-    objective: '아플 때 어른에게 알리고 도움을 받는 방법을 말할 수 있다.',
+    objective: '아플 때 내 상태를 어른에게 먼저 말하고 도와달라고 해요.',
     standards: ['[12정통02-04] 일상생활에서 인공지능 기기를 활용하여 생활의 편리함을 경험한다.'],
     bodyEasy: '아프면 제일 먼저 어른에게 말해요.',
     bodyNormal:
@@ -879,7 +879,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 9,
     kind: 'activity',
     title: '인사와 부탁의 말',
-    objective: '상황에 맞는 인사말과 부탁하는 말을 사용할 수 있다.',
+    objective: '고마운 상황에 어울리는 말을 소리 내어 연습해 봐요.',
     standards: ['[9국어01-04] 대화 예절을 지키며 상대방의 말에 적절한 질문과 대답으로 대화를 이어 간다.'],
     bodyEasy: '상황에 맞는 인사말을 연습해요.',
     bodyNormal:
@@ -969,7 +969,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 10,
     kind: 'concept',
     title: '여러 가지 직업 구경',
-    objective: '여러 가지 직업과 하는 일을 짝지을 수 있다.',
+    objective: '내가 되고 싶은 직업이 무슨 일을 하는지 AI에게 물어봐요.',
     standards: [
       '[9진로02-02] 직업의 세계에 관심을 가지고 가족, 이웃 등 주변 사람들의 직업에 대하여 탐색한다.',
       '[12정통03-04] 디지털 사회에서의 다양한 직업을 탐색하고 체험한다.',
@@ -1074,7 +1074,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 11,
     kind: 'experience',
     title: '나를 소개해요',
-    objective: '자신의 이름(별명)과 좋아하는 것으로 자기소개를 할 수 있다.',
+    objective: '내가 쓴 자기소개를 AI에게 보여주고 고쳐서 다시 써 봐요.',
     standards: ['[9진로01-02] 흥미, 적성, 장점과 단점, 성격 등 자신의 특성을 파악하여 자신을 소개한다.'],
     bodyEasy: '내가 좋아하는 것으로 나를 소개해봐요.',
     bodyNormal:
@@ -1172,7 +1172,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 12,
     kind: 'concept',
     title: 'AI와 함께하는 나의 생활 (마무리)',
-    objective: '전체 과정에서 배운 AI 활용법을 생활 장면과 연결하여 말할 수 있다.',
+    objective: '그동안 배운 생활 약속을 다시 모아 확인해 봐요.',
     standards: ['[12정통02-04] 일상생활에서 인공지능 기기를 활용하여 생활의 편리함을 경험한다.'],
     bodyEasy: '지금까지 배운 것을 다 확인해봐요. 정말 잘했어요!',
     bodyNormal:

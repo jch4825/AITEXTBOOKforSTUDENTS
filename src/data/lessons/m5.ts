@@ -16,7 +16,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'concept',
     title: '문제가 뭐예요?',
-    objective: '생활 속에서 해결해야 할 문제를 알아차릴 수 있다.',
+    objective: '지금 상황과 내가 바라는 것이 다를 때 이것이 문제임을 알아요.',
     standards: ['[12정통02-03] 생활 속 다양한 문제 해결 상황을 인식하고, 문제 해결 절차를 구성한다.'],
     bodyEasy: '문제는 "해결하고 싶은 일"이에요. 배고픈 것도 문제예요!',
     bodyNormal:
@@ -126,7 +126,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 2,
     kind: 'concept',
     title: '문제를 작게 나눠요',
-    objective: '큰 문제를 작은 문제로 나눌 수 있다.',
+    objective: '큰 일을 세 가지 작은 일들로 나누어 봐요.',
     standards: ['[12정통02-03] 생활 속 다양한 문제 해결 상황을 인식하고, 문제 해결 절차를 구성한다.'],
     bodyEasy: '큰 문제는 작게 나누면 쉬워져요.',
     bodyNormal:
@@ -219,7 +219,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 3,
     kind: 'activity',
     title: '순서대로 생각해요',
-    objective: '일의 순서를 차례대로 늘어놓을 수 있다.',
+    objective: '나눈 작은 일들을 먼저 할 것부터 순서대로 나열해요.',
     standards: ['[9정통02-03] 순차, 선택, 반복 구조를 통해 문제 해결 과정을 탐색한다.'],
     bodyEasy: '일에는 순서가 있어요. 순서대로 하면 잘 돼요.',
     bodyNormal:
@@ -314,7 +314,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 4,
     kind: 'activity',
     title: '무엇부터 할까요?',
-    objective: '여러 일 중에서 먼저 할 일을 고를 수 있다.',
+    objective: '여러 일 중 더 중요한 일을 먼저 하기로 정해요.',
     standards: ['[9정통02-03] 순차, 선택, 반복 구조를 통해 문제 해결 과정을 탐색한다.'],
     bodyEasy: '할 일이 많으면 중요한 것부터 해요.',
     bodyNormal:
@@ -402,7 +402,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 5,
     kind: 'activity',
     title: 'AI에게 힌트를 달라고 해요',
-    objective: '문제가 어려울 때 AI에게 힌트를 요청할 수 있다.',
+    objective: '정답 대신 살짝 도와주는 힌트만 달라고 부탁해 봐요.',
     standards: ['[9정통02-02] 인터넷 검색을 통해 목적에 따라 필요한 정보를 찾는다.'],
     bodyEasy: '어려우면 답 말고 "힌트"를 달라고 해요.',
     bodyNormal:
@@ -505,7 +505,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 6,
     kind: 'experience',
     title: '못 알아들으면 다시 물어봐요',
-    objective: 'AI가 내 말을 못 알아들었을 때 바꿔서 다시 물을 수 있다.',
+    objective: 'AI가 내 말을 오해하면 더 구체적인 이름으로 다시 말해요.',
     standards: ['[9국어01-04] 대화 예절을 지키며 상대방의 말에 적절한 질문과 대답으로 대화를 이어 간다.'],
     bodyEasy: 'AI가 못 알아들으면 다르게 다시 물어봐요.',
     bodyNormal:
@@ -618,7 +618,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 7,
     kind: 'activity',
     title: '한 단계씩 부탁해요',
-    objective: 'AI에게 한 번에 하나씩 차례대로 부탁할 수 있다.',
+    objective: 'AI에게 한 번에 하나씩 순서대로 실행해 달라고 부탁해 봐요.',
     standards: ['[9정통02-03] 순차, 선택, 반복 구조를 통해 문제 해결 과정을 탐색한다.'],
     bodyEasy: '한 번에 하나씩 부탁하면 잘 돼요.',
     bodyNormal:
@@ -724,7 +724,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 8,
     kind: 'concept',
     title: '답이 맞는지 확인해요',
-    objective: '문제를 푼 뒤 답이 맞는지 스스로 확인할 수 있다.',
+    objective: '내가 얻은 결과가 처음에 원했던 목표와 같은지 확인해 봐요.',
     standards: ['[12정통02-03] 생활 속 다양한 문제 해결 상황을 인식하고, 문제 해결 절차를 구성한다.'],
     bodyEasy: '다 하고 나면 맞는지 한 번 더 봐요.',
     bodyNormal:
@@ -846,7 +846,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 9,
     kind: 'concept',
     title: '다른 방법도 있어요',
-    objective: '한 가지 방법이 안 될 때 다른 방법을 찾을 수 있다.',
+    objective: '이 방법 말고 다른 방법도 있는지 AI에게 물어봐요.',
     standards: ['[12정통02-03] 생활 속 다양한 문제 해결 상황을 인식하고, 문제 해결 절차를 구성한다.'],
     bodyEasy: '한 방법이 안 되면 다른 방법을 찾아봐요.',
     bodyNormal:
@@ -938,7 +938,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 10,
     kind: 'concept',
     title: '실수해도 괜찮아요',
-    objective: '실수했을 때 다시 시도하는 태도를 말할 수 있다.',
+    objective: '틀린 부분을 찾아서 고치고 다시 도전해 봐요.',
     standards: ['[12정통02-03] 생활 속 다양한 문제 해결 상황을 인식하고, 문제 해결 절차를 구성한다.'],
     bodyEasy: '실수해도 괜찮아요. 다시 하면 돼요.',
     bodyNormal:
@@ -1055,7 +1055,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 11,
     kind: 'experience',
     title: '라면 끓이기 대작전',
-    objective: '배운 문제 해결 방법으로 요리 순서를 계획할 수 있다.',
+    objective: '라면 끓이는 일의 순서를 세워 차례대로 해 봐요.',
     standards: [
       '[9정통02-03] 순차, 선택, 반복 구조를 통해 문제 해결 과정을 탐색한다.',
       '[9진로03-01] 직군별 작업 과정의 순서를 익힌다.',
@@ -1187,7 +1187,7 @@ export const M5_LESSONS: LessonContent[] = [
     number: 12,
     kind: 'concept',
     title: '나는 문제 해결사! (마무리)',
-    objective: '단원 5에서 배운 문제 해결 단계를 정리하여 말할 수 있다.',
+    objective: '이전 시간에 공부한 문제 해결 4단계를 다시 알아봐요.',
     standards: ['[12정통02-03] 생활 속 다양한 문제 해결 상황을 인식하고, 문제 해결 절차를 구성한다.'],
     bodyEasy: '배운 문제 해결 방법을 확인해봐요.',
     bodyNormal:

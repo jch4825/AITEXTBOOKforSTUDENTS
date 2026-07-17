@@ -15,7 +15,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'concept',
     title: 'AI도 틀릴 수 있어요',
-    objective: 'AI가 자신 있게 틀린 답을 줄 수 있다는 것을 사례로 말할 수 있다.',
+    objective: 'AI가 거짓말처럼 틀린 답을 자신 있게 할 수 있음을 알아요.',
     standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
     bodyEasy: 'AI도 가끔 틀려요. 다 믿으면 안 돼요.',
     bodyNormal:
@@ -143,7 +143,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 2,
     kind: 'activity',
     title: '진짜일까? 확인해봐요',
-    objective: '정보가 진짜인지 확인하는 방법을 말할 수 있다.',
+    objective: '정보를 그대로 믿지 않고 사실인지 확인해 봐요.',
     standards: ['[9정통01-01] 정보통신의 의미를 이해하고, 다양한 형태와 방법으로 제공되는 정보를 살펴본다.'],
     bodyEasy: '들은 이야기가 진짜인지 확인하는 방법을 배워요.',
     bodyNormal:
@@ -262,7 +262,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 3,
     kind: 'concept',
     title: '내 정보는 소중해요',
-    objective: '개인정보가 무엇인지 알고 AI에게 말하면 안 되는 것을 구별할 수 있다.',
+    objective: 'AI에게 이름이나 주소 같은 개인정보를 말하지 않기로 해요.',
     standards: ['[9정통03-02] 개인 정보 보호의 중요성을 알고, 안전하게 관리하는 습관을 기른다.'],
     bodyEasy: '내 이름, 집 주소, 전화번호는 소중해요. 함부로 말하지 않아요.',
     bodyNormal:
@@ -403,7 +403,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 4,
     kind: 'activity',
     title: '비밀번호는 비밀!',
-    objective: '비밀번호를 다른 사람에게 알려주면 안 된다는 것을 말할 수 있다.',
+    objective: '비밀번호를 묻는 말을 만나면 절대로 말하지 않아요.',
     standards: ['[9정통03-02] 개인 정보 보호의 중요성을 알고, 안전하게 관리하는 습관을 기른다.'],
     bodyEasy: '비밀번호는 아무한테도 알려주지 않아요.',
     bodyNormal:
@@ -527,7 +527,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 5,
     kind: 'concept',
     title: '사진을 함부로 보내지 않아요',
-    objective: '내 사진과 가족 사진을 함부로 보내면 안 된다는 것을 말할 수 있다.',
+    objective: '사진을 보내기 전에 한번 더 생각하는 약속을 지켜요.',
     standards: ['[9정통03-02] 개인 정보 보호의 중요성을 알고, 안전하게 관리하는 습관을 기른다.'],
     bodyEasy: '내 얼굴 사진은 함부로 보내지 않아요.',
     bodyNormal:
@@ -650,7 +650,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 6,
     kind: 'activity',
     title: '기분 나쁜 말을 만나면',
-    objective: '기분 나쁜 말을 만났을 때 대처하는 방법을 말할 수 있다.',
+    objective: '마음이 무서워지는 나쁜 내용을 만나면 화면을 끄고 알려요.',
     standards: ['[9정통03-01] 디지털 공간에서 올바른 예절을 익혀 실천한다.'],
     bodyEasy: '기분 나쁜 말을 보면 어른에게 알려요. 내 잘못이 아니에요.',
     bodyNormal:
@@ -779,7 +779,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 7,
     kind: 'activity',
     title: '고운 말로 물어봐요',
-    objective: 'AI와 사람에게 고운 말을 사용할 수 있다.',
+    objective: 'AI에게 명령하는 대신 고운 말로 부탁해 봐요.',
     standards: [
       '[6국어01-05] 바르고 고운 말을 사용하여 대화한다.',
       '[9정통03-01] 디지털 공간에서 올바른 예절을 익혀 실천한다.',
@@ -902,7 +902,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 8,
     kind: 'concept',
     title: '너무 오래 쓰지 않아요',
-    objective: '스마트폰과 AI를 정해진 시간만큼만 사용하는 습관을 말할 수 있다.',
+    objective: '폰을 너무 오래 하지 않도록 미리 시간을 정해요.',
     standards: ['[12정통03-02] 디지털 중독 및 디지털 범죄 사례를 살펴보고, 예방하는 방법을 실천한다.'],
     bodyEasy: '스마트폰은 약속한 시간만큼만 써요.',
     bodyNormal:
@@ -1023,7 +1023,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 9,
     kind: 'activity',
     title: '이상하면 어른에게 알려요',
-    objective: '이상하거나 무서운 일이 생기면 즉시 어른에게 알릴 수 있다.',
+    objective: '무서운 일이 생기면 숨기지 않고 어른에게 도움을 요청해요.',
     standards: ['[12정통03-02] 디지털 중독 및 디지털 범죄 사례를 살펴보고, 예방하는 방법을 실천한다.'],
     bodyEasy: '이상한 일이 생기면 바로 어른에게 말해요.',
     bodyNormal:
@@ -1147,7 +1147,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 10,
     kind: 'concept',
     title: '광고와 진짜를 구별해요',
-    objective: '광고와 일반 정보를 구별할 수 있다.',
+    objective: '화면에서 진짜 정보와 파는 광고를 다른 점을 찾아요.',
     standards: ['[9정통01-01] 정보통신의 의미를 이해하고, 다양한 형태와 방법으로 제공되는 정보를 살펴본다.'],
     bodyEasy: '"공짜!" "최고!" 하는 광고를 조심해요.',
     bodyNormal:
@@ -1262,7 +1262,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 11,
     kind: 'concept',
     title: '우리의 안전 약속 (마무리)',
-    objective: '단원 4에서 배운 안전 수칙을 정리하여 말할 수 있다.',
+    objective: '그동안 배운 안전 약속을 다시 말해 봐요.',
     standards: ['[12정통03-01] 디지털 윤리를 이해하고, 디지털 공간에서 타인을 존중하고 배려하는 태도를 기른다.'],
     bodyEasy: '배운 안전 약속을 확인해봐요.',
     bodyNormal:
