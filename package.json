@@ -24,7 +24,8 @@
     "check:single-objective": "node scripts/check-single-learning-objective-contract.mjs",
     "check:no-experience-bridge": "node scripts/check-no-experience-bridge-contract.mjs",
     "check:student-formal-style": "node scripts/check-student-formal-style-contract.mjs",
-    "check:no-lesson-support-selector": "node scripts/check-no-lesson-support-selector-contract.mjs"
+    "check:no-lesson-support-selector": "node scripts/check-no-lesson-support-selector-contract.mjs",
+    "check:visual-novel-story": "node scripts/check-visual-novel-social-story-contract.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
