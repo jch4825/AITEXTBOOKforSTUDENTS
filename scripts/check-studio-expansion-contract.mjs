@@ -28,23 +28,12 @@ if (!experience.includes('<PreparedStimulusPanel')) throw new Error('studio does
 if (panel.includes('useEffect')) throw new Error('prepared speech must not auto-play');
 
 const studioSharedPath = 'src/data/studios/shared.ts';
-const bridgeIndexPath = 'src/data/supportBridges/index.ts';
-const bridgeTypesPath = 'src/data/supportBridges/types.ts';
-for (const required of [studioSharedPath, bridgeIndexPath, bridgeTypesPath]) {
-  if (!fs.existsSync(required)) throw new Error(`shared studio registry file missing: ${required}`);
-}
+if (!fs.existsSync(studioSharedPath)) throw new Error(`shared studio registry file missing: ${studioSharedPath}`);
 const studioShared = fs.readFileSync(studioSharedPath, 'utf8');
-const bridgeIndex = fs.readFileSync(bridgeIndexPath, 'utf8');
-const bridgeComponent = fs.readFileSync('src/features/studio/SupportLessonBridge.tsx', 'utf8');
 const rootLesson = fs.readFileSync('src/views/LessonView.tsx', 'utf8');
 for (const token of ['STUDIO_SUPPORT_PROFILES', 'STUDIO_EXPRESSION_MODES']) {
   if (!studioShared.includes(token)) throw new Error(`shared studio constant missing: ${token}`);
 }
-for (const token of ['M5_SUPPORT_BRIDGES', 'getSupportBridge']) {
-  if (!bridgeIndex.includes(token)) throw new Error(`generic bridge registry missing: ${token}`);
-}
-if (bridgeComponent.includes('supportBridges/m5')) throw new Error('bridge component must use the common type');
-if (!rootLesson.includes("from '../data/supportBridges'")) throw new Error('LessonView must use the bridge registry');
 
 const portfolioIndexPath = 'src/data/modulePortfolios/index.ts';
 const portfolioTypesPath = 'src/data/modulePortfolios/types.ts';
@@ -82,15 +71,8 @@ if (!m1.includes("kind: 'image'") || !m1.includes("kind: 'speech'")) {
   throw new Error('M1 recognition studio needs image and speech stimuli');
 }
 
-const m1BridgePath = 'src/data/supportBridges/m1.ts';
 const m1PortfolioPath = 'src/data/modulePortfolios/m1.ts';
-for (const required of [m1BridgePath, m1PortfolioPath]) {
-  if (!fs.existsSync(required)) throw new Error(`M1 learning connection missing: ${required}`);
-}
-const m1Bridges = fs.readFileSync(m1BridgePath, 'utf8');
-for (const lessonId of ['m1-l2', 'm1-l3', 'm1-l5', 'm1-l6', 'm1-l7', 'm1-l8', 'm1-l9']) {
-  if (!m1Bridges.includes(`lessonId: '${lessonId}'`)) throw new Error(`M1 bridge missing: ${lessonId}`);
-}
+if (!fs.existsSync(m1PortfolioPath)) throw new Error(`M1 learning connection missing: ${m1PortfolioPath}`);
 const m1Portfolio = fs.readFileSync(m1PortfolioPath, 'utf8');
 for (const token of ["lessonId: 'm1-l11'", "'m1-l1', 'm1-l4', 'm1-l10'", '1단원 성장 포트폴리오']) {
   if (!m1Portfolio.includes(token)) throw new Error(`M1 portfolio missing: ${token}`);
@@ -113,15 +95,8 @@ for (const disclosure of ['준비된 AI 예시', '안전한 연습 응답']) {
   if (!m2.includes(disclosure)) throw new Error(`prepared AI disclosure missing: ${disclosure}`);
 }
 
-const m2BridgePath = 'src/data/supportBridges/m2.ts';
 const m2PortfolioPath = 'src/data/modulePortfolios/m2.ts';
-for (const required of [m2BridgePath, m2PortfolioPath]) {
-  if (!fs.existsSync(required)) throw new Error(`M2 learning connection missing: ${required}`);
-}
-const m2Bridges = fs.readFileSync(m2BridgePath, 'utf8');
-for (const lessonId of ['m2-l2', 'm2-l3', 'm2-l4', 'm2-l5', 'm2-l7', 'm2-l8', 'm2-l9']) {
-  if (!m2Bridges.includes(`lessonId: '${lessonId}'`)) throw new Error(`M2 bridge missing: ${lessonId}`);
-}
+if (!fs.existsSync(m2PortfolioPath)) throw new Error(`M2 learning connection missing: ${m2PortfolioPath}`);
 const m2Portfolio = fs.readFileSync(m2PortfolioPath, 'utf8');
 for (const token of ["lessonId: 'm2-l11'", "'m2-l1', 'm2-l6', 'm2-l10'", '2단원 성장 포트폴리오']) {
   if (!m2Portfolio.includes(token)) throw new Error(`M2 portfolio missing: ${token}`);
@@ -153,20 +128,8 @@ for (const [source, expected, label] of [
   if (count !== expected) throw new Error(`${label} ready studio count must be ${expected}, got ${count}`);
 }
 
-for (const spread of ['...M1_SUPPORT_BRIDGES', '...M2_SUPPORT_BRIDGES', '...M5_SUPPORT_BRIDGES']) {
-  if (!bridgeIndex.includes(spread)) throw new Error(`ready bridge group missing: ${spread}`);
-}
-for (const [source, expected, label] of [
-  [m1Bridges, 7, 'M1'],
-  [m2Bridges, 7, 'M2'],
-  [fs.readFileSync('src/data/supportBridges/m5.ts', 'utf8'), 8, 'M5'],
-]) {
-  const count = (source.match(/lessonId: 'm\d-l\d+'/g) ?? []).length;
-  if (count !== expected) throw new Error(`${label} ready bridge count must be ${expected}, got ${count}`);
-}
-
 for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M5_PORTFOLIO']) {
   if (!portfolioIndex.includes(portfolio)) throw new Error(`ready portfolio missing: ${portfolio}`);
 }
 
-console.log('studio expansion contract: 9 studios, 22 bridges, 3 portfolios ready');
+console.log('studio expansion contract: 9 studios, 3 portfolios ready');

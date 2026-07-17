@@ -46,12 +46,12 @@ export default function TeacherOperationGuide() {
         </section>
 
         <section>
-          <h3 className="text-lg font-extrabold">기존 3단계 설명과의 연결</h3>
-          <div className="mt-3 grid gap-3 md:grid-cols-3">
+          <h3 className="text-lg font-extrabold">설명 차시의 구성</h3>
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
             <article className="studio-fact-card"><strong>1. 개념 만나기</strong><p className="mt-1">기존 쉬운 설명과 예시로 오늘 사용할 개념을 짧게 확인합니다.</p></article>
             <article className="studio-fact-card"><strong>2. 도구 연습하기</strong><p className="mt-1">게임과 선택 활동으로 한 가지 기능을 반복합니다.</p></article>
-            <article className="studio-fact-card"><strong>3. 다음 경험 연결</strong><p className="mt-1">이전 핵심 경험을 회상하고 오늘 연습의 목적과 다음 경험을 예고합니다.</p></article>
           </div>
+          <p className="studio-margin-note mt-3">지원 차시는 학습목표 뒤에 개념 설명과 활동을 바로 제시합니다.</p>
         </section>
 
         <section>

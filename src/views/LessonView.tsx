@@ -31,9 +31,7 @@ import { getLesson } from '../data/lessons';
 import { getHardContent } from '../data/lessons/hard';
 import { getStudioDefinition } from '../data/studios';
 import StudioLessonView from '../features/studio/StudioLessonView';
-import { getSupportBridge } from '../data/supportBridges';
 import { getModulePortfolioDefinition } from '../data/modulePortfolios';
-import SupportLessonBridge from '../features/studio/SupportLessonBridge';
 import ModuleCloseLessonView from '../features/studio/ModuleCloseLessonView';
 import LessonGoal from '../components/LessonGoal';
 import HardLessonBody from '../components/HardLessonBody';
@@ -156,27 +154,13 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
         </Button>
       </>
     );
-    const supportBridge = step === 0 ? getSupportBridge(lesson.id) : undefined;
-    const connectedBody = (
-      <>
-        {supportBridge && (
-          <SupportLessonBridge
-            bridge={supportBridge}
-            accent={theme.accent}
-            onPickLesson={onPickLesson}
-          />
-        )}
-        {bodyNode}
-      </>
-    );
-
     return (
       <EpisodeHeroSpread
         lessonId={lesson.id}
         title={lesson.title}
         scene={story?.scene ?? []}
         text={storyIntro ?? ''}
-        bodyText={connectedBody}
+        bodyText={bodyNode}
         goalText={goalNode}
         episodeTitle={lesson.number === 1 ? MODULE_EPISODES[lesson.moduleId].title : undefined}
         accent={theme.accent}

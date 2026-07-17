@@ -2,7 +2,9 @@ import fs from 'node:fs';
 
 const obsoletePaths = [
   'src/features/studio/SupportLessonBridge.tsx',
-  'src/data/supportBridges',
+  'src/data/supportBridges/index.ts',
+  'src/data/supportBridges/types.ts',
+  ...['m1', 'm2', 'm3', 'm4', 'm5', 'm6'].map((moduleId) => `src/data/supportBridges/${moduleId}.ts`),
 ];
 
 for (const path of obsoletePaths) {
