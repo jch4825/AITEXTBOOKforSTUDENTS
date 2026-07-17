@@ -916,8 +916,13 @@
   }
 
   .visual-novel-stage {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .visual-novel-image-frame {
     position: relative;
-    min-height: 31rem;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--editorial-line));
     border-radius: 16px;
@@ -925,7 +930,7 @@
     box-shadow: 0 10px 28px rgba(43, 58, 85, 0.16);
   }
 
-  .visual-novel-stage::after {
+  .visual-novel-image-frame::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -982,12 +987,7 @@
   }
 
   .visual-novel-dialogue {
-    position: absolute;
-    z-index: 3;
-    right: 0.8rem;
-    bottom: 0.8rem;
-    left: 0.8rem;
-    min-height: 8.2rem;
+    position: relative;
     padding: 1rem 3.9rem 1rem 1rem;
     border: 1px solid rgba(255, 255, 255, 0.36);
     border-radius: 14px;
@@ -1158,17 +1158,7 @@
     font-weight: 900;
   }
 
-  @media (max-width: 1023px) {
-    .visual-novel-stage {
-      min-height: min(34rem, 76vw);
-    }
-  }
-
   @media (max-width: 430px) {
-    .visual-novel-stage {
-      min-height: 36rem;
-    }
-
     .visual-novel-scene-label {
       max-width: calc(100% - 3rem);
     }

@@ -51,11 +51,13 @@ export default function VisualNovelExperience({
         <h2>{story.title}</h2>
       </div>
       <div className="visual-novel-stage">
-        <img className="visual-novel-scene" src={scene.imageSrc} alt={scene.alt} />
-        <span className="visual-novel-scene-label">{scene.label}</span>
-        <button type="button" className="visual-novel-listen" onClick={speakCurrentScene}>
-          <Icon name="speaker" size={18} /> 대사 듣기
-        </button>
+        <div className="visual-novel-image-frame">
+          <img className="visual-novel-scene" src={scene.imageSrc} alt={scene.alt} />
+          <span className="visual-novel-scene-label">{scene.label}</span>
+          <button type="button" className="visual-novel-listen" onClick={speakCurrentScene}>
+            <Icon name="speaker" size={18} /> 대사 듣기
+          </button>
+        </div>
         <div className="visual-novel-dialogue">
           <p>{copy.text}</p>
           {copy.perspective && <p className="visual-novel-perspective">{copy.perspective}</p>}

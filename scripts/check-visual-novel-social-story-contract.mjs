@@ -44,8 +44,18 @@ const visualNovelPath = 'src/features/studio/components/VisualNovelExperience.ts
 if (!fs.existsSync(visualNovelPath)) throw new Error('VisualNovelExperience is missing');
 const visualNovel = fs.readFileSync(visualNovelPath, 'utf8');
 const experience = fs.readFileSync('src/features/studio/components/StudioExperience.tsx', 'utf8');
-for (const token of ['aria-label="생활 장면 이야기"', '학습목표', '이야기와 함께 알아봅니다', '대사 듣기', 'aria-pressed']) {
+for (const token of [
+  'aria-label="생활 장면 이야기"',
+  'className="visual-novel-image-frame"',
+  '학습목표',
+  '이야기와 함께 알아봅니다',
+  '대사 듣기',
+  'aria-pressed',
+]) {
   if (!visualNovel.includes(token)) throw new Error(`missing visual novel UI token: ${token}`);
+}
+if (!/className="visual-novel-image-frame"[\s\S]*?className="visual-novel-listen"[\s\S]*?<\/button>\s*<\/div>\s*<div className="visual-novel-dialogue">/.test(visualNovel)) {
+  throw new Error('scene image and dialogue must render as separate sibling blocks');
 }
 if (visualNovel.includes('비주얼 노벨 이야기')) throw new Error('student UI must not name the visual-novel format');
 if (visualNovel.includes('copy.speaker')) throw new Error('visual story must not render a separate speaker label box');
@@ -88,8 +98,17 @@ if (styles.includes('.visual-novel-current-note')) {
 if (styles.includes('.visual-novel-dialogue > strong')) {
   throw new Error('removed speaker label box must not leave unused styles');
 }
-if (!/@media \(max-width: 430px\)[\s\S]*?\.visual-novel-stage\s*\{\s*min-height:\s*36rem;/.test(styles)) {
-  throw new Error('mobile visual story must fit the longest supported dialogue at 390px and 125% text');
+if (!/\.visual-novel-image-frame\s*\{[\s\S]*?aspect-ratio:\s*16\s*\/\s*9;[\s\S]*?overflow:\s*hidden;[\s\S]*?\}/.test(styles)) {
+  throw new Error('visual story image must have its own 16:9 frame');
+}
+if (/\.visual-novel-stage\s*\{[^}]*min-height:/s.test(styles)) {
+  throw new Error('visual story stage must grow from its content instead of a fixed minimum height');
+}
+if (!/\.visual-novel-dialogue\s*\{[\s\S]*?position:\s*relative;[\s\S]*?\}/.test(styles)) {
+  throw new Error('visual story dialogue must participate in document flow below the image');
+}
+if (/\.visual-novel-dialogue\s*\{[^}]*position:\s*absolute;/s.test(styles)) {
+  throw new Error('visual story dialogue must not overlay the scene image');
 }
 
 console.log('visual novel social story assets: 4 scenes ready');
