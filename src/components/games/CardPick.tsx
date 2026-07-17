@@ -34,7 +34,7 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
   function pick(i: number) {
     if (pickedIdx !== null) return;
     setPickedIdx(i);
-    speak(choices[i].isCorrect ? '잘했어요!' : '아쉬워요, 다른 답을 골라봐요.');
+    speak(choices[i].isCorrect ? '잘했습니다!' : '아쉽습니다, 다른 답을 골라봅니다.');
   }
 
   // 오답이어도 정답을 강제로 넘기지 않고, 다시 고를 수 있게 초기화한다.
@@ -71,7 +71,7 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
 
   return (
     <ActivitySpread
-      kicker="골라봐요!"
+      kicker="골라봅니다!"
       title={question}
       accent="var(--accent)"
       character={characterReaction}
@@ -163,7 +163,7 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
             ) : (
               <>
                 <p className="text-lg font-bold inline-flex items-center gap-1.5 text-[color:var(--warn)]">
-                  <Icon name="bulb" size={22} color="var(--warn)" /> 아쉬워요, 다시 해볼까요?
+                  <Icon name="bulb" size={22} color="var(--warn)" /> 아쉽습니다, 다시 해 보겠습니까?
                 </p>
                 <div>
                   <Button size="lg" variant="secondary" onClick={retry} className="mt-4 px-6 cursor-pointer">

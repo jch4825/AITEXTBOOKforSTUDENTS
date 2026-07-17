@@ -19,7 +19,7 @@ for (const artifact of ['action-card', 'repair-card', 'visual-plan']) {
   if (!source.includes(`kind: '${artifact}'`)) throw new Error(`missing artifact kind: ${artifact}`);
 }
 if ((source.match(/source: 'prepared'/g) ?? []).length !== 3) throw new Error('pilot AI must be prepared in all studios');
-if (!source.includes('실제 불이나 뜨거운 물을 사용하지 않아요')) throw new Error('cooking safety copy is missing');
+if (!source.includes('실제 불이나 뜨거운 물을 사용하지 않습니다')) throw new Error('cooking safety copy is missing');
 if (source.includes('정답입니다') || source.includes('틀렸습니다')) throw new Error('studio must not grade a single correct answer');
 
 const reducerPath = 'src/features/studio/studioReducer.ts';
@@ -68,7 +68,7 @@ const decisionSource = fs.readFileSync(decisionPath, 'utf8');
 for (const label of ['충분한 지원', '약한 지원', '도전적']) {
   if (!supportSource.includes(label)) throw new Error(`support selector label is missing: ${label}`);
 }
-for (const label of ['이 의견을 받아들여요', '내 생각에 맞게 고쳐요', '이 의견은 사용하지 않아요']) {
+for (const label of ['이 의견을 받아들입니다', '내 생각에 맞게 고칩니다', '이 의견은 사용하지 않습니다']) {
   if (!decisionSource.includes(label)) throw new Error(`AI decision label is missing: ${label}`);
 }
 if (!expressionSource.includes('ExpressionInput')) throw new Error('existing multimodal input must be reused');
@@ -89,7 +89,7 @@ const experienceSource = fs.readFileSync(experiencePath, 'utf8');
 const lessonViewSource = fs.readFileSync(lessonViewPath, 'utf8');
 if (!frameSource.includes('nextDisabled?: boolean')) throw new Error('MicroLessonFrame next lock is missing');
 if (!frameSource.includes('disabled={nextDisabled}')) throw new Error('next button does not use the lock');
-for (const label of ['상황 만나기', '첫 생각', '조건이 달라졌어요', 'AI의 다른 관점', '내가 판단하기', '생각을 결과물로', '다른 상황에 적용하기', '과정 돌아보기']) {
+for (const label of ['상황 만나기', '첫 생각', '조건이 달라졌습니다', 'AI의 다른 관점', '내가 판단하기', '생각을 결과물로', '다른 상황에 적용하기', '과정 돌아보기']) {
   if (!editorialSource.includes(label)) throw new Error(`studio stage label is missing: ${label}`);
 }
 for (const token of ['bodyEasy', 'bodyNormal', 'hard.concept', '생각 도구 열기']) {

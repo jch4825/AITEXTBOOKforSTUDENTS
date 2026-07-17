@@ -94,7 +94,7 @@ export default function TeacherObservation({ value = EMPTY, onChange, accent }: 
             onChange={(event) => setField('note', event.target.value)}
             className="mt-1 w-full min-h-20 p-3 rounded-[var(--r-sm)] border-2 font-normal"
             style={{ borderColor: 'var(--line)', background: 'var(--paper-0)' }}
-            placeholder="학생의 시도나 도움을 짧게 기록해 주세요."
+            placeholder="학생의 시도나 도움을 짧게 기록해 주십시오."
           />
         </label>
       </div>

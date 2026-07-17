@@ -14,7 +14,7 @@ interface Props {
 export const STAGE_LABELS: Record<StudioStage, string> = {
   encounter: '상황 만나기',
   'first-attempt': '첫 생각',
-  'condition-change': '조건이 달라졌어요',
+  'condition-change': '조건이 달라졌습니다',
   'ai-compare': 'AI의 다른 관점',
   decision: '내가 판단하기',
   artifact: '생각을 결과물로',

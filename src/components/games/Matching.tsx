@@ -61,7 +61,7 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
       nextMatched[left] = true;
       setMatched(nextMatched);
       setPicked({ leftIdx: null, rightIdx: null });
-      speak('잘 맞췄어요!');
+      speak('잘 맞췄습니다!');
 
       const allDone = nextMatched.every(Boolean);
       if (allDone) {
@@ -72,7 +72,7 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
     } else {
       setIsChecking(true);
       setWrongPair({ leftIdx: left, rightIdx: rightShuffleIdx });
-      speak('다시 골라볼까요?');
+      speak('다시 골라 보겠습니까?');
       setTimeout(() => {
         setWrongPair(null);
         setPicked({ leftIdx: null, rightIdx: null });
@@ -113,7 +113,7 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
 
   const questionNode = (
     <p className="text-base text-[color:var(--ink-2)]">
-      왼쪽 열과 오른쪽 열에서 알맞은 짝을 하나씩 차례로 골라보세요.
+      왼쪽 열과 오른쪽 열에서 알맞은 짝을 하나씩 차례로 골라보십시오.
     </p>
   );
 
@@ -127,8 +127,8 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
 
   return (
     <ActivitySpread
-      kicker="짝을 맞춰봐요!"
-      title="알맞은 짝을 찾아 연결해 볼까요?"
+      kicker="짝을 맞춰봅니다!"
+      title="알맞은 짝을 찾아 연결해 보겠습니까?"
       accent="var(--accent)"
       character={characterReaction}
       questionNode={questionNode}

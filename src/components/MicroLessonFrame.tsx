@@ -150,10 +150,10 @@ export default function MicroLessonFrame({
         <Button
           onClick={onNext}
           disabled={nextDisabled}
-          aria-label={nextDisabled ? '현재 활동을 마치면 다음으로 갈 수 있어요' : undefined}
+          aria-label={nextDisabled ? '현재 활동을 마치면 다음으로 갈 수 있습니다' : undefined}
           className="px-4 md:px-6"
         >{currentStep + 1 >= totalSteps
-          ? <><Icon name="sparkles" size={20} filled /> 다 했어요!</>
+          ? <><Icon name="sparkles" size={20} filled /> 다 했습니다!</>
           : <>다음 <Icon name="chevron-right" size={20} /></>}</Button>
       </footer>
     </div>

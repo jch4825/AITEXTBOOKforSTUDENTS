@@ -140,7 +140,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
           onClick={goTeacherMode}
           className="w-full h-12 px-3 rounded-[var(--r-sm)] border-2 flex items-center gap-2 text-sm font-semibold bg-[color:var(--paper-0)] hover:bg-[color:var(--paper-2)]"
           style={{ borderColor: 'var(--border)', color: 'var(--muted)' }}
-          title="교사 모드에서 Gemini API 키를 연결해요 (비밀번호 필요)"
+          title="교사 모드에서 Gemini API 키를 연결합니다 (비밀번호 필요)"
         >
           <span
             aria-hidden

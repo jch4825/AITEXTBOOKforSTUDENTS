@@ -17,9 +17,9 @@ interface Props {
 }
 
 const DECISION_LABELS: Record<AiDecision, string> = {
-  accept: '이 의견을 받아들여요',
-  modify: '내 생각에 맞게 고쳐요',
-  reject: '이 의견은 사용하지 않아요',
+  accept: '이 의견을 받아들입니다',
+  modify: '내 생각에 맞게 고칩니다',
+  reject: '이 의견은 사용하지 않습니다',
 };
 
 export default function AiDecisionPanel({
@@ -60,7 +60,7 @@ export default function AiDecisionPanel({
       </section>
 
       <div>
-        <p className="mb-2 font-bold">AI 의견을 어떻게 사용할까요?</p>
+        <p className="mb-2 font-bold">AI 의견을 어떻게 사용하겠습니까?</p>
         <div className="grid gap-2 md:grid-cols-3">
           {(Object.keys(DECISION_LABELS) as AiDecision[]).map((value) => {
             const selected = decision === value;
@@ -89,7 +89,7 @@ export default function AiDecisionPanel({
           value={finalExpression}
           choices={choices}
           modes={modes}
-          prompt="AI 의견을 살펴본 뒤, 내가 실제로 할 방법을 다시 표현해 보세요."
+          prompt="AI 의견을 살펴본 뒤, 내가 실제로 할 방법을 다시 표현해 보십시오."
           accent={accent}
           onChange={onExpression}
         />

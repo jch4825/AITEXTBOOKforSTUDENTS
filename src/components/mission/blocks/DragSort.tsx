@@ -50,12 +50,12 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
       const newValue = { ...value, [selectedCardIdx]: binIdx };
       onChange(newValue);
       setSelectedCardIdx(null);
-      speak(Object.keys(newValue).length === block.cards.length ? '와, 모두 나눴어요!' : '잘 맞췄어요!');
+      speak(Object.keys(newValue).length === block.cards.length ? '와, 모두 나눴습니다!' : '잘 맞췄습니다!');
     } else {
       // Wrong! Shake animation
       setErrorCardIdx(selectedCardIdx);
       setTimeout(() => setErrorCardIdx(null), 500);
-      speak('다시 골라볼까요?');
+      speak('다시 골라 보겠습니까?');
     }
   };
 
@@ -119,12 +119,12 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
         const newValue = { ...value, [originalIdx]: droppedBinIdx };
         onChange(newValue);
         setSelectedCardIdx(null);
-        speak(Object.keys(newValue).length === block.cards.length ? '와, 모두 나눴어요!' : '잘 맞췄어요!');
+        speak(Object.keys(newValue).length === block.cards.length ? '와, 모두 나눴습니다!' : '잘 맞췄습니다!');
       } else {
         // Fail: Shake
         setErrorCardIdx(originalIdx);
         setTimeout(() => setErrorCardIdx(null), 500);
-        speak('다시 골라볼까요?');
+        speak('다시 골라 보겠습니까?');
       }
     }
 
@@ -199,7 +199,7 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
       {!isAllSorted && (
         <div className="border border-[color:var(--line)] rounded-[var(--r-md)] p-4 flex flex-col items-center gap-3 bg-[color:var(--paper-0)]">
           <p className="text-base font-semibold" style={{ color: 'var(--muted)' }}>
-            카드를 알맞은 상자로 끌어다 놓거나, 카드를 누른 뒤 상자를 눌러 보세요.
+            카드를 알맞은 상자로 끌어다 놓거나, 카드를 누른 뒤 상자를 눌러 보십시오.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             {unsortedCards.map((card) => {
@@ -245,7 +245,7 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
           style={{ background: 'var(--ok-bg)', border: '1px solid var(--ok)', color: 'var(--brand-ink)' }}
         >
           <Icon name="sparkles" size={22} filled color="var(--ok)" />
-          모든 카드를 알맞게 나눴어요!
+          모든 카드를 알맞게 나눴습니다!
         </div>
       )}
     </div>

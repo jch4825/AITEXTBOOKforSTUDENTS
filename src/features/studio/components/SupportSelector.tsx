@@ -10,17 +10,17 @@ const OPTIONS: Array<{ value: SupportLevel; label: string; description: string }
   {
     value: 'full',
     label: '충분한 지원',
-    description: '중요한 정보를 줄여서 보고, 선택지를 적게 받아요.',
+    description: '중요한 정보를 줄여서 보고, 선택지를 적게 받습니다.',
   },
   {
     value: 'light',
     label: '약한 지원',
-    description: '핵심 힌트를 받고 내 방법을 정해요.',
+    description: '핵심 힌트를 받고 내 방법을 정합니다.',
   },
   {
     value: 'challenge',
     label: '도전적',
-    description: '여러 조건과 AI 의견의 한계까지 비교해요.',
+    description: '여러 조건과 AI 의견의 한계까지 비교합니다.',
   },
 ];
 

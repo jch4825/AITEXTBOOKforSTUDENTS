@@ -26,7 +26,7 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
     const nextValue = [...value, label];
     onChange(nextValue);
     const allDone = nextValue.length === block.targets.length;
-    speak(allDone ? `${label}. 와, 모두 찾았어요!` : `${label}. 찾았어요!`);
+    speak(allDone ? `${label}. 와, 모두 찾았습니다!` : `${label}. 찾았습니다!`);
   };
 
   const isAllFound = value.length === block.targets.length;
@@ -89,7 +89,7 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
                 boxShadow: isFound ? '0 0 10px rgba(22, 163, 74, 0.5)' : 'none',
               }}
               title={target.label}
-              aria-label={isFound ? `${target.label} (찾음)` : '여기를 찾아보세요'}
+              aria-label={isFound ? `${target.label} (찾음)` : '여기를 찾아보십시오'}
             >
               {isFound && (
                 <span className="answer-pop w-6 h-6 rounded-full bg-[color:var(--paper-0)] flex items-center justify-center shadow-md" style={{ border: '2px solid var(--ok)' }}>
@@ -133,7 +133,7 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
           style={{ background: 'var(--ok-bg)', border: '1px solid var(--ok)', color: 'var(--brand-ink)' }}
         >
           <Icon name="sparkles" size={22} filled color="var(--ok)" />
-          찾을 것을 모두 찾았어요! 대단해요!
+          찾을 것을 모두 찾았습니다! 대단합니다!
         </div>
       )}
     </div>

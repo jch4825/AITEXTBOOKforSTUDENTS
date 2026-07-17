@@ -41,9 +41,9 @@ export default class StepErrorBoundary extends React.Component<Props, State> {
           >
             <Icon name="bulb" size={36} color="var(--warn)" />
             <p className="text-lg font-semibold" style={{ color: 'var(--fg)' }}>
-              이 활동을 여는 데 문제가 생겼어요.
+              이 활동을 여는 데 문제가 생겼습니다.
             </p>
-            <p>아래 <b>다음</b> 버튼을 눌러 계속 진행할 수 있어요.</p>
+            <p>아래 <b>다음</b> 버튼을 눌러 계속 진행할 수 있습니다.</p>
           </div>
         </div>
       );

@@ -50,7 +50,7 @@ export default function Vow({ block, value = '', onChange, studentName, accent }
                 type="text"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                placeholder="여기에 써 보세요"
+                placeholder="여기에 써 보십시오"
                 className="w-40 text-center border-b-[3px] font-bold px-1 py-1 text-lg select-text rounded-t"
                 style={{ borderColor: accent, background: 'var(--paper-0)', color: 'var(--brand-ink)' }}
                 aria-label="빈칸 채우기"

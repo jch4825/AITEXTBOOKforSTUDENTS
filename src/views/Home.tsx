@@ -369,8 +369,8 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
             </h1>
             <p className="text-xl text-[#5C5B5A] leading-relaxed max-w-lg">
               {isResume
-                ? '아이미와 친구들이 다시 공부할 준비를 마쳤어요! 이어서 모험을 떠나볼까요?'
-                : '진우, 윤아랑 같이 AI 친구 아이미를 만나 여러 가지 신기한 도구와 인공지능의 지식을 배워요.'}
+                ? '아이미와 친구들이 다시 공부할 준비를 마쳤습니다! 이어서 모험을 떠나 보겠습니까?'
+                : '진우, 윤아랑 같이 AI 친구 아이미를 만나 여러 가지 신기한 도구와 인공지능의 지식을 배웁니다.'}
             </p>
 
             <div className="pt-4 flex flex-wrap gap-4">
@@ -429,7 +429,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                 </span>
                 <h3 className="text-2xl font-bold text-[#4f5b90] mb-2">획득한 단원 완주 배지</h3>
                 <p className="text-sm text-[#5C5B5A] max-w-md">
-                  각 단원의 모든 차시 공부를 완료하면 예쁜 AI 친구들 배지를 모을 수 있어요.
+                  각 단원의 모든 차시 공부를 완료하면 예쁜 AI 친구들 배지를 모을 수 있습니다.
                 </p>
               </div>
 
@@ -496,7 +496,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
               <div className="space-y-2 md:border-x md:border-[#4f5b90]/10 py-2">
                 <div className="text-3xl font-black text-[#4f5b90]">{isResume ? '학습 중' : '시작 단계'}</div>
                 <div className="text-xs font-bold text-[#45464f] uppercase tracking-wider">나의 학습 상태</div>
-                <p className="text-xs text-[#5C5B5A]">아이미가 대기하고 있어요</p>
+                <p className="text-xs text-[#5C5B5A]">아이미가 대기하고 있습니다</p>
               </div>
 
               {/* Completed Task Count */}
@@ -522,8 +522,8 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
           </div>
           <div className="flex flex-wrap justify-center gap-4 text-xs text-[#5C5B5A]">
             <span>접근성 기능 제공</span>
-            <span>학습 기록은 이 기기에 저장돼요</span>
-            <span>도움이 필요하면 선생님께 알려 주세요</span>
+            <span>학습 기록은 이 기기에 저장됩니다</span>
+            <span>도움이 필요하면 선생님께 알려 주십시오</span>
           </div>
         </div>
       </footer>

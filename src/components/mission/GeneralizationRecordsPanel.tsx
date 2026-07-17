@@ -10,7 +10,7 @@ import TeacherObservation from './blocks/TeacherObservation';
 import Icon from '../Icon';
 
 function expressionLabel(expression: GeneralizationExpression | undefined, moduleId: ModuleId, final = false): string {
-  if (!expression) return '아직 기록이 없어요.';
+  if (!expression) return '아직 기록이 없습니다.';
   const choices = final
     ? GENERALIZATION_CYCLES[moduleId].main.finalChoices
     : GENERALIZATION_CYCLES[moduleId].preview.choices;
@@ -18,15 +18,15 @@ function expressionLabel(expression: GeneralizationExpression | undefined, modul
     return expression.choiceIds.map((id) => choices.find((choice) => choice.id === id)?.label || id).join(', ');
   }
   if (expression.text?.trim()) return expression.text;
-  if (expression.drawing) return '그림으로 표현했어요.';
-  return '표현했어요.';
+  if (expression.drawing) return '그림으로 표현했습니다.';
+  return '표현했습니다.';
 }
 
 function decisionLabel(decision: GeneralizationAiDecision | undefined): string {
-  if (decision === 'accept') return '아이미의 방법을 받아들였어요.';
-  if (decision === 'modify') return '아이미의 방법을 조금 바꿨어요.';
-  if (decision === 'keep') return '내 생각을 유지했어요.';
-  return '아직 비교 기록이 없어요.';
+  if (decision === 'accept') return '아이미의 방법을 받아들였습니다.';
+  if (decision === 'modify') return '아이미의 방법을 조금 바꿨습니다.';
+  if (decision === 'keep') return '내 생각을 유지했습니다.';
+  return '아직 비교 기록이 없습니다.';
 }
 
 export default function GeneralizationRecordsPanel() {
@@ -53,7 +53,7 @@ export default function GeneralizationRecordsPanel() {
         <Icon name="think" size={24} color="var(--accent)" className="shrink-0 mt-0.5" />
         <div>
           <h2 className="text-xl font-bold">일반화 과정 기록</h2>
-          <p className="text-sm text-[color:var(--muted)] mt-1">첫 생각과 마지막 판단을 비교하고, 정답률 대신 시도 과정을 기록해요. 이 기기의 학생 1명 기록입니다.</p>
+          <p className="text-sm text-[color:var(--muted)] mt-1">첫 생각과 마지막 판단을 비교하고, 정답률 대신 시도 과정을 기록합니다. 이 기기의 학생 1명 기록입니다.</p>
         </div>
       </div>
 
@@ -68,7 +68,7 @@ export default function GeneralizationRecordsPanel() {
               </summary>
               <div className="p-4 space-y-4">
                 {!record ? (
-                  <p className="text-sm text-[color:var(--muted)]">아직 기록이 없어요. 학생이 예고 또는 본 활동을 시작하면 여기에 나타나요.</p>
+                  <p className="text-sm text-[color:var(--muted)]">아직 기록이 없습니다. 학생이 예고 또는 본 활동을 시작하면 여기에 나타납니다.</p>
                 ) : (
                   <>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">

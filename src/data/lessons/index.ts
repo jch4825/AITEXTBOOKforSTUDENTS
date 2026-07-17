@@ -9,7 +9,7 @@ import { M6_LESSONS } from './m6';
 /**
  * Aggregate registry of every implemented lesson across modules.
  * A lesson only exists in the app if it appears here — otherwise
- * LessonView falls back to the "곧 열려요" placeholder.
+ * LessonView falls back to the "곧 열립니다" placeholder.
  */
 export const ALL_LESSONS: LessonContent[] = [
   ...M1_LESSONS,

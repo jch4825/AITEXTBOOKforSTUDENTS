@@ -290,7 +290,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
 
 /**
  * 정리 화면의 "다음 차시 예고" 한 줄 — 전체 차시 순서에서 다음으로 구현된 차시.
- * (아직 콘텐츠가 없는 차시는 건너뛴다 — "곧 열려요"를 예고하지 않기 위해.)
+ * (아직 콘텐츠가 없는 차시는 건너뛴다 — "곧 열립니다"를 예고하지 않기 위해.)
  */
 function nextLessonInfo(currentId: LessonId): { id: LessonId; title: string } | null {
   const all: LessonId[] = MODULES.flatMap(m => lessonIdsForModule(m.id));
@@ -331,10 +331,10 @@ function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps)
           <ModuleIcon moduleId={modId ?? 'm1'} size={64} />
         </div>
         <h1 className="text-3xl font-bold mb-3" style={{ color: theme.accent }}>
-          곧 열려요!
+          곧 열립니다!
         </h1>
         <p className="text-lg text-[color:var(--muted)] mb-8">
-          이 차시는 아직 준비 중이에요. 첫 번째 차시부터 시작해봐요.
+          이 차시는 아직 준비 중입니다. 첫 번째 차시부터 시작해 보십시오.
         </p>
         <Button size="lg" accent={theme.accent} onClick={() => onPickLesson('m1-l1')}>
           <Icon name="rocket" size={24} /> 첫 차시로 가기
@@ -411,7 +411,7 @@ function SimAIStep({ prompt, userInput, aiResponse, accent, accentSoft, accentTe
 
   return (
     <ActivitySpread
-      kicker="AI랑 이야기해봐요"
+      kicker="AI랑 이야기해 보십시오"
       title={prompt}
       accent={accent}
       character={characterReaction}

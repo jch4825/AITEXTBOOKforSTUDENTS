@@ -20,7 +20,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
   const resumeModule = moduleIdFromLessonId(resume) ?? 'm1';
   const [activeId, setActiveId] = useState<ModuleId | null>(resumeModule);
   const activeTheme = themeFor(activeId ?? resumeModule);
-  const resumeTitle = getLesson(resume)?.title ?? 'AI는 우리 곁에 있어요';
+  const resumeTitle = getLesson(resume)?.title ?? 'AI는 우리 곁에 있습니다';
   const episodes = useMemo(() => MODULES.map((module) => {
     const ids = lessonIdsForModule(module.id);
     return {
@@ -45,7 +45,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
     </header>
     <div className="comic-contents-inner mx-auto px-4 md:px-8 py-6 md:py-10">
       <ComicPanel accent={activeTheme.accent} className="comic-resume" label="이어서 배우기">
-        <div><p className="comic-kicker">{completedLessons.length ? '다음 컷에서 이어서' : '첫 번째 이야기를 시작해요'}</p><h1>{resumeTitle}</h1><p>한 장면씩 천천히, 아이미와 함께 배워요.</p></div>
+        <div><p className="comic-kicker">{completedLessons.length ? '다음 컷에서 이어서' : '첫 번째 이야기를 시작합니다'}</p><h1>{resumeTitle}</h1><p>한 장면씩 천천히, 아이미와 함께 배웁니다.</p></div>
         <Button size="lg" accent={activeTheme.accent} onClick={() => onPickLesson(resume)}><Icon name="book" size={22} /> {completedLessons.length ? '이어서 하기' : '첫 컷 보기'}</Button>
       </ComicPanel>
       <section className="mt-9"><p className="comic-kicker mb-3">SEASON MAP</p><SeasonMap episodes={episodes} activeId={activeId} onPick={handlePickModule} renderLessons={(moduleId) => {
@@ -61,7 +61,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
     </div>
     <ol className="comic-lesson-cuts">{lessonIdsForModule(moduleId).map((id, index) => {
       const lesson = getLesson(id); const done = isCompleted(id);
-      return <li key={id}><button onClick={() => lesson && onPickLesson(id)} disabled={!lesson} className="comic-lesson-cut"><span className="comic-cut-number">{done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}</span><span><strong>{lesson?.title ?? '곧 열려요'}</strong>{lesson && <small>{lesson.wrapUpEasy}</small>}</span><Icon name="chevron-right" size={20} /></button></li>;
+      return <li key={id}><button onClick={() => lesson && onPickLesson(id)} disabled={!lesson} className="comic-lesson-cut"><span className="comic-cut-number">{done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}</span><span><strong>{lesson?.title ?? '곧 열립니다'}</strong>{lesson && <small>{lesson.wrapUpEasy}</small>}</span><Icon name="chevron-right" size={20} /></button></li>;
     })}</ol>
   </div>;
 }} /></section>

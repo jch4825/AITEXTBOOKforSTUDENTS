@@ -35,7 +35,7 @@ export default function OXGame({ questions, onComplete }: Props) {
 
     // Speak feedback
     const feedbackLine = q.feedback ? ` ${q.feedback}` : '';
-    speak((isCorrect ? '정답이에요!' : '아쉬워요, 다시 생각해보세요.') + feedbackLine);
+    speak((isCorrect ? '정답입니다!' : '아쉽습니다, 다시 생각해 보십시오.') + feedbackLine);
   }
 
   const isCorrect = selected === q.answer;
@@ -101,7 +101,7 @@ export default function OXGame({ questions, onComplete }: Props) {
 
   return (
     <ActivitySpread
-      kicker="같이 풀어봐요!"
+      kicker="같이 풀어봅니다!"
       title={q.question}
       accent="var(--accent)"
       character={characterReaction}
@@ -219,7 +219,7 @@ export default function OXGame({ questions, onComplete }: Props) {
             ) : (
               <>
                 <p className="text-lg font-bold inline-flex items-center gap-1.5 text-[color:var(--warn)]">
-                  <Icon name="bulb" size={22} color="var(--warn)" /> 아쉬워요, 다시 해볼까요?
+                  <Icon name="bulb" size={22} color="var(--warn)" /> 아쉽습니다, 다시 해 보겠습니까?
                 </p>
                 {q.feedback && <p className="mt-2 text-[color:var(--muted)] text-base">{q.feedback}</p>}
                 <div>

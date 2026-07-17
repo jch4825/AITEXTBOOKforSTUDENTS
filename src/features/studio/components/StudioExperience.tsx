@@ -21,21 +21,21 @@ interface Props {
 }
 
 const AI_DECISION_SUMMARY: Record<AiDecision, string> = {
-  accept: 'AI 의견을 받아들였어요.',
-  modify: 'AI 의견을 내 생각에 맞게 고쳤어요.',
-  reject: 'AI 의견을 사용하지 않고 내 방법을 선택했어요.',
+  accept: 'AI 의견을 받아들였습니다.',
+  modify: 'AI 의견을 내 생각에 맞게 고쳤습니다.',
+  reject: 'AI 의견을 사용하지 않고 내 방법을 선택했습니다.',
 };
 
 function expressionSummary(expression: StudioExpression | undefined, choices: StudioChoice[]): string {
-  if (!expression) return '아직 표현한 내용이 없어요.';
+  if (!expression) return '아직 표현한 내용이 없습니다.';
   if (expression.mode === 'choice' || expression.mode === 'aac') {
     const labels = expression.choiceIds
       ?.map((id) => choices.find((choice) => choice.id === id)?.label)
       .filter((label): label is string => Boolean(label));
-    return labels?.join(' / ') || '카드로 내 생각을 표현했어요.';
+    return labels?.join(' / ') || '카드로 내 생각을 표현했습니다.';
   }
-  if (expression.mode === 'draw') return '그림으로 내 생각을 표현했어요.';
-  return expression.text?.trim() || '말이나 글로 내 생각을 표현했어요.';
+  if (expression.mode === 'draw') return '그림으로 내 생각을 표현했습니다.';
+  return expression.text?.trim() || '말이나 글로 내 생각을 표현했습니다.';
 }
 
 export default function StudioExperience({
@@ -133,9 +133,9 @@ export default function StudioExperience({
     right = (
       <div className="space-y-6 p-5 md:p-7">
         <div>
-          <p className="studio-kicker" style={{ color: accent }}>먼저 장면을 살펴봐요</p>
-          <h2 className="mt-1 text-xl font-extrabold">아직 방법을 배우기 전이에요</h2>
-          <p className="mt-3 leading-relaxed">다음 화면에서 지금 떠오르는 첫 생각을 표현합니다. 지원 수준은 언제든 바꿀 수 있어요.</p>
+          <p className="studio-kicker" style={{ color: accent }}>먼저 장면을 살펴봅니다</p>
+          <h2 className="mt-1 text-xl font-extrabold">아직 방법을 배우기 전입니다</h2>
+          <p className="mt-3 leading-relaxed">다음 화면에서 지금 떠오르는 첫 생각을 표현합니다. 지원 수준은 언제든 바꿀 수 있습니다.</p>
         </div>
         <SupportSelector
           value={state.supportLevel}
@@ -163,20 +163,20 @@ export default function StudioExperience({
             value={state.reason ?? ''}
             onChange={(event) => dispatch({ type: 'set-reason', value: event.target.value })}
             maxLength={300}
-            placeholder="말하지 않아도 다음으로 갈 수 있어요"
+            placeholder="말하지 않아도 다음으로 갈 수 있습니다"
             className="min-h-12 w-full rounded-xl border-2 px-4"
             style={{ borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' }}
           />
         </label>
-        <p className="text-sm text-[color:var(--muted)]">선택한 내용은 ‘첫 생각’으로 남고 지금 바로 해설하지 않아요.</p>
+        <p className="text-sm text-[color:var(--muted)]">선택한 내용은 ‘첫 생각’으로 남고 지금 바로 해설하지 않습니다.</p>
       </div>
     );
   } else if (state.stage === 'condition-change') {
     right = (
       <div className="p-5 md:p-7">
         <p className="studio-kicker" style={{ color: secondary }}>처음과 달라진 점</p>
-        <h2 className="mt-1 text-xl font-extrabold">새 정보를 보고 첫 생각을 다시 살펴봐요</h2>
-        <p className="mt-3 leading-relaxed">방법을 당장 바꾸지 않아도 괜찮아요. 어떤 정보가 중요한지 먼저 찾아보세요.</p>
+        <h2 className="mt-1 text-xl font-extrabold">새 정보를 보고 첫 생각을 다시 살펴봅니다</h2>
+        <p className="mt-3 leading-relaxed">방법을 당장 바꾸지 않아도 괜찮습니다. 어떤 정보가 중요한지 먼저 찾아보십시오.</p>
         <StudioExplanationPanel
           lesson={lesson}
           hard={hard}
@@ -213,7 +213,7 @@ export default function StudioExperience({
         {definition.aiContribution.question && (
           <p className="font-bold leading-relaxed" style={{ color: accent }}>{definition.aiContribution.question}</p>
         )}
-        <p className="text-sm text-[color:var(--muted)]">이것은 한 가지 관점이에요. 다음 화면에서 받아들일지, 고칠지, 사용하지 않을지 직접 판단해요.</p>
+        <p className="text-sm text-[color:var(--muted)]">이것은 한 가지 관점입니다. 다음 화면에서 받아들일지, 고칠지, 사용하지 않을지 직접 판단합니다.</p>
       </div>
     );
   } else if (state.stage === 'decision') {
@@ -239,7 +239,7 @@ export default function StudioExperience({
       <div className="space-y-5 p-5 md:p-7">
         <div>
           <p className="studio-kicker" style={{ color: secondary }}>{definition.artifact.title}</p>
-          <h2 className="mt-1 text-xl font-extrabold">내 판단을 다시 쓸 수 있는 결과물로 만들어요</h2>
+          <h2 className="mt-1 text-xl font-extrabold">내 판단을 다시 쓸 수 있는 결과물로 만듭니다</h2>
           <p className="mt-2 leading-relaxed">{definition.artifact.prompt}</p>
         </div>
         <div className="studio-artifact-sheet">
@@ -273,7 +273,7 @@ export default function StudioExperience({
           value={state.transferExpression}
           choices={definition.transfer.choices}
           modes={definition.firstAttempt.modes}
-          prompt="이 장면에서는 어떤 방법을 써 볼까요?"
+          prompt="이 장면에서는 어떤 방법을 써 보겠습니까?"
           accent={accent}
           onChange={(value) => dispatch({ type: 'set-transfer', value })}
         />
@@ -284,15 +284,15 @@ export default function StudioExperience({
       <div className="space-y-5 p-5 md:p-7">
         <div>
           <p className="studio-kicker" style={{ color: accent }}>나의 학습 과정</p>
-          <h2 className="mt-1 text-xl font-extrabold">처음부터 새 상황까지 돌아봐요</h2>
+          <h2 className="mt-1 text-xl font-extrabold">처음부터 새 상황까지 돌아봅니다</h2>
         </div>
         <dl className="grid gap-3">
           <div className="studio-fact-card"><dt className="font-bold" style={{ color: accent }}>처음에는</dt><dd>{expressionSummary(state.firstAttempt, definition.firstAttempt.choices)}</dd></div>
-          <div className="studio-fact-card"><dt className="font-bold" style={{ color: accent }}>AI 의견을 보고</dt><dd>{state.aiDecision ? AI_DECISION_SUMMARY[state.aiDecision] : '내 판단을 살펴봤어요.'}</dd></div>
-          <div className="studio-fact-card"><dt className="font-bold" style={{ color: accent }}>나는 이렇게 판단했어요</dt><dd>{expressionSummary(state.finalExpression, definition.firstAttempt.choices)}</dd></div>
+          <div className="studio-fact-card"><dt className="font-bold" style={{ color: accent }}>AI 의견을 보고</dt><dd>{state.aiDecision ? AI_DECISION_SUMMARY[state.aiDecision] : '내 판단을 살펴봤습니다.'}</dd></div>
+          <div className="studio-fact-card"><dt className="font-bold" style={{ color: accent }}>나는 이렇게 판단했습니다</dt><dd>{expressionSummary(state.finalExpression, definition.firstAttempt.choices)}</dd></div>
           <div className="studio-fact-card"><dt className="font-bold" style={{ color: accent }}>다른 상황에서는</dt><dd>{expressionSummary(state.transferExpression, definition.transfer.choices)}</dd></div>
         </dl>
-        <p className="studio-margin-note">선택을 바꾸지 않았더라도 달라진 정보를 살펴보고 이유 있게 판단했다면 좋은 과정이에요.</p>
+        <p className="studio-margin-note">선택을 바꾸지 않았더라도 달라진 정보를 살펴보고 이유 있게 판단했다면 좋은 과정입니다.</p>
       </div>
     );
   }

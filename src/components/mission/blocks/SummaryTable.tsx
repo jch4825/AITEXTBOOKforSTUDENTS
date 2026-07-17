@@ -24,7 +24,7 @@ function LabelChip({ label }: { key?: any; label: string }) {
   );
 }
 
-function EmptyHint({ text = '아직 고르지 않았어요' }: { text?: string }) {
+function EmptyHint({ text = '아직 고르지 않았습니다' }: { text?: string }) {
   return <span className="text-base" style={{ color: 'var(--muted)' }}>{text}</span>;
 }
 
@@ -125,7 +125,7 @@ export default function SummaryTable({ block, allBlocks, answers, accent }: Prop
                       ))}
                     </div>
                   ) : (
-                    <EmptyHint text="대화를 아직 안 했어요" />
+                    <EmptyHint text="대화를 아직 안 했습니다" />
                   );
                 } else if (targetBlock.kind === 'scene-hunt') {
                   const foundLabels = value as string[];
@@ -134,7 +134,7 @@ export default function SummaryTable({ block, allBlocks, answers, accent }: Prop
                       {foundLabels.map((lbl, i) => <LabelChip key={i} label={lbl} />)}
                     </div>
                   ) : (
-                    <EmptyHint text="아직 찾지 않았어요" />
+                    <EmptyHint text="아직 찾지 않았습니다" />
                   );
                 } else if (targetBlock.kind === 'vow') {
                   displayContent = (
@@ -151,7 +151,7 @@ export default function SummaryTable({ block, allBlocks, answers, accent }: Prop
                       <img src={value} alt="내가 그린 그림" className="max-w-full max-h-full object-contain" />
                     </div>
                   ) : (
-                    <EmptyHint text="그림이 없어요" />
+                    <EmptyHint text="그림이 없습니다" />
                   );
                 }
               }
