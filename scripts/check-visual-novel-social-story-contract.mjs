@@ -42,11 +42,23 @@ if (visualNovel.includes('useEffect')) throw new Error('visual novel must not au
 if (!experience.includes('<VisualNovelExperience')) throw new Error('studio encounter does not render visual novel');
 
 const studioView = fs.readFileSync('src/features/studio/StudioLessonView.tsx', 'utf8');
-for (const token of ['encounterComplete', 'onEncounterComplete', 'visualNovelLocked']) {
+for (const token of ['completedEncounterId', 'onEncounterComplete', 'visualNovelLocked']) {
   if (!studioView.includes(token)) throw new Error(`missing encounter completion gate: ${token}`);
+}
+if (studioView.includes('useEffect')) {
+  throw new Error('encounter completion must be derived from the current lesson id');
 }
 if (studioView.includes('speakNow') || studioView.includes('speechSynthesis')) {
   throw new Error('studio route must not auto-start TTS');
+}
+
+const studioSession = fs.readFileSync('src/features/studio/useStudioSession.ts', 'utf8');
+for (const token of [
+  'const currentState = state.supportLevel === initialSupportLevel',
+  'supportLevel: initialSupportLevel',
+  'state: currentState',
+]) {
+  if (!studioSession.includes(token)) throw new Error(`global support level is not reflected in studio content: ${token}`);
 }
 
 console.log('visual novel social story assets: 4 scenes ready');

@@ -31,6 +31,9 @@ export function useStudioSession(
   );
   const completedRef = useRef(false);
   const evidenceIdRef = useRef(makeEvidenceId(definition.id));
+  const currentState = state.supportLevel === initialSupportLevel
+    ? state
+    : { ...state, supportLevel: initialSupportLevel };
 
   useEffect(() => {
     completedRef.current = false;
@@ -50,7 +53,7 @@ export function useStudioSession(
       studioId: definition.id,
       lessonId: definition.lessonId,
       firstAttempt: state.firstAttempt,
-      supportLevel: state.supportLevel,
+      supportLevel: initialSupportLevel,
       supportModesUsed: state.supportModesUsed,
       aiSource: definition.aiContribution.source,
       aiRole: definition.aiContribution.role,
@@ -65,7 +68,7 @@ export function useStudioSession(
     };
     saveStudioEvidence(evidence, settings.processRecording);
     onComplete();
-  }, [definition, onComplete, state]);
+  }, [definition, initialSupportLevel, onComplete, state]);
 
   const goNext = useCallback(() => dispatch({ type: 'next' }), []);
   const goPrevious = useCallback(() => dispatch({ type: 'previous' }), []);
@@ -76,7 +79,7 @@ export function useStudioSession(
   }, [definition.id, initialSupportLevel]);
 
   return {
-    state,
+    state: currentState,
     dispatch,
     canGoNext: canAdvance(state),
     goNext,

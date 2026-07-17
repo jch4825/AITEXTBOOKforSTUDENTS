@@ -101,6 +101,13 @@ if (!frame.includes('comic-frame-footer')) {
   throw new Error('Lesson navigation must use the comic cut navigator.');
 }
 
+const topBar = readFileSync(new URL('../src/components/TopBar.tsx', import.meta.url), 'utf8');
+for (const marker of ['flex-wrap md:flex-nowrap', 'order-3 md:order-none', 'w-full md:w-auto']) {
+  if (!topBar.includes(marker)) {
+    throw new Error(`TopBar must keep every accessibility control visible at 390px and 125% text: ${marker}`);
+  }
+}
+
 if (!document.includes('favicon.svg')) {
   throw new Error('The app must provide its own favicon.');
 }
