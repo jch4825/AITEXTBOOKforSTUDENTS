@@ -41,4 +41,12 @@ if (!visualNovel.includes('speakNow(spokenText)')) throw new Error('TTS must be 
 if (visualNovel.includes('useEffect')) throw new Error('visual novel must not auto-speak or auto-advance');
 if (!experience.includes('<VisualNovelExperience')) throw new Error('studio encounter does not render visual novel');
 
+const studioView = fs.readFileSync('src/features/studio/StudioLessonView.tsx', 'utf8');
+for (const token of ['encounterComplete', 'onEncounterComplete', 'visualNovelLocked']) {
+  if (!studioView.includes(token)) throw new Error(`missing encounter completion gate: ${token}`);
+}
+if (studioView.includes('speakNow') || studioView.includes('speechSynthesis')) {
+  throw new Error('studio route must not auto-start TTS');
+}
+
 console.log('visual novel social story assets: 4 scenes ready');

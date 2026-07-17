@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import MicroLessonFrame from '../../components/MicroLessonFrame';
 import ScreentoneBackdrop from '../../components/lesson/ScreentoneBackdrop';
 import { useProgress } from '../../context/ProgressContext';
@@ -31,6 +31,7 @@ export default function StudioLessonView({
   const { markCompleted } = useProgress();
   const theme = themeFor(definition.moduleId);
   const module = getModule(definition.moduleId);
+  const [encounterComplete, setEncounterComplete] = useState(!definition.visualNovel);
   const markStudioComplete = useCallback(() => {
     markCompleted(definition.lessonId);
   }, [definition.lessonId, markCompleted]);
@@ -40,6 +41,13 @@ export default function StudioLessonView({
     markStudioComplete,
   );
   const currentStep = STUDIO_STAGES.indexOf(session.state.stage);
+  const visualNovelLocked = session.state.stage === 'encounter'
+    && Boolean(definition.visualNovel)
+    && !encounterComplete;
+
+  useEffect(() => {
+    setEncounterComplete(!definition.visualNovel);
+  }, [definition.id, definition.visualNovel]);
 
   function handleNext() {
     if (session.state.stage === 'complete') onGoHome();
@@ -57,7 +65,7 @@ export default function StudioLessonView({
         onNext={handleNext}
         onPickLesson={onPickLesson}
         onGoHome={onGoHome}
-        nextDisabled={session.state.stage !== 'complete' && !session.canGoNext}
+        nextDisabled={visualNovelLocked || (session.state.stage !== 'complete' && !session.canGoNext)}
       >
         <StudioExperience
           definition={definition}
@@ -67,6 +75,7 @@ export default function StudioLessonView({
           dispatch={session.dispatch}
           accent={theme.accent}
           secondary={theme.secondary}
+          onEncounterComplete={() => setEncounterComplete(true)}
         />
       </MicroLessonFrame>
     </ScreentoneBackdrop>
