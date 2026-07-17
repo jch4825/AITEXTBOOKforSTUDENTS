@@ -57,7 +57,6 @@ export default function VisualNovelExperience({
           <Icon name="speaker" size={18} /> 대사 듣기
         </button>
         <div className="visual-novel-dialogue">
-          <strong>{copy.speaker}</strong>
           <p>{copy.text}</p>
           {copy.perspective && <p className="visual-novel-perspective">{copy.perspective}</p>}
           <button

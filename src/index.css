@@ -988,23 +988,12 @@
     bottom: 0.8rem;
     left: 0.8rem;
     min-height: 8.2rem;
-    padding: 1.45rem 3.9rem 1rem 1rem;
+    padding: 1rem 3.9rem 1rem 1rem;
     border: 1px solid rgba(255, 255, 255, 0.36);
     border-radius: 14px;
     background: rgba(18, 43, 53, 0.94);
     color: #fff;
     box-shadow: 0 12px 30px rgba(10, 24, 31, 0.28);
-  }
-
-  .visual-novel-dialogue > strong {
-    position: absolute;
-    top: -1rem;
-    left: 0.85rem;
-    padding: 0.4rem 0.72rem;
-    border-radius: 8px;
-    background: #f0d77f;
-    color: #173f46;
-    font-size: 0.9rem;
   }
 
   .visual-novel-dialogue > p {

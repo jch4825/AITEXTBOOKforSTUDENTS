@@ -49,7 +49,6 @@ export interface SupportProfile {
 }
 
 export interface VisualNovelCopy {
-  speaker: string;
   text: string;
   perspective?: string;
 }
