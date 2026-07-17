@@ -895,4 +895,320 @@
     background: var(--editorial-paper);
     box-shadow: 0 2px 8px rgba(48, 44, 54, 0.06);
   }
+
+  .visual-novel-story-page,
+  .visual-novel-knowledge-page {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+  }
+
+  .visual-novel-page-heading {
+    margin-bottom: 0.75rem;
+  }
+
+  .visual-novel-page-heading h2 {
+    margin-top: 0.2rem;
+    color: var(--editorial-ink);
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+    font-weight: 900;
+    line-height: 1.3;
+  }
+
+  .visual-novel-stage {
+    position: relative;
+    min-height: 31rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--editorial-line));
+    border-radius: 16px;
+    background: var(--ink-1);
+    box-shadow: 0 10px 28px rgba(43, 58, 85, 0.16);
+  }
+
+  .visual-novel-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(17, 35, 46, 0.48), transparent 56%);
+    pointer-events: none;
+  }
+
+  .visual-novel-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .visual-novel-scene-label {
+    position: absolute;
+    z-index: 2;
+    top: 0.8rem;
+    left: 0.8rem;
+    max-width: calc(100% - 8.5rem);
+    padding: 0.42rem 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.76);
+    border-radius: 10px;
+    background: rgba(255, 253, 247, 0.94);
+    color: var(--editorial-ink);
+    font-size: 0.85rem;
+    font-weight: 850;
+  }
+
+  .visual-novel-listen {
+    position: absolute;
+    z-index: 3;
+    top: 0.8rem;
+    right: 0.8rem;
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.42rem 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 10px;
+    background: rgba(31, 57, 68, 0.88);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 850;
+  }
+
+  .visual-novel-listen:focus-visible,
+  .visual-novel-next:focus-visible,
+  .visual-novel-controls button:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .visual-novel-dialogue {
+    position: absolute;
+    z-index: 3;
+    right: 0.8rem;
+    bottom: 0.8rem;
+    left: 0.8rem;
+    min-height: 8.2rem;
+    padding: 1.45rem 3.9rem 1rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.36);
+    border-radius: 14px;
+    background: rgba(18, 43, 53, 0.94);
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(10, 24, 31, 0.28);
+  }
+
+  .visual-novel-dialogue > strong {
+    position: absolute;
+    top: -1rem;
+    left: 0.85rem;
+    padding: 0.4rem 0.72rem;
+    border-radius: 8px;
+    background: #f0d77f;
+    color: #173f46;
+    font-size: 0.9rem;
+  }
+
+  .visual-novel-dialogue > p {
+    margin: 0;
+    font-size: clamp(1rem, 1.5vw, 1.12rem);
+    font-weight: 720;
+    line-height: 1.58;
+  }
+
+  .visual-novel-dialogue .visual-novel-perspective {
+    margin-top: 0.4rem;
+    color: #d8e7e5;
+    font-size: 0.9rem;
+    font-weight: 580;
+  }
+
+  .visual-novel-next {
+    position: absolute;
+    right: 0.8rem;
+    bottom: 0.75rem;
+    display: grid;
+    width: 2.7rem;
+    height: 2.7rem;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: #f0d77f;
+    color: #173f46;
+  }
+
+  .visual-novel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+    font-weight: 800;
+  }
+
+  .visual-novel-controls > div {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .visual-novel-controls button {
+    display: grid;
+    width: 2.1rem;
+    height: 2.1rem;
+    place-items: center;
+    border: 1px solid var(--editorial-line);
+    border-radius: 999px;
+    background: var(--editorial-paper);
+    color: var(--muted);
+    font-weight: 850;
+  }
+
+  .visual-novel-controls button[aria-pressed='true'] {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .visual-novel-goal {
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border-left: 5px solid var(--accent);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--accent) 9%, var(--editorial-paper));
+  }
+
+  .visual-novel-goal > strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--accent);
+    font-size: 0.82rem;
+  }
+
+  .visual-novel-goal p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 760;
+    line-height: 1.48;
+  }
+
+  .visual-novel-knowledge-page > h3 {
+    margin-bottom: 0.65rem;
+    font-size: 1.08rem;
+    font-weight: 900;
+  }
+
+  .visual-novel-knowledge-list {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .visual-novel-knowledge {
+    display: grid;
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+    gap: 0.7rem;
+    padding: 0.72rem 0.8rem;
+    border: 1px solid var(--editorial-line);
+    border-radius: 12px;
+    background: var(--editorial-paper);
+  }
+
+  .visual-novel-knowledge[data-active='true'] {
+    border: 2px solid var(--accent);
+    background: color-mix(in srgb, var(--accent) 7%, var(--editorial-paper));
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+
+  .visual-novel-knowledge > span {
+    display: grid;
+    width: 2.1rem;
+    height: 2.1rem;
+    place-items: center;
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--accent) 55%, var(--paper-2));
+    color: #fff;
+    font-weight: 900;
+  }
+
+  .visual-novel-knowledge[data-active='true'] > span {
+    background: var(--accent);
+  }
+
+  .visual-novel-knowledge h4 {
+    margin: 0 0 0.2rem;
+    color: var(--accent);
+    font-size: 0.98rem;
+    font-weight: 900;
+  }
+
+  .visual-novel-knowledge p {
+    margin: 0.12rem 0 0;
+    color: var(--editorial-ink);
+    font-size: 0.86rem;
+    line-height: 1.43;
+  }
+
+  .visual-novel-flow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 0.7fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.28rem;
+    margin-top: 0.45rem;
+  }
+
+  .visual-novel-flow b {
+    padding: 0.35rem 0.3rem;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--accent) 8%, var(--paper-1));
+    font-size: 0.76rem;
+    text-align: center;
+  }
+
+  .visual-novel-flow i {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 900;
+  }
+
+  .visual-novel-current-note {
+    margin-top: 0.7rem;
+    font-size: 0.84rem;
+  }
+
+  .visual-novel-current-note p {
+    margin: 0.2rem 0 0;
+  }
+
+  @media (max-width: 1023px) {
+    .visual-novel-stage {
+      min-height: min(34rem, 76vw);
+    }
+  }
+
+  @media (max-width: 430px) {
+    .visual-novel-stage {
+      min-height: 30rem;
+    }
+
+    .visual-novel-scene-label {
+      max-width: calc(100% - 3rem);
+    }
+
+    .visual-novel-listen {
+      top: 3.75rem;
+      right: 0.7rem;
+    }
+
+    .visual-novel-dialogue {
+      padding-right: 3.45rem;
+    }
+
+    .visual-novel-flow {
+      grid-template-columns: 1fr;
+    }
+
+    .visual-novel-flow i {
+      transform: rotate(90deg);
+      text-align: center;
+    }
+  }
 }

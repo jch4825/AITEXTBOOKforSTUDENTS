@@ -7,6 +7,7 @@ import EditorialStudioFrame from './EditorialStudioFrame';
 import PreparedStimulusPanel from './PreparedStimulusPanel';
 import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
+import VisualNovelExperience from './VisualNovelExperience';
 import type { AiDecision, StudioAction, StudioChoice, StudioDefinition, StudioExpression, StudioSessionState } from '../types';
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
   dispatch: (action: StudioAction) => void;
   accent: string;
   secondary: string;
+  onEncounterComplete?: () => void;
 }
 
 const AI_DECISION_SUMMARY: Record<AiDecision, string> = {
@@ -45,6 +47,7 @@ export default function StudioExperience({
   dispatch,
   accent,
   secondary,
+  onEncounterComplete,
 }: Props) {
   const [hintOpen, setHintOpen] = useState(false);
   const { speakNow } = useSpeak();
@@ -73,6 +76,20 @@ export default function StudioExperience({
   function toggleHint() {
     if (!hintOpen) dispatch({ type: 'record-support-mode', value: 'hint' });
     setHintOpen((value) => !value);
+  }
+
+  if (state.stage === 'encounter' && definition.visualNovel) {
+    return (
+      <VisualNovelExperience
+        definition={definition}
+        story={definition.visualNovel}
+        supportLevel={state.supportLevel}
+        accent={accent}
+        secondary={secondary}
+        onCompleted={() => onEncounterComplete?.()}
+        onSupportMode={(value) => dispatch({ type: 'record-support-mode', value })}
+      />
+    );
   }
 
   const left = (
