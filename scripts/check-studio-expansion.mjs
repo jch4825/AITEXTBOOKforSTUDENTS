@@ -8,6 +8,7 @@ const checks = [
   'scripts/check-editorial-theme-contract.mjs',
   'scripts/check-generalization-contract.mjs',
   'scripts/check-complete-studio-rollout-contract.mjs',
+  'scripts/check-single-learning-objective-contract.mjs',
 ];
 
 for (const check of checks) {
