@@ -107,6 +107,21 @@ if (styles.includes('.visual-novel-current-note')) {
 if (styles.includes('.visual-novel-dialogue > strong')) {
   throw new Error('removed speaker label box must not leave unused styles');
 }
+for (const [selector, bottom] of [
+  ['visual-novel-scene-label', '0.8rem'],
+  ['visual-novel-listen', '0.8rem'],
+]) {
+  const rule = styles.match(new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+  if (!rule.includes(`bottom: ${bottom};`) || rule.includes('top:')) {
+    throw new Error(`${selector} must align to the image bottom without a top anchor`);
+  }
+}
+if (!/@media \(max-width: 430px\)[\s\S]*?\.visual-novel-scene-label\s*\{[^}]*bottom:\s*0\.7rem;[^}]*max-width:\s*calc\(100%\s*-\s*8\.25rem\);/.test(styles)) {
+  throw new Error('mobile scene label must wrap upward within the space left by the listen button');
+}
+if (!/@media \(max-width: 430px\)[\s\S]*?\.visual-novel-listen\s*\{[^}]*bottom:\s*0\.7rem;[^}]*right:\s*0\.7rem;/.test(styles)) {
+  throw new Error('mobile listen button must stay at the image bottom-right');
+}
 if (!/\.visual-novel-image-frame\s*\{[\s\S]*?aspect-ratio:\s*16\s*\/\s*9;[\s\S]*?overflow:\s*hidden;[\s\S]*?\}/.test(styles)) {
   throw new Error('visual story image must have its own 16:9 frame');
 }
