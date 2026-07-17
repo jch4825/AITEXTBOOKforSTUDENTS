@@ -39,7 +39,7 @@ export default function ExpressionInput({
   const { speakNow, speak } = useSpeak();
   const [selectedMode, setSelectedMode] = useState<GeneralizationExpressionMode>(value?.mode ?? expressionModes[0] ?? 'choice');
   const activeMode = selectedMode;
-  const drawBlock: DrawBlock = { kind: 'draw', id: 'generalization-expression', prompt: '내 생각을 그림으로 표현해 보세요.' };
+  const drawBlock: DrawBlock = { kind: 'draw', id: 'generalization-expression', prompt: '내 생각을 그림으로 표현해 보십시오.' };
 
   useEffect(() => {
     if (value?.mode && expressionModes.includes(value.mode)) setSelectedMode(value.mode);
@@ -119,7 +119,7 @@ export default function ExpressionInput({
           <input
             value={value?.text ?? ''}
             onChange={(event) => onChange({ mode: activeMode, text: event.target.value })}
-            placeholder="내 생각을 짧게 적어 보세요"
+            placeholder="내 생각을 짧게 적어 보십시오"
             aria-label="내 생각"
             className="flex-1 min-h-13 px-4 rounded-[var(--r-md)] border-2 text-lg font-semibold"
             style={{ borderColor: accent, background: 'var(--paper-0)' }}

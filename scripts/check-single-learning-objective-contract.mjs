@@ -111,8 +111,22 @@ if (objectiveByLesson.size !== 68) {
 
 for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
   const actual = objectiveByLesson.get(lessonId);
-  if (actual !== expected) {
-    throw new Error(`${lessonId} must use the former weak-support objective\nexpected: ${expected}\nactual: ${actual}`);
+  const formalExpected = expected
+    .replaceAll('해 봐요', '해 보십시오')
+    .replaceAll('봐요', '봅니다')
+    .replaceAll('해요', '합니다')
+    .replaceAll('알아요', '압니다')
+    .replaceAll('않아요', '않습니다')
+    .replaceAll('찾아요', '찾습니다')
+    .replaceAll('정해요', '정합니다')
+    .replaceAll('요청해요', '요청합니다')
+    .replaceAll('말해요', '말합니다')
+    .replaceAll('지켜요', '지킵니다')
+    .replaceAll('확인해요', '확인합니다')
+    .replaceAll('알아봐요', '알아봅니다')
+    .replaceAll('알려요', '알립니다');
+  if (actual !== formalExpected) {
+    throw new Error(`${lessonId} must use the former weak-support objective\nexpected: ${formalExpected}\nactual: ${actual}`);
   }
 }
 

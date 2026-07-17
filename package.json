@@ -23,6 +23,7 @@
     "check:studio-rollout": "node scripts/check-complete-studio-rollout-contract.mjs",
     "check:single-objective": "node scripts/check-single-learning-objective-contract.mjs",
     "check:no-experience-bridge": "node scripts/check-no-experience-bridge-contract.mjs"
+    ,"check:student-formal-style": "node scripts/check-student-formal-style-contract.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",

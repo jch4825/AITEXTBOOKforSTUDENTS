@@ -12,12 +12,12 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '프롬프트',
         definition: 'AI에게 주는 지시나 질문. 잘 만든 프롬프트가 좋은 답을 만든다.',
-        example: '"숙제 도와줘"보다 "수학 나눗셈 문제 세 개 만들어줘"가 더 좋은 프롬프트다.',
+        example: '"숙제 도와 주십시오"보다 "수학 나눗셈 문제 세 개 만들어줘"가 더 좋은 프롬프트다.',
       },
       {
         term: '지시',
         definition: '무엇을 해달라고 구체적으로 시키는 말.',
-        example: '"이름 세 개를 추천해줘"가 지시다.',
+        example: '"이름 세 개를 추천해 주십시오"가 지시다.',
       },
     ],
     method: [
@@ -41,7 +41,7 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '간결',
         definition: '프롬프트에서 한 번에 하나의 부탁만 담는 것.',
-        example: '"이름 추천해줘"와 "설명해줘"를 한 문장에 같이 넣지 않는다.',
+        example: '"이름 추천해 주십시오"와 "설명해 주십시오"를 한 문장에 같이 넣지 않는다.',
       },
     ],
     method: [
@@ -81,14 +81,14 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
   'm2-l4': {
     concept: [
       '프롬프트에 예시를 하나 넣으면 AI가 원하는 답의 모양을 더 잘 이해합니다. 이것을 예시 제시라고 부릅니다.',
-      '예시 제시는 "이런 식으로 해줘: (예시)"처럼 원하는 답의 모양을 미리 보여주는 방법입니다.',
+      '예시 제시는 "이런 식으로 해 주십시오: (예시)"처럼 원하는 답의 모양을 미리 보여주는 방법입니다.',
       'AI는 보여준 예시를 보고 비슷한 모양으로 답을 만듭니다. 그래서 예시를 잘 고르는 것이 중요합니다.',
     ],
     terms: [
       {
         term: '예시 제시',
         definition: '프롬프트에 예시 하나를 넣어 원하는 답의 모양을 미리 보여주는 것.',
-        example: '"동물 이름으로 문장 만들어줘. 예: 강아지가 뛰어요."',
+        example: '"동물 이름으로 문장 만들어줘. 예: 강아지가 뛰습니다."',
       },
     ],
     method: [
@@ -150,20 +150,20 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
   'm2-l7': {
     concept: [
       'AI의 첫 답이 항상 최선은 아닙니다. 답을 보고 다시 고쳐 묻는 것을 반복 개선이라고 부릅니다.',
-      '반복 개선은 세 단계로 이루어집니다. 답을 확인하고, 모자란 점을 말하고, "~는 빼고 다시 해줘"처럼 다시 부탁합니다.',
+      '반복 개선은 세 단계로 이루어집니다. 답을 확인하고, 모자란 점을 말하고, "~는 빼고 다시 해 주십시오"처럼 다시 부탁합니다.',
       '여러 번 다시 물어도 괜찮습니다. 반복할수록 원하는 답에 가까워집니다.',
     ],
     terms: [
       {
         term: '반복 개선',
         definition: 'AI의 답을 확인한 뒤 부족한 점을 말해 다시 부탁하는 것.',
-        example: '"설명은 좋은데 너무 길어. 짧게 다시 해줘."',
+        example: '"설명은 좋은데 너무 길어. 짧게 다시 해 주십시오."',
       },
     ],
     method: [
       'AI가 만든 답을 확인합니다.',
       '모자라거나 고치고 싶은 점을 찾습니다.',
-      '"~는 빼고 다시 해줘"처럼 구체적으로 다시 부탁합니다.',
+      '"~는 빼고 다시 해 주십시오"처럼 구체적으로 다시 부탁합니다.',
     ],
     limits: '첫 답이 최선이 아닐 때가 많습니다. 다시 물어보는 것은 자연스럽고 정상적인 일입니다.',
     wrapUpHard:
@@ -180,7 +180,7 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '형식 지정',
         definition: '"세 줄로", "표로"처럼 답의 길이나 모양을 미리 정해주는 것.',
-        example: '"고양이 특징을 세 줄로 알려줘."',
+        example: '"고양이 특징을 세 줄로 알려 주십시오."',
       },
     ],
     method: [
@@ -208,7 +208,7 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '환각',
         definition: 'AI가 그럴듯하지만 틀린 답을 자신 있게 말하는 것.',
-        example: 'AI가 없는 책 이름을 진짜처럼 말했어요. 그래서 꼭 확인해야 해요.',
+        example: 'AI가 없는 책 이름을 진짜처럼 말했습니다. 그래서 꼭 확인해야 합니다.',
       },
     ],
     method: [
@@ -231,7 +231,7 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '프롬프트',
         definition: 'AI에게 주는 지시나 질문. 잘 만든 프롬프트가 좋은 답을 만든다.',
-        example: '"숙제 도와줘"보다 "수학 나눗셈 문제 세 개 만들어줘"가 더 좋은 프롬프트다.',
+        example: '"숙제 도와 주십시오"보다 "수학 나눗셈 문제 세 개 만들어줘"가 더 좋은 프롬프트다.',
       },
       {
         term: '역할 지정',
@@ -264,7 +264,7 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '프롬프트',
         definition: 'AI에게 주는 지시나 질문. 잘 만든 프롬프트가 좋은 답을 만든다.',
-        example: '"숙제 도와줘"보다 "수학 나눗셈 문제 세 개 만들어줘"가 더 좋은 프롬프트다.',
+        example: '"숙제 도와 주십시오"보다 "수학 나눗셈 문제 세 개 만들어줘"가 더 좋은 프롬프트다.',
       },
       {
         term: '역할 지정',
@@ -274,7 +274,7 @@ export const HARD_M2: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '반복 개선',
         definition: 'AI의 답을 확인한 뒤 부족한 점을 말해 다시 부탁하는 것.',
-        example: '"설명은 좋은데 너무 길어. 짧게 다시 해줘."',
+        example: '"설명은 좋은데 너무 길어. 짧게 다시 해 주십시오."',
       },
     ],
     method: [

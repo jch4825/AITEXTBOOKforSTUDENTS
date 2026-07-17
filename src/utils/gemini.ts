@@ -59,7 +59,7 @@ export async function askGemini(userText: string, systemInstruction?: string): P
   if (!apiKey) {
     throw new GeminiError(
       'no-key',
-      '아직 AI가 준비되지 않았어요. 선생님께 알려주세요.',
+      '아직 AI가 준비되지 않았습니다. 선생님께 알려 주십시오.',
       'No Gemini API key set in localStorage (teacher must enter one in TeacherView).',
     );
   }
@@ -74,7 +74,7 @@ export async function askGemini(userText: string, systemInstruction?: string): P
       if (raw.promptFeedback?.blockReason) {
         throw new GeminiError(
           'blocked',
-          '이 질문에는 답하기 어려워요. 다른 걸 물어봐요.',
+      '이 질문에는 답하기 어렵습니다. 다른 질문을 해 주십시오.',
           `Blocked by upstream safety: ${raw.promptFeedback.blockReason}`,
         );
       }

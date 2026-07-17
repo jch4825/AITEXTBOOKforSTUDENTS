@@ -17,10 +17,10 @@ interface Props {
 }
 
 const CRITERIA = [
-  '상황의 중요한 정보를 찾았어요.',
-  '내 방법을 먼저 시도했어요.',
-  'AI 의견을 비교하고 판단했어요.',
-  '조건이 달라졌을 때 방법을 조정했어요.',
+  '상황의 중요한 정보를 찾았습니다.',
+  '내 방법을 먼저 시도했습니다.',
+  'AI 의견을 비교하고 판단했습니다.',
+  '조건이 달라졌을 때 방법을 조정했습니다.',
 ];
 
 const NEXT_MODES: ExpressionMode[] = ['choice', 'aac', 'text', 'speech'];
@@ -90,7 +90,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
           <section className="studio-editorial p-6">
             <h2 className="text-xl font-extrabold">나의 세 경험</h2>
             {evidence.length === 0 ? (
-              <p className="studio-margin-note mt-4">이 기기에는 과정기록이 없어요. 활동을 하지 않았다는 뜻은 아니에요.</p>
+              <p className="studio-margin-note mt-4">이 기기에는 과정기록이 없습니다. 활동을 하지 않았다는 뜻은 아닙니다.</p>
             ) : (
               <div className="mt-4 grid gap-4 lg:grid-cols-3">
                 {evidence.map((record) => {
@@ -112,7 +112,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
 
           <section className="studio-editorial p-6">
             <h2 className="text-xl font-extrabold">내가 잘한 과정</h2>
-            <p className="mt-1 text-sm text-[color:var(--muted)]">하나 이상 골라 보세요.</p>
+            <p className="mt-1 text-sm text-[color:var(--muted)]">하나 이상 골라 보십시오.</p>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               {CRITERIA.map((criterion) => {
                 const selected = selectedCriteria.includes(criterion);
@@ -141,7 +141,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
               value={nextMethod}
               choices={definition.nextChoices}
               modes={NEXT_MODES}
-              prompt="다른 문제가 생기면 어떤 방법을 다시 써 볼까요?"
+              prompt="다른 문제가 생기면 어떤 방법을 다시 써 보겠습니까?"
               accent={theme.accent}
               onChange={setNextMethod}
             />

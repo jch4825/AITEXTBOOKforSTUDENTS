@@ -208,7 +208,7 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
                       />
                     </div>
                   ) : (
-                    <span className="text-base font-medium" style={{ color: 'var(--muted)' }}>여기에 놓아요</span>
+                    <span className="text-base font-medium" style={{ color: 'var(--muted)' }}>여기에 놓습니다</span>
                   )}
                 </div>
               </div>
@@ -220,7 +220,7 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
       {/* Pieces Pool */}
       <div className="border border-[color:var(--line)] rounded-[var(--r-md)] p-4 flex flex-col items-center gap-3 bg-[color:var(--paper-0)]">
         <p className="text-base font-semibold" style={{ color: 'var(--muted)' }}>
-          조각을 알맞은 칸으로 끌어다 놓거나, 조각을 누른 뒤 칸을 눌러 보세요.
+          조각을 알맞은 칸으로 끌어다 놓거나, 조각을 누른 뒤 칸을 눌러 보십시오.
         </p>
         <div className="flex flex-wrap gap-3 justify-center">
           {block.pieces.map((piece, idx) => {

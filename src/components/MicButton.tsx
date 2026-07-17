@@ -18,8 +18,8 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
       <button
         type="button"
         disabled
-        aria-label="음성 입력 미지원 — 글로 써 주세요"
-        title="이 브라우저에서는 음성 입력이 안 돼요. 글로 써주세요."
+        aria-label="음성 입력 미지원 — 글로 써 주십시오"
+        title="이 브라우저에서는 음성 입력이 안 됩니다. 글로 써주십시오."
         className="shrink-0 h-13 w-13 rounded-full border-2 cursor-not-allowed flex items-center justify-center"
         style={{ borderColor: 'var(--line)', color: 'var(--ink-3)', background: 'var(--paper-2)' }}
       ><Icon name="mic" size={22} /></button>
@@ -38,8 +38,8 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
       },
       onError: (msg) => {
         const humanMsg =
-          msg === 'not-allowed' ? '마이크 권한을 허용해 주세요.'
-          : msg === 'no-speech' ? '소리가 안 들렸어요. 다시 눌러서 말해봐요.'
+          msg === 'not-allowed' ? '마이크 권한을 허용해 주십시오.'
+          : msg === 'no-speech' ? '소리가 안 들렸습니다. 다시 눌러서 말해 보십시오.'
           : `음성 인식 오류: ${msg}`;
         setError(humanMsg);
         setListening(false);

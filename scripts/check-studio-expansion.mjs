@@ -10,6 +10,7 @@ const checks = [
   'scripts/check-complete-studio-rollout-contract.mjs',
   'scripts/check-single-learning-objective-contract.mjs',
   'scripts/check-no-experience-bridge-contract.mjs',
+  'scripts/check-student-formal-style-contract.mjs',
 ];
 
 for (const check of checks) {

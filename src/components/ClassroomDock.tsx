@@ -128,14 +128,14 @@ export default function ClassroomDock({ lessonId }: Props) {
               {panelTool === 'pecs' && <PecsBoard moduleId={moduleId} />}
               {panelTool === 'worksheet' && (
                 <div className="p-4 w-64 text-center">
-                  <p className="text-[color:var(--muted)]">학습지는 준비 중이에요.</p>
+                  <p className="text-[color:var(--muted)]">학습지는 준비 중입니다.</p>
                 </div>
               )}
               {panelTool === 'resources' && (
                 <div className="p-4 w-64">
                   <h3 className="text-lg font-bold mb-2" style={{ color: theme.accent }}>교사 자료</h3>
                   {resources.length === 0 ? (
-                    <p className="text-[color:var(--muted)]">자료 준비 중이에요.</p>
+                    <p className="text-[color:var(--muted)]">자료 준비 중입니다.</p>
                   ) : (
                     <ul className="space-y-2">
                       {resources.map((r) => (

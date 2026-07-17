@@ -11,7 +11,7 @@ import type { Expression } from './CharacterAvatar';
 import ActivitySpread from './lesson/ActivitySpread';
 
 interface Props {
-  prompt: string;              // shown to the student ("AI한테 __ 라고 물어봐요")
+  prompt: string;              // shown to the student ("AI한테 __ 라고 물어봅니다")
   userInput: string;           // default text sent to Gemini (also the pre-filled value when allowFreeInput)
   fallbackResponse: string;    // shown when there's no key or all models fail
   accent: string;
@@ -89,7 +89,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
     } catch (err) {
       const e = err instanceof GeminiError
         ? { studentMessage: err.studentMessage, technicalDetail: err.technicalDetail }
-        : { studentMessage: '무언가 잘못됐어요.', technicalDetail: String(err) };
+        : { studentMessage: '무언가 잘못되었습니다.', technicalDetail: String(err) };
       // fallbackResponse에도 [happy] 같은 감정 태그가 들어있으니 반드시 제거 후 읽는다.
       speak(parseExpression(fallbackResponse).cleanText);
       setState({ kind: 'fallback', ...e, sent: toSend });
@@ -157,7 +157,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
             </button>
           </div>
           <p className="text-sm text-center" style={{ color: 'var(--muted)' }}>
-            🎤 를 누르고 말하거나, 위 글을 직접 고쳐도 돼요.
+            🎤 를 누르고 말하거나, 위 글을 직접 고쳐도 됩니다.
           </p>
         </div>
       );
@@ -186,7 +186,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
 
   return (
     <ActivitySpread
-      kicker="아이미랑 이야기해봐요"
+      kicker="아이미랑 이야기해 보십시오"
       title={prompt}
       accent={accent}
       character={characterReaction}
@@ -209,7 +209,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
               technicalDetail={state.technicalDetail}
             />
             <p className="text-xs text-[color:var(--muted)]">
-              지금은 미리 준비된 답변을 보여드릴게요.
+              지금은 미리 준비된 답변을 보여드리겠습니다.
             </p>
           </div>
         )}

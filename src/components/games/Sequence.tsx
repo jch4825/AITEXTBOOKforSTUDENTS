@@ -54,13 +54,13 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
       setPlacedCount(next);
       setWrongIdx(null);
       if (next === items.length) {
-        speak('와, 순서를 다 맞췄어요!');
+        speak('와, 순서를 다 맞췄습니다!');
         setTimeout(onComplete, 800);
       } else {
-        speak('맞아요!');
+        speak('맞습니다!');
       }
     } else {
-      speak('다시 생각해봐요.');
+      speak('다시 생각해 보십시오.');
       setWrongIdx(shuffleIdx);
       setTimeout(() => setWrongIdx(null), 600);
     }
@@ -113,7 +113,7 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
 
   return (
     <ActivitySpread
-      kicker="순서대로 눌러봐요!"
+      kicker="순서대로 눌러봅니다!"
       title={instruction}
       accent="var(--accent)"
       character={characterReaction}
@@ -196,7 +196,7 @@ export default function Sequence({ instruction, items, difficulty, onComplete }:
           <div className="text-center py-4">
             <p className="text-xl font-bold flex items-center justify-center gap-2 text-[color:var(--ok)]">
               <Burst />
-              <Icon name="sparkles" size={24} filled /> 순서를 다 맞췄어요!
+              <Icon name="sparkles" size={24} filled /> 순서를 다 맞췄습니다!
             </p>
           </div>
         )}

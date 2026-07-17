@@ -12,11 +12,11 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '인공지능(AI)',
         definition: '사람처럼 배우고 답할 수 있게 만든 컴퓨터 프로그램.',
-        example: '휴대폰에게 "내일 날씨 알려줘"라고 말하면 AI가 답해요.',
+        example: '휴대폰에게 "내일 날씨 알려 주십시오"라고 말하면 AI가 답합니다.',
       },
       {
         term: '음성 비서',
-        definition: '사람의 말소리를 알아듣고 일을 도와주는 AI. 시리, 빅스비가 있어요.',
+        definition: '사람의 말소리를 알아듣고 일을 도와주는 AI. 시리, 빅스비가 있습니다.',
         example: '"시리야, 알람 맞춰줘"',
       },
     ],
@@ -41,12 +41,12 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '자동화',
         definition: '사람이 정해준 순서대로만 똑같이 움직이는 것.',
-        example: '세탁기는 버튼을 누르면 항상 같은 순서로 빨래를 해요.',
+        example: '세탁기는 버튼을 누르면 항상 같은 순서로 빨래를 합니다.',
       },
       {
         term: '학습',
         definition: '많은 자료를 보고 배워서 새로운 답을 만들어내는 것.',
-        example: 'AI는 여러 그림을 배운 뒤 처음 보는 그림도 알아맞혀요.',
+        example: 'AI는 여러 그림을 배운 뒤 처음 보는 그림도 알아맞혀습니다.',
       },
     ],
     method: [
@@ -70,12 +70,12 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '생성형 AI',
         definition: '배운 자료를 바탕으로 새로운 글, 그림, 답을 만들어내는 AI.',
-        example: '이야기를 써 달라고 하면 처음 보는 이야기를 새로 만들어 줘요.',
+        example: '이야기를 써 달라고 하면 처음 보는 이야기를 새로 만들어 줍니다.',
       },
       {
         term: '예측',
         definition: 'AI가 다음에 올 말을 확률로 골라 이어 붙이는 것.',
-        example: '"오늘 날씨가"라는 말 다음에 "좋아요" 같은 말을 골라요.',
+        example: '"오늘 날씨가"라는 말 다음에 "좋습니다" 같은 말을 골라습니다.',
       },
     ],
     method: [
@@ -99,12 +99,12 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '이미지 인식',
         definition: '사진이나 그림을 보고 그것이 무엇인지 알아내는 AI 기능.',
-        example: '사진을 보여주면 AI가 "이건 고양이예요"라고 답해요.',
+        example: '사진을 보여주면 AI가 "이건 고양이입니다"라고 답합니다.',
       },
       {
         term: '패턴',
         definition: '여러 자료에서 자주 반복되는 모양이나 규칙.',
-        example: '고양이 사진마다 뾰족한 귀 모양이 자주 나오는 것도 패턴이에요.',
+        example: '고양이 사진마다 뾰족한 귀 모양이 자주 나오는 것도 패턴입니다.',
       },
     ],
     method: [
@@ -128,12 +128,12 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '음성 인식',
         definition: '사람의 말소리를 듣고 글자로 바꾸는 AI 기능.',
-        example: '"알람 맞춰줘"라고 말하면 AI가 그 말을 글자로 바꿔서 알아들어요.',
+        example: '"알람 맞춰줘"라고 말하면 AI가 그 말을 글자로 바꿔서 알아듣습니다.',
       },
       {
         term: '명령어',
         definition: 'AI에게 어떤 일을 하라고 시키는 정해진 말.',
-        example: '"타이머 시작"은 하나의 명령어예요.',
+        example: '"타이머 시작"은 하나의 명령어입니다.',
       },
     ],
     method: [
@@ -157,12 +157,12 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '학습 데이터',
         definition: 'AI가 배우기 위해 미리 모아 놓은 아주 많은 자료 묶음.',
-        example: '수천 장의 강아지 사진이 이미지 인식 AI의 학습 데이터가 돼요.',
+        example: '수천 장의 강아지 사진이 이미지 인식 AI의 학습 데이터가 됩니다.',
       },
       {
         term: '훈련',
         definition: '학습 데이터를 반복해서 보며 AI가 더 잘하게 되는 과정.',
-        example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞혀요.',
+        example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞혀습니다.',
       },
     ],
     method: [
@@ -186,12 +186,12 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '요약',
         definition: '긴 글에서 중요한 내용만 남기고 짧게 만드는 것.',
-        example: '"이 글을 세 줄로 요약해 줘"라고 부탁할 수 있어요.',
+        example: '"이 글을 세 줄로 요약해 줘"라고 부탁할 수 있습니다.',
       },
       {
         term: '번역',
         definition: '한 나라의 말을 다른 나라의 말로 바꾸는 것.',
-        example: '"Hello"를 "안녕하세요"로 바꿔줘요.',
+        example: '"Hello"를 "안녕하세요"로 바꿔 주십시오.',
       },
     ],
     method: [
@@ -215,12 +215,12 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '감정',
         definition: '기쁨, 슬픔처럼 마음으로 느끼는 것. AI는 감정을 실제로 느끼지 못한다.',
-        example: 'AI가 "슬퍼요"라고 답해도, 사람처럼 실제로 슬픔을 느끼는 것은 아니에요.',
+        example: 'AI가 "슬퍼요"라고 답해도, 사람처럼 실제로 슬픔을 느끼는 것은 아닙니다.',
       },
       {
         term: '최신 정보',
         definition: 'AI가 학습을 마친 뒤에 새로 생긴 정보. AI는 이것을 모를 수 있다.',
-        example: 'AI 학습이 끝난 다음에 일어난 일은 AI가 알지 못해요.',
+        example: 'AI 학습이 끝난 다음에 일어난 일은 AI가 알지 못합니다.',
       },
     ],
     method: [
@@ -244,12 +244,12 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '챗봇',
         definition: '글로 대화하며 질문에 답해주는 AI.',
-        example: '"오늘 날씨 어때?"라고 글로 물으면 답해줘요.',
+        example: '"오늘 날씨 어때?"라고 글로 물으면 답해 주십시오.',
       },
       {
         term: '이미지 생성 AI',
         definition: '글로 설명하면 그 내용에 맞는 새로운 그림을 만들어주는 AI.',
-        example: '"파란 하늘 아래 강아지"라고 쓰면 그런 그림을 그려줘요.',
+        example: '"파란 하늘 아래 강아지"라고 쓰면 그런 그림을 그려줍니다.',
       },
     ],
     method: [
@@ -267,18 +267,18 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
     concept: [
       '이제 직접 AI와 대화해 볼 차례입니다. AI에게 하는 질문이나 부탁을 프롬프트라고 부릅니다.',
       '프롬프트는 짧고 분명할수록 좋습니다. 무엇을 알고 싶은지 정확히 말하면 AI도 더 정확하게 답합니다.',
-      'AI의 답이 이상하거나 이해가 안 되면 그대로 두지 않아도 됩니다. "다시 말해줘"라고 다시 물어볼 수 있습니다.',
+      'AI의 답이 이상하거나 이해가 안 되면 그대로 두지 않아도 됩니다. "다시 말해 주십시오"라고 다시 물어볼 수 있습니다.',
     ],
     terms: [
       {
         term: '프롬프트',
         definition: 'AI에게 하는 질문이나 부탁의 말.',
-        example: '"짧게 설명해줘"도 하나의 프롬프트예요.',
+        example: '"짧게 설명해 주십시오"도 하나의 프롬프트입니다.',
       },
       {
         term: '챗봇',
         definition: '글로 대화하며 질문에 답해주는 AI.',
-        example: '챗봇에게 프롬프트를 입력하면 글로 답해줘요.',
+        example: '챗봇에게 프롬프트를 입력하면 글로 답해 주십시오.',
       },
     ],
     method: [
@@ -287,7 +287,7 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       'AI의 답을 확인하고, 이상하면 다시 말해 달라고 요청합니다.',
     ],
     limits:
-      'AI의 답이 이상하거나 틀린 것 같으면 그대로 믿지 않아도 됩니다. "다시 말해줘"라고 다시 물어보거나 다른 사람에게 확인하면 됩니다.',
+      'AI의 답이 이상하거나 틀린 것 같으면 그대로 믿지 않아도 됩니다. "다시 말해 주십시오"라고 다시 물어보거나 다른 사람에게 확인하면 됩니다.',
     wrapUpHard:
       '프롬프트는 AI에게 하는 질문이나 부탁입니다. 답이 이상하면 다시 물어봐도 괜찮습니다.',
   },
@@ -302,22 +302,22 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '인공지능(AI)',
         definition: '사람처럼 배우고 답할 수 있게 만든 컴퓨터 프로그램.',
-        example: '휴대폰에게 "내일 날씨 알려줘"라고 말하면 AI가 답해요.',
+        example: '휴대폰에게 "내일 날씨 알려 주십시오"라고 말하면 AI가 답합니다.',
       },
       {
         term: '학습 데이터',
         definition: 'AI가 배우기 위해 미리 모아 놓은 아주 많은 자료 묶음.',
-        example: '수천 장의 강아지 사진이 이미지 인식 AI의 학습 데이터가 돼요.',
+        example: '수천 장의 강아지 사진이 이미지 인식 AI의 학습 데이터가 됩니다.',
       },
       {
         term: '생성형 AI',
         definition: '배운 자료를 바탕으로 새로운 글, 그림, 답을 만들어내는 AI.',
-        example: '이야기를 써 달라고 하면 처음 보는 이야기를 새로 만들어 줘요.',
+        example: '이야기를 써 달라고 하면 처음 보는 이야기를 새로 만들어 줍니다.',
       },
       {
         term: '환각',
         definition: 'AI가 그럴듯하지만 틀린 답을 자신 있게 말하는 것.',
-        example: 'AI가 없는 책 이름을 진짜처럼 말했어요. 그래서 꼭 확인해야 해요.',
+        example: 'AI가 없는 책 이름을 진짜처럼 말했습니다. 그래서 꼭 확인해야 합니다.',
       },
     ],
     method: [

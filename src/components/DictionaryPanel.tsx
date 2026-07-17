@@ -38,7 +38,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
 
       <input
         type="search"
-        placeholder="단어를 검색해보세요"
+        placeholder="단어를 검색해 보십시오"
         value={query ?? ''}
         onChange={(e) => onSearch(e.target.value)}
         className="w-full p-3 mb-4 border-2 border-[color:var(--border)] rounded-[var(--r-sm)] text-base"
@@ -50,11 +50,11 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
             <CharacterAvatar character="aimi" expression="curious" size={80} />
           </div>
           <p className="text-[color:var(--muted)]">
-            궁금한 단어가 있어요?
+            궁금한 단어가 있습니까?
             <br />
             본문의 <span className="dict-term">밑줄 친 단어</span>를 누르면
             <br />
-            아이미가 뜻을 알려줘요.
+            아이미가 뜻을 알려 주십시오.
           </p>
         </div>
       )}
@@ -64,7 +64,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
           <div className="flex justify-center mb-3" aria-hidden>
             <CharacterAvatar character="aimi" expression="thinking" size={80} />
           </div>
-          <p className="text-[color:var(--muted)]">"{query}"는 아직 사전에 없어요. 선생님께 물어봐요!</p>
+          <p className="text-[color:var(--muted)]">"{query}"는 아직 사전에 없습니다. 선생님께 물어봅니다!</p>
         </div>
       )}
 

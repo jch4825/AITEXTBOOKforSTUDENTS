@@ -8,8 +8,8 @@ function expressionText(value: any, choices: { id: string; label: string }[] = [
       .join(', ');
   }
   if (typeof value.text === 'string' && value.text.trim()) return value.text;
-  if (value.drawing) return '그림으로 표현했어요.';
-  return '표현했어요.';
+  if (value.drawing) return '그림으로 표현했습니다.';
+  return '표현했습니다.';
 }
 
 export function printMission(
@@ -22,7 +22,7 @@ export function printMission(
 ) {
   const printWindow = window.open('', '_blank');
   if (!printWindow) {
-    alert('팝업 차단이 설정되어 있습니다. 팝업 차단을 해제하고 다시 시도해 주세요.');
+    alert('팝업 차단이 설정되어 있습니다. 팝업 차단을 해제하고 다시 시도해 주십시오.');
     return;
   }
 

@@ -103,7 +103,7 @@ export default function BranchChat({ block, value = [], onChange, accent, accent
   const footer = !isFinished && !typing ? (
     <div className="flex flex-col gap-2">
       <p className="text-sm font-bold text-center mb-1" style={{ color: 'var(--muted)' }}>
-        대답을 하나 골라 보세요
+        대답을 하나 골라 보십시오
       </p>
       {block.turns[currentTurnIdx].choices.map((choice, idx) => (
         <button

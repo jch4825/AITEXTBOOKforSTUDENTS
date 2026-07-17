@@ -158,9 +158,9 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
           <div>
             <p className="font-bold" style={{ color: accent }}>그때의 첫 생각을 다시 만나요</p>
             {firstThought ? (
-              <p className="mt-1 text-lg font-semibold" style={{ color: 'var(--brand-ink)' }}>{previewLabel || '내 방식으로 표현했어요.'}</p>
+              <p className="mt-1 text-lg font-semibold" style={{ color: 'var(--brand-ink)' }}>{previewLabel || '내 방식으로 표현했습니다.'}</p>
             ) : (
-              <p className="mt-1" style={{ color: 'var(--ink-1)' }}>예고 기록이 아직 없어요. 지금의 첫 생각을 남기고 시작해요.</p>
+              <p className="mt-1" style={{ color: 'var(--ink-1)' }}>예고 기록이 아직 없습니다. 지금의 첫 생각을 남기고 시작합니다.</p>
             )}
           </div>
         </div>
@@ -168,7 +168,7 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
           <ExpressionInput
             choices={block.finalChoices}
             expressionModes={block.expressionModes}
-            prompt="지금 처음 생각한 방법을 하나 골라 보세요."
+            prompt="지금 처음 생각한 방법을 하나 골라 보십시오."
             accent={accent}
             onChange={captureFallback}
           />
@@ -199,8 +199,8 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
   if (phase === 'info') {
     return (
       <div className="w-full space-y-5 story-fade-in">
-        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>중요한 정보를 찾아요</h3>
-        <p className="text-lg" style={{ color: 'var(--ink-1)' }}>이 장면에서 먼저 살펴볼 정보를 골라 보세요.</p>
+        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>중요한 정보를 찾습니다</h3>
+        <p className="text-lg" style={{ color: 'var(--ink-1)' }}>이 장면에서 먼저 살펴볼 정보를 골라 보십시오.</p>
         {choiceCards(block.importantInfo, local.importantInfoIds, 'importantInfoIds')}
         <div className="flex justify-end">{nextButton('방법 두 가지 살펴보기', local.importantInfoIds.length === 0, 'methods')}</div>
       </div>
@@ -210,8 +210,8 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
   if (phase === 'methods') {
     return (
       <div className="w-full space-y-5 story-fade-in">
-        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>가능한 방법을 두 가지 이상 살펴봐요</h3>
-        <p className="text-lg" style={{ color: 'var(--ink-1)' }}>지금 할 수 있는 방법을 두 가지 이상 골라 비교해 보세요.</p>
+        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>가능한 방법을 두 가지 이상 살펴봅니다</h3>
+        <p className="text-lg" style={{ color: 'var(--ink-1)' }}>지금 할 수 있는 방법을 두 가지 이상 골라 비교해 보십시오.</p>
         {choiceCards(block.methods, local.exploredMethodIds, 'exploredMethodIds')}
         <div className="flex justify-end">{nextButton('아이미의 다른 생각 보기', local.exploredMethodIds.length < 2, 'ai')}</div>
       </div>
@@ -233,13 +233,13 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
 
   if (phase === 'decision') {
     const decisions: { id: GeneralizationAiDecision; label: string; emoji: string }[] = [
-      { id: 'accept', label: '받아들일래요', emoji: '👍' },
-      { id: 'modify', label: '조금 바꿀래요', emoji: '🛠️' },
-      { id: 'keep', label: '내 생각을 유지할래요', emoji: '🧭' },
+      { id: 'accept', label: '받아들이겠습니까', emoji: '👍' },
+      { id: 'modify', label: '조금 바꾸겠습니까', emoji: '🛠️' },
+      { id: 'keep', label: '내 생각을 유지하겠습니까', emoji: '🧭' },
     ];
     return (
       <div className="w-full space-y-5 story-fade-in">
-        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>아이미의 생각을 보고 내가 판단해요</h3>
+        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>아이미의 생각을 보고 내가 판단합니다</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {decisions.map((decision) => (
             <button type="button" key={decision.id} onClick={() => chooseDecision(decision.id)} className="card3d p-4 rounded-[var(--r-md)] min-h-28 flex flex-col items-center justify-center gap-2 font-bold cursor-pointer" style={{ border: `2.5px solid ${accent}`, background: 'var(--paper-0)', color: 'var(--brand-ink)' }}>
@@ -255,12 +255,12 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
   if (phase === 'final') {
     return (
       <div className="w-full space-y-5 story-fade-in">
-        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>내가 실제로 할 방법을 정해요</h3>
+        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>내가 실제로 할 방법을 정합니다</h3>
         <ExpressionInput
           value={local.finalThought}
           choices={block.finalChoices}
           expressionModes={block.expressionModes}
-          prompt="이 상황에서 내가 사용할 방법을 골라 보세요."
+          prompt="이 상황에서 내가 사용할 방법을 골라 보십시오."
           accent={accent}
           onChange={chooseFinal}
         />
@@ -271,7 +271,7 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
   if (phase === 'transfer') {
     return (
       <div className="w-full space-y-5 story-fade-in">
-        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>새 장면에 한 번 더 적용해요</h3>
+        <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>새 장면에 한 번 더 적용합니다</h3>
         <p className="text-lg leading-relaxed" style={{ color: 'var(--ink-1)' }}>{block.transfer.title}: {block.transfer.description}</p>
         {choiceCards(block.transfer.choices, local.transferChoiceId ? [local.transferChoiceId] : [], 'importantInfoIds', false, (id) => updateValue({ ...local, transferChoiceId: id }))}
         <div className="flex justify-end">
@@ -286,10 +286,10 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
       <div className="p-5 rounded-[var(--r-md)] border-2" style={{ borderColor: accent, background: 'var(--paper-1)' }}>
         <h3 className="text-xl font-bold" style={{ color: accent }}>생각 증거 카드</h3>
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-base" style={{ color: 'var(--brand-ink)' }}>
-          <div><b>첫 생각</b><p>{previewLabel || '내 방식으로 표현했어요.'}</p></div>
-          <div><b>AI와 비교</b><p>{local.aiDecision === 'accept' ? '아이미의 방법을 받아들였어요.' : local.aiDecision === 'modify' ? '아이미의 방법을 조금 바꿨어요.' : '내 생각을 유지했어요.'}</p></div>
-          <div><b>최종 생각</b><p>{local.finalThought?.text || local.finalThought?.choiceIds?.map((id) => block.finalChoices.find((choice) => choice.id === id)?.label || id).join(', ') || '내 방식으로 표현했어요.'}</p></div>
-          <div><b>새 장면</b><p>{block.transfer.choices.find((choice) => choice.id === local.transferChoiceId)?.label || '선택을 기록했어요.'}</p></div>
+          <div><b>첫 생각</b><p>{previewLabel || '내 방식으로 표현했습니다.'}</p></div>
+          <div><b>AI와 비교</b><p>{local.aiDecision === 'accept' ? '아이미의 방법을 받아들였습니다.' : local.aiDecision === 'modify' ? '아이미의 방법을 조금 바꿨습니다.' : '내 생각을 유지했습니다.'}</p></div>
+          <div><b>최종 생각</b><p>{local.finalThought?.text || local.finalThought?.choiceIds?.map((id) => block.finalChoices.find((choice) => choice.id === id)?.label || id).join(', ') || '내 방식으로 표현했습니다.'}</p></div>
+          <div><b>새 장면</b><p>{block.transfer.choices.find((choice) => choice.id === local.transferChoiceId)?.label || '선택을 기록했습니다.'}</p></div>
         </div>
       </div>
       {teacherSession && <TeacherObservation value={observation} onChange={saveObservation} accent={accent} />}

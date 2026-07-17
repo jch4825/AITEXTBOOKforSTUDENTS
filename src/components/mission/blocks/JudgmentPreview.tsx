@@ -79,27 +79,27 @@ export default function JudgmentPreview({ block, value = {}, studentName, accent
           value={value.firstThought}
           choices={block.choices}
           expressionModes={block.expressionModes}
-          prompt="처음 생각한 방법을 하나 골라 보세요."
+          prompt="처음 생각한 방법을 하나 골라 보십시오."
           accent={accent}
           onChange={saveThought}
         />
       ) : (
         <div className="p-4 rounded-[var(--r-md)] border-2" style={{ borderColor: accent, background: 'var(--paper-1)' }}>
-          <p className="text-sm font-bold mb-1" style={{ color: accent }}>첫 생각을 저장했어요</p>
+          <p className="text-sm font-bold mb-1" style={{ color: accent }}>첫 생각을 저장했습니다</p>
           <p className="text-lg font-semibold" style={{ color: 'var(--brand-ink)' }}>
-            {savedThought.text || savedThought.choiceIds?.map((id) => block.choices.find((choice) => choice.id === id)?.label).filter(Boolean).join(', ') || (savedThought.drawing ? '그림으로 표현했어요.' : '내 생각을 남겼어요.')}
+            {savedThought.text || savedThought.choiceIds?.map((id) => block.choices.find((choice) => choice.id === id)?.label).filter(Boolean).join(', ') || (savedThought.drawing ? '그림으로 표현했습니다.' : '내 생각을 남겼습니다.')}
           </p>
         </div>
       )}
 
       {savedThought && reasonCards.length > 0 && (
         <div className="space-y-3">
-          <p className="text-lg font-semibold">왜 그렇게 생각했는지는 말하지 않아도 괜찮아요. 말하고 싶다면 골라 보세요.</p>
+          <p className="text-lg font-semibold">왜 그렇게 생각했는지는 말하지 않아도 괜찮습니다. 말하고 싶다면 골라 보십시오.</p>
           <ExpressionInput
             value={value.reason}
             choices={reasonCards}
             expressionModes={['aac']}
-            prompt="내가 중요하게 본 것은 무엇인가요?"
+            prompt="내가 중요하게 본 것은 무엇입니까?"
             accent={accent}
             onChange={saveReason}
           />
@@ -114,7 +114,7 @@ export default function JudgmentPreview({ block, value = {}, studentName, accent
       )}
 
       {cycleRecord?.preview?.capturedAtMain && (
-        <p className="text-sm" style={{ color: 'var(--muted)' }}>이번 차시에서 첫 생각을 대신 기록했어요.</p>
+        <p className="text-sm" style={{ color: 'var(--muted)' }}>이번 차시에서 첫 생각을 대신 기록했습니다.</p>
       )}
     </div>
   );

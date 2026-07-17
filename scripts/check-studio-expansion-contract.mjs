@@ -21,7 +21,7 @@ const experience = fs.readFileSync('src/features/studio/components/StudioExperie
 for (const token of ['export type PreparedStimulus', "kind: 'image'", "kind: 'speech'", 'stimuli?: PreparedStimulus[]']) {
   if (!types.includes(token)) throw new Error(`prepared stimulus type missing: ${token}`);
 }
-for (const token of ['이미지를 불러오지 못했어요', '소리 듣기', 'speakNow(stimulus.text)']) {
+for (const token of ['이미지를 불러오지 못했습니다', '소리 듣기', 'speakNow(stimulus.text)']) {
   if (!panel.includes(token)) throw new Error(`prepared stimulus fallback missing: ${token}`);
 }
 if (!experience.includes('<PreparedStimulusPanel')) throw new Error('studio does not render prepared stimuli');

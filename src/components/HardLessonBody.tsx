@@ -10,7 +10,7 @@ interface Props {
   dictionaryTerms?: string[]; // 기존 text step의 사전 점선 연동 유지
 }
 
-/** '어려움' 본문 — 개념 문단 → 오늘의 용어 카드 → 어떻게 할까요 → 꼭 기억해요 (spec §3.1). */
+/** '어려움' 본문 — 개념 문단 → 오늘의 용어 카드 → 어떻게 할까요 → 꼭 기억합니다 (spec §3.1). */
 export default function HardLessonBody({ content, accent, dictionaryTerms = [] }: Props) {
   const { speakNow } = useSpeak();
   const conceptAll = content.concept.join(' ');
@@ -72,14 +72,14 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
         </section>
       )}
 
-      {/* 꼭 기억해요 — 한계·주의 (경고 톤) */}
+      {/* 꼭 기억합니다 — 한계·주의 (경고 톤) */}
       <section
         className="rounded-[var(--r-md)] p-4 flex items-start gap-3"
         style={{ background: 'var(--warn-bg)', border: '2px solid var(--warn)' }}
       >
         <Icon name="bulb" size={24} color="var(--warn)" />
         <div>
-          <p className="t-label" style={{ color: 'var(--warn)' }}>꼭 기억해요</p>
+          <p className="t-label" style={{ color: 'var(--warn)' }}>꼭 기억합니다</p>
           <p className="t-body-lg">{content.limits}</p>
         </div>
       </section>

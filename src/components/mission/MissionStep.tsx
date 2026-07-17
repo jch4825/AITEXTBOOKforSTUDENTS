@@ -194,7 +194,7 @@ export default function MissionStep({
     const coverRight = (
       <div className="flex flex-col justify-center p-4 space-y-4">
         <p className="text-base text-[color:var(--ink-2)] text-center md:text-left">
-          이름을 쓰면 결과물에 내 이름이 들어가요.
+          이름을 쓰면 결과물에 내 이름이 들어갑니다.
         </p>
         <form onSubmit={handleStart} className="w-full space-y-4">
           <input
@@ -262,7 +262,7 @@ export default function MissionStep({
 
         <h2 className="t-h2 text-2xl font-black" style={{ color: accent }}>미션 완료!</h2>
         <p className="text-lg">
-          <b>{studentName}</b>님, 참 잘했어요!
+          <b>{studentName}</b>님, 참 잘했습니다!
         </p>
       </div>
     );
@@ -539,7 +539,7 @@ export default function MissionStep({
           onClick={handleNextTab}
           disabled={!isActiveChapterCompleted}
           className="px-6 text-lg cursor-pointer"
-          title={isActiveChapterCompleted ? undefined : '이 장의 활동을 끝내면 넘어갈 수 있어요'}
+          title={isActiveChapterCompleted ? undefined : '이 장의 활동을 끝내면 넘어갈 수 있습니다'}
         >
           {currentChapter < mission.chapters.length - 1 ? (
             <>다음 장으로 <Icon name="chevron-right" size={20} /></>

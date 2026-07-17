@@ -40,7 +40,7 @@ export function startListening(opts: {
 }): SttHandle | null {
   const Ctor = (typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition)) as SpeechRecognitionCtor | undefined;
   if (!Ctor) {
-    opts.onError?.('음성 인식이 지원되지 않아요');
+    opts.onError?.('음성 인식이 지원되지 않습니다');
     return null;
   }
   const rec = new Ctor();

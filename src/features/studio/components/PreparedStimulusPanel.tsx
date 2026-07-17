@@ -33,7 +33,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                   aria-label={stimulus.alt}
                   className="studio-margin-note flex min-h-32 flex-col justify-center text-sm"
                 >
-                  <strong>이미지를 불러오지 못했어요.</strong>
+                  <strong>이미지를 불러오지 못했습니다.</strong>
                   <p className="mt-1">{stimulus.caption}</p>
                 </div>
               ) : (

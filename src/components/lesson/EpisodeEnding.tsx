@@ -44,7 +44,7 @@ export default function EpisodeEnding({
 
       <div className="space-y-2">
         <h2 className="t-h2 text-2xl font-black" style={{ color: theme.accent }}>오늘 배운 것</h2>
-        <p className="text-sm font-bold text-[color:var(--ink-2)]">미션 도장을 받았어요!</p>
+        <p className="text-sm font-bold text-[color:var(--ink-2)]">미션 도장을 받았습니다!</p>
       </div>
 
       {reaction && (
@@ -109,7 +109,7 @@ export default function EpisodeEnding({
           onClick={onFinish}
           className="text-lg font-bold flex-1 justify-center cursor-pointer"
         >
-          <Icon name="sparkles" size={20} filled /> 다 했어요!
+          <Icon name="sparkles" size={20} filled /> 다 했습니다!
         </Button>
       </div>
     </div>
