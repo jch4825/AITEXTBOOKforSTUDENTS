@@ -21,7 +21,8 @@
     "check:studio-expansion": "node scripts/check-studio-expansion-contract.mjs",
     "check:studio-expansion-all": "node scripts/check-studio-expansion.mjs",
     "check:studio-rollout": "node scripts/check-complete-studio-rollout-contract.mjs",
-    "check:single-objective": "node scripts/check-single-learning-objective-contract.mjs"
+    "check:single-objective": "node scripts/check-single-learning-objective-contract.mjs",
+    "check:no-experience-bridge": "node scripts/check-no-experience-bridge-contract.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
