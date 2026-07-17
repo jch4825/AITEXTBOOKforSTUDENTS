@@ -7,7 +7,6 @@ import EditorialStudioFrame from './EditorialStudioFrame';
 import PreparedStimulusPanel from './PreparedStimulusPanel';
 import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
-import SupportSelector from './SupportSelector';
 import type { AiDecision, StudioAction, StudioChoice, StudioDefinition, StudioExpression, StudioSessionState } from '../types';
 
 interface Props {
@@ -135,13 +134,8 @@ export default function StudioExperience({
         <div>
           <p className="studio-kicker" style={{ color: accent }}>먼저 장면을 살펴봅니다</p>
           <h2 className="mt-1 text-xl font-extrabold">아직 방법을 배우기 전입니다</h2>
-          <p className="mt-3 leading-relaxed">다음 화면에서 지금 떠오르는 첫 생각을 표현합니다. 지원 수준은 언제든 바꿀 수 있습니다.</p>
+          <p className="mt-3 leading-relaxed">다음 화면에서 지금 떠오르는 첫 생각을 표현합니다. 지원 수준은 위의 네비게이션에서 조절할 수 있습니다.</p>
         </div>
-        <SupportSelector
-          value={state.supportLevel}
-          accent={accent}
-          onChange={(value) => dispatch({ type: 'set-support', value })}
-        />
       </div>
     );
   } else if (state.stage === 'first-attempt') {

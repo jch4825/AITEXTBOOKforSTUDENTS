@@ -36,7 +36,6 @@ export function canAdvance(state: StudioSessionState): boolean {
 }
 
 export function studioReducer(state: StudioSessionState, action: StudioAction): StudioSessionState {
-  if (action.type === 'set-support') return { ...state, supportLevel: action.value };
   if (action.type === 'set-first-attempt') return { ...state, firstAttempt: action.value };
   if (action.type === 'set-reason') return { ...state, reason: action.value.slice(0, 300) };
   if (action.type === 'record-support-mode') {

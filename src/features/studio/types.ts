@@ -147,7 +147,6 @@ export interface StudioSessionState {
 }
 
 export type StudioAction =
-  | { type: 'set-support'; value: SupportLevel }
   | { type: 'set-first-attempt'; value: StudioExpression }
   | { type: 'set-reason'; value: string }
   | { type: 'record-support-mode'; value: string }

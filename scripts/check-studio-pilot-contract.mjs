@@ -57,17 +57,12 @@ state = reducerModule.studioReducer(state, { type: 'next' });
 if (state.stage !== 'artifact') throw new Error('decision must advance after judgment and expression');
 
 const expressionPath = 'src/features/studio/components/StudioExpressionInput.tsx';
-const supportPath = 'src/features/studio/components/SupportSelector.tsx';
 const decisionPath = 'src/features/studio/components/AiDecisionPanel.tsx';
-for (const componentPath of [expressionPath, supportPath, decisionPath]) {
+for (const componentPath of [expressionPath, decisionPath]) {
   if (!fs.existsSync(componentPath)) throw new Error(`studio response component is missing: ${componentPath}`);
 }
 const expressionSource = fs.readFileSync(expressionPath, 'utf8');
-const supportSource = fs.readFileSync(supportPath, 'utf8');
 const decisionSource = fs.readFileSync(decisionPath, 'utf8');
-for (const label of ['충분한 지원', '약한 지원', '도전적']) {
-  if (!supportSource.includes(label)) throw new Error(`support selector label is missing: ${label}`);
-}
 for (const label of ['이 의견을 받아들입니다', '내 생각에 맞게 고칩니다', '이 의견은 사용하지 않습니다']) {
   if (!decisionSource.includes(label)) throw new Error(`AI decision label is missing: ${label}`);
 }

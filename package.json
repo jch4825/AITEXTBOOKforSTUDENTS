@@ -22,8 +22,9 @@
     "check:studio-expansion-all": "node scripts/check-studio-expansion.mjs",
     "check:studio-rollout": "node scripts/check-complete-studio-rollout-contract.mjs",
     "check:single-objective": "node scripts/check-single-learning-objective-contract.mjs",
-    "check:no-experience-bridge": "node scripts/check-no-experience-bridge-contract.mjs"
-    ,"check:student-formal-style": "node scripts/check-student-formal-style-contract.mjs"
+    "check:no-experience-bridge": "node scripts/check-no-experience-bridge-contract.mjs",
+    "check:student-formal-style": "node scripts/check-student-formal-style-contract.mjs",
+    "check:no-lesson-support-selector": "node scripts/check-no-lesson-support-selector-contract.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
