@@ -46,9 +46,8 @@ export default function VisualNovelExperience({
   }
 
   const left = (
-    <section className="visual-novel-story-page" aria-label="비주얼 노벨 이야기">
+    <section className="visual-novel-story-page" aria-label="생활 장면 이야기">
       <div className="visual-novel-page-heading">
-        <p className="studio-kicker" style={{ color: secondary }}>비주얼 노벨 이야기</p>
         <h2>{story.title}</h2>
       </div>
       <div className="visual-novel-stage">

@@ -64,7 +64,7 @@ for (const lessonId of ['m1-l1', 'm1-l4', 'm1-l10']) {
   if (!m1.includes(`lessonId: '${lessonId}'`)) throw new Error(`M1 lesson mapping missing: ${lessonId}`);
 }
 if ((m1.match(/source: 'prepared'/g) ?? []).length !== 3) throw new Error('M1 AI source must be prepared');
-for (const artifact of ['AI 답 확인 카드', 'AI 인식 실험 기록', 'AI 사용 판단 설명서']) {
+for (const artifact of ['AI 질문 확인 카드', 'AI 인식 실험 기록', 'AI 사용 판단 설명서']) {
   if (!m1.includes(artifact)) throw new Error(`M1 artifact missing: ${artifact}`);
 }
 if (!m1.includes("kind: 'image'") || !m1.includes("kind: 'speech'")) {

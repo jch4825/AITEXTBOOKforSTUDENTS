@@ -17,14 +17,21 @@ for (const token of ['VisualNovelStory', 'VisualNovelScene', 'VisualNovelKnowled
   if (!types.includes(token)) throw new Error(`missing visual novel type: ${token}`);
 }
 for (const token of [
-  "title: '처음 온 교실에서 자리를 찾습니다'",
+  "title: '내 자리가 어디일까?'",
   "objective: 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.'",
   "imageSrc: '/AITEXTBOOKforSTUDENTS/lessons/m1-l1-vn-01.webp'",
   "imageSrc: '/AITEXTBOOKforSTUDENTS/lessons/m1-l1-vn-04.webp'",
-  '어제 자리표',
-  '오늘 자리표',
+  '오늘은 진우가 처음으로 학교에 등교하는 날입니다.',
+  '나는 너를 도와줄 AI(에이아이) 아이미라고 해.',
+  '창가 쪽 자리가 좋겠어.',
+  '내 자리가 아닌 것 같은데?',
+  '아이미가 잘못 대답한 거야.',
+  '아이미를 잘 사용하려면 사용법을 알고 있어야 해.',
 ]) {
   if (!m1Studio.includes(token)) throw new Error(`missing m1-l1 social story data: ${token}`);
+}
+for (const retiredToken of ['어제 자리표', '아이미가 본 것은 어제 자리표']) {
+  if (m1Studio.includes(retiredToken)) throw new Error(`retired m1-l1 story remains: ${retiredToken}`);
 }
 if (!m1Lesson.includes("objective: 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.'")) {
   throw new Error('m1-l1 must expose one shared learning objective');
@@ -34,9 +41,10 @@ const visualNovelPath = 'src/features/studio/components/VisualNovelExperience.ts
 if (!fs.existsSync(visualNovelPath)) throw new Error('VisualNovelExperience is missing');
 const visualNovel = fs.readFileSync(visualNovelPath, 'utf8');
 const experience = fs.readFileSync('src/features/studio/components/StudioExperience.tsx', 'utf8');
-for (const token of ['비주얼 노벨 이야기', '학습목표', '이야기와 함께 알아봅니다', '대사 듣기', 'aria-pressed']) {
+for (const token of ['aria-label="생활 장면 이야기"', '학습목표', '이야기와 함께 알아봅니다', '대사 듣기', 'aria-pressed']) {
   if (!visualNovel.includes(token)) throw new Error(`missing visual novel UI token: ${token}`);
 }
+if (visualNovel.includes('비주얼 노벨 이야기')) throw new Error('student UI must not name the visual-novel format');
 if (!visualNovel.includes('speakNow(spokenText)')) throw new Error('TTS must be button-triggered');
 if (visualNovel.includes('useEffect')) throw new Error('visual novel must not auto-speak or auto-advance');
 if (!experience.includes('<VisualNovelExperience')) throw new Error('studio encounter does not render visual novel');
@@ -59,6 +67,11 @@ for (const token of [
   'state: currentState',
 ]) {
   if (!studioSession.includes(token)) throw new Error(`global support level is not reflected in studio content: ${token}`);
+}
+
+const styles = fs.readFileSync('src/index.css', 'utf8');
+if (!/@media \(max-width: 430px\)[\s\S]*?\.visual-novel-stage\s*\{\s*min-height:\s*36rem;/.test(styles)) {
+  throw new Error('mobile visual story must fit the longest supported dialogue at 390px and 125% text');
 }
 
 console.log('visual novel social story assets: 4 scenes ready');
