@@ -1,5 +1,6 @@
 import type { StudioDefinition } from '../../features/studio/types';
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
+import { M1_L10_VISUAL_STORY, M1_L4_VISUAL_STORY } from './visualStories/m1';
 
 export const M1_STUDIOS: StudioDefinition[] = [
   {
@@ -185,6 +186,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI의 눈과 귀 실험실',
     subtitle: 'AI가 알아본 결과와 실제 장면을 다시 비교합니다',
+    visualNovel: M1_L4_VISUAL_STORY,
     encounter: {
       title: '그림과 안내 문장을 알아본 AI',
       description: 'AI가 그림을 고양이라고 보고, 안내 문장을 도서관으로 갑니다라고 들었다고 합니다. 실제 자료와 같겠습니까?',
@@ -257,6 +259,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI 능력 시험소',
     subtitle: 'AI에게 맡길 일과 사람이 확인할 일을 나누습니다',
+    visualNovel: M1_L10_VISUAL_STORY,
     encounter: {
       title: 'AI에게 어떤 일을 맡길까습니다',
       description: '번역, 영상 추천, 친구의 마음 알아맞히기, 약 복용 판단처럼 서로 다른 일이 있습니다.',
