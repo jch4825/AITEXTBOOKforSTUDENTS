@@ -1,5 +1,6 @@
 import type { StudioDefinition } from '../../features/studio/types';
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
+import { M6_L1_VISUAL_STORY, M6_L4_VISUAL_STORY, M6_L11_VISUAL_STORY } from './visualStories/m6';
 
 const PREPARED_LIFE_NOTE = '이 활동의 AI 의견은 안전하게 준비한 연습 예시입니다. 실제 돈·건강·이동·개인정보 판단은 믿을 만한 사람과 공식 정보를 함께 확인합니다.';
 
@@ -10,6 +11,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
     moduleId: 'm6',
     title: '장보기 선택 스튜디오',
     subtitle: '사고 싶은 것과 필요한 것, 예산과 안전 정보를 함께 살펴봅니다',
+    visualNovel: M6_L1_VISUAL_STORY,
     encounter: {
       title: '무엇부터 살까?',
       description: '생활용품과 간식을 함께 사러 마트에 왔습니다. 사고 싶은 물건은 많지만 아직 예산과 꼭 필요한 물건을 확인하지 않았습니다.',
@@ -75,6 +77,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
     moduleId: 'm6',
     title: '교통 변수 대응실',
     subtitle: '버스와 지하철 상황이 달라져도 안전한 확인과 도움 요청을 먼저 합니다',
+    visualNovel: M6_L4_VISUAL_STORY,
     encounter: {
       title: '오지 않는 버스',
       description: '약속 장소로 가려고 정류장에 왔는데 타려던 버스가 예정 시간보다 늦게 옵니다.',
@@ -140,6 +143,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
     moduleId: 'm6',
     title: '안전한 자기소개 연구소',
     subtitle: '만나는 사람과 장소에 맞게 소개할 정보의 범위를 정합니다',
+    visualNovel: M6_L11_VISUAL_STORY,
     encounter: {
       title: '새 동아리 친구에게 나를 소개하기',
       description: '새로 만난 동아리 친구에게 내 이름과 좋아하는 활동을 소개하려고 합니다.',
