@@ -1,12 +1,114 @@
 import fs from 'node:fs';
 
-const assets = [1, 2, 3, 4].map(
-  (number) => `public/lessons/m1-l1-vn-${String(number).padStart(2, '0')}.webp`,
-);
+const CORE_EXPERIENCES = {
+  m1: ['m1-l1', 'm1-l4', 'm1-l10'],
+  m2: ['m2-l1', 'm2-l6', 'm2-l10'],
+  m3: ['m3-l1', 'm3-l5', 'm3-l9'],
+  m4: ['m4-l1', 'm4-l5', 'm4-l10'],
+  m5: ['m5-l1', 'm5-l6', 'm5-l11'],
+  m6: ['m6-l1', 'm6-l4', 'm6-l11'],
+};
 
-for (const asset of assets) {
-  if (!fs.existsSync(asset)) throw new Error(`missing visual novel scene: ${asset}`);
-  if (fs.statSync(asset).size < 20_000) throw new Error(`visual novel scene is unexpectedly small: ${asset}`);
+const requestedModule = process.argv
+  .find((argument) => argument.startsWith('--module='))
+  ?.slice('--module='.length);
+
+if (requestedModule && !(requestedModule in CORE_EXPERIENCES)) {
+  throw new Error(`unknown visual story module: ${requestedModule}`);
+}
+
+const selectedModules = requestedModule ? [requestedModule] : Object.keys(CORE_EXPERIENCES);
+
+function storyConstantName(lessonId) {
+  return `${lessonId.replaceAll('-', '_').toUpperCase()}_VISUAL_STORY`;
+}
+
+function readStorySource(moduleId) {
+  const studioPath = `src/data/studios/${moduleId}.ts`;
+  const storyPath = `src/data/studios/visualStories/${moduleId}.ts`;
+  const studioSource = fs.readFileSync(studioPath, 'utf8');
+  const storySource = fs.existsSync(storyPath) ? fs.readFileSync(storyPath, 'utf8') : '';
+  return { studioSource, combinedSource: `${studioSource}\n${storySource}` };
+}
+
+function lessonObjective(moduleId, lessonId) {
+  const lessonSource = fs.readFileSync(`src/data/lessons/${moduleId}.ts`, 'utf8');
+  const lessonStart = lessonSource.indexOf(`id: '${lessonId}'`);
+  if (lessonStart < 0) throw new Error(`missing lesson source: ${lessonId}`);
+  const match = lessonSource.slice(lessonStart).match(/objective: '([^']+)'/);
+  if (!match) throw new Error(`missing lesson objective: ${lessonId}`);
+  return match[1];
+}
+
+function arrayWindow(source, marker) {
+  const markerIndex = source.indexOf(marker);
+  if (markerIndex < 0) return '';
+  const arrayStart = source.indexOf('[', markerIndex);
+  let depth = 0;
+  for (let index = arrayStart; index < source.length; index += 1) {
+    if (source[index] === '[') depth += 1;
+    if (source[index] === ']') depth -= 1;
+    if (depth === 0) return source.slice(arrayStart, index + 1);
+  }
+  return '';
+}
+
+for (const moduleId of selectedModules) {
+  const { studioSource, combinedSource } = readStorySource(moduleId);
+
+  for (const lessonId of CORE_EXPERIENCES[moduleId]) {
+    const assetPrefix = `public/lessons/${lessonId}-vn-`;
+    const publicPathPrefix = `/AITEXTBOOKforSTUDENTS/lessons/${lessonId}-vn-`;
+
+    for (const number of [1, 2, 3, 4]) {
+      const suffix = `${String(number).padStart(2, '0')}.webp`;
+      const asset = `${assetPrefix}${suffix}`;
+      const imageReference = `${publicPathPrefix}${suffix}`;
+      if (!fs.existsSync(asset)) throw new Error(`missing visual novel scene: ${asset}`);
+      if (fs.statSync(asset).size < 20_000) {
+        throw new Error(`visual novel scene is unexpectedly small: ${asset}`);
+      }
+      if (!combinedSource.includes(imageReference)) {
+        throw new Error(`visual novel scene is not referenced by ${lessonId}: ${imageReference}`);
+      }
+    }
+
+    if (lessonId !== 'm1-l1') {
+      const constantName = storyConstantName(lessonId);
+      if (!combinedSource.includes(`export const ${constantName}`)) {
+        throw new Error(`missing visual story data export: ${constantName}`);
+      }
+      if (!studioSource.includes(`visualNovel: ${constantName}`)) {
+        throw new Error(`visual story is not connected to studio ${lessonId}: ${constantName}`);
+      }
+    }
+
+    const firstImageIndex = combinedSource.indexOf(`${publicPathPrefix}01.webp`);
+    const objectiveIndex = combinedSource.lastIndexOf('objective:', firstImageIndex);
+    const nextObjectiveIndex = combinedSource.indexOf('objective:', objectiveIndex + 1);
+    const storyWindow = combinedSource.slice(
+      objectiveIndex,
+      nextObjectiveIndex < 0 ? combinedSource.length : nextObjectiveIndex,
+    );
+    const storyObjective = storyWindow.match(/objective: '([^']+)'/)?.[1];
+    const expectedObjective = lessonObjective(moduleId, lessonId);
+
+    if (storyObjective !== expectedObjective) {
+      throw new Error(
+        `${lessonId} visual story objective must match the lesson objective: expected "${expectedObjective}", got "${storyObjective ?? ''}"`,
+      );
+    }
+    for (const supportLevel of ['full', 'light', 'challenge']) {
+      if (!storyWindow.includes(`${supportLevel}:`)) {
+        throw new Error(`${lessonId} visual story is missing ${supportLevel} support copy`);
+      }
+    }
+    const knowledgeWindow = arrayWindow(storyWindow, 'knowledge: [');
+    const knowledgeTitles = knowledgeWindow.match(/title: '/g) ?? [];
+    if (knowledgeTitles.length !== 3) {
+      throw new Error(`${lessonId} visual story must have exactly three knowledge steps`);
+    }
+  }
 }
 
 const types = fs.readFileSync('src/features/studio/types.ts', 'utf8');
@@ -147,4 +249,5 @@ for (const pattern of [
   if (!pattern.test(styles)) throw new Error(`missing responsive scene navigation rule: ${pattern}`);
 }
 
-console.log('visual novel social story assets: 4 scenes ready');
+const checkedLessons = selectedModules.flatMap((moduleId) => CORE_EXPERIENCES[moduleId]);
+console.log(`visual novel social stories: ${checkedLessons.length} experiences, ${checkedLessons.length * 4} scenes ready`);
