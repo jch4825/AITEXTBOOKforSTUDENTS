@@ -1,5 +1,6 @@
 import type { StudioDefinition } from '../../features/studio/types';
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
+import { M4_L1_VISUAL_STORY, M4_L5_VISUAL_STORY, M4_L10_VISUAL_STORY } from './visualStories/m4';
 
 const PREPARED_SAFETY_NOTE = '이 활동의 AI 답과 온라인 장면은 안전하게 준비한 연습 예시입니다. 실제로 이상하거나 불편한 일이 생기면 화면을 멈추고 믿을 만한 어른에게 알립니다.';
 
@@ -10,6 +11,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
     moduleId: 'm4',
     title: 'AI 답 검증소',
     subtitle: '자신 있게 말하는 AI 답도 근거와 최신 정보를 확인합니다',
+    visualNovel: M4_L1_VISUAL_STORY,
     encounter: {
       title: '시간표와 다른 준비된 AI 답',
       description: '내일 준비물을 물었더니 준비된 AI가 “매주 화요일은 체육 수업이니 체육복을 가져가십시오”라고 자신 있게 답했습니다.',
@@ -66,6 +68,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
     moduleId: 'm4',
     title: '사진 공유 안전실',
     subtitle: '누구에게 왜 보내는지와 사진 속 정보를 살펴 공유 범위를 정합니다',
+    visualNovel: M4_L5_VISUAL_STORY,
     encounter: {
       title: '사진을 보내 달라는 메시지',
       description: '온라인에서 최근에 알게 된 사람이 “학교 활동 사진을 보내 줘”라고 말했습니다.',
@@ -131,6 +134,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
     moduleId: 'm4',
     title: '광고 단서 탐정실',
     subtitle: '추천처럼 보이는 글에서 목적과 표시, 빠진 정보를 찾아봅니다',
+    visualNovel: M4_L10_VISUAL_STORY,
     encounter: {
       title: '모두에게 가장 좋다는 추천',
       description: '준비된 게시물이 “이 음료는 모두에게 가장 좋습니다. 지금 꼭 사십시오!”라고 소개했습니다.',
