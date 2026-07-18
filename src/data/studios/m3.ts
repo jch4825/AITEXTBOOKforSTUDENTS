@@ -1,5 +1,6 @@
 import type { StudioDefinition } from '../../features/studio/types';
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
+import { M3_L1_VISUAL_STORY, M3_L5_VISUAL_STORY, M3_L9_VISUAL_STORY } from './visualStories/m3';
 
 const PREPARED_LEARNING_NOTE = '이 활동의 AI 답은 안전하게 준비한 연습 예시입니다. 실제 공부에서는 교과서와 선생님에게 한 번 더 확인합니다.';
 
@@ -10,6 +11,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
     moduleId: 'm3',
     title: '질문 탐정 실험실',
     subtitle: '넓은 질문에 필요한 단서를 더해 나에게 맞는 질문을 만듭니다',
+    visualNovel: M3_L1_VISUAL_STORY,
     encounter: {
       title: '너무 넓은 질문',
       description: '공부하다가 동물이 궁금해서 “동물에 대해 알려 줘”라고 물었더니 준비된 AI가 아주 긴 답을 했습니다.',
@@ -74,6 +76,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
     moduleId: 'm3',
     title: '이야기 공동창작소',
     subtitle: 'AI 제안을 그대로 따르지 않고 내 생각으로 이야기를 완성합니다',
+    visualNovel: M3_L5_VISUAL_STORY,
     encounter: {
       title: '비 오는 날의 작은 로봇',
       description: '“비가 많이 오는 날, 작은 로봇이 학교에 혼자 남았습니다.”라는 문장으로 이야기를 시작했습니다.',
@@ -140,6 +143,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
     moduleId: 'm3',
     title: '이미지 설명 검토소',
     subtitle: '그림에서 보이는 사실과 AI가 추측한 내용을 나누어 살펴봅니다',
+    visualNovel: M3_L9_VISUAL_STORY,
     encounter: {
       title: '그림보다 앞서간 설명',
       description: '준비된 AI가 그림을 보고 “두 학생은 소풍을 가서 매우 행복합니다”라고 설명했습니다.',
