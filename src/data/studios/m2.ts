@@ -1,5 +1,6 @@
 import type { StudioDefinition } from '../../features/studio/types';
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
+import { M2_L10_VISUAL_STORY, M2_L1_VISUAL_STORY, M2_L6_VISUAL_STORY } from './visualStories/m2';
 
 const PREPARED_AI_NOTE = '화면의 답은 실제 AI 연결이 아닌 준비된 AI 예시입니다. 안전한 연습 응답으로 판단과 고쳐 묻기를 연습합니다.';
 
@@ -10,6 +11,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
     moduleId: 'm2',
     title: 'AI가 내 말을 못 알아들었습니다',
     subtitle: '빠진 정보를 찾고 내 뜻을 안전하게 더합니다',
+    visualNovel: M2_L1_VISUAL_STORY,
     encounter: {
       title: '“그거 알려 줘”라고 했더니',
       description: 'AI에게 “그거 알려 줘”라고 말했는데 AI는 날씨를 알려줬습니다. 나는 오늘 급식 메뉴가 궁금했습니다.',
@@ -67,6 +69,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
     moduleId: 'm2',
     title: '요청 공동 제작소',
     subtitle: '목적·예시·순서·답의 모양을 조합합니다',
+    visualNovel: M2_L6_VISUAL_STORY,
     encounter: {
       title: '학교 준비를 도와 달라는 부탁',
       description: 'AI에게 내일 학교 준비를 도와 달라고 부탁하려고 합니다. 한 번에 긴 문장으로 말하지 않아도 됩니다.',
@@ -124,6 +127,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
     moduleId: 'm2',
     title: 'AI 고쳐 묻기 실험실',
     subtitle: '첫 답과 수정된 답을 비교하고 최종 사용을 판단합니다',
+    visualNovel: M2_L10_VISUAL_STORY,
     encounter: {
       title: '길고 확실하지 않은 첫 연습 응답',
       description: '“준비물을 알려 줘”라고 했더니 연습용 AI가 근거 없이 여러 과목 준비물을 아주 긴 문장으로 답했습니다.',
