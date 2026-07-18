@@ -1,5 +1,6 @@
 import type { StudioDefinition } from '../../features/studio/types';
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
+import { M5_L1_VISUAL_STORY, M5_L6_VISUAL_STORY, M5_L11_VISUAL_STORY } from './visualStories/m5';
 
 export const M5_STUDIOS: StudioDefinition[] = [
   {
@@ -8,6 +9,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
     moduleId: 'm5',
     title: '버스가 늦게 온다면',
     subtitle: '달라지는 정보를 보고 내 방법을 조정합니다',
+    visualNovel: M5_L1_VISUAL_STORY,
     encounter: {
       title: '약속 장소로 가는 길',
       description: '친구와 만나기로 했는데 타려던 버스가 늦게 옵니다. 아직 모든 정보가 정해지지는 않았습니다.',
@@ -62,6 +64,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
     moduleId: 'm5',
     title: 'AI가 다르게 알아들었다면',
     subtitle: '개인정보 없이 내 뜻을 더 분명하게 전합니다',
+    visualNovel: M5_L6_VISUAL_STORY,
     encounter: {
       title: '다른 장소를 알려 준 AI',
       description: 'AI에게 가는 길을 물었는데 내가 가려던 곳과 다른 장소를 알려줬습니다.',
@@ -116,6 +119,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
     moduleId: 'm5',
     title: '계획과 조건이 달라진다면',
     subtitle: '재료·도구·시간·안전을 살펴 계획을 바꿔습니다',
+    visualNovel: M5_L11_VISUAL_STORY,
     encounter: {
       title: '라면 계획 세우기',
       description: '라면을 만들 계획을 세우고 있습니다. 먼저 필요한 재료와 도구를 살펴봅니다.',
