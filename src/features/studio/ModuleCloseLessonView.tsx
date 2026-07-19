@@ -8,7 +8,7 @@ import type { LessonId } from '../../types';
 import { themeFor } from '../../utils/moduleThemes';
 import StudioExpressionInput from './components/StudioExpressionInput';
 import { loadStudioEvidence } from './evidenceStorage';
-import { isMeaningfulStudioExpression } from './studioCompletion';
+import { formatPersistedStudioExpression } from './studioCompletion';
 import type { ExpressionMode, StudioEvidenceV2, StudioExpression } from './types';
 
 interface Props {
@@ -28,18 +28,9 @@ const NEXT_MODES: ExpressionMode[] = ['choice', 'text', 'speech'];
 
 function expressionText(record: StudioEvidenceV2, field: 'firstAttempt' | 'finalExpression' | 'transferExpression'): string {
   const value = record[field];
-  if (!value) return '표현 기록 없음';
-  if (!isMeaningfulStudioExpression(value)) return '표현 기록 없음';
   const definition = getStudioDefinition(record.lessonId);
   const choices = field === 'transferExpression' ? definition?.transfer.choices : definition?.firstAttempt.choices;
-  if (value.mode === 'choice' || value.mode === 'aac') {
-    const labels = value.choiceIds
-      ?.map((id) => choices?.find((choice) => choice.id === id)?.label)
-      .filter((label): label is string => Boolean(label));
-    return labels?.join(' / ') || '카드로 표현함';
-  }
-  if (value.mode === 'draw') return '그림으로 표현함';
-  return value.text || '말이나 글로 표현함';
+  return formatPersistedStudioExpression(value, choices) ?? '표현 기록 없음';
 }
 
 export default function ModuleCloseLessonView({ definition, onGoHome, onPickLesson }: Props) {

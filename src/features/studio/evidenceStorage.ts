@@ -1,4 +1,7 @@
-import type { StudioEvidenceV2, StudioExpression, StudioObservation } from './types';
+import { sanitizeExpressionForEvidence } from './studioCompletion';
+import type { StudioEvidenceV2, StudioObservation } from './types';
+
+export { sanitizeExpressionForEvidence } from './studioCompletion';
 
 export const STUDIO_EVIDENCE_KEY = 'ai-students-studio-evidence-v2';
 export const STUDIO_EVIDENCE_CHANGED = 'studio-evidence-changed';
@@ -23,16 +26,6 @@ function isEvidence(value: unknown): value is StudioEvidenceV2 {
     && typeof record.learnerAlias === 'string'
     && typeof record.studioId === 'string'
     && typeof record.lessonId === 'string';
-}
-
-export function sanitizeExpressionForEvidence(value?: StudioExpression): StudioExpression | undefined {
-  if (!value) return undefined;
-  return {
-    mode: value.mode,
-    choiceIds: value.choiceIds?.slice(0, 4),
-    text: value.text?.trim().slice(0, 300),
-    drawing: undefined,
-  };
 }
 
 export function loadStudioEvidence(): StudioEvidenceV2[] {

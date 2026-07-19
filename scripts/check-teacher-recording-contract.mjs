@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import ts from 'typescript';
 
 const settingsPath = 'src/features/teacher/recordingSettings.ts';
 const evidencePath = 'src/features/studio/evidenceStorage.ts';
@@ -10,12 +11,70 @@ if (!fs.existsSync(backupPath)) throw new Error('backup module is missing');
 const settings = fs.readFileSync(settingsPath, 'utf8');
 const evidence = fs.readFileSync(evidencePath, 'utf8');
 const backup = fs.readFileSync(backupPath, 'utf8');
+const completionSource = fs.readFileSync('src/features/studio/studioCompletion.ts', 'utf8');
 if (!settings.includes('processRecording: false')) throw new Error('process recording must default to false');
 if (!settings.includes("learnerAlias: '학생 1'")) throw new Error('safe learner alias default is missing');
 if (!evidence.includes('ai-students-studio-evidence-v2')) throw new Error('v2 evidence key is missing');
 if (!evidence.includes('sanitizeExpressionForEvidence')) throw new Error('expression sanitizer is missing');
-if (!evidence.includes('drawing: undefined')) throw new Error('raw drawing must be removed');
+if (!evidence.includes("import { sanitizeExpressionForEvidence } from './studioCompletion'")) {
+  throw new Error('evidence storage must use the contract-tested semantic sanitizer');
+}
 if (!evidence.includes('processRecording')) throw new Error('opt-in gate is missing');
+
+const completionCompiled = ts.transpileModule(completionSource, {
+  compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 },
+}).outputText;
+const expressionModule = await import(`data:text/javascript;base64,${Buffer.from(completionCompiled).toString('base64')}`);
+if (
+  typeof expressionModule.sanitizeExpressionForEvidence !== 'function'
+  || typeof expressionModule.formatPersistedStudioExpression !== 'function'
+) {
+  throw new Error('privacy-safe evidence sanitizer/formatter units are missing');
+}
+
+for (const emptyExpression of [
+  { mode: 'choice', choiceIds: [] },
+  { mode: 'choice', choiceIds: ['', '   '] },
+  { mode: 'text', text: '   \t\n' },
+  { mode: 'draw' },
+  { mode: 'draw', drawing: '   \t\n' },
+]) {
+  const sanitized = expressionModule.sanitizeExpressionForEvidence(emptyExpression);
+  if (sanitized !== undefined) {
+    throw new Error(`semantically empty expression must be omitted: ${JSON.stringify(emptyExpression)}`);
+  }
+}
+
+const rawDrawing = 'data:image/png;base64,private-payload';
+const persistedDrawing = expressionModule.sanitizeExpressionForEvidence({ mode: 'draw', drawing: rawDrawing });
+if (!persistedDrawing || persistedDrawing.mode !== 'draw') {
+  throw new Error('meaningful drawing must retain a privacy-safe persisted marker');
+}
+if ('drawing' in persistedDrawing || JSON.stringify(persistedDrawing).includes(rawDrawing)) {
+  throw new Error('raw drawing payload must be stripped from persisted evidence');
+}
+if (expressionModule.formatPersistedStudioExpression(persistedDrawing, []) !== '그림으로 표현함') {
+  throw new Error('privacy-safe persisted drawing marker must remain readable as drawing evidence');
+}
+
+const choices = [{ id: 'choice-a', emoji: '', label: '첫 번째 방법' }];
+const persistedChoice = expressionModule.sanitizeExpressionForEvidence({
+  mode: 'choice', choiceIds: ['', 'choice-a', '   '],
+});
+if (
+  JSON.stringify(persistedChoice) !== JSON.stringify({ mode: 'choice', choiceIds: ['choice-a'] })
+  || expressionModule.formatPersistedStudioExpression(persistedChoice, choices) !== '첫 번째 방법'
+) {
+  throw new Error('meaningful choice must be preserved and readable after sanitization');
+}
+
+const persistedText = expressionModule.sanitizeExpressionForEvidence({ mode: 'text', text: '  내 생각  ' });
+if (
+  JSON.stringify(persistedText) !== JSON.stringify({ mode: 'text', text: '내 생각' })
+  || expressionModule.formatPersistedStudioExpression(persistedText, []) !== '내 생각'
+) {
+  throw new Error('meaningful text must be preserved and readable after sanitization');
+}
 for (const token of ['AES-GCM', 'PBKDF2', 'SHA-256', '250_000', 'new Uint8Array(16)', 'new Uint8Array(12)']) {
   if (!backup.includes(token)) throw new Error(`backup security token is missing: ${token}`);
 }

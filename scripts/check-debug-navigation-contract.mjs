@@ -401,8 +401,8 @@ for (const [name, readerSource] of [
   ['StudioEvidencePanel', evidencePanel],
   ['ModuleCloseLessonView', moduleClose],
 ]) {
-  if (!readerSource.includes('if (!isMeaningfulStudioExpression(')) {
-    throw new Error(`${name} must not present an empty expression shell as student evidence`);
+  if (!readerSource.includes('formatPersistedStudioExpression(')) {
+    throw new Error(`${name} must use persisted-record expression semantics`);
   }
   if (!/record\.artifactSummary\?\.trim\(\)[\s\S]*?>결과물<[\s\S]*?\{record\.artifactSummary\}/.test(readerSource)) {
     throw new Error(`${name} must conditionally show a sparse artifact summary`);

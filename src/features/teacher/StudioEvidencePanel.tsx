@@ -8,7 +8,7 @@ import {
   STUDIO_EVIDENCE_CHANGED,
   updateStudioObservation,
 } from '../studio/evidenceStorage';
-import { isMeaningfulStudioExpression } from '../studio/studioCompletion';
+import { formatPersistedStudioExpression } from '../studio/studioCompletion';
 import type { ObservationLevel, StudioChoice, StudioEvidenceV2, StudioExpression, StudioObservation } from '../studio/types';
 
 interface Props {
@@ -35,16 +35,7 @@ const DECISION_LABELS = {
 } as const;
 
 function expressionText(expression: StudioExpression | undefined, choices: StudioChoice[] | undefined): string {
-  if (!expression) return '기록 없음';
-  if (!isMeaningfulStudioExpression(expression)) return '기록 없음';
-  if (expression.mode === 'choice' || expression.mode === 'aac') {
-    const labels = expression.choiceIds
-      ?.map((id) => choices?.find((choice) => choice.id === id)?.label)
-      .filter((label): label is string => Boolean(label));
-    return labels?.join(' / ') || '카드로 표현함';
-  }
-  if (expression.mode === 'draw') return '그림으로 표현함';
-  return expression.text || '말이나 글로 표현함';
+  return formatPersistedStudioExpression(expression, choices) ?? '기록 없음';
 }
 
 function observationSummary(observation: StudioObservation): string {
