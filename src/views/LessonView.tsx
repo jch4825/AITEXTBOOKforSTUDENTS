@@ -41,6 +41,7 @@ import { wrapDictionaryTerms } from './lessonTextUtils';
 import type { LessonContent, LessonId } from '../types';
 
 interface Props {
+  key?: any;
   lessonId: LessonId;
   onGoHome: () => void;
   onPickLesson: (id: LessonId) => void;

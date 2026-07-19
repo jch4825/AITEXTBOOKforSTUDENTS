@@ -8,6 +8,7 @@ import PreparedStimulusPanel from './PreparedStimulusPanel';
 import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
+import { isMeaningfulStudioExpression } from '../studioCompletion';
 import type { AiDecision, StudioAction, StudioChoice, StudioDefinition, StudioExpression, StudioSessionState } from '../types';
 
 interface Props {
@@ -29,7 +30,7 @@ const AI_DECISION_SUMMARY: Record<AiDecision, string> = {
 };
 
 function expressionSummary(expression: StudioExpression | undefined, choices: StudioChoice[]): string {
-  if (!expression) return '아직 표현한 내용이 없습니다.';
+  if (!isMeaningfulStudioExpression(expression)) return '아직 표현한 내용이 없습니다.';
   if (expression.mode === 'choice' || expression.mode === 'aac') {
     const labels = expression.choiceIds
       ?.map((id) => choices.find((choice) => choice.id === id)?.label)
@@ -248,7 +249,9 @@ export default function StudioExperience({
       </div>
     );
   } else if (state.stage === 'artifact') {
-    const suggestion = expressionSummary(state.finalExpression, definition.firstAttempt.choices);
+    const suggestion = isMeaningfulStudioExpression(state.finalExpression)
+      ? expressionSummary(state.finalExpression, definition.firstAttempt.choices)
+      : null;
     right = (
       <div className="space-y-5 p-5 md:p-7">
         <div>
@@ -267,7 +270,7 @@ export default function StudioExperience({
             className="mt-2 w-full resize-y rounded-xl border-2 p-3 leading-relaxed"
             style={{ borderColor: accent, background: 'var(--editorial-paper)' }}
           />
-          {!state.artifactSummary && (
+          {!state.artifactSummary?.trim() && suggestion && (
             <button
               type="button"
               onClick={() => dispatch({ type: 'set-artifact', value: suggestion })}

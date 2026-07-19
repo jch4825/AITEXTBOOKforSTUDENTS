@@ -42,7 +42,7 @@
 | 스튜디오 판단 화면 | `m1-l1 · P05/08 · decision` |
 | 스튜디오 이야기 3번째 장면 | `m1-l1 · P01/08 · encounter · S03/04` |
 | 단원 마무리 | `m1-l11 · P01/01 · module-close` |
-| 미구현 차시 | `m1-l3 · P01/01 · coming-soon` |
+| 목록에 없는 알 수 없는 차시 | `m1-l999 · P01/01 · coming-soon` |
 
 `P` 번호는 사용자가 현재 순서를 즉시 이해하기 위한 값이다. `pageKey`는 페이지가 추가되어 숫자가 달라져도 코드에서 같은 화면 종류를 찾기 위한 의미 키다. 이야기 내부 장면처럼 한 페이지 안에서 콘텐츠가 바뀌는 경우에만 `S` 하위 번호를 붙인다.
 
@@ -59,7 +59,7 @@
 - 일반 차시: 현재 `LessonStep.kind`를 사용한다. 마지막 화면은 `wrap-up`을 사용한다.
 - 핵심 경험 스튜디오: `StudioStage` 값을 그대로 사용한다.
 - 이야기 장면: `encounter` 뒤에 `sceneIndex + 1`과 전체 장면 수를 추가한다.
-- 단원 마무리와 미구현 화면: 각각 `module-close`, `coming-soon`을 사용한다.
+- 단원 마무리와 목록에 없는 알 수 없는 차시 화면: 각각 `module-close`, `coming-soon`을 사용한다.
 - 모든 문자열 조립은 공통 포매터 한 곳에서 수행한다.
 
 ## 5. 자유로운 페이지 이동
@@ -119,7 +119,7 @@
 
 ### 7.3 일반 차시
 
-`LessonView`가 현재 단계의 `LessonStep.kind` 또는 `wrap-up`을 `pageKey`로 전달한다. 미구현 차시는 `coming-soon`을 전달한다.
+`LessonView`가 현재 단계의 `LessonStep.kind` 또는 `wrap-up`을 `pageKey`로 전달한다. 목록에 없는 알 수 없는 차시는 `coming-soon`을 전달한다.
 
 ### 7.4 스튜디오 차시
 

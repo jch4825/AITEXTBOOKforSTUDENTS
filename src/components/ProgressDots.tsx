@@ -5,7 +5,7 @@ interface Props {
 
 export default function ProgressDots({ total, current }: Props) {
   return (
-    <div className="flex justify-center gap-2.5" aria-label={`${total}단계 중 ${current + 1}단계`}>
+    <div className="progress-dots flex justify-center gap-2.5" aria-label={`${total}단계 중 ${current + 1}단계`}>
       {Array.from({ length: total }).map((_, i) => (
         <span
           key={i}

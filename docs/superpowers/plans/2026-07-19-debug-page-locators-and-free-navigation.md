@@ -121,8 +121,8 @@ if (scene !== 'm1-l1 · P01/08 · encounter · S03/04') {
   throw new Error(`unexpected scene locator: ${scene}`);
 }
 
-const fallback = debugModule.formatDebugPageId({ lessonId: 'm1-l3', current: 1, total: 1 });
-if (fallback !== 'm1-l3 · P01/01') throw new Error(`unexpected fallback locator: ${fallback}`);
+const fallback = debugModule.formatDebugPageId({ lessonId: 'm1-l999', current: 1, total: 1 });
+if (fallback !== 'm1-l999 · P01/01') throw new Error(`unexpected fallback locator: ${fallback}`);
 
 console.log('debug navigation contract passed');
 ```
@@ -814,7 +814,7 @@ Open the same lesson without `debug=1` and verify no `data-debug-page-id` attrib
 Also open representative non-studio routes in debug mode and verify their visible locators:
 
 - `?debug=1&lesson=m1-l2`: a regular activity uses its `LessonStep.kind`, and its final page uses `wrap-up`;
-- `?debug=1&lesson=m1-l3`: the placeholder page shows `m1-l3 · P01/01 · coming-soon`;
+- `?debug=1&lesson=m1-l999`: an unknown, unlisted lesson shows `m1-l999 · P01/01 · coming-soon`;
 - `?debug=1&lesson=m1-l11`: the module close shows `m1-l11 · P01/01 · module-close`.
 
 - [ ] **Step 4: Verify explicit completion without empty evidence**

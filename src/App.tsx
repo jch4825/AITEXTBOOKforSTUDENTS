@@ -57,7 +57,14 @@ export default function App() {
   if (state.view === 'teacher') return <TeacherView onExit={goHome} />;
   if (state.view === 'lesson' && state.lessonId) {
     // 차시의 "홈"은 학습 허브인 목차로 — 완료 후에도 목차로 돌아온다.
-    return <LessonView lessonId={state.lessonId} onGoHome={goContents} onPickLesson={goLesson} />;
+    return (
+      <LessonView
+        key={state.lessonId}
+        lessonId={state.lessonId}
+        onGoHome={goContents}
+        onPickLesson={goLesson}
+      />
+    );
   }
   if (state.view === 'contents') {
     return <ContentsView onPickLesson={goLesson} onGoHome={goHome} />;

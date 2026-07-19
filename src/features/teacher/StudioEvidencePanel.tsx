@@ -8,6 +8,7 @@ import {
   STUDIO_EVIDENCE_CHANGED,
   updateStudioObservation,
 } from '../studio/evidenceStorage';
+import { isMeaningfulStudioExpression } from '../studio/studioCompletion';
 import type { ObservationLevel, StudioChoice, StudioEvidenceV2, StudioExpression, StudioObservation } from '../studio/types';
 
 interface Props {
@@ -35,6 +36,7 @@ const DECISION_LABELS = {
 
 function expressionText(expression: StudioExpression | undefined, choices: StudioChoice[] | undefined): string {
   if (!expression) return '기록 없음';
+  if (!isMeaningfulStudioExpression(expression)) return '기록 없음';
   if (expression.mode === 'choice' || expression.mode === 'aac') {
     const labels = expression.choiceIds
       ?.map((id) => choices?.find((choice) => choice.id === id)?.label)
@@ -197,6 +199,14 @@ export default function StudioEvidencePanel({ mode }: Props) {
                   </dl>
                   <ObservationEditor record={record} />
                 </>
+              )}
+              {record.artifactSummary?.trim() && (
+                <dl className="mt-3">
+                  <div className="studio-fact-card">
+                    <dt className="font-bold">결과물</dt>
+                    <dd>{record.artifactSummary}</dd>
+                  </div>
+                </dl>
               )}
             </article>
           );

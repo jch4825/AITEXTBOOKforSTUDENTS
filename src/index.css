@@ -438,7 +438,38 @@
 .comic-stage h1 { letter-spacing: -.04em; }
 .comic-frame-footer { border-top: 1px solid var(--line); background:var(--paper-0); }
 .comic-frame-footer .btn { min-width:7.25rem; }.comic-cut-progress { display:flex; flex-direction:column; align-items:center; gap:.15rem; font-weight:900; font-size:.78rem; color:var(--brand-ink); letter-spacing:.04em; }.comic-cut-progress > span { border:1px solid var(--line); border-radius:999px; padding:.05rem .4rem; }
-@media(max-width:767px){.comic-frame-footer .btn{min-width:0;padding-inline:.8rem}.comic-cut-progress{min-width:3.1rem}.comic-cut-progress .progress-dots{display:none}}
+@media (max-width: 767px) {
+  .comic-frame-footer {
+    height: auto;
+    min-height: 7rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "progress progress" "previous next";
+    align-items: center;
+    column-gap: .5rem;
+    row-gap: .4rem;
+    padding-block: .5rem;
+  }
+  .comic-frame-footer .btn {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    padding-inline: .8rem;
+  }
+  .comic-footer-previous { grid-area: previous; }
+  .comic-cut-progress {
+    grid-area: progress;
+    width: 100%;
+    min-width: 0;
+  }
+  .comic-footer-next { grid-area: next; }
+  .comic-cut-progress > code {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+  }
+  .comic-cut-progress .progress-dots { display: none; }
+}
 .season-map > li { border:2px solid var(--brand-ink); border-radius:5px 14px 5px 14px; background:var(--paper-0); box-shadow:4px 4px 0 color-mix(in srgb,var(--episode-accent) 28%,var(--paper-2)); overflow:hidden; }
 .season-map > li:has(.season-episode-active) { background:var(--episode-soft); box-shadow:6px 6px 0 var(--episode-accent); }
 .season-episode { border:0; border-radius:0; box-shadow:none; }.season-episode-active { transform:none; box-shadow:none; }

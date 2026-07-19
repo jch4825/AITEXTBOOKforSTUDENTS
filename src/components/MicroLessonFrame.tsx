@@ -155,7 +155,7 @@ export default function MicroLessonFrame({
           variant="secondary"
           onClick={onPrev}
           disabled={currentStep === 0}
-          className="px-4 md:px-6"
+          className="comic-footer-previous px-4 md:px-6"
         ><Icon name="chevron-left" size={20} /> 이전</Button>
         <div
           className="comic-cut-progress min-w-0"
@@ -175,7 +175,7 @@ export default function MicroLessonFrame({
         </div>
         <Button
           onClick={onNext}
-          className="px-4 md:px-6"
+          className="comic-footer-next px-4 md:px-6"
         >{currentStep + 1 >= totalSteps
           ? <><Icon name="sparkles" size={20} filled /> 다 했습니다!</>
           : <>다음 <Icon name="chevron-right" size={20} /></>}</Button>

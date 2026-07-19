@@ -178,6 +178,14 @@ function assertHookCompletionContract(sourceText) {
   if (finishSaveCalls.length < 1 || guardedSaveCalls.length !== finishSaveCalls.length) {
     throw new Error('studio completion contract: evidence save must remain inside the process-evidence guard');
   }
+  for (const saveCall of finishSaveCalls) {
+    if (
+      saveCall.arguments.length !== 2
+      || propertyPath(saveCall.arguments[1]) !== 'settings.processRecording'
+    ) {
+      throw new Error('studio completion contract: evidence save must preserve the processRecording opt-in argument');
+    }
+  }
 
   const onCompleteIndex = statements.findIndex((statement) => isDirectCallStatement(statement, 'onComplete'));
   if (
@@ -249,14 +257,38 @@ if (scene !== 'm1-l1 · P01/08 · encounter · S03/04') {
   throw new Error(`unexpected scene locator: ${scene}`);
 }
 
-const fallback = debugModule.formatDebugPageId({ lessonId: 'm1-l3', current: 1, total: 1 });
-if (fallback !== 'm1-l3 · P01/01') throw new Error(`unexpected fallback locator: ${fallback}`);
+const fallback = debugModule.formatDebugPageId({ lessonId: 'm1-l999', current: 1, total: 1 });
+if (fallback !== 'm1-l999 · P01/01') throw new Error(`unexpected fallback locator: ${fallback}`);
 
 const frame = fs.readFileSync('src/components/MicroLessonFrame.tsx', 'utf8');
+const app = fs.readFileSync('src/App.tsx', 'utf8');
+const progressDots = fs.readFileSync('src/components/ProgressDots.tsx', 'utf8');
+const styles = fs.readFileSync('src/index.css', 'utf8').replace(/\s+/g, ' ');
 const lessonView = fs.readFileSync('src/views/LessonView.tsx', 'utf8');
 const studioView = fs.readFileSync('src/features/studio/StudioLessonView.tsx', 'utf8');
 const moduleClose = fs.readFileSync('src/features/studio/ModuleCloseLessonView.tsx', 'utf8');
+const studioExperience = fs.readFileSync('src/features/studio/components/StudioExperience.tsx', 'utf8');
+const evidencePanel = fs.readFileSync('src/features/teacher/StudioEvidencePanel.tsx', 'utf8');
 const visualNovel = fs.readFileSync('src/features/studio/components/VisualNovelExperience.tsx', 'utf8');
+
+if (!/<LessonView[\s\S]*?key=\{state\.lessonId\}[\s\S]*?\/>/.test(app)) {
+  throw new Error('lesson routes must remount by lessonId before reading new lesson state');
+}
+if (!progressDots.includes('className="progress-dots ')) {
+  throw new Error('ProgressDots must expose the progress-dots mobile styling hook');
+}
+for (const token of ['comic-footer-previous', 'comic-footer-next']) {
+  if (!frame.includes(token)) throw new Error(`mobile footer grid hook is missing: ${token}`);
+}
+for (const rule of [
+  'grid-template-areas: "progress progress" "previous next"',
+  '.comic-footer-previous { grid-area: previous;',
+  '.comic-cut-progress { grid-area: progress;',
+  '.comic-footer-next { grid-area: next;',
+  '.comic-cut-progress > code { width: 100%; max-width: 100%;',
+]) {
+  if (!styles.includes(rule)) throw new Error(`mobile footer reflow rule is missing: ${rule}`);
+}
 
 for (const token of ['pageKey?: string', 'subPage?: DebugSubPage', 'data-debug-page-id', 'formatDebugPageId', 'isDebugMode']) {
   if (!frame.includes(token)) throw new Error(`frame debug locator missing: ${token}`);
@@ -283,7 +315,6 @@ for (const [name, source] of [
     throw new Error(`${name} has a MicroLessonFrame call without pageKey`);
   }
 }
-
 const completionPath = 'src/features/studio/studioCompletion.ts';
 if (!fs.existsSync(completionPath)) throw new Error('studio completion helper is missing');
 const completionSource = fs.readFileSync(completionPath, 'utf8');
@@ -291,6 +322,41 @@ const completionCompiled = ts.transpileModule(completionSource, {
   compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 },
 }).outputText;
 const completionModule = await import(`data:text/javascript;base64,${Buffer.from(completionCompiled).toString('base64')}`);
+
+if (typeof completionModule.isMeaningfulStudioExpression !== 'function') {
+  throw new Error('semantic studio expression validator is missing');
+}
+
+const semanticallyEmptyExpressions = [
+  { mode: 'choice' },
+  { mode: 'choice', choiceIds: [] },
+  { mode: 'choice', choiceIds: ['', '   '] },
+  { mode: 'aac' },
+  { mode: 'aac', choiceIds: [] },
+  { mode: 'text' },
+  { mode: 'text', text: '   \t\n' },
+  { mode: 'speech' },
+  { mode: 'speech', text: '   \t\n' },
+  { mode: 'draw' },
+  { mode: 'draw', drawing: '' },
+  { mode: 'draw', drawing: '   \t\n' },
+];
+for (const expression of semanticallyEmptyExpressions) {
+  if (completionModule.isMeaningfulStudioExpression(expression)) {
+    throw new Error(`empty expression was accepted: ${JSON.stringify(expression)}`);
+  }
+}
+for (const expression of [
+  { mode: 'choice', choiceIds: ['choice-a'] },
+  { mode: 'aac', choiceIds: ['aac-a'] },
+  { mode: 'text', text: ' 내 생각 ' },
+  { mode: 'speech', text: ' 말한 생각 ' },
+  { mode: 'draw', drawing: 'data:image/png;base64,abc' },
+]) {
+  if (!completionModule.isMeaningfulStudioExpression(expression)) {
+    throw new Error(`real expression was ignored: ${JSON.stringify(expression)}`);
+  }
+}
 
 const emptyState = {
   stage: 'complete', startedAt: '2026-07-19T00:00:00.000Z', supportLevel: 'light', supportModesUsed: [],
@@ -302,15 +368,44 @@ if (completionModule.hasStudentProcessEvidence({ ...emptyState, supportModesUsed
 if (completionModule.hasStudentProcessEvidence({ ...emptyState, artifactSummary: '   \t\n' })) {
   throw new Error('whitespace-only artifact summary must not create evidence');
 }
+for (const field of ['firstAttempt', 'finalExpression', 'transferExpression']) {
+  for (const expression of semanticallyEmptyExpressions) {
+    if (completionModule.hasStudentProcessEvidence({ ...emptyState, [field]: expression })) {
+      throw new Error(`empty ${field} expression created evidence: ${JSON.stringify(expression)}`);
+    }
+  }
+}
 for (const partial of [
   { firstAttempt: { mode: 'choice', choiceIds: ['a'] } },
   { aiDecision: 'reject' },
   { finalExpression: { mode: 'text', text: '내 생각' } },
   { artifactSummary: '결과물' },
   { transferExpression: { mode: 'speech', text: '다음 방법' } },
+  { transferExpression: { mode: 'draw', drawing: 'data:image/png;base64,abc' } },
 ]) {
   if (!completionModule.hasStudentProcessEvidence({ ...emptyState, ...partial })) {
     throw new Error(`partial process evidence was ignored: ${JSON.stringify(partial)}`);
+  }
+}
+
+if (
+  !studioExperience.includes('isMeaningfulStudioExpression(state.finalExpression)')
+  || !studioExperience.includes('suggestion && (')
+) {
+  throw new Error('artifact fallback must only be offered for a meaningful final expression');
+}
+if (!studioExperience.includes('if (!isMeaningfulStudioExpression(expression))')) {
+  throw new Error('studio summary must not present an empty expression shell as student evidence');
+}
+for (const [name, readerSource] of [
+  ['StudioEvidencePanel', evidencePanel],
+  ['ModuleCloseLessonView', moduleClose],
+]) {
+  if (!readerSource.includes('if (!isMeaningfulStudioExpression(')) {
+    throw new Error(`${name} must not present an empty expression shell as student evidence`);
+  }
+  if (!/record\.artifactSummary\?\.trim\(\)[\s\S]*?>결과물<[\s\S]*?\{record\.artifactSummary\}/.test(readerSource)) {
+    throw new Error(`${name} must conditionally show a sparse artifact summary`);
   }
 }
 

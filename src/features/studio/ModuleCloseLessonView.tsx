@@ -8,6 +8,7 @@ import type { LessonId } from '../../types';
 import { themeFor } from '../../utils/moduleThemes';
 import StudioExpressionInput from './components/StudioExpressionInput';
 import { loadStudioEvidence } from './evidenceStorage';
+import { isMeaningfulStudioExpression } from './studioCompletion';
 import type { ExpressionMode, StudioEvidenceV2, StudioExpression } from './types';
 
 interface Props {
@@ -28,6 +29,7 @@ const NEXT_MODES: ExpressionMode[] = ['choice', 'text', 'speech'];
 function expressionText(record: StudioEvidenceV2, field: 'firstAttempt' | 'finalExpression' | 'transferExpression'): string {
   const value = record[field];
   if (!value) return '표현 기록 없음';
+  if (!isMeaningfulStudioExpression(value)) return '표현 기록 없음';
   const definition = getStudioDefinition(record.lessonId);
   const choices = field === 'transferExpression' ? definition?.transfer.choices : definition?.firstAttempt.choices;
   if (value.mode === 'choice' || value.mode === 'aac') {
@@ -96,6 +98,9 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
                         <div><dt className="font-bold">처음에는</dt><dd>{expressionText(record, 'firstAttempt')}</dd></div>
                         <div><dt className="font-bold">AI와 비교한 뒤</dt><dd>{expressionText(record, 'finalExpression')}</dd></div>
                         <div><dt className="font-bold">새 상황에서는</dt><dd>{expressionText(record, 'transferExpression')}</dd></div>
+                        {record.artifactSummary?.trim() && (
+                          <div><dt className="font-bold">결과물</dt><dd>{record.artifactSummary}</dd></div>
+                        )}
                       </dl>
                     </article>
                   );
