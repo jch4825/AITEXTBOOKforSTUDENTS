@@ -58,12 +58,12 @@ export default function MissionStep({
   // 종이 꽃가루(1회성) — 색은 액티비티 팔레트(앱 공용 6색)에서. 무한 반복 금지.
   useEffect(() => {
     if (showReward) {
-      const list = Array.from({ length: 24 }).map((_, i) => ({
+      const list = Array.from({ length: 64 }).map((_, i) => ({
         id: i,
         left: `${Math.random() * 100}%`,
         color: ACTIVITY_PALETTE[i % ACTIVITY_PALETTE.length].accent,
-        delay: `${Math.random() * 0.6}s`,
-        size: `${Math.random() * 8 + 6}px`,
+        delay: `${Math.random() * 1.5}s`,
+        size: `${Math.random() * 10 + 6}px`,
       }));
       setConfetti(list);
     } else {
@@ -244,31 +244,48 @@ export default function MissionStep({
   // 2. 보상 화면 — 앱 공통 보상 문법(D4 도장 메달리온 + 1회성 모션)으로.
   if (showReward) {
     const rewardLeft = (
-      <div className="flex flex-col items-center justify-center text-center p-4">
-        <div className="relative mb-4" aria-hidden>
+      <div className="flex flex-col items-center justify-center text-center p-6 bg-gradient-to-b from-white to-[color:var(--paper-1)] rounded-2xl border shadow-sm relative overflow-hidden">
+        {/* 반짝이는 배경 오라 링 */}
+        <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)]" />
+        
+        <div className="relative mb-6" aria-hidden>
+          {/* 황금빛 테두리 회전 효과링 */}
           <span
-            className="stamp-in inline-flex items-center justify-center rounded-full h-[120px] w-[120px]"
-            style={{ background: accentSoft, boxShadow: 'var(--e-1)' }}
+            className="stamp-in inline-flex items-center justify-center rounded-full h-[140px] w-[140px] border-4 border-[#ffd700] animate-[spin_20s_linear_infinite]"
+            style={{
+              background: 'radial-gradient(circle, #fffbeb 0%, #fef3c7 100%)',
+              boxShadow: '0 0 25px rgba(255, 215, 0, 0.4), inset 0 2px 10px rgba(255,255,255,0.8)'
+            }}
           >
-            <CharacterAvatar character="aimi" expression="cheer" size={92} idle={false} />
+            {/* 내부 회전 링 장식 */}
+            <span className="absolute inset-2 rounded-full border-2 border-dashed border-[#f59e0b]/40" />
           </span>
+          {/* 아이미 캐릭터 본체 - 회전하지 않도록 링 위에 absolute 배치 */}
+          <span className="absolute inset-0 flex items-center justify-center">
+            <CharacterAvatar character="aimi" expression="cheer" size={104} idle={false} />
+          </span>
+          {/* 정답 별표 뱃지 */}
           <span
-            className="answer-pop absolute -top-1 -right-1 rounded-full h-10 w-10 flex items-center justify-center text-white shadow-md"
-            style={{ background: accent }}
+            className="answer-pop absolute -top-1 -right-1 rounded-full h-11 w-11 flex items-center justify-center text-white shadow-lg border-2 border-white"
+            style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
           >
-            <Icon name={mission.reward.printable === 'certificate' ? 'star' : 'check'} size={22} filled strokeWidth={3} />
+            <Icon name="star" size={24} filled strokeWidth={3} />
           </span>
         </div>
 
-        <h2 className="t-h2 text-2xl font-black" style={{ color: accent }}>미션 완료!</h2>
-        <p className="text-lg">
-          <b>{studentName}</b>님, 참 잘했습니다!
-        </p>
+        <h2 className="t-h2 text-3xl font-extrabold tracking-tight mb-2 flex items-center gap-1.5 justify-center" style={{ color: 'var(--brand-ink)' }}>
+          🎉 미션 완료! 🎉
+        </h2>
+        <div className="inline-block bg-[color:var(--paper-2)] border px-4 py-1.5 rounded-full mt-2" style={{ borderColor: 'var(--border)' }}>
+          <p className="text-lg text-[color:var(--brand-ink)] font-semibold">
+            👑 <b className="text-xl" style={{ color: accent }}>{studentName}</b>님, 참 잘했습니다!
+          </p>
+        </div>
       </div>
     );
 
     const rewardRight = (
-      <div className="flex flex-col justify-center p-4 space-y-4 items-center md:items-start relative">
+      <div className="flex flex-col justify-center p-6 space-y-5 items-center md:items-start relative">
         <div className="absolute inset-x-0 top-0 h-0 pointer-events-none z-30" aria-hidden>
           {confetti.map((c) => (
             <span
@@ -287,23 +304,33 @@ export default function MissionStep({
           ))}
         </div>
 
+        {/* 리본 장식 완료 배지 */}
         <span
-          className="inline-flex items-center gap-1.5 rounded-[var(--r-pill)] px-4 py-2 mb-2 text-base font-bold"
-          style={{ background: accentSoft, color: accentText }}
+          className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-2 text-base font-black border-2 shadow-xs transition-transform hover:scale-105"
+          style={{
+            background: 'linear-gradient(135deg, #fff 0%, var(--paper-1) 100%)',
+            borderColor: accent,
+            color: 'var(--brand-ink)',
+            boxShadow: `0 4px 12px color-mix(in srgb, ${accent} 25%, transparent)`
+          }}
         >
-          <Icon name="star" size={18} filled /> {mission.reward.badgeLabel}
+          <span className="text-xl">✨</span> {mission.reward.badgeLabel}
         </span>
 
-        <div className="w-full space-y-3">
-          <Button
-            size="lg"
-            accent={accent}
+        <div className="w-full space-y-4">
+          <button
             onClick={handlePrint}
-            className="w-full text-lg justify-center font-bold cursor-pointer"
+            className="w-full nav-jelly-btn py-3.5 justify-center text-lg font-black flex items-center"
+            style={{
+              '--border-color': accent,
+              '--shadow-color': accentSoft,
+              background: `linear-gradient(135deg, #fff 0%, ${accentSoft} 100%)`,
+              color: 'var(--brand-ink)',
+            } as React.CSSProperties}
           >
-            <Icon name="printer" size={20} />
+            <Icon name="printer" size={22} className="mr-1.5 shrink-0" />
             {mission.reward.printable === 'certificate' ? '수료증 인쇄하기' : '활동지 인쇄하기'}
-          </Button>
+          </button>
 
           <Button
             variant="ghost"
@@ -312,7 +339,7 @@ export default function MissionStep({
               setShowReward(false);
               setTempName('');
             }}
-            className="mx-auto md:mx-0 cursor-pointer"
+            className="mx-auto md:mx-0 cursor-pointer text-sm font-semibold hover:bg-black/[0.03]"
           >
             <Icon name="refresh" size={16} /> 처음부터 다시 하기
           </Button>
