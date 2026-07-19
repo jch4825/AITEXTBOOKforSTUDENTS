@@ -137,7 +137,7 @@ export interface DragSortBlock {
   id: string;
   prompt: string;
   bins: { label: string; emoji: string }[];
-  cards: { label: string; emoji: string; bin: number }[];
+  cards: { label: string; emoji: string; bin: number; image?: string }[];
 }
 
 export interface DragBuildBlock {

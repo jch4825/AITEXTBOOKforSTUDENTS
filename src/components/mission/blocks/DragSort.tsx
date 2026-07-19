@@ -181,12 +181,20 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
                 {sortedByBin[idx].map((card, cIdx) => (
                   <div
                     key={cIdx}
-                    className="answer-pop flex items-center gap-1.5 px-3 py-2 rounded-[var(--r-sm)] text-sm font-semibold"
+                    className="answer-pop flex items-center gap-1.5 px-2.5 py-1.5 rounded-[var(--r-sm)] text-xs font-semibold"
                     style={{ background: 'var(--ok-bg)', border: '1px solid var(--ok)', color: 'var(--brand-ink)' }}
                   >
-                    <span aria-hidden>{card.emoji}</span>
-                    <span>{card.label}</span>
-                    <Icon name="check" size={14} strokeWidth={3} color="var(--ok)" className="ml-auto shrink-0" />
+                    {card.image ? (
+                      <img
+                        src={card.image}
+                        alt={card.label}
+                        className="h-6 w-6 object-contain shrink-0"
+                      />
+                    ) : (
+                      <span aria-hidden>{card.emoji}</span>
+                    )}
+                    <span className="truncate flex-1">{card.label}</span>
+                    <Icon name="check" size={12} strokeWidth={3} color="var(--ok)" className="shrink-0" />
                   </div>
                 ))}
               </div>
@@ -216,7 +224,7 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
                   onPointerMove={handlePointerMove}
                   onPointerUp={(e) => handlePointerUp(e, card.originalIdx)}
                   onClick={() => handleCardClick(card.originalIdx)}
-                  className={`card3d flex items-center gap-2 px-5 py-3 rounded-[var(--r-md)] font-bold text-base select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
+                  className={`card3d flex flex-col items-center justify-center gap-2 p-3 rounded-[var(--r-md)] font-bold text-base select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
                     ${isDragging ? 'z-50 scale-105' : ''}
                     ${isError ? 'answer-shake' : ''}
                   `}
@@ -228,10 +236,20 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
                     transform: isDragging
                       ? `translate(${dragOffset.x}px, ${dragOffset.y}px)`
                       : 'none',
+                    width: card.image ? '100px' : 'auto',
+                    minHeight: card.image ? '110px' : 'auto',
                   }}
                 >
-                  <span className="text-2xl" aria-hidden>{card.emoji}</span>
-                  <span>{card.label}</span>
+                  {card.image ? (
+                    <img
+                      src={card.image}
+                      alt={card.label}
+                      className="h-14 w-14 object-contain"
+                    />
+                  ) : (
+                    <span className="text-2xl" aria-hidden>{card.emoji}</span>
+                  )}
+                  <span className="text-xs leading-tight text-center">{card.label}</span>
                 </div>
               );
             })}
