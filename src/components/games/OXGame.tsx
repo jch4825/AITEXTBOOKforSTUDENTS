@@ -78,7 +78,7 @@ export default function OXGame({ questions, onComplete }: Props) {
 
       {/* 퀴즈 왼쪽에 이미지(토스터 이미지) 크게 넣기 */}
       {q.image && (
-        <div className="flex justify-center sm:justify-start w-full my-3">
+        <div className="flex justify-center w-full my-3">
           <img
             src={q.image}
             alt="문제 그림"
