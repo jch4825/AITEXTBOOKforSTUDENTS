@@ -5,6 +5,7 @@ import CharacterAvatar from '../CharacterAvatar';
 import Icon from '../Icon';
 import LessonSpread from './LessonSpread';
 import { getLesson } from '../../data/lessons';
+import { useSpeak } from '../../hooks/useSpeak';
 
 interface Props {
   lessonId: LessonId;
@@ -35,6 +36,7 @@ export default function EpisodeHeroSpread({
   className = '',
   isHardMode = false,
 }: Props) {
+  const { speakNow } = useSpeak();
   const lesson = getLesson(lessonId);
   const lessonNumber = lesson?.number ?? 1;
 
@@ -91,9 +93,20 @@ export default function EpisodeHeroSpread({
             </div>
 
             {/* Title */}
-            <h1 className="t-h1 leading-tight font-black text-2xl lg:text-3xl" style={{ color: accentText ?? accent }}>
-              {title}
-            </h1>
+            <div className="flex items-center justify-between gap-3 w-full">
+              <h1 className="t-h1 leading-tight font-black text-2xl lg:text-3xl" style={{ color: accentText ?? accent }}>
+                {title}
+              </h1>
+              <button
+                type="button"
+                onClick={() => speakNow(title)}
+                className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+                style={{ borderColor: accent, color: accent }}
+                title="제목 듣기"
+              >
+                <Icon name="speaker" size={16} />
+              </button>
+            </div>
 
             {goalText && <div className="w-full">{goalText}</div>}
 
@@ -191,9 +204,20 @@ export default function EpisodeHeroSpread({
           화 {lessonNumber}
         </div>
       </div>
-      <h1 className="spread-copy-title t-h1" style={{ color: accentText ?? accent }}>
-        {title}
-      </h1>
+      <div className="flex items-center justify-between gap-3 w-full mb-4">
+        <h1 className="spread-copy-title t-h1 mb-0" style={{ color: accentText ?? accent }}>
+          {title}
+        </h1>
+        <button
+          type="button"
+          onClick={() => speakNow(title)}
+          className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+          style={{ borderColor: accent, color: accent }}
+          title="제목 듣기"
+        >
+          <Icon name="speaker" size={16} />
+        </button>
+      </div>
 
       {goalText && <div className="spread-goal-slot">{goalText}</div>}
 
