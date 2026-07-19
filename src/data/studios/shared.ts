@@ -20,4 +20,4 @@ export const STUDIO_SUPPORT_PROFILES = {
   },
 } satisfies StudioDefinition['supportProfiles'];
 
-export const STUDIO_EXPRESSION_MODES = ['choice', 'aac', 'text', 'speech', 'draw'] as const;
+export const STUDIO_EXPRESSION_MODES = ['choice', 'text', 'speech', 'draw'] as const;

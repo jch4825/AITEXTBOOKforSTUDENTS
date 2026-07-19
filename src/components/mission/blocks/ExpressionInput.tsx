@@ -21,7 +21,7 @@ interface Props {
 }
 
 const MODE_LABELS: Record<GeneralizationExpressionMode, string> = {
-  choice: '카드로 고르기',
+  choice: '문장 고르기',
   aac: 'AAC 카드',
   text: '글로 쓰기',
   speech: '말로 말하기',
@@ -116,17 +116,17 @@ export default function ExpressionInput({
 
       {(activeMode === 'text' || activeMode === 'speech') && (
         <div className="flex items-center gap-2">
+          {activeMode === 'speech' && (
+            <MicButton accent={accent} onResult={(text) => onChange({ mode: activeMode, text })} />
+          )}
           <input
             value={value?.text ?? ''}
             onChange={(event) => onChange({ mode: activeMode, text: event.target.value })}
             placeholder="내 생각을 짧게 적어 보십시오"
             aria-label="내 생각"
-            className="flex-1 min-h-13 px-4 rounded-[var(--r-md)] border-2 text-lg font-semibold"
+            className="flex-1 min-w-0 min-h-13 px-4 rounded-[var(--r-md)] border-2 text-lg font-semibold"
             style={{ borderColor: accent, background: 'var(--paper-0)' }}
           />
-          {activeMode === 'speech' && (
-            <MicButton accent={accent} onResult={(text) => onChange({ mode: activeMode, text })} />
-          )}
         </div>
       )}
 

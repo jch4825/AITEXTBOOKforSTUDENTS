@@ -12,9 +12,10 @@ for (const id of ['m5-ambiguous-problem', 'm5-clarify-request', 'm5-changing-coo
 for (const lessonId of ['m5-l1', 'm5-l6', 'm5-l11']) {
   if (!source.includes(`lessonId: '${lessonId}'`)) throw new Error(`missing lesson mapping: ${lessonId}`);
 }
-for (const mode of ['choice', 'aac', 'text', 'speech', 'draw']) {
+for (const mode of ['choice', 'text', 'speech', 'draw']) {
   if (!sharedSource.includes(`'${mode}'`)) throw new Error(`missing expression mode: ${mode}`);
 }
+if (sharedSource.includes("'aac'")) throw new Error('studio expression modes must not expose AAC without dedicated cards');
 for (const artifact of ['action-card', 'repair-card', 'visual-plan']) {
   if (!source.includes(`kind: '${artifact}'`)) throw new Error(`missing artifact kind: ${artifact}`);
 }

@@ -23,7 +23,7 @@ const CRITERIA = [
   '조건이 달라졌을 때 방법을 조정했습니다.',
 ];
 
-const NEXT_MODES: ExpressionMode[] = ['choice', 'aac', 'text', 'speech'];
+const NEXT_MODES: ExpressionMode[] = ['choice', 'text', 'speech'];
 
 function expressionComplete(value?: StudioExpression): boolean {
   if (!value) return false;
