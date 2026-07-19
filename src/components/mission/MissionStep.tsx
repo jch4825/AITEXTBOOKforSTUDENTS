@@ -29,6 +29,7 @@ interface Props {
   accent: string;
   accentSoft: string;
   accentText: string;
+  wrapUpText?: string;
 }
 
 export default function MissionStep({
@@ -39,6 +40,7 @@ export default function MissionStep({
   accent,
   accentSoft,
   accentText,
+  wrapUpText,
 }: Props) {
   const { speak, speakNow } = useSpeak();
   const {
@@ -329,7 +331,7 @@ export default function MissionStep({
     );
 
     const rewardRight = (
-      <div className="flex flex-col justify-center p-6 items-center relative h-full min-h-[260px]">
+      <div className="flex flex-col justify-center p-6 items-center md:items-start relative h-full min-h-[260px] space-y-4">
         <div className="absolute inset-x-0 top-0 h-0 pointer-events-none z-30" aria-hidden>
           {confetti.map((c) => (
             <span
@@ -348,14 +350,45 @@ export default function MissionStep({
           ))}
         </div>
 
-        {/* 대형 축하 3D 스타일 트로피 카드 장식 */}
-        <div className="flex flex-col items-center gap-4 bg-white/50 border border-dashed rounded-3xl p-6 shadow-xs max-w-xs w-full text-center">
-          <span className="text-7xl animate-[bounce_2s_infinite]" role="img" aria-label="트로피">🏆</span>
-          <div className="space-y-1">
-            <span className="text-lg font-black" style={{ color: accent }}>참 멋집니다!</span>
-            <p className="text-xs text-[color:var(--muted)]">모든 문제를 스스로 해결하고 미션을 완수했습니다. 훌륭한 탐험가네요!</p>
+        {wrapUpText ? (
+          <div className="w-full space-y-3">
+            <div className="flex items-center gap-2">
+              <h3 className="t-h3 text-xl font-extrabold flex-1" style={{ color: 'var(--brand-ink)' }}>
+                📖 오늘 배운 것
+              </h3>
+              <button
+                type="button"
+                onClick={() => speakNow(wrapUpText)}
+                aria-label="오늘 배운 것 들려주기"
+                className="shrink-0 h-10 w-10 rounded-full border-2 flex items-center justify-center cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                style={{ borderColor: accent, color: accent, background: 'var(--paper-0)' }}
+              >
+                <Icon name="speaker" size={20} />
+              </button>
+            </div>
+
+            <div
+              className="rounded-[var(--r-md)] p-5 border border-l-4 leading-relaxed text-base font-bold shadow-xs"
+              style={{
+                borderColor: `color-mix(in srgb, ${accent} 15%, var(--line))`,
+                borderLeftColor: accent,
+                background: 'var(--paper-1)',
+                color: 'var(--brand-ink)'
+              }}
+            >
+              {wrapUpText}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* 대형 축하 3D 스타일 트로피 카드 장식 */
+          <div className="flex flex-col items-center gap-4 bg-white/50 border border-dashed rounded-3xl p-6 shadow-xs max-w-xs w-full text-center">
+            <span className="text-7xl animate-[bounce_2s_infinite]" role="img" aria-label="트로피">🏆</span>
+            <div className="space-y-1">
+              <span className="text-lg font-black" style={{ color: accent }}>참 멋집니다!</span>
+              <p className="text-xs text-[color:var(--muted)]">모든 문제를 스스로 해결하고 미션을 완수했습니다. 훌륭한 탐험가네요!</p>
+            </div>
+          </div>
+        )}
       </div>
     );
 

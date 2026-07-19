@@ -238,16 +238,20 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
 
   function renderMission() {
     const data = currentStep.data as unknown as MissionContent;
+    const wrapUpText = difficulty === 'easy' ? lesson.wrapUpEasy : lesson.wrapUpNormal;
     return (
-      <MissionStep
-        mission={data}
-        lessonId={lesson.id}
-        lessonTitle={lesson.title}
-        moduleTitle={mod.title}
-        accent={theme.accent}
-        accentSoft={theme.accentSoft}
-        accentText={theme.accentText}
-      />
+      <span key={`mission-${step}`}>
+        <MissionStep
+          mission={data}
+          lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          moduleTitle={mod.title}
+          accent={theme.accent}
+          accentSoft={theme.accentSoft}
+          accentText={theme.accentText}
+          wrapUpText={wrapUpText}
+        />
+      </span>
     );
   }
 
