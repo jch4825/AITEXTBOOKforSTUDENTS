@@ -114,7 +114,14 @@ export default function StudioExperience({
           <h2 className={isTransferStage ? "mt-1 text-3xl font-extrabold" : "mt-1 text-xl font-extrabold"} style={{ color: 'var(--brand-ink)' }}>
             {state.stage === 'transfer' ? definition.transfer.title : definition.encounter.title}
           </h2>
-          <p className={isTransferStage ? "mt-4 leading-relaxed text-xl font-extrabold text-[color:var(--brand-ink)]" : "mt-3 leading-relaxed text-sm font-semibold text-[color:var(--brand-ink)]"}>{contextDescription}</p>
+          <p
+            className={isTransferStage ? "mt-4 leading-relaxed text-xl font-extrabold text-[color:var(--brand-ink)]" : "mt-3 leading-relaxed text-sm font-semibold text-[color:var(--brand-ink)]"}
+            style={isTransferStage ? {
+              textShadow: '3px 3px 0 #fff, -3px 3px 0 #fff, 3px -3px 0 #fff, -3px -3px 0 #fff, 3px 0px 0 #fff, -3px 0px 0 #fff, 0px 3px 0 #fff, 0px -3px 0 #fff'
+            } : undefined}
+          >
+            {contextDescription}
+          </p>
         </div>
 
         {contextStimuli?.length ? (
