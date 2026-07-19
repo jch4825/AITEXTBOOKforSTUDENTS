@@ -30,7 +30,7 @@ export const M1_LESSONS: LessonContent[] = [
             {
               question: '핸드폰의 음성비서(시리, 빅스비)는 AI입니까?',
               answer: 'O',
-              feedback: '맞습니다! AI가 우리 말을 알아듣고 답해 주십시오.',
+              feedback: '맞습니다! AI가 우리 말을 알아듣고 대답해 줍니다.',
             },
             {
               question: '냉장고는 AI입니까?',
@@ -149,7 +149,7 @@ export const M1_LESSONS: LessonContent[] = [
     ],
     wrapUpEasy: '그냥 기계는 정해진 일만 합니다. AI는 말을 알아듣고 대답합니다.',
     wrapUpNormal: '보통 기계는 정해진 일만 반복하지만, AI는 우리 질문을 알아듣고 스스로 답을 만듭니다.',
-    bodyEasy: '그냥 기계는 정해진 일만 합니다. AI는 우리 말을 알아듣고 답해 주십시오.',
+    bodyEasy: '그냥 기계는 정해진 일만 합니다. AI는 우리 말을 알아듣고 대답해 줍니다.',
     bodyNormal:
       '보통 기계는 미리 정해진 일만 반복합니다. 하지만 AI는 우리가 하는 질문을 알아듣고 스스로 답을 만들어줍니다.',
     steps: [
@@ -1044,7 +1044,7 @@ export const M1_LESSONS: LessonContent[] = [
       '[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.',
     ],
     wrapUpEasy: '오늘 AI랑 이야기해봤습니다. 또박또박 물어보면 됩니다.',
-    wrapUpNormal: '오늘 AI랑 진짜로 이야기해봤습니다. 궁금한 걸 또박또박 물어보면 AI가 대답해 주십시오.',
+    wrapUpNormal: '오늘 AI랑 진짜로 이야기해봤습니다. 궁금한 걸 또박또박 물어보면 AI가 대답해 줍니다.',
     bodyEasy: 'AI랑 이야기해본 적 있습니까? 오늘은 짧게 대화해 보십시오.',
     bodyNormal:
       'AI랑 이야기해본 적 있습니까? 오늘은 짧은 대화를 해보면서 AI가 어떻게 답하는지 느껴봅니다.',
