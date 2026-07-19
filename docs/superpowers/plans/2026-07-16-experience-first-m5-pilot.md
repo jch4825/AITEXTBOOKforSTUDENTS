@@ -14,7 +14,7 @@
 - 이번 구현 범위는 **기반 + 5단원 파일럿**이다. 새 스튜디오는 `m5-l1`, `m5-l6`, `m5-l11` 세 개만 학생에게 노출한다.
 - 68차시 역할표는 지금 모두 등록한다: 스튜디오 18개, 지원 차시 44개, 단원 마무리 6개. 단, M5 외 스튜디오는 이후 정의가 생길 때까지 기존 차시 화면으로 렌더링한다.
 - 기존 차시 데이터, 기존 일반화 기록 `ai-students-generalization-v1`, 기존 진도와 설정을 삭제하거나 자동 변환하지 않는다.
-- 지원 수준의 학생용 표기는 오직 `충분한 지원`, `약한 지원`, `도전적`을 사용한다. 내부 저장값 `easy | normal | hard`는 하위 호환을 위해 유지한다.
+- 지원 수준의 학생용 표기는 오직 `충분한 지원`, `보통`, `도전적`을 사용한다. 내부 저장값 `easy | normal | hard`는 하위 호환을 위해 유지한다.
 - 스튜디오 공통 단계는 `encounter → first-attempt → condition-change → ai-compare → decision → artifact → transfer → complete` 순서를 벗어나지 않는다.
 - AI 의견 판단값은 `accept | modify | reject`, AI 출처는 `prepared | live`로 고정한다. 파일럿에서는 `prepared`만 사용한다.
 - 학생 표현 통로는 `choice | aac | text | speech | draw`를 지원하되 모든 차시에서 모든 통로를 강제하지 않는다.
@@ -418,7 +418,7 @@ const toggle = fs.readFileSync('src/components/controls/DifficultyToggle.tsx', '
 const support = fs.readFileSync('src/features/studio/supportLevel.ts', 'utf8');
 const themes = fs.readFileSync('src/utils/moduleThemes.ts', 'utf8');
 const css = fs.readFileSync('src/index.css', 'utf8');
-for (const label of ['충분한 지원', '약한 지원', '도전적']) {
+for (const label of ['충분한 지원', '보통', '도전적']) {
   if (!toggle.includes(label) && !support.includes(label)) throw new Error(`missing support label: ${label}`);
 }
 for (const oldLabel of ['도움 충분히', '기본 도움', '도전하기']) {
@@ -455,7 +455,7 @@ import type { SupportLevel } from './types';
 
 export const SUPPORT_LABELS: Record<SupportLevel, string> = {
   full: '충분한 지원',
-  light: '약한 지원',
+  light: '보통',
   challenge: '도전적',
 };
 
@@ -477,7 +477,7 @@ export const SUPPORT_TO_DIFFICULTY: Record<SupportLevel, Difficulty> = {
 ```ts
 const LABEL: Record<Difficulty, string> = {
   easy: '충분한 지원',
-  normal: '약한 지원',
+  normal: '보통',
   hard: '도전적',
 };
 ```
@@ -897,7 +897,7 @@ interface Props {
 `SupportSelector`는 `radiogroup`과 세 개의 `radio` 버튼을 사용한다. 설명 문구는 다음으로 고정한다.
 
 - `충분한 지원`: “중요한 정보를 줄여서 보고, 선택지를 적게 받아요.”
-- `약한 지원`: “핵심 힌트를 받고 내 방법을 정해요.”
+- `보통`: “핵심 힌트를 받고 내 방법을 정해요.”
 - `도전적`: “여러 조건과 AI 의견의 한계까지 비교해요.”
 
 선택 변경은 기존 전역 난이도 값을 바꾸지 않고 현재 스튜디오 세션에만 적용한다. 최초값만 전역 난이도에서 매핑한다.
@@ -996,7 +996,7 @@ const STAGE_LABELS: Record<StudioStage, string> = {
 | 지원 수준 | 기존 자료의 재배치 | 제시 방식 |
 |---|---|---|
 | 충분한 지원 | `lesson.bodyEasy`, `hard.goal.easy` | 한 문단, 핵심어 2개, 읽기 버튼 |
-| 약한 지원 | `lesson.bodyNormal`, `hard.goal.normal`, `hard.method` 앞 2개 | 한 문단, 단계 힌트 2개 |
+| 보통 | `lesson.bodyNormal`, `hard.goal.normal`, `hard.method` 앞 2개 | 한 문단, 단계 힌트 2개 |
 | 도전적 | `hard.goal.hard`, `hard.concept`, `hard.terms`, `hard.method`, `hard.limits` | 개념·용어·한계 접이식 카드 |
 
 어려움 콘텐츠가 없으면 `lesson.bodyNormal`과 현재 차시 목표로 안전하게 폴백한다. 지원 수준을 바꾸면 같은 장면에서 설명의 양과 깊이가 바뀌지만 첫 선택 데이터는 지우지 않는다. 설명을 열었을 때 `supportModesUsed`에 `explanation-full`, `explanation-light`, `explanation-challenge` 중 하나를 기록한다.
@@ -1390,7 +1390,7 @@ console.log('M5 pilot contract: all checks passed');
 1. 파일럿 목적과 68차시/18개 핵심 경험 관계.
 2. M5 핵심 경험 3개와 지원 차시 연결표.
 3. 8단계 수업 흐름과 예상 시간 15~20분.
-4. `충분한 지원 / 약한 지원 / 도전적` 사용 기준과 수업 중 변경 원칙.
+4. `충분한 지원 / 보통 / 도전적` 사용 기준과 수업 중 변경 원칙.
 5. 과정중심평가 네 기준과 “선택 유지도 타당하면 성공” 원칙.
 6. 브라우저 저장 로직, 기본 꺼짐, 같은 브라우저·프로필에서만 보인다는 한계.
 7. 저장 항목/미저장 항목/학생 별칭 운용.

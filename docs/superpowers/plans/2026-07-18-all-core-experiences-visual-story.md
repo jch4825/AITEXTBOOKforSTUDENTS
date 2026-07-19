@@ -15,7 +15,7 @@
 - Use four story scenes: person/place, concrete life problem, attempt and comparison, safe stable ending.
 - Keep scene images separate from dialogue and preserve the existing left-story/right-knowledge spread.
 - Use formal Korean student-facing endings except natural character dialogue.
-- Use the labels `충분한 지원`, `약한 지원`, and `도전적` only.
+- Use the labels `충분한 지원`, `보통`, and `도전적` only.
 - TTS remains manually triggered and never auto-starts.
 - Every generated image is a separate 16:9 WebP project asset without text, speech bubbles, UI, logos, or watermarks.
 - Verify desktop first, plus 390px viewport and 125% text size.
@@ -173,4 +173,3 @@
 - [ ] **Step 3: Verify all four scenes at 390px viewport and 125% text for representative short and long story copies.**
 - [ ] **Step 4: Review the 17 stories for repeated plots, single-answer moralizing, missing perspective sentences, unsafe advice, and objective drift; correct every identified issue.**
 - [ ] **Step 5: Run the full verification commands again and commit `test: verify complete visual story rollout`.**
-

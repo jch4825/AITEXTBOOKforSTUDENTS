@@ -15,7 +15,7 @@
 - M3 studios are `m3-l1`, `m3-l5`, `m3-l9`; M4 studios are `m4-l1`, `m4-l5`, `m4-l10`; M6 studios are `m6-l1`, `m6-l4`, `m6-l11`.
 - Every new AI contribution uses `source: 'prepared'` and must not imply a live AI call.
 - Prepared speech never auto-plays. Camera and microphone permission are not required.
-- Keep the support labels exactly `충분한 지원`, `약한 지원`, `도전적`.
+- Keep the support labels exactly `충분한 지원`, `보통`, `도전적`.
 - Reuse existing lesson images under `/AITEXTBOOKforSTUDENTS/lessons/<lessonId>.webp` and supply Korean alt text and captions.
 - Preserve UTF-8 Korean text and strict TypeScript.
 - Do not modify the `StudioEvidenceV2` storage schema.
@@ -359,4 +359,3 @@ git log --oneline --decorate -8
 ```
 
 Expected: clean tracked worktree with only intentional commits.
-

@@ -9,7 +9,7 @@ export const STORAGE_KEYS = {
 const DEFAULT_PROGRESS: ProgressState = { completedLessons: [] };
 
 const DEFAULT_SETTINGS: SettingsState = {
-  difficulty: 'hard',   // 하향식 교수 흐름: 어려움에서 시작해 보통→쉬움으로 내린다 (spec §2)
+  difficulty: 'normal', // 새 사용자는 보통 지원 수준으로 시작한다.
   fontSize: 'normal',
   ttsEnabled: true,
 };

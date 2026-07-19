@@ -3,7 +3,7 @@ import type { SupportLevel } from './types';
 
 export const SUPPORT_LABELS: Record<SupportLevel, string> = {
   full: '충분한 지원',
-  light: '약한 지원',
+  light: '보통',
   challenge: '도전적',
 };
 
