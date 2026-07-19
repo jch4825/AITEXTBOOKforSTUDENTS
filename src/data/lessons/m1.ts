@@ -191,10 +191,10 @@ export const M1_LESSONS: LessonContent[] = [
                     { label: '인공지능', emoji: '🤖' }
                   ],
                   cards: [
-                    { label: '선풍기', emoji: '🌀', bin: 0, image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/fan.webp' },
-                    { label: '음성 비서', emoji: '🗣️', bin: 1, image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/ai_speaker.webp' },
-                    { label: '전동칫솔', emoji: '🪥', bin: 0, image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/alarm_clock.webp' },
-                    { label: '번역 앱', emoji: '🌐', bin: 1, image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/translate.webp' }
+                    { label: '선풍기', emoji: '🌀', bin: 0 },
+                    { label: '음성 비서', emoji: '🗣️', bin: 1 },
+                    { label: '전동칫솔', emoji: '🪥', bin: 0 },
+                    { label: '번역 앱', emoji: '🌐', bin: 1 }
                   ]
                 }
               ]
