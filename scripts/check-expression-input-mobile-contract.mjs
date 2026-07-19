@@ -25,7 +25,12 @@ const responseBlock = input.slice(
   input.indexOf("(activeMode === 'text' || activeMode === 'speech')"),
   input.indexOf("activeMode === 'draw'"),
 );
-if (responseBlock.indexOf('<MicButton') > responseBlock.indexOf('<input')) {
+const micIndex = responseBlock.indexOf('<MicButton');
+const inputIndex = responseBlock.indexOf('<input');
+if (micIndex === -1) {
+  throw new Error('말로 말하기에 마이크 버튼이 필요합니다.');
+}
+if (micIndex > inputIndex) {
   throw new Error('말로 말하기의 마이크 버튼은 글 입력칸 왼쪽에 있어야 합니다.');
 }
 
