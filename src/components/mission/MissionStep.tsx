@@ -244,11 +244,11 @@ export default function MissionStep({
   // 2. 보상 화면 — 앱 공통 보상 문법(D4 도장 메달리온 + 1회성 모션)으로.
   if (showReward) {
     const rewardLeft = (
-      <div className="flex flex-col items-center justify-center text-center p-6 bg-gradient-to-b from-white to-[color:var(--paper-1)] rounded-2xl border shadow-sm relative overflow-hidden">
+      <div className="flex flex-col items-center justify-center text-center p-6 bg-gradient-to-b from-white to-[color:var(--paper-1)] rounded-2xl border shadow-sm relative overflow-hidden space-y-4">
         {/* 반짝이는 배경 오라 링 */}
         <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)]" />
         
-        <div className="relative mb-6" aria-hidden>
+        <div className="relative mb-2" aria-hidden>
           {/* 황금빛 테두리 회전 효과링 */}
           <span
             className="stamp-in inline-flex items-center justify-center rounded-full h-[140px] w-[140px] border-4 border-[#ffd700] animate-[spin_20s_linear_infinite]"
@@ -273,51 +273,19 @@ export default function MissionStep({
           </span>
         </div>
 
-        <h2 className="t-h2 text-3xl font-extrabold tracking-tight mb-2 flex items-center gap-1.5 justify-center" style={{ color: 'var(--brand-ink)' }}>
-          🎉 미션 완료! 🎉
-        </h2>
-        <div className="inline-block bg-[color:var(--paper-2)] border px-4 py-1.5 rounded-full mt-2" style={{ borderColor: 'var(--border)' }}>
-          <p className="text-lg text-[color:var(--brand-ink)] font-semibold">
-            👑 <b className="text-xl" style={{ color: accent }}>{studentName}</b>님, 참 잘했습니다!
-          </p>
-        </div>
-      </div>
-    );
-
-    const rewardRight = (
-      <div className="flex flex-col justify-center p-6 space-y-5 items-center md:items-start relative">
-        <div className="absolute inset-x-0 top-0 h-0 pointer-events-none z-30" aria-hidden>
-          {confetti.map((c) => (
-            <span
-              key={c.id}
-              className="confetti-piece absolute"
-              style={{
-                left: c.left,
-                top: '-12px',
-                width: c.size,
-                height: c.size,
-                background: c.color,
-                borderRadius: c.id % 2 === 0 ? '50%' : '2px',
-                animationDelay: c.delay,
-              }}
-            />
-          ))}
+        <div className="space-y-1">
+          <h2 className="t-h2 text-3xl font-extrabold tracking-tight flex items-center gap-1.5 justify-center" style={{ color: 'var(--brand-ink)' }}>
+            🎉 미션 완료! 🎉
+          </h2>
+          <div className="inline-block bg-[color:var(--paper-2)] border px-4 py-1.5 rounded-full mt-2" style={{ borderColor: 'var(--border)' }}>
+            <p className="text-lg text-[color:var(--brand-ink)] font-semibold">
+              👑 <b className="text-xl" style={{ color: accent }}>{studentName}</b>님, 참 잘했습니다!
+            </p>
+          </div>
         </div>
 
-        {/* 리본 장식 완료 배지 */}
-        <span
-          className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 mb-2 text-base font-black border-2 shadow-xs transition-transform hover:scale-105"
-          style={{
-            background: 'linear-gradient(135deg, #fff 0%, var(--paper-1) 100%)',
-            borderColor: accent,
-            color: 'var(--brand-ink)',
-            boxShadow: `0 4px 12px color-mix(in srgb, ${accent} 25%, transparent)`
-          }}
-        >
-          <span className="text-xl">✨</span> {mission.reward.badgeLabel}
-        </span>
-
-        <div className="w-full space-y-4">
+        {/* 오른쪽에서 왼쪽 아래로 이사 온 기능용 버튼들 */}
+        <div className="w-full pt-4 space-y-3 max-w-xs z-10">
           <button
             onClick={handlePrint}
             className="w-full nav-jelly-btn py-3.5 justify-center text-lg font-black flex items-center"
@@ -339,11 +307,46 @@ export default function MissionStep({
               setShowReward(false);
               setTempName('');
             }}
-            className="mx-auto md:mx-0 cursor-pointer text-sm font-semibold hover:bg-black/[0.03]"
+            className="mx-auto cursor-pointer text-sm font-semibold hover:bg-black/[0.03]"
           >
             <Icon name="refresh" size={16} /> 처음부터 다시 하기
           </Button>
         </div>
+      </div>
+    );
+
+    const rewardRight = (
+      <div className="flex flex-col justify-center p-6 items-center relative h-full min-h-[220px]">
+        <div className="absolute inset-x-0 top-0 h-0 pointer-events-none z-30" aria-hidden>
+          {confetti.map((c) => (
+            <span
+              key={c.id}
+              className="confetti-piece absolute"
+              style={{
+                left: c.left,
+                top: '-12px',
+                width: c.size,
+                height: c.size,
+                background: c.color,
+                borderRadius: c.id % 2 === 0 ? '50%' : '2px',
+                animationDelay: c.delay,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* 리본 장식 완료 배지 */}
+        <span
+          className="inline-flex items-center gap-2 rounded-full px-6 py-4 text-lg font-black border-2 shadow-md transition-transform hover:scale-105"
+          style={{
+            background: 'linear-gradient(135deg, #fff 0%, var(--paper-1) 100%)',
+            borderColor: accent,
+            color: 'var(--brand-ink)',
+            boxShadow: `0 8px 24px color-mix(in srgb, ${accent} 25%, transparent)`
+          }}
+        >
+          <span className="text-2xl">✨</span> {mission.reward.badgeLabel}
+        </span>
       </div>
     );
 
