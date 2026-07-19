@@ -6,7 +6,7 @@ import LessonSpread from './LessonSpread';
 
 interface Props {
   kicker: string;
-  title: string;
+  title: ReactNode;
   accent: string;
   character?: {
     id: CharacterId;

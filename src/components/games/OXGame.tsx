@@ -56,6 +56,21 @@ export default function OXGame({ questions, onComplete }: Props) {
     speakNow(q.question);
   }
 
+  const titleNode = (
+    <div className="flex items-center justify-between gap-3 w-full">
+      <span className="flex-1">{q.question}</span>
+      <button
+        type="button"
+        onClick={() => speakNow(q.question)}
+        className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+        style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
+        title="질문 듣기"
+      >
+        <Icon name="speaker" size={16} />
+      </button>
+    </div>
+  );
+
   const questionNode = (
     <div className="space-y-4">
       {/* Progress Dots */}
@@ -87,20 +102,6 @@ export default function OXGame({ questions, onComplete }: Props) {
           />
         </div>
       )}
-
-      {/* Problem Speak Button */}
-      <button
-        type="button"
-        onClick={() => speakNow(q.question)}
-        aria-label="문제 다시 들려주기"
-        className="btn btn-secondary px-3 py-1.5 text-xs inline-flex items-center gap-1 cursor-pointer"
-        style={{
-          borderColor: 'var(--accent)',
-          color: 'var(--accent)',
-        }}
-      >
-        <Icon name="speaker" size={16} /> 다시 들려줘
-      </button>
     </div>
   );
 
@@ -115,7 +116,7 @@ export default function OXGame({ questions, onComplete }: Props) {
   return (
     <ActivitySpread
       kicker="같이 풀어봅니다!"
-      title={q.question}
+      title={titleNode}
       accent="var(--accent)"
       character={characterReaction}
       questionNode={questionNode}
