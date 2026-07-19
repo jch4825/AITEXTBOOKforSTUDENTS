@@ -151,7 +151,7 @@ export const M1_LESSONS: LessonContent[] = [
     wrapUpNormal: '보통 기계는 정해진 일만 반복하지만, AI는 우리 질문을 알아듣고 스스로 답을 만듭니다.',
     bodyEasy: '그냥 기계는 정해진 일만 합니다. AI는 우리 말을 알아듣고 대답해 줍니다.',
     bodyNormal:
-      '보통 기계는 미리 정해진 일만 반복합니다. 하지만 AI는 우리가 하는 질문을 알아듣고 스스로 답을 만들어줍니다.',
+      '보통 기계는 미리 정해진 대로 똑같이 움직입니다. 하지만 AI는 우리가 하는 질문을 알아듣고 스스로 답을 만들어줍니다.',
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['기계', '자동화', '학습', '자료'], imagePlaceholder: true } },
       {
