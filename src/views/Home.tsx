@@ -394,7 +394,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
 
           {/* Right Column (Hero Card with cover image) */}
           <div className="lg:col-span-5 flex justify-center">
-            <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white/60 transform rotate-1 hover:rotate-0 transition-transform duration-300 group">
+            <div className="relative w-full max-w-[420px] aspect-[7/10] rounded-3xl overflow-hidden shadow-2xl border-4 border-white/60 transform rotate-1 hover:rotate-0 transition-transform duration-300 group">
               {/* Cover Image from public/cover.webp */}
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"

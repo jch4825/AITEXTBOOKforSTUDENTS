@@ -10,7 +10,7 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
     ],
     terms: [
       {
-        term: '인공지능(AI)',
+        term: '생성형 인공지능(AI)',
         definition: '사람처럼 배우고 답할 수 있게 만든 컴퓨터 프로그램.',
         example: '휴대폰에게 "내일 날씨 알려 주십시오"라고 말하면 AI가 답합니다.',
       },
@@ -300,7 +300,7 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
     ],
     terms: [
       {
-        term: '인공지능(AI)',
+        term: '생성형 인공지능(AI)',
         definition: '사람처럼 배우고 답할 수 있게 만든 컴퓨터 프로그램.',
         example: '휴대폰에게 "내일 날씨 알려 주십시오"라고 말하면 AI가 답합니다.',
       },

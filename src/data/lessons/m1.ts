@@ -20,7 +20,7 @@ export const M1_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI는 자료를 보고 답을 만드는 컴퓨터 기술입니다.',
     wrapUpNormal: 'AI는 자료를 보고 답이나 추천을 만듭니다. 중요한 내용은 사람이 다시 확인합니다.',
     bodyEasy: 'AI는 사람이 만든 컴퓨터 기술입니다.',
-    bodyNormal: 'AI는 글·말·사진 같은 자료를 보고 답이나 추천을 만드는 컴퓨터 기술입니다.',
+    bodyNormal: 'AI는 글을 읽거나, 말을 듣거나, 사진 또는 영상을 이해할 수 있습니다.',
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['인공지능', '컴퓨터', '프로그램', '자료', '음성 비서', '번역', '앱', '도구'], imagePlaceholder: true } },
       {

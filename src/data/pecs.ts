@@ -8,6 +8,7 @@ export const PECS_LABELS: Record<string, string> = {
   cat: '고양이', rabbit: '토끼', elephant: '코끼리', dinosaur: '공룡', turtle: '거북이',
   book: '책', pencil: '연필', eraser: '지우개', apple: '사과', bread: '식빵', milk: '우유',
   cheese: '치즈', ham: '햄', chocolate: '초콜릿', ramen: '라면', pot: '냄비', toaster: '토스터',
+  aircon: '에어컨',
   knife: '칼', lettuce: '상추', bus: '버스', umbrella: '우산', cloud: '구름', clothes: '옷',
   sunglasses: '선글라스', soccer_ball: '축구공', key: '열쇠', light_switch: '전등 스위치',
   cheetah: '치타', eagle: '독수리', fan: '선풍기', hand_fan: '부채', tube: '튜브',
@@ -36,7 +37,7 @@ export const PECS_COMMON: string[] = ['toilet', 'faucet', 'paper_cup', 'snack'];
 
 // 모듈별 관련 단어 (초안 — 교사 피드백으로 조정)
 export const PECS_BY_MODULE: Record<ModuleId, string[]> = {
-  m1: ['smartphone', 'ai_speaker', 'ai_aimi', 'refrigerator', 'cat', 'rabbit', 'elephant', 'dinosaur', 'alarm_clock', 'window', 'tap_screen'],
+  m1: ['smartphone', 'ai_speaker', 'ai_aimi', 'refrigerator', 'cat', 'rabbit', 'elephant', 'dinosaur', 'alarm_clock', 'window', 'tap_screen', 'toaster', 'aircon'],
   m2: [
     'ai_aimi', 'smartphone', 'book', 'pencil', 'sunglasses', 'unclear_speech',
     'vague_request', 'ask_again', 'easy_explain', 'short_question', 'example_request',

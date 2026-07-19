@@ -45,12 +45,6 @@ export default function TeacherView({ onExit }: Props) {
   }
 
   return (
-    <TeacherHub
-      onExit={onExit}
-      onLogout={() => {
-        logout();
-        setActive(false);
-      }}
-    />
+    <TeacherHub onExit={onExit} />
   );
 }

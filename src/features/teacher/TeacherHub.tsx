@@ -11,7 +11,6 @@ import { loadTeacherRecordingSettings } from './recordingSettings';
 
 interface Props {
   onExit: () => void;
-  onLogout: () => void;
 }
 
 const TEACHER_TABS = [
@@ -25,7 +24,14 @@ const TEACHER_TABS = [
 
 type TeacherTab = typeof TEACHER_TABS[number];
 
-export default function TeacherHub({ onExit, onLogout }: Props) {
+export default function TeacherHub({ onExit }: Props) {
+  function handleReset() {
+    const yes = window.confirm('기존에 브라우저에 저장되었던 API 키 및 진행 상황이 모두 초기화됩니다. 계속하시겠습니까?');
+    if (yes) {
+      localStorage.clear();
+      window.location.href = window.location.origin + window.location.pathname;
+    }
+  }
   const initialSettings = loadTeacherRecordingSettings();
   const [activeTab, setActiveTab] = useState<TeacherTab>('운영 안내');
   const [settings, setSettings] = useState<TeacherRecordingSettings>(initialSettings);
@@ -55,7 +61,7 @@ export default function TeacherHub({ onExit, onLogout }: Props) {
         </div>
         <div className="flex gap-2">
           <Button variant="secondary" onClick={onExit}>학생 화면으로</Button>
-          <button onClick={onLogout} className="btn border-red-300 bg-[color:var(--paper-0)] px-4 text-red-700">로그아웃</button>
+          <button onClick={handleReset} className="btn border-red-300 bg-[color:var(--paper-0)] px-4 text-red-700">초기화</button>
         </div>
       </header>
 

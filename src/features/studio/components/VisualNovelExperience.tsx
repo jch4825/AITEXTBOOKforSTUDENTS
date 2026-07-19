@@ -100,7 +100,7 @@ export default function VisualNovelExperience({
         <strong>학습목표</strong>
         <p>{story.objective}</p>
       </div>
-      <h3>이야기와 함께 알아봅니다</h3>
+      <h3>오늘 배울 개념</h3>
       <div className="visual-novel-knowledge-list">
         {story.knowledge.map((knowledge, index) => (
           <article

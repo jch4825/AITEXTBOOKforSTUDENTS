@@ -105,8 +105,9 @@ for (const moduleId of selectedModules) {
     }
     const knowledgeWindow = arrayWindow(storyWindow, 'knowledge: [');
     const knowledgeTitles = knowledgeWindow.match(/title: '/g) ?? [];
-    if (knowledgeTitles.length !== 3) {
-      throw new Error(`${lessonId} visual story must have exactly three knowledge steps`);
+    const expectedCount = lessonId === 'm1-l1' ? 2 : 3;
+    if (knowledgeTitles.length !== expectedCount) {
+      throw new Error(`${lessonId} visual story must have exactly ${expectedCount} knowledge steps`);
     }
   }
 }
@@ -122,16 +123,16 @@ if (types.includes('speaker: string') || m1Studio.includes('speaker:')) {
   throw new Error('visual story must express speakers in the story text instead of a separate label field');
 }
 for (const token of [
-  "title: '내 자리가 어디일까?'",
+  "title: '아이미와의 첫 만남'",
   "objective: 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.'",
   "imageSrc: '/AITEXTBOOKforSTUDENTS/lessons/m1-l1-vn-01.webp'",
   "imageSrc: '/AITEXTBOOKforSTUDENTS/lessons/m1-l1-vn-04.webp'",
-  '오늘은 진우가 처음으로 학교에 등교하는 날입니다.',
-  '나는 너를 도와줄 AI(에이아이) 아이미라고 해.',
-  '창가 쪽 자리가 좋겠어.',
-  '내 자리가 아닌 것 같은데?',
-  '아이미가 잘못 대답한 거야.',
-  '아이미를 잘 사용하려면 사용법을 알고 있어야 해.',
+  '진우는 설레는 마음으로 학교에 처음 등교했습니다.',
+  '오늘부터 너의 학교 생활을 도와줄 인공지능 아이미야.',
+  '인공지능이 무슨 뜻이야?',
+  '인간의 지능을 모방한 프로그램입니다.',
+  '인공지능은 컴퓨터가 사람처럼 생각하고, 배우고, 문제를 해결하도록 만든 기술이란다.',
+  '이해하기 어려울 때는 선생님이나 부모님께 도움을 받아',
 ]) {
   if (!m1Studio.includes(token)) throw new Error(`missing m1-l1 social story data: ${token}`);
 }
@@ -150,7 +151,7 @@ for (const token of [
   'aria-label="생활 장면 이야기"',
   'className="visual-novel-image-frame"',
   '학습목표',
-  '이야기와 함께 알아봅니다',
+  '오늘 배울 개념',
   '대사 듣기',
   'aria-pressed',
 ]) {
