@@ -176,7 +176,7 @@ export const M1_LESSONS: LessonContent[] = [
       {
         kind: 'mission',
         data: {
-          title: '기계·AI 분류 공장',
+          title: '기계와 AI 구분하기',
           chapters: [
             {
               title: '1장: 기계일까, AI일까?',
