@@ -96,23 +96,25 @@ export default function StudioExperience({
     );
   }
 
+  const isTransferStage = definition.lessonId === 'm1-l1' && state.stage === 'transfer';
+
   const left = (
     <div
       className="p-5 md:p-7 rounded-2xl flex flex-col justify-between h-full bg-no-repeat bg-cover bg-bottom-right"
       style={{
-        backgroundImage: definition.lessonId === 'm1-l1'
+        backgroundImage: isTransferStage
           ? `url(${import.meta.env.BASE_URL}lessons/webtoon/m1-l1.webp)`
           : 'none',
-        minHeight: definition.lessonId === 'm1-l1' ? '600px' : 'auto',
+        minHeight: isTransferStage ? '600px' : 'auto',
       }}
     >
       <div className="space-y-5">
         <div>
-          <p className="studio-kicker text-lg font-extrabold" style={{ color: secondary }}>생활 장면</p>
-          <h2 className="mt-1 text-3xl font-extrabold" style={{ color: 'var(--brand-ink)' }}>
+          <p className={isTransferStage ? "studio-kicker text-lg font-extrabold" : "studio-kicker"} style={{ color: secondary }}>생활 장면</p>
+          <h2 className={isTransferStage ? "mt-1 text-3xl font-extrabold" : "mt-1 text-xl font-extrabold"} style={{ color: 'var(--brand-ink)' }}>
             {state.stage === 'transfer' ? definition.transfer.title : definition.encounter.title}
           </h2>
-          <p className="mt-4 leading-relaxed text-xl font-extrabold text-[color:var(--brand-ink)]">{contextDescription}</p>
+          <p className={isTransferStage ? "mt-4 leading-relaxed text-xl font-extrabold text-[color:var(--brand-ink)]" : "mt-3 leading-relaxed text-sm font-semibold text-[color:var(--brand-ink)]"}>{contextDescription}</p>
         </div>
 
         {contextStimuli?.length ? (
@@ -120,24 +122,24 @@ export default function StudioExperience({
         ) : null}
 
         {contextFacts.length > 0 && (
-          <ul className="space-y-3" aria-label="상황의 중요한 정보">
+          <ul className={isTransferStage ? "space-y-3" : "space-y-2"} aria-label="상황의 중요한 정보">
             {contextFacts.map((fact, index) => (
               <li
                 key={fact}
-                className="studio-fact-card flex items-start gap-4 p-4 rounded-xl border backdrop-blur-xs"
-                style={{
+                className={isTransferStage ? "studio-fact-card flex items-start gap-4 p-4 rounded-xl border backdrop-blur-xs" : "studio-fact-card flex items-start gap-3"}
+                style={isTransferStage ? {
                   borderColor: 'var(--editorial-line)',
                   background: 'rgba(255, 255, 255, 0.85)',
-                }}
+                } : undefined}
               >
                 <span
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold text-white"
+                  className={isTransferStage ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold text-white" : "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-extrabold text-white"}
                   style={{ background: index % 2 === 0 ? accent : secondary }}
                   aria-hidden
                 >
                   {index + 1}
                 </span>
-                <span className="font-extrabold leading-relaxed text-xl text-[color:var(--brand-ink)]">{fact}</span>
+                <span className={isTransferStage ? "font-extrabold leading-relaxed text-xl text-[color:var(--brand-ink)]" : "font-semibold leading-relaxed text-sm text-[color:var(--brand-ink)]"}>{fact}</span>
               </li>
             ))}
           </ul>
