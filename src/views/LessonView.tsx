@@ -238,7 +238,11 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
 
   function renderMission() {
     const data = currentStep.data as unknown as MissionContent;
-    const wrapUpText = difficulty === 'easy' ? lesson.wrapUpEasy : lesson.wrapUpNormal;
+    const wrapUpText = difficulty === 'easy'
+      ? lesson.wrapUpEasy
+      : difficulty === 'hard'
+        ? (lesson.wrapUpHard ?? lesson.wrapUpNormal)
+        : lesson.wrapUpNormal;
     return (
       <span key={`mission-${step}`}>
         <MissionStep
