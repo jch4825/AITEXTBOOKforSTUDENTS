@@ -314,7 +314,7 @@ export default function MissionStep({
             } as React.CSSProperties}
           >
             <Icon name="printer" size={22} className="mr-1.5 shrink-0" />
-            {mission.reward.printable === 'certificate' ? '수료증 인쇄하기' : '활동지 인쇄하기'}
+            {mission.reward.printable === 'certificate' ? '수료증 인쇄하기' : '활동 결과 인쇄하기'}
           </button>
 
           <Button
