@@ -300,7 +300,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '훈련',
     shortExplanation: 'AI가 자료를 반복해서 보며 더 잘하게 되는 과정입니다.',
-    example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞혀습니다.',
+    example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞힙니다.',
   },
   {
     term: '패턴',

@@ -46,7 +46,7 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '학습',
         definition: '많은 자료를 보고 배워서 새로운 답을 만들어내는 것.',
-        example: 'AI는 여러 그림을 배운 뒤 처음 보는 그림도 알아맞혀습니다.',
+        example: 'AI는 여러 그림을 배운 뒤 처음 보는 그림도 알아맞힙니다.',
       },
     ],
     method: [
@@ -162,7 +162,7 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '훈련',
         definition: '학습 데이터를 반복해서 보며 AI가 더 잘하게 되는 과정.',
-        example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞혀습니다.',
+        example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞힙니다.',
       },
     ],
     method: [
