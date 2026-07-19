@@ -41,20 +41,30 @@ export default function SinglePick({ block, value = '', onChange, accent }: Prop
           const palette = activityColor(item.label);
           return (
             <button
-              key={idx}
-              role="radio"
-              aria-checked={isSelected}
-              onClick={() => handlePick(item.label)}
-              className="card3d relative flex flex-col items-center justify-center gap-2 p-4 rounded-[var(--r-md)] min-h-[120px] text-center select-none font-bold"
-              style={{
-                border: isSelected ? `4px solid ${palette.accent}` : `2.5px solid ${palette.accent}`,
-                background: isSelected ? palette.tint : 'var(--paper-0)',
-                color: 'var(--brand-ink)',
-                ['--edge' as string]: palette.accent,
-              }}
+               key={idx}
+               role="radio"
+               aria-checked={isSelected}
+               onClick={() => handlePick(item.label)}
+               className="card3d relative flex flex-col items-center justify-center gap-2 p-4 rounded-[var(--r-md)] min-h-[180px] sm:min-h-[220px] text-center select-none font-bold transition-all hover:scale-[1.02] cursor-pointer"
+               style={{
+                 border: isSelected ? `4px solid ${palette.accent}` : `2.5px solid ${palette.accent}`,
+                 background: isSelected ? palette.tint : 'var(--paper-0)',
+                 color: 'var(--brand-ink)',
+                 ['--edge' as string]: palette.accent,
+               }}
             >
-              <span className="text-4xl" aria-hidden>{item.emoji}</span>
-              <span className="text-base leading-tight">{item.label}</span>
+              {item.image ? (
+                <div className="w-full flex justify-center mb-1">
+                  <img
+                    src={item.image}
+                    alt={item.label}
+                    className="h-24 w-24 sm:h-28 sm:w-28 object-contain"
+                  />
+                </div>
+              ) : (
+                <span className="text-4xl" aria-hidden>{item.emoji}</span>
+              )}
+              <span className="text-base sm:text-lg leading-tight mt-1">{item.label}</span>
               {isSelected && (
                 <span
                   className="answer-pop absolute -top-2.5 -right-2.5 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"

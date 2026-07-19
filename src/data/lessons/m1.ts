@@ -208,9 +208,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'invent_choice',
                   prompt: '우리 집 물건 중에서 AI로 만들고 싶은 것을 하나만 골라 보십시오.',
                   items: [
-                    { emoji: '🍎', label: '말하는 냉장고' },
-                    { emoji: '🧹', label: '자동 정리 로봇' },
-                    { emoji: '☔', label: '날씨 알려주는 우산' }
+                    { emoji: '🍎', label: '말하는 냉장고', image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/refrigerator.webp' },
+                    { emoji: '🧹', label: '자동 정리 로봇', image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/tidy_room.webp' },
+                    { emoji: '☔', label: '날씨 알려주는 우산', image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/umbrella.webp' }
                   ]
                 }
               ]

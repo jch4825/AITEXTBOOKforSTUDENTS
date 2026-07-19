@@ -129,7 +129,7 @@ export interface SinglePickBlock {
   kind: 'single-pick';
   id: string;
   prompt: string;
-  items: { emoji: string; label: string }[];
+  items: { emoji: string; label: string; image?: string }[];
 }
 
 export interface DragSortBlock {
