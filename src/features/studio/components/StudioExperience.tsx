@@ -60,16 +60,27 @@ export default function StudioExperience({
     : definition.firstAttempt.choices;
   const changedFacts = definition.conditionChange.facts;
   const showingChangedContext = ['condition-change', 'ai-compare', 'decision', 'artifact', 'complete'].includes(state.stage);
+  const isCompleteStage = definition.lessonId === 'm1-l1' && state.stage === 'complete';
+
   const contextDescription = state.stage === 'transfer'
     ? definition.transfer.description
-    : showingChangedContext
-      ? definition.conditionChange.description
-      : definition.encounter.description;
+    : isCompleteStage
+      ? '오늘 인공지능 아이미와 만나서 배운 중요한 내용들을 돌아보세요.'
+      : showingChangedContext
+        ? definition.conditionChange.description
+        : definition.encounter.description;
+
   const contextFacts = state.stage === 'transfer'
     ? []
-    : showingChangedContext
-      ? changedFacts
-      : definition.encounter.facts;
+    : isCompleteStage
+      ? [
+          '진우는 새로 등교한 학교에서 나를 도와주는 인공지능 아이미를 만나서 인공지능에 대해 배웠습니다.',
+          '진우는 아이미에게 토스터가 무엇인지 물어보고, 어려운 과학 단어 대신 누구나 알기 쉬운 말로 답을 들었습니다.'
+        ]
+      : showingChangedContext
+        ? changedFacts
+        : definition.encounter.facts;
+
   const contextStimuli = state.stage === 'transfer' || state.stage === 'complete'
     ? undefined
     : showingChangedContext
@@ -112,7 +123,11 @@ export default function StudioExperience({
         <div>
           <p className={isTransferStage ? "studio-kicker text-lg font-extrabold" : "studio-kicker"} style={{ color: secondary }}>생활 장면</p>
           <h2 className={isTransferStage ? "mt-1 text-3xl font-extrabold" : "mt-1 text-xl font-extrabold"} style={{ color: 'var(--brand-ink)' }}>
-            {state.stage === 'transfer' ? definition.transfer.title : definition.encounter.title}
+            {state.stage === 'transfer'
+              ? definition.transfer.title
+              : isCompleteStage
+                ? '아이미와의 첫 만남 정리'
+                : definition.encounter.title}
           </h2>
           <p
             className={isTransferStage ? "mt-4 leading-relaxed text-xl font-extrabold text-[color:var(--brand-ink)]" : "mt-3 leading-relaxed text-sm font-semibold text-[color:var(--brand-ink)]"}
