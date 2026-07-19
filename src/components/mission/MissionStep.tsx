@@ -8,6 +8,8 @@ import Icon from '../Icon';
 import CharacterAvatar from '../CharacterAvatar';
 import { ACTIVITY_PALETTE } from '../../utils/activityPalette';
 import LessonSpread from '../lesson/LessonSpread';
+import { wrapDictionaryTerms } from '../../views/lessonTextUtils';
+import { STUDENT_DICTIONARY } from '../../data/studentDictionary';
 
 import MultiPick from './blocks/MultiPick';
 import SinglePick from './blocks/SinglePick';
@@ -330,6 +332,11 @@ export default function MissionStep({
       </div>
     );
 
+    const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
+      entry.term,
+      ...(entry.aliases ?? []),
+    ]);
+
     const rewardRight = (
       <div className="flex flex-col justify-center p-6 items-center md:items-start relative h-full min-h-[260px] space-y-4">
         <div className="absolute inset-x-0 top-0 h-0 pointer-events-none z-30" aria-hidden>
@@ -376,7 +383,7 @@ export default function MissionStep({
                 color: 'var(--brand-ink)'
               }}
             >
-              {wrapUpText}
+              {wrapDictionaryTerms(wrapUpText, allDictTerms)}
             </div>
           </div>
         ) : (

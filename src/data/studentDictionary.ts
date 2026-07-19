@@ -802,6 +802,12 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '어떤 것에 대한 생각입니다.',
     example: 'AI의 의견을 참고해서 내가 직접 고칩니다.',
   },
+  {
+    term: '방대하다',
+    aliases: ['방대한'],
+    shortExplanation: '아주 많고 넓은 것입니다.',
+    example: '인공지능은 방대한 자료를 공부해서 똑똑해집니다.',
+  },
 ];
 
 function normalize(term: string): string {
