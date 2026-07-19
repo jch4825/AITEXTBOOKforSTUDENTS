@@ -30,6 +30,7 @@ export const PECS_LABELS: Record<string, string> = {
   money_coins: '돈 계산', warm_clothes: '두꺼운 옷', cool_clothes: '시원한 옷',
   enter_store: '가게에 들어갑니다', do_nothing: '아무것도 안 합니다', give_up: '포기합니다',
   random_choice: '아무거나 골라습니다', long_time: '오래 걸립니다',
+  tidy_room: '자동 정리 로봇',
 };
 
 // 기본 의사소통 욕구 — 모든 모듈에서 항상 노출
@@ -37,7 +38,7 @@ export const PECS_COMMON: string[] = ['toilet', 'faucet', 'paper_cup', 'snack'];
 
 // 모듈별 관련 단어 (초안 — 교사 피드백으로 조정)
 export const PECS_BY_MODULE: Record<ModuleId, string[]> = {
-  m1: ['smartphone', 'ai_speaker', 'ai_aimi', 'refrigerator', 'cat', 'rabbit', 'elephant', 'dinosaur', 'alarm_clock', 'window', 'tap_screen', 'toaster', 'aircon'],
+  m1: ['smartphone', 'ai_speaker', 'ai_aimi', 'refrigerator', 'cat', 'rabbit', 'elephant', 'dinosaur', 'alarm_clock', 'window', 'tap_screen', 'toaster', 'aircon', 'tidy_room', 'umbrella'],
   m2: [
     'ai_aimi', 'smartphone', 'book', 'pencil', 'sunglasses', 'unclear_speech',
     'vague_request', 'ask_again', 'easy_explain', 'short_question', 'example_request',
