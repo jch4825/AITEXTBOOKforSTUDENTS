@@ -1,6 +1,227 @@
 import fs from 'node:fs';
 import ts from 'typescript';
 
+function parseSource(fileName, text, scriptKind = ts.ScriptKind.TS) {
+  return ts.createSourceFile(fileName, text, ts.ScriptTarget.Latest, true, scriptKind);
+}
+
+function findNodes(root, predicate) {
+  const matches = [];
+  function visit(node) {
+    if (predicate(node)) matches.push(node);
+    ts.forEachChild(node, visit);
+  }
+  visit(root);
+  return matches;
+}
+
+function unwrapExpression(expression) {
+  let current = expression;
+  while (
+    ts.isParenthesizedExpression(current)
+    || ts.isAsExpression(current)
+    || ts.isNonNullExpression(current)
+  ) {
+    current = current.expression;
+  }
+  return current;
+}
+
+function propertyPath(expression) {
+  const current = unwrapExpression(expression);
+  if (ts.isIdentifier(current)) return current.text;
+  if (ts.isPropertyAccessExpression(current)) {
+    const parent = propertyPath(current.expression);
+    return parent ? `${parent}.${current.name.text}` : current.name.text;
+  }
+  return '';
+}
+
+function isCallTo(node, path) {
+  return ts.isCallExpression(node) && propertyPath(node.expression) === path;
+}
+
+function callsTo(root, path) {
+  return findNodes(root, (node) => isCallTo(node, path));
+}
+
+function callsNamed(root, name) {
+  return findNodes(root, (node) => (
+    ts.isCallExpression(node) && propertyPath(node.expression).split('.').at(-1) === name
+  ));
+}
+
+function directStatements(statement) {
+  return ts.isBlock(statement) ? [...statement.statements] : [statement];
+}
+
+function isDirectCallStatement(statement, path) {
+  return ts.isExpressionStatement(statement) && isCallTo(statement.expression, path);
+}
+
+function isCompleteStageCondition(expression) {
+  const current = unwrapExpression(expression);
+  if (!ts.isBinaryExpression(current)) return false;
+  if (![ts.SyntaxKind.EqualsEqualsEqualsToken, ts.SyntaxKind.EqualsEqualsToken].includes(current.operatorToken.kind)) {
+    return false;
+  }
+  const operands = [unwrapExpression(current.left), unwrapExpression(current.right)];
+  return operands.some((operand) => propertyPath(operand) === 'session.state.stage')
+    && operands.some((operand) => ts.isStringLiteral(operand) && operand.text === 'complete');
+}
+
+function assertStudioFinalAction(sourceText) {
+  const sourceFile = parseSource('StudioLessonView.tsx', sourceText, ts.ScriptKind.TSX);
+  const handleNext = findNodes(sourceFile, (node) => (
+    ts.isFunctionDeclaration(node) && node.name?.text === 'handleNext'
+  ))[0];
+  if (!handleNext?.body) throw new Error('studio final action contract: handleNext is missing');
+
+  const finalIf = handleNext.body.statements.find((statement) => (
+    ts.isIfStatement(statement) && isCompleteStageCondition(statement.expression)
+  ));
+  if (!finalIf) throw new Error('studio final action contract: complete-stage branch is missing');
+
+  const finishCalls = callsTo(handleNext, 'session.finish');
+  const goNextCalls = callsTo(handleNext, 'session.goNext');
+  if (finishCalls.length !== 1 || callsTo(finalIf.thenStatement, 'session.finish').length !== 1) {
+    throw new Error('studio final action contract: final-stage branch must call session.finish exactly once');
+  }
+  if (callsTo(finalIf.thenStatement, 'session.goNext').length > 0) {
+    throw new Error('studio final action contract: final-stage branch must not call session.goNext');
+  }
+  if (goNextCalls.length !== 1) {
+    throw new Error('studio final action contract: non-final flow must call session.goNext exactly once');
+  }
+
+  if (finalIf.elseStatement) {
+    if (callsTo(finalIf.elseStatement, 'session.goNext').length !== 1) {
+      throw new Error('studio final action contract: only the non-final branch may call session.goNext');
+    }
+    return;
+  }
+
+  const finalIndex = handleNext.body.statements.indexOf(finalIf);
+  const finalReturns = directStatements(finalIf.thenStatement).some(ts.isReturnStatement);
+  const laterGoNext = handleNext.body.statements
+    .slice(finalIndex + 1)
+    .some((statement) => isDirectCallStatement(statement, 'session.goNext'));
+  if (!finalReturns || !laterGoNext) {
+    throw new Error('studio final action contract: final flow must return before non-final session.goNext');
+  }
+}
+
+function isCompletedRefAssignment(statement) {
+  if (!ts.isExpressionStatement(statement) || !ts.isBinaryExpression(statement.expression)) return false;
+  const assignment = statement.expression;
+  return assignment.operatorToken.kind === ts.SyntaxKind.EqualsToken
+    && propertyPath(assignment.left) === 'completedRef.current'
+    && assignment.right.kind === ts.SyntaxKind.TrueKeyword;
+}
+
+function hasCompletedRefGuard(statement) {
+  return ts.isIfStatement(statement)
+    && propertyPath(statement.expression) === 'completedRef.current'
+    && directStatements(statement.thenStatement).some(ts.isReturnStatement);
+}
+
+function isEvidenceCondition(expression) {
+  const current = unwrapExpression(expression);
+  return isCallTo(current, 'hasStudentProcessEvidence')
+    && current.arguments.length === 1
+    && propertyPath(current.arguments[0]) === 'state';
+}
+
+function assertHookCompletionContract(sourceText) {
+  const sourceFile = parseSource('useStudioSession.ts', sourceText);
+  const useStudioSession = findNodes(sourceFile, (node) => (
+    ts.isFunctionDeclaration(node) && node.name?.text === 'useStudioSession'
+  ))[0];
+  if (!useStudioSession?.body) throw new Error('studio completion contract: useStudioSession is missing');
+
+  const finishDeclaration = findNodes(useStudioSession.body, (node) => (
+    ts.isVariableDeclaration(node)
+    && ts.isIdentifier(node.name)
+    && node.name.text === 'finish'
+  ))[0];
+  const finishInitializer = finishDeclaration?.initializer;
+  if (!finishInitializer || !isCallTo(finishInitializer, 'useCallback')) {
+    throw new Error('studio completion contract: finish must be a useCallback');
+  }
+  const finishCallback = finishInitializer.arguments[0];
+  if (
+    (!ts.isArrowFunction(finishCallback) && !ts.isFunctionExpression(finishCallback))
+    || !ts.isBlock(finishCallback.body)
+  ) {
+    throw new Error('studio completion contract: finish callback body is missing');
+  }
+
+  const statements = [...finishCallback.body.statements];
+  const guardIndex = statements.findIndex(hasCompletedRefGuard);
+  const assignmentIndex = statements.findIndex(isCompletedRefAssignment);
+  if (guardIndex < 0 || assignmentIndex <= guardIndex) {
+    throw new Error('studio completion contract: finish must retain completedRef idempotence');
+  }
+
+  const evidenceIndex = statements.findIndex((statement) => (
+    ts.isIfStatement(statement) && isEvidenceCondition(statement.expression)
+  ));
+  if (evidenceIndex < 0) {
+    throw new Error('studio completion contract: hasStudentProcessEvidence(state) guard is missing');
+  }
+  if (assignmentIndex >= evidenceIndex) {
+    throw new Error('studio completion contract: completedRef must be set before completion side effects');
+  }
+  const evidenceIf = statements[evidenceIndex];
+  const finishSaveCalls = callsTo(finishCallback.body, 'saveStudioEvidence');
+  const guardedSaveCalls = callsTo(evidenceIf.thenStatement, 'saveStudioEvidence');
+  if (finishSaveCalls.length < 1 || guardedSaveCalls.length !== finishSaveCalls.length) {
+    throw new Error('studio completion contract: evidence save must remain inside the process-evidence guard');
+  }
+
+  const onCompleteIndex = statements.findIndex((statement) => isDirectCallStatement(statement, 'onComplete'));
+  if (
+    onCompleteIndex <= evidenceIndex
+    || callsTo(finishCallback.body, 'onComplete').length !== 1
+    || callsTo(evidenceIf.thenStatement, 'onComplete').length > 0
+  ) {
+    throw new Error('studio completion contract: onComplete must be unconditional and outside the evidence guard');
+  }
+
+  const returnedFinish = useStudioSession.body.statements.some((statement) => (
+    ts.isReturnStatement(statement)
+    && statement.expression
+    && ts.isObjectLiteralExpression(statement.expression)
+    && statement.expression.properties.some((property) => (
+      ts.isShorthandPropertyAssignment(property) && property.name.text === 'finish'
+    ))
+  ));
+  if (!returnedFinish) throw new Error('studio completion contract: finish must be returned by the hook');
+
+  for (const effectCall of findNodes(useStudioSession.body, (node) => isCallTo(node, 'useEffect'))) {
+    const callback = effectCall.arguments[0];
+    if (!callback || (!ts.isArrowFunction(callback) && !ts.isFunctionExpression(callback))) continue;
+    for (const forbiddenCall of [
+      'finish',
+      'onComplete',
+      'saveStudioEvidence',
+      'hasStudentProcessEvidence',
+      'loadTeacherRecordingSettings',
+    ]) {
+      if (callsNamed(callback, forbiddenCall).length > 0) {
+        throw new Error(`studio completion contract: useEffect must not call ${forbiddenCall}`);
+      }
+    }
+    const referencesCompleteStage = findNodes(callback, (node) => (
+      ts.isStringLiteral(node) && node.text === 'complete'
+    )).length > 0;
+    const marksCompleted = findNodes(callback, isCompletedRefAssignment).length > 0;
+    if (referencesCompleteStage || marksCompleted) {
+      throw new Error('studio completion contract: useEffect must not drive complete-stage completion');
+    }
+  }
+}
+
 const debugPath = 'src/utils/debugMode.ts';
 if (!fs.existsSync(debugPath)) throw new Error('debug mode utility is missing');
 
@@ -78,6 +299,9 @@ if (completionModule.hasStudentProcessEvidence(emptyState)) throw new Error('emp
 if (completionModule.hasStudentProcessEvidence({ ...emptyState, supportModesUsed: ['hint'] })) {
   throw new Error('support-mode use alone must not create evidence');
 }
+if (completionModule.hasStudentProcessEvidence({ ...emptyState, artifactSummary: '   \t\n' })) {
+  throw new Error('whitespace-only artifact summary must not create evidence');
+}
 for (const partial of [
   { firstAttempt: { mode: 'choice', choiceIds: ['a'] } },
   { aiDecision: 'reject' },
@@ -91,11 +315,7 @@ for (const partial of [
 }
 
 const hook = fs.readFileSync('src/features/studio/useStudioSession.ts', 'utf8');
-if (/state\.stage\s*!==\s*'complete'/.test(hook)) {
-  throw new Error('studio completion must not run automatically on final-stage entry');
-}
-for (const token of ['const finish = useCallback', 'hasStudentProcessEvidence(state)', 'finish,']) {
-  if (!hook.includes(token)) throw new Error(`explicit studio finish missing: ${token}`);
-}
+assertStudioFinalAction(studioView);
+assertHookCompletionContract(hook);
 
 console.log('debug navigation contract passed');
