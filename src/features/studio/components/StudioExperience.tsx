@@ -659,17 +659,17 @@ export default function StudioExperience({
         <div className="space-y-5 p-5 md:p-7">
           <div>
             <p className="studio-kicker" style={{ color: secondary }}>오늘의 학습 정리</p>
-            <h2 className="mt-1 text-xl font-extrabold">인공지능 친구와 대화하는 법</h2>
+            <h2 className="mt-1 text-xl font-extrabold">인공지능과 지혜롭게 공부하기</h2>
             <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">
-              인공지능에게 질문을 하고 도움을 받을 때 꼭 기억해야 하는 세 가지 방법입니다.
+              오늘 배운 인공지능(AI)의 뜻과 인공지능이 쉽게 대답하도록 요청하는 세 가지 방법입니다.
             </p>
           </div>
 
           <div className="space-y-3">
             {[
-              { num: '1', title: '쉽게 물어보기', desc: '인공지능에게 질문할 때는 복잡하고 어려운 과학 단어 대신 누구나 알 수 있는 쉬운 단어를 사용해 보세요.' },
-              { num: '2', title: '구체적으로 말하기', desc: '내가 진짜 알고 싶은 것(예: 토스터나 에어컨이 하는 일)을 콕 집어서 자세하게 이야기해 보세요.' },
-              { num: '3', title: '한 번 더 물어보기', desc: '인공지능의 설명이 잘 이해되지 않거나 어려울 때는 “더 쉽게 말해줘”라고 다시 물어보세요.' }
+              { num: '1', title: '인공지능(AI)의 뜻 알기', desc: '인공지능은 컴퓨터 프로그램이 사람처럼 스스로 정보를 공부하고 생각해서 여러 문제를 해결할 수 있게 돕는 기술이에요.' },
+              { num: '2', title: '쉬운 단어로 물어보기', desc: '인공지능에게 질문할 때는 복잡하고 어려운 단어 대신 누구나 알 수 있는 쉽고 직관적인 단어를 사용해요.' },
+              { num: '3', title: '쉽게 다시 대답해 달라고 하기', desc: '인공지능의 설명이 잘 이해되지 않거나 어려울 때는 “더 쉽게 말해줘”라고 한 번 더 친근하게 요청해요.' }
             ].map((item) => (
               <div key={item.num} className="studio-fact-card p-4 rounded-xl border border-dashed flex gap-3 bg-[color:var(--editorial-paper)]" style={{ borderColor: 'var(--editorial-line)' }}>
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-extrabold text-white" style={{ background: accent }}>
@@ -684,7 +684,7 @@ export default function StudioExperience({
           </div>
 
           <div className="p-4 rounded-xl border text-center text-sm font-bold bg-[#f0fff0]" style={{ borderColor: '#32cd32', color: '#008000' }}>
-            🎉 참 잘했습니다! 인공지능과 지혜롭게 대화하는 방법을 모두 배웠습니다.
+            🎉 참 잘했습니다! 인공지능이 무엇인지 알아보고, 쉽게 대답을 요청하는 방법을 모두 배웠습니다.
           </div>
         </div>
       );
