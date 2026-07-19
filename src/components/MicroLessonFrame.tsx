@@ -8,6 +8,7 @@ import Icon from './Icon';
 import ClassroomDock from './ClassroomDock';
 import type { LessonId } from '../types';
 import { formatDebugPageId, isDebugMode, type DebugSubPage } from '../utils/debugMode';
+import { stopSpeaking } from '../utils/tts';
 
 interface Props {
   lessonId: LessonId;
@@ -153,7 +154,10 @@ export default function MicroLessonFrame({
       <footer className="comic-frame-footer h-20 shrink-0 px-3 md:px-6 flex items-center justify-between gap-2">
         <Button
           variant="secondary"
-          onClick={onPrev}
+          onClick={() => {
+            stopSpeaking();
+            onPrev();
+          }}
           disabled={currentStep === 0}
           className="comic-footer-previous px-4 md:px-6"
         ><Icon name="chevron-left" size={20} /> 이전</Button>
@@ -174,7 +178,10 @@ export default function MicroLessonFrame({
           <ProgressDots total={totalSteps} current={currentStep} />
         </div>
         <Button
-          onClick={onNext}
+          onClick={() => {
+            stopSpeaking();
+            onNext();
+          }}
           className="comic-footer-next px-4 md:px-6"
         >{currentStep + 1 >= totalSteps
           ? <><Icon name="sparkles" size={20} filled /> 다 했습니다!</>

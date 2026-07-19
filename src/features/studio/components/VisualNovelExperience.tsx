@@ -24,7 +24,7 @@ export default function VisualNovelExperience({
   sceneIndex,
   onSceneIndexChange,
 }: Props) {
-  const { speakNow } = useSpeak();
+  const { speakNow, stop } = useSpeak();
   const scene = story.scenes[sceneIndex];
   const copy = scene.copy[supportLevel];
   const activeKnowledge = story.knowledge[scene.knowledgeStep];
@@ -36,6 +36,7 @@ export default function VisualNovelExperience({
   ].filter(Boolean).join(' ');
 
   function selectScene(index: number) {
+    stop();
     onSceneIndexChange(index);
   }
 
