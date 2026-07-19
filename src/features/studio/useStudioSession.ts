@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { loadTeacherRecordingSettings } from '../teacher/recordingSettings';
 import { saveStudioEvidence } from './evidenceStorage';
+import { hasStudentProcessEvidence } from './studioCompletion';
 import { createInitialStudioSession, studioReducer } from './studioReducer';
 import type { StudioDefinition, StudioEvidenceV2, SupportLevel } from './types';
 
@@ -41,32 +42,36 @@ export function useStudioSession(
     dispatch({ type: 'reset', supportLevel: initialSupportLevel });
   }, [definition.id]);
 
-  useEffect(() => {
-    if (state.stage !== 'complete' || completedRef.current) return;
+  const finish = useCallback(() => {
+    if (completedRef.current) return;
     completedRef.current = true;
     const completedAt = new Date().toISOString();
-    const settings = loadTeacherRecordingSettings();
-    const evidence: StudioEvidenceV2 = {
-      version: 2,
-      id: evidenceIdRef.current,
-      learnerAlias: settings.learnerAlias,
-      studioId: definition.id,
-      lessonId: definition.lessonId,
-      firstAttempt: state.firstAttempt,
-      supportLevel: initialSupportLevel,
-      supportModesUsed: state.supportModesUsed,
-      aiSource: definition.aiContribution.source,
-      aiRole: definition.aiContribution.role,
-      aiDecision: state.aiDecision,
-      finalExpression: state.finalExpression,
-      artifactSummary: state.artifactSummary,
-      transferExpression: state.transferExpression,
-      observation: EMPTY_OBSERVATION,
-      startedAt: state.startedAt,
-      completedAt,
-      updatedAt: completedAt,
-    };
-    saveStudioEvidence(evidence, settings.processRecording);
+
+    if (hasStudentProcessEvidence(state)) {
+      const settings = loadTeacherRecordingSettings();
+      const evidence: StudioEvidenceV2 = {
+        version: 2,
+        id: evidenceIdRef.current,
+        learnerAlias: settings.learnerAlias,
+        studioId: definition.id,
+        lessonId: definition.lessonId,
+        firstAttempt: state.firstAttempt,
+        supportLevel: initialSupportLevel,
+        supportModesUsed: state.supportModesUsed,
+        aiSource: definition.aiContribution.source,
+        aiRole: definition.aiContribution.role,
+        aiDecision: state.aiDecision,
+        finalExpression: state.finalExpression,
+        artifactSummary: state.artifactSummary,
+        transferExpression: state.transferExpression,
+        observation: EMPTY_OBSERVATION,
+        startedAt: state.startedAt,
+        completedAt,
+        updatedAt: completedAt,
+      };
+      saveStudioEvidence(evidence, settings.processRecording);
+    }
+
     onComplete();
   }, [definition, initialSupportLevel, onComplete, state]);
 
@@ -84,5 +89,6 @@ export function useStudioSession(
     goNext,
     goPrevious,
     reset,
+    finish,
   };
 }

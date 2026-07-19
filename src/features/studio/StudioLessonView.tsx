@@ -49,8 +49,12 @@ export default function StudioLessonView({
     : undefined;
 
   function handleNext() {
-    if (session.state.stage === 'complete') onGoHome();
-    else session.goNext();
+    if (session.state.stage === 'complete') {
+      session.finish();
+      onGoHome();
+      return;
+    }
+    session.goNext();
   }
 
   return (

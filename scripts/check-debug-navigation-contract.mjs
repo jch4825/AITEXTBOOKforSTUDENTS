@@ -63,4 +63,39 @@ for (const [name, source] of [
   }
 }
 
+const completionPath = 'src/features/studio/studioCompletion.ts';
+if (!fs.existsSync(completionPath)) throw new Error('studio completion helper is missing');
+const completionSource = fs.readFileSync(completionPath, 'utf8');
+const completionCompiled = ts.transpileModule(completionSource, {
+  compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 },
+}).outputText;
+const completionModule = await import(`data:text/javascript;base64,${Buffer.from(completionCompiled).toString('base64')}`);
+
+const emptyState = {
+  stage: 'complete', startedAt: '2026-07-19T00:00:00.000Z', supportLevel: 'light', supportModesUsed: [],
+};
+if (completionModule.hasStudentProcessEvidence(emptyState)) throw new Error('empty session must not create evidence');
+if (completionModule.hasStudentProcessEvidence({ ...emptyState, supportModesUsed: ['hint'] })) {
+  throw new Error('support-mode use alone must not create evidence');
+}
+for (const partial of [
+  { firstAttempt: { mode: 'choice', choiceIds: ['a'] } },
+  { aiDecision: 'reject' },
+  { finalExpression: { mode: 'text', text: '내 생각' } },
+  { artifactSummary: '결과물' },
+  { transferExpression: { mode: 'speech', text: '다음 방법' } },
+]) {
+  if (!completionModule.hasStudentProcessEvidence({ ...emptyState, ...partial })) {
+    throw new Error(`partial process evidence was ignored: ${JSON.stringify(partial)}`);
+  }
+}
+
+const hook = fs.readFileSync('src/features/studio/useStudioSession.ts', 'utf8');
+if (/state\.stage\s*!==\s*'complete'/.test(hook)) {
+  throw new Error('studio completion must not run automatically on final-stage entry');
+}
+for (const token of ['const finish = useCallback', 'hasStudentProcessEvidence(state)', 'finish,']) {
+  if (!hook.includes(token)) throw new Error(`explicit studio finish missing: ${token}`);
+}
+
 console.log('debug navigation contract passed');
