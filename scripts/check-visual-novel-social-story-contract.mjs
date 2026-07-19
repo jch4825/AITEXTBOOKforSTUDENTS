@@ -186,6 +186,10 @@ const studioView = fs.readFileSync('src/features/studio/StudioLessonView.tsx', '
 for (const token of ['completedEncounterId', 'onEncounterComplete', 'visualNovelLocked']) {
   if (!studioView.includes(token)) throw new Error(`missing encounter completion gate: ${token}`);
 }
+const useEffectCalls = studioView.match(/\buseEffect\s*\(/g) ?? [];
+if (useEffectCalls.length !== 1) {
+  throw new Error('studio route must contain exactly one scene-reset effect');
+}
 const sceneResetEffect = studioView.match(/useEffect\(\(\) => \{([\s\S]*?)\}, \[definition\.id, session\.state\.stage\]\);/);
 if (!sceneResetEffect?.[1].includes('setSceneIndex(0)') || sceneResetEffect[1].includes('setCompletedEncounterId')) {
   throw new Error('scene reset must not change encounter completion');
