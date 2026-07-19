@@ -3,9 +3,9 @@ import type { Difficulty } from '../../types';
 
 const NEXT: Record<Difficulty, Difficulty> = { hard: 'normal', normal: 'easy', easy: 'hard' };
 const LABEL: Record<Difficulty, string> = {
-  easy: '지원 많음',
-  normal: '지원 보통',
-  hard: '지원 도전',
+  easy: '충분한 지원',
+  normal: '보통',
+  hard: '도전적',
 };
 const EMOJI: Record<Difficulty, string> = {
   easy: '🌱',
