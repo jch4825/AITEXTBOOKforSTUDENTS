@@ -104,7 +104,18 @@ export default function VisualNovelExperience({
     <section className="visual-novel-knowledge-page" aria-label="학습목표와 지식 설명">
       <div className="visual-novel-page-heading">
         <p className="studio-kicker" style={{ color: accent }}>1차시</p>
-        <h2>AI가 무엇인지 처음 배웁니다</h2>
+        <div className="flex items-center justify-between gap-3 w-full">
+          <h2>AI가 무엇인지 처음 배웁니다</h2>
+          <button
+            type="button"
+            onClick={() => speakNow(`AI가 무엇인지 처음 배웁니다. 학습 목표: ${story.objective}`)}
+            className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+            style={{ borderColor: accent, color: accent }}
+            title="학습목표 듣기"
+          >
+            <Icon name="speaker" size={16} />
+          </button>
+        </div>
       </div>
       <div className="visual-novel-goal">
         <strong>학습목표</strong>
@@ -115,27 +126,44 @@ export default function VisualNovelExperience({
         {story.knowledge.map((knowledge, index) => (
           <article
             key={knowledge.title}
-            className="visual-novel-knowledge"
+            className="visual-novel-knowledge flex justify-between items-start gap-3"
             data-active={scene.knowledgeStep === index}
           >
-            <span>{index + 1}</span>
-            <div>
-              <h4>{knowledge.title}</h4>
-              <p><strong>{knowledge.core}</strong></p>
-              <p>{knowledge.detail[supportLevel]}</p>
-              {knowledge.flow && (
-                <div
-                  className="visual-novel-flow"
-                  aria-label={`${knowledge.flow.input}, ${knowledge.flow.process}, ${knowledge.flow.output}`}
-                >
-                  <b>{knowledge.flow.input}</b>
-                  <i aria-hidden>→</i>
-                  <b>{knowledge.flow.process}</b>
-                  <i aria-hidden>→</i>
-                  <b>{knowledge.flow.output}</b>
-                </div>
-              )}
+            <div className="flex gap-3">
+              <span>{index + 1}</span>
+              <div>
+                <h4>{knowledge.title}</h4>
+                <p><strong>{knowledge.core}</strong></p>
+                <p>{knowledge.detail[supportLevel]}</p>
+                {knowledge.flow && (
+                  <div
+                    className="visual-novel-flow"
+                    aria-label={`${knowledge.flow.input}, ${knowledge.flow.process}, ${knowledge.flow.output}`}
+                  >
+                    <b>{knowledge.flow.input}</b>
+                    <i aria-hidden>→</i>
+                    <b>{knowledge.flow.process}</b>
+                    <i aria-hidden>→</i>
+                    <b>{knowledge.flow.output}</b>
+                  </div>
+                )}
+              </div>
             </div>
+            <button
+              type="button"
+              onClick={() => {
+                let text = `개념 ${index + 1}. ${knowledge.title}. ${knowledge.core}. ${knowledge.detail[supportLevel]}`;
+                if (knowledge.flow) {
+                  text += `. 입력은 ${knowledge.flow.input}, 과정은 ${knowledge.flow.process}, 출력은 ${knowledge.flow.output} 입니다.`;
+                }
+                speakNow(text);
+              }}
+              className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-1 shadow-xs bg-white"
+              style={{ borderColor: accent, color: accent }}
+              title="개념 카드 듣기"
+            >
+              <Icon name="speaker" size={14} />
+            </button>
           </article>
         ))}
       </div>
