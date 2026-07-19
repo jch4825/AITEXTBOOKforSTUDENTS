@@ -15,7 +15,7 @@ export const M1_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'concept',
     title: 'AI는 우리 곁에 있습니다',
-    objective: 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.',
+    objective: 'AI가 무엇인지 알고, AI가 쉽게 답변하도록 요청할 수 있습니다.',
     standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
     wrapUpEasy: 'AI는 자료를 보고 답을 만드는 컴퓨터 기술입니다.',
     wrapUpNormal: 'AI는 자료를 보고 답이나 추천을 만듭니다. 중요한 내용은 사람이 다시 확인합니다.',

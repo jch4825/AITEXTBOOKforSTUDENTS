@@ -8,10 +8,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     lessonId: 'm1-l1',
     moduleId: 'm1',
     title: 'AI 친구 아이미와의 첫 만남',
-    subtitle: 'AI가 무엇인지 알고, 알맞게 질문하고 답을 확인하는 방법을 배웁니다',
+    subtitle: 'AI가 무엇인지 알고, AI가 쉽게 답변하도록 요청할 수 있습니다.',
     visualNovel: {
       title: '아이미와의 첫 만남',
-      objective: 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.',
+      objective: 'AI가 무엇인지 알고, AI가 쉽게 답변하도록 요청할 수 있습니다.',
       scenes: [
         {
           id: 'arrive',
