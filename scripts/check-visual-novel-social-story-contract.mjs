@@ -124,7 +124,7 @@ if (types.includes('speaker: string') || m1Studio.includes('speaker:')) {
 }
 for (const token of [
   "title: '아이미와의 첫 만남'",
-  "objective: 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.'",
+  "objective: 'AI가 무엇인지 알고, AI가 쉽게 답변하도록 요청할 수 있습니다.'",
   "imageSrc: '/AITEXTBOOKforSTUDENTS/lessons/m1-l1-vn-01.webp'",
   "imageSrc: '/AITEXTBOOKforSTUDENTS/lessons/m1-l1-vn-04.webp'",
   '진우는 설레는 마음으로 학교에 처음 등교했습니다.',
@@ -133,13 +133,13 @@ for (const token of [
   '인간의 지능을 모방한 프로그램입니다.',
   '인공지능은 컴퓨터가 사람처럼 생각하고, 배우고, 문제를 해결하도록 만든 기술이란다.',
   '이해하기 어려울 때는 선생님이나 부모님께 도움을 받아',
-]) {
+ ]) {
   if (!m1Studio.includes(token)) throw new Error(`missing m1-l1 social story data: ${token}`);
 }
 for (const retiredToken of ['어제 자리표', '아이미가 본 것은 어제 자리표']) {
   if (m1Studio.includes(retiredToken)) throw new Error(`retired m1-l1 story remains: ${retiredToken}`);
 }
-if (!m1Lesson.includes("objective: 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.'")) {
+if (!m1Lesson.includes("objective: 'AI가 무엇인지 알고, AI가 쉽게 답변하도록 요청할 수 있습니다.'")) {
   throw new Error('m1-l1 must expose one shared learning objective');
 }
 

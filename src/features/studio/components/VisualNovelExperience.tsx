@@ -80,6 +80,16 @@ export default function VisualNovelExperience({
         <button
           type="button"
           className="visual-novel-next"
+          style={{
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            ...(sceneIndex === story.scenes.length - 1 ? {
+              background: 'var(--paper-1)',
+              color: 'var(--muted)',
+              border: '2px solid var(--editorial-line)',
+              boxShadow: 'none'
+            } : {})
+          }}
           onClick={() => selectScene(sceneIndex === story.scenes.length - 1 ? 0 : sceneIndex + 1)}
           aria-label={sceneIndex === story.scenes.length - 1 ? '이야기 처음부터 보기' : '다음 장면 보기'}
         >
