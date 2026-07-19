@@ -163,7 +163,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     },
     transfer: {
       title: '인공지능은 무엇일까요?',
-      description: '인공지능(AI)은 사람처럼 스스로 배우고 공부하여 우리에게 친절하게 대답해 주는 똑똑한 컴퓨터 프로그램이에요.',
+      description: '인공지능은 컴퓨터 프로그램이 사람처럼 스스로 정보를 공부하고 생각해서, 여러 문제를 해결할 수 있게 돕는 기술입니다.',
       choices: [
         { id: 'ai-definition-correct', emoji: '🤖', label: '사람처럼 배우고 대답해 주는 똑똑한 컴퓨터 프로그램' },
         { id: 'ai-definition-toaster', emoji: '🍞', label: '식빵을 맛있게 구워 주는 토스터 기계' },
