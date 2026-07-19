@@ -32,9 +32,9 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '기계',
-    shortExplanation: '정해진 일을 반복해서 하는 물건입니다.',
+    shortExplanation: '사람이 정해준 순서대로만 똑같이 움직이는 도구',
     example: '토스터, 선풍기, 세탁기 같은 것들입니다.',
-    ttsVersion: '기계는 정해진 일을 반복해서 하는 물건입니다.',
+    ttsVersion: '기계는 사람이 정해준 순서대로만 똑같이 움직이는 도구입니다.',
   },
   {
     term: '인식',
@@ -289,7 +289,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '자동화',
-    shortExplanation: '사람이 정해준 순서대로만 똑같이 움직이는 것입니다.',
+    shortExplanation: '사람이 정해준 순서대로만 똑같이 움직이는 것.',
     example: '세탁기는 버튼을 누르면 항상 같은 순서로 빨래를 합니다.',
   },
   {
