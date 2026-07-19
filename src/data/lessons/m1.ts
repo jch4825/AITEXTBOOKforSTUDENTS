@@ -168,6 +168,7 @@ export const M1_LESSONS: LessonContent[] = [
               question: 'AI 스피커는 "음악 틀어줘"를 알아들습니까?',
               answer: 'O',
               feedback: '맞습니다! AI 스피커는 우리 말을 듣고 이해할 수 있습니다.',
+              image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/ai_speaker.webp',
             },
           ],
         },
