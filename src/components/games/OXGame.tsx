@@ -24,11 +24,6 @@ export default function OXGame({ questions, onComplete }: Props) {
 
   const q = questions[currIdx];
 
-  // Auto-read question on mount/change
-  useEffect(() => {
-    speak(q.question);
-  }, [speak, q.question]);
-
   function choose(ans: 'O' | 'X') {
     if (selected !== null) return;
     setSelected(ans);
