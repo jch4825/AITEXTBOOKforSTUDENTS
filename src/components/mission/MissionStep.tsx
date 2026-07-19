@@ -284,8 +284,21 @@ export default function MissionStep({
           </div>
         </div>
 
+        {/* 오른쪽에서 왼쪽으로 이사 온 리본 장식 완료 배지 */}
+        <span
+          className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-black border-2 shadow-xs transition-transform hover:scale-105"
+          style={{
+            background: 'linear-gradient(135deg, #fff 0%, var(--paper-1) 100%)',
+            borderColor: accent,
+            color: 'var(--brand-ink)',
+            boxShadow: `0 4px 12px color-mix(in srgb, ${accent} 25%, transparent)`
+          }}
+        >
+          <span className="text-lg">✨</span> {mission.reward.badgeLabel}
+        </span>
+
         {/* 오른쪽에서 왼쪽 아래로 이사 온 기능용 버튼들 */}
-        <div className="w-full pt-4 space-y-3 max-w-xs z-10">
+        <div className="w-full pt-2 space-y-3 max-w-xs z-10">
           <button
             onClick={handlePrint}
             className="w-full nav-jelly-btn py-3.5 justify-center text-lg font-black flex items-center"
@@ -316,7 +329,7 @@ export default function MissionStep({
     );
 
     const rewardRight = (
-      <div className="flex flex-col justify-center p-6 items-center relative h-full min-h-[220px]">
+      <div className="flex flex-col justify-center p-6 items-center relative h-full min-h-[260px]">
         <div className="absolute inset-x-0 top-0 h-0 pointer-events-none z-30" aria-hidden>
           {confetti.map((c) => (
             <span
@@ -335,18 +348,14 @@ export default function MissionStep({
           ))}
         </div>
 
-        {/* 리본 장식 완료 배지 */}
-        <span
-          className="inline-flex items-center gap-2 rounded-full px-6 py-4 text-lg font-black border-2 shadow-md transition-transform hover:scale-105"
-          style={{
-            background: 'linear-gradient(135deg, #fff 0%, var(--paper-1) 100%)',
-            borderColor: accent,
-            color: 'var(--brand-ink)',
-            boxShadow: `0 8px 24px color-mix(in srgb, ${accent} 25%, transparent)`
-          }}
-        >
-          <span className="text-2xl">✨</span> {mission.reward.badgeLabel}
-        </span>
+        {/* 대형 축하 3D 스타일 트로피 카드 장식 */}
+        <div className="flex flex-col items-center gap-4 bg-white/50 border border-dashed rounded-3xl p-6 shadow-xs max-w-xs w-full text-center">
+          <span className="text-7xl animate-[bounce_2s_infinite]" role="img" aria-label="트로피">🏆</span>
+          <div className="space-y-1">
+            <span className="text-lg font-black" style={{ color: accent }}>참 멋집니다!</span>
+            <p className="text-xs text-[color:var(--muted)]">모든 문제를 스스로 해결하고 미션을 완수했습니다. 훌륭한 탐험가네요!</p>
+          </div>
+        </div>
       </div>
     );
 
