@@ -132,13 +132,24 @@ export default function StudioExperience({
       <div className="space-y-5">
         <div>
           <p className={isTransferStage ? "studio-kicker text-lg font-extrabold" : "studio-kicker"} style={{ color: secondary }}>생활 장면</p>
-          <h2 className={isTransferStage ? "mt-1 text-3xl font-extrabold" : "mt-1 text-xl font-extrabold"} style={{ color: 'var(--brand-ink)' }}>
-            {state.stage === 'transfer'
-              ? definition.transfer.title
-              : isCompleteStage
-                ? '아이미와의 첫 만남 정리'
-                : definition.encounter.title}
-          </h2>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className={isTransferStage ? "mt-1 text-3xl font-extrabold" : "mt-1 text-xl font-extrabold"} style={{ color: 'var(--brand-ink)' }}>
+              {state.stage === 'transfer'
+                ? definition.transfer.title
+                : isCompleteStage
+                  ? '아이미와의 첫 만남 정리'
+                  : definition.encounter.title}
+            </h2>
+            <button
+              type="button"
+              onClick={() => speakNow(`${state.stage === 'transfer' ? definition.transfer.title : isCompleteStage ? '아이미와의 첫 만남 정리' : definition.encounter.title}. ${contextDescription}`)}
+              className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs"
+              style={{ borderColor: accent, color: accent, background: 'rgba(255, 255, 255, 0.9)' }}
+              title="설명 듣기"
+            >
+              <Icon name="speaker" size={16} />
+            </button>
+          </div>
           <p
             className={isTransferStage ? "mt-4 leading-relaxed text-xl font-extrabold text-[color:var(--brand-ink)]" : "mt-3 leading-relaxed text-sm font-semibold text-[color:var(--brand-ink)]"}
             style={isTransferStage ? {
@@ -158,20 +169,33 @@ export default function StudioExperience({
             {contextFacts.map((fact, index) => (
               <li
                 key={fact}
-                className={isTransferStage ? "studio-fact-card flex items-start gap-4 p-4 rounded-xl border backdrop-blur-xs" : "studio-fact-card flex items-start gap-3"}
+                className={isTransferStage ? "studio-fact-card flex items-start justify-between gap-4 p-4 rounded-xl border backdrop-blur-xs" : "studio-fact-card flex items-start justify-between gap-3 bg-[color:var(--editorial-paper)]/50 p-2.5 rounded-xl border border-dashed"}
                 style={isTransferStage ? {
                   borderColor: 'var(--editorial-line)',
                   background: 'rgba(255, 255, 255, 0.85)',
-                } : undefined}
+                } : {
+                  borderColor: 'var(--editorial-line)'
+                }}
               >
-                <span
-                  className={isTransferStage ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold text-white" : "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-extrabold text-white"}
-                  style={{ background: index % 2 === 0 ? accent : secondary }}
-                  aria-hidden
+                <div className="flex items-start gap-3">
+                  <span
+                    className={isTransferStage ? "flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold text-white" : "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-extrabold text-white"}
+                    style={{ background: index % 2 === 0 ? accent : secondary }}
+                    aria-hidden
+                  >
+                    {index + 1}
+                  </span>
+                  <span className={isTransferStage ? "font-extrabold leading-relaxed text-xl text-[color:var(--brand-ink)]" : "font-semibold leading-relaxed text-sm text-[color:var(--brand-ink)]"}>{fact}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => speakNow(fact)}
+                  className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-0.5 ml-2 shadow-xs bg-white"
+                  style={{ borderColor: accent, color: accent }}
+                  title="내용 듣기"
                 >
-                  {index + 1}
-                </span>
-                <span className={isTransferStage ? "font-extrabold leading-relaxed text-xl text-[color:var(--brand-ink)]" : "font-semibold leading-relaxed text-sm text-[color:var(--brand-ink)]"}>{fact}</span>
+                  <Icon name="speaker" size={14} />
+                </button>
               </li>
             ))}
           </ul>
@@ -180,9 +204,18 @@ export default function StudioExperience({
 
       <div className="pt-5">
         {definition.safetyNote && (
-          <p className="studio-margin-note text-xs leading-relaxed mb-3">
-            <strong>안전 약속:</strong> {definition.safetyNote}
-          </p>
+          <div className="studio-margin-note text-xs leading-relaxed mb-3 flex items-center justify-between gap-2 p-3 rounded-lg border border-dashed bg-white" style={{ borderColor: 'var(--editorial-line)' }}>
+            <span><strong>안전 약속:</strong> {definition.safetyNote}</span>
+            <button
+              type="button"
+              onClick={() => speakNow(`안전 약속. ${definition.safetyNote}`)}
+              className="h-6 w-6 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 bg-white"
+              style={{ borderColor: accent, color: accent }}
+              title="안전 약속 듣기"
+            >
+              <Icon name="speaker" size={12} />
+            </button>
+          </div>
         )}
       </div>
     </div>
@@ -522,7 +555,18 @@ export default function StudioExperience({
         <div className="space-y-5 p-5 md:p-7">
           <div>
             <p className="studio-kicker" style={{ color: secondary }}>배운 내용 정리하기</p>
-            <h2 className="mt-1 text-xl font-extrabold">인공지능은 무엇일까요?</h2>
+            <div className="flex items-center justify-between gap-3 mt-1">
+              <h2 className="text-xl font-extrabold">인공지능은 무엇일까요?</h2>
+              <button
+                type="button"
+                onClick={() => speakNow("인공지능은 무엇일까요? 오늘 배운 인공지능(AI)의 뜻을 생각하며, 아래 질문에 알맞은 답을 골라보세요.")}
+                className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 bg-white shadow-xs"
+                style={{ borderColor: accent, color: accent }}
+                title="설명 듣기"
+              >
+                <Icon name="speaker" size={16} />
+              </button>
+            </div>
             <p className="mt-3 text-lg font-extrabold leading-relaxed text-[color:var(--ink-1)]">
               오늘 배운 인공지능(AI)의 뜻을 생각하며, 아래 질문에 알맞은 답을 골라보세요.
             </p>
@@ -684,7 +728,18 @@ export default function StudioExperience({
         <div className="space-y-5 p-5 md:p-7">
           <div>
             <p className="studio-kicker" style={{ color: secondary }}>오늘의 학습 정리</p>
-            <h2 className="mt-1 text-xl font-extrabold">인공지능과 지혜롭게 공부하기</h2>
+            <div className="flex items-center justify-between gap-3 mt-1">
+              <h2 className="text-xl font-extrabold">인공지능과 지혜롭게 공부하기</h2>
+              <button
+                type="button"
+                onClick={() => speakNow("오늘의 학습 정리. 인공지능과 지혜롭게 공부하기. 오늘 배운 인공지능(AI)의 뜻과 인공지능이 쉽게 대답하도록 요청하는 세 가지 방법입니다.")}
+                className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 bg-white shadow-xs"
+                style={{ borderColor: accent, color: accent }}
+                title="설명 듣기"
+              >
+                <Icon name="speaker" size={16} />
+              </button>
+            </div>
             <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">
               오늘 배운 인공지능(AI)의 뜻과 인공지능이 쉽게 대답하도록 요청하는 세 가지 방법입니다.
             </p>
@@ -696,20 +751,40 @@ export default function StudioExperience({
               { num: '2', title: '쉬운 단어로 물어보기', desc: '인공지능에게 질문할 때는 복잡하고 어려운 단어 대신 누구나 알 수 있는 쉽고 직관적인 단어를 사용해요.' },
               { num: '3', title: '쉽게 다시 대답해 달라고 하기', desc: '인공지능의 설명이 잘 이해되지 않거나 어려울 때는 “더 쉽게 말해줘”라고 한 번 더 친근하게 요청해요.' }
             ].map((item) => (
-              <div key={item.num} className="studio-fact-card p-4 rounded-xl border border-dashed flex gap-3 bg-[color:var(--editorial-paper)]" style={{ borderColor: 'var(--editorial-line)' }}>
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-extrabold text-white" style={{ background: accent }}>
-                  {item.num}
-                </span>
-                <div>
-                  <h3 className="text-sm font-extrabold text-[color:var(--ink-1)]">{item.title}</h3>
-                  <p className="mt-1 text-xs text-[color:var(--muted)] leading-relaxed">{item.desc}</p>
+              <div key={item.num} className="studio-fact-card p-4 rounded-xl border border-dashed flex justify-between gap-3 bg-[color:var(--editorial-paper)]" style={{ borderColor: 'var(--editorial-line)' }}>
+                <div className="flex gap-3">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-extrabold text-white" style={{ background: accent }}>
+                    {item.num}
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-extrabold text-[color:var(--ink-1)]">{item.title}</h3>
+                    <p className="mt-1 text-xs text-[color:var(--muted)] leading-relaxed">{item.desc}</p>
+                  </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => speakNow(`${item.title}. ${item.desc}`)}
+                  className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-0.5 shadow-xs bg-white"
+                  style={{ borderColor: accent, color: accent }}
+                  title="항목 듣기"
+                >
+                  <Icon name="speaker" size={14} />
+                </button>
               </div>
             ))}
           </div>
 
-          <div className="p-4 rounded-xl border text-center text-sm font-bold bg-[#f0fff0]" style={{ borderColor: '#32cd32', color: '#008000' }}>
-            🎉 참 잘했습니다! 인공지능이 무엇인지 알아보고, 쉽게 대답을 요청하는 방법을 모두 배웠습니다.
+          <div className="p-4 rounded-xl border flex items-center justify-between gap-3 text-sm font-bold bg-[#f0fff0]" style={{ borderColor: '#32cd32', color: '#008000' }}>
+            <span>🎉 참 잘했습니다! 인공지능이 무엇인지 알아보고, 쉽게 대답을 요청하는 방법을 모두 배웠습니다.</span>
+            <button
+              type="button"
+              onClick={() => speakNow("참 잘했습니다! 인공지능이 무엇인지 알아보고, 쉽게 대답을 요청하는 방법을 모두 배웠습니다.")}
+              className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 bg-white"
+              style={{ borderColor: '#32cd32', color: '#008000' }}
+              title="축하 듣기"
+            >
+              <Icon name="speaker" size={14} />
+            </button>
           </div>
         </div>
       );
