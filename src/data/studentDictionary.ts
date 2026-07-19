@@ -808,6 +808,16 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '아주 많고 넓은 것입니다.',
     example: '인공지능은 방대한 자료를 공부해서 똑똑해집니다.',
   },
+  {
+    term: '예외',
+    shortExplanation: '보통의 규칙이나 상황에서 벗어나는 특별한 일입니다.',
+    example: '자동화 기계는 정해진 규칙 외에 예외 상황이 생기면 멈춥니다.',
+  },
+  {
+    term: '추론',
+    shortExplanation: '알고 있는 것을 바탕으로 새로운 답을 생각해 내는 것입니다.',
+    example: '인공지능은 추론을 통해 처음 보는 문제도 풀 수 있습니다.',
+  },
 ];
 
 function normalize(term: string): string {
