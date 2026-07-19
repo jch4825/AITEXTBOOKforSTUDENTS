@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Icon from '../../../components/Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
 import type { HardLessonContent, LessonContent } from '../../../types';
@@ -53,7 +53,7 @@ export default function StudioExperience({
   onSceneIndexChange,
 }: Props) {
   const [hintOpen, setHintOpen] = useState(false);
-  const { speakNow } = useSpeak();
+  const { speak, speakNow } = useSpeak();
   const profile = definition.supportProfiles[state.supportLevel];
   const firstChoices = profile.choiceLimit
     ? definition.firstAttempt.choices.slice(0, profile.choiceLimit)
@@ -96,6 +96,18 @@ export default function StudioExperience({
     : showingChangedContext
       ? definition.conditionChange.stimuli
       : definition.encounter.stimuli;
+
+  useEffect(() => {
+    if (state.stage === 'encounter' && definition.visualNovel) return;
+    
+    const textToRead = [
+      (state.stage === 'transfer' ? definition.transfer.title : isCompleteStage ? '아이미와의 첫 만남 정리' : definition.encounter.title),
+      contextDescription,
+      ...contextFacts
+    ].filter(Boolean).join('. ');
+    
+    speak(textToRead);
+  }, [state.stage, state.supportLevel, contextDescription, contextFacts, definition.transfer.title, definition.encounter.title, isCompleteStage, speak, definition.visualNovel]);
 
   function toggleHint() {
     if (!hintOpen) dispatch({ type: 'record-support-mode', value: 'hint' });
