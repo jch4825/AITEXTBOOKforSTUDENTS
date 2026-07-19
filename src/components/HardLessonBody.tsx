@@ -18,12 +18,22 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
     <div className="space-y-6">
       {/* 개념 */}
       <section>
-        {content.concept.map((para, i) => (
-          <p key={i} className="t-body-lg mb-3">{wrapDictionaryTerms(para, dictionaryTerms)}</p>
-        ))}
-        <Button variant="secondary" accent={accent} onClick={() => speakNow(conceptAll)}>
-          <Icon name="speaker" size={20} /> 읽어줘
-        </Button>
+        <div className="flex justify-between items-start gap-4">
+          <div className="flex-1">
+            {content.concept.map((para, i) => (
+              <p key={i} className="t-body-lg mb-3">{wrapDictionaryTerms(para, dictionaryTerms)}</p>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => speakNow(conceptAll)}
+            className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white mt-1"
+            style={{ borderColor: accent, color: accent }}
+            title="개념 듣기"
+          >
+            <Icon name="speaker" size={16} />
+          </button>
+        </div>
       </section>
 
       {/* 오늘의 용어 */}
@@ -36,14 +46,18 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
               className="rounded-[var(--r-md)] p-4"
               style={{ background: 'var(--paper-0)', border: '1px solid var(--line)', boxShadow: 'var(--e-1)' }}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-2">
                 <span className="text-lg font-bold" style={{ color: accent }}>{t.term}</span>
                 <button
+                  type="button"
                   onClick={() => speakNow(`${t.term}. ${t.definition}${t.example ? ` 예를 들면, ${t.example}` : ''}`)}
                   aria-label={`${t.term} 읽어주기`}
-                  className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
-                  style={{ color: accent }}
-                ><Icon name="speaker" size={16} /></button>
+                  className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+                  style={{ borderColor: accent, color: accent }}
+                  title="용어 뜻 듣기"
+                >
+                  <Icon name="speaker" size={14} />
+                </button>
               </div>
               <p className="mt-1">{t.definition}</p>
               {t.example && (
@@ -58,14 +72,25 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
       {content.method && content.method.length > 0 && (
         <section>
           <h2 className="t-h2 mb-3" style={{ color: accent }}>어떻게 할까요</h2>
-          <ol className="space-y-2">
+          <ol className="space-y-3">
             {content.method.map((step, i) => (
-              <li key={i} className="flex items-start gap-3">
-                <span
-                  className="shrink-0 h-7 w-7 rounded-full flex items-center justify-center text-sm font-bold text-white"
-                  style={{ background: accent }}
-                >{i + 1}</span>
-                <span className="t-body-lg">{step}</span>
+              <li key={i} className="flex items-start justify-between gap-3 bg-[color:var(--editorial-paper)]/50 p-2.5 rounded-xl border border-dashed" style={{ borderColor: 'var(--editorial-line)' }}>
+                <div className="flex items-start gap-3">
+                  <span
+                    className="shrink-0 h-7 w-7 rounded-full flex items-center justify-center text-sm font-bold text-white"
+                    style={{ background: accent }}
+                  >{i + 1}</span>
+                  <span className="t-body-lg text-[color:var(--brand-ink)] font-semibold">{step}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => speakNow(step)}
+                  className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-0.5 ml-2 shadow-xs bg-white"
+                  style={{ borderColor: accent, color: accent }}
+                  title="내용 듣기"
+                >
+                  <Icon name="speaker" size={14} />
+                </button>
               </li>
             ))}
           </ol>
@@ -74,14 +99,25 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
 
       {/* 꼭 기억합니다 — 한계·주의 (경고 톤) */}
       <section
-        className="rounded-[var(--r-md)] p-4 flex items-start gap-3"
+        className="rounded-[var(--r-md)] p-4 flex items-start justify-between gap-3"
         style={{ background: 'var(--warn-bg)', border: '2px solid var(--warn)' }}
       >
-        <Icon name="bulb" size={24} color="var(--warn)" />
-        <div>
-          <p className="t-label" style={{ color: 'var(--warn)' }}>꼭 기억합니다</p>
-          <p className="t-body-lg">{content.limits}</p>
+        <div className="flex items-start gap-3">
+          <Icon name="bulb" size={24} color="var(--warn)" className="shrink-0" />
+          <div>
+            <p className="t-label" style={{ color: 'var(--warn)' }}>꼭 기억합니다</p>
+            <p className="t-body-lg text-[color:var(--brand-ink)] font-semibold">{content.limits}</p>
+          </div>
         </div>
+        <button
+          type="button"
+          onClick={() => speakNow(`꼭 기억합니다. ${content.limits}`)}
+          className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-0.5 shadow-xs bg-white"
+          style={{ borderColor: 'var(--warn)', color: 'var(--warn)' }}
+          title="기억할 내용 듣기"
+        >
+          <Icon name="speaker" size={14} />
+        </button>
       </section>
     </div>
   );
