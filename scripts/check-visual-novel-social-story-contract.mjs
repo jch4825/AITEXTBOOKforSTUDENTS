@@ -183,8 +183,11 @@ if (!editorialFrame.includes('이야기로 경험하기') || editorialFrame.incl
 }
 
 const studioView = fs.readFileSync('src/features/studio/StudioLessonView.tsx', 'utf8');
-for (const token of ['completedEncounterId', 'onEncounterComplete', 'visualNovelLocked']) {
-  if (!studioView.includes(token)) throw new Error(`missing encounter completion gate: ${token}`);
+if (studioView.includes('completedEncounterId') || studioView.includes('visualNovelLocked')) {
+  throw new Error('visual story viewing must not gate the shared next button');
+}
+if (!studioView.includes('sceneIndex') || !studioView.includes('setSceneIndex')) {
+  throw new Error('studio route must retain controlled scene indexing for debug locators');
 }
 const useEffectCalls = studioView.match(/\buseEffect\s*\(/g) ?? [];
 if (useEffectCalls.length !== 1) {

@@ -18,7 +18,6 @@ interface Props {
   dispatch: (action: StudioAction) => void;
   accent: string;
   secondary: string;
-  onEncounterComplete?: () => void;
   sceneIndex: number;
   onSceneIndexChange: (index: number) => void;
 }
@@ -49,7 +48,6 @@ export default function StudioExperience({
   dispatch,
   accent,
   secondary,
-  onEncounterComplete,
   sceneIndex,
   onSceneIndexChange,
 }: Props) {
@@ -90,7 +88,6 @@ export default function StudioExperience({
         supportLevel={state.supportLevel}
         accent={accent}
         secondary={secondary}
-        onCompleted={() => onEncounterComplete?.()}
         onSupportMode={(value) => dispatch({ type: 'record-support-mode', value })}
         sceneIndex={sceneIndex}
         onSceneIndexChange={onSceneIndexChange}

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { loadTeacherRecordingSettings } from '../teacher/recordingSettings';
 import { saveStudioEvidence } from './evidenceStorage';
-import { canAdvance, createInitialStudioSession, studioReducer } from './studioReducer';
+import { createInitialStudioSession, studioReducer } from './studioReducer';
 import type { StudioDefinition, StudioEvidenceV2, SupportLevel } from './types';
 
 const EMPTY_OBSERVATION: StudioEvidenceV2['observation'] = {
@@ -81,7 +81,6 @@ export function useStudioSession(
   return {
     state: currentState,
     dispatch,
-    canGoNext: canAdvance(state),
     goNext,
     goPrevious,
     reset,

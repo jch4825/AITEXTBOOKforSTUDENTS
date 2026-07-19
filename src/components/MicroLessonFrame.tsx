@@ -18,7 +18,6 @@ interface Props {
   onNext: () => void;
   onPickLesson: (id: LessonId) => void;
   onGoHome: () => void;
-  nextDisabled?: boolean;
   pageKey?: string;
   subPage?: DebugSubPage;
   children: ReactNode;
@@ -28,7 +27,7 @@ const SIDEBAR_COLLAPSED_KEY = 'ai-students-sidebar-collapsed';
 
 export default function MicroLessonFrame({
   lessonId, crumb, totalSteps, currentStep,
-  onPrev, onNext, onPickLesson, onGoHome, nextDisabled = false, pageKey, subPage, children,
+  onPrev, onNext, onPickLesson, onGoHome, pageKey, subPage, children,
 }: Props) {
   const [dictOpen, setDictOpen] = useState(false);
   const [dictQuery, setDictQuery] = useState<string | null>(null);
@@ -176,8 +175,6 @@ export default function MicroLessonFrame({
         </div>
         <Button
           onClick={onNext}
-          disabled={nextDisabled}
-          aria-label={nextDisabled ? '현재 활동을 마치면 다음으로 갈 수 있습니다' : undefined}
           className="px-4 md:px-6"
         >{currentStep + 1 >= totalSteps
           ? <><Icon name="sparkles" size={20} filled /> 다 했습니다!</>

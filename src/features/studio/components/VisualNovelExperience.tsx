@@ -9,7 +9,6 @@ interface Props {
   supportLevel: SupportLevel;
   accent: string;
   secondary: string;
-  onCompleted: () => void;
   onSupportMode: (mode: string) => void;
   sceneIndex: number;
   onSceneIndexChange: (index: number) => void;
@@ -21,7 +20,6 @@ export default function VisualNovelExperience({
   supportLevel,
   accent,
   secondary,
-  onCompleted,
   onSupportMode,
   sceneIndex,
   onSceneIndexChange,
@@ -39,7 +37,6 @@ export default function VisualNovelExperience({
 
   function selectScene(index: number) {
     onSceneIndexChange(index);
-    if (index === story.scenes.length - 1) onCompleted();
   }
 
   function speakCurrentScene() {

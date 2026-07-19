@@ -40,6 +40,10 @@ const visualNovel = fs.readFileSync('src/features/studio/components/VisualNovelE
 for (const token of ['pageKey?: string', 'subPage?: DebugSubPage', 'data-debug-page-id', 'formatDebugPageId', 'isDebugMode']) {
   if (!frame.includes(token)) throw new Error(`frame debug locator missing: ${token}`);
 }
+if (frame.includes('nextDisabled')) throw new Error('shared footer must not expose a next-page lock');
+if (studioView.includes('visualNovelLocked') || studioView.includes('canGoNext')) {
+  throw new Error('studio view still gates forward navigation');
+}
 for (const key of ["'wrap-up'", "'coming-soon'", 'currentStep.kind']) {
   if (!lessonView.includes(key)) throw new Error(`lesson page key missing: ${key}`);
 }

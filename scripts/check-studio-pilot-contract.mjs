@@ -40,22 +40,20 @@ const compiled = ts.transpileModule(reducerSource, {
 }).outputText;
 const reducerModule = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
 let state = reducerModule.createInitialStudioSession('light', '2026-07-16T00:00:00.000Z');
+for (const expected of [
+  'first-attempt',
+  'condition-change',
+  'ai-compare',
+  'decision',
+  'artifact',
+  'transfer',
+  'complete',
+]) {
+  state = reducerModule.studioReducer(state, { type: 'next' });
+  if (state.stage !== expected) throw new Error(`free navigation must reach ${expected}, got ${state.stage}`);
+}
 state = reducerModule.studioReducer(state, { type: 'next' });
-if (state.stage !== 'first-attempt') throw new Error('encounter must advance to first-attempt');
-state = reducerModule.studioReducer(state, { type: 'next' });
-if (state.stage !== 'first-attempt') throw new Error('first-attempt must block without an expression');
-state = reducerModule.studioReducer(state, { type: 'set-first-attempt', value: { mode: 'choice', choiceIds: ['a'] } });
-state = reducerModule.studioReducer(state, { type: 'next' });
-if (state.stage !== 'condition-change') throw new Error('first-attempt must advance after an expression');
-state = reducerModule.studioReducer(state, { type: 'next' });
-state = reducerModule.studioReducer(state, { type: 'next' });
-if (state.stage !== 'decision') throw new Error('AI comparison must lead to decision');
-state = reducerModule.studioReducer(state, { type: 'next' });
-if (state.stage !== 'decision') throw new Error('decision must block without AI judgment and final expression');
-state = reducerModule.studioReducer(state, { type: 'set-ai-decision', value: 'reject' });
-state = reducerModule.studioReducer(state, { type: 'set-final-expression', value: { mode: 'text', text: '내 방법' } });
-state = reducerModule.studioReducer(state, { type: 'next' });
-if (state.stage !== 'artifact') throw new Error('decision must advance after judgment and expression');
+if (state.stage !== 'complete') throw new Error('next must stay on the final stage');
 
 const expressionPath = 'src/features/studio/components/StudioExpressionInput.tsx';
 const decisionPath = 'src/features/studio/components/AiDecisionPanel.tsx';
@@ -83,8 +81,6 @@ const editorialSource = fs.readFileSync(editorialPath, 'utf8');
 const explanationSource = fs.readFileSync(explanationPath, 'utf8');
 const experienceSource = fs.readFileSync(experiencePath, 'utf8');
 const lessonViewSource = fs.readFileSync(lessonViewPath, 'utf8');
-if (!frameSource.includes('nextDisabled?: boolean')) throw new Error('MicroLessonFrame next lock is missing');
-if (!frameSource.includes('disabled={nextDisabled}')) throw new Error('next button does not use the lock');
 for (const label of ['상황 만나기', '첫 생각', '조건이 달라졌습니다', 'AI의 다른 관점', '내가 판단하기', '생각을 결과물로', '다른 상황에 적용하기', '과정 돌아보기']) {
   if (!editorialSource.includes(label)) throw new Error(`studio stage label is missing: ${label}`);
 }

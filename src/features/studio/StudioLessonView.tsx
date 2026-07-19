@@ -31,7 +31,6 @@ export default function StudioLessonView({
   const { markCompleted } = useProgress();
   const theme = themeFor(definition.moduleId);
   const module = getModule(definition.moduleId);
-  const [completedEncounterId, setCompletedEncounterId] = useState<string | null>(null);
   const [sceneIndex, setSceneIndex] = useState(0);
   const markStudioComplete = useCallback(() => {
     markCompleted(definition.lessonId);
@@ -48,9 +47,6 @@ export default function StudioLessonView({
   const debugSubPage = session.state.stage === 'encounter' && definition.visualNovel
     ? { current: sceneIndex + 1, total: definition.visualNovel.scenes.length }
     : undefined;
-  const visualNovelLocked = session.state.stage === 'encounter'
-    && Boolean(definition.visualNovel)
-    && completedEncounterId !== definition.id;
 
   function handleNext() {
     if (session.state.stage === 'complete') onGoHome();
@@ -68,7 +64,6 @@ export default function StudioLessonView({
         onNext={handleNext}
         onPickLesson={onPickLesson}
         onGoHome={onGoHome}
-        nextDisabled={visualNovelLocked || (session.state.stage !== 'complete' && !session.canGoNext)}
         pageKey={session.state.stage}
         subPage={debugSubPage}
       >
@@ -80,7 +75,6 @@ export default function StudioLessonView({
           dispatch={session.dispatch}
           accent={theme.accent}
           secondary={theme.secondary}
-          onEncounterComplete={() => setCompletedEncounterId(definition.id)}
           sceneIndex={sceneIndex}
           onSceneIndexChange={setSceneIndex}
         />

@@ -25,12 +25,6 @@ const CRITERIA = [
 
 const NEXT_MODES: ExpressionMode[] = ['choice', 'text', 'speech'];
 
-function expressionComplete(value?: StudioExpression): boolean {
-  if (!value) return false;
-  if (value.mode === 'choice' || value.mode === 'aac') return Boolean(value.choiceIds?.length);
-  return Boolean(value.text?.trim());
-}
-
 function expressionText(record: StudioEvidenceV2, field: 'firstAttempt' | 'finalExpression' | 'transferExpression'): string {
   const value = record[field];
   if (!value) return '표현 기록 없음';
@@ -78,7 +72,6 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
       onNext={finish}
       onGoHome={onGoHome}
       onPickLesson={onPickLesson}
-      nextDisabled={selectedCriteria.length === 0 || !expressionComplete(nextMethod)}
     >
       <ScreentoneBackdrop moduleId={definition.moduleId}>
         <main className="mx-auto max-w-6xl space-y-6 py-2">
