@@ -303,10 +303,10 @@ export default function StudioExperience({
           <div className="mt-4 rounded-xl border p-4" style={{ borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' }}>
             <p className="text-xs font-bold text-[color:var(--muted)] mb-2">💡 쉽게 물어보는 방법 예시</p>
             <ul className="list-disc pl-5 space-y-1.5 text-sm" style={{ color: 'var(--ink-1)' }}>
-              <li>“토스터가 뭐하는 물건인지 누구나 이해하기 쉽게 설명해 줘.”</li>
-              <li>“토스터의 뜻을 어려운 과학 단어 없이 간단하게 말해 줘.”</li>
-              <li>“토스터가 하는 일을 한 문장으로 짧게 알려 줘.”</li>
-              <li>“빵을 굽는 토스터에 대해 쉬운 말로 설명해 줄래?”</li>
+              <li>“토스터가 뭐하는 물건인지 누구나 이해하기 <strong>쉽게</strong> 설명해 줘.”</li>
+              <li>“토스터의 뜻을 어려운 과학 단어 없이 <strong>간단하게</strong> 말해 줘.”</li>
+              <li>“토스터가 하는 일을 한 문장으로 <strong>짧게</strong> 알려 줘.”</li>
+              <li>“빵을 굽는 토스터에 대해 <strong>쉬운 말로</strong> 설명해 줄래?”</li>
             </ul>
             <div className="mt-4 flex justify-center">
               <img
