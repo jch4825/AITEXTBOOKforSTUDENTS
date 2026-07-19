@@ -144,9 +144,20 @@ export default function EpisodeHeroSpread({
             {/* Story Text and Body Text */}
             <div className="space-y-6 max-w-3xl mx-auto pt-2">
               {text && (
-                <p className="t-body-lg text-lg leading-relaxed text-[color:var(--ink-2)] border-l-4 pl-4" style={{ borderColor: accent }}>
-                  {text}
-                </p>
+                <div className="flex justify-between items-start gap-4 border-l-4 pl-4" style={{ borderColor: accent }}>
+                  <p className="t-body-lg text-lg leading-relaxed text-[color:var(--ink-2)] flex-1 mb-0">
+                    {text}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => speakNow(text)}
+                    className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white mt-1"
+                    style={{ borderColor: accent, color: accent }}
+                    title="도입 지문 듣기"
+                  >
+                    <Icon name="speaker" size={16} />
+                  </button>
+                </div>
               )}
               {bodyText && <div className="mt-4">{bodyText}</div>}
             </div>
@@ -223,9 +234,20 @@ export default function EpisodeHeroSpread({
 
       <div className="spread-copy-body">
         {text && (
-          <p className="spread-story-intro t-body-lg" style={{ borderColor: accent }}>
-            {text}
-          </p>
+          <div className="spread-story-intro flex justify-between items-start gap-4" style={{ borderColor: accent }}>
+            <p className="t-body-lg flex-1 mb-0">
+              {text}
+            </p>
+            <button
+              type="button"
+              onClick={() => speakNow(text)}
+              className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white mt-1"
+              style={{ borderColor: accent, color: accent }}
+              title="도입 지문 듣기"
+            >
+              <Icon name="speaker" size={16} />
+            </button>
+          </div>
         )}
         {bodyText && <div className="spread-body-slot">{bodyText}</div>}
       </div>

@@ -149,12 +149,18 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
     const bodyNode = effectiveHard ? (
       <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
     ) : (
-      <>
-        <p className="t-body-lg">{wrapDictionaryTerms(body, terms)}</p>
-        <Button accent={theme.accent} onClick={() => speakNow(body)} className="mt-4">
-          <Icon name="speaker" size={20} /> 읽어줘
-        </Button>
-      </>
+      <div className="flex justify-between items-start gap-4">
+        <p className="t-body-lg flex-1">{wrapDictionaryTerms(body, terms)}</p>
+        <button
+          type="button"
+          onClick={() => speakNow(body)}
+          className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white mt-1"
+          style={{ borderColor: theme.accent, color: theme.accent }}
+          title="본문 듣기"
+        >
+          <Icon name="speaker" size={16} />
+        </button>
+      </div>
     );
     return (
       <EpisodeHeroSpread
