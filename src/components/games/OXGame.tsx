@@ -9,6 +9,7 @@ export interface OXQuestion {
   question: string;
   answer: 'O' | 'X';
   feedback: string;
+  image?: string;
 }
 
 interface Props {
@@ -74,6 +75,18 @@ export default function OXGame({ questions, onComplete }: Props) {
           />
         ))}
       </div>
+
+      {/* 퀴즈 왼쪽에 이미지(토스터 이미지) 크게 넣기 */}
+      {q.image && (
+        <div className="flex justify-center sm:justify-start w-full my-3">
+          <img
+            src={q.image}
+            alt="문제 그림"
+            className="max-h-56 sm:max-h-64 w-auto rounded-2xl border object-contain shadow-md bg-white p-2.5"
+            style={{ borderColor: 'var(--editorial-line)' }}
+          />
+        </div>
+      )}
 
       {/* Problem Speak Button */}
       <button

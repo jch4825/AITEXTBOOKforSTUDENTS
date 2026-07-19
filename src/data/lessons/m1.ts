@@ -162,6 +162,7 @@ export const M1_LESSONS: LessonContent[] = [
               question: '토스터는 우리 말을 알아들을 수 있습니까?',
               answer: 'X',
               feedback: '토스터는 그냥 빵을 굽는 기계입니다. 말을 알아들을 수 없습니다.',
+              image: '/AITEXTBOOKforSTUDENTS/lessons/toaster.png',
             },
             {
               question: 'AI 스피커는 "음악 틀어줘"를 알아들습니까?',
