@@ -1,4 +1,3 @@
-import TTSToggle from './controls/TTSToggle';
 import FontSizeToggle from './controls/FontSizeToggle';
 import DifficultyToggle from './controls/DifficultyToggle';
 import DictionaryTrigger from './controls/DictionaryTrigger';
@@ -30,7 +29,6 @@ export default function TopBar({ crumb, onOpenDictionary, onGoHome, onOpenNav }:
       ><Icon name="home" size={22} /><span className="hidden sm:inline"> AI 교과서</span></button>
       <span className="hidden md:inline text-base text-[color:var(--muted)] truncate" aria-label="현재 위치">{crumb}</span>
       <div className="order-3 md:order-none w-full md:w-auto md:ml-auto flex items-center justify-between gap-1.5 md:justify-start md:gap-2">
-        <TTSToggle />
         <FontSizeToggle />
         <DifficultyToggle />
         <DictionaryTrigger onClick={onOpenDictionary} />
