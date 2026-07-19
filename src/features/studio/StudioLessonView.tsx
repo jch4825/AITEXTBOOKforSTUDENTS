@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import MicroLessonFrame from '../../components/MicroLessonFrame';
 import ScreentoneBackdrop from '../../components/lesson/ScreentoneBackdrop';
 import { useProgress } from '../../context/ProgressContext';
@@ -32,6 +32,7 @@ export default function StudioLessonView({
   const theme = themeFor(definition.moduleId);
   const module = getModule(definition.moduleId);
   const [completedEncounterId, setCompletedEncounterId] = useState<string | null>(null);
+  const [sceneIndex, setSceneIndex] = useState(0);
   const markStudioComplete = useCallback(() => {
     markCompleted(definition.lessonId);
   }, [definition.lessonId, markCompleted]);
@@ -41,6 +42,12 @@ export default function StudioLessonView({
     markStudioComplete,
   );
   const currentStep = STUDIO_STAGES.indexOf(session.state.stage);
+  useEffect(() => {
+    setSceneIndex(0);
+  }, [definition.id, session.state.stage]);
+  const debugSubPage = session.state.stage === 'encounter' && definition.visualNovel
+    ? { current: sceneIndex + 1, total: definition.visualNovel.scenes.length }
+    : undefined;
   const visualNovelLocked = session.state.stage === 'encounter'
     && Boolean(definition.visualNovel)
     && completedEncounterId !== definition.id;
@@ -62,6 +69,8 @@ export default function StudioLessonView({
         onPickLesson={onPickLesson}
         onGoHome={onGoHome}
         nextDisabled={visualNovelLocked || (session.state.stage !== 'complete' && !session.canGoNext)}
+        pageKey={session.state.stage}
+        subPage={debugSubPage}
       >
         <StudioExperience
           definition={definition}
@@ -72,6 +81,8 @@ export default function StudioLessonView({
           accent={theme.accent}
           secondary={theme.secondary}
           onEncounterComplete={() => setCompletedEncounterId(definition.id)}
+          sceneIndex={sceneIndex}
+          onSceneIndexChange={setSceneIndex}
         />
       </MicroLessonFrame>
     </ScreentoneBackdrop>

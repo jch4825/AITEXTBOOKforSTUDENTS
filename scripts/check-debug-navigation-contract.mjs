@@ -31,4 +31,32 @@ if (scene !== 'm1-l1 · P01/08 · encounter · S03/04') {
 const fallback = debugModule.formatDebugPageId({ lessonId: 'm1-l3', current: 1, total: 1 });
 if (fallback !== 'm1-l3 · P01/01') throw new Error(`unexpected fallback locator: ${fallback}`);
 
+const frame = fs.readFileSync('src/components/MicroLessonFrame.tsx', 'utf8');
+const lessonView = fs.readFileSync('src/views/LessonView.tsx', 'utf8');
+const studioView = fs.readFileSync('src/features/studio/StudioLessonView.tsx', 'utf8');
+const moduleClose = fs.readFileSync('src/features/studio/ModuleCloseLessonView.tsx', 'utf8');
+const visualNovel = fs.readFileSync('src/features/studio/components/VisualNovelExperience.tsx', 'utf8');
+
+for (const token of ['pageKey?: string', 'subPage?: DebugSubPage', 'data-debug-page-id', 'formatDebugPageId', 'isDebugMode']) {
+  if (!frame.includes(token)) throw new Error(`frame debug locator missing: ${token}`);
+}
+for (const key of ["'wrap-up'", "'coming-soon'", 'currentStep.kind']) {
+  if (!lessonView.includes(key)) throw new Error(`lesson page key missing: ${key}`);
+}
+if (!studioView.includes('pageKey={session.state.stage}')) throw new Error('studio stage page key is missing');
+if (!moduleClose.includes('pageKey="module-close"')) throw new Error('module close page key is missing');
+for (const token of ['sceneIndex: number', 'onSceneIndexChange: (index: number) => void']) {
+  if (!visualNovel.includes(token)) throw new Error(`controlled visual story scene missing: ${token}`);
+}
+for (const [name, source] of [
+  ['LessonView', lessonView],
+  ['StudioLessonView', studioView],
+  ['ModuleCloseLessonView', moduleClose],
+]) {
+  const calls = source.match(/<MicroLessonFrame[\s\S]*?>/g) ?? [];
+  if (calls.length === 0 || calls.some((call) => !call.includes('pageKey='))) {
+    throw new Error(`${name} has a MicroLessonFrame call without pageKey`);
+  }
+}
+
 console.log('debug navigation contract passed');

@@ -7,6 +7,7 @@ import Button from './Button';
 import Icon from './Icon';
 import ClassroomDock from './ClassroomDock';
 import type { LessonId } from '../types';
+import { formatDebugPageId, isDebugMode, type DebugSubPage } from '../utils/debugMode';
 
 interface Props {
   lessonId: LessonId;
@@ -18,6 +19,8 @@ interface Props {
   onPickLesson: (id: LessonId) => void;
   onGoHome: () => void;
   nextDisabled?: boolean;
+  pageKey?: string;
+  subPage?: DebugSubPage;
   children: ReactNode;
 }
 
@@ -25,7 +28,7 @@ const SIDEBAR_COLLAPSED_KEY = 'ai-students-sidebar-collapsed';
 
 export default function MicroLessonFrame({
   lessonId, crumb, totalSteps, currentStep,
-  onPrev, onNext, onPickLesson, onGoHome, nextDisabled = false, children,
+  onPrev, onNext, onPickLesson, onGoHome, nextDisabled = false, pageKey, subPage, children,
 }: Props) {
   const [dictOpen, setDictOpen] = useState(false);
   const [dictQuery, setDictQuery] = useState<string | null>(null);
@@ -34,6 +37,15 @@ export default function MicroLessonFrame({
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(
     () => { try { return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1'; } catch { return false; } },
   );
+  const debugPageId = isDebugMode()
+    ? formatDebugPageId({
+        lessonId,
+        current: currentStep + 1,
+        total: totalSteps,
+        pageKey,
+        subPage,
+      })
+    : null;
 
   function toggleSidebar() {
     setSidebarCollapsed(v => {
@@ -146,7 +158,22 @@ export default function MicroLessonFrame({
           disabled={currentStep === 0}
           className="px-4 md:px-6"
         ><Icon name="chevron-left" size={20} /> 이전</Button>
-        <div className="comic-cut-progress" aria-label={`전체 ${totalSteps}컷 중 ${currentStep + 1}번째 컷`}><span>{String(currentStep + 1).padStart(2, '0')} / {String(totalSteps).padStart(2, '0')}</span><ProgressDots total={totalSteps} current={currentStep} /></div>
+        <div
+          className="comic-cut-progress min-w-0"
+          aria-label={debugPageId
+            ? `디버그 페이지 ${debugPageId}`
+            : `전체 ${totalSteps}컷 중 ${currentStep + 1}번째 컷`}
+          data-debug-page-id={debugPageId ?? undefined}
+        >
+          {debugPageId ? (
+            <code className="block max-w-[48vw] overflow-x-auto whitespace-nowrap font-mono text-[10px] leading-tight select-text md:max-w-none md:text-xs">
+              {debugPageId}
+            </code>
+          ) : (
+            <span>{String(currentStep + 1).padStart(2, '0')} / {String(totalSteps).padStart(2, '0')}</span>
+          )}
+          <ProgressDots total={totalSteps} current={currentStep} />
+        </div>
         <Button
           onClick={onNext}
           disabled={nextDisabled}

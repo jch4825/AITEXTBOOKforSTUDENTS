@@ -186,8 +186,9 @@ const studioView = fs.readFileSync('src/features/studio/StudioLessonView.tsx', '
 for (const token of ['completedEncounterId', 'onEncounterComplete', 'visualNovelLocked']) {
   if (!studioView.includes(token)) throw new Error(`missing encounter completion gate: ${token}`);
 }
-if (studioView.includes('useEffect')) {
-  throw new Error('encounter completion must be derived from the current lesson id');
+const sceneResetEffect = studioView.match(/useEffect\(\(\) => \{([\s\S]*?)\}, \[definition\.id, session\.state\.stage\]\);/);
+if (!sceneResetEffect?.[1].includes('setSceneIndex(0)') || sceneResetEffect[1].includes('setCompletedEncounterId')) {
+  throw new Error('scene reset must not change encounter completion');
 }
 if (studioView.includes('speakNow') || studioView.includes('speechSynthesis')) {
   throw new Error('studio route must not auto-start TTS');

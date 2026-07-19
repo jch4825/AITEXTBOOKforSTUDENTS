@@ -107,6 +107,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   const totalSteps = lesson.steps.length + 1;
   const isWrapUp = step === lesson.steps.length;
   const currentStep = lesson.steps[step];
+  const pageKey = isWrapUp ? 'wrap-up' : currentStep.kind;
   const hard = getHardContent(lesson.id);
   // 어려움인데 hard 콘텐츠가 없으면 보통으로 폴백 (spec §4 — 절대 깨지지 않음)
   const effectiveHard = difficulty === 'hard' && hard ? hard : null;
@@ -273,6 +274,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   return (
     <MicroLessonFrame
       lessonId={lesson.id}
+      pageKey={pageKey}
       crumb={`단원 ${mod.number} > ${lesson.number}. ${lesson.title}`}
       totalSteps={totalSteps}
       currentStep={step}
@@ -318,6 +320,7 @@ function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps)
   return (
     <MicroLessonFrame
       lessonId={lessonId}
+      pageKey={'coming-soon'}
       crumb={crumb}
       totalSteps={1}
       currentStep={0}

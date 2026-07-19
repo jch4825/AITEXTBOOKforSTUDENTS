@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Icon from '../../../components/Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
 import type { StudioDefinition, SupportLevel, VisualNovelStory } from '../types';
@@ -12,6 +11,8 @@ interface Props {
   secondary: string;
   onCompleted: () => void;
   onSupportMode: (mode: string) => void;
+  sceneIndex: number;
+  onSceneIndexChange: (index: number) => void;
 }
 
 export default function VisualNovelExperience({
@@ -22,8 +23,9 @@ export default function VisualNovelExperience({
   secondary,
   onCompleted,
   onSupportMode,
+  sceneIndex,
+  onSceneIndexChange,
 }: Props) {
-  const [sceneIndex, setSceneIndex] = useState(0);
   const { speakNow } = useSpeak();
   const scene = story.scenes[sceneIndex];
   const copy = scene.copy[supportLevel];
@@ -36,7 +38,7 @@ export default function VisualNovelExperience({
   ].filter(Boolean).join(' ');
 
   function selectScene(index: number) {
-    setSceneIndex(index);
+    onSceneIndexChange(index);
     if (index === story.scenes.length - 1) onCompleted();
   }
 

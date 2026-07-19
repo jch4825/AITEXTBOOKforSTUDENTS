@@ -19,6 +19,8 @@ interface Props {
   accent: string;
   secondary: string;
   onEncounterComplete?: () => void;
+  sceneIndex: number;
+  onSceneIndexChange: (index: number) => void;
 }
 
 const AI_DECISION_SUMMARY: Record<AiDecision, string> = {
@@ -48,6 +50,8 @@ export default function StudioExperience({
   accent,
   secondary,
   onEncounterComplete,
+  sceneIndex,
+  onSceneIndexChange,
 }: Props) {
   const [hintOpen, setHintOpen] = useState(false);
   const { speakNow } = useSpeak();
@@ -88,6 +92,8 @@ export default function StudioExperience({
         secondary={secondary}
         onCompleted={() => onEncounterComplete?.()}
         onSupportMode={(value) => dispatch({ type: 'record-support-mode', value })}
+        sceneIndex={sceneIndex}
+        onSceneIndexChange={onSceneIndexChange}
       />
     );
   }

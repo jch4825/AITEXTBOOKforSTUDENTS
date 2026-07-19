@@ -70,6 +70,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
   return (
     <MicroLessonFrame
       lessonId={definition.lessonId}
+      pageKey="module-close"
       crumb={definition.crumb}
       totalSteps={1}
       currentStep={0}
