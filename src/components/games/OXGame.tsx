@@ -4,6 +4,8 @@ import Button from '../Button';
 import Icon from '../Icon';
 import Burst from './Burst';
 import ActivitySpread from '../lesson/ActivitySpread';
+import { wrapDictionaryTerms } from '../../views/lessonTextUtils';
+import { STUDENT_DICTIONARY } from '../../data/studentDictionary';
 
 export interface OXQuestion {
   question: string;
@@ -51,9 +53,14 @@ export default function OXGame({ questions, onComplete }: Props) {
     speakNow(q.question);
   }
 
+  const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
+    entry.term,
+    ...(entry.aliases ?? []),
+  ]);
+
   const titleNode = (
     <div className="flex items-center justify-between gap-3 w-full">
-      <span className="flex-1">{q.question}</span>
+      <span className="flex-1">{wrapDictionaryTerms(q.question, allDictTerms)}</span>
       <button
         type="button"
         onClick={() => speakNow(q.question)}
