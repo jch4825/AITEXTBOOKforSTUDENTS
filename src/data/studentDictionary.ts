@@ -818,6 +818,39 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '알고 있는 것을 바탕으로 새로운 답을 생각해 내는 것입니다.',
     example: '인공지능은 추론을 통해 처음 보는 문제도 풀 수 있습니다.',
   },
+  {
+    term: '열역학',
+    shortExplanation: '열과 에너지가 어떻게 움직이는지 공부하는 과학입니다.',
+    example: '에어컨은 열역학 법칙을 이용해서 시원한 바람을 만듭니다.',
+  },
+  {
+    term: '기화',
+    shortExplanation: '액체가 기체로 변하는 현상입니다.',
+    example: '땀이 마르면서 기화되면 우리 몸이 시원해집니다.',
+  },
+  {
+    term: '메커니즘',
+    shortExplanation: '기계나 어떤 일이 작동하는 내부적인 순서와 원리입니다.',
+    example: '컴퓨터가 작동하는 메커니즘을 알아봅시다.',
+  },
+  {
+    term: '대처하다',
+    aliases: ['대처', '대처하지'],
+    shortExplanation: '어려운 일이나 문제를 해결하기 위해 알맞게 행동하는 것입니다.',
+    example: 'AI가 갑자기 멈추었을 때 당황하지 않고 대처해야 합니다.',
+  },
+  {
+    term: '유연하다',
+    aliases: ['유연하고', '유연한'],
+    shortExplanation: '상황에 맞춰 부드럽고 융통성 있게 행동하는 것입니다.',
+    example: '인공지능은 새로운 상황에 유연하게 대답할 수 있습니다.',
+  },
+  {
+    term: '복잡하다',
+    aliases: ['복잡한', '복잡하지'],
+    shortExplanation: '여러 가지가 얽혀 있어 이해하기 어렵고 어지러운 것입니다.',
+    example: '길이 복잡해서 지도를 보고 찾아가야 합니다.',
+  },
 ];
 
 function normalize(term: string): string {
