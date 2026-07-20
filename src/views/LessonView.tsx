@@ -152,8 +152,8 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
 
     const vnStory = lesson.id === 'm1-l2' ? M1_L2_VISUAL_STORY : null;
 
-    const bodyNode = effectiveHard ? (
-      vnStory ? (
+    if (effectiveHard && vnStory) {
+      return (
         <VisualNovelExperience
           definition={{
             id: `${lesson.id}-hard-story`,
@@ -173,9 +173,11 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
           sceneIndex={vnSceneIndex}
           onSceneIndexChange={setVnSceneIndex}
         />
-      ) : (
-        <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
-      )
+      );
+    }
+
+    const bodyNode = effectiveHard ? (
+      <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
     ) : (
       <div className="flex justify-between items-start gap-4">
         <p className="t-body-lg flex-1">{wrapDictionaryTerms(body, terms)}</p>
