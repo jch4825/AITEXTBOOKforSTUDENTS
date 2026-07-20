@@ -89,7 +89,7 @@ export default function ExpressionInput({
       )}
 
       {(activeMode === 'choice' || activeMode === 'aac') && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className={activeMode === 'choice' ? "grid grid-cols-1 gap-3" : "grid grid-cols-1 sm:grid-cols-2 gap-3"}>
           {choices.map((choice) => {
             const selected = value?.choiceIds?.includes(choice.id) ?? false;
             return (
