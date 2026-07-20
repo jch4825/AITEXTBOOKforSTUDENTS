@@ -41,7 +41,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
   return <main className="min-h-screen comic-contents">
     <header className="comic-contents-header">
       <button onClick={onGoHome} className="comic-home-link" aria-label="처음 화면으로"><Icon name="home" size={21} /> AI 교과서</button>
-      <span className="comic-header-caption">AI 동아리 · 시즌 1</span>
+      <span className="comic-header-caption">인공지능 활용 · V1.0</span>
     </header>
     <div className="comic-contents-inner mx-auto px-4 md:px-8 py-6 md:py-10">
       <ComicPanel accent={activeTheme.accent} className="comic-resume" label="이어서 배우기">
