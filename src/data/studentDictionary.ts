@@ -851,6 +851,32 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '여러 가지가 얽혀 있어 이해하기 어렵고 어지러운 것입니다.',
     example: '길이 복잡해서 지도를 보고 찾아가야 합니다.',
   },
+  {
+    term: '모방',
+    aliases: ['모방하여', '모방한'],
+    shortExplanation: '다른 것의 모습이나 행동을 그대로 흉내 내어 따라 하는 것입니다.',
+    example: '인공지능은 사람의 생각하는 방식을 모방해서 행동합니다.',
+  },
+  {
+    term: '알고리즘',
+    shortExplanation: '컴퓨터가 문제를 해결하기 위해 차례대로 실행하는 규칙과 방법입니다.',
+    example: '인공지능은 알맞은 답을 찾기 위해 수학적 알고리즘을 사용합니다.',
+  },
+  {
+    term: '인지',
+    shortExplanation: '무언가를 보고, 듣고, 생각해서 알아차리거나 이해하는 것입니다.',
+    example: '사람은 오감을 통해 주변 세상을 인지합니다.',
+  },
+  {
+    term: '필라멘트',
+    shortExplanation: '전구나 토스터 기계 안에서 전기를 받아 뜨거운 열이나 빛을 내는 얇은 철사선입니다.',
+    example: '토스터의 필라멘트가 빨갛게 달아오르면 식빵이 구워집니다.',
+  },
+  {
+    term: '마이야르',
+    shortExplanation: '빵이나 고기를 구울 때 겉이 갈색으로 변하며 맛있는 냄새와 맛이 나게 되는 화학 현상입니다.',
+    example: '식빵이 갈색으로 노릇노릇해지는 것은 마이야르 반응 때문입니다.',
+  },
 ];
 
 function normalize(term: string): string {

@@ -22,7 +22,7 @@ export const M1_LESSONS: LessonContent[] = [
     bodyEasy: 'AI는 사람이 만든 컴퓨터 기술입니다.',
     bodyNormal: 'AI는 글을 읽거나, 말을 듣거나, 사진 또는 영상을 이해할 수 있습니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['인공지능', '컴퓨터', '프로그램', '자료', '음성 비서', '번역', '앱', '도구'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['인공지능', '컴퓨터', '프로그램', '자료', '음성 비서', '번역', '앱', '도구', '열역학', '기화', '메커니즘', '모방', '알고리즘', '인지', '필라멘트', '마이야르'], imagePlaceholder: true } },
       {
         kind: 'ox',
         data: {
