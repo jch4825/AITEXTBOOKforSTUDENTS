@@ -36,7 +36,16 @@ import ModuleCloseLessonView from '../features/studio/ModuleCloseLessonView';
 import LessonGoal from '../components/LessonGoal';
 import HardLessonBody from '../components/HardLessonBody';
 import VisualNovelExperience from '../features/studio/components/VisualNovelExperience';
-import { M1_L2_VISUAL_STORY } from '../data/studios/visualStories/m1';
+import {
+  M1_L2_VISUAL_STORY,
+  M1_L3_VISUAL_STORY,
+  M1_L5_VISUAL_STORY,
+  M1_L6_VISUAL_STORY,
+  M1_L7_VISUAL_STORY,
+  M1_L8_VISUAL_STORY,
+  M1_L9_VISUAL_STORY,
+  M1_L11_VISUAL_STORY
+} from '../data/studios/visualStories/m1';
 import { getModule, moduleIdFromLessonId, MODULES, lessonIdsForModule } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import { wrapDictionaryTerms } from './lessonTextUtils';
@@ -150,7 +159,17 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       <LessonGoal text={goalText} accent={theme.accent} />
     ) : null;
 
-    const vnStory = lesson.id === 'm1-l2' ? M1_L2_VISUAL_STORY : null;
+    const vnStories: Record<string, any> = {
+      'm1-l2': M1_L2_VISUAL_STORY,
+      'm1-l3': M1_L3_VISUAL_STORY,
+      'm1-l5': M1_L5_VISUAL_STORY,
+      'm1-l6': M1_L6_VISUAL_STORY,
+      'm1-l7': M1_L7_VISUAL_STORY,
+      'm1-l8': M1_L8_VISUAL_STORY,
+      'm1-l9': M1_L9_VISUAL_STORY,
+      'm1-l11': M1_L11_VISUAL_STORY,
+    };
+    const vnStory = vnStories[lesson.id] || null;
 
     if (effectiveHard && vnStory) {
       return (
@@ -162,9 +181,9 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
             title: lesson.title,
             subtitle: lesson.objective,
             visualNovel: vnStory,
-            firstAttempt: { modes: [] },
-            generalization: { expression: { modes: [] }, generalizationQuestions: [] }
-          }}
+            firstAttempt: { modes: [] } as any,
+            generalization: { expression: { modes: [] }, generalizationQuestions: [] } as any
+          } as any}
           story={vnStory}
           supportLevel="challenge"
           accent={theme.accent}

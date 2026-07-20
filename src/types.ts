@@ -59,6 +59,7 @@ export interface LessonContent {
   /** 차시 정리 한 줄 — 마지막 정리 화면에 표시하고 TTS로 읽어준다. */
   wrapUpEasy: string;
   wrapUpNormal: string;
+  wrapUpHard?: string;
   steps: LessonStep[];
 }
 

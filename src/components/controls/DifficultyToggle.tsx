@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSettings } from '../../context/SettingsContext';
 import type { Difficulty } from '../../types';
 
