@@ -132,7 +132,7 @@ export default function StudioExperience({
     >
       <div className="space-y-5">
         <div>
-          <p className={isTransferStage ? "studio-kicker text-lg font-extrabold" : "studio-kicker"} style={{ color: secondary }}>생활 장면</p>
+          <p className={isTransferStage ? "studio-kicker text-lg font-extrabold" : "studio-kicker"} style={{ color: secondary }}>{isTransferStage ? "배운 내용 정리하기" : "생활 장면"}</p>
           <div className="flex items-center justify-between gap-3">
             <h2 className={isTransferStage ? "mt-1 text-3xl font-extrabold" : "mt-1 text-xl font-extrabold"} style={{ color: 'var(--brand-ink)' }}>
               {state.stage === 'transfer'
