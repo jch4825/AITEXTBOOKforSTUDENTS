@@ -5,7 +5,7 @@ import DictionaryTerm from '../components/DictionaryTerm';
  * Renders the body with each occurrence of a listed term wrapped in a
  * DictionaryTerm (dotted-underline, opens the right-hand panel on click).
  */
-export function wrapDictionaryTerms(text: string, terms: string[], clickable: boolean = true): ReactNode[] {
+export function wrapDictionaryTerms(text: string, terms: string[]): ReactNode[] {
   if (terms.length === 0) return [text];
   
   // Normalize and filter out '인공지능' (should not have underlines as requested)
@@ -24,7 +24,7 @@ export function wrapDictionaryTerms(text: string, terms: string[], clickable: bo
   return parts.map((part, i) => {
     const normPart = part.normalize('NFC');
     return normalizedTerms.includes(normPart)
-      ? <span key={i}><DictionaryTerm term={normPart} clickable={clickable}>{part}</DictionaryTerm></span>
+      ? <span key={i}><DictionaryTerm term={normPart}>{part}</DictionaryTerm></span>
       : <span key={i}>{part}</span>;
   });
 }
