@@ -53,6 +53,7 @@ export default function StudioExperience({
   onSceneIndexChange,
 }: Props) {
   const [hintOpen, setHintOpen] = useState(false);
+  const [isCoolWrong, setIsCoolWrong] = useState(false);
   const { speakNow } = useSpeak();
   const profile = definition.supportProfiles[state.supportLevel];
   const firstChoices = profile.choiceLimit
@@ -357,7 +358,16 @@ export default function StudioExperience({
                 ].map((card) => {
                   const selectedIds = state.finalExpression?.choiceIds ?? [];
                   const isSelected = selectedIds.includes(card.id);
+                  const isCoolButtonWrong = card.id === 'cool' && isCoolWrong;
                   function toggleCard() {
+                    if (card.id === 'cool') {
+                      setIsCoolWrong(true);
+                      speakNow(card.label);
+                      setTimeout(() => {
+                        setIsCoolWrong(false);
+                      }, 800);
+                      return;
+                    }
                     const nextIds = isSelected 
                       ? selectedIds.filter(id => id !== card.id)
                       : [...selectedIds, card.id];
@@ -375,10 +385,20 @@ export default function StudioExperience({
                       type="button"
                       key={card.id}
                       onClick={toggleCard}
-                      className="card3d flex flex-col items-center p-4 rounded-2xl border-2 text-center cursor-pointer transition-all hover:scale-105"
+                      className={`card3d flex flex-col items-center p-4 rounded-2xl border-2 text-center cursor-pointer transition-all hover:scale-105 ${
+                        isCoolButtonWrong ? 'answer-shake' : ''
+                      }`}
                       style={{
-                        borderColor: isSelected ? accent : 'var(--editorial-line)',
-                        background: isSelected ? 'var(--editorial-paper)' : 'white',
+                        borderColor: isCoolButtonWrong
+                          ? '#ef4444'
+                          : isSelected
+                          ? accent
+                          : 'var(--editorial-line)',
+                        background: isCoolButtonWrong
+                          ? '#fee2e2'
+                          : isSelected
+                          ? 'var(--editorial-paper)'
+                          : 'white',
                         width: '144px',
                       }}
                     >
