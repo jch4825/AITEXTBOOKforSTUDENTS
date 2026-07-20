@@ -535,6 +535,13 @@ export default function StudioExperience({
     const suggestion = isMeaningfulStudioExpression(state.finalExpression)
       ? expressionSummary(state.finalExpression, definition.firstAttempt.choices)
       : null;
+
+    const artifactAacChoices = [
+      { id: 'art-opt-1', label: '에어컨에 대해 쉬운 말로 물어보기', img: 'easy_explain.webp', text: '에어컨은 어떻게 시원하게 해 주는지 쉬운 단어로 말해줘.' },
+      { id: 'art-opt-2', label: '에어컨 작동 방법 자세히 물어보기', img: 'aircon.webp', text: '에어컨 작동 방법을 자세히 알려줘.' },
+      { id: 'art-opt-3', label: '에어컨 뜻 간단하게 물어보기', img: 'tap_screen.webp', text: '에어컨에 대해 간단하게 말해줘.' }
+    ];
+
     right = (
       <div className="space-y-5 p-5 md:p-7">
         <div>
@@ -542,29 +549,80 @@ export default function StudioExperience({
           <h2 className="mt-1 text-xl font-extrabold">내가 물어보고 싶은 말을 한 번 써봅니다.</h2>
           <p className="mt-2 leading-relaxed text-sm text-[color:var(--muted)]">{definition.artifact.prompt}</p>
         </div>
-        <div className="studio-artifact-sheet">
-          <label className="block font-bold text-sm text-[color:var(--ink-1)]" htmlFor="studio-artifact-summary">카드에 담길 최종 내용</label>
-          <textarea
-            id="studio-artifact-summary"
-            value={state.artifactSummary ?? ''}
-            onChange={(event) => dispatch({ type: 'set-artifact', value: event.target.value })}
-            placeholder="내가 물어보고 싶은 말을 여기에 써보세요."
-            maxLength={300}
-            rows={4}
-            className="mt-2 w-full resize-y rounded-xl border-2 p-3 text-sm leading-relaxed"
-            style={{ borderColor: accent, background: 'var(--editorial-paper)' }}
-          />
-          {!state.artifactSummary?.trim() && suggestion && (
-            <button
-              type="button"
-              onClick={() => dispatch({ type: 'set-artifact', value: suggestion })}
-              className="mt-3 rounded-full border-2 px-4 py-2 text-sm font-bold cursor-pointer transition-all hover:scale-105"
-              style={{ borderColor: accent, color: accent }}
-            >
-              내가 고른 카드로 채우기
-            </button>
-          )}
-        </div>
+
+        {state.supportLevel === 'full' ? (
+          <div className="space-y-4">
+            <p className="text-sm font-bold text-[color:var(--muted)]">💡 아래의 그림 카드 중에서 카드에 담고 싶은 질문을 하나 골라 보십시오.</p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              {artifactAacChoices.map((choice) => {
+                const isSelected = state.artifactSummary === choice.text;
+                function selectChoice() {
+                  speakNow(choice.label);
+                  dispatch({ type: 'set-artifact', value: choice.text });
+                }
+                return (
+                  <button
+                    type="button"
+                    key={choice.id}
+                    onClick={selectChoice}
+                    className="card3d flex flex-col items-center p-4 rounded-2xl border-2 text-center cursor-pointer transition-all hover:scale-105 flex-1"
+                    style={{
+                      borderColor: isSelected ? accent : 'var(--editorial-line)',
+                      background: isSelected ? 'var(--editorial-paper)' : 'white',
+                      minWidth: '140px',
+                    }}
+                  >
+                    <img
+                      src={`${import.meta.env.BASE_URL}lessons/pecs/${choice.img}`}
+                      alt={choice.label}
+                      className="h-20 w-20 object-contain mb-2 rounded-lg mx-auto"
+                    />
+                    <span className="text-xs font-black text-[color:var(--ink-1)] mb-1 leading-tight">{choice.label}</span>
+                    <p className="text-[10px] text-[color:var(--muted)] leading-tight mt-1">{choice.text}</p>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="studio-artifact-sheet mt-4">
+              <label className="block font-bold text-sm text-[color:var(--ink-1)]" htmlFor="studio-artifact-summary">카드에 담길 최종 내용</label>
+              <textarea
+                id="studio-artifact-summary"
+                value={state.artifactSummary ?? ''}
+                onChange={(event) => dispatch({ type: 'set-artifact', value: event.target.value })}
+                placeholder="카드를 고르거나 여기에 직접 수정해서 써보세요."
+                maxLength={300}
+                rows={3}
+                className="mt-2 w-full resize-y rounded-xl border-2 p-3 text-sm leading-relaxed"
+                style={{ borderColor: accent, background: 'var(--editorial-paper)' }}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="studio-artifact-sheet">
+            <label className="block font-bold text-sm text-[color:var(--ink-1)]" htmlFor="studio-artifact-summary">카드에 담길 최종 내용</label>
+            <textarea
+              id="studio-artifact-summary"
+              value={state.artifactSummary ?? ''}
+              onChange={(event) => dispatch({ type: 'set-artifact', value: event.target.value })}
+              placeholder="내가 물어보고 싶은 말을 여기에 써보세요."
+              maxLength={300}
+              rows={4}
+              className="mt-2 w-full resize-y rounded-xl border-2 p-3 text-sm leading-relaxed"
+              style={{ borderColor: accent, background: 'var(--editorial-paper)' }}
+            />
+            {!state.artifactSummary?.trim() && suggestion && (
+              <button
+                type="button"
+                onClick={() => dispatch({ type: 'set-artifact', value: suggestion })}
+                className="mt-3 rounded-full border-2 px-4 py-2 text-sm font-bold cursor-pointer transition-all hover:scale-105"
+                style={{ borderColor: accent, color: accent }}
+              >
+                내가 고른 카드로 채우기
+              </button>
+            )}
+          </div>
+        )}
       </div>
     );
   } else if (state.stage === 'transfer') {
