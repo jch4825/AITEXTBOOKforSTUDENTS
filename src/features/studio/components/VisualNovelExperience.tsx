@@ -2,6 +2,8 @@ import Icon from '../../../components/Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
 import type { StudioDefinition, SupportLevel, VisualNovelStory } from '../types';
 import EditorialStudioFrame from './EditorialStudioFrame';
+import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
+import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 
 interface Props {
   definition: StudioDefinition;
@@ -35,6 +37,11 @@ export default function VisualNovelExperience({
     activeKnowledge.detail[supportLevel],
   ].filter(Boolean).join(' ');
 
+  const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
+    entry.term,
+    ...(entry.aliases ?? []),
+  ]);
+
   function selectScene(index: number) {
     stop();
     onSceneIndexChange(index);
@@ -59,8 +66,12 @@ export default function VisualNovelExperience({
           </button>
         </div>
         <div className="visual-novel-dialogue">
-          <p>{copy.text}</p>
-          {copy.perspective && <p className="visual-novel-perspective">{copy.perspective}</p>}
+          <p>{wrapDictionaryTerms(copy.text, allDictTerms)}</p>
+          {copy.perspective && (
+            <p className="visual-novel-perspective">
+              {wrapDictionaryTerms(copy.perspective, allDictTerms)}
+            </p>
+          )}
         </div>
       </div>
       <div className="visual-novel-controls" aria-label="이야기 장면 선택">

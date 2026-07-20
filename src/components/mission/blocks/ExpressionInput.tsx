@@ -4,6 +4,8 @@ import DrawPad from './DrawPad';
 import MicButton from '../../MicButton';
 import Icon from '../../Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
+import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
+import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 
 interface ChoiceItem {
   id: string;
@@ -58,7 +60,9 @@ export default function ExpressionInput({
   return (
     <div className="w-full space-y-4 story-fade-in">
       <div className="flex items-start gap-2">
-        <p className="text-xl font-semibold flex-1">{prompt}</p>
+        <p className="text-xl font-semibold flex-1">
+          {wrapDictionaryTerms(prompt, STUDENT_DICTIONARY.flatMap(e => [e.term, ...(e.aliases ?? [])]))}
+        </p>
         <button
           type="button"
           onClick={() => speakNow(prompt)}

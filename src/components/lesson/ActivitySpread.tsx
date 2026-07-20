@@ -3,8 +3,6 @@ import type { CharacterId } from '../../data/characters';
 import type { Expression } from '../CharacterAvatar';
 import SpeechBubble from '../SpeechBubble';
 import LessonSpread from './LessonSpread';
-import { wrapDictionaryTerms } from '../../views/lessonTextUtils';
-import { STUDENT_DICTIONARY } from '../../data/studentDictionary';
 
 interface Props {
   kicker: string;
@@ -38,9 +36,7 @@ export default function ActivitySpread({
           {kicker}
         </span>
         <h2 className="t-h2 text-xl lg:text-2xl font-black leading-snug mt-1 text-[color:var(--brand-ink)]">
-          {typeof title === 'string'
-            ? wrapDictionaryTerms(title, STUDENT_DICTIONARY.flatMap(e => [e.term, ...(e.aliases ?? [])]))
-            : title}
+          {title}
         </h2>
       </div>
 
