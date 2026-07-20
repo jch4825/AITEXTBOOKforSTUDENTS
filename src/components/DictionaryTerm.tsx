@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function DictionaryTerm({ term, children, clickable = true }: Props) {
-  if (!clickable) {
+  if (clickable === false) {
     return (
       <span
         className="dict-term inline-flex items-baseline bg-transparent p-0 m-0 text-inherit border-b-2 border-dotted border-[color:var(--accent,currentColor)]"
