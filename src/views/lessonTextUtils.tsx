@@ -5,11 +5,16 @@ import DictionaryTerm from '../components/DictionaryTerm';
  * Renders the body with each occurrence of a listed term wrapped in a
  * DictionaryTerm (dotted-underline, opens the right-hand panel on click).
  */
-export function wrapDictionaryTerms(text: string, terms: string[]): ReactNode[] {
+export function wrapDictionaryTerms(text: string, terms: string[], clickable: boolean = true): ReactNode[] {
   if (terms.length === 0) return [text];
   
-  // Normalize both search terms and source text to NFC (standardized Hangeul composition)
-  const normalizedTerms = terms.map(t => t.normalize('NFC'));
+  // Normalize and filter out '인공지능' (should not have underlines as requested)
+  const normalizedTerms = terms
+    .map(t => t.normalize('NFC'))
+    .filter(t => t !== '인공지능');
+  
+  if (normalizedTerms.length === 0) return [text];
+  
   const normalizedText = text.normalize('NFC');
 
   const ordered = [...normalizedTerms].sort((a, b) => b.length - a.length);
@@ -19,7 +24,7 @@ export function wrapDictionaryTerms(text: string, terms: string[]): ReactNode[] 
   return parts.map((part, i) => {
     const normPart = part.normalize('NFC');
     return normalizedTerms.includes(normPart)
-      ? <span key={i}><DictionaryTerm term={normPart}>{part}</DictionaryTerm></span>
+      ? <span key={i}><DictionaryTerm term={normPart} clickable={clickable}>{part}</DictionaryTerm></span>
       : <span key={i}>{part}</span>;
   });
 }

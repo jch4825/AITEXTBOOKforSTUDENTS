@@ -61,7 +61,7 @@ export default function ExpressionInput({
     <div className="w-full space-y-4 story-fade-in">
       <div className="flex items-start gap-2">
         <p className="text-xl font-semibold flex-1">
-          {wrapDictionaryTerms(prompt, STUDENT_DICTIONARY.flatMap(e => [e.term, ...(e.aliases ?? [])]))}
+          {wrapDictionaryTerms(prompt, STUDENT_DICTIONARY.flatMap(e => [e.term, ...(e.aliases ?? [])]), false)}
         </p>
         <button
           type="button"

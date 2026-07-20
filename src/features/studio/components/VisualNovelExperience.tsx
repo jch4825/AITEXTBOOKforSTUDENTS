@@ -66,10 +66,10 @@ export default function VisualNovelExperience({
           </button>
         </div>
         <div className="visual-novel-dialogue">
-          <p>{wrapDictionaryTerms(copy.text, allDictTerms)}</p>
+          <p>{wrapDictionaryTerms(copy.text, allDictTerms, false)}</p>
           {copy.perspective && (
             <p className="visual-novel-perspective">
-              {wrapDictionaryTerms(copy.perspective, allDictTerms)}
+              {wrapDictionaryTerms(copy.perspective, allDictTerms, false)}
             </p>
           )}
         </div>
