@@ -115,12 +115,14 @@ export default function VisualNovelExperience({
   const right = (
     <section className="visual-novel-knowledge-page" aria-label="학습목표와 지식 설명">
       <div className="visual-novel-page-heading">
-        <p className="studio-kicker" style={{ color: accent }}>1차시</p>
+        <p className="studio-kicker" style={{ color: accent }}>
+          {definition.lessonId ? `${definition.lessonId.split('-l')[1]}차시` : '학습'}
+        </p>
         <div className="flex items-center justify-between gap-3 w-full">
-          <h2>AI가 무엇인지 처음 배웁니다</h2>
+          <h2>{definition.title}</h2>
           <button
             type="button"
-            onClick={() => speakNow(`AI가 무엇인지 처음 배웁니다. 학습 목표: ${story.objective}`)}
+            onClick={() => speakNow(`${definition.title}. 학습 목표: ${story.objective}`)}
             className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
             style={{ borderColor: accent, color: accent }}
             title="학습목표 듣기"

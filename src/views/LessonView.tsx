@@ -35,6 +35,8 @@ import { getModulePortfolioDefinition } from '../data/modulePortfolios';
 import ModuleCloseLessonView from '../features/studio/ModuleCloseLessonView';
 import LessonGoal from '../components/LessonGoal';
 import HardLessonBody from '../components/HardLessonBody';
+import VisualNovelExperience from '../features/studio/components/VisualNovelExperience';
+import { M1_L2_VISUAL_STORY } from '../data/studios/visualStories/m1';
 import { getModule, moduleIdFromLessonId, MODULES, lessonIdsForModule } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import { wrapDictionaryTerms } from './lessonTextUtils';
@@ -95,11 +97,13 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   const { speakNow } = useSpeak();
   const [step, setStep] = useState(0);
   const [simRevealed, setSimRevealed] = useState(false);
+  const [vnSceneIndex, setVnSceneIndex] = useState(0);
 
   // Reset per-lesson state whenever the lesson changes (e.g. sidebar navigation).
   useEffect(() => {
     setStep(0);
     setSimRevealed(false);
+    setVnSceneIndex(0);
   }, [lesson.id]);
 
   const mod = getModule(lesson.moduleId)!;
@@ -146,8 +150,32 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       <LessonGoal text={goalText} accent={theme.accent} />
     ) : null;
 
+    const vnStory = lesson.id === 'm1-l2' ? M1_L2_VISUAL_STORY : null;
+
     const bodyNode = effectiveHard ? (
-      <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
+      vnStory ? (
+        <VisualNovelExperience
+          definition={{
+            id: `${lesson.id}-hard-story`,
+            lessonId: lesson.id,
+            moduleId: lesson.moduleId,
+            title: lesson.title,
+            subtitle: lesson.objective,
+            visualNovel: vnStory,
+            firstAttempt: { modes: [] },
+            generalization: { expression: { modes: [] }, generalizationQuestions: [] }
+          }}
+          story={vnStory}
+          supportLevel="challenge"
+          accent={theme.accent}
+          secondary={theme.accentSoft}
+          onSupportMode={() => {}}
+          sceneIndex={vnSceneIndex}
+          onSceneIndexChange={setVnSceneIndex}
+        />
+      ) : (
+        <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
+      )
     ) : (
       <div className="flex justify-between items-start gap-4">
         <p className="t-body-lg flex-1">{wrapDictionaryTerms(body, terms)}</p>
