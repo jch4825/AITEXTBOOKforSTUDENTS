@@ -26,14 +26,16 @@ export const SingleChoiceActivityView: React.FC<SingleChoiceProps> = ({
       <div className="grid grid-cols-1 gap-2">
         {activity.choices.map((c) => {
           const isChosen = selected === c.id;
-          const isCorrect = c.isCorrect !== false;
+          const isCorrect = c.isCorrect;
 
           let cardStyle = 'bg-white text-slate-800 border-slate-200 hover:bg-slate-50 font-medium';
           if (isChosen) {
-            if (isCorrect) {
+            if (isCorrect === true) {
               cardStyle = 'bg-emerald-50 text-emerald-900 border-2 border-emerald-500 shadow-md font-bold answer-pop';
-            } else {
+            } else if (isCorrect === false) {
               cardStyle = 'bg-red-50 text-red-900 border-2 border-red-500 shadow-md font-bold answer-shake';
+            } else {
+              cardStyle = 'bg-indigo-600 text-white border-indigo-600 shadow-sm font-semibold';
             }
           }
 
@@ -43,14 +45,14 @@ export const SingleChoiceActivityView: React.FC<SingleChoiceProps> = ({
               onClick={() => handlePick(c.id)}
               className={`relative min-h-[48px] p-3 rounded-xl text-left transition flex items-center justify-between border ${cardStyle}`}
             >
-              {isChosen && isCorrect && <Burst />}
+              {isChosen && isCorrect === true && <Burst />}
               <div className="flex items-center space-x-2 z-10">
                 {c.emoji && <span className="text-base">{c.emoji}</span>}
                 <span className="text-sm">{c.label}</span>
               </div>
               {isChosen && (
                 <span className="text-xs font-bold z-10">
-                  {isCorrect ? '🎉 정답!' : '❌ 다시 생각해보아요'}
+                  {isCorrect === true ? '🎉 정답!' : isCorrect === false ? '❌ 다시 생각해 보아요' : '✓ 선택됨'}
                 </span>
               )}
             </button>

@@ -96,20 +96,20 @@ export default function ExpressionInput({
 
       {(activeMode === 'choice' || activeMode === 'aac') && (
         <div className={activeMode === 'choice' ? "grid grid-cols-1 gap-3" : "grid grid-cols-1 sm:grid-cols-2 gap-3"}>
-          {choices.map((choice, idx) => {
+          {choices.map((choice) => {
             const selected = value?.choiceIds?.includes(choice.id) ?? false;
-            const isCorrect = choice.isCorrect !== undefined ? choice.isCorrect : idx === 0;
+            const isCorrect = choice.isCorrect;
 
             let borderStyle = selected ? `4px solid ${accent}` : '2.5px solid var(--line)';
             let bgStyle = selected ? 'var(--paper-1)' : 'var(--paper-0)';
             let animClass = '';
 
             if (selected) {
-              if (isCorrect) {
+              if (isCorrect === true) {
                 borderStyle = '4px solid #10b981';
                 bgStyle = '#ecfdf5';
                 animClass = 'answer-pop';
-              } else {
+              } else if (isCorrect === false) {
                 borderStyle = '4px solid #ef4444';
                 bgStyle = '#fef2f2';
                 animClass = 'answer-shake';
@@ -129,12 +129,12 @@ export default function ExpressionInput({
                   color: 'var(--brand-ink)',
                 }}
               >
-                {selected && isCorrect && <Burst />}
+                {selected && isCorrect === true && <Burst />}
                 <span className="text-3xl shrink-0 z-10" aria-hidden>{choice.emoji}</span>
                 <span className="leading-tight flex-1 z-10">{choice.label}</span>
                 {selected && (
                   <span className="ml-auto shrink-0 z-10 text-xs font-extrabold px-2 py-1 rounded-full bg-white/80 shadow-xs">
-                    {isCorrect ? '🎉 정답!' : '❌ 다시 생각해 보아요'}
+                    {isCorrect === true ? '🎉 정답!' : isCorrect === false ? '❌ 다시 생각해 보아요' : '✓ 선택됨'}
                   </span>
                 )}
               </button>
