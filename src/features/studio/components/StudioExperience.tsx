@@ -252,12 +252,8 @@ export default function StudioExperience({
           role={definition.aiContribution.role}
           text={definition.aiContribution.text}
           question={definition.aiContribution.question}
-          decision={state.aiDecision}
           finalExpression={state.finalExpression}
-          choices={definition.firstAttempt.choices}
-          modes={definition.firstAttempt.modes}
           accent={accent}
-          onDecision={(value) => dispatch({ type: 'set-ai-decision', value })}
           onExpression={(value) => dispatch({ type: 'set-final-expression', value })}
         />
       </div>

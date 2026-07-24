@@ -1,58 +1,48 @@
 import Icon from '../../../components/Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
-import StudioExpressionInput from './StudioExpressionInput';
-import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
-import type { AiDecision, ExpressionMode, StudioChoice, StudioExpression } from '../types';
+import DrawPad from '../../../components/mission/blocks/DrawPad';
+import type { StudioExpression } from '../types';
 
 interface Props {
   lessonId: string;
   role: string;
   text: string;
   question?: string;
-  decision?: AiDecision;
   finalExpression?: StudioExpression;
-  choices: StudioChoice[];
-  modes: ExpressionMode[];
   accent: string;
-  onDecision: (value: AiDecision) => void;
   onExpression: (value: StudioExpression) => void;
 }
 
-const DECISION_LABELS: Record<AiDecision, string> = {
-  accept: '이 의견을 받아들입니다',
-  modify: '내 생각에 맞게 고칩니다',
-  reject: '이 의견은 사용하지 않습니다',
-};
-
 export default function AiDecisionPanel({
-  lessonId,
   role,
   text,
   question,
-  decision,
   finalExpression,
-  choices,
-  modes,
   accent,
-  onDecision,
   onExpression,
 }: Props) {
   const { speakNow } = useSpeak();
   const spokenText = [role, text, question].filter(Boolean).join('. ');
+
+  const drawBlock = {
+    kind: 'draw' as const,
+    id: 'ai-decision-draw',
+    prompt: '그림으로 나만의 생각을 표현해 보세요',
+  };
 
   return (
     <div className="space-y-5">
       <section className="studio-margin-note" aria-label="준비된 AI 의견">
         <div className="mb-2 flex items-center justify-between gap-3">
           <div>
-            <span className="studio-kicker" style={{ color: accent }}>AI에게 물어보는 방법</span>
+            <span className="studio-kicker" style={{ color: accent }}>AI의 안내 사례</span>
             <h3 className="text-lg font-bold">{role}</h3>
           </div>
           <button
             type="button"
             onClick={() => speakNow(spokenText)}
             aria-label="AI 의견 읽어주기"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 cursor-pointer"
             style={{ borderColor: accent, color: accent, background: 'var(--editorial-paper)' }}
           >
             <Icon name="speaker" size={20} />
@@ -62,47 +52,14 @@ export default function AiDecisionPanel({
         {question && <p className="mt-2 font-bold" style={{ color: accent }}>{question}</p>}
       </section>
 
-      <div>
-        <p className="mb-2 font-bold">AI 의견을 어떻게 사용하겠습니까?</p>
-        <div className="grid gap-2 md:grid-cols-3">
-          {(Object.keys(DECISION_LABELS) as AiDecision[]).map((value) => {
-            const selected = decision === value;
-            return (
-              <button
-                type="button"
-                key={value}
-                aria-pressed={selected}
-                onClick={() => onDecision(value)}
-                className="min-h-16 rounded-xl border-2 px-3 py-2 font-bold"
-                style={{
-                  borderColor: selected ? accent : 'var(--editorial-line)',
-                  background: selected ? 'var(--editorial-quiet)' : 'var(--editorial-paper)',
-                  color: selected ? accent : 'var(--editorial-ink)',
-                }}
-              >
-                {DECISION_LABELS[value]}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <LiveGeminiInteraction
-        lessonId={lessonId}
-        accent={accent}
-        promptHint="실시간 AI 아이미와 함께 추가 질문을 나누고 답변을 확인해 보세요!"
-      />
-
-      {decision && (
-        <StudioExpressionInput
-          value={finalExpression}
-          choices={choices}
-          modes={modes}
-          prompt="AI 의견을 살펴본 뒤, 내가 실제로 할 방법을 다시 표현해 보십시오."
+      <div className="space-y-2">
+        <DrawPad
+          block={drawBlock}
+          value={finalExpression?.drawing}
+          onChange={(drawing) => onExpression({ mode: 'draw', drawing })}
           accent={accent}
-          onChange={onExpression}
         />
-      )}
+      </div>
     </div>
   );
 }
