@@ -57,24 +57,35 @@ for (const forbidden of ["themeFor('m5')", "['m5-l1', 'm5-l6', 'm5-l11']", "less
 const m1StudioPath = 'src/data/studios/m1.ts';
 if (!fs.existsSync(m1StudioPath)) throw new Error('M1 studio definitions are missing');
 const m1 = fs.readFileSync(m1StudioPath, 'utf8');
-for (const id of ['m1-daily-ai-finder', 'm1-eyes-ears-lab', 'm1-ability-test']) {
+for (const id of [
+  'm1-aimi-introduction',
+  'm1-feature-investigation',
+  'm1-answer-making-lab',
+  'm1-image-recognition-lab',
+  'm1-speech-recognition-lab',
+  'm1-training-data-lab',
+  'm1-fast-help-review',
+  'm1-help-boundary-map',
+  'm1-tool-selection-studio',
+  'm1-ai-result-decision',
+]) {
   if (!m1.includes(`id: '${id}'`)) throw new Error(`M1 studio missing: ${id}`);
 }
-for (const lessonId of ['m1-l1', 'm1-l4', 'm1-l10']) {
+for (const lessonId of Array.from({ length: 10 }, (_, index) => `m1-l${index + 1}`)) {
   if (!m1.includes(`lessonId: '${lessonId}'`)) throw new Error(`M1 lesson mapping missing: ${lessonId}`);
 }
-if ((m1.match(/source: 'prepared'/g) ?? []).length !== 3) throw new Error('M1 AI source must be prepared');
-for (const artifact of ['AI 질문 확인 카드', 'AI 인식 실험 기록', 'AI 사용 판단 설명서']) {
+if ((m1.match(/source: 'prepared'/g) ?? []).length !== 10) throw new Error('M1 AI source must be prepared');
+for (const artifact of ['AI 정의 카드', '이미지 인식 실험 기록', 'AI 결과 사용 판단 기록']) {
   if (!m1.includes(artifact)) throw new Error(`M1 artifact missing: ${artifact}`);
 }
-if (!m1.includes("kind: 'image'") || !m1.includes("kind: 'speech'")) {
-  throw new Error('M1 recognition studio needs image and speech stimuli');
+if (!m1.includes("imageSrc: ''") || m1.includes('/lessons/remodel/')) {
+  throw new Error('M1 visual stories must use pending image slots until new assets exist');
 }
 
 const m1PortfolioPath = 'src/data/modulePortfolios/m1.ts';
 if (!fs.existsSync(m1PortfolioPath)) throw new Error(`M1 learning connection missing: ${m1PortfolioPath}`);
 const m1Portfolio = fs.readFileSync(m1PortfolioPath, 'utf8');
-for (const token of ["lessonId: 'm1-l11'", "'m1-l1', 'm1-l4', 'm1-l10'", '1단원 성장 포트폴리오']) {
+for (const token of ["lessonId: 'm1-l11'", "'m1-l1'", "'m1-l10'", '아이미 사용 설명서']) {
   if (!m1Portfolio.includes(token)) throw new Error(`M1 portfolio missing: ${token}`);
 }
 
@@ -106,12 +117,12 @@ const expansionGuidePath = 'docs/teacher-guide/m1-m2-studio-expansion.md';
 if (!fs.existsSync(expansionGuidePath)) throw new Error('M1/M2 teacher expansion guide is missing');
 const teacherHub = fs.readFileSync('src/features/teacher/TeacherHub.tsx', 'utf8');
 const expansionGuide = fs.readFileSync(expansionGuidePath, 'utf8');
-for (const text of ['1·2·5단원', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+for (const text of ['1단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
   if (!teacherHub.includes(text) && !expansionGuide.includes(text)) {
     throw new Error(`teacher expansion guidance missing: ${text}`);
   }
 }
-for (const title of ['오늘 하루의 AI 찾기', 'AI의 눈과 귀 실험실', '요청 공동 제작소', 'AI 고쳐 묻기 실험실']) {
+for (const title of ['아이미와 처음 만난 날', 'AI의 눈 실험실', 'AI 결과를 사용할까?', '요청 공동 제작소', 'AI 고쳐 묻기 실험실']) {
   if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
 }
 
@@ -120,7 +131,7 @@ for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M5_STUDIOS']) {
   if (!studioIndex.includes(spread)) throw new Error(`ready studio group missing: ${spread}`);
 }
 for (const [source, expected, label] of [
-  [m1, 3, 'M1'],
+  [m1, 10, 'M1'],
   [m2, 3, 'M2'],
   [fs.readFileSync('src/data/studios/m5.ts', 'utf8'), 3, 'M5'],
 ]) {
@@ -132,4 +143,4 @@ for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M5_PORTFOLIO']) {
   if (!portfolioIndex.includes(portfolio)) throw new Error(`ready portfolio missing: ${portfolio}`);
 }
 
-console.log('studio expansion contract: 9 studios, 3 portfolios ready');
+console.log('studio expansion contract: 16 studios, 3 portfolios ready');

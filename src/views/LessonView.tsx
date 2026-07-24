@@ -35,17 +35,6 @@ import { getModulePortfolioDefinition } from '../data/modulePortfolios';
 import ModuleCloseLessonView from '../features/studio/ModuleCloseLessonView';
 import LessonGoal from '../components/LessonGoal';
 import HardLessonBody from '../components/HardLessonBody';
-import VisualNovelExperience from '../features/studio/components/VisualNovelExperience';
-import {
-  M1_L2_VISUAL_STORY,
-  M1_L3_VISUAL_STORY,
-  M1_L5_VISUAL_STORY,
-  M1_L6_VISUAL_STORY,
-  M1_L7_VISUAL_STORY,
-  M1_L8_VISUAL_STORY,
-  M1_L9_VISUAL_STORY,
-  M1_L11_VISUAL_STORY
-} from '../data/studios/visualStories/m1';
 import { getModule, moduleIdFromLessonId, MODULES, lessonIdsForModule } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import { wrapDictionaryTerms } from './lessonTextUtils';
@@ -106,13 +95,11 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
   const { speakNow } = useSpeak();
   const [step, setStep] = useState(0);
   const [simRevealed, setSimRevealed] = useState(false);
-  const [vnSceneIndex, setVnSceneIndex] = useState(0);
 
   // Reset per-lesson state whenever the lesson changes (e.g. sidebar navigation).
   useEffect(() => {
     setStep(0);
     setSimRevealed(false);
-    setVnSceneIndex(0);
   }, [lesson.id]);
 
   const mod = getModule(lesson.moduleId)!;
@@ -159,42 +146,6 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
       <LessonGoal text={goalText} accent={theme.accent} />
     ) : null;
 
-    const vnStories: Record<string, any> = {
-      'm1-l2': M1_L2_VISUAL_STORY,
-      'm1-l3': M1_L3_VISUAL_STORY,
-      'm1-l5': M1_L5_VISUAL_STORY,
-      'm1-l6': M1_L6_VISUAL_STORY,
-      'm1-l7': M1_L7_VISUAL_STORY,
-      'm1-l8': M1_L8_VISUAL_STORY,
-      'm1-l9': M1_L9_VISUAL_STORY,
-      'm1-l11': M1_L11_VISUAL_STORY,
-    };
-    const vnStory = vnStories[lesson.id] || null;
-
-    if (effectiveHard && vnStory) {
-      return (
-        <VisualNovelExperience
-          definition={{
-            id: `${lesson.id}-hard-story`,
-            lessonId: lesson.id,
-            moduleId: lesson.moduleId,
-            title: lesson.title,
-            subtitle: lesson.objective,
-            visualNovel: vnStory,
-            firstAttempt: { modes: [] } as any,
-            generalization: { expression: { modes: [] }, generalizationQuestions: [] } as any
-          } as any}
-          story={vnStory}
-          supportLevel="challenge"
-          accent={theme.accent}
-          secondary={theme.accentSoft}
-          onSupportMode={() => {}}
-          sceneIndex={vnSceneIndex}
-          onSceneIndexChange={setVnSceneIndex}
-        />
-      );
-    }
-
     const bodyNode = effectiveHard ? (
       <HardLessonBody content={effectiveHard} accent={theme.accent} dictionaryTerms={terms} />
     ) : (
@@ -224,6 +175,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
         accentText={theme.accentText}
         accentSoft={theme.accentSoft}
         isHardMode={effectiveHard !== null}
+        imagePending={data.imagePlaceholder === true}
       />
     );
   }

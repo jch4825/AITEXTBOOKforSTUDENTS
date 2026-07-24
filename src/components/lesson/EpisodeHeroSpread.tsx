@@ -20,6 +20,7 @@ interface Props {
   accentSoft: string;
   className?: string;
   isHardMode?: boolean;
+  imagePending?: boolean;
 }
 
 export default function EpisodeHeroSpread({
@@ -35,6 +36,7 @@ export default function EpisodeHeroSpread({
   accentSoft,
   className = '',
   isHardMode = false,
+  imagePending = false,
 }: Props) {
   const { speakNow } = useSpeak();
   const lesson = getLesson(lessonId);
@@ -112,7 +114,7 @@ export default function EpisodeHeroSpread({
 
             {/* Image (Centered and Large) */}
             <div className="flex justify-center py-2">
-              {!imgMissing ? (
+              {!imagePending && !imgMissing ? (
                 <div
                   className="spread-hero-image relative w-full max-w-[480px] aspect-[4/3] md:aspect-[16/9] rounded-[var(--r-lg)] overflow-hidden shadow-md"
                 >
@@ -129,6 +131,17 @@ export default function EpisodeHeroSpread({
                     onError={() => setSrcIdx((i) => i + 1)}
                     className="absolute inset-0 w-full h-full object-contain"
                   />
+                </div>
+              ) : imagePending ? (
+                <div
+                  className="spread-hero-image flex min-h-64 w-full max-w-[480px] items-center justify-center rounded-[var(--r-lg)] border border-dashed bg-[color:var(--paper-1)]"
+                  role="img"
+                  aria-label="새 장면 이미지를 넣을 자리입니다."
+                  data-image-slot="pending"
+                >
+                  <span className="rounded-full border border-dashed px-4 py-2 text-sm font-bold text-[color:var(--muted)]">
+                    장면 이미지 자리
+                  </span>
                 </div>
               ) : (
                 <div className="spread-hero-image flex justify-center items-end -space-x-4 py-4" aria-hidden>
@@ -174,7 +187,7 @@ export default function EpisodeHeroSpread({
       <div className="spread-art-field">
         <span className="spread-art-mark spread-art-mark-one" aria-hidden />
         <span className="spread-art-mark spread-art-mark-two" aria-hidden />
-        {!imgMissing ? (
+        {!imagePending && !imgMissing ? (
           <div className="spread-hero-image spread-hero-image-large">
             <img
               src={candidates[srcIdx]}
@@ -182,6 +195,17 @@ export default function EpisodeHeroSpread({
               onError={() => setSrcIdx((i) => i + 1)}
               className="w-full h-full object-contain"
             />
+          </div>
+        ) : imagePending ? (
+          <div
+            className="spread-hero-image spread-hero-image-large flex items-center justify-center border border-dashed bg-[color:var(--paper-1)]"
+            role="img"
+            aria-label="새 장면 이미지를 넣을 자리입니다."
+            data-image-slot="pending"
+          >
+            <span className="rounded-full border border-dashed px-4 py-2 text-sm font-bold text-[color:var(--muted)]">
+              장면 이미지 자리
+            </span>
           </div>
         ) : (
           <div className="spread-hero-image spread-hero-characters" aria-hidden>

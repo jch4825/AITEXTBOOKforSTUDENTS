@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 
 const CORE_EXPERIENCES = {
-  m1: ['m1-l1', 'm1-l4', 'm1-l10'],
+  m1: ['m1-l1', 'm1-l2', 'm1-l3', 'm1-l4', 'm1-l5', 'm1-l6', 'm1-l7', 'm1-l8', 'm1-l9', 'm1-l10'],
   m2: ['m2-l1', 'm2-l6', 'm2-l10'],
   m3: ['m3-l1', 'm3-l5', 'm3-l9'],
   m4: ['m4-l1', 'm4-l5', 'm4-l10'],
@@ -57,6 +57,33 @@ for (const moduleId of selectedModules) {
   const { studioSource, combinedSource } = readStorySource(moduleId);
 
   for (const lessonId of CORE_EXPERIENCES[moduleId]) {
+    if (moduleId === 'm1') {
+      const lessonStart = studioSource.indexOf(`lessonId: '${lessonId}'`);
+      const nextLessonStart = studioSource.indexOf("lessonId: 'm1-", lessonStart + 1);
+      const storyWindow = studioSource.slice(
+        lessonStart,
+        nextLessonStart < 0 ? studioSource.length : nextLessonStart,
+      );
+      const expectedObjective = lessonObjective(moduleId, lessonId);
+      if (!storyWindow.includes(`objective: '${expectedObjective}'`)) {
+        throw new Error(`${lessonId} visual story objective must match the lesson objective`);
+      }
+      if ((storyWindow.match(/imageSrc: ''/g) ?? []).length !== 4) {
+        throw new Error(`${lessonId} must expose four pending image slots`);
+      }
+      for (const supportLevel of ['full', 'light', 'challenge']) {
+        if (!storyWindow.includes(`${supportLevel}:`)) {
+          throw new Error(`${lessonId} visual story is missing ${supportLevel} support copy`);
+        }
+      }
+      const knowledgeWindow = arrayWindow(storyWindow, 'knowledge: [');
+      const knowledgeTitles = knowledgeWindow.match(/title: '/g) ?? [];
+      if (knowledgeTitles.length !== 3) {
+        throw new Error(`${lessonId} visual story must have exactly 3 knowledge steps`);
+      }
+      continue;
+    }
+
     const assetPrefix = `public/lessons/${lessonId}-vn-`;
     const publicPathPrefix = `/AITEXTBOOKforSTUDENTS/lessons/${lessonId}-vn-`;
 
@@ -123,23 +150,19 @@ if (types.includes('speaker: string') || m1Studio.includes('speaker:')) {
   throw new Error('visual story must express speakers in the story text instead of a separate label field');
 }
 for (const token of [
-  "title: '아이미와의 첫 만남'",
-  "objective: 'AI가 무엇인지 알고, AI가 쉽게 답변하도록 요청할 수 있습니다.'",
-  "imageSrc: '/AITEXTBOOKforSTUDENTS/lessons/m1-l1-vn-01.webp'",
-  "imageSrc: '/AITEXTBOOKforSTUDENTS/lessons/m1-l1-vn-04.webp'",
-  '진우는 설레는 마음으로 학교에 처음 등교했습니다.',
-  '오늘부터 너의 학교 생활을 도와줄 인공지능 아이미야.',
-  '인공지능이 무슨 뜻이야?',
-  '인간의 지능을 모방한 프로그램입니다.',
-  '인공지능은 컴퓨터가 사람처럼 생각하고, 배우고, 문제를 해결하도록 만든 기술이란다.',
-  '이해하기 어려울 때는 선생님이나 부모님께 도움을 받아',
+  "title: '아이미의 어려운 자기소개'",
+  "objective: '오늘은 생활 속 AI가 하는 일을 찾고, AI를 내 말로 소개해 봐요.'",
+  "imageSrc: ''",
+  '아이미의 설명에는 어려운 말이 많았어요.',
+  'AI는 사람이 목적을 정하고 만든 도구입니다.',
+  'AI가 만든 결과는 사람이 확인하고 결정합니다.',
  ]) {
   if (!m1Studio.includes(token)) throw new Error(`missing m1-l1 social story data: ${token}`);
 }
 for (const retiredToken of ['어제 자리표', '아이미가 본 것은 어제 자리표']) {
   if (m1Studio.includes(retiredToken)) throw new Error(`retired m1-l1 story remains: ${retiredToken}`);
 }
-if (!m1Lesson.includes("objective: 'AI가 무엇인지 알고, AI가 쉽게 답변하도록 요청할 수 있습니다.'")) {
+if (!m1Lesson.includes("objective: '오늘은 생활 속 AI가 하는 일을 찾고, AI를 내 말로 소개해 봐요.'")) {
   throw new Error('m1-l1 must expose one shared learning objective');
 }
 
@@ -259,4 +282,4 @@ for (const pattern of [
 }
 
 const checkedLessons = selectedModules.flatMap((moduleId) => CORE_EXPERIENCES[moduleId]);
-console.log(`visual novel social stories: ${checkedLessons.length} experiences, ${checkedLessons.length * 4} scenes ready`);
+console.log(`visual novel social stories: ${checkedLessons.length} experiences, ${checkedLessons.length * 4} scene contracts ready`);

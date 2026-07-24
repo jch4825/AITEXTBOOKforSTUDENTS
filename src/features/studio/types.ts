@@ -112,7 +112,15 @@ export interface StudioDefinition {
     question?: string;
   };
   artifact: {
-    kind: 'action-card' | 'repair-card' | 'visual-plan';
+    kind:
+      | 'action-card'
+      | 'repair-card'
+      | 'visual-plan'
+      | 'choice-board'
+      | 'comparison-table'
+      | 'review-sheet'
+      | 'boundary-map'
+      | 'workflow-plan';
     title: string;
     prompt: string;
   };

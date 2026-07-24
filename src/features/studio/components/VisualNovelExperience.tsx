@@ -59,7 +59,20 @@ export default function VisualNovelExperience({
       </div>
       <div className="visual-novel-stage">
         <div className="visual-novel-image-frame">
-          <img className="visual-novel-scene" src={scene.imageSrc} alt={scene.alt} />
+          {scene.imageSrc ? (
+            <img className="visual-novel-scene" src={scene.imageSrc} alt={scene.alt} />
+          ) : (
+            <div
+              className="visual-novel-scene flex min-h-72 items-center justify-center bg-[color:var(--paper-1)]"
+              role="img"
+              aria-label={`${scene.alt}. 새 장면 이미지를 넣을 자리입니다.`}
+              data-image-slot="pending"
+            >
+              <span className="rounded-full border border-dashed px-4 py-2 text-sm font-bold text-[color:var(--muted)]">
+                장면 이미지 자리
+              </span>
+            </div>
+          )}
           <span className="visual-novel-scene-label">{scene.label}</span>
           <button type="button" className="visual-novel-listen" onClick={speakCurrentScene}>
             <Icon name="speaker" size={18} /> 대사 듣기

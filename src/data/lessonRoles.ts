@@ -3,7 +3,8 @@ import type { LessonRole, LessonRoleRecord } from '../features/studio/types';
 import { MODULES, lessonIdsForModule, moduleIdFromLessonId } from './modules';
 
 export const STUDIO_LESSON_IDS = [
-  'm1-l1', 'm1-l4', 'm1-l10',
+  'm1-l1', 'm1-l2', 'm1-l3', 'm1-l4', 'm1-l5',
+  'm1-l6', 'm1-l7', 'm1-l8', 'm1-l9', 'm1-l10',
   'm2-l1', 'm2-l6', 'm2-l10',
   'm3-l1', 'm3-l5', 'm3-l9',
   'm4-l1', 'm4-l5', 'm4-l10',

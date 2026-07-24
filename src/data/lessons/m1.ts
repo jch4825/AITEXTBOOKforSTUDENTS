@@ -1,1277 +1,661 @@
 import type { LessonContent } from '../../types';
-import { GENERALIZATION_CYCLES } from '../generalizationCycles';
+
+const AI_STANDARD = '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.';
 
 /**
- * 단원 1 — AI가 뭐야?
+ * 1단원 - 아이미를 알아가는 탐구 기록
  *
- * 11차시 개념 도입. 학생이 "AI가 우리 곁에 있고, 뭘 잘하고 못하는지"를
- * 감으로 잡는 것이 목표. 실제 Gemini 호출 없음 — 전부 시뮬레이션.
+ * AI 동아리 첫 주 동안 입력, 결과, 한계를 차례로 시험하고
+ * 마지막에 "아이미 사용 설명서"를 완성한다.
  */
 export const M1_LESSONS: LessonContent[] = [
-  // ─────────────────────────── l1 ───────────────────────────
   {
     id: 'm1-l1',
     moduleId: 'm1',
     number: 1,
-    kind: 'concept',
-    title: 'AI는 우리 곁에 있습니다',
-    objective: 'AI가 무엇인지 알고, AI가 쉽게 답변하도록 요청할 수 있습니다.',
-    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
-    wrapUpEasy: 'AI는 자료를 보고 답을 만드는 컴퓨터 기술입니다.',
-    wrapUpNormal: 'AI는 자료를 보고 답이나 추천을 만듭니다. 중요한 내용은 사람이 다시 확인합니다.',
-    bodyEasy: '인공지능(AI)은 컴퓨터 프로그램으로 만든 똑똑한 도구입니다. 번역 앱처럼 사람을 돕는 유용한 기술입니다.',
-    bodyNormal: '인공지능(AI)은 컴퓨터 프로그램의 한 종류로, 사람이 만든 똑똑한 도구입니다. 음성 비서나 번역 앱처럼 사람이 준 자료를 모방하고 공부하여 우리 생활을 돕습니다.',
+    kind: 'experience',
+    title: '아이미와 처음 만난 날',
+    objective: '오늘은 생활 속 AI가 하는 일을 찾고, AI를 내 말로 소개해 봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: 'AI는 사람이 만든 도구예요. 말, 글, 사진 같은 자료를 받아 결과를 만들어요.',
+    bodyNormal: 'AI는 사람이 만든 도구입니다. 말, 글, 사진 같은 입력을 받아 자료에서 찾은 규칙을 바탕으로 답, 추천, 분류 같은 결과를 만듭니다.',
+    wrapUpEasy: 'AI는 자료를 받아 결과를 만드는 사람이 만든 도구예요.',
+    wrapUpNormal: 'AI는 입력과 자료를 바탕으로 결과를 만드는 사람이 만든 도구이며, 결과는 사람이 확인합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['인공지능', '컴퓨터', '프로그램', '자료', '음성 비서', '번역', '앱', '도구', '열역학', '기화', '메커니즘', '모방', '알고리즘', '인지', '필라멘트', '마이야르'], imagePlaceholder: true } },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '핸드폰의 음성비서(시리, 빅스비)는 AI입니까?',
-              answer: 'O',
-              feedback: '맞습니다! AI가 우리 말을 알아듣고 대답해 줍니다.',
-            },
-            {
-              question: '냉장고는 AI입니까?',
-              answer: 'X',
-              feedback: '대부분의 냉장고는 그냥 차갑게 만드는 기계입니다.',
-            },
-            {
-              question: '챗봇은 AI입니까?',
-              answer: 'O',
-              feedback: '맞습니다! 챗봇은 글로 대화하는 AI입니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: 'AI가 가장 잘하는 일은 무엇입니까?',
-          choices: [
-            { label: '사람이 묻는 말에 답해주기', isCorrect: true, icon: 'chatbot' },
-            { label: '빨래를 개기', isCorrect: false, icon: 'clothes' },
-            { label: '축구공 차기', isCorrect: false, icon: 'soccer_ball' },
-            { label: '비 오게 하기', isCorrect: false, icon: 'rain' },
-          ],
-        },
-      },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: 'AI한테 "안녕!" 이라고 인사해 보십시오.',
-          userInput: '안녕!',
-          aiResponse: '안녕하세요! 만나서 반갑습니다. 오늘은 어떤 걸 배우고 싶습니까?',
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: 'AI 찾기 탐험대',
-          chapters: [
-            {
-              title: '1장: 우리 주변의 AI',
-              goal: '집과 학교에서 본 AI를 모두 골라 보십시오.',
-              blocks: [
-                {
-                  kind: 'multi-pick',
-                  id: 'seen_ai',
-                  prompt: '집이나 학교에서 본 인공지능(AI)을 모두 골라 보십시오.',
-                  items: [
-                    { emoji: '🗣️', label: '음성 비서 스피커' },
-                    { emoji: '🌐', label: '글자 번역기' },
-                    { emoji: '🤖', label: '대화하는 챗봇' },
-                    { emoji: '🍞', label: '토스터' },
-                    { emoji: '🌀', label: '선풍기' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 내가 써 보고 싶은 AI',
-              goal: '가장 사용해 보고 싶은 AI를 하나만 골라 보십시오.',
-              blocks: [
-                {
-                  kind: 'single-pick',
-                  id: 'want_ai',
-                  prompt: '가장 써 보고 싶은 인공지능(AI)을 하나만 골라 보십시오.',
-                  items: [
-                    { emoji: '🗣️', label: '날씨 알려주는 음성 비서' },
-                    { emoji: '🌐', label: '외국어를 고쳐주는 번역기' },
-                    { emoji: '🤖', label: '심심할 때 대화하는 챗봇' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 다짐하기',
-              goal: '다짐을 완성하고 발견 카드를 확인하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary1',
-                  title: '나의 AI 발견 카드',
-                  rows: [
-                    { label: '내가 발견한 AI', from: 'seen_ai' },
-                    { label: '내가 써 볼 AI', from: 'want_ai' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow1',
-                  prompt: '다짐 문장을 완성해 보십시오.',
-                  template: '나 {이름}는 우리 생활 속에서 인공지능을 {빈칸} 도우미로 바르게 사용하겠습니다!'
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: 'AI 탐험가 배지 획득!'
-          }
-        }
-      }
+      { kind: 'text', data: { dictionaryTerms: ['인공지능', '자료', '도구'], imagePlaceholder: true } },
     ],
   },
-
-  // ─────────────────────────── l2 ───────────────────────────
   {
     id: 'm1-l2',
     moduleId: 'm1',
     number: 2,
     kind: 'concept',
-    title: '기계랑 AI는 뭐가 달라?',
-    objective: '기계와 AI가 어떻게 다른지 알아봅니다.',
-    standards: [
-      '[9정통01-02] 다양한 정보통신 기기의 종류를 알고, 기본 기능을 익힌다.',
-      '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.',
-    ],
-    wrapUpEasy: '그냥 기계는 사람이 정해준 순서대로 똑같이만 움직입니다. 하지만 인공지능(AI)은 우리 말을 알아듣고 스스로 생각해서 대답해 줍니다.',
-    wrapUpNormal: '보통 기계는 미리 정해진 대로 똑같이 움직이는 자동화 기계입니다. 반면에 인공지능(AI)은 많은 자료를 배우고(학습) 훈련해서 처음 보는 질문에도 스스로 알맞은 답을 만들어냅니다.',
-    wrapUpHard: '자동화 기계는 사람이 미리 정해둔 순서와 규칙대로만 똑같이 작동하여 예외에 대처하지 못합니다. 그러나 인공지능(AI)은 방대한 데이터를 학습하고 스스로 훈련하여, 처음 겪는 복잡한 상황이나 질문에도 추론을 통해 유연하고 새로운 답을 스스로 만들어냅니다.',
-    bodyEasy: '그냥 기계는 정해진 일만 합니다. AI는 우리 말을 알아듣고 대답해 줍니다.',
-    bodyNormal:
-      '보통 기계는 미리 정해진 대로 똑같이 움직입니다. 하지만 AI는 우리가 하는 질문을 알아듣고 스스로 답을 만들어줍니다.',
+    title: '기계와 AI는 어떻게 다를까?',
+    objective: '오늘은 기계가 결과를 바꾸는 데 어떤 정보를 쓰는지 살펴보고 AI가 쓰인 기능을 찾아봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: '기계의 이름만 보고 AI인지 정하기는 어려워요. 무엇을 입력받고 어떻게 결과를 바꾸는지 살펴봐요.',
+    bodyNormal: '자동으로 움직이는 기계가 모두 AI인 것은 아닙니다. 버튼, 센서, 사용 기록처럼 어떤 정보를 받고 결과를 어떻게 바꾸는지 기능별로 살펴봐야 합니다.',
+    wrapUpEasy: '기계가 받는 정보와 바꾸는 결과를 살펴보면 AI 기능을 찾을 수 있어요.',
+    wrapUpNormal: '기기 전체의 이름보다 입력과 결과를 살펴보면 자동 기능, 센서 기능, AI 기능을 더 정확하게 판단할 수 있습니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['기계', '자동화', '학습', '자료'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['센서', '입력', '결과'], imagePlaceholder: true } },
       {
-        kind: 'ox',
+        kind: 'matching',
         data: {
-          questions: [
-            {
-              question: '토스터는 우리 말을 알아들을 수 있습니까?',
-              answer: 'X',
-              feedback: '토스터는 그냥 빵을 굽는 기계입니다. 말을 알아들을 수 없습니다.',
-              image: '/AITEXTBOOKforSTUDENTS/lessons/toaster.png',
-            },
-            {
-              question: 'AI 스피커는 "음악 틀어줘"를 알아들습니까?',
-              answer: 'O',
-              feedback: '맞습니다! AI 스피커는 우리 말을 듣고 이해할 수 있습니다.',
-              image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/ai_speaker.webp',
-            },
+          pairs: [
+            { left: '선풍기 버튼', right: '누른 세기로 바람이 바뀝니다', icon: 'fan' },
+            { left: '자동문 센서', right: '사람을 감지하면 문이 열립니다', icon: 'enter_store' },
+            { left: '음악 사용 기록', right: '들은 노래에 따라 추천이 바뀝니다', icon: 'music' },
           ],
         },
       },
       {
         kind: 'mission',
         data: {
-          title: '기계와 AI 구분하기',
+          title: '기능 설계 카드',
+          intro: '도구가 무엇을 받고, 어떤 도움을 주며, 사람이 무엇을 확인할지 설계해 봐요.',
           chapters: [
             {
-              title: '1장: 기계일까, AI일까?',
-              goal: '그냥 기계와 인공지능(AI)을 구분해 보십시오.',
+              title: '1장 기능의 단서',
+              goal: '기계의 기능을 입력, 도움, 사람 확인으로 나눠 봐요.',
               blocks: [
                 {
                   kind: 'drag-sort',
-                  id: 'sort_mach',
-                  prompt: '그냥 기계와 인공지능(AI)을 알맞은 바구니에 나눠 담아 보십시오.',
+                  id: 'm1_l2_function_clues',
+                  prompt: '음악 추천 기능의 단서를 알맞은 칸으로 옮겨 봐요.',
                   bins: [
-                    { label: '그냥 기계', emoji: '⚙️' },
-                    { label: '인공지능', emoji: '🤖' }
+                    { label: '받는 정보', emoji: 'IN' },
+                    { label: '도와주는 일', emoji: 'AI' },
+                    { label: '사람이 확인', emoji: 'OK' },
                   ],
                   cards: [
-                    { label: '선풍기', emoji: '🌀', bin: 0 },
-                    { label: '음성 비서', emoji: '🗣️', bin: 1 },
-                    { label: '전동칫솔', emoji: '🪥', bin: 0 },
-                    { label: '번역 앱', emoji: '🌐', bin: 1 }
-                  ]
-                }
-              ]
+                    { label: '내가 전에 들은 노래', emoji: '1', bin: 0 },
+                    { label: '비슷한 노래를 추천하기', emoji: '2', bin: 1 },
+                    { label: '지금 듣고 싶은지 고르기', emoji: '3', bin: 2 },
+                  ],
+                },
+              ],
             },
             {
-              title: '2장: 상상하기',
-              goal: 'AI로 만들고 싶은 우리 집 물건을 골라 보십시오.',
+              title: '2장 나의 설계',
+              goal: '동아리방에 필요한 기능 하나를 설계해 봐요.',
               blocks: [
                 {
                   kind: 'single-pick',
-                  id: 'invent_choice',
-                  prompt: '우리 집 물건 중에서 AI로 만들고 싶은 것을 하나만 골라 보십시오.',
+                  id: 'm1_l2_tool_purpose',
+                  prompt: '어떤 도움을 주는 도구를 만들고 싶나요?',
                   items: [
-                    { emoji: '🍎', label: '말하는 냉장고', image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/refrigerator.webp' },
-                    { emoji: '🧹', label: '자동 정리 로봇', image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/tidy_room.webp' },
-                    { emoji: '☔', label: '날씨 알려주는 우산', image: '/AITEXTBOOKforSTUDENTS/lessons/pecs/umbrella.webp' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 내 발명품 그리기',
-              goal: '내가 고른 물건을 그리고 상상해 보십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary2',
-                  title: '나의 발명 카드',
-                  rows: [
-                    { label: '분류 완료한 기계', from: 'sort_mach' },
-                    { label: '만들고 싶은 AI 물건', from: 'invent_choice' }
-                  ]
+                    { emoji: 'BOOK', label: '필요한 책을 추천하는 도구' },
+                    { emoji: 'LIGHT', label: '방이 어두우면 불을 켜는 도구' },
+                    { emoji: 'SOUND', label: '큰 소리를 알려 주는 도구' },
+                  ],
                 },
                 {
-                  kind: 'draw',
-                  id: 'draw_invent',
-                  prompt: '내가 상상한 똑똑한 AI 기계를 그려 보십시오.'
-                }
-              ]
-            }
+                  kind: 'summary',
+                  id: 'm1_l2_artifact',
+                  title: '나의 기능 설계 카드',
+                  rows: [
+                    { label: '입력·도움·확인 구분', from: 'm1_l2_function_clues' },
+                    { label: '내가 고른 도구', from: 'm1_l2_tool_purpose' },
+                  ],
+                },
+              ],
+            },
           ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: 'AI 발명가 배지 획득!'
-          }
-        }
-      }
+          reward: { printable: 'worksheet', badgeLabel: '기능 탐정 도장' },
+        },
+      },
     ],
   },
-
-  // ─────────────────────────── l3 ───────────────────────────
   {
     id: 'm1-l3',
     moduleId: 'm1',
     number: 3,
     kind: 'concept',
-    title: 'AI는 어떻게 답해줄까?',
-    objective: 'AI가 어떻게 답을 만드는지 알아봅니다.',
-    standards: [
-      '[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.',
-      '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.',
-    ],
-    wrapUpEasy: '궁금한 게 있으면 AI한테 물어봅니다. 답을 해 주십시오.',
-    wrapUpNormal: 'AI한테 글이나 말로 물어보면 답을 만들어줍니다. 궁금한 건 언제든 물어봐도 됩니다.',
-    bodyEasy: 'AI한테 물으면 답을 해 주십시오. 짧게 물어도 되고, 길게 물어도 됩니다.',
-    bodyNormal:
-      'AI한테 궁금한 걸 글이나 말로 물어보면 답을 만들어줍니다. 짧게 물어도 되고 자세하게 물어도 됩니다.',
+    title: 'AI는 어떻게 답을 만들까?',
+    objective: '오늘은 AI가 다음 말을 이어 답을 만드는 모습을 보고, 확인할 문장을 찾아봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: '글을 만드는 AI는 다음에 올 말을 하나씩 골라 답을 이어 가요. 자연스러운 답도 사실과 다를 수 있어요.',
+    bodyNormal: '생성형 AI는 배운 자료를 바탕으로 다음에 이어질 표현을 예측하며 답을 만듭니다. 문장이 자연스러워도 날짜나 장소 같은 사실이 맞는지는 따로 확인해야 합니다.',
+    wrapUpEasy: 'AI 답이 자연스러워도 날짜와 장소는 원래 자료에서 확인해요.',
+    wrapUpNormal: '생성형 AI는 다음 표현을 예측해 답을 만들므로, 자연스러운 문장과 확인된 사실을 구분해야 합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['생성형 AI', '자료', '확률', '예측', '특징', '환각'], imagePlaceholder: true } },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: 'AI한테 "무지개는 몇 개 색이야?" 라고 물어봅니다.',
-          userInput: '무지개는 몇 개 색이야?',
-          aiResponse: '무지개는 보통 7개 색입니다. 빨강, 주황, 노랑, 초록, 파랑, 남색, 보라!',
-        },
-      },
+      { kind: 'text', data: { dictionaryTerms: ['생성형 AI', '예측', '자료'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
-          question: 'AI한테 물어보기 좋은 것은 무엇입니까?',
+          question: '학교 공지에는 체험회가 “금요일 오후 2시, 도서관”이라고 적혀 있습니다. AI 답에서 먼저 확인할 부분은 무엇인가요?',
           choices: [
-            { label: '"고양이는 왜 울어?"', isCorrect: true, icon: 'cat' },
-            { label: '아무 말 안 하기', isCorrect: false, icon: 'sleep' },
-            { label: '눈만 감고 기다리기', isCorrect: false, icon: 'sleep' },
-            { label: '화면 두드리기', isCorrect: false, icon: 'tap_screen' },
+            { label: '“금요일 오후 3시”라는 시간', isCorrect: true, icon: 'alarm_clock' },
+            { label: '“친구들과 함께”라는 표현', isCorrect: false, icon: 'borrow_friend' },
+            { label: '문장이 자연스럽게 이어지는지', isCorrect: false, icon: 'chatbot' },
           ],
         },
       },
       {
         kind: 'mission',
         data: {
-          title: '답 만들기 구경',
+          title: 'AI 답 확인 표시지',
+          intro: 'AI가 만든 동아리 소개와 학교 공지를 나란히 확인해 봐요.',
           chapters: [
             {
-              title: '1장: 문장 이어 쓰기 대화',
-              goal: '아이미와 함께 문장을 완성해 보십시오.',
+              title: '1장 답을 나누기',
+              goal: '바로 써도 되는 부분과 원래 자료에서 확인할 부분을 나눠 봐요.',
               blocks: [
+                {
+                  kind: 'drag-sort',
+                  id: 'm1_l3_claim_check',
+                  prompt: 'AI 답의 문장을 두 칸으로 나눠 봐요.',
+                  bins: [
+                    { label: '그대로 써도 돼요', emoji: 'USE' },
+                    { label: '자료를 확인해요', emoji: 'CHECK' },
+                  ],
+                  cards: [
+                    { label: 'AI 동아리에서는 여러 도구를 시험합니다.', emoji: 'A', bin: 0 },
+                    { label: '체험회는 금요일 오후 3시에 열립니다.', emoji: 'B', bin: 1 },
+                    { label: '장소는 운동장입니다.', emoji: 'C', bin: 1 },
+                  ],
+                },
                 {
                   kind: 'branch-chat',
-                  id: 'aimi_sentence',
-                  intro: '생성형 AI 아이미와 함께 어울리는 말을 골라 문장을 완성해 보십시오.',
+                  id: 'm1_l3_check_method',
+                  intro: '아이미가 “문장이 자연스러우니 맞을 거예요”라고 말했어요.',
                   turns: [
                     {
-                      aimi: '안녕! 나는 배워서 답하는 생성형 AI야. 내 아침 이야기의 첫 문장을 골라 줘. "나는 아침마다 맛있는..."',
+                      aimi: '제 답을 그대로 안내문에 넣을까요?',
                       choices: [
-                        { label: '우유를 마십니다.', reply: '좋습니다! "나는 아침마다 맛있는 우유를 마십니다."로 이어 볼겠습니다.', good: true },
-                        { label: '돌을 먹습니다.', reply: '어라? 컴퓨터가 돌을 먹는다고습니까? 이상하지만 일단 "나는 아침마다 맛있는 돌을 먹습니다."로 해 볼겠습니다.' }
-                      ]
+                        { label: '학교 공지에서 날짜와 장소를 다시 볼게.', reply: '좋아요. 날짜와 장소는 원래 공지에서 확인해야 해요.', good: true },
+                        { label: '문장이 자연스러우니 그대로 넣을게.', reply: '자연스러운 문장에도 틀린 사실이 섞일 수 있어요.' },
+                      ],
                     },
-                    {
-                      aimi: '그다음은 어떤 말로 이어 보겠습니까? "우유를 마시면 키가 쑥쑥..."',
-                      choices: [
-                        { label: '자랍니다.', reply: '멋집니다! "우유를 마시면 키가 쑥쑥 자랍니다." 문장 완성!', good: true },
-                        { label: '하늘을 날습니다.', reply: '앗! 우유를 마신다고 하늘을 날 수는 없습니다. AI가 자신 있게 말해도 틀린 답(환각)이 될 수 있습니다!' }
-                      ]
-                    }
-                  ]
-                }
-              ]
+                  ],
+                },
+              ],
             },
             {
-              title: '2장: 그럴듯한 거짓말 찾기',
-              goal: 'AI가 자신 있게 말했지만 틀린 대답을 골라 보십시오.',
-              blocks: [
-                {
-                  kind: 'single-pick',
-                  id: 'hallucination_check',
-                  prompt: '문장 중에서 그럴듯해 보이지만 사실이 아닌 틀린 대답(환각)은 무엇입니까?',
-                  items: [
-                    { emoji: '🥛', label: '우유를 마시면 키가 자란다' },
-                    { emoji: '🧚', label: '우유를 마시면 하늘을 난다' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 다짐하기',
-              goal: '안전 다짐을 채워 보십시오.',
+              title: '2장 기록 남기기',
+              goal: '확인한 내용을 한 장에 남겨요.',
               blocks: [
                 {
                   kind: 'summary',
-                  id: 'summary3',
-                  title: '오늘의 발견 카드',
+                  id: 'm1_l3_artifact',
+                  title: '그대로 쓸 부분·확인할 부분 표시지',
                   rows: [
-                    { label: '내가 선택한 대화', from: 'aimi_sentence' },
-                    { label: '내가 찾은 틀린 대답', from: 'hallucination_check' }
-                  ]
+                    { label: '문장 분류', from: 'm1_l3_claim_check' },
+                    { label: '내가 고른 확인 방법', from: 'm1_l3_check_method' },
+                  ],
                 },
-                {
-                  kind: 'vow',
-                  id: 'vow3',
-                  prompt: '다짐 문장을 완성해 보십시오.',
-                  template: '나 {이름}는 AI가 자신 있게 대답해도 사실이 맞는지 {빈칸} 확인하겠습니다!'
-                }
-              ]
-            }
+              ],
+            },
           ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: 'AI 발견자 배지 획득!'
-          }
-        }
-      }
+          reward: { printable: 'worksheet', badgeLabel: '사실 확인 도장' },
+        },
+      },
     ],
   },
-
-  // ─────────────────────────── l4 ───────────────────────────
   {
     id: 'm1-l4',
     moduleId: 'm1',
     number: 4,
-    kind: 'concept',
-    title: 'AI는 눈이 있어? (그림을 알아봅니다)',
-    objective: 'AI가 사진 속 물건을 알아보는 모습을 알아봅니다.',
-    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
-    wrapUpEasy: 'AI는 사진을 보고 뭐가 있는지 알아볼 수 있습니다.',
-    wrapUpNormal: 'AI는 사진을 보고 무엇이 있는지 알아볼 수 있습니다. 이것을 이미지 인식이라고 합니다.',
-    bodyEasy: 'AI는 사진을 보고 "이게 뭐야"를 알 수 있습니다.',
-    bodyNormal:
-      'AI는 사진을 보여주면 "이건 강아지야, 저건 자동차야" 하고 알아볼 수 있습니다. 이걸 이미지 인식이라고 합니다.',
+    kind: 'experience',
+    title: 'AI의 눈 실험실',
+    objective: '오늘은 사진 조건을 바꾸어 AI의 답이 달라지는지 살펴보고 원본과 다시 비교해 봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: 'AI는 사진에서 보이는 특징으로 무엇인지 짐작해요. 가림, 밝기, 각도가 달라지면 답도 달라질 수 있어요.',
+    bodyNormal: '이미지 인식 AI는 사진에서 보이는 특징을 바탕으로 가능성이 높은 결과를 고릅니다. 가려진 부분, 밝기, 각도 같은 입력 조건이 바뀌면 결과도 달라질 수 있습니다.',
+    wrapUpEasy: '사진 조건이 바뀌면 AI 답도 바뀔 수 있어요. 원본을 다시 확인해요.',
+    wrapUpNormal: '이미지 인식 결과는 가림, 밝기, 각도의 영향을 받으므로 입력 조건과 원본을 함께 확인해야 합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['이미지 인식', '학습', '패턴', '판단'], imagePlaceholder: true } },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: 'AI한테 사진을 보여주고 "이게 뭐야?" 하고 물어봅니다.',
-          userInput: '(강아지 사진) 이게 뭐야?',
-          aiResponse: '귀여운 강아지입니다! 갈색 털을 가진 작은 강아지입니다.',
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: 'AI는 사진을 보고 "고양이야"라고 말해줄 수 있습니까?',
-              answer: 'O',
-              feedback: '맞습니다! AI는 사진 속 물건을 알아볼 수 있습니다.',
-            },
-            {
-              question: 'AI는 눈을 감으면 아무것도 못 봅니다?',
-              answer: 'X',
-              feedback: 'AI는 사람 같은 눈이 아니라 카메라나 사진을 통해 보십시오.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: 'AI 눈 실험실',
-          chapters: [
-            {
-              title: '1장: 사진 분류하기',
-              goal: 'AI가 알아보기 쉬운 사진과 헷갈리는 사진을 나눠 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'sort_images',
-                  prompt: 'AI가 보기 편한 사진과 알아보기 힘든 헷갈리는 사진을 바구니에 나눠 담아 보십시오.',
-                  bins: [
-                    { label: '알아보기 쉽습니다', emoji: '☀️' },
-                    { label: '헷갈렸습니다', emoji: '🌫️' }
-                  ],
-                  cards: [
-                    { label: '정면에서 찍은 강아지 사진', emoji: '🐶', bin: 0 },
-                    { label: '강아지 모양 인형 사진', emoji: '🧸', bin: 1 },
-                    { label: '가까이서 잘 찍은 사과 사진', emoji: '🍎', bin: 0 },
-                    { label: '사과 그림이 그려진 가방 사진', emoji: '🎒', bin: 1 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 잘못 보는 AI 고쳐주기',
-              goal: '잘못 알아보는 아이미를 바르게 고쳐 줘 보십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'correct_aimi',
-                  intro: '아이미가 사과 가방 사진을 보고 "맛있는 사과"라고 합니다. 아이미에게 알려 주십시오 보겠습니까?',
-                  turns: [
-                    {
-                      aimi: '빨갛고 둥근 사과입니다! 참 맛있어 보입니다.',
-                      choices: [
-                        { label: '그건 사과가 아니라 사과 가방이야.', reply: '앗, 그렇습니다! 빨간 원형이라 사과인 줄 알았습니다. 알려 주셔서 감사합니다!', good: true },
-                        { label: '와! 한 입 깨물어 먹어야지.', reply: '어라? 사과 가방을 먹으면 이가 아플 것 같습니다! AI가 틀릴 수 있습니다.' }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 다짐하기',
-              goal: '내 눈으로 한 번 더 확인하기로 약속해 보십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary4',
-                  title: '실험 기록 카드',
-                  rows: [
-                    { label: '사진 분류 결과', from: 'sort_images' },
-                    { label: '내가 가르쳐준 대답', from: 'correct_aimi' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow4',
-                  prompt: '다짐 문장을 완성해 보십시오.',
-                  template: '나 {이름}는 AI가 사진을 잘못 볼 수 있으니 {빈칸} 직접 확인하겠습니다!'
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: 'AI 분석가 배지 획득!'
-          }
-        }
-      }
+      { kind: 'text', data: { dictionaryTerms: ['이미지 인식', '입력', '결과'], imagePlaceholder: true } },
     ],
   },
-
-  // ─────────────────────────── l5 ───────────────────────────
   {
     id: 'm1-l5',
     moduleId: 'm1',
     number: 5,
     kind: 'concept',
-    title: 'AI는 귀가 있어? (말을 알아듣습니다)',
-    objective: 'AI가 우리 목소리를 어떻게 알아듣는지 알아봅니다.',
-    standards: [
-      '[9정통01-02] 다양한 정보통신 기기의 종류를 알고, 기본 기능을 익힌다.',
-      '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.',
-    ],
-    wrapUpEasy: 'AI는 우리 목소리를 듣고 알아듣습니다.',
-    wrapUpNormal: 'AI는 마이크로 우리 말을 듣고 알아듣습니다. 조용한 곳에서 또박또박 말하면 더 잘 알아듣습니다.',
-    bodyEasy: 'AI는 우리가 하는 말을 듣고 알아들을 수 있습니다.',
-    bodyNormal:
-      'AI는 마이크로 우리 목소리를 듣고 무슨 말을 했는지 알아듣습니다. 이걸 음성 인식이라고 합니다.',
+    title: 'AI의 귀는 어떻게 들을까?',
+    objective: '오늘은 같은 말을 다른 조건에서 들려주고 인식된 글자를 비교해 봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: '음성 인식은 소리를 글자로 바꿔요. 주변이 시끄럽거나 마이크가 멀면 다른 글자로 바뀔 수 있어요.',
+    bodyNormal: '음성 인식은 들어온 소리를 글자로 바꾸는 기능입니다. 주변 소음, 마이크와의 거리, 기기 상태에 따라 같은 말도 다르게 인식될 수 있습니다.',
+    wrapUpEasy: '말이 잘 인식되지 않으면 다시 듣기, 글, AAC, 사람 확인을 사용할 수 있어요.',
+    wrapUpNormal: '음성 인식이 다를 때는 말한 사람을 탓하지 않고 소음과 기기 상태를 살피며 다른 입력 방법을 함께 사용합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['음성 인식', '마이크', '명령어'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['음성 인식', '입력', '결과'], imagePlaceholder: true } },
       {
-        kind: 'sim-ai',
+        kind: 'matching',
         data: {
-          prompt: 'AI한테 말로 "지금 몇 시야?" 라고 물어봅니다.',
-          userInput: '(마이크) 지금 몇 시야?',
-          aiResponse: '지금은 오후 3시 30분입니다.',
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '말로 AI를 쓰는 예는 무엇입니까?',
-          choices: [
-            { label: '"시리야, 알람 맞춰줘"', isCorrect: true, icon: 'alarm_clock' },
-            { label: '종이에 그림 그리기', isCorrect: false, icon: 'drawing' },
-            { label: '창문 닫기', isCorrect: false, icon: 'window' },
-            { label: '가만히 있기', isCorrect: false, icon: 'sleep' },
+          pairs: [
+            { left: '조용한 교실에서 가까이 말하기', right: '“체험회는 두 시예요”', icon: 'ai_speaker' },
+            { left: '시끄러운 복도에서 멀리 말하기', right: '“체험에는 도시예요”', icon: 'ai_speaker' },
+            { left: '글자판으로 직접 입력하기', right: '쓴 문장이 그대로 들어갑니다', icon: 'chatbot' },
           ],
         },
       },
       {
         kind: 'mission',
         data: {
-          title: '또박또박 말하기 도전',
+          title: '나에게 편한 입력 방법 카드',
+          intro: '인식이 잘되지 않을 때 사용할 수 있는 방법을 찾아봐요.',
           chapters: [
             {
-              title: '1장: 소음 속의 대화',
-              goal: '시끄러운 곳에서 AI와 대화하는 대처법을 골라 보십시오.',
+              title: '1장 다른 조건',
+              goal: '소리 조건과 인식 결과를 비교해요.',
               blocks: [
                 {
-                  kind: 'branch-chat',
-                  id: 'noise_chat',
-                  prompt: '주변 소음 속에서 올바르게 대처해 보십시오.',
-                  intro: '주변이 시끄러워 내 목소리를 알아듣지 못하는 아이미와 대화해 보십시오.',
-                  turns: [
-                    {
-                      aimi: '(주변 소음: 와글와글) 소리가 웅웅대서 잘 들리지 않습니다. 뭐라고 하셨습니까?',
-                      choices: [
-                        { label: '조용한 곳으로 옮겨 또박또박 말합니다.', reply: '아! 이제 잘 들립니다. 음성 인식 성공!', good: true },
-                        { label: '핸드폰에 대고 더 크게 소리를 지릅니다.', reply: '앗, 큰 소리가 마이크에 찢어지게 들려 오해하기 더 어려워졌습니다!' }
-                      ]
-                    }
-                  ]
-                }
-              ]
+                  kind: 'drag-sort',
+                  id: 'm1_l5_strategy_sort',
+                  prompt: '상황에 알맞은 해결 방법을 골라 봐요.',
+                  bins: [
+                    { label: '다시 들어 봐요', emoji: 'REPLAY' },
+                    { label: '다른 입력을 써요', emoji: 'INPUT' },
+                    { label: '사람과 확인해요', emoji: 'HUMAN' },
+                  ],
+                  cards: [
+                    { label: '녹음된 안내를 한 번 더 재생하기', emoji: '1', bin: 0 },
+                    { label: '글이나 AAC로 뜻을 전달하기', emoji: '2', bin: 1 },
+                    { label: '행사 담당자에게 정확한 시간을 묻기', emoji: '3', bin: 2 },
+                  ],
+                },
+              ],
             },
             {
-              title: '2장: 어려운 상황 찾기',
-              goal: 'AI가 말을 알아듣기 어려운 상황을 찾아 보십시오.',
+              title: '2장 내 방법',
+              goal: '내가 편하게 사용할 입력 방법을 골라요.',
               blocks: [
                 {
-                  kind: 'multi-pick',
-                  id: 'hard_speech',
-                  prompt: '인공지능(AI)이 내 목소리를 알아듣기 어려운 상황을 모두 골라 보십시오.',
+                  kind: 'single-pick',
+                  id: 'm1_l5_preferred_input',
+                  prompt: '내가 먼저 사용하고 싶은 입력 방법은 무엇인가요?',
                   items: [
-                    { emoji: '🔊', label: '주변이 매우 시끄러울 때' },
-                    { emoji: '🍬', label: '사탕을 물고 우물우물 말할 때' },
-                    { emoji: '🤫', label: '조용한 곳에서 또박또박 말할 때' },
-                    { emoji: '⚡', label: '숨차게 너무 빨리 다다다 말할 때' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 다짐하기',
-              goal: '말하기 다짐을 완성해 보십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary5',
-                  title: '말하기 도전 카드',
-                  rows: [
-                    { label: '내가 선택한 대처법', from: 'noise_chat' },
-                    { label: '잘 안 들리는 상황', from: 'hard_speech' }
-                  ]
+                    { emoji: 'MIC', label: '말로 입력하기' },
+                    { emoji: 'TEXT', label: '글자로 입력하기' },
+                    { emoji: 'AAC', label: '그림·상징으로 입력하기' },
+                  ],
                 },
                 {
-                  kind: 'vow',
-                  id: 'vow5',
-                  prompt: '다짐 문장을 완성해 보십시오.',
-                  template: '나 {이름}는 AI가 내 목소리를 잘 듣도록 앞으로 {빈칸} 말하겠습니다!'
-                }
-              ]
-            }
+                  kind: 'summary',
+                  id: 'm1_l5_artifact',
+                  title: '나에게 편한 입력 방법 카드',
+                  rows: [
+                    { label: '상황별 해결 방법', from: 'm1_l5_strategy_sort' },
+                    { label: '내가 고른 입력 방법', from: 'm1_l5_preferred_input' },
+                  ],
+                },
+              ],
+            },
           ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '말하기 대장 배지 획득!'
-          }
-        }
-      }
+          reward: { printable: 'worksheet', badgeLabel: '입력 방법 도장' },
+        },
+      },
     ],
   },
-
-  // ─────────────────────────── l6 ───────────────────────────
   {
     id: 'm1-l6',
     moduleId: 'm1',
     number: 6,
     kind: 'concept',
-    title: 'AI는 어떻게 배울까?',
-    objective: 'AI가 자료를 보고 배우는 과정을 알아봅니다.',
-    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
-    wrapUpEasy: 'AI는 많은 예시를 보고 배웁니다. 우리가 연습하는 것과 같습니다.',
-    wrapUpNormal: 'AI는 아주 많은 예시를 보면서 배웁니다. 우리가 연습을 많이 하면 잘하게 되는 것과 비슷합니다.',
-    bodyEasy: 'AI는 아주 많은 예시를 보고 배웁니다. 우리가 연습하는 것과 같습니다.',
-    bodyNormal:
-      'AI는 사람이 만든 아주 많은 예시(사진, 글, 소리)를 보면서 배웁니다. 우리가 자꾸 연습하면 잘하게 되는 것과 비슷합니다.',
+    title: 'AI는 자료로 배워요',
+    objective: '오늘은 학습 자료가 달라지면 AI 결과가 어떻게 달라지는지 시험해 봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: 'AI는 여러 예시를 보고 규칙을 찾아요. 비슷한 자료만 보면 처음 보는 모양을 자주 틀릴 수 있어요.',
+    bodyNormal: 'AI는 학습 자료에서 반복되는 특징을 찾습니다. 자료의 수가 적거나 한 종류에 치우치면 새로운 사례에서 결과가 달라질 수 있습니다.',
+    wrapUpEasy: '여러 종류의 자료를 보여 주면 새로운 모양을 더 잘 구분할 수 있어요.',
+    wrapUpNormal: '학습 자료의 양과 다양성은 AI 결과에 영향을 주며, 사람에 관한 판단에는 더 세심한 검토가 필요합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['학습 데이터', '자료', '훈련', '편향'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['학습 데이터', '훈련', '결과'], imagePlaceholder: true } },
       {
-        kind: 'matching',
+        kind: 'card-pick',
         data: {
-          pairs: [
-            { left: '고양이 사진 100장 보여주기', right: 'AI가 고양이를 알아봅니다', icon: 'cat' },
-            { left: '노래 가사 많이 보여주기', right: 'AI가 노래를 만듭니다', icon: 'music' },
-            { left: '대화 많이 보여주기', right: 'AI가 대화를 잘합니다', icon: 'chatbot' },
-          ],
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: 'AI는 태어날 때부터 다 알겠습니까?',
-              answer: 'X',
-              feedback: 'AI도 사람처럼 많이 보고 배워야 알 수 있습니다.',
-            },
-            {
-              question: 'AI에게 많은 예시를 보여주면 더 잘하게 될겠습니까?',
-              answer: 'O',
-              feedback: '맞습니다! 우리가 연습을 많이 하면 잘하는 것과 같습니다.',
-            },
+          question: '분류기가 세모를 자주 틀립니다. 학습 카드에는 동그라미와 네모만 많습니다. 무엇을 먼저 바꿔 볼까요?',
+          choices: [
+            { label: '여러 크기와 색의 세모 카드를 더 보여 줍니다', isCorrect: true, icon: 'random_choice' },
+            { label: '동그라미 카드만 더 많이 보여 줍니다', isCorrect: false, icon: 'random_choice' },
+            { label: '결과를 보지 않고 그대로 사용합니다', isCorrect: false, icon: 'notice_problem' },
           ],
         },
       },
       {
         kind: 'mission',
         data: {
-          title: 'AI 학교 급식소',
+          title: '학습 자료 전후 결과표',
+          intro: '처음 자료와 보완한 자료가 어떤 결과를 만드는지 비교해요.',
           chapters: [
             {
-              title: '1장: 배움의 종류 분류',
-              goal: '골고루 배운 자료와 한쪽만 치우치게 배운 자료를 구분해 보십시오.',
+              title: '1장 자료 살펴보기',
+              goal: '처음 자료에서 빠진 모양을 찾아요.',
               blocks: [
                 {
-                  kind: 'drag-sort',
-                  id: 'sort_data',
-                  prompt: '인공지능(AI)이 똑똑해지려면 골고루 배워야 합니다. 자료의 균형을 나눠 보십시오.',
-                  bins: [
-                    { label: '골고루 배웁니다', emoji: '🌈' },
-                    { label: '한쪽만 배웁니다', emoji: '🌓' }
-                  ],
-                  cards: [
-                    { label: '다양한 강아지 사진 천 장', emoji: '🐶', bin: 0 },
-                    { label: '하얀색 말티즈 사진만 천 장', emoji: '🐩', bin: 1 },
-                    { label: '여러 가지 과일 사진 백 장', emoji: '🍍', bin: 0 },
-                    { label: '빨간 사과 사진만 백 장', emoji: '🍎', bin: 1 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 치우친 학습의 결과',
-              goal: '한쪽만 배운 AI가 겪을 일을 예측해 보십시오.',
-              blocks: [
-                {
-                  kind: 'single-pick',
-                  id: 'bias_predict',
-                  prompt: '하얀 강아지만 공부한 AI에게 까만 강아지 사진을 보여주면 어떻게 될겠습니까?',
+                  kind: 'multi-pick',
+                  id: 'm1_l6_missing_data',
+                  prompt: '새로운 카드를 구분하려면 어떤 자료를 더 넣어야 할까요?',
                   items: [
-                    { emoji: '🐕', label: '까만 강아지도 잘 알아본다' },
-                    { emoji: '❓', label: '강아지가 아니라고 오해한다' }
-                  ]
-                }
-              ]
+                    { emoji: 'TRIANGLE', label: '여러 크기의 세모' },
+                    { emoji: 'TRIANGLE', label: '여러 색의 세모' },
+                    { emoji: 'CIRCLE', label: '똑같은 동그라미만 20장' },
+                  ],
+                },
+                {
+                  kind: 'branch-chat',
+                  id: 'm1_l6_result_compare',
+                  intro: '자료를 보완하자 세모를 맞히는 횟수가 늘었어요.',
+                  turns: [
+                    {
+                      aimi: '이제 모든 세모를 언제나 맞힐 수 있을까요?',
+                      choices: [
+                        { label: '새로운 자료에서도 다시 시험해야 해.', reply: '맞아요. 보완한 뒤에도 새로운 사례로 다시 시험해야 해요.', good: true },
+                        { label: '한 번 좋아졌으니 언제나 맞을 거야.', reply: '처음 보는 모양에서는 또 다른 결과가 나올 수 있어요.' },
+                      ],
+                    },
+                  ],
+                },
+              ],
             },
             {
-              title: '3장: AI 가르치기',
-              goal: 'AI에게 골고루 보여주고 싶은 것을 그리십시오.',
+              title: '2장 전후 기록',
+              goal: '자료를 바꾸기 전과 뒤의 판단을 남겨요.',
               blocks: [
                 {
                   kind: 'summary',
-                  id: 'summary6',
-                  title: '급식소 기록 카드',
+                  id: 'm1_l6_artifact',
+                  title: '학습 자료 전후 결과표',
                   rows: [
-                    { label: '자료 분류 결과', from: 'sort_data' },
-                    { label: '치우친 공부의 결과', from: 'bias_predict' }
-                  ]
+                    { label: '추가한 자료', from: 'm1_l6_missing_data' },
+                    { label: '다시 시험할 방법', from: 'm1_l6_result_compare' },
+                  ],
                 },
-                {
-                  kind: 'draw',
-                  id: 'draw_teach',
-                  prompt: '내가 AI에게 골고루 보여주고 가르치고 싶은 대상을 그려 보십시오.'
-                }
-              ]
+              ],
             },
-            {
-              title: '4장: 예고: 첫 생각 저장',
-              goal: '새로운 생활 장면에서 처음 생각한 방법을 기록해 보십시오.',
-              blocks: [GENERALIZATION_CYCLES.m1.preview]
-            }
           ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '공평한 선생님 배지 획득!'
-          }
-        }
-      }
+          reward: { printable: 'worksheet', badgeLabel: '자료 연구원 도장' },
+        },
+      },
     ],
   },
-
-  // ─────────────────────────── l7 ───────────────────────────
   {
     id: 'm1-l7',
     moduleId: 'm1',
     number: 7,
     kind: 'concept',
-    title: 'AI가 잘하는 것',
-    objective: 'AI가 잘하는 일들을 찾아봅니다.',
-    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
-    wrapUpEasy: 'AI는 빠르게 답하고, 번역하고, 그림을 알아봅니다.',
-    wrapUpNormal: 'AI는 빠르게 답하기, 번역하기, 사진 알아보기를 잘합니다. 우리를 여러 가지로 도와줄 수 있습니다.',
-    bodyEasy: 'AI는 빠르게 답하기, 번역하기, 그림 알아보기를 잘합니다.',
-    bodyNormal:
-      'AI는 아주 빠르게 답을 만들고, 다른 나라 말로 바꿔주고, 사진 속 물건을 알아봅니다. 우리를 여러 가지로 도와줄 수 있습니다.',
+    title: 'AI가 빠르게 도와주는 일',
+    objective: '오늘은 AI가 만든 요약과 번역을 원문과 비교하고 빠진 부분을 찾아봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: 'AI는 긴 글을 짧게 만들거나 다른 언어로 빠르게 바꿀 수 있어요. 중요한 내용이 빠지지 않았는지 확인해요.',
+    bodyNormal: 'AI는 요약과 번역처럼 많은 글을 빠르게 처리하는 일을 도울 수 있습니다. 빠르다는 것이 정확하다는 뜻은 아니므로 원문과 비교해 핵심 내용의 누락과 변화를 확인해야 합니다.',
+    wrapUpEasy: 'AI가 빠르게 만든 결과도 원문과 나란히 놓고 확인해요.',
+    wrapUpNormal: 'AI의 요약과 번역은 원문의 날짜, 시간, 장소, 준비물 같은 핵심 정보와 비교한 뒤 사용합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['요약', '번역'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['요약', '번역', '결과'], imagePlaceholder: true } },
       {
-        kind: 'ox',
+        kind: 'card-pick',
         data: {
-          questions: [
-            {
-              question: 'AI는 사람보다 계산을 훨씬 빠르게 할 수 있습니까?',
-              answer: 'O',
-              feedback: '맞습니다! AI는 계산을 아주 빠르게 합니다.',
-            },
+          question: '원문에는 “금요일 오후 2시, 도서관, 이름표 준비”가 있습니다. AI 요약은 “금요일 오후 2시에 만나요”입니다. 빠진 핵심은 무엇인가요?',
+          choices: [
+            { label: '도서관과 이름표', isCorrect: true, icon: 'map_app' },
+            { label: '금요일과 오후 2시', isCorrect: false, icon: 'alarm_clock' },
+            { label: '만나요라는 표현', isCorrect: false, icon: 'borrow_friend' },
           ],
         },
       },
       {
         kind: 'mission',
         data: {
-          title: 'AI 사용 설명서',
+          title: '요약·번역 검토지',
+          intro: '원문과 AI 결과를 비교해 사용할 부분과 고칠 부분을 정해요.',
           chapters: [
             {
-              title: '1장: 잘하는 것 고르기',
-              goal: 'AI가 잘해서 우리를 도와주는 일을 모두 골라 보십시오.',
+              title: '1장 핵심 찾기',
+              goal: '원문에 꼭 남아야 할 정보를 골라요.',
               blocks: [
                 {
                   kind: 'multi-pick',
-                  id: 'good_at',
-                  prompt: '인공지능(AI)이 사람을 도와 아주 잘할 수 있는 일을 모두 골라 보십시오.',
+                  id: 'm1_l7_key_points',
+                  prompt: '체험회 안내에서 꼭 남아야 할 정보를 모두 골라 봐요.',
                   items: [
-                    { emoji: '🌐', label: '영어 대사를 한국어로 번역하기' },
-                    { emoji: '📖', label: '긴 동화책을 짧게 줄이기' },
-                    { emoji: '🍲', label: '부엌에서 직접 찌개 끓이기' },
-                    { emoji: '🎨', label: '어울리는 일러스트 그려주기' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 잘함과 못함 분류',
-              goal: 'AI가 잘하는 일과 할 수 없는 일을 나눠 보십시오.',
-              blocks: [
+                    { emoji: 'TIME', label: '금요일 오후 2시' },
+                    { emoji: 'PLACE', label: '도서관' },
+                    { emoji: 'ITEM', label: '이름표 준비' },
+                    { emoji: 'STYLE', label: '신나는 느낌의 꾸밈말' },
+                  ],
+                },
                 {
                   kind: 'drag-sort',
-                  id: 'sort_ability',
-                  prompt: 'AI가 스스로 해결할 수 있는 일과 사람이 대신해 주십시오야 하는 일을 바구니에 담아 보십시오.',
+                  id: 'm1_l7_review',
+                  prompt: 'AI 결과를 사용할 부분과 고칠 부분으로 나눠요.',
                   bins: [
-                    { label: 'AI가 잘합니다', emoji: '🌟' },
-                    { label: 'AI가 못합니다', emoji: '❌' }
+                    { label: '사용해요', emoji: 'USE' },
+                    { label: '고쳐요', emoji: 'EDIT' },
                   ],
                   cards: [
-                    { label: '빠르게 계산하기', emoji: '🧮', bin: 0 },
-                    { label: '글자 번역하기', emoji: '🌐', bin: 0 },
-                    { label: '마음으로 슬퍼하기', emoji: '💧', bin: 1 },
-                    { label: '밥을 씹어 먹기', emoji: '🍚', bin: 1 }
-                  ]
-                }
-              ]
+                    { label: '금요일 오후 2시', emoji: '1', bin: 0 },
+                    { label: '빠진 장소: 도서관', emoji: '2', bin: 1 },
+                    { label: '빠진 준비물: 이름표', emoji: '3', bin: 1 },
+                  ],
+                },
+              ],
             },
             {
-              title: '3장: 다짐하기',
-              goal: '사용 설명서를 완성하고 약속해 보십시오.',
+              title: '2장 검토 기록',
+              goal: '비교한 결과를 남겨요.',
               blocks: [
                 {
                   kind: 'summary',
-                  id: 'summary7',
-                  title: '나의 AI 사용 설명서',
+                  id: 'm1_l7_artifact',
+                  title: '검토 표시가 남은 비교지',
                   rows: [
-                    { label: '도움을 받는 일', from: 'good_at' },
-                    { label: '못하는 한계 분류', from: 'sort_ability' }
-                  ]
+                    { label: '원문의 핵심', from: 'm1_l7_key_points' },
+                    { label: '사용·수정 결정', from: 'm1_l7_review' },
+                  ],
                 },
-                {
-                  kind: 'vow',
-                  id: 'vow7',
-                  prompt: '다짐 문장을 완성해 보십시오.',
-                  template: '나 {이름}는 AI가 마음이 없는 {빈칸} 도구일 뿐임을 항상 기억하겠습니다!'
-                }
-              ]
-            }
+              ],
+            },
           ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '설명서 마스터 배지 획득!'
-          }
-        }
-      }
+          reward: { printable: 'worksheet', badgeLabel: '비교 편집자 도장' },
+        },
+      },
     ],
   },
-
-  // ─────────────────────────── l8 ───────────────────────────
   {
     id: 'm1-l8',
     moduleId: 'm1',
     number: 8,
     kind: 'concept',
-    title: 'AI가 못하는 것',
-    objective: 'AI가 못하는 일들을 찾아봅니다.',
-    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
-    wrapUpEasy: 'AI는 밥을 먹거나 진짜 마음을 느끼지 못합니다.',
-    wrapUpNormal: 'AI는 몸과 마음이 없어서 밥을 먹거나 진짜로 슬퍼하지 못합니다. 사람만 할 수 있는 일이 있습니다.',
-    bodyEasy: 'AI는 밥을 먹거나, 마음을 느끼지 못합니다. 사람만 하는 일이 있습니다.',
-    bodyNormal:
-      'AI는 사람처럼 배고픔이나 슬픔 같은 마음을 진짜로 느끼지 못합니다. 몸이 없어서 뛰거나 밥 먹는 것도 못 합니다.',
+    title: 'AI에게 맡기기 어려운 일',
+    objective: '오늘은 AI가 혼자 결정하기 어려운 일을 찾고 누구와 함께 확인할지 골라봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: 'AI가 도울 수 있는 일도 있지만, 마음, 건강, 안전처럼 중요한 일은 믿을 수 있는 사람과 함께 확인해요.',
+    bodyNormal: 'AI가 할 수 있는 일은 도구의 기능과 연결 상태에 따라 다릅니다. 감정, 건강, 안전, 책임에 관한 결정은 AI 답만 따르지 않고 믿을 수 있는 사람과 함께 확인합니다.',
+    wrapUpEasy: '중요한 결정은 AI에게 혼자 맡기지 않고 믿을 수 있는 사람과 확인해요.',
+    wrapUpNormal: 'AI만으로 시도할 일, 결과를 확인하고 사용할 일, 믿을 수 있는 사람에게 요청할 일을 위험과 책임에 따라 구분합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['최신 정보', '감정'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['도구', '결과'], imagePlaceholder: true } },
       {
-        kind: 'ox',
+        kind: 'card-pick',
         data: {
-          questions: [
-            {
-              question: 'AI는 배가 고파서 밥을 먹겠습니까?',
-              answer: 'X',
-              feedback: 'AI는 몸이 없어서 밥을 못 먹습니다.',
-            },
-            {
-              question: 'AI는 진짜로 슬퍼서 눈물을 흘릴겠습니까?',
-              answer: 'X',
-              feedback: 'AI는 마음이 없어서 진짜로 슬퍼하지 못합니다.',
-            },
-            {
-              question: 'AI는 축구공을 발로 찰 수 있겠습니까?',
-              answer: 'X',
-              feedback: 'AI는 몸이 없어서 발로 찰 수가 없습니다.',
-            },
+          question: '친구가 아파 보일 때 가장 알맞은 방법은 무엇인가요?',
+          choices: [
+            { label: '선생님이나 보호자에게 바로 알립니다', isCorrect: true, icon: 'ask_more' },
+            { label: 'AI에게 병명을 정해 달라고 합니다', isCorrect: false, icon: 'chatbot' },
+            { label: '친구 표정만 보고 괜찮다고 정합니다', isCorrect: false, icon: 'angry_face' },
           ],
         },
       },
       {
         kind: 'mission',
         data: {
-          title: '못하는 것 탐정',
+          title: '도움 경계 지도',
+          intro: '부탁의 위험과 책임을 살펴보고 알맞은 도움 경로를 정해요.',
           chapters: [
             {
-              title: '1장: 가능과 불가능',
-              goal: 'AI가 할 수 있는 것과 없는 것을 탐정처럼 밝혀내 보십시오.',
+              title: '1장 도움 경로',
+              goal: '네 가지 부탁을 세 경로로 나눠요.',
               blocks: [
                 {
                   kind: 'drag-sort',
-                  id: 'sort_detect',
-                  prompt: '인공지능(AI)이 해낼 수 있는 일과 절대 혼자선 못하는 일을 구분해 보십시오.',
+                  id: 'm1_l8_help_map',
+                  prompt: '각 부탁을 어디로 보내면 좋을까요?',
                   bins: [
-                    { label: '할 수 있습니다', emoji: '🙆' },
-                    { label: '할 수 없습니다', emoji: '🙅' }
+                    { label: 'AI로 시도', emoji: 'AI' },
+                    { label: '확인하고 사용', emoji: 'CHECK' },
+                    { label: '사람에게 요청', emoji: 'HUMAN' },
                   ],
                   cards: [
-                    { label: '빠르게 번역하기', emoji: '🌐', bin: 0 },
-                    { label: '스스로 배고파하기', emoji: '🍕', bin: 1 },
-                    { label: '진짜로 슬퍼하기', emoji: '😢', bin: 1 },
-                    { label: '새로운 퀴즈 만들기', emoji: '✏️', bin: 0 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 생각의 비밀 탐색',
-              goal: 'AI와 마음을 주제로 대화해 보십시오.',
-              blocks: [
+                    { label: '긴 안내문을 짧게 정리하기', emoji: '1', bin: 0 },
+                    { label: '최신 행사 시간을 찾아보기', emoji: '2', bin: 1 },
+                    { label: '약을 먹어도 되는지 결정하기', emoji: '3', bin: 2 },
+                    { label: '친구가 왜 속상한지 단정하기', emoji: '4', bin: 2 },
+                  ],
+                },
                 {
                   kind: 'branch-chat',
-                  id: 'mind_detect',
-                  intro: '마음이 무엇인지 아이미와 깊이 대화해 보겠습니까?',
+                  id: 'm1_l8_reason',
+                  intro: '새 조건이 생겼어요. AI가 최신 행사 시간을 알려 줬지만 출처가 없어요.',
                   turns: [
                     {
-                      aimi: '저는 몸과 마음이 없어서 진짜 배고픔이나 기쁨을 느끼지는 못한습니다.',
+                      aimi: '제가 알려 준 시간을 바로 안내해도 될까요?',
                       choices: [
-                        { label: '맛있는 걸 먹는 기쁨은 모르는구나.', reply: '네, 맞습니다. 진짜로 음식을 먹고 행복을 느낄 수 있는 건 사람뿐입니다!', good: true },
-                        { label: '전기가 없으면 배고파지는 거야?', reply: '충전선은 전기 전원일 뿐입니다. 배가 고픈 진짜 기분과는 다릅니다!' }
-                      ]
-                    }
-                  ]
-                }
-              ]
+                        { label: '학교 공지나 담당자에게 확인할게.', reply: '좋아요. 최신 정보는 공식 자료나 담당자에게 확인해요.', good: true },
+                        { label: 'AI가 말했으니 바로 안내할게.', reply: '출처가 없으면 오래되거나 틀린 정보일 수 있어요.' },
+                      ],
+                    },
+                  ],
+                },
+              ],
             },
             {
-              title: '3장: 다짐하기',
-              goal: '탐정 다짐을 완성해 보십시오.',
+              title: '2장 지도 완성',
+              goal: '내가 정한 도움 경로를 남겨요.',
               blocks: [
                 {
                   kind: 'summary',
-                  id: 'summary8',
-                  title: '탐정 수첩 카드',
+                  id: 'm1_l8_artifact',
+                  title: 'AI 도움 경계 지도',
                   rows: [
-                    { label: '탐정 분류 기록', from: 'sort_detect' },
-                    { label: '대화에서 찾은 한계', from: 'mind_detect' }
-                  ]
+                    { label: '부탁별 도움 경로', from: 'm1_l8_help_map' },
+                    { label: '확인할 사람과 자료', from: 'm1_l8_reason' },
+                  ],
                 },
-                {
-                  kind: 'vow',
-                  id: 'vow8',
-                  prompt: '다짐 문장을 완성해 보십시오.',
-                  template: '나 {이름}는 AI가 몸과 마음이 없는 {빈칸} 도구임을 항상 잊지 않겠습니다!'
-                }
-              ]
-            }
+              ],
+            },
           ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '명탐정 배지 획득!'
-          }
-        }
-      }
+          reward: { printable: 'worksheet', badgeLabel: '안전 판단 도장' },
+        },
+      },
     ],
   },
-
-  // ─────────────────────────── l9 ───────────────────────────
   {
     id: 'm1-l9',
     moduleId: 'm1',
     number: 9,
     kind: 'concept',
-    title: '여러 가지 AI 친구들',
-    objective: '챗봇과 이미지 생성 AI가 무엇인지 알아봅니다.',
-    standards: [
-      '[9정통01-02] 다양한 정보통신 기기의 종류를 알고, 기본 기능을 익힌다.',
-      '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.',
-    ],
-    wrapUpEasy: 'AI는 여러 가지입니다. 하는 일이 조금씩 다릅니다.',
-    wrapUpNormal: '글로 대화하는 AI, 말로 대화하는 AI, 그림 그리는 AI처럼 AI는 종류마다 하는 일이 다릅니다.',
-    bodyEasy: 'AI는 여러 가지가 있습니다. 이름도 하는 일도 조금씩 다릅니다.',
-    bodyNormal:
-      'AI는 종류가 여러 가지입니다. 어떤 AI는 글로 대화하고, 어떤 AI는 그림을 그립니다. 이름도 하는 일도 조금씩 다릅니다.',
+    title: '일에 맞는 AI 도구 고르기',
+    objective: '오늘은 원하는 결과와 필요한 입력을 보고 알맞은 AI 도구를 골라봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: '원하는 결과가 글, 그림, 자막 중 무엇인지 먼저 정해요. 필요한 입력과 사람이 확인할 점도 함께 살펴봐요.',
+    bodyNormal: 'AI 도구는 이름보다 입력, 출력, 근거, 개인정보 조건을 보고 선택합니다. 하나의 서비스가 여러 기능을 가질 수 있으므로 작업 목적에 맞는 기능과 사람의 확인 방법을 함께 정합니다.',
+    wrapUpEasy: '원하는 결과와 필요한 입력을 보고 도구를 고른 뒤 사람이 확인해요.',
+    wrapUpNormal: '작업 목적에 맞춰 입력과 출력을 연결하고, 근거와 개인정보를 확인하는 도구 선택 설계가 필요합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['이미지 생성 AI', '챗봇', '도구'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['입력', '결과', '개인정보'], imagePlaceholder: true } },
       {
-        kind: 'card-pick',
+        kind: 'matching',
         data: {
-          question: '"이 강아지 사진을 그려줘"는 어떤 AI에게 물어보겠습니까?',
-          choices: [
-            { label: '그림을 그려주는 AI', isCorrect: true, icon: 'drawing' },
-            { label: '말로만 대답하는 AI', isCorrect: false, icon: 'chatbot' },
-            { label: '번역만 하는 AI', isCorrect: false, icon: 'translate' },
+          pairs: [
+            { left: '체험회 안내문', right: '글을 정리하는 AI 기능', icon: 'book' },
+            { left: '체험회 포스터 그림', right: '그림을 만드는 AI 기능', icon: 'drawing' },
+            { left: '안내 영상 자막', right: '음성을 글로 바꾸는 AI 기능', icon: 'ai_speaker' },
           ],
         },
       },
       {
         kind: 'mission',
         data: {
-          title: 'AI 친구 소개 카드',
+          title: '도구 선택 설계서',
+          intro: '체험회 작업 하나를 골라 입력, 결과, 확인 방법을 설계해요.',
           chapters: [
             {
-              title: '1장: 일감 나눠주기',
-              goal: '어떤 일을 어떤 AI에게 부탁해야 할지 나눠 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'sort_friend',
-                  prompt: '하려는 대화에 따라 글로 답하는 챗봇과 그림을 그려주는 AI에게 알맞게 부탁을 나눠 보십시오.',
-                  bins: [
-                    { label: '챗봇 AI', emoji: '💬' },
-                    { label: '이미지 생성 AI', emoji: '🎨' }
-                  ],
-                  cards: [
-                    { label: '귀여운 강아지 그림 그려줘', emoji: '🎨', bin: 1 },
-                    { label: '강아지는 뼈다귀를 왜 좋아해?', emoji: '💬', bin: 0 },
-                    { label: '우주선 그림 그려줘', emoji: '🚀', bin: 1 },
-                    { label: '재미있는 짧은 동화 써 주십시오', emoji: '📖', bin: 0 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 내 AI 친구 그리기',
-              goal: '나에게 꼭 맞는 AI 친구를 상상하고 그려 보십시오.',
+              title: '1장 목적과 도구',
+              goal: '작업 목적에 알맞은 기능을 골라요.',
               blocks: [
                 {
                   kind: 'single-pick',
-                  id: 'friend_choice',
-                  prompt: '나와 가장 친하게 지내고 싶은 AI 친구를 하나만 골라 보십시오.',
+                  id: 'm1_l9_task',
+                  prompt: '내가 맡고 싶은 체험회 작업은 무엇인가요?',
                   items: [
-                    { emoji: '💬', label: '고민을 들어주는 챗봇 친구' },
-                    { emoji: '🎨', label: '상상을 그려주는 화가 친구' },
-                    { emoji: '🎵', label: '어울리는 노래를 고르는 음악 친구' }
-                  ]
+                    { emoji: 'TEXT', label: '짧고 쉬운 안내문 만들기' },
+                    { emoji: 'IMAGE', label: '체험회 포스터 그림 만들기' },
+                    { emoji: 'CAPTION', label: '안내 영상 자막 만들기' },
+                  ],
                 },
                 {
-                  kind: 'draw',
-                  id: 'draw_friend',
-                  prompt: '내가 상상한 멋진 AI 친구의 생김새를 자유롭게 그려 보십시오.'
-                }
-              ]
+                  kind: 'drag-sort',
+                  id: 'm1_l9_conditions',
+                  prompt: '도구를 고르기 전에 살펴볼 조건을 나눠요.',
+                  bins: [
+                    { label: '필요한 입력', emoji: 'IN' },
+                    { label: '원하는 결과', emoji: 'OUT' },
+                    { label: '사람이 확인', emoji: 'CHECK' },
+                  ],
+                  cards: [
+                    { label: '공개해도 되는 행사 정보', emoji: '1', bin: 0 },
+                    { label: '안내문·그림·자막', emoji: '2', bin: 1 },
+                    { label: '사실, 저작권, 개인정보', emoji: '3', bin: 2 },
+                  ],
+                },
+              ],
             },
             {
-              title: '3장: 카드 완성하기',
-              goal: '내가 만든 AI 친구 카드를 최종 확인하십시오.',
+              title: '2장 설계서 완성',
+              goal: '내가 고른 작업과 확인 조건을 한 장에 남겨요.',
               blocks: [
                 {
                   kind: 'summary',
-                  id: 'summary9',
-                  title: '나의 AI 친구 카드',
+                  id: 'm1_l9_artifact',
+                  title: '도구 선택 설계서',
                   rows: [
-                    { label: 'AI 역할 구분', from: 'sort_friend' },
-                    { label: '나의 AI 친구 종류', from: 'friend_choice' }
-                  ]
-                }
-              ]
-            }
+                    { label: '내 작업 목적', from: 'm1_l9_task' },
+                    { label: '입력·결과·확인 조건', from: 'm1_l9_conditions' },
+                  ],
+                },
+              ],
+            },
           ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '친화력 대장 배지 획득!'
-          }
-        }
-      }
+          reward: { printable: 'worksheet', badgeLabel: '도구 설계자 도장' },
+        },
+      },
     ],
   },
-
-  // ─────────────────────────── l10 ───────────────────────────
   {
     id: 'm1-l10',
     moduleId: 'm1',
     number: 10,
     kind: 'experience',
-    title: 'AI랑 놀아본 사람?',
-    objective: 'AI에게 프롬프트로 물어보고 답을 확인해 보십시오.',
-    standards: [
-      '[9정통01-04] 필요한 정보를 수집하고, 타인과 정보를 주고받는다.',
-      '[6국어01-04] 묻는 말의 의미를 이해하여 적절한 질문과 대답을 한다.',
-    ],
-    wrapUpEasy: '오늘 AI랑 이야기해봤습니다. 또박또박 물어보면 됩니다.',
-    wrapUpNormal: '오늘 AI랑 진짜로 이야기해봤습니다. 궁금한 걸 또박또박 물어보면 AI가 대답해 줍니다.',
-    bodyEasy: 'AI랑 이야기해본 적 있습니까? 오늘은 짧게 대화해 보십시오.',
-    bodyNormal:
-      'AI랑 이야기해본 적 있습니까? 오늘은 짧은 대화를 해보면서 AI가 어떻게 답하는지 느껴봅니다.',
+    title: 'AI 결과를 사용할까?',
+    objective: '오늘은 AI에게 안전한 요청을 한 뒤 결과를 확인하고 사용·수정·거절을 골라봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: 'AI 결과를 바로 쓰지 않고 목적과 조건에 맞는지 확인해요. 마지막 결정은 사람이 해요.',
+    bodyNormal: 'AI 결과는 작업 목적, 확인된 자료, 안전 조건과 비교한 뒤 사용하거나 수정하거나 거절합니다. AI가 제안해도 마지막 결정과 책임은 사람에게 있습니다.',
+    wrapUpEasy: 'AI 결과는 확인한 뒤 사용, 수정, 거절을 사람이 결정해요.',
+    wrapUpNormal: 'AI의 첫 결과와 수정 결과를 근거와 비교하고, 최종 사용 여부는 사람이 결정합니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['프롬프트'] } },
-      {
-        kind: 'real-ai',
-        data: {
-          prompt: '이번엔 진짜 AI한테 "노래 하나 추천해 주십시오" 라고 부탁해 보십시오!',
-          userInput: '노래 하나 추천해 주십시오',
-          fallbackResponse:
-            '기분이 좋아지는 신나는 동요는 어떻습니까? "곰 세 마리" 나 "숲속을 걸습니다" 같은 노래를 추천합니다!',
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: 'AI랑 이야기할 때 어떻게 하면 좋겠습니까?',
-          choices: [
-            { label: '궁금한 걸 또박또박 물어봅니다', isCorrect: true, icon: 'chatbot' },
-            { label: '아무 말도 안 합니다', isCorrect: false, icon: 'sleep' },
-            { label: '큰 소리로 화냅니다', isCorrect: false, icon: 'angry_face' },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '첫 프롬프트 만들기',
-          chapters: [
-            {
-              title: '1장: 프롬프트 조립소',
-              goal: '조각을 맞춰 멋진 질문을 완성해 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-build',
-                  id: 'first_prompt',
-                  prompt: '원하는 답을 얻기 위해 "무엇을", "어떻게" 조각을 골라 프롬프트를 조립해 보십시오.',
-                  slots: [
-                    { label: '무엇을 하겠습니까?' },
-                    { label: '어떤 모양으로 하겠습니까?' }
-                  ],
-                  pieces: [
-                    { label: '동화 주인공 이름 추천해 줘', slot: 0, quality: 'good' },
-                    { label: '재밌는 거 아무거나 추천해 봐', slot: 0, quality: 'weak' },
-                    { label: '세 가지만 짧게 보여 줘', slot: 1, quality: 'good' },
-                    { label: '대충 많이 보여 줘', slot: 1, quality: 'weak' }
-                  ],
-                  response: {
-                    good: '좋습니다! 동화책 주인공으로 어울리는 이름 "솔이", "하늘이", "초록이" 세 개를 추천합니다.',
-                    weak: '음... 어떤 재밌는 주인공을 원하시는지 조금 더 자세히 적어 보겠습니까?'
-                  }
-                }
-              ]
-            },
-            {
-              title: '2장: 구체적인 질문의 힘',
-              goal: '대답을 확인한 후 아이미와 의견을 나눠 보십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'feedback_prompt',
-                  intro: '답을 확인한 다음, 더 깔끔한 대답을 얻으려면 어떻게 질문할지 대화해 보십시오.',
-                  turns: [
-                    {
-                      aimi: '질문이 정확하면 저도 꼭 마음에 드는 답을 찾아드릴 수 있습니다.',
-                      choices: [
-                        { label: '구체적으로 형식을 말하니까 대답이 깔끔하네!', reply: '맞습니다! 구체적으로 목적과 개수를 적을수록 대답이 명확해져습니다.', good: true },
-                        { label: '그냥 대충 짧게 대화하고 싶어.', reply: '그러면 저도 틀린 말을 하거나 이상한 답을 할 확률이 높아져습니다!' }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 다짐하기',
-              goal: '좋은 질문을 쓰기로 다짐해 보십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary10',
-                  title: '나의 첫 프롬프트 카드',
-                  rows: [
-                    { label: '조립한 프롬프트', from: 'first_prompt' },
-                    { label: '질문에 대한 평가', from: 'feedback_prompt' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow10',
-                  prompt: '다짐 문장을 완성해 보십시오.',
-                  template: '나 {이름}는 앞으로 원하는 답을 얻기 위해 {빈칸} 프롬프트를 적어서 질문하겠습니다!'
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '프롬프트 입문 배지 획득!'
-          }
-        }
-      }
+      { kind: 'text', data: { dictionaryTerms: ['결과', '자료'], imagePlaceholder: true } },
     ],
   },
-
-  // ─────────────────────────── l11 ───────────────────────────
   {
     id: 'm1-l11',
     moduleId: 'm1',
     number: 11,
     kind: 'activity',
-    title: '다 배웠습니다! (마무리 퀴즈)',
-    objective: '이번 단원에서 배운 낱말들을 다시 알아봅니다.',
-    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
-    wrapUpEasy: '단원 1을 다 배웠습니다! AI가 뭔지 알게 됐습니다.',
-    wrapUpNormal: '단원 1을 마쳤습니다! AI가 무엇이고, 뭘 잘하고 못하는지 알게 됐습니다. 다음 단원에서 AI랑 직접 말해 보십시오.',
-    bodyEasy: '지금까지 배운 걸 확인해 보십시오.',
-    bodyNormal:
-      '단원 1에서 배운 내용을 짧은 퀴즈로 확인해 보십시오. 틀려도 괜찮습니다, 다시 보면서 배워봅니다!',
+    title: '아이미 사용 설명서',
+    objective: '오늘은 새 AI 상황에서 입력·결과·확인할 점을 찾아 나만의 AI 사용 설명서를 완성해 봐요.',
+    standards: [AI_STANDARD],
+    bodyEasy: '동아리에서 남긴 기록을 모아 새 친구에게 줄 아이미 사용 설명서를 만들어요.',
+    bodyNormal: '동아리 첫 주의 탐구 기록을 모아 AI가 잘 도와주는 일, 조건에 따라 달라지는 일, 사람이 확인할 일을 설명서로 정리합니다.',
+    wrapUpEasy: 'AI가 도와주는 일과 사람이 확인할 일을 설명서에 담았어요.',
+    wrapUpNormal: '입력, 결과, 확인할 점을 살펴보고 마지막 결정을 사람이 한다는 아이미 사용 설명서를 완성했습니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['학습 데이터', '생성형 AI', '인공지능', '예측', '훈련', '환각', '도구'] } },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: 'AI는 사람 말을 알아듣고 답해줄 수 있습니까?',
-              answer: 'O',
-              feedback: '맞습니다! 그게 AI가 잘하는 일입니다.',
-            },
-            {
-              question: 'AI는 진짜로 배가 고파서 밥을 먹겠습니까?',
-              answer: 'X',
-              feedback: 'AI는 몸이 없어서 밥을 못 먹습니다.',
-            },
-            {
-              question: 'AI는 많은 예시를 보고 배울겠습니까?',
-              answer: 'O',
-              feedback: '맞습니다! 우리가 연습하는 것과 같습니다.',
-            },
-            {
-              question: '냉장고는 모두 다 AI입니까?',
-              answer: 'X',
-              feedback: '대부분의 냉장고는 그냥 차갑게 만드는 기계입니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '단원 1 수료식',
-          chapters: [
-            {
-              title: '1장: 배운 것 스스로 확인',
-              goal: '단원 1에서 배운 것 중 할 수 있는 것을 골라 보십시오.',
-              blocks: [
-                {
-                  kind: 'multi-pick',
-                  id: 'self_check',
-                  prompt: '단원 1을 마치면서 내 힘으로 할 수 있게 된 일들을 모두 골라 보십시오.',
-                  items: [
-                    { emoji: '🔍', label: '우리 생활 속 AI 찾기' },
-                    { emoji: '⚙️', label: '그냥 기계와 AI 구분하기' },
-                    { emoji: '🌟', label: 'AI가 잘하는 한계 이해하기' },
-                    { emoji: '🗣️', label: 'AI에게 또박또박 질문하기' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 최종 확인 퀴즈',
-              goal: '배운 개념들을 OX 퀴즈처럼 분류해 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'final_quiz',
-                  prompt: '단원 1의 참과 거짓을 탐정처럼 분류 바구니에 바르게 나눠 담아 보십시오.',
-                  bins: [
-                    { label: '맞습니다', emoji: '⭕' },
-                    { label: '틀립니다', emoji: '❌' }
-                  ],
-                  cards: [
-                    { label: '인공지능은 몸과 마음이 없다', emoji: '🤖', bin: 0 },
-                    { label: '모든 냉장고는 무조건 인공지능이다', emoji: '❄️', bin: 1 },
-                    { label: 'AI는 배우지 않아도 태어날 때부터 다 안다', emoji: '👶', bin: 1 },
-                    { label: 'AI는 빠르게 요약하고 번역한다', emoji: '⚡', bin: 0 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 본 활동: 생각 리플레이',
-              goal: '첫 생각과 달라진 조건을 비교하고, 나의 판단을 다시 만들어 보십시오.',
-              blocks: [GENERALIZATION_CYCLES.m1.main]
-            },
-            {
-              title: '4장: 수료 선서',
-              goal: '수료증 문구를 다짐과 함께 채워 완성하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary11',
-                  title: '나의 단원 1 기록 카드',
-                  rows: [
-                    { label: '내가 해낸 일들', from: 'self_check' },
-                    { label: '최종 퀴즈 확인', from: 'final_quiz' },
-                    { label: '판단 비교와 새 장면 기록', from: 'judgment_main_m1_l11' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow11',
-                  prompt: '다짐 문장을 완성해 보십시오.',
-                  template: '위 학생 {이름}는 단원 1 공부를 마쳤으므로 앞으로 인공지능을 {빈칸} 사용하는 똑똑한 어린이가 될 것을 다짐합니다!'
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'certificate',
-            badgeLabel: '단원 1 정복 수료증 획득!'
-          }
-        }
-      }
+      { kind: 'text', data: { dictionaryTerms: ['인공지능', '입력', '결과'], imagePlaceholder: true } },
     ],
   },
 ];

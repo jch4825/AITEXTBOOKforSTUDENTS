@@ -10,4 +10,23 @@ export interface ModulePortfolioDefinition {
   description: string;
   studioLessonIds: readonly LessonId[];
   nextChoices: StudioChoice[];
+  artifactChoices?: {
+    lessonId: LessonId;
+    label: string;
+    artifact: string;
+  }[];
+  guideSections?: {
+    id: string;
+    title: string;
+    prompt: string;
+    placeholder: string;
+  }[];
+  closingStory?: {
+    id: string;
+    label: string;
+    imageSrc: string;
+    alt: string;
+    copy: string;
+  }[];
+  transferPrompt?: string;
 }

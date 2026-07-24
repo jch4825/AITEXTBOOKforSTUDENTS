@@ -76,8 +76,23 @@ m6-l12\t그동안 배운 생활 약속을 다시 모아 확인해 봐요.
   return [lessonId, objective];
 }));
 
-// m1-l1은 비주얼 노벨 기준형에서 승인된 공통 목표로 갱신합니다.
-EXPECTED_OBJECTIVES.set('m1-l1', 'AI가 무엇인지 알고, AI가 하는 일을 생활 장면에서 찾습니다.');
+const M1_OBJECTIVES = new Map([
+  ['m1-l1', '오늘은 생활 속 AI가 하는 일을 찾고, AI를 내 말로 소개해 봐요.'],
+  ['m1-l2', '오늘은 기계가 결과를 바꾸는 데 어떤 정보를 쓰는지 살펴보고 AI가 쓰인 기능을 찾아봐요.'],
+  ['m1-l3', '오늘은 AI가 다음 말을 이어 답을 만드는 모습을 보고, 확인할 문장을 찾아봐요.'],
+  ['m1-l4', '오늘은 사진 조건을 바꾸어 AI의 답이 달라지는지 살펴보고 원본과 다시 비교해 봐요.'],
+  ['m1-l5', '오늘은 같은 말을 다른 조건에서 들려주고 인식된 글자를 비교해 봐요.'],
+  ['m1-l6', '오늘은 학습 자료가 달라지면 AI 결과가 어떻게 달라지는지 시험해 봐요.'],
+  ['m1-l7', '오늘은 AI가 만든 요약과 번역을 원문과 비교하고 빠진 부분을 찾아봐요.'],
+  ['m1-l8', '오늘은 AI가 혼자 결정하기 어려운 일을 찾고 누구와 함께 확인할지 골라봐요.'],
+  ['m1-l9', '오늘은 원하는 결과와 필요한 입력을 보고 알맞은 AI 도구를 골라봐요.'],
+  ['m1-l10', '오늘은 AI에게 안전한 요청을 한 뒤 결과를 확인하고 사용·수정·거절을 골라봐요.'],
+  ['m1-l11', '오늘은 새 AI 상황에서 입력·결과·확인할 점을 찾아 나만의 AI 사용 설명서를 완성해 봐요.'],
+]);
+
+for (const [lessonId, objective] of M1_OBJECTIVES) {
+  EXPECTED_OBJECTIVES.set(lessonId, objective);
+}
 
 if (EXPECTED_OBJECTIVES.size !== 68) {
   throw new Error(`objective baseline must contain 68 lessons, got ${EXPECTED_OBJECTIVES.size}`);
@@ -114,7 +129,7 @@ if (objectiveByLesson.size !== 68) {
 
 for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
   const actual = objectiveByLesson.get(lessonId);
-  const formalExpected = expected
+  const formalExpected = lessonId.startsWith('m1-') ? expected : expected
     .replaceAll('해 봐요', '해 보십시오')
     .replaceAll('봐요', '봅니다')
     .replaceAll('해요', '합니다')

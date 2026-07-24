@@ -41,6 +41,13 @@ for (const [moduleId, previewLesson, mainLesson] of lessonPairs) {
   if (!source.includes(`id: '${previewLesson}'`) || !source.includes(`id: '${mainLesson}'`)) {
     throw new Error(`missing lesson pair for ${moduleId}`);
   }
+  if (moduleId === 'm1') {
+    const portfolio = readFileSync(resolve(root, 'src/data/modulePortfolios/m1.ts'), 'utf8');
+    for (const marker of ['guideSections:', 'transferPrompt:', 'nextChoices:']) {
+      if (!portfolio.includes(marker)) throw new Error(`missing project transfer marker for m1: ${marker}`);
+    }
+    continue;
+  }
   if (!source.includes(`GENERALIZATION_CYCLES.${moduleId}.preview`) || !source.includes(`GENERALIZATION_CYCLES.${moduleId}.main`)) {
     throw new Error(`missing judgment blocks for ${moduleId}`);
   }
