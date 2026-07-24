@@ -12,14 +12,13 @@ interface Props {
   accent: string;
 }
 
-interface FloatingTextItem {
+interface ActiveText {
   id: string;
   x: number;
   y: number;
   text: string;
   color: string;
   fontSize: number;
-  isEditing: boolean;
 }
 
 type ToolMode = 'pen' | 'eraser' | 'text';
@@ -45,10 +44,12 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   const [width, setWidth] = useState(WIDTHS[1]); // 디폴트 굵게 (8px)
   const [mode, setMode] = useState<ToolMode>('pen');
 
-  // Text items for dragging & editing
-  const [textItems, setTextItems] = useState<FloatingTextItem[]>([]);
-  const draggingIdRef = useRef<string | null>(null);
-  const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  // AutoDraw-style Active Text State
+  const [activeText, setActiveText] = useState<ActiveText | null>(null);
+  const textContainerRef = useRef<HTMLDivElement>(null);
+  const textInputRef = useRef<HTMLInputElement>(null);
+  const isDraggingTextRef = useRef(false);
+  const textDragOffsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const isEraser = mode === 'eraser';
 
@@ -74,25 +75,6 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
     }
   }, []);
 
-  function saveCanvasWithTexts(updatedItems = textItems) {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Rasterize committed text items into canvas
-    updatedItems.forEach((item) => {
-      if (!item.isEditing && item.text.trim()) {
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = item.color;
-        ctx.font = `bold ${item.fontSize}px sans-serif, "Segoe UI Emoji"`;
-        ctx.fillText(item.text, item.x + 8, item.y + item.fontSize);
-      }
-    });
-
-    onChange(canvas.toDataURL());
-  }
-
   function getPoint(e: ReactPointerEvent<HTMLCanvasElement> | React.PointerEvent) {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
@@ -103,38 +85,40 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   function handlePointerDown(e: ReactPointerEvent<HTMLCanvasElement>) {
     const point = getPoint(e);
     if (mode === 'text') {
-      // Create a new draggable text box at clicked location
-      const newItem: FloatingTextItem = {
+      // AutoDraw style: If active text already exists with content, commit it first
+      if (activeText && activeText.text.trim()) {
+        commitActiveText();
+      }
+
+      // Create new AutoDraw-style borderless text input at click location
+      const fontSize = width === 8 ? 22 : 16;
+      setActiveText({
         id: `text-${Date.now()}`,
         x: Math.max(10, Math.min(point.x, 260)),
         y: Math.max(10, Math.min(point.y, 200)),
         text: '',
         color: color === '#FFFFFF' ? '#FFFFFF' : color,
-        fontSize: width === 8 ? 22 : 16,
-        isEditing: true,
-      };
-      setTextItems((prev) => [...prev, newItem]);
+        fontSize,
+      });
+
+      setTimeout(() => textInputRef.current?.focus(), 50);
       return;
     }
+
     e.currentTarget.setPointerCapture(e.pointerId);
     drawingRef.current = true;
     lastPointRef.current = point;
   }
 
   function handlePointerMove(e: ReactPointerEvent<HTMLCanvasElement>) {
-    if (draggingIdRef.current) {
+    if (isDraggingTextRef.current && activeText && textContainerRef.current) {
       const point = getPoint(e);
-      const dx = point.x - dragStartRef.current.x;
-      const dy = point.y - dragStartRef.current.y;
-      dragStartRef.current = point;
+      const newX = Math.max(0, point.x - textDragOffsetRef.current.x);
+      const newY = Math.max(0, point.y - textDragOffsetRef.current.y);
 
-      setTextItems((prev) =>
-        prev.map((item) =>
-          item.id === draggingIdRef.current
-            ? { ...item, x: Math.max(0, item.x + dx), y: Math.max(0, item.y + dy) }
-            : item
-        )
-      );
+      // Direct DOM manipulation for silky smooth 60fps drag
+      textContainerRef.current.style.left = `${newX}px`;
+      textContainerRef.current.style.top = `${newY}px`;
       return;
     }
 
@@ -167,9 +151,11 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   }
 
   function handlePointerUp() {
-    if (draggingIdRef.current) {
-      draggingIdRef.current = null;
-      saveCanvasWithTexts();
+    if (isDraggingTextRef.current && textContainerRef.current && activeText) {
+      isDraggingTextRef.current = false;
+      const finalX = parseFloat(textContainerRef.current.style.left) || activeText.x;
+      const finalY = parseFloat(textContainerRef.current.style.top) || activeText.y;
+      setActiveText((prev) => (prev ? { ...prev, x: finalX, y: finalY } : null));
       return;
     }
 
@@ -177,29 +163,52 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
     drawingRef.current = false;
     lastPointRef.current = null;
 
-    saveCanvasWithTexts();
+    const canvas = canvasRef.current;
+    if (canvas) {
+      onChange(canvas.toDataURL());
+    }
   }
 
-  function handleTextDragStart(id: string, e: React.PointerEvent) {
+  function handleTextContainerPointerDown(e: React.PointerEvent) {
+    if (mode !== 'text') return;
     e.stopPropagation();
-    draggingIdRef.current = id;
-    dragStartRef.current = getPoint(e);
+    isDraggingTextRef.current = true;
+    const point = getPoint(e);
+    const container = textContainerRef.current;
+    if (container) {
+      const currentX = parseFloat(container.style.left) || activeText?.x || 0;
+      const currentY = parseFloat(container.style.top) || activeText?.y || 0;
+      textDragOffsetRef.current = {
+        x: point.x - currentX,
+        y: point.y - currentY,
+      };
+    }
   }
 
-  function commitItemText(id: string) {
-    setTextItems((prev) => {
-      const next = prev.map((item) => (item.id === id ? { ...item, isEditing: false } : item));
-      saveCanvasWithTexts(next);
-      return next;
-    });
+  function commitActiveText() {
+    if (!activeText || !activeText.text.trim()) {
+      setActiveText(null);
+      return;
+    }
+
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (canvas && ctx && textContainerRef.current) {
+      const finalX = parseFloat(textContainerRef.current.style.left) || activeText.x;
+      const finalY = parseFloat(textContainerRef.current.style.top) || activeText.y;
+
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = activeText.color;
+      ctx.font = `bold ${activeText.fontSize}px sans-serif, "Segoe UI Emoji"`;
+      ctx.fillText(activeText.text, finalX + 4, finalY + activeText.fontSize);
+      onChange(canvas.toDataURL());
+    }
+
+    setActiveText(null);
   }
 
-  function removeItem(id: string) {
-    setTextItems((prev) => {
-      const next = prev.filter((item) => item.id !== id);
-      saveCanvasWithTexts(next);
-      return next;
-    });
+  function cancelActiveText() {
+    setActiveText(null);
   }
 
   function clearAll() {
@@ -209,7 +218,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       onChange('');
     }
-    setTextItems([]);
+    setActiveText(null);
   }
 
   return (
@@ -275,7 +284,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
               <Icon name="eraser" size={18} color="#FFFFFF" />
             </button>
 
-            {/* Text Box Tool ('T') */}
+            {/* AutoDraw-style Text Tool ('T') */}
             <button
               type="button"
               onClick={() => setMode('text')}
@@ -284,8 +293,8 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
                 borderColor: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
                 boxShadow: mode === 'text' ? '0 0 0 2px #047857' : undefined,
               }}
-              title="텍스트 상자 입력 & 이동 (T)"
-              aria-label="텍스트 상자 입력 및 이동"
+              title="AutoDraw 텍스트 도구 (T)"
+              aria-label="AutoDraw 텍스트 도구"
             >
               T
             </button>
@@ -328,75 +337,51 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
           <canvas
             ref={canvasRef}
             className="absolute inset-0 w-full h-full"
-            style={{ touchAction: 'none', cursor: mode === 'text' ? 'crosshair' : 'default' }}
+            style={{ touchAction: 'none', cursor: mode === 'text' ? 'text' : 'crosshair' }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
           />
 
-          {/* Draggable & Editable Text Items Layer */}
-          {textItems.map((item) => (
+          {/* AutoDraw-Style Frameless Text Tool Overlay */}
+          {activeText && (
             <div
-              key={item.id}
-              className="absolute z-20 flex items-center gap-1 bg-emerald-950/90 border border-emerald-300/80 px-2 py-1 rounded-lg shadow-xl cursor-move touch-none group"
+              ref={textContainerRef}
+              className="absolute z-20 flex items-center gap-1.5 cursor-move touch-none"
               style={{
-                left: item.x,
-                top: item.y,
+                left: `${activeText.x}px`,
+                top: `${activeText.y}px`,
               }}
-              onPointerDown={(e) => handleTextDragStart(item.id, e)}
+              onPointerDown={handleTextContainerPointerDown}
             >
-              {/* Drag Handle Icon */}
-              <span className="text-emerald-400 text-xs font-mono cursor-grab active:cursor-grabbing select-none pr-1">
-                ⋮⋮
-              </span>
-
-              {item.isEditing ? (
-                <input
-                  type="text"
-                  autoFocus
-                  value={item.text}
-                  onChange={(e) =>
-                    setTextItems((prev) =>
-                      prev.map((t) => (t.id === item.id ? { ...t, text: e.target.value } : t))
-                    )
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') commitItemText(item.id);
-                  }}
-                  onBlur={() => commitItemText(item.id)}
-                  placeholder="글자 입력..."
-                  className="bg-transparent font-bold outline-none border-b border-emerald-400 w-28 sm:w-40"
-                  style={{ color: item.color, fontSize: `${item.fontSize}px` }}
-                />
-              ) : (
-                <span
-                  className="font-bold cursor-pointer select-none"
-                  style={{ color: item.color, fontSize: `${item.fontSize}px` }}
-                  onDoubleClick={() =>
-                    setTextItems((prev) =>
-                      prev.map((t) => (t.id === item.id ? { ...t, isEditing: true } : t))
-                    )
-                  }
-                >
-                  {item.text || '(빈 텍스트)'}
-                </span>
-              )}
-
-              {/* Delete button */}
+              <input
+                ref={textInputRef}
+                type="text"
+                value={activeText.text}
+                onChange={(e) => setActiveText({ ...activeText, text: e.target.value })}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') commitActiveText();
+                  if (e.key === 'Escape') cancelActiveText();
+                }}
+                placeholder="글자를 적으세요..."
+                className="bg-transparent font-bold outline-none border-b-2 border-dashed border-white/70 px-1 py-0.5 tracking-wide"
+                style={{
+                  color: activeText.color,
+                  fontSize: `${activeText.fontSize}px`,
+                  width: `${Math.max(130, activeText.text.length * (activeText.fontSize * 0.75) + 30)}px`,
+                }}
+              />
               <button
                 type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeItem(item.id);
-                }}
-                aria-label="텍스트 삭제"
-                className="text-emerald-300 hover:text-rose-400 font-bold text-sm ml-1 px-1 cursor-pointer"
+                onClick={commitActiveText}
+                title="칠판에 고정 (Enter)"
+                className="px-2 py-0.5 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-xs rounded cursor-pointer shadow-xs transition shrink-0"
               >
-                ×
+                확인
               </button>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
