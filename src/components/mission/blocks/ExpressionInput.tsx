@@ -3,6 +3,7 @@ import type { DrawBlock, GeneralizationExpression, GeneralizationExpressionMode 
 import DrawPad from './DrawPad';
 import MicButton from '../../MicButton';
 import Icon from '../../Icon';
+import Burst from '../../games/Burst';
 import { useSpeak } from '../../../hooks/useSpeak';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
@@ -11,6 +12,7 @@ interface ChoiceItem {
   id: string;
   emoji: string;
   label: string;
+  isCorrect?: boolean;
 }
 
 interface Props {
@@ -94,24 +96,47 @@ export default function ExpressionInput({
 
       {(activeMode === 'choice' || activeMode === 'aac') && (
         <div className={activeMode === 'choice' ? "grid grid-cols-1 gap-3" : "grid grid-cols-1 sm:grid-cols-2 gap-3"}>
-          {choices.map((choice) => {
+          {choices.map((choice, idx) => {
             const selected = value?.choiceIds?.includes(choice.id) ?? false;
+            const isCorrect = choice.isCorrect !== undefined ? choice.isCorrect : idx === 0;
+
+            let borderStyle = selected ? `4px solid ${accent}` : '2.5px solid var(--line)';
+            let bgStyle = selected ? 'var(--paper-1)' : 'var(--paper-0)';
+            let animClass = '';
+
+            if (selected) {
+              if (isCorrect) {
+                borderStyle = '4px solid #10b981';
+                bgStyle = '#ecfdf5';
+                animClass = 'answer-pop';
+              } else {
+                borderStyle = '4px solid #ef4444';
+                bgStyle = '#fef2f2';
+                animClass = 'answer-shake';
+              }
+            }
+
             return (
               <button
                 type="button"
                 key={choice.id}
                 onClick={() => selectChoice(choice.id, choice.label)}
                 aria-pressed={selected}
-                className="card3d flex items-center gap-3 p-4 rounded-[var(--r-md)] min-h-20 text-left font-bold cursor-pointer"
+                className={`relative card3d flex items-center gap-3 p-4 rounded-[var(--r-md)] min-h-20 text-left font-bold cursor-pointer transition-all ${animClass}`}
                 style={{
-                  border: selected ? `4px solid ${accent}` : '2.5px solid var(--line)',
-                  background: selected ? 'var(--paper-1)' : 'var(--paper-0)',
+                  border: borderStyle,
+                  background: bgStyle,
                   color: 'var(--brand-ink)',
                 }}
               >
-                <span className="text-3xl shrink-0" aria-hidden>{choice.emoji}</span>
-                <span className="leading-tight">{choice.label}</span>
-                {selected && <Icon name="check" size={20} color={accent} strokeWidth={3} className="ml-auto shrink-0" />}
+                {selected && isCorrect && <Burst />}
+                <span className="text-3xl shrink-0 z-10" aria-hidden>{choice.emoji}</span>
+                <span className="leading-tight flex-1 z-10">{choice.label}</span>
+                {selected && (
+                  <span className="ml-auto shrink-0 z-10 text-xs font-extrabold px-2 py-1 rounded-full bg-white/80 shadow-xs">
+                    {isCorrect ? '🎉 정답!' : '❌ 다시 생각해 보아요'}
+                  </span>
+                )}
               </button>
             );
           })}

@@ -17,6 +17,7 @@ export interface StudioChoice {
   id: string;
   emoji: string;
   label: string;
+  isCorrect?: boolean;
 }
 
 export type PreparedStimulus =
