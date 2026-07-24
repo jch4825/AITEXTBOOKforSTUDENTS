@@ -90,12 +90,17 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
         commitActiveText();
       }
 
-      // Create new AutoDraw-style borderless text input at click location
+      // Create new AutoDraw-style borderless text input at click location (across full canvas width)
+      const canvasWidth = canvasRef.current?.width || 600;
+      const canvasHeight = canvasRef.current?.height || 256;
       const fontSize = width === 8 ? 22 : 16;
+      const posX = Math.max(10, Math.min(point.x, canvasWidth - 140));
+      const posY = Math.max(10, Math.min(point.y, canvasHeight - 40));
+
       setActiveText({
         id: `text-${Date.now()}`,
-        x: Math.max(10, Math.min(point.x, 260)),
-        y: Math.max(10, Math.min(point.y, 200)),
+        x: posX,
+        y: posY,
         text: '',
         color: color === '#FFFFFF' ? '#FFFFFF' : color,
         fontSize,
@@ -113,10 +118,12 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   function handlePointerMove(e: ReactPointerEvent<HTMLCanvasElement>) {
     if (isDraggingTextRef.current && activeText && textContainerRef.current) {
       const point = getPoint(e);
-      const newX = Math.max(0, point.x - textDragOffsetRef.current.x);
-      const newY = Math.max(0, point.y - textDragOffsetRef.current.y);
+      const canvasWidth = canvasRef.current?.width || 600;
+      const canvasHeight = canvasRef.current?.height || 256;
+      const newX = Math.max(0, Math.min(point.x - textDragOffsetRef.current.x, canvasWidth - 100));
+      const newY = Math.max(0, Math.min(point.y - textDragOffsetRef.current.y, canvasHeight - 30));
 
-      // Direct DOM manipulation for silky smooth 60fps drag
+      // Direct DOM manipulation for silky smooth 60fps drag across full canvas
       textContainerRef.current.style.left = `${newX}px`;
       textContainerRef.current.style.top = `${newY}px`;
       return;
