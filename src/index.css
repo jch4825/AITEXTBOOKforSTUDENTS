@@ -42,15 +42,15 @@
     --warn-bg: #fed7aa;
     --done-bg: #e5e7eb;
 
-    /* 타이포그래피 (Pretendard Variable) */
-    --fs-display: 2.5rem;   /* 40 / 1.3 / 800 — Home 타이틀 */
-    --fs-h1: 2rem;          /* 32 / 1.4 / 700 — 차시 제목 */
-    --fs-h2: 1.5rem;        /* 24 / 1.45 / 700 — 게임 헤더 */
-    --fs-body-lg: 1.25rem;  /* 20 / 1.8 — 본문 */
-    --fs-body: 1.125rem;    /* 18 / 1.8 — 일반 */
-    --fs-label: 0.9375rem;  /* 15 / 1.5 / 600 — 이름표·버튼 보조 */
-    --font-base: 1.125rem;
-    --font-large: 1.5rem;
+    /* 타이포그래피 (Pretendard Variable) — 2포인트(약 2px/12.5%) 상향 조정 */
+    --fs-display: 2.75rem;   /* 44 / 1.3 / 800 — Home 타이틀 */
+    --fs-h1: 2.125rem;       /* 34 / 1.4 / 700 — 차시 제목 */
+    --fs-h2: 1.625rem;       /* 26 / 1.45 / 700 — 게임 헤더 */
+    --fs-body-lg: 1.375rem;  /* 22 / 1.8 — 본문 */
+    --fs-body: 1.25rem;      /* 20 / 1.8 — 일반 */
+    --fs-label: 1.0625rem;   /* 17 / 1.5 / 600 — 이름표·버튼 보조 */
+    --font-base: 1.25rem;
+    --font-large: 1.625rem;
     --leading: 1.8;
 
     /* 형태 — 중첩 시 안쪽 radius = 바깥 radius − gap */
@@ -72,14 +72,11 @@
 
   html {
     background: var(--bg);
-    /* 글자 크기 스케일 (접근성) — 루트 font-size를 키우면 rem 기반인 모든 본문
-       (Tailwind text-*, t-* 토큰)이 비례 확대된다. body만 바꾸면 본문에 닿지
-       않는다: 유틸리티는 :root 기준 rem으로 크기가 고정되기 때문. 아이콘·이미지는
-       px라서 그대로 유지된다. [data-font-size]는 SettingsContext가 <html>에 부여. */
-    font-size: 100%;              /* 보통: 16px 기준 */
+    /* 글자 크기 스케일 (접근성) — 기본 글자 크기를 18px(112.5%)로 상향하여 모든 rem 텍스트 +2px 확대 */
+    font-size: 112.5%;             /* 보통: 18px 기준 (+2px) */
   }
   html[data-font-size="large"] {
-    font-size: 125%;              /* 크게: 20px 기준 → 모든 rem 텍스트 +25% */
+    font-size: 137.5%;             /* 크게: 22px 기준 → 모든 rem 텍스트 추가 확대 */
   }
 
   html, body, #root {
