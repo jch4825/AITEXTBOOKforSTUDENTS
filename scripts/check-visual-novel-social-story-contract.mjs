@@ -155,7 +155,7 @@ for (const token of [
   "imageSrc: ''",
   '아이미의 설명에는 어려운 말이 많았어요.',
   'AI는 사람이 목적을 정하고 만든 도구입니다.',
-  'AI가 만든 결과는 사람이 확인하고 결정합니다.',
+  'AI는 번역, 음악 추천, 사진 찾기 등 사람이 정한 다양한 목적을 도와줍니다.',
  ]) {
   if (!m1Studio.includes(token)) throw new Error(`missing m1-l1 social story data: ${token}`);
 }
