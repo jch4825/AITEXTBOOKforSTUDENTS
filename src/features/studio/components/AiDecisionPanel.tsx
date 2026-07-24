@@ -27,7 +27,7 @@ export default function AiDecisionPanel({
   const drawBlock = {
     kind: 'draw' as const,
     id: 'ai-decision-draw',
-    prompt: '그림으로 나만의 생각을 표현해 보세요',
+    prompt: '나만의 생각을 표현해 보세요',
   };
 
   return (
