@@ -99,10 +99,10 @@ export default function ClassroomDock({ lessonId }: Props) {
 
   return (
     <>
-      {/* 이전/다음 바(footer, h-20) 중앙 위에 붙는 도구 바.
+      {/* 이전/다음 바(footer, h-14) 중앙 위에 붙는 도구 바.
           absolute + 프레임(relative, h-dvh)에 앵커 — 흐름에서 빠져 사이드바가 푸터까지 이어지고,
           fixed와 달리 프레임 기준이라 모바일 주소창 변화에도 점핑·사라짐이 없다. */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-20 z-30 flex flex-col items-center gap-2 pointer-events-none">
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-14 z-30 flex flex-col items-center gap-2 pointer-events-none">
         {!collapsed && panelTool && (
           <div
             className="rounded-[var(--r-md)] overflow-hidden pointer-events-auto max-h-[60vh] overflow-y-auto"
