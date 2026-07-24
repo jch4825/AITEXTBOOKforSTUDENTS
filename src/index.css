@@ -441,39 +441,82 @@
 .comic-resume p,.comic-list-heading p { margin:0; color:var(--ink-2); }
 .season-map { margin:0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:.75rem; }
 .season-episode { width:100%; min-height:8.5rem; padding:1rem; display:grid; grid-template-columns:auto 1fr auto; align-items:start; gap:.65rem; border:2px solid var(--brand-ink); border-radius:5px 14px 5px 14px; background:var(--paper-0); text-align:left; box-shadow:4px 4px 0 color-mix(in srgb, var(--episode-accent) 28%, var(--paper-2)); }
-.season-episode-active { background:var(--episode-soft); transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--episode-accent); }.season-number{font-weight:900;font-size:1.35rem;opacity:.65}.season-copy{min-width:0}.season-copy strong,.season-copy small{display:block}.season-copy small{margin-top:.25rem;color:var(--ink-2);font-size:.82rem;line-height:1.35}.season-progress{font-weight:800;color:var(--brand-ink)}
-.comic-lesson-list{padding:clamp(1rem,3vw,1.8rem)}.comic-list-heading{display:flex;justify-content:space-between;gap:1rem;align-items:start;padding-bottom:1rem;border-bottom:2px solid var(--brand-ink)}.comic-count{min-width:3.4rem;text-align:center;border:2px solid var(--brand-ink);border-radius:999px;padding:.35rem .5rem;font-weight:800}.comic-lesson-cuts{margin:0;padding:0;list-style:none}.comic-lesson-cut{width:100%;min-height:4.5rem;display:grid;grid-template-columns:2.6rem 1fr auto;gap:.8rem;align-items:center;padding:.7rem 0;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left}.comic-lesson-cut:hover:not(:disabled){background:color-mix(in srgb,var(--comic-accent) 8%,transparent)}.comic-cut-number{width:2rem;height:2rem;display:grid;place-items:center;border:2px solid var(--brand-ink);border-radius:4px;font-weight:900}.comic-lesson-cut strong,.comic-lesson-cut small{display:block}.comic-lesson-cut small{font-size:.84rem;color:var(--ink-2);margin-top:.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media(max-width:767px){.comic-contents-header{padding:.6rem 1rem}.comic-header-caption{display:none}.comic-resume{align-items:stretch;flex-direction:column}.season-map{grid-template-columns:1fr}.season-episode{min-height:6.1rem}.comic-resume .btn{width:100%}.comic-lesson-cut{min-height:4.75rem}.comic-lesson-cut small{white-space:normal;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}}
+.season-episode-active { background:var(--episode-soft); transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--episode-accent); }
+.comic-cut-number { width:2rem; height:2rem; display:grid; place-items:center; border:2px solid var(--brand-ink); border-radius:4px; font-weight:900; }
+.comic-lesson-cut strong, .comic-lesson-cut small { display:block; }
+.comic-lesson-cut small { font-size:.84rem; color:var(--ink-2); margin-top:.15rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+@media (max-width: 767px) {
+  .comic-contents-header { padding:.6rem 1rem; }
+  .comic-header-caption { display:none; }
+  .comic-resume { align-items:stretch; flex-direction:column; }
+  .season-map { grid-template-columns:1fr; }
+  .season-episode { min-height:6.1rem; }
+  .comic-resume .btn { width:100%; }
+  .comic-lesson-cut { min-height:4.75rem; }
+  .comic-lesson-cut small { white-space:normal; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+}
+
 .comic-stage h1 { letter-spacing: -.04em; }
-.comic-frame-footer { border-top: 1px solid var(--line); background:var(--paper-0); }
-.comic-frame-footer .btn { min-width:7.25rem; }.comic-cut-progress { display:flex; flex-direction:column; align-items:center; gap:.15rem; font-weight:900; font-size:.78rem; color:var(--brand-ink); letter-spacing:.04em; }.comic-cut-progress > span { border:1px solid var(--line); border-radius:999px; padding:.05rem .4rem; }
+
+.comic-frame-footer {
+  border-top: 1px solid var(--line);
+  background: var(--paper-0);
+}
+
+.comic-frame-footer .btn {
+  min-width: 9rem;
+  height: 2.375rem;
+  font-size: 0.9375rem;
+  padding-inline: 1.25rem;
+}
+
+.comic-cut-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .15rem;
+  font-weight: 900;
+  font-size: .78rem;
+  color: var(--brand-ink);
+  letter-spacing: .04em;
+}
+
+.comic-cut-progress > span {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .05rem .4rem;
+}
+
 @media (max-width: 767px) {
   .comic-frame-footer {
     height: auto;
-    min-height: 7rem;
+    min-height: 5.2rem;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas: "progress progress" "previous next";
     align-items: center;
     column-gap: .5rem;
-    row-gap: .4rem;
-    padding-block: .5rem;
+    row-gap: .3rem;
+    padding: .4rem .75rem;
   }
   .comic-frame-footer .btn {
     width: 100%;
     min-width: 0;
+    height: 2.25rem;
     justify-content: center;
     gap: .3rem;
     padding-inline: .5rem;
-    font-size: 1rem;
+    font-size: 0.875rem;
   }
   .comic-footer-previous { grid-area: previous; }
+  .comic-footer-next { grid-area: next; }
   .comic-cut-progress {
     grid-area: progress;
     width: 100%;
     min-width: 0;
+    margin-bottom: 2px;
   }
-  .comic-footer-next { grid-area: next; }
   .comic-cut-progress > code {
     width: 100%;
     max-width: 100%;
