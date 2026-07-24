@@ -44,7 +44,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
   }
 
   return (
-    <nav className="w-64 shrink-0 md:h-full md:border-r border-[color:var(--border)] bg-[color:var(--paper-0)] p-4 md:overflow-y-auto md:flex md:flex-col">
+    <nav className="sidebar-compact-text w-64 shrink-0 md:h-full md:border-r border-[color:var(--border)] bg-[color:var(--paper-0)] p-4 md:overflow-y-auto md:flex md:flex-col">
       <div className="md:flex-1 space-y-1.5">
       {MODULES.map(mod => {
         const theme = themeFor(mod.id);

@@ -42,15 +42,15 @@
     --warn-bg: #fed7aa;
     --done-bg: #e5e7eb;
 
-    /* 타이포그래피 (Pretendard Variable) — 요청하신 기본 +3pt 확대 적용 */
-    --fs-display: 2.5rem;     /* 40px — Home 타이틀 */
-    --fs-h1: 1.875rem;        /* 30px — 차시 제목 */
-    --fs-h2: 1.5rem;          /* 24px — 영역 헤더 */
-    --fs-body-lg: 1.25rem;    /* 20px — 주요 본문 */
-    --fs-body: 1.125rem;      /* 18px — 일반 본문 */
-    --fs-label: 1rem;         /* 16px — 이름표·버튼 */
-    --font-base: 1.125rem;
-    --font-large: 1.375rem;
+    /* 타이포그래피 (Pretendard Variable) — 요청하신 1포인트 축소 (+2pt / 18px 기준) */
+    --fs-display: 2.375rem;   /* 38px — Home 타이틀 */
+    --fs-h1: 1.75rem;         /* 28px — 차시 제목 */
+    --fs-h2: 1.375rem;        /* 22px — 영역 헤더 */
+    --fs-body-lg: 1.1875rem;  /* 19px — 주요 본문 */
+    --fs-body: 1.0625rem;     /* 17px — 일반 본문 */
+    --fs-label: 0.9375rem;    /* 15px — 이름표·버튼 */
+    --font-base: 1.0625rem;
+    --font-large: 1.25rem;
     --leading: 1.6;
 
     /* 형태 — 중첩 시 안쪽 radius = 바깥 radius − gap */
@@ -72,10 +72,20 @@
 
   html {
     background: var(--bg);
-    font-size: 118.75%;           /* 기본 +3pt 스케일 (19px 기준) */
+    font-size: 112.5%;            /* 기본 -1pt 스케일 (18px 기준) */
   }
   html[data-font-size="large"] {
-    font-size: 131.25%;           /* 크게 (21px 기준) */
+    font-size: 125%;              /* 크게 (20px 기준) */
+  }
+
+  /* 사이드바 전용 3포인트 축소 모드 */
+  .sidebar-compact-text {
+    font-size: 0.8125rem !important; /* -3pt 축소 (13px) */
+    line-height: 1.4;
+  }
+  .sidebar-compact-text button,
+  .sidebar-compact-text span {
+    font-size: 0.8125rem;
   }
 
   html, body, #root {
