@@ -41,14 +41,14 @@ for (const [moduleId, previewLesson, mainLesson] of lessonPairs) {
   if (!source.includes(`id: '${previewLesson}'`) || !source.includes(`id: '${mainLesson}'`)) {
     throw new Error(`missing lesson pair for ${moduleId}`);
   }
-  if (['m1', 'm2', 'm3', 'm4', 'm5'].includes(moduleId)) {
+  if (['m1', 'm2', 'm3', 'm4', 'm5', 'm6'].includes(moduleId)) {
     const portfolio = readFileSync(resolve(root, `src/data/modulePortfolios/${moduleId}.ts`), 'utf8');
     for (const marker of ['guideSections:', 'transferPrompt:', 'nextChoices:']) {
       if (!portfolio.includes(marker)) throw new Error(`missing project transfer marker for ${moduleId}: ${marker}`);
     }
-    if (moduleId === 'm2' || moduleId === 'm3' || moduleId === 'm4' || moduleId === 'm5') {
+    if (moduleId !== 'm1') {
       const studios = readFileSync(resolve(root, `src/data/studios/${moduleId}.ts`), 'utf8');
-      const expectedTransferCount = moduleId === 'm5' ? 11 : 10;
+      const expectedTransferCount = moduleId === 'm5' || moduleId === 'm6' ? 11 : 10;
       if ((studios.match(/\btransfer:\s*\{/g) ?? []).length !== expectedTransferCount) {
         throw new Error(`${moduleId} must provide a transfer task in all ${expectedTransferCount} studios`);
       }

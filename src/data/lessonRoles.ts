@@ -13,7 +13,8 @@ export const STUDIO_LESSON_IDS = [
   'm4-l6', 'm4-l7', 'm4-l8', 'm4-l9', 'm4-l10',
   'm5-l1', 'm5-l2', 'm5-l3', 'm5-l4', 'm5-l5', 'm5-l6',
   'm5-l7', 'm5-l8', 'm5-l9', 'm5-l10', 'm5-l11',
-  'm6-l1', 'm6-l4', 'm6-l11',
+  'm6-l1', 'm6-l2', 'm6-l3', 'm6-l4', 'm6-l5', 'm6-l6',
+  'm6-l7', 'm6-l8', 'm6-l9', 'm6-l10', 'm6-l11',
 ] as const;
 
 export const MODULE_CLOSE_LESSON_IDS = [

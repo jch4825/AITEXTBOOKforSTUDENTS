@@ -273,6 +273,52 @@ for (const token of ["lessonId: 'm5-l12'", "'m5-l1'", "'m5-l11'", '문제 해결
   if (!m5Portfolio.includes(token)) throw new Error(`M5 portfolio missing: ${token}`);
 }
 
+const m6StudioPath = 'src/data/studios/m6.ts';
+if (!fs.existsSync(m6StudioPath)) throw new Error('M6 studio definitions are missing');
+const m6 = fs.readFileSync(m6StudioPath, 'utf8');
+for (const id of [
+  'm6-shopping-choice',
+  'm6-money-calculator-check',
+  'm6-fixed-map-route-check',
+  'm6-transit-change',
+  'm6-official-weather-prep',
+  'm6-safe-food-plan',
+  'm6-personal-day-plan',
+  'm6-health-human-first',
+  'm6-self-advocacy-expression',
+  'm6-real-work-exploration',
+  'm6-safe-self-introduction',
+]) {
+  if (!m6.includes(`id: '${id}'`)) throw new Error(`M6 studio missing: ${id}`);
+}
+for (const lessonId of Array.from({ length: 11 }, (_, index) => `m6-l${index + 1}`)) {
+  if (!m6.includes(`lessonId: '${lessonId}'`)) throw new Error(`M6 lesson mapping missing: ${lessonId}`);
+}
+if ((m6.match(/source: 'prepared'/g) ?? []).length !== 11) throw new Error('M6 AI source must be prepared');
+for (const artifact of [
+  '장보기 판단표와 최종 목록',
+  '계산·검산 기록',
+  '안전 경로 카드',
+  '교통 확인 기록과 도움 요청 문장',
+  '나의 외출 준비 카드',
+  '안전 음식 계획 카드',
+  '전후 하루 계획표와 알림',
+  '증상 전달 카드와 도움 요청 표현',
+  '생활 표현 카드 4종',
+  '나의 직업 탐색 카드',
+  '초안·변경 기록·최종 소개 2종',
+]) {
+  if (!m6.includes(artifact)) throw new Error(`M6 artifact missing: ${artifact}`);
+}
+if ((m6.match(/imageSrc: ''/g) ?? []).length !== 44 || m6.includes('/lessons/m6-l')) {
+  throw new Error('M6 visual stories must use 44 pending image slots');
+}
+
+const m6Portfolio = fs.readFileSync('src/data/modulePortfolios/m6.ts', 'utf8');
+for (const token of ["lessonId: 'm6-l12'", "'m6-l1'", "'m6-l11'", '나의 AI 생활 포트폴리오']) {
+  if (!m6Portfolio.includes(token)) throw new Error(`M6 portfolio missing: ${token}`);
+}
+
 const expansionGuidePath = 'docs/teacher-guide/m1-m2-studio-expansion.md';
 if (!fs.existsSync(expansionGuidePath)) throw new Error('M1/M2 teacher expansion guide is missing');
 const teacherHub = fs.readFileSync('src/features/teacher/TeacherHub.tsx', 'utf8');
@@ -280,7 +326,7 @@ const expansionGuide = [
   fs.readFileSync(expansionGuidePath, 'utf8'),
   fs.readFileSync('docs/teacher-guide/m3-m4-m6-studio-expansion.md', 'utf8'),
 ].join('\n');
-for (const text of ['1~5단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+for (const text of ['1~6단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
   if (!teacherHub.includes(text) && !expansionGuide.includes(text)) {
     throw new Error(`teacher expansion guidance missing: ${text}`);
   }
@@ -300,12 +346,15 @@ for (const title of [
   '문제를 정확히 찾기',
   '조건이 바뀌면 계획도 바꾸기',
   '나는 문제 해결사',
+  '조건에 맞는 장보기',
+  '아픈 상태를 사람에게 알리기',
+  'AI와 함께하는 나의 하루',
 ]) {
   if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
 }
 
 const studioIndex = fs.readFileSync('src/data/studios/index.ts', 'utf8');
-for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M3_STUDIOS', '...M4_STUDIOS', '...M5_STUDIOS']) {
+for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M3_STUDIOS', '...M4_STUDIOS', '...M5_STUDIOS', '...M6_STUDIOS']) {
   if (!studioIndex.includes(spread)) throw new Error(`ready studio group missing: ${spread}`);
 }
 for (const [source, expected, label] of [
@@ -314,13 +363,14 @@ for (const [source, expected, label] of [
   [m3, 10, 'M3'],
   [m4, 10, 'M4'],
   [m5, 11, 'M5'],
+  [m6, 11, 'M6'],
 ]) {
   const count = (source.match(/lessonId: 'm\d-l\d+'/g) ?? []).length;
   if (count !== expected) throw new Error(`${label} ready studio count must be ${expected}, got ${count}`);
 }
 
-for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M3_PORTFOLIO', 'M4_PORTFOLIO', 'M5_PORTFOLIO']) {
+for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M3_PORTFOLIO', 'M4_PORTFOLIO', 'M5_PORTFOLIO', 'M6_PORTFOLIO']) {
   if (!portfolioIndex.includes(portfolio)) throw new Error(`ready portfolio missing: ${portfolio}`);
 }
 
-console.log('studio expansion contract: 51 studios, 5 portfolios ready');
+console.log('studio expansion contract: 62 studios, 6 portfolios ready');

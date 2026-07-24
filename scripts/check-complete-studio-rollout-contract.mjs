@@ -117,13 +117,49 @@ const MODULES = {
   M6: {
     studioFile: 'src/data/studios/m6.ts',
     studioSymbol: 'M6_STUDIOS',
-    studioIds: ['m6-shopping-choice', 'm6-transit-change', 'm6-safe-self-introduction'],
-    lessonIds: ['m6-l1', 'm6-l4', 'm6-l11'],
+    studioIds: [
+      'm6-shopping-choice',
+      'm6-money-calculator-check',
+      'm6-fixed-map-route-check',
+      'm6-transit-change',
+      'm6-official-weather-prep',
+      'm6-safe-food-plan',
+      'm6-personal-day-plan',
+      'm6-health-human-first',
+      'm6-self-advocacy-expression',
+      'm6-real-work-exploration',
+      'm6-safe-self-introduction',
+    ],
+    lessonIds: [
+      'm6-l1',
+      'm6-l2',
+      'm6-l3',
+      'm6-l4',
+      'm6-l5',
+      'm6-l6',
+      'm6-l7',
+      'm6-l8',
+      'm6-l9',
+      'm6-l10',
+      'm6-l11',
+    ],
     portfolioFile: 'src/data/modulePortfolios/m6.ts',
     portfolioSymbol: 'M6_PORTFOLIO',
     portfolioLessonId: 'm6-l12',
-    artifactTitles: ['나의 장보기 판단표', '안전 이동 계획 카드', '상대에 맞춘 자기소개 카드'],
-    preparedCount: 3,
+    artifactTitles: [
+      '장보기 판단표와 최종 목록',
+      '계산·검산 기록',
+      '안전 경로 카드',
+      '교통 확인 기록과 도움 요청 문장',
+      '나의 외출 준비 카드',
+      '안전 음식 계획 카드',
+      '전후 하루 계획표와 알림',
+      '증상 전달 카드와 도움 요청 표현',
+      '생활 표현 카드 4종',
+      '나의 직업 탐색 카드',
+      '초안·변경 기록·최종 소개 2종',
+    ],
+    preparedCount: 11,
   },
 };
 
@@ -192,6 +228,12 @@ function checkModule(label, config) {
     requireToken(studio, '독립 검증', 'M5 independent verification wording missing');
   }
   if (label === 'M6') {
+    if ((studio.match(/imageSrc: ''/g) ?? []).length !== 44) {
+      throw new Error('M6 must expose 44 pending story image slots');
+    }
+    if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m6-l')) {
+      throw new Error('M6 must not reuse retired lesson images');
+    }
     requireToken(studio, '준비된 시뮬레이션', 'M6 transit simulation disclosure missing');
     requireToken(studio, '실시간 길 안내', 'M6 live-route disclaimer missing');
   }
@@ -214,17 +256,17 @@ if (!requested) {
   const portfolioCount = (portfolioIndex.match(/\[M\d_PORTFOLIO\.lessonId, M\d_PORTFOLIO\]/g) ?? []).length;
   const preparedCount = allStudioFiles.reduce((sum, source) => sum + (source.match(/source: 'prepared'/g) ?? []).length, 0);
 
-  if (studioCount !== 54) throw new Error(`module 5 remodel rollout needs 54 studios, got ${studioCount}`);
+  if (studioCount !== 62) throw new Error(`module 6 remodel rollout needs 62 studios, got ${studioCount}`);
   if (portfolioCount !== 6) throw new Error(`complete rollout needs 6 portfolios, got ${portfolioCount}`);
-  if (preparedCount !== 54) throw new Error(`module 5 remodel rollout needs 54 prepared AI contributions, got ${preparedCount}`);
+  if (preparedCount !== 62) throw new Error(`module 6 remodel rollout needs 62 prepared AI contributions, got ${preparedCount}`);
 
   const teacherCopy = [
     readRequired('src/features/teacher/TeacherHub.tsx'),
     readRequired('docs/teacher-guide/m3-m4-m6-studio-expansion.md'),
   ].join('\n');
-  for (const text of ['1~6단원', '54개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+  for (const text of ['1~6단원', '62개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
     requireToken(teacherCopy, text, 'complete teacher guidance missing');
   }
 
-  console.log('module 5 remodel rollout: 54 studios, 6 portfolios ready');
+  console.log('module 6 remodel rollout: 62 studios, 6 portfolios ready');
 }

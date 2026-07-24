@@ -19,11 +19,11 @@ const requiredStudios = [
   'm3-l1','m3-l2','m3-l3','m3-l4','m3-l5','m3-l6','m3-l7','m3-l8','m3-l9','m3-l10',
   'm4-l1','m4-l2','m4-l3','m4-l4','m4-l5','m4-l6','m4-l7','m4-l8','m4-l9','m4-l10',
   'm5-l1','m5-l2','m5-l3','m5-l4','m5-l5','m5-l6','m5-l7','m5-l8','m5-l9','m5-l10','m5-l11',
-  'm6-l1','m6-l4','m6-l11',
+  'm6-l1','m6-l2','m6-l3','m6-l4','m6-l5','m6-l6','m6-l7','m6-l8','m6-l9','m6-l10','m6-l11',
 ];
 const requiredCloses = ['m1-l11','m2-l11','m3-l11','m4-l11','m5-l12','m6-l12'];
 
-if (studioIds.length !== 54) throw new Error('studio lesson count must be 54 after the module 5 remodel');
+if (studioIds.length !== 62) throw new Error('studio lesson count must be 62 after the module 6 remodel');
 if (closeIds.length !== 6) throw new Error('module close lesson count must be 6');
 if (new Set(studioIds).size !== studioIds.length) throw new Error('studio anchors must be unique');
 if (new Set(closeIds).size !== closeIds.length) throw new Error('module close anchors must be unique');
@@ -36,4 +36,4 @@ if (!source.includes('68 - STUDIO_LESSON_IDS.length - MODULE_CLOSE_LESSON_IDS.le
   throw new Error('derived support count is missing');
 }
 
-console.log('lesson role contract: 54 studio, 8 support, 6 module-close');
+console.log('lesson role contract: 62 studio, 0 support, 6 module-close');

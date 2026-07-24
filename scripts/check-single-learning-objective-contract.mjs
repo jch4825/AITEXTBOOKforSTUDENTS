@@ -147,7 +147,22 @@ const M5_OBJECTIVES = new Map([
   ['m5-l12', '오늘은 새 생활 문제 하나를 골라 현재·목표·작은 과제·순서·대안·확인을 한 장에 완성해 봐요.'],
 ]);
 
-for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES, ...M3_OBJECTIVES, ...M4_OBJECTIVES, ...M5_OBJECTIVES]) {
+const M6_OBJECTIVES = new Map([
+  ['m6-l1', '오늘은 필요한 것·집에 있는 것·예산·알레르기 정보를 보고 AI 장보기 목록을 고쳐 봐요.'],
+  ['m6-l2', '오늘은 가격표와 화폐를 보고 합계와 거스름돈을 계산기로 확인해 봐요.'],
+  ['m6-l3', '오늘은 고정된 지도에서 출발점·목적지·표지를 찾고 공식 안내나 믿을 사람에게 길을 확인해 봐요.'],
+  ['m6-l4', '오늘은 버스 번호·방향·정류장·운행 공지를 확인하고 상황이 다르면 안전하게 도움을 요청해 봐요.'],
+  ['m6-l5', '오늘은 지역·날짜가 있는 예보에서 기온·비·바람을 보고 활동과 내 감각에 맞는 준비를 골라봐요.'],
+  ['m6-l6', '오늘은 재료·알레르기·도구·사람 도움 조건을 보고 안전한 음식 계획을 골라 순서를 만들어 봐요.'],
+  ['m6-l7', '오늘은 해야 할 일·쉬는 시간·도움·걸리는 시간을 넣어 계획을 만들고 일정이 바뀌면 고쳐 봐요.'],
+  ['m6-l8', '오늘은 몸의 불편함을 말·그림·AAC로 표현하고 믿을 만한 어른에게 먼저 알려 봐요.'],
+  ['m6-l9', '오늘은 인사·도움 요청·거절·다시 말해 달라는 표현을 말·글·AAC 중 편한 방법으로 연습해 봐요.'],
+  ['m6-l10', '오늘은 직업 자료와 사람의 설명을 비교하고 나의 흥미·강점·필요한 도움을 적어 봐요.'],
+  ['m6-l11', '오늘은 내가 먼저 자기소개를 만들고 AI 제안을 고쳐 교실용·온라인용 두 버전으로 완성해 봐요.'],
+  ['m6-l12', '오늘은 예산·이동·날씨·소통이 연결된 하루 계획을 만들고 나의 AI 생활 원칙과 함께 발표해 봐요.'],
+]);
+
+for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES, ...M3_OBJECTIVES, ...M4_OBJECTIVES, ...M5_OBJECTIVES, ...M6_OBJECTIVES]) {
   EXPECTED_OBJECTIVES.set(lessonId, objective);
 }
 
@@ -186,7 +201,7 @@ if (objectiveByLesson.size !== 68) {
 
 for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
   const actual = objectiveByLesson.get(lessonId);
-  const formalExpected = ['m1-', 'm2-', 'm3-', 'm4-', 'm5-'].some((prefix) => lessonId.startsWith(prefix)) ? expected : expected
+  const formalExpected = ['m1-', 'm2-', 'm3-', 'm4-', 'm5-', 'm6-'].some((prefix) => lessonId.startsWith(prefix)) ? expected : expected
     .replaceAll('해 봐요', '해 보십시오')
     .replaceAll('봐요', '봅니다')
     .replaceAll('해요', '합니다')
