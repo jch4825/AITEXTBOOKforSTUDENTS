@@ -17,7 +17,7 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       'AI(인공지능)의 뜻과 할 수 있는 일을 결합하여 쉬운 정의로 소개합니다.',
     ],
     limits: 'AI가 사람처럼 말하더라도 스스로 목적과 책임을 정하는 존재로 설명하지 않습니다.',
-    wrapUpHard: 'AI(인공지능)는 사람이 만든 똑똑한 도구이며, 입력과 결과를 바탕으로 번역·추천·분류 등 다양한 일을 해냅니다.',
+    wrapUpHard: 'AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하여, 입력과 결과를 바탕으로 번역·추천·분류 등 다양한 일을 해냅니다.',
   },
   'm1-l2': {
     concept: [
