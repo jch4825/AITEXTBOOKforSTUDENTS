@@ -13,7 +13,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '아이미와 처음 만난 날',
     masterObjective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.',
     standards: [STANDARD_CODES.SPEC_AI_01],
-    coreConcepts: ['AI(인공지능)는 사람처럼 생각하고 학습하여 문제 해결을 돕는 기술이며, 입력을 받아 다양한 결과와 도움을 줄 수 있다.'],
+    coreConcepts: ['AI(인공지능)는 사람의 생각하는 방식을 비슷하게 만들어 내어 문제 해결을 돕는 기술이며, 입력을 받아 다양한 결과와 도움을 줄 수 있다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'aimi', 'minjun'],
       location: '동아리방',
@@ -33,13 +33,13 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '아이미가 말한 인공지능(AI)은 무슨 뜻일까요?',
           choices: [
-            { id: 'human-tool', label: '사람처럼 생각하고 학습하여 문제 해결을 돕는 기술이라는 뜻이에요', emoji: '🤖' },
+            { id: 'human-tool', label: '사람의 생각하는 방식을 비슷하게 만들어 내어 문제 해결을 돕는 기술이라는 뜻이에요', emoji: '🤖' },
             { id: 'magic-robot', label: '스스로 태어난 마법 로봇이라는 뜻이에요', emoji: '🪄' },
           ],
         },
         assetIds: ['m1-l1-story-01'],
         support: {
-          full: { hint: '인공지능은 사람처럼 생각하고 배워서 문제 해결을 도와주는 기술이에요.' },
+          full: { hint: '인공지능은 사람의 생각하는 방식을 비슷하게 만들어 내어 문제 해결을 도와주는 도구예요.' },
         },
       },
       {
@@ -94,7 +94,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: 'AI(인공지능)는 어떤 도구인가요?',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'def1', label: '사람처럼 생각하고 학습하여 번역과 추천을 도와줘요', emoji: '💡' },
+            { id: 'def1', label: '사람의 생각하는 방식을 비슷하게 만들어 내어 번역과 추천을 도와줘요', emoji: '💡' },
             { id: 'def2', label: '자료를 학습하고 판단하여 필요한 답과 결과를 찾아주는 프로그램이에요', emoji: '🔍' },
           ],
         },
@@ -129,7 +129,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       { id: 'm1-l1-story-04', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l1-story-04.webp', alt: '자기 정의 발표', required: true, purpose: '스토리 컷 4' },
       { id: 'm1-l1-concept-01', kind: 'concept', renderAs: 'html', alt: '입력 -> AI -> 결과 개념도', required: false, purpose: '개념도' },
     ],
-    wrapUp: 'AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하는 기술로, 입력된 정보로 번역·추천·분류 같은 일을 해냅니다.',
+    wrapUp: 'AI(인공지능)는 컴퓨터가 사람의 생각하는 방식을 비슷하게 학습하고 판단하는 기술로, 입력된 정보로 번역·추천·분류 같은 일을 해냅니다.',
   },
 
   // ============================================================

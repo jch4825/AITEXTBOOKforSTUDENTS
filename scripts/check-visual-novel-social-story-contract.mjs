@@ -154,7 +154,7 @@ for (const token of [
   "objective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.'",
   "imageSrc: ''",
   '아이미의 설명에는 어려운 말이 많았어요.',
-  'AI(인공지능)는 사람처럼 생각하고 학습하여 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
+  'AI(인공지능)는 사람의 생각하는 방식을 비슷하게 만들어 내어 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
   'AI는 번역, 음악 추천, 사진 찾기 등 사람이 정한 다양한 목적을 도와줍니다.',
  ]) {
   if (!m1Studio.includes(token)) throw new Error(`missing m1-l1 social story data: ${token}`);
