@@ -1,5 +1,5 @@
 export type Difficulty = 'easy' | 'normal' | 'hard';
-export type FontSize = 'normal' | 'large';
+export type FontSize = 'small' | 'normal' | 'large';
 
 export type ModuleId = 'm1' | 'm2' | 'm3' | 'm4' | 'm5' | 'm6';
 export type LessonId = string; // 'm1-l1', 'm1-l2', ...

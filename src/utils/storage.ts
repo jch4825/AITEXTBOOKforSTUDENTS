@@ -47,7 +47,10 @@ export function loadSettings(): SettingsState {
       parsed?.difficulty === 'easy' ? 'easy'
       : parsed?.difficulty === 'hard' ? 'hard'
       : 'normal';
-    const fontSize: FontSize = parsed?.fontSize === 'large' ? 'large' : 'normal';
+    const fontSize: FontSize =
+      parsed?.fontSize === 'small' ? 'small'
+      : parsed?.fontSize === 'large' ? 'large'
+      : 'normal';
     const ttsEnabled = parsed?.ttsEnabled !== false;
     return { difficulty, fontSize, ttsEnabled };
   } catch {
