@@ -27,7 +27,13 @@
     "check:no-lesson-support-selector": "node scripts/check-no-lesson-support-selector-contract.mjs",
     "check:expression-input-mobile": "node scripts/check-expression-input-mobile-contract.mjs",
     "check:visual-novel-story": "node scripts/check-visual-novel-social-story-contract.mjs",
-    "check:debug-navigation": "node scripts/check-debug-navigation-contract.mjs"
+    "check:module1-remodel": "node scripts/check-module1-remodel.mjs",
+    "check:debug-navigation": "node scripts/check-debug-navigation-contract.mjs",
+    "check:canonical-content": "node scripts/check-canonical-content.mjs --migrated",
+    "check:canonical-assets": "node scripts/check-canonical-assets.mjs",
+    "check:canonical-copy": "node scripts/check-canonical-copy.mjs",
+    "check:canonical-safety": "node scripts/check-canonical-safety.mjs",
+    "check:canonical-evidence": "node scripts/check-canonical-evidence.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",

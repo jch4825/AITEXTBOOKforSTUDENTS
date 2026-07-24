@@ -95,7 +95,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
       onPickLesson={onPickLesson}
     >
       <ScreentoneBackdrop moduleId={definition.moduleId}>
-        <main className="mx-auto max-w-6xl space-y-6 py-2">
+        <main className="mx-auto w-full max-w-[min(96vw,110rem)] 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)] space-y-6 py-2">
           <header className="studio-editorial p-6 md:p-8">
             <p className="studio-kicker" style={{ color: theme.secondary }}>{definition.kicker}</p>
             <h1 className="mt-1 text-3xl font-extrabold" style={{ color: theme.accent }}>{definition.title}</h1>

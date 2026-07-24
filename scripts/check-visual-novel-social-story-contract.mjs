@@ -151,7 +151,7 @@ if (types.includes('speaker: string') || m1Studio.includes('speaker:')) {
 }
 for (const token of [
   "title: '아이미의 어려운 자기소개'",
-  "objective: '오늘은 생활 속 AI가 하는 일을 찾고, AI를 내 말로 소개해 봐요.'",
+  "objective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.'",
   "imageSrc: ''",
   '아이미의 설명에는 어려운 말이 많았어요.',
   'AI는 사람이 목적을 정하고 만든 도구입니다.',
@@ -162,7 +162,7 @@ for (const token of [
 for (const retiredToken of ['어제 자리표', '아이미가 본 것은 어제 자리표']) {
   if (m1Studio.includes(retiredToken)) throw new Error(`retired m1-l1 story remains: ${retiredToken}`);
 }
-if (!m1Lesson.includes("objective: '오늘은 생활 속 AI가 하는 일을 찾고, AI를 내 말로 소개해 봐요.'")) {
+if (!m1Lesson.includes("objective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.'")) {
   throw new Error('m1-l1 must expose one shared learning objective');
 }
 

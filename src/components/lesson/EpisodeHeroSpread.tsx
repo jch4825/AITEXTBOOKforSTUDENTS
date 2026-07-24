@@ -60,7 +60,7 @@ export default function EpisodeHeroSpread({
     return (
       <div className={`story-fade-in ${className}`}>
         <section
-          className="w-full max-w-[960px] mx-auto rounded-[var(--r-lg)] bg-[color:var(--paper-0)] shadow-[0_8px_32px_rgba(43,58,85,0.12)] border border-[color:var(--line)] p-6 md:p-8 lg:p-10 overflow-hidden relative"
+          className="w-full max-w-[min(96vw,110rem)] 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)] mx-auto rounded-[var(--r-lg)] bg-[color:var(--paper-0)] shadow-[0_8px_32px_rgba(43,58,85,0.12)] border border-[color:var(--line)] p-6 md:p-8 lg:p-10 overflow-hidden relative"
           style={{ borderColor: `color-mix(in srgb, ${accent} 20%, var(--line))` }}
           aria-label={`차시 도입 (어려움): ${title}`}
         >

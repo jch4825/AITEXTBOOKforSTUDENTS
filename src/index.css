@@ -479,7 +479,17 @@
 
 /* 2026-07-13 polish: closable season drawer and symmetric book spread */
 .comic-contents-inner {
-  max-width: min(78rem, 100%);
+  max-width: min(96vw, 120rem);
+}
+@media (min-width: 1536px) {
+  .comic-contents-inner {
+    max-width: min(94vw, 148rem);
+  }
+}
+@media (min-width: 1920px) {
+  .comic-contents-inner {
+    max-width: min(92vw, 175rem);
+  }
 }
 
 .season-map {

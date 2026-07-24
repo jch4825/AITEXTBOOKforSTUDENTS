@@ -19,7 +19,7 @@ export default function LessonSpread({
 }: Props) {
   return (
     <section
-      className={`lesson-spread w-full max-w-[1180px] mx-auto rounded-[var(--r-lg)] bg-[color:var(--paper-0)] shadow-[0_10px_34px_rgba(43,58,85,0.10)] border border-[color:var(--line)] overflow-hidden relative ${className}`}
+      className={`lesson-spread w-full max-w-[min(96vw,110rem)] 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)] mx-auto rounded-[var(--r-lg)] bg-[color:var(--paper-0)] shadow-[0_10px_34px_rgba(43,58,85,0.10)] border border-[color:var(--line)] overflow-hidden relative ${className}`}
       aria-label={label}
       style={accent ? { borderColor: `color-mix(in srgb, ${accent} 18%, var(--line))`, '--spread-accent': accent } as CSSProperties : undefined}
     >

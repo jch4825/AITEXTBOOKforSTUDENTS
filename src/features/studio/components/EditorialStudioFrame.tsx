@@ -32,7 +32,7 @@ export default function EditorialStudioFrame({
 }: Props) {
   return (
     <article
-      className="mx-auto w-full max-w-[1220px] space-y-4"
+      className="mx-auto w-full max-w-[min(96vw,110rem)] 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)] space-y-4"
       style={{ '--accent': accent, '--studio-secondary': secondary } as CSSProperties}
     >
       <header className="flex flex-wrap items-end justify-between gap-3 px-1">
