@@ -76,8 +76,8 @@ export const M1_PORTFOLIO: ModulePortfolioDefinition = {
   ],
   transferPrompt: '도서관의 새 안내 AI가 행사 시간을 알려 줬지만 공식 공지와 다릅니다. 어떤 입력과 결과를 확인하고 누가 마지막 결정을 해야 할까요?',
   nextChoices: [
-    { id: 'find-input', emoji: 'IN', label: 'AI가 어떤 입력을 받는지 먼저 찾을 거예요.' },
-    { id: 'check-result', emoji: 'CHECK', label: 'AI 결과를 원래 자료와 비교할 거예요.' },
-    { id: 'decide-with-human', emoji: 'HUMAN', label: '중요한 일은 믿을 수 있는 사람과 확인할 거예요.' },
+    { id: 'find-input', emoji: '📥', label: 'AI가 어떤 입력을 받는지 먼저 찾을 거예요.' },
+    { id: 'check-result', emoji: '🔍', label: 'AI 결과를 원래 자료와 비교할 거예요.' },
+    { id: 'decide-with-human', emoji: '👥', label: '중요한 일은 믿을 수 있는 사람과 확인할 거예요.' },
   ],
 };

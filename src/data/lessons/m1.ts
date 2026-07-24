@@ -64,9 +64,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l2_function_clues',
                   prompt: '음악 추천 기능의 단서를 알맞은 칸으로 옮겨 봐요.',
                   bins: [
-                    { label: '받는 정보', emoji: 'IN' },
-                    { label: '도와주는 일', emoji: 'AI' },
-                    { label: '사람이 확인', emoji: 'OK' },
+                    { label: '받는 정보', emoji: '📥' },
+                    { label: '도와주는 일', emoji: '🤖' },
+                    { label: '사람이 확인', emoji: '✅' },
                   ],
                   cards: [
                     { label: '내가 전에 들은 노래', emoji: '1', bin: 0 },
@@ -85,9 +85,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l2_tool_purpose',
                   prompt: '어떤 도움을 주는 도구를 만들고 싶나요?',
                   items: [
-                    { emoji: 'BOOK', label: '필요한 책을 추천하는 도구' },
-                    { emoji: 'LIGHT', label: '방이 어두우면 불을 켜는 도구' },
-                    { emoji: 'SOUND', label: '큰 소리를 알려 주는 도구' },
+                    { emoji: '📚', label: '필요한 책을 추천하는 도구' },
+                    { emoji: '💡', label: '방이 어두우면 불을 켜는 도구' },
+                    { emoji: '🔊', label: '큰 소리를 알려 주는 도구' },
                   ],
                 },
                 {
@@ -147,8 +147,8 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l3_claim_check',
                   prompt: 'AI 답의 문장을 두 칸으로 나눠 봐요.',
                   bins: [
-                    { label: '그대로 써도 돼요', emoji: 'USE' },
-                    { label: '자료를 확인해요', emoji: 'CHECK' },
+                    { label: '그대로 써도 돼요', emoji: '📄' },
+                    { label: '자료를 확인해요', emoji: '🔍' },
                   ],
                   cards: [
                     { label: 'AI 동아리에서는 여러 도구를 시험합니다.', emoji: 'A', bin: 0 },
@@ -248,9 +248,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l5_strategy_sort',
                   prompt: '상황에 알맞은 해결 방법을 골라 봐요.',
                   bins: [
-                    { label: '다시 들어 봐요', emoji: 'REPLAY' },
-                    { label: '다른 입력을 써요', emoji: 'INPUT' },
-                    { label: '사람과 확인해요', emoji: 'HUMAN' },
+                    { label: '다시 들어 봐요', emoji: '🔁' },
+                    { label: '다른 입력을 써요', emoji: '⌨️' },
+                    { label: '사람과 확인해요', emoji: '👥' },
                   ],
                   cards: [
                     { label: '녹음된 안내를 한 번 더 재생하기', emoji: '1', bin: 0 },
@@ -269,9 +269,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l5_preferred_input',
                   prompt: '내가 먼저 사용하고 싶은 입력 방법은 무엇인가요?',
                   items: [
-                    { emoji: 'MIC', label: '말로 입력하기' },
-                    { emoji: 'TEXT', label: '글자로 입력하기' },
-                    { emoji: 'AAC', label: '그림·상징으로 입력하기' },
+                    { emoji: '🎙️', label: '말로 입력하기' },
+                    { emoji: '📝', label: '글자로 입력하기' },
+                    { emoji: '🖼️', label: '그림·상징으로 입력하기' },
                   ],
                 },
                 {
@@ -331,9 +331,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l6_missing_data',
                   prompt: '새로운 카드를 구분하려면 어떤 자료를 더 넣어야 할까요?',
                   items: [
-                    { emoji: 'TRIANGLE', label: '여러 크기의 세모' },
-                    { emoji: 'TRIANGLE', label: '여러 색의 세모' },
-                    { emoji: 'CIRCLE', label: '똑같은 동그라미만 20장' },
+                    { emoji: '🔺', label: '여러 크기의 세모' },
+                    { emoji: '🔺', label: '여러 색의 세모' },
+                    { emoji: '🟢', label: '똑같은 동그라미만 20장' },
                   ],
                 },
                 {
@@ -413,10 +413,10 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l7_key_points',
                   prompt: '체험회 안내에서 꼭 남아야 할 정보를 모두 골라 봐요.',
                   items: [
-                    { emoji: 'TIME', label: '금요일 오후 2시' },
-                    { emoji: 'PLACE', label: '도서관' },
-                    { emoji: 'ITEM', label: '이름표 준비' },
-                    { emoji: 'STYLE', label: '신나는 느낌의 꾸밈말' },
+                    { emoji: '⏰', label: '금요일 오후 2시' },
+                    { emoji: '📍', label: '도서관' },
+                    { emoji: '🎒', label: '이름표 준비' },
+                    { emoji: '🎨', label: '신나는 느낌의 꾸밈말' },
                   ],
                 },
                 {
@@ -424,8 +424,8 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l7_review',
                   prompt: 'AI 결과를 사용할 부분과 고칠 부분으로 나눠요.',
                   bins: [
-                    { label: '사용해요', emoji: 'USE' },
-                    { label: '고쳐요', emoji: 'EDIT' },
+                    { label: '사용해요', emoji: '📄' },
+                    { label: '고쳐요', emoji: '✏️' },
                   ],
                   cards: [
                     { label: '금요일 오후 2시', emoji: '1', bin: 0 },
@@ -496,9 +496,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l8_help_map',
                   prompt: '각 부탁을 어디로 보내면 좋을까요?',
                   bins: [
-                    { label: 'AI로 시도', emoji: 'AI' },
-                    { label: '확인하고 사용', emoji: 'CHECK' },
-                    { label: '사람에게 요청', emoji: 'HUMAN' },
+                    { label: 'AI로 시도', emoji: '🤖' },
+                    { label: '확인하고 사용', emoji: '🔍' },
+                    { label: '사람에게 요청', emoji: '👥' },
                   ],
                   cards: [
                     { label: '긴 안내문을 짧게 정리하기', emoji: '1', bin: 0 },
@@ -583,9 +583,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l9_task',
                   prompt: '내가 맡고 싶은 체험회 작업은 무엇인가요?',
                   items: [
-                    { emoji: 'TEXT', label: '짧고 쉬운 안내문 만들기' },
-                    { emoji: 'IMAGE', label: '체험회 포스터 그림 만들기' },
-                    { emoji: 'CAPTION', label: '안내 영상 자막 만들기' },
+                    { emoji: '📝', label: '짧고 쉬운 안내문 만들기' },
+                    { emoji: '🖼️', label: '체험회 포스터 그림 만들기' },
+                    { emoji: '🎬', label: '안내 영상 자막 만들기' },
                   ],
                 },
                 {
@@ -593,9 +593,9 @@ export const M1_LESSONS: LessonContent[] = [
                   id: 'm1_l9_conditions',
                   prompt: '도구를 고르기 전에 살펴볼 조건을 나눠요.',
                   bins: [
-                    { label: '필요한 입력', emoji: 'IN' },
-                    { label: '원하는 결과', emoji: 'OUT' },
-                    { label: '사람이 확인', emoji: 'CHECK' },
+                    { label: '필요한 입력', emoji: '📥' },
+                    { label: '원하는 결과', emoji: '📤' },
+                    { label: '사람이 확인', emoji: '🔍' },
                   ],
                   cards: [
                     { label: '공개해도 되는 행사 정보', emoji: '1', bin: 0 },
