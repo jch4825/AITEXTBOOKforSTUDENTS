@@ -104,7 +104,21 @@ const M2_OBJECTIVES = new Map([
   ['m2-l11', '오늘은 실제 목적 하나를 정하고 요청·수정·확인·최종 판단이 담긴 프롬프트 노트를 완성해 봐요.'],
 ]);
 
-for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES]) {
+const M3_OBJECTIVES = new Map([
+  ['m3-l1', '오늘은 같은 주제를 여러 질문으로 바꾸어 보고 답의 차이를 비교해 봐요.'],
+  ['m3-l2', '오늘은 글에서 모르는 낱말을 골라 AI 설명과 사전 설명을 비교하고 내 말로 뜻을 적어 봐요.'],
+  ['m3-l3', '오늘은 어려운 설명에서 꼭 남아야 할 사실을 찾고, 쉬운 예를 넣어 다시 요청해 봐요.'],
+  ['m3-l4', '오늘은 낱말의 뜻·반대말·예문을 살펴보고 내 문장을 만들어 봐요.'],
+  ['m3-l5', '오늘은 AI의 이야기 제안을 골라 고치고 내 생각이 담긴 결말을 만들어 봐요.'],
+  ['m3-l6', '오늘은 생활 계산을 먼저 예상하고 계산기로 확인한 뒤 AI 풀이에서 틀린 부분을 찾아봐요.'],
+  ['m3-l7', '오늘은 긴 글에서 꼭 남길 내용을 고르고 세 문장 요약을 원문과 비교해 봐요.'],
+  ['m3-l8', '오늘은 배운 내용으로 문제를 만들고 먼저 풀어 본 뒤 정답과 이유를 확인해 봐요.'],
+  ['m3-l9', '오늘은 그림에서 직접 보이는 사실과 AI가 덧붙인 추측을 나누고 설명을 고쳐 봐요.'],
+  ['m3-l10', '오늘은 내가 배운 자료를 고르고 AI 요약을 내 말로 다시 설명해 봐요.'],
+  ['m3-l11', '오늘은 공부할 때 AI에게 맡길 일과 내가 직접 할 일을 정해 나의 공부 도구함을 완성해 봐요.'],
+]);
+
+for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES, ...M3_OBJECTIVES]) {
   EXPECTED_OBJECTIVES.set(lessonId, objective);
 }
 
@@ -143,7 +157,7 @@ if (objectiveByLesson.size !== 68) {
 
 for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
   const actual = objectiveByLesson.get(lessonId);
-  const formalExpected = lessonId.startsWith('m1-') || lessonId.startsWith('m2-') ? expected : expected
+  const formalExpected = ['m1-', 'm2-', 'm3-'].some((prefix) => lessonId.startsWith(prefix)) ? expected : expected
     .replaceAll('해 봐요', '해 보십시오')
     .replaceAll('봐요', '봅니다')
     .replaceAll('해요', '합니다')

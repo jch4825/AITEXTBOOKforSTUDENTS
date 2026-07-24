@@ -4,12 +4,35 @@ const MODULES = {
   M3: {
     studioFile: 'src/data/studios/m3.ts',
     studioSymbol: 'M3_STUDIOS',
-    studioIds: ['m3-question-detective', 'm3-story-coauthor', 'm3-image-description-review'],
-    lessonIds: ['m3-l1', 'm3-l5', 'm3-l9'],
+    studioIds: [
+      'm3-question-depth-lab',
+      'm3-word-evidence-lab',
+      'm3-accurate-simple-explanation-lab',
+      'm3-word-in-context-studio',
+      'm3-story-choice-studio',
+      'm3-calculation-verification-lab',
+      'm3-evidence-summary-lab',
+      'm3-delayed-answer-quiz-studio',
+      'm3-image-evidence-review',
+      'm3-self-explanation-review-studio',
+    ],
+    lessonIds: ['m3-l1', 'm3-l2', 'm3-l3', 'm3-l4', 'm3-l5', 'm3-l6', 'm3-l7', 'm3-l8', 'm3-l9', 'm3-l10'],
     portfolioFile: 'src/data/modulePortfolios/m3.ts',
     portfolioSymbol: 'M3_PORTFOLIO',
     portfolioLessonId: 'm3-l11',
-    artifactTitles: ['나의 질문 설계 카드', 'AI와 나의 이야기 보드', '그림 설명 확인표'],
+    artifactTitles: [
+      '질문 계단과 답 비교 기록',
+      '뜻-근거-예문-그림 낱말 카드',
+      '정확성을 지킨 쉬운 설명 카드',
+      '뜻-그림-내 문장 낱말 카드',
+      '3컷 이야기 보드와 선택 이유',
+      '계산·검산·오류 수정 기록',
+      '근거가 연결된 3문장 요약',
+      '문제-정답-해설 양면 카드',
+      '그림 근거 표시와 수정 설명',
+      '자기 설명과 다음 복습 카드',
+    ],
+    preparedCount: 10,
   },
   M4: {
     studioFile: 'src/data/studios/m4.ts',
@@ -20,6 +43,7 @@ const MODULES = {
     portfolioSymbol: 'M4_PORTFOLIO',
     portfolioLessonId: 'm4-l11',
     artifactTitles: ['AI 답 확인 기록', '사진 공유 전 확인 카드', '광고 단서 표시판'],
+    preparedCount: 3,
   },
   M6: {
     studioFile: 'src/data/studios/m6.ts',
@@ -30,6 +54,7 @@ const MODULES = {
     portfolioSymbol: 'M6_PORTFOLIO',
     portfolioLessonId: 'm6-l12',
     artifactTitles: ['나의 장보기 판단표', '안전 이동 계획 카드', '상대에 맞춘 자기소개 카드'],
+    preparedCount: 3,
   },
 };
 
@@ -54,7 +79,9 @@ function checkModule(label, config) {
   for (const title of config.artifactTitles) requireToken(studio, title, `${label} artifact missing`);
 
   const preparedCount = (studio.match(/source: 'prepared'/g) ?? []).length;
-  if (preparedCount !== 3) throw new Error(`${label} must have 3 prepared AI contributions, got ${preparedCount}`);
+  if (preparedCount !== config.preparedCount) {
+    throw new Error(`${label} must have ${config.preparedCount} prepared AI contributions, got ${preparedCount}`);
+  }
 
   requireToken(portfolio, `lessonId: '${config.portfolioLessonId}'`, `${label} portfolio lesson missing`);
   for (const id of config.lessonIds) requireToken(portfolio, `'${id}'`, `${label} portfolio studio reference missing`);
@@ -69,8 +96,12 @@ function checkModule(label, config) {
   );
 
   if (label === 'M3') {
-    requireToken(studio, "kind: 'image'", 'M3 image review stimulus missing');
-    requireToken(studio, '/AITEXTBOOKforSTUDENTS/lessons/m3-l9.webp', 'M3 image path missing');
+    if ((studio.match(/imageSrc: ''/g) ?? []).length !== 40) {
+      throw new Error('M3 must expose 40 pending story image slots');
+    }
+    if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m3-l')) {
+      throw new Error('M3 must not reuse retired lesson images');
+    }
   }
   if (label === 'M4') {
     const imageCount = (studio.match(/kind: 'image'/g) ?? []).length;
@@ -100,17 +131,17 @@ if (!requested) {
   const portfolioCount = (portfolioIndex.match(/\[M\d_PORTFOLIO\.lessonId, M\d_PORTFOLIO\]/g) ?? []).length;
   const preparedCount = allStudioFiles.reduce((sum, source) => sum + (source.match(/source: 'prepared'/g) ?? []).length, 0);
 
-  if (studioCount !== 32) throw new Error(`module 2 remodel rollout needs 32 studios, got ${studioCount}`);
+  if (studioCount !== 39) throw new Error(`module 3 remodel rollout needs 39 studios, got ${studioCount}`);
   if (portfolioCount !== 6) throw new Error(`complete rollout needs 6 portfolios, got ${portfolioCount}`);
-  if (preparedCount !== 32) throw new Error(`module 2 remodel rollout needs 32 prepared AI contributions, got ${preparedCount}`);
+  if (preparedCount !== 39) throw new Error(`module 3 remodel rollout needs 39 prepared AI contributions, got ${preparedCount}`);
 
   const teacherCopy = [
     readRequired('src/features/teacher/TeacherHub.tsx'),
     readRequired('docs/teacher-guide/m3-m4-m6-studio-expansion.md'),
   ].join('\n');
-  for (const text of ['1~6단원', '32개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+  for (const text of ['1~6단원', '39개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
     requireToken(teacherCopy, text, 'complete teacher guidance missing');
   }
 
-  console.log('module 2 remodel rollout: 32 studios, 6 portfolios ready');
+  console.log('module 3 remodel rollout: 39 studios, 6 portfolios ready');
 }

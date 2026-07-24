@@ -41,15 +41,15 @@ for (const [moduleId, previewLesson, mainLesson] of lessonPairs) {
   if (!source.includes(`id: '${previewLesson}'`) || !source.includes(`id: '${mainLesson}'`)) {
     throw new Error(`missing lesson pair for ${moduleId}`);
   }
-  if (moduleId === 'm1' || moduleId === 'm2') {
+  if (['m1', 'm2', 'm3'].includes(moduleId)) {
     const portfolio = readFileSync(resolve(root, `src/data/modulePortfolios/${moduleId}.ts`), 'utf8');
     for (const marker of ['guideSections:', 'transferPrompt:', 'nextChoices:']) {
       if (!portfolio.includes(marker)) throw new Error(`missing project transfer marker for ${moduleId}: ${marker}`);
     }
-    if (moduleId === 'm2') {
-      const studios = readFileSync(resolve(root, 'src/data/studios/m2.ts'), 'utf8');
+    if (moduleId === 'm2' || moduleId === 'm3') {
+      const studios = readFileSync(resolve(root, `src/data/studios/${moduleId}.ts`), 'utf8');
       if ((studios.match(/\btransfer:\s*\{/g) ?? []).length !== 10) {
-        throw new Error('module 2 must provide a transfer task in all 10 studios');
+        throw new Error(`${moduleId} must provide a transfer task in all 10 studios`);
       }
     }
     continue;

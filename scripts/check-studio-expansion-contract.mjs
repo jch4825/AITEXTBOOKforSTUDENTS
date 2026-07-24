@@ -135,34 +135,93 @@ for (const token of ["lessonId: 'm2-l11'", "'m2-l1'", "'m2-l10'", '나의 프롬
   if (!m2Portfolio.includes(token)) throw new Error(`M2 portfolio missing: ${token}`);
 }
 
+const m3StudioPath = 'src/data/studios/m3.ts';
+if (!fs.existsSync(m3StudioPath)) throw new Error('M3 studio definitions are missing');
+const m3 = fs.readFileSync(m3StudioPath, 'utf8');
+for (const id of [
+  'm3-question-depth-lab',
+  'm3-word-evidence-lab',
+  'm3-accurate-simple-explanation-lab',
+  'm3-word-in-context-studio',
+  'm3-story-choice-studio',
+  'm3-calculation-verification-lab',
+  'm3-evidence-summary-lab',
+  'm3-delayed-answer-quiz-studio',
+  'm3-image-evidence-review',
+  'm3-self-explanation-review-studio',
+]) {
+  if (!m3.includes(`id: '${id}'`)) throw new Error(`M3 studio missing: ${id}`);
+}
+for (const lessonId of Array.from({ length: 10 }, (_, index) => `m3-l${index + 1}`)) {
+  if (!m3.includes(`lessonId: '${lessonId}'`)) throw new Error(`M3 lesson mapping missing: ${lessonId}`);
+}
+if ((m3.match(/source: 'prepared'/g) ?? []).length !== 10) throw new Error('M3 AI source must be prepared');
+for (const artifact of [
+  '질문 계단과 답 비교 기록',
+  '뜻-근거-예문-그림 낱말 카드',
+  '정확성을 지킨 쉬운 설명 카드',
+  '뜻-그림-내 문장 낱말 카드',
+  '3컷 이야기 보드와 선택 이유',
+  '계산·검산·오류 수정 기록',
+  '근거가 연결된 3문장 요약',
+  '문제-정답-해설 양면 카드',
+  '그림 근거 표시와 수정 설명',
+  '자기 설명과 다음 복습 카드',
+]) {
+  if (!m3.includes(artifact)) throw new Error(`M3 artifact missing: ${artifact}`);
+}
+if ((m3.match(/imageSrc: ''/g) ?? []).length !== 40 || m3.includes('/lessons/m3-l')) {
+  throw new Error('M3 visual stories must use 40 pending image slots');
+}
+
+const m3PortfolioPath = 'src/data/modulePortfolios/m3.ts';
+if (!fs.existsSync(m3PortfolioPath)) throw new Error(`M3 learning connection missing: ${m3PortfolioPath}`);
+const m3Portfolio = fs.readFileSync(m3PortfolioPath, 'utf8');
+for (const token of ["lessonId: 'm3-l11'", "'m3-l1'", "'m3-l10'", '나의 공부 도우미 도구함']) {
+  if (!m3Portfolio.includes(token)) throw new Error(`M3 portfolio missing: ${token}`);
+}
+
 const expansionGuidePath = 'docs/teacher-guide/m1-m2-studio-expansion.md';
 if (!fs.existsSync(expansionGuidePath)) throw new Error('M1/M2 teacher expansion guide is missing');
 const teacherHub = fs.readFileSync('src/features/teacher/TeacherHub.tsx', 'utf8');
-const expansionGuide = fs.readFileSync(expansionGuidePath, 'utf8');
-for (const text of ['1·2단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+const expansionGuide = [
+  fs.readFileSync(expansionGuidePath, 'utf8'),
+  fs.readFileSync('docs/teacher-guide/m3-m4-m6-studio-expansion.md', 'utf8'),
+].join('\n');
+for (const text of ['1~3단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
   if (!teacherHub.includes(text) && !expansionGuide.includes(text)) {
     throw new Error(`teacher expansion guidance missing: ${text}`);
   }
 }
-for (const title of ['아이미와 처음 만난 날', 'AI의 눈 실험실', 'AI 결과를 사용할까?', '요청 공동 제작소', '한 번의 진짜 대화 완성하기']) {
+for (const title of [
+  '아이미와 처음 만난 날',
+  'AI의 눈 실험실',
+  'AI 결과를 사용할까?',
+  '요청 공동 제작소',
+  '한 번의 진짜 대화 완성하기',
+  '궁금한 것을 깊게 묻기',
+  '계산은 다른 도구로 확인하기',
+  '오늘 배운 것을 내 말로 복습하기',
+]) {
   if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
 }
 
 const studioIndex = fs.readFileSync('src/data/studios/index.ts', 'utf8');
-for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M5_STUDIOS']) {
+for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M3_STUDIOS', '...M5_STUDIOS']) {
   if (!studioIndex.includes(spread)) throw new Error(`ready studio group missing: ${spread}`);
 }
 for (const [source, expected, label] of [
   [m1, 10, 'M1'],
   [m2, 10, 'M2'],
+  [m3, 10, 'M3'],
   [fs.readFileSync('src/data/studios/m5.ts', 'utf8'), 3, 'M5'],
 ]) {
   const count = (source.match(/lessonId: 'm\d-l\d+'/g) ?? []).length;
   if (count !== expected) throw new Error(`${label} ready studio count must be ${expected}, got ${count}`);
 }
 
-for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M5_PORTFOLIO']) {
+for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M3_PORTFOLIO', 'M5_PORTFOLIO']) {
   if (!portfolioIndex.includes(portfolio)) throw new Error(`ready portfolio missing: ${portfolio}`);
 }
 
-console.log('studio expansion contract: 23 studios, 3 portfolios ready');
+console.log('studio expansion contract: 33 studios, 4 portfolios ready');
