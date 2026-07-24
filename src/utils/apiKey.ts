@@ -8,9 +8,13 @@
 const STORAGE_KEY = 'ai-students-gemini-key';
 
 export function getApiKey(): string | null {
+  const envKey = import.meta.env.VITE_GEMINI_API_KEY;
+  if (typeof envKey === 'string' && envKey.trim().length > 0) {
+    return envKey.trim();
+  }
   if (typeof localStorage === 'undefined') return null;
   const v = localStorage.getItem(STORAGE_KEY);
-  return v && v.trim().length > 0 ? v : null;
+  return v && v.trim().length > 0 ? v.trim() : null;
 }
 
 export function setApiKey(key: string): void {

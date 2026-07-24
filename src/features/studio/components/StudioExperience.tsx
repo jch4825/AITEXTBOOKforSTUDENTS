@@ -280,6 +280,7 @@ export default function StudioExperience({
     right = (
       <div className="p-5 md:p-7">
         <AiDecisionPanel
+          lessonId={definition.lessonId}
           role={definition.aiContribution.role}
           text={definition.aiContribution.text}
           question={definition.aiContribution.question}

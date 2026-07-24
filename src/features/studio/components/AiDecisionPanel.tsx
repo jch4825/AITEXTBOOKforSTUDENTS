@@ -1,9 +1,11 @@
 import Icon from '../../../components/Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
 import StudioExpressionInput from './StudioExpressionInput';
+import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
 import type { AiDecision, ExpressionMode, StudioChoice, StudioExpression } from '../types';
 
 interface Props {
+  lessonId: string;
   role: string;
   text: string;
   question?: string;
@@ -23,6 +25,7 @@ const DECISION_LABELS: Record<AiDecision, string> = {
 };
 
 export default function AiDecisionPanel({
+  lessonId,
   role,
   text,
   question,
@@ -83,6 +86,12 @@ export default function AiDecisionPanel({
           })}
         </div>
       </div>
+
+      <LiveGeminiInteraction
+        lessonId={lessonId}
+        accent={accent}
+        promptHint="실시간 AI 아이미와 함께 추가 질문을 나누고 답변을 확인해 보세요!"
+      />
 
       {decision && (
         <StudioExpressionInput
