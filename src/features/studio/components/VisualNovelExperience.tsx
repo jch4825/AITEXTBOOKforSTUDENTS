@@ -146,7 +146,7 @@ export default function VisualNovelExperience({
       </div>
       <div className="visual-novel-goal">
         <strong>학습목표</strong>
-        <p>{story.objective}</p>
+        <p>{wrapDictionaryTerms(story.objective, allDictTerms)}</p>
       </div>
       <h3>오늘 배울 개념</h3>
       <div className="visual-novel-knowledge-list">
@@ -159,19 +159,19 @@ export default function VisualNovelExperience({
             <div className="flex gap-3">
               <span>{index + 1}</span>
               <div>
-                <h4>{knowledge.title}</h4>
-                <p><strong>{knowledge.core}</strong></p>
-                {supportLevel !== 'full' && <p>{knowledge.detail[supportLevel]}</p>}
+                <h4>{wrapDictionaryTerms(knowledge.title, allDictTerms)}</h4>
+                <p><strong>{wrapDictionaryTerms(knowledge.core, allDictTerms)}</strong></p>
+                {supportLevel !== 'full' && <p>{wrapDictionaryTerms(knowledge.detail[supportLevel], allDictTerms)}</p>}
                 {knowledge.flow && (
                   <div
                     className="visual-novel-flow"
                     aria-label={`${knowledge.flow.input}, ${knowledge.flow.process}, ${knowledge.flow.output}`}
                   >
-                    <b>{knowledge.flow.input}</b>
+                    <b>{wrapDictionaryTerms(knowledge.flow.input, allDictTerms)}</b>
                     <i aria-hidden>→</i>
-                    <b>{knowledge.flow.process}</b>
+                    <b>{wrapDictionaryTerms(knowledge.flow.process, allDictTerms)}</b>
                     <i aria-hidden>→</i>
-                    <b>{knowledge.flow.output}</b>
+                    <b>{wrapDictionaryTerms(knowledge.flow.output, allDictTerms)}</b>
                   </div>
                 )}
               </div>

@@ -8,6 +8,8 @@ import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
+import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
+import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 import type {
   AiDecision,
   StudioAction,
@@ -59,6 +61,10 @@ export default function StudioExperience({
   onSceneIndexChange,
 }: Props) {
   const { speakNow } = useSpeak();
+  const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
+    entry.term,
+    ...(entry.aliases ?? []),
+  ]);
   const profile = definition.supportProfiles[state.supportLevel];
   const firstChoices = profile.choiceLimit
     ? definition.firstAttempt.choices.slice(0, profile.choiceLimit)
@@ -146,7 +152,7 @@ export default function StudioExperience({
                     {index + 1}
                   </span>
                   <span className="text-sm font-semibold leading-relaxed text-[color:var(--brand-ink)]">
-                    {fact}
+                    {wrapDictionaryTerms(fact, allDictTerms)}
                   </span>
                 </div>
                 <button
