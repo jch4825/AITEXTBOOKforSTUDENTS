@@ -12,6 +12,8 @@ interface Props {
   accent: string;
 }
 
+type ToolMode = 'pen' | 'eraser' | 'text';
+
 const COLORS = [
   { name: '흰색', value: '#FFFFFF' },
   { name: '검정', value: '#0F172A' },
@@ -30,8 +32,14 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
 
   const [color, setColor] = useState(COLORS[0].value); // 디폴트 흰색
-  const [width, setWidth] = useState(WIDTHS[1]); // 디폴트 굵게
-  const [isEraser, setIsEraser] = useState(false);
+  const [width, setWidth] = useState(WIDTHS[1]); // 디폴트 굵게 (8px)
+  const [mode, setMode] = useState<ToolMode>('pen');
+
+  // Text Box Tool state
+  const [activeTextPos, setActiveTextPos] = useState<{ x: number; y: number } | null>(null);
+  const [inputText, setInputText] = useState('');
+
+  const isEraser = mode === 'eraser';
 
   // Initialize and resize canvas
   useEffect(() => {
@@ -63,13 +71,19 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   }
 
   function handlePointerDown(e: ReactPointerEvent<HTMLCanvasElement>) {
+    const point = getPoint(e);
+    if (mode === 'text') {
+      setActiveTextPos(point);
+      setInputText('');
+      return;
+    }
     e.currentTarget.setPointerCapture(e.pointerId);
     drawingRef.current = true;
-    lastPointRef.current = getPoint(e);
+    lastPointRef.current = point;
   }
 
   function handlePointerMove(e: ReactPointerEvent<HTMLCanvasElement>) {
-    if (!drawingRef.current) return;
+    if (!drawingRef.current || mode === 'text') return;
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
     if (!canvas || !ctx) return;
@@ -98,6 +112,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   }
 
   function handlePointerUp() {
+    if (mode === 'text') return;
     drawingRef.current = false;
     lastPointRef.current = null;
 
@@ -107,6 +122,27 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
     }
   }
 
+  function commitText() {
+    if (!activeTextPos || !inputText.trim()) {
+      setActiveTextPos(null);
+      return;
+    }
+
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (canvas && ctx) {
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = color;
+      const fontSize = width === 8 ? 24 : 18;
+      ctx.font = `bold ${fontSize}px sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`;
+      ctx.fillText(inputText, activeTextPos.x, activeTextPos.y + fontSize);
+      onChange(canvas.toDataURL());
+    }
+
+    setActiveTextPos(null);
+    setInputText('');
+  }
+
   function clearAll() {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
@@ -114,6 +150,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       onChange('');
     }
+    setActiveTextPos(null);
   }
 
   return (
@@ -138,14 +175,14 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
           {/* Colors Selection */}
           <div className="flex items-center gap-2">
             {COLORS.map((col, idx) => {
-              const isSelected = !isEraser && color === col.value;
+              const isSelected = mode === 'pen' && color === col.value;
               return (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => {
                     setColor(col.value);
-                    setIsEraser(false);
+                    setMode('pen');
                   }}
                   className="w-9 h-9 rounded-full border-2 transition-transform hover:scale-105 cursor-pointer relative shadow-2xs"
                   style={{
@@ -167,16 +204,31 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
             {/* Eraser */}
             <button
               type="button"
-              onClick={() => setIsEraser(true)}
+              onClick={() => setMode('eraser')}
               className="w-9 h-9 rounded-full border-2 flex items-center justify-center transition-all cursor-pointer shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white"
               style={{
-                borderColor: isEraser ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
-                boxShadow: isEraser ? '0 0 0 2px #047857' : undefined,
+                borderColor: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
+                boxShadow: mode === 'eraser' ? '0 0 0 2px #047857' : undefined,
               }}
               title="지우개"
               aria-label="지우개"
             >
               <Icon name="eraser" size={18} color="#FFFFFF" />
+            </button>
+
+            {/* Text Box Tool ('T') */}
+            <button
+              type="button"
+              onClick={() => setMode('text')}
+              className="w-9 h-9 rounded-full border-2 flex items-center justify-center font-black text-base transition-all cursor-pointer shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white"
+              style={{
+                borderColor: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
+                boxShadow: mode === 'text' ? '0 0 0 2px #047857' : undefined,
+              }}
+              title="텍스트 상자 입력 (T)"
+              aria-label="텍스트 상자 입력"
+            >
+              T
             </button>
           </div>
 
@@ -214,17 +266,56 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
           className="w-full h-64 relative overflow-hidden"
           style={{ background: '#064E3B' }}
         >
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full"
-          style={{ touchAction: 'none', cursor: 'crosshair' }}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-        />
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{ touchAction: 'none', cursor: mode === 'text' ? 'text' : 'crosshair' }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+          />
+
+          {/* Text Tool Placement Overlay */}
+          {activeTextPos && (
+            <div
+              className="absolute z-20 flex items-center gap-1 bg-emerald-950/95 border-2 border-emerald-300 p-1.5 rounded-xl shadow-2xl animate-scale-in"
+              style={{
+                left: Math.min(activeTextPos.x, 220),
+                top: Math.min(activeTextPos.y, 180),
+              }}
+            >
+              <input
+                type="text"
+                autoFocus
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') commitText();
+                  if (e.key === 'Escape') setActiveTextPos(null);
+                }}
+                placeholder="글자 입력..."
+                className="bg-transparent font-bold px-2 py-1 outline-none text-base border-b border-emerald-400 w-36 sm:w-48"
+                style={{ color: color === '#FFFFFF' ? '#FFFFFF' : color }}
+              />
+              <button
+                type="button"
+                onClick={commitText}
+                className="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold rounded-lg text-xs shrink-0 cursor-pointer shadow-xs"
+              >
+                입력
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTextPos(null)}
+                className="px-2 py-1 bg-emerald-900 hover:bg-emerald-800 text-emerald-200 font-bold rounded-lg text-xs shrink-0 cursor-pointer"
+              >
+                취소
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
-  </div>
   );
 }
