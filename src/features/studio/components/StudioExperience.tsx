@@ -164,7 +164,7 @@ export default function StudioExperience({
         ) : null}
       </div>
 
-      {definition.safetyNote ? (
+      {state.supportLevel !== 'full' && definition.safetyNote ? (
         <div
           className="studio-margin-note mt-5 flex items-center justify-between gap-2 rounded-lg border border-dashed bg-white p-3 text-xs leading-relaxed"
           style={{ borderColor: 'var(--editorial-line)' }}

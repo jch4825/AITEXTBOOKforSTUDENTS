@@ -34,7 +34,7 @@ export default function VisualNovelExperience({
     copy.text,
     copy.perspective,
     activeKnowledge.core,
-    activeKnowledge.detail[supportLevel],
+    supportLevel !== 'full' ? activeKnowledge.detail[supportLevel] : null,
   ].filter(Boolean).join(' ');
 
   const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
@@ -161,7 +161,7 @@ export default function VisualNovelExperience({
               <div>
                 <h4>{knowledge.title}</h4>
                 <p><strong>{knowledge.core}</strong></p>
-                <p>{knowledge.detail[supportLevel]}</p>
+                {supportLevel !== 'full' && <p>{knowledge.detail[supportLevel]}</p>}
                 {knowledge.flow && (
                   <div
                     className="visual-novel-flow"
@@ -179,7 +179,7 @@ export default function VisualNovelExperience({
             <button
               type="button"
               onClick={() => {
-                let text = `개념 ${index + 1}. ${knowledge.title}. ${knowledge.core}. ${knowledge.detail[supportLevel]}`;
+                let text = `개념 ${index + 1}. ${knowledge.title}. ${knowledge.core}. ${supportLevel !== 'full' ? knowledge.detail[supportLevel] : ''}`;
                 if (knowledge.flow) {
                   text += `. 입력은 ${knowledge.flow.input}, 과정은 ${knowledge.flow.process}, 출력은 ${knowledge.flow.output} 입니다.`;
                 }
