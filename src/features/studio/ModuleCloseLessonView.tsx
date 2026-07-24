@@ -12,6 +12,7 @@ import { formatPersistedStudioExpression, isMeaningfulStudioExpression } from '.
 import type { ExpressionMode, StudioEvidenceV2, StudioExpression } from './types';
 
 interface Props {
+  key?: string;
   definition: ModulePortfolioDefinition;
   onGoHome: () => void;
   onPickLesson: (id: LessonId) => void;
@@ -71,7 +72,10 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
       || selectedCriteria.length < 1
       || !isMeaningfulStudioExpression(nextMethod)
     ) {
-      setCompletionMessage('탐구 기록 3개, 설명서 세 칸, 잘한 과정 1개, 새 상황의 방법을 모두 남기면 마칠 수 있어요.');
+      setCompletionMessage(
+        definition.completionRequirement
+          ?? '탐구 기록 3개, 설명서 세 칸, 잘한 과정 1개, 새 상황의 방법을 모두 남기면 마칠 수 있어요.',
+      );
       return;
     }
     markCompleted(definition.lessonId);
@@ -101,7 +105,9 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
           {definition.closingStory?.length ? (
             <section className="studio-editorial p-6">
               <p className="studio-kicker" style={{ color: theme.secondary }}>마지막 이야기</p>
-              <h2 className="mt-1 text-xl font-extrabold">아이미를 처음 쓰는 친구에게</h2>
+              <h2 className="mt-1 text-xl font-extrabold">
+                {definition.storyHeading ?? '아이미를 처음 쓰는 친구에게'}
+              </h2>
               <div className="mt-4 grid gap-4 md:grid-cols-3">
                 {definition.closingStory.map((scene) => (
                   <article key={scene.id} className="overflow-hidden rounded-2xl border" style={{ borderColor: 'var(--editorial-line)' }}>
@@ -132,9 +138,12 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
           {definition.artifactChoices?.length ? (
             <section className="studio-editorial p-6">
               <p className="studio-kicker" style={{ color: theme.secondary }}>1단계 · 탐구 기록 고르기</p>
-              <h2 className="mt-1 text-xl font-extrabold">설명서에 넣을 기록을 3개 이상 골라요</h2>
+              <h2 className="mt-1 text-xl font-extrabold">
+                {definition.artifactHeading ?? '설명서에 넣을 기록을 3개 이상 골라요'}
+              </h2>
               <p className="mt-1 text-sm text-[color:var(--muted)]">
-                경험형 차시뿐 아니라 1차시부터 10차시까지 만든 모든 기록을 사용할 수 있어요.
+                {definition.artifactDescription
+                  ?? '경험형 차시뿐 아니라 1차시부터 10차시까지 만든 모든 기록을 사용할 수 있어요.'}
               </p>
               <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                 {definition.artifactChoices.map((choice) => {
@@ -195,7 +204,9 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
           {definition.guideSections?.length ? (
             <section className="studio-editorial p-6">
               <p className="studio-kicker" style={{ color: theme.secondary }}>2단계 · 설명서 작성하기</p>
-              <h2 className="mt-1 text-xl font-extrabold">아이미를 사용할 때 기억할 세 가지</h2>
+              <h2 className="mt-1 text-xl font-extrabold">
+                {definition.guideHeading ?? '아이미를 사용할 때 기억할 세 가지'}
+              </h2>
               <div className="mt-4 grid gap-4 lg:grid-cols-3">
                 {definition.guideSections.map((section, index) => (
                   <label key={section.id} className="studio-artifact-sheet block">
@@ -228,7 +239,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
                 className="mt-5 rounded-full border-2 px-5 py-2.5 font-bold"
                 style={{ borderColor: theme.accent, color: theme.accent, background: 'var(--editorial-paper)' }}
               >
-                아이미 사용 설명서 인쇄하기
+                {definition.printLabel ?? '아이미 사용 설명서 인쇄하기'}
               </button>
             </section>
           ) : null}

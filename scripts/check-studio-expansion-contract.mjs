@@ -227,6 +227,52 @@ for (const token of ["lessonId: 'm4-l11'", "'m4-l1'", "'m4-l10'", '나의 AI 안
   if (!m4Portfolio.includes(token)) throw new Error(`M4 portfolio missing: ${token}`);
 }
 
+const m5StudioPath = 'src/data/studios/m5.ts';
+if (!fs.existsSync(m5StudioPath)) throw new Error('M5 studio definitions are missing');
+const m5 = fs.readFileSync(m5StudioPath, 'utf8');
+for (const id of [
+  'm5-problem-definition-map',
+  'm5-task-decomposition-board',
+  'm5-reasoned-sequence',
+  'm5-priority-criteria',
+  'm5-adjustable-help',
+  'm5-safe-clarification',
+  'm5-step-checkpoints',
+  'm5-goal-result-verification',
+  'm5-alternative-comparison',
+  'm5-error-retest',
+  'm5-condition-change-plan',
+]) {
+  if (!m5.includes(`id: '${id}'`)) throw new Error(`M5 studio missing: ${id}`);
+}
+for (const lessonId of Array.from({ length: 11 }, (_, index) => `m5-l${index + 1}`)) {
+  if (!m5.includes(`lessonId: '${lessonId}'`)) throw new Error(`M5 lesson mapping missing: ${lessonId}`);
+}
+if ((m5.match(/source: 'prepared'/g) ?? []).length !== 11) throw new Error('M5 AI source must be prepared');
+for (const artifact of [
+  '현재-목표-정보-행동 문제 정의 카드',
+  '과제 분해 보드',
+  '이유 연결선이 있는 절차표',
+  '우선순위 판단표',
+  '첫 시도-힌트-수정 결과 기록',
+  '요청 수정과 외부 확인 기록',
+  '체크포인트가 있는 단계별 대화',
+  '목표-결과 검토표',
+  '대안 비교표',
+  '오류 전후 테스트 기록',
+  '처음 계획-바뀐 계획-수정 이유',
+]) {
+  if (!m5.includes(artifact)) throw new Error(`M5 artifact missing: ${artifact}`);
+}
+if ((m5.match(/imageSrc: ''/g) ?? []).length !== 44 || m5.includes('/lessons/m5-l')) {
+  throw new Error('M5 visual stories must use 44 pending image slots');
+}
+
+const m5Portfolio = fs.readFileSync('src/data/modulePortfolios/m5.ts', 'utf8');
+for (const token of ["lessonId: 'm5-l12'", "'m5-l1'", "'m5-l11'", '문제 해결 지도']) {
+  if (!m5Portfolio.includes(token)) throw new Error(`M5 portfolio missing: ${token}`);
+}
+
 const expansionGuidePath = 'docs/teacher-guide/m1-m2-studio-expansion.md';
 if (!fs.existsSync(expansionGuidePath)) throw new Error('M1/M2 teacher expansion guide is missing');
 const teacherHub = fs.readFileSync('src/features/teacher/TeacherHub.tsx', 'utf8');
@@ -234,7 +280,7 @@ const expansionGuide = [
   fs.readFileSync(expansionGuidePath, 'utf8'),
   fs.readFileSync('docs/teacher-guide/m3-m4-m6-studio-expansion.md', 'utf8'),
 ].join('\n');
-for (const text of ['1~4단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+for (const text of ['1~5단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
   if (!teacherHub.includes(text) && !expansionGuide.includes(text)) {
     throw new Error(`teacher expansion guidance missing: ${text}`);
   }
@@ -251,6 +297,9 @@ for (const title of [
   '자신 있는 AI 답도 확인하기',
   '비밀번호와 인증 코드는 보내지 않기',
   '추천 속 광고 단서 찾기',
+  '문제를 정확히 찾기',
+  '조건이 바뀌면 계획도 바꾸기',
+  '나는 문제 해결사',
 ]) {
   if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
 }
@@ -264,7 +313,7 @@ for (const [source, expected, label] of [
   [m2, 10, 'M2'],
   [m3, 10, 'M3'],
   [m4, 10, 'M4'],
-  [fs.readFileSync('src/data/studios/m5.ts', 'utf8'), 3, 'M5'],
+  [m5, 11, 'M5'],
 ]) {
   const count = (source.match(/lessonId: 'm\d-l\d+'/g) ?? []).length;
   if (count !== expected) throw new Error(`${label} ready studio count must be ${expected}, got ${count}`);
@@ -274,4 +323,4 @@ for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M3_PORTFOLIO', 'M4_POR
   if (!portfolioIndex.includes(portfolio)) throw new Error(`ready portfolio missing: ${portfolio}`);
 }
 
-console.log('studio expansion contract: 43 studios, 5 portfolios ready');
+console.log('studio expansion contract: 51 studios, 5 portfolios ready');

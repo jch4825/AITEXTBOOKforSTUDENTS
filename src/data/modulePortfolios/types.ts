@@ -8,6 +8,12 @@ export interface ModulePortfolioDefinition {
   kicker: string;
   title: string;
   description: string;
+  storyHeading?: string;
+  artifactHeading?: string;
+  artifactDescription?: string;
+  guideHeading?: string;
+  printLabel?: string;
+  completionRequirement?: string;
   studioLessonIds: readonly LessonId[];
   nextChoices: StudioChoice[];
   artifactChoices?: {

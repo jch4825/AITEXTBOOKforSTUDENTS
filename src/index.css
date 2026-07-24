@@ -454,7 +454,9 @@
     width: 100%;
     min-width: 0;
     justify-content: center;
-    padding-inline: .8rem;
+    gap: .3rem;
+    padding-inline: .5rem;
+    font-size: 1rem;
   }
   .comic-footer-previous { grid-area: previous; }
   .comic-cut-progress {

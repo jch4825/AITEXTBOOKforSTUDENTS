@@ -67,6 +67,53 @@ const MODULES = {
     ],
     preparedCount: 10,
   },
+  M5: {
+    studioFile: 'src/data/studios/m5.ts',
+    studioSymbol: 'M5_STUDIOS',
+    studioIds: [
+      'm5-problem-definition-map',
+      'm5-task-decomposition-board',
+      'm5-reasoned-sequence',
+      'm5-priority-criteria',
+      'm5-adjustable-help',
+      'm5-safe-clarification',
+      'm5-step-checkpoints',
+      'm5-goal-result-verification',
+      'm5-alternative-comparison',
+      'm5-error-retest',
+      'm5-condition-change-plan',
+    ],
+    lessonIds: [
+      'm5-l1',
+      'm5-l2',
+      'm5-l3',
+      'm5-l4',
+      'm5-l5',
+      'm5-l6',
+      'm5-l7',
+      'm5-l8',
+      'm5-l9',
+      'm5-l10',
+      'm5-l11',
+    ],
+    portfolioFile: 'src/data/modulePortfolios/m5.ts',
+    portfolioSymbol: 'M5_PORTFOLIO',
+    portfolioLessonId: 'm5-l12',
+    artifactTitles: [
+      '현재-목표-정보-행동 문제 정의 카드',
+      '과제 분해 보드',
+      '이유 연결선이 있는 절차표',
+      '우선순위 판단표',
+      '첫 시도-힌트-수정 결과 기록',
+      '요청 수정과 외부 확인 기록',
+      '체크포인트가 있는 단계별 대화',
+      '목표-결과 검토표',
+      '대안 비교표',
+      '오류 전후 테스트 기록',
+      '처음 계획-바뀐 계획-수정 이유',
+    ],
+    preparedCount: 11,
+  },
   M6: {
     studioFile: 'src/data/studios/m6.ts',
     studioSymbol: 'M6_STUDIOS',
@@ -134,6 +181,16 @@ function checkModule(label, config) {
     }
     requireToken(studio, '믿을 만한 어른', 'M4 trusted-adult safety wording missing');
   }
+  if (label === 'M5') {
+    if ((studio.match(/imageSrc: ''/g) ?? []).length !== 44) {
+      throw new Error('M5 must expose 44 pending story image slots');
+    }
+    if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m5-l')) {
+      throw new Error('M5 must not reuse retired lesson images');
+    }
+    requireToken(studio, '실제 조리가 아닌', 'M5 card-only food safety wording missing');
+    requireToken(studio, '독립 검증', 'M5 independent verification wording missing');
+  }
   if (label === 'M6') {
     requireToken(studio, '준비된 시뮬레이션', 'M6 transit simulation disclosure missing');
     requireToken(studio, '실시간 길 안내', 'M6 live-route disclaimer missing');
@@ -144,7 +201,7 @@ function checkModule(label, config) {
 
 const requested = process.argv[2]?.toUpperCase();
 if (requested && !MODULES[requested]) {
-  throw new Error(`unknown module ${requested}; use M3, M4, or M6`);
+  throw new Error(`unknown module ${requested}; use M3, M4, M5, or M6`);
 }
 
 const selected = requested ? [[requested, MODULES[requested]]] : Object.entries(MODULES);
@@ -157,17 +214,17 @@ if (!requested) {
   const portfolioCount = (portfolioIndex.match(/\[M\d_PORTFOLIO\.lessonId, M\d_PORTFOLIO\]/g) ?? []).length;
   const preparedCount = allStudioFiles.reduce((sum, source) => sum + (source.match(/source: 'prepared'/g) ?? []).length, 0);
 
-  if (studioCount !== 46) throw new Error(`module 4 remodel rollout needs 46 studios, got ${studioCount}`);
+  if (studioCount !== 54) throw new Error(`module 5 remodel rollout needs 54 studios, got ${studioCount}`);
   if (portfolioCount !== 6) throw new Error(`complete rollout needs 6 portfolios, got ${portfolioCount}`);
-  if (preparedCount !== 46) throw new Error(`module 4 remodel rollout needs 46 prepared AI contributions, got ${preparedCount}`);
+  if (preparedCount !== 54) throw new Error(`module 5 remodel rollout needs 54 prepared AI contributions, got ${preparedCount}`);
 
   const teacherCopy = [
     readRequired('src/features/teacher/TeacherHub.tsx'),
     readRequired('docs/teacher-guide/m3-m4-m6-studio-expansion.md'),
   ].join('\n');
-  for (const text of ['1~6단원', '46개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+  for (const text of ['1~6단원', '54개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
     requireToken(teacherCopy, text, 'complete teacher guidance missing');
   }
 
-  console.log('module 4 remodel rollout: 46 studios, 6 portfolios ready');
+  console.log('module 5 remodel rollout: 54 studios, 6 portfolios ready');
 }

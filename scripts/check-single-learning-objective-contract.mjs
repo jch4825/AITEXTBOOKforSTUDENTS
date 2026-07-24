@@ -132,7 +132,22 @@ const M4_OBJECTIVES = new Map([
   ['m4-l11', '오늘은 확인할 때·보내기 전·위험할 때의 행동과 도움 요청 문장을 안전 여권에 완성해 봐요.'],
 ]);
 
-for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES, ...M3_OBJECTIVES, ...M4_OBJECTIVES]) {
+const M5_OBJECTIVES = new Map([
+  ['m5-l1', '오늘은 현재 상황과 원하는 모습을 비교하고 문제·모르는 정보·도움을 나누어 적어 봐요.'],
+  ['m5-l2', '오늘은 큰 일에 필요한 작은 과제를 만들고 빠진 과제와 불필요한 과제를 찾아봐요.'],
+  ['m5-l3', '오늘은 어떤 단계가 먼저 필요한지 살펴보고 이유가 있는 순서를 만들어 봐요.'],
+  ['m5-l4', '오늘은 안전·마감·필요·도움 가능성을 보고 먼저 할 일을 정해 봐요.'],
+  ['m5-l5', '오늘은 먼저 내 방법을 시도하고 필요한 힌트의 정도를 골라 답을 고쳐 봐요.'],
+  ['m5-l6', '오늘은 AI가 추정한 내용과 내가 준 정보를 비교하고 개인정보 없이 필요한 단서를 더해 다시 요청해 봐요.'],
+  ['m5-l7', '오늘은 한 단계를 부탁하고 끝났는지 확인한 뒤 다음 단계로 넘어가 봐요.'],
+  ['m5-l8', '오늘은 처음 원한 조건과 결과를 나란히 보고 독립된 방법으로 확인해 봐요.'],
+  ['m5-l9', '오늘은 가능한 방법을 두 가지 이상 만들고 시간·안전·비용·도움 필요를 비교해 골라봐요.'],
+  ['m5-l10', '오늘은 잘못된 순서·요청·결과에서 오류를 찾아 고치고 다시 시험해 봐요.'],
+  ['m5-l11', '오늘은 준비물·도구·시간·안전 조건이 바뀌었을 때 처음 계획을 멈추고 안전한 새 계획으로 고쳐 봐요.'],
+  ['m5-l12', '오늘은 새 생활 문제 하나를 골라 현재·목표·작은 과제·순서·대안·확인을 한 장에 완성해 봐요.'],
+]);
+
+for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES, ...M3_OBJECTIVES, ...M4_OBJECTIVES, ...M5_OBJECTIVES]) {
   EXPECTED_OBJECTIVES.set(lessonId, objective);
 }
 
@@ -171,7 +186,7 @@ if (objectiveByLesson.size !== 68) {
 
 for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
   const actual = objectiveByLesson.get(lessonId);
-  const formalExpected = ['m1-', 'm2-', 'm3-', 'm4-'].some((prefix) => lessonId.startsWith(prefix)) ? expected : expected
+  const formalExpected = ['m1-', 'm2-', 'm3-', 'm4-', 'm5-'].some((prefix) => lessonId.startsWith(prefix)) ? expected : expected
     .replaceAll('해 봐요', '해 보십시오')
     .replaceAll('봐요', '봅니다')
     .replaceAll('해요', '합니다')

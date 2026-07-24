@@ -56,6 +56,7 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
   if (studioDefinition) {
     return (
       <StudioLessonView
+        key={lessonId}
         definition={studioDefinition}
         lesson={lesson}
         hard={getHardContent(lesson.id)}
@@ -68,6 +69,7 @@ export default function LessonView({ lessonId, onGoHome, onPickLesson }: Props) 
   if (portfolioDefinition) {
     return (
       <ModuleCloseLessonView
+        key={lessonId}
         definition={portfolioDefinition}
         onGoHome={onGoHome}
         onPickLesson={onPickLesson}

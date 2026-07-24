@@ -13,6 +13,7 @@ import { useStudioSession } from './useStudioSession';
 import type { StudioDefinition } from './types';
 
 interface Props {
+  key?: string;
   definition: StudioDefinition;
   lesson: LessonContent;
   hard?: HardLessonContent;

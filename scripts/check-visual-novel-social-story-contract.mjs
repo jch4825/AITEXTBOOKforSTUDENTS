@@ -5,7 +5,7 @@ const CORE_EXPERIENCES = {
   m2: ['m2-l1', 'm2-l2', 'm2-l3', 'm2-l4', 'm2-l5', 'm2-l6', 'm2-l7', 'm2-l8', 'm2-l9', 'm2-l10'],
   m3: ['m3-l1', 'm3-l2', 'm3-l3', 'm3-l4', 'm3-l5', 'm3-l6', 'm3-l7', 'm3-l8', 'm3-l9', 'm3-l10'],
   m4: ['m4-l1', 'm4-l2', 'm4-l3', 'm4-l4', 'm4-l5', 'm4-l6', 'm4-l7', 'm4-l8', 'm4-l9', 'm4-l10'],
-  m5: ['m5-l1', 'm5-l6', 'm5-l11'],
+  m5: ['m5-l1', 'm5-l2', 'm5-l3', 'm5-l4', 'm5-l5', 'm5-l6', 'm5-l7', 'm5-l8', 'm5-l9', 'm5-l10', 'm5-l11'],
   m6: ['m6-l1', 'm6-l4', 'm6-l11'],
 };
 
@@ -57,7 +57,7 @@ for (const moduleId of selectedModules) {
   const { studioSource, combinedSource } = readStorySource(moduleId);
 
   for (const lessonId of CORE_EXPERIENCES[moduleId]) {
-    if (moduleId === 'm1' || moduleId === 'm2' || moduleId === 'm3' || moduleId === 'm4') {
+    if (moduleId === 'm1' || moduleId === 'm2' || moduleId === 'm3' || moduleId === 'm4' || moduleId === 'm5') {
       const lessonStart = studioSource.indexOf(`lessonId: '${lessonId}'`);
       const nextLessonStart = studioSource.indexOf(`lessonId: '${moduleId}-`, lessonStart + 1);
       const storyWindow = studioSource.slice(
