@@ -100,17 +100,17 @@ if (!requested) {
   const portfolioCount = (portfolioIndex.match(/\[M\d_PORTFOLIO\.lessonId, M\d_PORTFOLIO\]/g) ?? []).length;
   const preparedCount = allStudioFiles.reduce((sum, source) => sum + (source.match(/source: 'prepared'/g) ?? []).length, 0);
 
-  if (studioCount !== 25) throw new Error(`module 1 remodel rollout needs 25 studios, got ${studioCount}`);
+  if (studioCount !== 32) throw new Error(`module 2 remodel rollout needs 32 studios, got ${studioCount}`);
   if (portfolioCount !== 6) throw new Error(`complete rollout needs 6 portfolios, got ${portfolioCount}`);
-  if (preparedCount !== 25) throw new Error(`module 1 remodel rollout needs 25 prepared AI contributions, got ${preparedCount}`);
+  if (preparedCount !== 32) throw new Error(`module 2 remodel rollout needs 32 prepared AI contributions, got ${preparedCount}`);
 
   const teacherCopy = [
     readRequired('src/features/teacher/TeacherHub.tsx'),
     readRequired('docs/teacher-guide/m3-m4-m6-studio-expansion.md'),
   ].join('\n');
-  for (const text of ['1~6단원', '25개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+  for (const text of ['1~6단원', '32개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
     requireToken(teacherCopy, text, 'complete teacher guidance missing');
   }
 
-  console.log('module 1 remodel rollout: 25 studios, 6 portfolios ready');
+  console.log('module 2 remodel rollout: 32 studios, 6 portfolios ready');
 }

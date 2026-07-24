@@ -90,7 +90,21 @@ const M1_OBJECTIVES = new Map([
   ['m1-l11', '오늘은 새 AI 상황에서 입력·결과·확인할 점을 찾아 나만의 AI 사용 설명서를 완성해 봐요.'],
 ]);
 
-for (const [lessonId, objective] of M1_OBJECTIVES) {
+const M2_OBJECTIVES = new Map([
+  ['m2-l1', '오늘은 AI가 다르게 알아들은 요청에서 빠진 정보를 찾아 안전하게 더해 봐요.'],
+  ['m2-l2', '오늘은 여러 부탁이 섞인 문장을 목적별로 나누어 두 번에 걸쳐 요청해 봐요.'],
+  ['m2-l3', '오늘은 `그거`, `아무거나` 대신 이름·종류·개수를 넣고 결과가 달라지는지 비교해 봐요.'],
+  ['m2-l4', '오늘은 원하는 답의 예시를 하나 만들고 예시 전후 결과를 비교해 봐요.'],
+  ['m2-l5', '오늘은 답을 볼 사람과 원하는 말투를 넣고 내용의 정확성은 따로 확인해 봐요.'],
+  ['m2-l6', '오늘은 큰 요청을 작은 단계로 나누고 앞 단계 결과를 다음 요청에 이어 써 봐요.'],
+  ['m2-l7', '오늘은 첫 답에서 부족한 점을 찾아 중요한 사실을 지키며 다시 요청해 봐요.'],
+  ['m2-l8', '오늘은 할 일에 맞는 표·번호 목록·한 문장 형식을 고르고 결과가 형식을 지켰는지 확인해 봐요.'],
+  ['m2-l9', '오늘은 AI 답의 주장 하나를 골라 학교 공지나 믿을 수 있는 자료와 비교해 봐요.'],
+  ['m2-l10', '오늘은 내가 정한 목적의 요청을 보내고, 결과를 고쳐 묻고, 근거를 확인해 최종 사용을 결정해 봐요.'],
+  ['m2-l11', '오늘은 실제 목적 하나를 정하고 요청·수정·확인·최종 판단이 담긴 프롬프트 노트를 완성해 봐요.'],
+]);
+
+for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES]) {
   EXPECTED_OBJECTIVES.set(lessonId, objective);
 }
 
@@ -129,7 +143,7 @@ if (objectiveByLesson.size !== 68) {
 
 for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
   const actual = objectiveByLesson.get(lessonId);
-  const formalExpected = lessonId.startsWith('m1-') ? expected : expected
+  const formalExpected = lessonId.startsWith('m1-') || lessonId.startsWith('m2-') ? expected : expected
     .replaceAll('해 봐요', '해 보십시오')
     .replaceAll('봐요', '봅니다')
     .replaceAll('해요', '합니다')

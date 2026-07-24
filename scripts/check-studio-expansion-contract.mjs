@@ -92,24 +92,46 @@ for (const token of ["lessonId: 'm1-l11'", "'m1-l1'", "'m1-l10'", '아이미 사
 const m2StudioPath = 'src/data/studios/m2.ts';
 if (!fs.existsSync(m2StudioPath)) throw new Error('M2 studio definitions are missing');
 const m2 = fs.readFileSync(m2StudioPath, 'utf8');
-for (const id of ['m2-misunderstood-request', 'm2-request-workshop', 'm2-repair-dialogue']) {
+for (const id of [
+  'm2-missing-information-lab',
+  'm2-one-purpose-at-a-time',
+  'm2-specific-target-lab',
+  'm2-example-comparison-lab',
+  'm2-audience-tone-studio',
+  'm2-stepwise-request-workshop',
+  'm2-revision-criteria-lab',
+  'm2-output-format-studio',
+  'm2-independent-verification-lab',
+  'm2-complete-dialogue-studio',
+]) {
   if (!m2.includes(`id: '${id}'`)) throw new Error(`M2 studio missing: ${id}`);
 }
-for (const lessonId of ['m2-l1', 'm2-l6', 'm2-l10']) {
+for (const lessonId of Array.from({ length: 10 }, (_, index) => `m2-l${index + 1}`)) {
   if (!m2.includes(`lessonId: '${lessonId}'`)) throw new Error(`M2 lesson mapping missing: ${lessonId}`);
 }
-if ((m2.match(/source: 'prepared'/g) ?? []).length !== 3) throw new Error('M2 AI source must be prepared');
-for (const artifact of ['요청 고치기 카드', '나의 요청 제작 레시피', '고쳐 묻기 대화 기록']) {
+if ((m2.match(/source: 'prepared'/g) ?? []).length !== 10) throw new Error('M2 AI source must be prepared');
+for (const artifact of [
+  '요청 수정 카드',
+  '분할 요청 대화선',
+  '전후 요청-결과 체크표',
+  '나의 좋은 예시 카드',
+  '대상별 안내문 2종',
+  '단계별 요청 제작 기록',
+  '수정 전후 차이와 수정 기준표',
+  '형식 규칙 체크 결과물',
+  '주장-근거 확인표',
+  '전체 대화·검증 기록',
+]) {
   if (!m2.includes(artifact)) throw new Error(`M2 artifact missing: ${artifact}`);
 }
-for (const disclosure of ['준비된 AI 예시', '안전한 연습 응답']) {
+for (const disclosure of ['준비된 AI 예시', '실제 AI 연결이 아닌']) {
   if (!m2.includes(disclosure)) throw new Error(`prepared AI disclosure missing: ${disclosure}`);
 }
 
 const m2PortfolioPath = 'src/data/modulePortfolios/m2.ts';
 if (!fs.existsSync(m2PortfolioPath)) throw new Error(`M2 learning connection missing: ${m2PortfolioPath}`);
 const m2Portfolio = fs.readFileSync(m2PortfolioPath, 'utf8');
-for (const token of ["lessonId: 'm2-l11'", "'m2-l1', 'm2-l6', 'm2-l10'", '2단원 성장 포트폴리오']) {
+for (const token of ["lessonId: 'm2-l11'", "'m2-l1'", "'m2-l10'", '나의 프롬프트 노트']) {
   if (!m2Portfolio.includes(token)) throw new Error(`M2 portfolio missing: ${token}`);
 }
 
@@ -117,12 +139,12 @@ const expansionGuidePath = 'docs/teacher-guide/m1-m2-studio-expansion.md';
 if (!fs.existsSync(expansionGuidePath)) throw new Error('M1/M2 teacher expansion guide is missing');
 const teacherHub = fs.readFileSync('src/features/teacher/TeacherHub.tsx', 'utf8');
 const expansionGuide = fs.readFileSync(expansionGuidePath, 'utf8');
-for (const text of ['1단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+for (const text of ['1·2단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
   if (!teacherHub.includes(text) && !expansionGuide.includes(text)) {
     throw new Error(`teacher expansion guidance missing: ${text}`);
   }
 }
-for (const title of ['아이미와 처음 만난 날', 'AI의 눈 실험실', 'AI 결과를 사용할까?', '요청 공동 제작소', 'AI 고쳐 묻기 실험실']) {
+for (const title of ['아이미와 처음 만난 날', 'AI의 눈 실험실', 'AI 결과를 사용할까?', '요청 공동 제작소', '한 번의 진짜 대화 완성하기']) {
   if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
 }
 
@@ -132,7 +154,7 @@ for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M5_STUDIOS']) {
 }
 for (const [source, expected, label] of [
   [m1, 10, 'M1'],
-  [m2, 3, 'M2'],
+  [m2, 10, 'M2'],
   [fs.readFileSync('src/data/studios/m5.ts', 'utf8'), 3, 'M5'],
 ]) {
   const count = (source.match(/lessonId: 'm\d-l\d+'/g) ?? []).length;
@@ -143,4 +165,4 @@ for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M5_PORTFOLIO']) {
   if (!portfolioIndex.includes(portfolio)) throw new Error(`ready portfolio missing: ${portfolio}`);
 }
 
-console.log('studio expansion contract: 16 studios, 3 portfolios ready');
+console.log('studio expansion contract: 23 studios, 3 portfolios ready');
