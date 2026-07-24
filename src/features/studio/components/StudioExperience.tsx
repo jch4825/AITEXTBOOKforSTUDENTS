@@ -104,7 +104,7 @@ export default function StudioExperience({
       <div className="space-y-5">
         <div>
           <p className="studio-kicker" style={{ color: secondary }}>
-            {state.stage === 'transfer' ? '새 상황에 적용하기' : '생활 장면'}
+            {state.stage === 'transfer' ? '새 상황에 적용하기' : '생활 속 이야기'}
           </p>
           <div className="flex items-center justify-between gap-3">
             <h2 className="mt-1 text-xl font-extrabold" style={{ color: 'var(--brand-ink)' }}>
@@ -247,7 +247,7 @@ export default function StudioExperience({
       <div className="space-y-5 p-5 md:p-7">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="studio-kicker" style={{ color: accent }}>AI의 다른 관점</p>
+            <p className="studio-kicker" style={{ color: accent }}>AI의 제안과 비교하기</p>
             <h2 className="mt-1 text-xl font-extrabold">{definition.aiContribution.role}</h2>
           </div>
           <button

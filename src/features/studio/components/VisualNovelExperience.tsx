@@ -53,7 +53,7 @@ export default function VisualNovelExperience({
   }
 
   const left = (
-    <section className="visual-novel-story-page" aria-label="생활 장면 이야기">
+    <section className="visual-novel-story-page" aria-label="생활 속 이야기">
       <div className="visual-novel-page-heading">
         <h2>{story.title}</h2>
       </div>

@@ -171,7 +171,7 @@ if (!fs.existsSync(visualNovelPath)) throw new Error('VisualNovelExperience is m
 const visualNovel = fs.readFileSync(visualNovelPath, 'utf8');
 const experience = fs.readFileSync('src/features/studio/components/StudioExperience.tsx', 'utf8');
 for (const token of [
-  'aria-label="생활 장면 이야기"',
+  'aria-label="생활 속 이야기"',
   'className="visual-novel-image-frame"',
   '학습목표',
   '오늘 배울 개념',
@@ -202,7 +202,7 @@ if (visualNovel.includes('useEffect')) throw new Error('visual novel must not au
 if (!experience.includes('<VisualNovelExperience')) throw new Error('studio encounter does not render visual novel');
 
 const editorialFrame = fs.readFileSync('src/features/studio/components/EditorialStudioFrame.tsx', 'utf8');
-if (!editorialFrame.includes('이야기로 경험하기') || editorialFrame.includes('핵심 경험 스튜디오')) {
+if (!editorialFrame.includes('생생한 이야기로 만나기') || editorialFrame.includes('핵심 경험 스튜디오')) {
   throw new Error('studio badge must describe the student experience, not the implementation format');
 }
 

@@ -45,13 +45,13 @@ export const M1_PORTFOLIO: ModulePortfolioDefinition = {
   artifactChoices: [
     { lessonId: 'm1-l1', label: '아이미와 처음 만난 날', artifact: 'AI 정의 카드' },
     { lessonId: 'm1-l2', label: '기계와 AI는 어떻게 다를까?', artifact: '기능 분석 지도' },
-    { lessonId: 'm1-l3', label: 'AI는 어떻게 답을 만들까?', artifact: 'AI 답 검토 표시지' },
+    { lessonId: 'm1-l3', label: 'AI는 어떻게 답을 만들까?', artifact: 'AI 답 검토 기록표' },
     { lessonId: 'm1-l4', label: 'AI의 눈 실험실', artifact: '이미지 인식 실험 기록' },
     { lessonId: 'm1-l5', label: 'AI의 귀는 어떻게 들을까?', artifact: '나에게 편한 입력 방법 카드' },
     { lessonId: 'm1-l6', label: 'AI는 자료로 배워요', artifact: '학습 자료 전후 결과표' },
-    { lessonId: 'm1-l7', label: 'AI가 빠르게 도와주는 일', artifact: '요약·번역 검토지' },
+    { lessonId: 'm1-l7', label: 'AI가 빠르게 도와주는 일', artifact: '요약·번역 검토 기록표' },
     { lessonId: 'm1-l8', label: 'AI에게 맡기기 어려운 일', artifact: '도움 경계 지도' },
-    { lessonId: 'm1-l9', label: '일에 맞는 AI 도구 고르기', artifact: '도구 선택 설계서' },
+    { lessonId: 'm1-l9', label: '일에 맞는 AI 도구 고르기', artifact: '도구 선택 계획서' },
     { lessonId: 'm1-l10', label: 'AI 결과를 사용할까?', artifact: 'AI 결과 사용 판단 기록' },
   ],
   guideSections: [

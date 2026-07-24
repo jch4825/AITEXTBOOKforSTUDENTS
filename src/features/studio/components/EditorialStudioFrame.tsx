@@ -15,7 +15,7 @@ export const STAGE_LABELS: Record<StudioStage, string> = {
   encounter: '상황 만나기',
   'first-attempt': '첫 생각',
   'condition-change': '조건이 달라졌습니다',
-  'ai-compare': 'AI의 다른 관점',
+  'ai-compare': 'AI의 제안과 비교하기',
   decision: '내가 판단하기',
   artifact: '생각을 결과물로',
   transfer: '다른 상황에 적용하기',
@@ -47,7 +47,7 @@ export default function EditorialStudioFrame({
           className="rounded-full px-3 py-1 text-sm font-bold"
           style={{ color: accent, background: 'var(--editorial-quiet)' }}
         >
-          이야기로 경험하기
+          생생한 이야기로 만나기
         </span>
       </header>
 

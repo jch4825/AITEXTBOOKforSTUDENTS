@@ -135,7 +135,7 @@ export const M1_LESSONS: LessonContent[] = [
       {
         kind: 'mission',
         data: {
-          title: 'AI 답 확인 표시지',
+          title: 'AI 답 확인 기록표',
           intro: 'AI가 만든 동아리 소개와 학교 공지를 나란히 확인해 봐요.',
           chapters: [
             {
@@ -179,7 +179,7 @@ export const M1_LESSONS: LessonContent[] = [
                 {
                   kind: 'summary',
                   id: 'm1_l3_artifact',
-                  title: '그대로 쓸 부분·확인할 부분 표시지',
+                  title: '그대로 쓸 부분·확인할 부분 기록표',
                   rows: [
                     { label: '문장 분류', from: 'm1_l3_claim_check' },
                     { label: '내가 고른 확인 방법', from: 'm1_l3_check_method' },
@@ -571,7 +571,7 @@ export const M1_LESSONS: LessonContent[] = [
       {
         kind: 'mission',
         data: {
-          title: '도구 선택 설계서',
+          title: '도구 선택 계획서',
           intro: '체험회 작업 하나를 골라 입력, 결과, 확인 방법을 설계해요.',
           chapters: [
             {
@@ -606,13 +606,13 @@ export const M1_LESSONS: LessonContent[] = [
               ],
             },
             {
-              title: '2장 설계서 완성',
+              title: '2장 계획서 완성',
               goal: '내가 고른 작업과 확인 조건을 한 장에 남겨요.',
               blocks: [
                 {
                   kind: 'summary',
                   id: 'm1_l9_artifact',
-                  title: '도구 선택 설계서',
+                  title: '도구 선택 계획서',
                   rows: [
                     { label: '내 작업 목적', from: 'm1_l9_task' },
                     { label: '입력·결과·확인 조건', from: 'm1_l9_conditions' },

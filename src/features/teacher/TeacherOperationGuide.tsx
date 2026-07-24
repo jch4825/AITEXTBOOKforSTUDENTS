@@ -35,7 +35,7 @@ export default function TeacherOperationGuide() {
         <section>
           <h3 className="text-lg font-extrabold">핵심 경험 차시의 기록 순서</h3>
           <ol className="mt-2 list-decimal space-y-1 pl-5">
-            <li>생활 장면에서 중요한 정보를 찾습니다.</li>
+            <li>생활 속 이야기에서 중요한 정보를 찾습니다.</li>
             <li>말·글·그림·AAC·선택으로 첫 생각을 표현합니다.</li>
             <li>시간·장소·사람·도구 중 바뀐 조건을 확인합니다.</li>
             <li>준비된 AI 예시의 다른 방법이나 확인 질문과 비교합니다.</li>

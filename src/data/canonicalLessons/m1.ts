@@ -279,7 +279,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     ],
     artifact: {
       id: 'm1-l3-artifact',
-      title: '검토 표시지',
+      title: '검토 기록표',
       portfolioLabel: '그대로 쓸 부분 / 확인할 부분 구분표',
       fields: [
         { id: 'checkItem', label: 'AI 답에서 사람이 꼭 확인해야 할 정보', input: 'text', required: true },
@@ -827,7 +827,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     ],
     artifact: {
       id: 'm1-l9-artifact',
-      title: '도구 선택 설계서',
+      title: '도구 선택 계획서',
       portfolioLabel: '목적별 AI 도구 조합 설계표',
       fields: [
         { id: 'toolCombination', label: '내 과제에 알맞게 선택한 AI 도구 조합', input: 'text', required: true },

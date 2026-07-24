@@ -66,7 +66,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'my-definition',
-          label: '장면 4 · 나의 소개',
+          label: '장면 4 · 나의 생각 소개',
           imageSrc: '',
           alt: '진우가 자신이 만든 AI 정의 카드를 발표하는 장면',
           knowledgeStep: 2,
@@ -354,7 +354,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'review-sheet',
-          label: '장면 4 · 확인 표시지',
+          label: '장면 4 · 확인 기록표',
           imageSrc: '',
           alt: '윤아가 그대로 쓸 부분과 확인할 부분과 수정 문장을 정리한 장면',
           knowledgeStep: 2,
@@ -434,7 +434,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     },
     artifact: {
       kind: 'repair-card',
-      title: 'AI 답 검토 표시지',
+      title: 'AI 답 검토 기록표',
       prompt: '주장, 확인한 자료, 그대로 쓸 부분, 수정할 문장을 한 장에 정리해 봐요.',
     },
     transfer: {
@@ -1220,7 +1220,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'tool-workflow-plan',
-          label: '장면 4 · 도구와 사람의 역할 설계',
+          label: '장면 4 · 도구와 사람의 역할 나누기',
           imageSrc: '',
           alt: '각 과제에 알맞은 도구와 사람의 확인 단계를 연결한 작업 흐름',
           knowledgeStep: 2,
@@ -1300,7 +1300,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     },
     artifact: {
       kind: 'workflow-plan',
-      title: '도구 선택 설계서',
+      title: '도구 선택 계획서',
       prompt: '과제 목적, 입력, 필요한 결과, 도구 선택, 확인 근거, 사람의 역할을 연결해 봐요.',
     },
     transfer: {

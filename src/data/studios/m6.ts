@@ -1394,7 +1394,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '흥미와 강점 카드를 하나씩 골라요.',
             light: '도움이 필요해도 직업 탐색을 계속할 수 있어요.',
-            challenge: '개인 특성과 환경 지원을 함께 고려하는 사람-환경 적합 관점을 적용합니다.',
+            challenge: '개인 특성과 환경 지원을 함께 고려하여 사람과 환경에 알맞은 시각을 적용합니다.',
           },
         },
       ],
