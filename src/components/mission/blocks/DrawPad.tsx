@@ -30,7 +30,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   const lastPointRef = useRef<{ x: number; y: number } | null>(null);
 
   const [color, setColor] = useState(COLORS[0].value); // 디폴트 흰색
-  const [width, setWidth] = useState(WIDTHS[0]);
+  const [width, setWidth] = useState(WIDTHS[1]); // 디폴트 굵게
   const [isEraser, setIsEraser] = useState(false);
 
   // Initialize and resize canvas
