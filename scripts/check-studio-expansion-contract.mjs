@@ -181,6 +181,52 @@ for (const token of ["lessonId: 'm3-l11'", "'m3-l1'", "'m3-l10'", '나의 공부
   if (!m3Portfolio.includes(token)) throw new Error(`M3 portfolio missing: ${token}`);
 }
 
+const m4StudioPath = 'src/data/studios/m4.ts';
+if (!fs.existsSync(m4StudioPath)) throw new Error('M4 studio definitions are missing');
+const m4 = fs.readFileSync(m4StudioPath, 'utf8');
+for (const id of [
+  'm4-confident-answer-audit',
+  'm4-source-trust-lab',
+  'm4-privacy-clue-redaction',
+  'm4-password-refusal-route',
+  'm4-photo-sharing-check',
+  'm4-uncomfortable-content-stop',
+  'm4-respectful-request-rewrite',
+  'm4-stop-time-plan',
+  'm4-risk-request-help-network',
+  'm4-sponsored-recommendation-audit',
+]) {
+  if (!m4.includes(`id: '${id}'`)) throw new Error(`M4 studio missing: ${id}`);
+}
+for (const lessonId of Array.from({ length: 10 }, (_, index) => `m4-l${index + 1}`)) {
+  if (!m4.includes(`lessonId: '${lessonId}'`)) throw new Error(`M4 lesson mapping missing: ${lessonId}`);
+}
+if ((m4.match(/source: 'prepared'/g) ?? []).length !== 10) throw new Error('M4 AI source must be prepared');
+for (const artifact of [
+  'AI 답 확인 기록',
+  '출처 비교 카드',
+  '가리기 전후 안전 요청',
+  '거절·도움 요청 대화 카드',
+  '사진 공유 전 확인 카드와 가린 이미지',
+  '도움 요청 문장과 안전 행동 순서',
+  '전후 요청과 바꾼 이유 카드',
+  '개인 사용·휴식 계획',
+  '도움 요청 표현과 개인 도움망',
+  '광고 단서 표시판과 구매 판단 카드',
+]) {
+  if (!m4.includes(artifact)) throw new Error(`M4 artifact missing: ${artifact}`);
+}
+if ((m4.match(/imageSrc: ''/g) ?? []).length !== 40 || m4.includes('/lessons/m4-l')) {
+  throw new Error('M4 visual stories must use 40 pending image slots');
+}
+
+const m4PortfolioPath = 'src/data/modulePortfolios/m4.ts';
+if (!fs.existsSync(m4PortfolioPath)) throw new Error(`M4 learning connection missing: ${m4PortfolioPath}`);
+const m4Portfolio = fs.readFileSync(m4PortfolioPath, 'utf8');
+for (const token of ["lessonId: 'm4-l11'", "'m4-l1'", "'m4-l10'", '나의 AI 안전 여권']) {
+  if (!m4Portfolio.includes(token)) throw new Error(`M4 portfolio missing: ${token}`);
+}
+
 const expansionGuidePath = 'docs/teacher-guide/m1-m2-studio-expansion.md';
 if (!fs.existsSync(expansionGuidePath)) throw new Error('M1/M2 teacher expansion guide is missing');
 const teacherHub = fs.readFileSync('src/features/teacher/TeacherHub.tsx', 'utf8');
@@ -188,7 +234,7 @@ const expansionGuide = [
   fs.readFileSync(expansionGuidePath, 'utf8'),
   fs.readFileSync('docs/teacher-guide/m3-m4-m6-studio-expansion.md', 'utf8'),
 ].join('\n');
-for (const text of ['1~3단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+for (const text of ['1~4단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
   if (!teacherHub.includes(text) && !expansionGuide.includes(text)) {
     throw new Error(`teacher expansion guidance missing: ${text}`);
   }
@@ -202,26 +248,30 @@ for (const title of [
   '궁금한 것을 깊게 묻기',
   '계산은 다른 도구로 확인하기',
   '오늘 배운 것을 내 말로 복습하기',
+  '자신 있는 AI 답도 확인하기',
+  '비밀번호와 인증 코드는 보내지 않기',
+  '추천 속 광고 단서 찾기',
 ]) {
   if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
 }
 
 const studioIndex = fs.readFileSync('src/data/studios/index.ts', 'utf8');
-for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M3_STUDIOS', '...M5_STUDIOS']) {
+for (const spread of ['...M1_STUDIOS', '...M2_STUDIOS', '...M3_STUDIOS', '...M4_STUDIOS', '...M5_STUDIOS']) {
   if (!studioIndex.includes(spread)) throw new Error(`ready studio group missing: ${spread}`);
 }
 for (const [source, expected, label] of [
   [m1, 10, 'M1'],
   [m2, 10, 'M2'],
   [m3, 10, 'M3'],
+  [m4, 10, 'M4'],
   [fs.readFileSync('src/data/studios/m5.ts', 'utf8'), 3, 'M5'],
 ]) {
   const count = (source.match(/lessonId: 'm\d-l\d+'/g) ?? []).length;
   if (count !== expected) throw new Error(`${label} ready studio count must be ${expected}, got ${count}`);
 }
 
-for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M3_PORTFOLIO', 'M5_PORTFOLIO']) {
+for (const portfolio of ['M1_PORTFOLIO', 'M2_PORTFOLIO', 'M3_PORTFOLIO', 'M4_PORTFOLIO', 'M5_PORTFOLIO']) {
   if (!portfolioIndex.includes(portfolio)) throw new Error(`ready portfolio missing: ${portfolio}`);
 }
 
-console.log('studio expansion contract: 33 studios, 4 portfolios ready');
+console.log('studio expansion contract: 43 studios, 5 portfolios ready');

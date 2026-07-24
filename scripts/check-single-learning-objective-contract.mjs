@@ -118,7 +118,21 @@ const M3_OBJECTIVES = new Map([
   ['m3-l11', '오늘은 공부할 때 AI에게 맡길 일과 내가 직접 할 일을 정해 나의 공부 도구함을 완성해 봐요.'],
 ]);
 
-for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES, ...M3_OBJECTIVES]) {
+const M4_OBJECTIVES = new Map([
+  ['m4-l1', '오늘은 AI 답의 날짜와 근거를 공식 자료와 비교하고 잘못된 부분을 고쳐 봐요.'],
+  ['m4-l2', '오늘은 같은 내용을 말하는 여러 자료의 출처와 날짜를 보고 더 믿을 만한 자료를 골라봐요.'],
+  ['m4-l3', '오늘은 채팅 초안에서 나를 알아볼 수 있는 정보를 찾아 가리고 안전한 요청으로 고쳐 봐요.'],
+  ['m4-l4', '오늘은 비밀번호·인증 코드 요구를 알아보고 거절한 뒤 믿을 만한 어른과 공식 절차를 확인해 봐요.'],
+  ['m4-l5', '오늘은 사진 속 얼굴·이름·위치·다른 사람을 찾아 그대로 보내기·가리기·보내지 않기를 판단해 봐요.'],
+  ['m4-l6', '오늘은 불편한 내용의 위험 신호를 보고 화면에서 거리를 둔 뒤 믿을 만한 사람에게 알려 봐요.'],
+  ['m4-l7', '오늘은 같은 요청을 거친 말과 분명하고 존중하는 말로 비교하고 사람에게도 쓸 표현을 골라봐요.'],
+  ['m4-l8', '오늘은 나의 사용 기록을 보고 쉬는 신호와 멈출 계획을 정해 봐요.'],
+  ['m4-l9', '오늘은 사진·암호·선물·만남을 요구하는 위험 신호를 보고 누구에게 어떤 말로 알릴지 연습해 봐요.'],
+  ['m4-l10', '오늘은 추천처럼 보이는 게시물에서 광고 표시·구매 링크·과장·빠진 정보를 찾아봐요.'],
+  ['m4-l11', '오늘은 확인할 때·보내기 전·위험할 때의 행동과 도움 요청 문장을 안전 여권에 완성해 봐요.'],
+]);
+
+for (const [lessonId, objective] of [...M1_OBJECTIVES, ...M2_OBJECTIVES, ...M3_OBJECTIVES, ...M4_OBJECTIVES]) {
   EXPECTED_OBJECTIVES.set(lessonId, objective);
 }
 
@@ -157,7 +171,7 @@ if (objectiveByLesson.size !== 68) {
 
 for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
   const actual = objectiveByLesson.get(lessonId);
-  const formalExpected = ['m1-', 'm2-', 'm3-'].some((prefix) => lessonId.startsWith(prefix)) ? expected : expected
+  const formalExpected = ['m1-', 'm2-', 'm3-', 'm4-'].some((prefix) => lessonId.startsWith(prefix)) ? expected : expected
     .replaceAll('해 봐요', '해 보십시오')
     .replaceAll('봐요', '봅니다')
     .replaceAll('해요', '합니다')

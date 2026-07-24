@@ -37,13 +37,35 @@ const MODULES = {
   M4: {
     studioFile: 'src/data/studios/m4.ts',
     studioSymbol: 'M4_STUDIOS',
-    studioIds: ['m4-answer-verification', 'm4-photo-sharing-safety', 'm4-ad-clue-detective'],
-    lessonIds: ['m4-l1', 'm4-l5', 'm4-l10'],
+    studioIds: [
+      'm4-confident-answer-audit',
+      'm4-source-trust-lab',
+      'm4-privacy-clue-redaction',
+      'm4-password-refusal-route',
+      'm4-photo-sharing-check',
+      'm4-uncomfortable-content-stop',
+      'm4-respectful-request-rewrite',
+      'm4-stop-time-plan',
+      'm4-risk-request-help-network',
+      'm4-sponsored-recommendation-audit',
+    ],
+    lessonIds: ['m4-l1', 'm4-l2', 'm4-l3', 'm4-l4', 'm4-l5', 'm4-l6', 'm4-l7', 'm4-l8', 'm4-l9', 'm4-l10'],
     portfolioFile: 'src/data/modulePortfolios/m4.ts',
     portfolioSymbol: 'M4_PORTFOLIO',
     portfolioLessonId: 'm4-l11',
-    artifactTitles: ['AI 답 확인 기록', '사진 공유 전 확인 카드', '광고 단서 표시판'],
-    preparedCount: 3,
+    artifactTitles: [
+      'AI 답 확인 기록',
+      '출처 비교 카드',
+      '가리기 전후 안전 요청',
+      '거절·도움 요청 대화 카드',
+      '사진 공유 전 확인 카드와 가린 이미지',
+      '도움 요청 문장과 안전 행동 순서',
+      '전후 요청과 바꾼 이유 카드',
+      '개인 사용·휴식 계획',
+      '도움 요청 표현과 개인 도움망',
+      '광고 단서 표시판과 구매 판단 카드',
+    ],
+    preparedCount: 10,
   },
   M6: {
     studioFile: 'src/data/studios/m6.ts',
@@ -104,8 +126,12 @@ function checkModule(label, config) {
     }
   }
   if (label === 'M4') {
-    const imageCount = (studio.match(/kind: 'image'/g) ?? []).length;
-    if (imageCount < 2) throw new Error(`M4 needs 2 prepared image stimuli, got ${imageCount}`);
+    if ((studio.match(/imageSrc: ''/g) ?? []).length !== 40) {
+      throw new Error('M4 must expose 40 pending story image slots');
+    }
+    if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m4-l')) {
+      throw new Error('M4 must not reuse retired lesson images');
+    }
     requireToken(studio, '믿을 만한 어른', 'M4 trusted-adult safety wording missing');
   }
   if (label === 'M6') {
@@ -131,17 +157,17 @@ if (!requested) {
   const portfolioCount = (portfolioIndex.match(/\[M\d_PORTFOLIO\.lessonId, M\d_PORTFOLIO\]/g) ?? []).length;
   const preparedCount = allStudioFiles.reduce((sum, source) => sum + (source.match(/source: 'prepared'/g) ?? []).length, 0);
 
-  if (studioCount !== 39) throw new Error(`module 3 remodel rollout needs 39 studios, got ${studioCount}`);
+  if (studioCount !== 46) throw new Error(`module 4 remodel rollout needs 46 studios, got ${studioCount}`);
   if (portfolioCount !== 6) throw new Error(`complete rollout needs 6 portfolios, got ${portfolioCount}`);
-  if (preparedCount !== 39) throw new Error(`module 3 remodel rollout needs 39 prepared AI contributions, got ${preparedCount}`);
+  if (preparedCount !== 46) throw new Error(`module 4 remodel rollout needs 46 prepared AI contributions, got ${preparedCount}`);
 
   const teacherCopy = [
     readRequired('src/features/teacher/TeacherHub.tsx'),
     readRequired('docs/teacher-guide/m3-m4-m6-studio-expansion.md'),
   ].join('\n');
-  for (const text of ['1~6단원', '39개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+  for (const text of ['1~6단원', '46개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
     requireToken(teacherCopy, text, 'complete teacher guidance missing');
   }
 
-  console.log('module 3 remodel rollout: 39 studios, 6 portfolios ready');
+  console.log('module 4 remodel rollout: 46 studios, 6 portfolios ready');
 }

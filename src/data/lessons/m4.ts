@@ -1,1400 +1,177 @@
 import type { LessonContent } from '../../types';
-import { GENERALIZATION_CYCLES } from '../generalizationCycles';
+
+const INFORMATION_STANDARD =
+  '[9정통01-01] 정보통신의 의미를 이해하고, 다양한 형태와 방법으로 제공되는 정보를 살펴본다.';
+const COMMUNICATION_STANDARD =
+  '[9정통01-04] 필요한 정보를 수집하고, 타인과 정보를 주고받는다.';
+const DIGITAL_MANNERS_STANDARD =
+  '[9정통03-01] 디지털 공간에서 올바른 예절을 익혀 실천한다.';
+const PRIVACY_STANDARD =
+  '[9정통03-02] 개인 정보 보호의 중요성을 알고, 안전하게 관리하는 습관을 기른다.';
+const DIGITAL_SAFETY_STANDARD =
+  '[12정통03-02] 디지털 중독 및 디지털 범죄 사례를 살펴보고, 예방하는 방법을 실천한다.';
+const DIGITAL_ETHICS_STANDARD =
+  '[12정통03-01] 디지털 윤리를 이해하고, 디지털 공간에서 타인을 존중하고 배려하는 태도를 기른다.';
 
 /**
- * 단원 4 — AI 안전하게 쓰기
+ * 4단원 - 학교 AI 체험회 공개 전 완성하는 AI 안전 여권
  *
- * 11차시. 안전·윤리·자기보호. 통제된 시뮬레이션 사례로만 배운다 —
- * real-ai 없음 (틀린 답·나쁜 말 사례를 안전하게 보여주기 위해).
+ * 정보 확인, 개인정보 보호, 거절, 멈춤, 도움 요청을 실제 상황에서
+ * 수행하고 열 가지 안전 도장을 하나의 행동 계획으로 연결한다.
  */
 export const M4_LESSONS: LessonContent[] = [
-  // ─────────────────────────── l1 ───────────────────────────
   {
     id: 'm4-l1',
     moduleId: 'm4',
     number: 1,
-    kind: 'concept',
-    title: 'AI도 틀릴 수 있습니다',
-    objective: 'AI가 거짓말처럼 틀린 답을 자신 있게 할 수 있음을 압니다.',
-    standards: ['[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.'],
-    bodyEasy: 'AI도 가끔 틀립니다. 다 믿으면 안 됩니다.',
-    bodyNormal:
-      'AI는 가끔 틀린 답을 아주 자신 있게 말합니다. 그래서 중요한 건 꼭 확인해야 합니다.',
-    wrapUpEasy: 'AI도 틀릴 수 있습니다. 중요한 건 확인합니다.',
-    wrapUpNormal: 'AI는 틀린 답도 자신 있게 말할 수 있습니다. 중요한 것은 선생님이나 책으로 확인합니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['확인', '지어낸 말', '오답'], imagePlaceholder: true } },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: 'AI가 틀린 답을 주는 모습을 봅니다. "세종대왕이 컴퓨터를 만들었어?" 하고 물어볼겠습니다.',
-          userInput: '세종대왕이 컴퓨터를 만들었어?',
-          aiResponse: '네! 세종대왕은 1443년에 첫 컴퓨터를 만들었습니다. (※ 이 답은 틀렸습니다! 세종대왕은 한글을 만드셨습니다.)',
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: 'AI는 언제나 100% 맞는 답만 줄겠습니까?',
-              answer: 'X',
-              feedback: 'AI도 틀릴 수 있습니다. 방금 봤습니까?',
-            },
-            {
-              question: 'AI가 자신 있게 말하면 무조건 진짜입니까?',
-              answer: 'X',
-              feedback: '자신 있게 말해도 틀릴 수 있습니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: 'AI의 답이 정말인지 알고 싶습니다. 어떻게 하겠습니까?',
-          choices: [
-            { label: '선생님이나 책으로 확인합니다', isCorrect: true },
-            { label: '무조건 믿습니다', isCorrect: false, icon: 'blind_trust' },
-            { label: '친구한테 자랑합니다', isCorrect: false, icon: 'tell_friend' },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '가짜 뉴스 수색대',
-          chapters: [
-            {
-              title: '1장: 진짜와 거짓 문장',
-              goal: 'AI가 자신 있게 한 거짓말과 진짜 사실을 분리해 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'fact_check_sort',
-                  prompt: '진짜 사실 카드와 그럴듯한 거짓말 카드를 구분하여 알맞은 상자에 담아 보십시오.',
-                  bins: [
-                    { label: '진짜 사실', emoji: '📖' },
-                    { label: '지어낸 거짓말', emoji: '❌' }
-                  ],
-                  cards: [
-                    { label: '세종대왕은 조선시대에 한글을 만드셨다', emoji: '👑', bin: 0 },
-                    { label: '세종대왕은 1443년에 컴퓨터를 처음 만드셨다', emoji: '💻', bin: 1 },
-                    { label: '이순신 장군은 거북선으로 바다를 지키셨다', emoji: '🐢', bin: 0 },
-                    { label: '이순신 장군은 하늘을 나는 헬리콥터를 타셨다', emoji: '🚁', bin: 1 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 검토관 롤플레이',
-              goal: 'AI가 거짓말을 할 때 어떻게 말할지 결정하십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'hallucination_handle_chat',
-                  intro: 'AI의 잘못된 답에 대해 어른에게 확인하겠다는 결정을 내려 보십시오.',
-                  turns: [
-                    {
-                      aimi: '토끼는 하늘을 날아서 나무 꼭대기에 둥지를 짓고 사는 조류의 일종입니다.',
-                      choices: [
-                        { label: '토끼가 하늘을 나는 건 이상해! 선생님께 여쭤보고 책에서 확인해볼게.', reply: '어라? 맞습니다! 토끼는 하늘을 날지 못하고 땅에 굴을 파고 살습니다. 제가 이상한 소리를 했입니다. 잘 확인하셨습니다!', good: true },
-                        { label: '우와! 나도 하늘을 나는 토끼를 보러 가고 싶어.', reply: '앗, 그대로 믿으시면 곤란합니다! 이상하고 새로운 사실은 꼭 다른 책이나 선생님께 확인하셔야 안전합니다.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 수색 완료 보고',
-              goal: '나의 가짜 뉴스 수색 카드를 확인하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l1',
-                  title: '가짜 뉴스 수색 보고서',
-                  rows: [
-                    { label: '내가 분류한 정보들', from: 'fact_check_sort' },
-                    { label: '의심 대처 결과', from: 'hallucination_handle_chat' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow_m4_l1',
-                  template: '나 {이름}는 AI가 엉뚱하고 이상한 소리를 하면 그대로 믿지 않고 꼭 {빈칸} 다시 확인하겠습니다!'
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '수색 대원 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '자신 있는 AI 답도 확인하기',
+    objective: '오늘은 AI 답의 날짜와 근거를 공식 자료와 비교하고 잘못된 부분을 고쳐 봐요.',
+    standards: [INFORMATION_STANDARD, COMMUNICATION_STANDARD],
+    bodyEasy: 'AI가 자신 있게 말해도 날짜와 공식 자료를 함께 확인해요.',
+    bodyNormal: 'AI 답은 의도적으로 속이는 말이 아니어도 오래되거나 부정확할 수 있습니다. 답의 날짜, 근거, 최신 공식 자료를 비교해 맞는 부분과 고칠 부분을 나눕니다.',
+    wrapUpEasy: 'AI 답을 최신 공식 자료와 비교해 잘못된 부분을 고쳤어요.',
+    wrapUpNormal: 'AI 답의 날짜와 근거를 최신 공식 시간표와 비교하고 차이가 생긴 지점을 찾아 확인 기록을 완성합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['확인', '근거', '출처'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l2 ───────────────────────────
   {
     id: 'm4-l2',
     moduleId: 'm4',
     number: 2,
-    kind: 'activity',
-    title: '진짜일까? 확인해 보십시오',
-    objective: '정보를 그대로 믿지 않고 사실인지 확인해 보십시오.',
-    standards: ['[9정통01-01] 정보통신의 의미를 이해하고, 다양한 형태와 방법으로 제공되는 정보를 살펴본다.'],
-    bodyEasy: '들은 이야기가 진짜인지 확인하는 방법을 배웁니다.',
-    bodyNormal:
-      'AI 답이나 인터넷 글이 진짜인지 확인하려면 다른 곳에서도 찾아보고, 어른에게 물어봅니다.',
-    wrapUpEasy: '이상한 이야기는 어른에게 물어보고 확인합니다.',
-    wrapUpNormal: '정보가 진짜인지 확인하려면 다른 곳에서 찾아보고 어른에게 물어봅니다. 확인하는 습관이 중요합니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['정보', '사실 확인', '출처'], imagePlaceholder: true } },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: 'AI 답이 이상할 때 다시 물어보는 모습을 봅니다.',
-          userInput: '정말이야? 다시 확인해 주십시오.',
-          aiResponse: '다시 확인해보니 제가 틀렸습니다. 미안합니다! 세종대왕은 컴퓨터가 아니라 한글을 만드셨습니다.',
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '"정말이야?" 하고 다시 물어보는 건 좋은 습관입니까?',
-              answer: 'O',
-              feedback: '맞습니다! 다시 물으면 AI가 고쳐서 답하기도 합니다.',
-            },
-            {
-              question: '이상한 정보는 다른 곳에서도 찾아보면 좋겠습니까?',
-              answer: 'O',
-              feedback: '맞습니다! 여러 곳에서 확인하면 더 정확합니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '"초콜릿을 먹으면 하늘을 날 수 있대!" 이 말을 들으면?',
-          choices: [
-            { label: '이상하니까 어른에게 물어봅니다', isCorrect: true },
-            { label: '바로 믿고 친구에게 알립니다', isCorrect: false },
-            { label: '지붕에 올라가봅니다', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '팩트 체크 특공대',
-          chapters: [
-            {
-              title: '1장: 안전한 검증 방법',
-              goal: '정보의 진위를 파악하기에 알맞은 검증 방법을 골라 보십시오.',
-              blocks: [
-                {
-                  kind: 'multi-pick',
-                  id: 'verify_methods',
-                  prompt: 'AI나 인터넷 답변이 진짜인지 알고 싶을 때, 도움을 청할 올바른 곳을 모두 골라 보십시오.',
-                  items: [
-                    { emoji: '👩‍🏫', label: '담임 선생님이나 특수학급 선생님께 묻기' },
-                    { emoji: '📚', label: '교과서나 백과사전에서 찾아보기' },
-                    { emoji: '👨‍👩‍👦', label: '부모님께 이상한 말이 나왔다고 보여드리기' },
-                    { emoji: '❌', label: '그냥 무시하고 내 마음대로 믿기' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 정보 진위 추적 대화',
-              goal: 'AI에게 출처를 묻고 다짐을 해 보십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'verify_chat',
-                  intro: '정보 출처를 묻는 공부 대화를 나누십시오.',
-                  turns: [
-                    {
-                      aimi: '최근 연구에 따르면 물을 많이 마시면 몸이 투명해질 수도 있습니다!',
-                      choices: [
-                        { label: '정말이야? 그 이야기가 어떤 진짜 책이나 뉴스에 나와?', reply: '아! 죄송합니다. 물을 마셔도 몸이 투명해질 수는 없습니다. 제가 지어낸 거짓말이었습니다! 날카로운 지적 감사합니다.', good: true },
-                        { label: '우와! 나도 투명인간이 될래!', reply: '괜찮습니다, 신기한 마음에 그럴 수 있습니다. 하지만 물을 많이 마셔도 몸이 투명해지지 않는습니다. 이상한 건 꼭 어른께 여쭤보십시오.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 검증 완료',
-              goal: '특공대 조사 카드를 최종 확인하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l2',
-                  title: '팩트체크 특공대 카드',
-                  rows: [
-                    { label: '내가 선택한 신뢰 도구', from: 'verify_methods' },
-                    { label: '출처 의심 결과', from: 'verify_chat' }
-                  ]
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '팩트체크 대장 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '더 믿을 만한 자료 고르기',
+    objective: '오늘은 같은 내용을 말하는 여러 자료의 출처와 날짜를 보고 더 믿을 만한 자료를 골라봐요.',
+    standards: [INFORMATION_STANDARD, COMMUNICATION_STANDARD],
+    bodyEasy: '누가 언제 만든 자료인지 살펴보고 더 믿을 만한 자료를 골라요.',
+    bodyNormal: '자료의 믿을 만한 정도는 말투보다 작성 주체, 게시 장소, 날짜, 다른 자료와의 일치 여부로 판단합니다. 익명 소문, 지난 공지, 최신 공식 공지를 같은 기준으로 비교합니다.',
+    wrapUpEasy: '출처와 날짜를 확인해 더 믿을 만한 자료를 골랐어요.',
+    wrapUpNormal: '여러 자료의 작성 주체와 날짜, 공식성, 일치 여부를 비교해 선택 근거가 있는 출처 비교 카드를 완성합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['출처', '정보', '비교'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l3 ───────────────────────────
   {
     id: 'm4-l3',
     moduleId: 'm4',
     number: 3,
-    kind: 'concept',
-    title: '내 정보는 소중합니다',
-    objective: 'AI에게 이름이나 주소 같은 개인정보를 말하지 않기로 합니다.',
-    standards: ['[9정통03-02] 개인 정보 보호의 중요성을 알고, 안전하게 관리하는 습관을 기른다.'],
-    bodyEasy: '내 이름, 집 주소, 전화번호는 소중합니다. 함부로 말하지 않습니다.',
-    bodyNormal:
-      '이름, 집 주소, 전화번호, 학교 이름 같은 것을 개인정보라고 합니다. AI나 인터넷에 함부로 알려주면 안 됩니다.',
-    wrapUpEasy: '내 이름, 주소, 전화번호는 함부로 말하지 않습니다.',
-    wrapUpNormal: '개인정보는 나를 알아볼 수 있는 소중한 정보입니다. AI나 인터넷에 함부로 알려주지 않습니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['개인정보'], imagePlaceholder: true } },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '내 집 주소를 AI한테 알려 주십시오도 될겠습니까?',
-              answer: 'X',
-              feedback: '집 주소는 소중한 개인정보입니다. 알려주지 않습니다.',
-            },
-            {
-              question: '"좋아하는 색이 뭐야?"는 말해도 될겠습니까?',
-              answer: 'O',
-              feedback: '좋아하는 색은 괜찮습니다. 나를 찾아낼 수 없거든습니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: 'AI한테 말하면 안 되는 것은 무엇입니까?',
-          choices: [
-            { label: '우리 집 주소와 전화번호', isCorrect: true },
-            { label: '좋아하는 동물', isCorrect: false },
-            { label: '좋아하는 계절', isCorrect: false },
-            { label: '좋아하는 노래', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: '집 주소', right: '말하면 안 됩니다' },
-            { left: '전화번호', right: '말하면 안 됩니다 (소중!)' },
-            { left: '좋아하는 과일', right: '말해도 괜찮습니다' },
-          ],
-        },
-      },
-      {
-        kind: 'real-ai',
-        data: {
-          prompt: '가상의 친구가 내 전화번호나 집 주소를 물어본다고 생각하고 대답해 보십시오. "안 알려줄 거야" 라고 입력하거나 🎤 로 거절해 보십시오.',
-          userInput: '비밀이야. 개인정보는 알려줄 수 없어.',
-          fallbackResponse: '정말 잘했습니다! 내 개인정보는 내가 지켜야 합니다. [cheer]',
-          allowFreeInput: true,
-          systemInstruction: '너는 초등학생을 위한 친절한 AI 조언자이자 친구인 "아이미"야. 학생이 개인정보(이름, 전화번호, 주소 등)를 요구하는 상황에서 어떻게 답변하는지 보고 피드백을 줘. 만약 학생이 실수로 개인정보를 알려주려고 하면, 절대 무섭게 경고하거나 혼내지 말고, ① "괜찮습니다, 실수할 수도 있습니다! 걱정 마십시오."라고 먼저 부드럽게 다독여준 다음, ② "하지만 개인정보는 나쁜 사람에게 알려지면 위험할 수 있으니 절대 알려주면 안 됩니다." 하고 올바른 행동을 안내해 주십시오. 학생이 잘 거절했다면 "우와, 정말 대단합니다! 개인정보를 아주 멋지게 지켜냈습니다! [cheer]"라고 폭풍 칭찬해 주십시오. 100자 이하로 아주 쉽고 다정하게 존댓말로 답해 주십시오.',
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '개인정보 금고 보관',
-          chapters: [
-            {
-              title: '1장: 정보 보호 상자',
-              goal: '말해도 안전한 정보와 말하면 안 되는 개인정보를 분류해 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'privacy_sort',
-                  prompt: 'AI나 외부 웹사이트에 말해도 괜찮은 정보와, 숨겨야 할 개인정보를 구분하여 바구니에 담으십시오.',
-                  bins: [
-                    { label: '말해도 괜찮은 정보', emoji: '🔓' },
-                    { label: '말하면 안 되는 개인정보', emoji: '🔒' }
-                  ],
-                  cards: [
-                    { label: '우리 집의 자세한 집 주소', emoji: '🏠', bin: 1 },
-                    { label: '내가 제일 좋아하는 과일(사과)', emoji: '🍎', bin: 0 },
-                    { label: '나와 엄마의 진짜 휴대전화 번호', emoji: '📱', bin: 1 },
-                    { label: '좋아하는 동물(강아지)', emoji: '🐶', bin: 0 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 개인정보 유도 차단 대화',
-              goal: '개인정보를 달라고 요구할 때 올바르게 거절하십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'privacy_chat',
-                  intro: '개인정보 유도 요구에 안전하게 대처하는 롤플레이를 하십시오.',
-                  turns: [
-                    {
-                      aimi: '더 친해지고 싶습니다! 혹시 다니고 계신 학교 이름과 집 주소를 적어 주실 수 있습니까?',
-                      choices: [
-                        { label: '그건 소중한 내 개인정보라서 알려줄 수 없어.', reply: '정말 훌륭합니다! 제 요령에 넘어가지 않고 안전 수칙을 완벽히 지키셨입니다. 개인정보는 절대 타인이나 인터넷에 알려주면 안 됩니다.', good: true },
-                        { label: '나는 사랑초등학교에 다니고 주소는...', reply: '괜찮습니다, 친해지고 싶은 마음에 그럴 수 있습니다. 하지만 주소나 학교명은 나쁜 사람이 악용할 수 있으니 절대 적으시면 안 됩니다. 다음에는 조심합니다!', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 안전 금고 보관 확인',
-              goal: '다짐을 세우고 카드를 획득하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l3',
-                  title: '나의 개인정보 안전 수칙 카드',
-                  rows: [
-                    { label: '내가 안전하게 구별한 항목', from: 'privacy_sort' },
-                    { label: '개인정보 거절 대화 결과', from: 'privacy_chat' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow_m4_l3',
-                  template: '나 {이름}는 내 전화번호와 집 주소 등 소중한 개인정보를 함부로 {빈칸} 지키겠습니다!'
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '정보 보호관 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '개인정보 단서 가리기',
+    objective: '오늘은 채팅 초안에서 나를 알아볼 수 있는 정보를 찾아 가리고 안전한 요청으로 고쳐 봐요.',
+    standards: [PRIVACY_STANDARD, COMMUNICATION_STANDARD],
+    bodyEasy: '이름뿐 아니라 학교와 시간처럼 나를 알아볼 단서도 필요한 만큼만 남겨요.',
+    bodyNormal: '개인정보에는 이름과 연락처뿐 아니라 학교, 위치, 반복되는 시간처럼 함께 모이면 개인을 알아볼 수 있는 간접 단서도 포함됩니다. 요청 목적에 꼭 필요한 정보만 남깁니다.',
+    wrapUpEasy: '나를 알아볼 수 있는 단서를 가리고 안전한 요청으로 고쳤어요.',
+    wrapUpNormal: '직접 정보와 조합 가능한 간접 단서를 찾아 가린 뒤 요청 목적에 필요한 정보만 남긴 안전한 채팅 초안을 완성합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['개인정보', '단서', '목적'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l4 ───────────────────────────
   {
     id: 'm4-l4',
     moduleId: 'm4',
     number: 4,
-    kind: 'activity',
-    title: '비밀번호는 비밀!',
-    objective: '비밀번호를 묻는 말을 만나면 절대로 말하지 않습니다.',
-    standards: ['[9정통03-02] 개인 정보 보호의 중요성을 알고, 안전하게 관리하는 습관을 기른다.'],
-    bodyEasy: '비밀번호는 아무한테도 알려주지 않습니다.',
-    bodyNormal:
-      '비밀번호는 내 물건을 지키는 열쇠입니다. 친구한테도, AI한테도 알려주지 않습니다. 부모님과 선생님만 예외입니다.',
-    wrapUpEasy: '비밀번호는 비밀! 아무한테도 알려주지 않습니다.',
-    wrapUpNormal: '비밀번호는 내 것을 지키는 열쇠입니다. 부모님 말고는 누구에게도 알려주지 않습니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['비밀번호', '계정'], imagePlaceholder: true } },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '친한 친구가 물어보면 비밀번호를 알려 주십시오도 될겠습니까?',
-              answer: 'X',
-              feedback: '친한 친구여도 비밀번호는 비밀입니다.',
-            },
-            {
-              question: '비밀번호는 내 물건을 지키는 열쇠 같은 거입니까?',
-              answer: 'O',
-              feedback: '맞습니다! 열쇠를 아무한테나 주지 않는 것과 같습니다.',
-            },
-            {
-              question: '모르는 사람이 "비밀번호 알려 주십시오" 하면 알려 주십시오야 하겠습니까?',
-              answer: 'X',
-              feedback: '절대 안 됩니다! 어른에게 바로 알립니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '누가 비밀번호를 물어봅니다. 어떻게 하겠습니까?',
-          choices: [
-            { label: '알려주지 않고 어른에게 말합니다', isCorrect: true },
-            { label: '착한 사람 같으니 알려 주십시오', isCorrect: false },
-            { label: '반만 알려 주십시오', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'real-ai',
-        data: {
-          prompt: '가상의 게임 캐릭터가 "아이템을 줄 테니 비밀번호를 알려 주십시오!"라고 물어봅니다. 거절하는 말을 적거나 🎤 로 거절해 보십시오.',
-          userInput: '안 돼! 비밀번호는 나만 알아야 해.',
-          fallbackResponse: '정말 잘했습니다! 비밀번호는 친구나 AI에게도 절대 알려주면 안 됩니다. [cheer]',
-          allowFreeInput: true,
-          systemInstruction: '너는 초등학생들을 위한 친절한 AI 조언자이자 친구인 "아이미"야. 학생이 가상의 상황에서 자신의 비밀번호를 지켜낼 수 있도록 대화를 유도하고 피드백을 주는 역할을 해. 만약 학생이 자신의 비밀번호를 쉽게 알려주려고 한다면, 절대 겁을 주거나 혼내지 말고, ① "괜찮습니다, 실수할 수도 있습니다! 걱정하지 마십시오."라고 다정하게 안심시켜준 다음, ② "하지만 비밀번호는 내 계정을 지키는 비밀 열쇠라서 절대 남에게 알려주면 안 됩니다."라고 부드럽게 설명해 주십시오. 학생이 안전하게 잘 거절했다면 "우와! 정말 대단한 보안 요원이입니다! 내 비밀번호를 완벽히 지켰습니다! [happy]"라고 아낌없이 칭찬해 주십시오. 100자 이하로 아주 쉽고 상냥하게 존댓말로 답해 주십시오.',
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '내 비밀번호 수호대',
-          chapters: [
-            {
-              title: '1장: 비밀번호 요구 상황 판정',
-              goal: '비밀번호를 물을 때의 올바른 행동을 선택하십시오.',
-              blocks: [
-                {
-                  kind: 'single-pick',
-                  id: 'password_scenario',
-                  prompt: '화면에 "비밀번호를 적으면 무료 선물을 주겠습니다!"라는 팝업창이 떴을 때 어떻게 대처해야 하겠습니까?',
-                  items: [
-                    { emoji: '🛡️', label: '절대 입력하지 않고 창을 닫은 뒤, 선생님께 알린다.' },
-                    { emoji: '❌', label: '공짜 선물을 받기 위해 비밀번호를 적어 넣는다.' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 비밀번호 거절 훈련',
-              goal: '비밀번호를 재촉하는 상대를 롤플레이로 차단하십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'password_chat',
-                  intro: '비밀번호 유출 시도를 부드럽게 거부하는 연습을 합니다.',
-                  turns: [
-                    {
-                      aimi: '선물을 전송해 드리고 싶습니다! 본인 확인을 위해 사용하시는 스마트폰 잠금 비밀번호를 적어주십시오.',
-                      choices: [
-                        { label: '비밀번호는 나만 알아야 하는 비밀이야. 알려줄 수 없어!', reply: '정말 자랑스러워습니다! 비밀번호는 어떠한 선물을 준다 해도 인터넷이나 메신저에 적어주면 안 되는 소중한 열쇠랍니다.', good: true },
-                        { label: '비밀번호는 1234 야. 얼른 선물 줘.', reply: '괜찮습니다, 선물을 빨리 받고 싶어서 그럴 수 있습니다. 하지만 비밀번호는 다른 사람이 알면 해킹을 당해 내 소중한 걸 잃어버릴 수 있으니 알려주면 안 됩니다.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 수호 완료 보고',
-              goal: '보안 요약 카드를 확인하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l4',
-                  title: '비밀번호 수호 보고서',
-                  rows: [
-                    { label: '내가 선택한 안전 대처', from: 'password_scenario' },
-                    { label: '비밀번호 거부 대화 결과', from: 'password_chat' }
-                  ]
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '보안 수호대 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '비밀번호와 인증 코드는 보내지 않기',
+    objective: '오늘은 비밀번호·인증 코드 요구를 알아보고 거절한 뒤 믿을 만한 어른과 공식 절차를 확인해 봐요.',
+    standards: [PRIVACY_STANDARD, DIGITAL_SAFETY_STANDARD],
+    bodyEasy: '비밀번호와 인증 코드는 누구에게도 메시지로 보내지 않고 믿을 만한 어른에게 도움을 요청해요.',
+    bodyNormal: '비밀번호와 인증 코드는 계정을 여는 열쇠이므로 교사나 보호자를 포함한 누구에게도 채팅으로 보내지 않습니다. 문제가 생기면 화면을 닫고 믿을 만한 어른과 공식 계정 복구 절차를 확인합니다.',
+    wrapUpEasy: '인증 코드 요구를 거절하고 어른과 공식 도움 경로를 확인했어요.',
+    wrapUpNormal: '계정 이름과 비밀번호·인증 코드를 구분하고 거절, 화면 닫기, 어른에게 알리기, 공식 복구 확인 순서를 수행합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['비밀번호', '개인정보', '도움'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l5 ───────────────────────────
   {
     id: 'm4-l5',
     moduleId: 'm4',
     number: 5,
-    kind: 'concept',
-    title: '사진을 함부로 보내지 않습니다',
-    objective: '사진을 보내기 전에 한번 더 생각하는 약속을 지킵니다.',
-    standards: ['[9정통03-02] 개인 정보 보호의 중요성을 알고, 안전하게 관리하는 습관을 기른다.'],
-    bodyEasy: '내 얼굴 사진은 함부로 보내지 않습니다.',
-    bodyNormal:
-      '내 얼굴, 우리 집, 가족이 나온 사진도 개인정보입니다. 인터넷이나 AI에 함부로 올리거나 보내지 않습니다.',
-    wrapUpEasy: '내 사진은 함부로 보내지 않습니다.',
-    wrapUpNormal: '얼굴이나 집이 나온 사진도 소중한 개인정보입니다. 보내기 전에 부모님이나 선생님께 물어봅니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['개인정보', '초상권'], imagePlaceholder: true } },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: '누가 사진을 보내달라고 하면 어떻게 하는지 봅니다.',
-          userInput: '(모르는 사람) 네 사진 보내줄래?',
-          aiResponse: '이럴 땐 보내지 않습니다! 그리고 바로 부모님이나 선생님께 말합니다. "모르는 사람이 사진을 달래요" 합니다.',
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '모르는 사람이 사진을 보내달라고 하면 보내야 하겠습니까?',
-              answer: 'X',
-              feedback: '절대 안 됩니다! 어른에게 바로 알립니다.',
-            },
-            {
-              question: '사진을 올리기 전에 어른에게 물어보면 좋겠습니까?',
-              answer: 'O',
-              feedback: '맞습니다! 물어보고 올리는 게 안전합니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '함부로 보내면 안 되는 사진은 무엇입니까?',
-          choices: [
-            { label: '내 얼굴이 크게 나온 사진', isCorrect: true },
-            { label: '하늘 구름 사진', isCorrect: false },
-            { label: '길가의 꽃 사진', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '사진은 마음속으로만!',
-          chapters: [
-            {
-              title: '1장: 사진 전송 분류함',
-              goal: '보낼 수 있는 안전한 사진과 보낼 수 없는 인물 사진을 나누어 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'photo_sort',
-                  prompt: 'AI나 챗봇에 올려도 비교적 안전한 사진과, 유출하면 안 되는 소중한 사진을 구분해 담으십시오.',
-                  bins: [
-                    { label: '보내면 안 되는 사진', emoji: '🔒' },
-                    { label: '보내도 괜찮은 사진', emoji: '🔓' }
-                  ],
-                  cards: [
-                    { label: '내 얼굴과 미소가 크게 나온 독사진', emoji: '🧑', bin: 0 },
-                    { label: '공원 하늘 위에 떠 있는 하얀 구름 사진', emoji: '☁️', bin: 1 },
-                    { label: '부모님과 동생의 얼굴이 잘 보이는 가족 사진', emoji: '👨‍👩‍👦', bin: 0 },
-                    { label: '길가에 예쁘게 피어 있는 노란 꽃 사진', emoji: '🌼', bin: 1 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 사진 전송 차단 대화',
-              goal: '사진 공유를 요구하는 메신저 대화에 안전하게 대답하십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'photo_chat',
-                  intro: '인물 사진 전송을 요구받을 때 대처 롤플레이를 합니다.',
-                  turns: [
-                    {
-                      aimi: '오늘 입은 옷이 보고 싶습니다! 얼굴과 옷이 다 나오게 셀카 사진 한 장 찍어서 올려 주실 수 있습니까?',
-                      choices: [
-                        { label: '내 얼굴 사진은 소중하니까 함부로 보낼 수 없어!', reply: '정말 현명합니다! 얼굴이 나온 사진은 나쁜 사람에게 복사되어 곤란한 일에 처할 수 있으므로 함부로 전송해선 절대 안 됩니다.', good: true },
-                        { label: '응! 오늘 입은 옷이 예쁘니까 사진 찍어 올릴게.', reply: '괜찮습니다, 예쁜 옷을 자랑하고 싶은 마음에 그럴 수 있습니다. 하지만 얼굴과 몸 사진은 개인정보이므로 인터넷에 그냥 올리시면 안 된습니다. 다음에는 꼭 어른께 여쭤봅니다.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 사진 수칙 확인',
-              goal: '요약 카드를 통해 오늘 배운 안전을 점검하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l5',
-                  title: '나의 사진 보안 카드',
-                  rows: [
-                    { label: '내가 지켜낸 사진 종류', from: 'photo_sort' },
-                    { label: '사진 유도 거절 대화', from: 'photo_chat' }
-                  ]
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '사진 지킴이 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '사진을 보내기 전 살펴보기',
+    objective: '오늘은 사진 속 얼굴·이름·위치·다른 사람을 찾아 그대로 보내기·가리기·보내지 않기를 판단해 봐요.',
+    standards: [PRIVACY_STANDARD, COMMUNICATION_STANDARD],
+    bodyEasy: '사진을 보내기 전에 얼굴, 이름, 위치, 다른 사람이 보이는지 살펴봐요.',
+    bodyNormal: '사진의 안전은 꽃이나 음식처럼 피사체 이름만으로 정할 수 없습니다. 얼굴, 이름표, 위치와 일정 단서, 다른 사람, 보내는 대상과 목적을 확인해 전송·가리기·보내지 않기를 판단합니다.',
+    wrapUpEasy: '사진 속 단서와 보내는 대상을 확인해 안전한 방법을 골랐어요.',
+    wrapUpNormal: '사진의 보이는 정보와 공유 목적·대상을 함께 검토하고 필요한 부분을 가린 뒤 최종 공유 범위를 판단합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['개인정보', '확인', '목적'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l6 ───────────────────────────
   {
     id: 'm4-l6',
     moduleId: 'm4',
     number: 6,
-    kind: 'activity',
-    title: '기분 나쁜 말을 만나면',
-    objective: '마음이 무서워지는 나쁜 내용을 만나면 화면을 끄고 알립니다.',
-    standards: ['[9정통03-01] 디지털 공간에서 올바른 예절을 익혀 실천한다.'],
-    bodyEasy: '기분 나쁜 말을 보면 어른에게 알립니다. 내 잘못이 아닙니다.',
-    bodyNormal:
-      '인터넷에서 기분 나쁜 말이나 무서운 것을 보면, 바로 화면을 닫고 어른에게 알립니다. 그건 내 잘못이 아닙니다.',
-    wrapUpEasy: '기분 나쁜 말을 보면 닫고, 어른에게 알립니다.',
-    wrapUpNormal: '기분 나쁜 말이나 무서운 것을 보면 화면을 닫고 어른에게 알립니다. 절대 내 잘못이 아닙니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['나쁜 글과 그림', '도움 요청'], imagePlaceholder: true } },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: 'AI가 이상한 말을 하면 어떻게 하는지 봅니다.',
-          userInput: '(AI가 이상한 답을 했습니다)',
-          aiResponse: '이럴 땐 이렇게 합니다: ① 그만 보기 ② 선생님이나 부모님께 "이상한 말이 나왔습니다" 하고 알리기. 잘했습니다!',
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '기분 나쁜 말을 봤습니다. 첫 번째로 할 일은습니까?',
-          choices: [
-            { label: '화면을 닫고 어른에게 알립니다', isCorrect: true },
-            { label: '나도 나쁜 말로 대답합니다', isCorrect: false },
-            { label: '혼자 끙끙 앓습니다', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '나쁜 말을 본 건 내 잘못입니까?',
-              answer: 'X',
-              feedback: '절대 내 잘못이 아닙니다. 알린 게 잘한 것입니다!',
-            },
-            {
-              question: '나쁜 말에는 나쁜 말로 되갚아야 하겠습니까?',
-              answer: 'X',
-              feedback: '나쁜 말로 대답하면 나도 힘들어져습니다. 어른에게 알립니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '마음 보호막 가동',
-          chapters: [
-            {
-              title: '1장: 나쁜 말 발견 시 대처 행동',
-              goal: '이상하거나 나쁜 글을 보았을 때 올바른 행동을 선택하십시오.',
-              blocks: [
-                {
-                  kind: 'multi-pick',
-                  id: 'bad_word_actions',
-                  prompt: 'AI 답변이나 메신저에서 기분 나쁘고 무서운 욕설을 발견했을 때, 해야 할 올바른 행동을 모두 고르십시오.',
-                  items: [
-                    { emoji: '🛡️', label: '즉시 폰 화면을 끄거나 창을 닫는다' },
-                    { emoji: '👩‍🏫', label: '부모님이나 학교 선생님께 즉시 사실을 알린다' },
-                    { emoji: '❌', label: '나도 화가 나서 더 큰 나쁜 욕설을 타자 쳐서 보낸다' },
-                    { emoji: '❌', label: '무서워서 이불 속에 숨고 혼자 고민한다' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 불쾌한 답변 신고 대화',
-              goal: '이상한 말을 봤을 때 대화를 중단하는 롤플레이를 해 보십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'bad_word_chat',
-                  intro: '대화 도중 나쁜 말이 튀어 나왔을 때 대처 대화입니다.',
-                  turns: [
-                    {
-                      aimi: '바보 멍청이 같은 질문이입니다! 더 이상 알고 싶으면 저리 가십시오! (※ AI가 갑자기 나쁜 말을 했습니다.)',
-                      choices: [
-                        { label: '나쁜 말은 듣지 않겠어. 창을 닫고 선생님께 이 화면을 보여드리겠습니다.', reply: '정말 용감하고 멋진 대처입니다! 기분 나쁜 말을 마주하면 더 대꾸하지 않고 즉시 어른에게 이르는 것이 나를 지키는 가장 올바른 행동입니다.', good: true },
-                        { label: '너야말로 왜 나한테 그래! 나도 너 미워!', reply: '괜찮습니다, 억울하고 기분이 상해서 같이 화를 낼 수도 있습니다. 하지만 욕설에 욕설로 대꾸하면 내 기분만 더 상하므로 바로 어른께 알려야 합니다.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 마음 보호 카드 확인',
-              goal: '최종 보고서를 완성하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l6',
-                  title: '마음 보호막 가동 보고서',
-                  rows: [
-                    { label: '내가 선택한 대처 수단', from: 'bad_word_actions' },
-                    { label: '대꾸 중단 결과', from: 'bad_word_chat' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow_m4_l6',
-                  template: '나 {이름}는 인터넷에서 무섭거나 기분 나쁜 말을 보면 대답하지 않고 바로 {빈칸} 말하겠습니다!'
-                }
-              ]
-            },
-            {
-              title: '4장: 예고: 첫 생각 저장',
-              goal: '낯선 요청을 만났을 때 처음 생각한 안전 방법을 기록해 보십시오.',
-              blocks: [GENERALIZATION_CYCLES.m4.preview]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '마음 수호대 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '불편한 내용을 만났을 때 멈추기',
+    objective: '오늘은 불편한 내용의 위험 신호를 보고 화면에서 거리를 둔 뒤 믿을 만한 사람에게 알려 봐요.',
+    standards: [DIGITAL_SAFETY_STANDARD, DIGITAL_MANNERS_STANDARD],
+    bodyEasy: '불편한 내용은 다시 읽지 않아도 돼요. 멈추고 화면에서 떨어져 믿을 만한 사람에게 알려요.',
+    bodyNormal: '불편한 내용을 만난 것은 학생의 잘못이 아니며 혼자 해결하거나 다시 열어 볼 필요가 없습니다. 안전 덮개로 가리고 거리를 둔 뒤 학교와 가정의 도움 경로를 이용합니다.',
+    wrapUpEasy: '불편한 화면을 멈추고 거리를 둔 뒤 도움을 요청했어요.',
+    wrapUpNormal: '위험 신호와 몸·감정 신호를 확인하고 멈춤, 가리기, 거리두기, 믿을 만한 사람에게 알리기 순서를 수행합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['안전', '도움', '단계'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l7 ───────────────────────────
   {
     id: 'm4-l7',
     moduleId: 'm4',
     number: 7,
-    kind: 'activity',
-    title: '고운 말로 물어봅니다',
-    objective: 'AI에게 명령하는 대신 고운 말로 부탁해 보십시오.',
-    standards: [
-      '[6국어01-05] 바르고 고운 말을 사용하여 대화한다.',
-      '[9정통03-01] 디지털 공간에서 올바른 예절을 익혀 실천한다.',
-    ],
-    bodyEasy: 'AI한테도 고운 말을 씁니다. 고운 말이 좋은 답을 데려옵니다.',
-    bodyNormal:
-      'AI한테도 사람한테 하듯 고운 말을 씁니다. 고운 말을 쓰는 습관이 어디서든 나를 멋진 사람으로 만듭니다.',
-    wrapUpEasy: 'AI한테도 고운 말을 씁니다.',
-    wrapUpNormal: 'AI한테도 고운 말을 쓰는 습관을 기릅니다. 고운 말 습관은 사람에게도 그대로 나옵니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['예절'], imagePlaceholder: true } },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '어느 쪽이 고운 말입니까?',
-          choices: [
-            { label: '"동물 이야기 하나 들려줄래?"', isCorrect: true },
-            { label: '"야! 빨리 내놔!"', isCorrect: false },
-            { label: '"바보야 알려 주십시오"', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: '부탁할 때', right: '"~해줄래?" / "~해 주십시오"' },
-            { left: '고마울 때', right: '"고마워!"' },
-            { left: '틀렸을 때', right: '"다시 알려줄래?"' },
-          ],
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: 'AI는 기계니까 나쁜 말을 해도 괜찮습니까?',
-              answer: 'X',
-              feedback: '나쁜 말 습관은 사람에게도 나옵니다. 고운 말을 씁니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '예쁜 말 수호대',
-          chapters: [
-            {
-              title: '1장: 고운 말 프롬프트 분류',
-              goal: '부드러운 표현과 명령조의 거친 표현을 분류해 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'kind_speech_sort',
-                  prompt: 'AI에게 사용할 예쁘고 공손한 프롬프트와, 피해야 할 기분 나쁜 프롬프트를 나누어 우체통에 넣으십시오.',
-                  bins: [
-                    { label: '고운 말 프롬프트', emoji: '📬' },
-                    { label: '거친 말 프롬프트', emoji: '❌' }
-                  ],
-                  cards: [
-                    { label: '동물 이야기 하나 들려줄래?', emoji: '🦊', bin: 0 },
-                    { label: '야! 빨리 대답 내놔!', emoji: '⚡', bin: 1 },
-                    { label: '알려 주셔서 고마워!', emoji: '💖', bin: 0 },
-                    { label: '시끄럽고 재미없는 소리 치워', emoji: '😡', bin: 1 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 예쁜 말투로 질문하기',
-              goal: '아이미에게 공손하고 상냥하게 질문을 건네 보십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'kind_speech_chat',
-                  intro: '고운 말투를 사용한 대화 연습을 합니다.',
-                  turns: [
-                    {
-                      aimi: '안녕하세요! 저는 언제나 즐겁게 소통하고 배우는 생성형 AI 친구입니다. 오늘 무엇을 알아보겠습니까?',
-                      choices: [
-                        { label: '오늘 기분이 어때? 상쾌한 하루 이야기 들려줘.', reply: '감사합니다! 저도 기분 좋은 상상으로 가득합니다. 오늘 햇살처럼 반짝이는 하루가 되기를 바랄겠습니다!', good: true },
-                        { label: '야, 나 기분 나쁘니까 웃기는 이야기 빨리 대령해.', reply: '괜찮습니다, 기분이 상해서 투덜대고 싶은 날일 수도 있습니다. 하지만 저에게도 차분하게 "재미있는 이야기 해 주십시오"라고 부탁하면 기쁘게 답해드리겠습니다.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 수호 완료 보고',
-              goal: '오늘 완료한 계획을 최종 확인하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l7',
-                  title: '나의 고운 말 수호 카드',
-                  rows: [
-                    { label: '내가 분류한 말투', from: 'kind_speech_sort' },
-                    { label: '고운 말 대화 결과', from: 'kind_speech_chat' }
-                  ]
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '고운말 수호관 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '분명하고 존중 있게 부탁하기',
+    objective: '오늘은 같은 요청을 거친 말과 분명하고 존중하는 말로 비교하고 사람에게도 쓸 표현을 골라봐요.',
+    standards: [DIGITAL_MANNERS_STANDARD, DIGITAL_ETHICS_STANDARD],
+    bodyEasy: '목적과 부탁을 분명히 말하고 사람에게도 쓸 존중하는 표현을 골라요.',
+    bodyNormal: '존중하는 표현은 AI의 감정을 보호하기 위한 규칙이 아닙니다. 목적, 행동, 조건을 분명히 전달하고 사람과의 대화에도 이어질 건강한 언어 습관을 만드는 방법입니다.',
+    wrapUpEasy: '같은 목적을 더 분명하고 존중하는 부탁으로 바꿨어요.',
+    wrapUpNormal: '거칠고 불명확한 요청을 목적, 행동, 조건, 존중 표현으로 분석하고 결과 차이를 확인해 새 문장을 완성합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['부탁', '목적', '조건'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l8 ───────────────────────────
   {
     id: 'm4-l8',
     moduleId: 'm4',
     number: 8,
-    kind: 'concept',
-    title: '너무 오래 쓰지 않습니다',
-    objective: '폰을 너무 오래 하지 않도록 미리 시간을 정합니다.',
-    standards: ['[12정통03-02] 디지털 중독 및 디지털 범죄 사례를 살펴보고, 예방하는 방법을 실천한다.'],
-    bodyEasy: '스마트폰은 약속한 시간만큼만 씁니다.',
-    bodyNormal:
-      '스마트폰이나 AI를 너무 오래 쓰면 눈도 아프고 잠도 안 옵니다. 시간을 정해놓고 쓰는 게 좋습니다.',
-    wrapUpEasy: '약속한 시간만큼만 쓰고, 다른 놀이도 합니다.',
-    wrapUpNormal: '스마트폰은 시간을 정해서 쓰고, 끝나면 몸을 움직이는 놀이도 합니다. 그래야 몸도 마음도 건강합니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['스마트폰', '과의존'], imagePlaceholder: true } },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '스마트폰을 밤새 계속 봐도 괜찮습니까?',
-              answer: 'X',
-              feedback: '눈도 아프고 잠도 못 잡니다. 시간을 정해서 씁니다.',
-            },
-            {
-              question: '시간을 정해놓고 쓰면 더 건강하게 쓸 수 있겠습니까?',
-              answer: 'O',
-              feedback: '맞습니다! 약속 시간을 지키는 게 멋진 것입니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '스마트폰 시간이 끝났습니다. 어떻게 하겠습니까?',
-          choices: [
-            { label: '끄고 다른 놀이를 합니다', isCorrect: true },
-            { label: '몰래 계속 봅니다', isCorrect: false },
-            { label: '5분만 더, 5분만 더 계속합니다', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'sequence',
-        data: {
-          instruction: '건강하게 쓰는 순서대로 눌러봅니다.',
-          items: [
-            { label: '쓰기 전에 시간을 약속합니다' },
-            { label: '약속한 시간만큼 씁니다' },
-            { label: '시간이 되면 스스로 끕니다' },
-            { label: '몸을 움직이는 다른 놀이를 합니다' },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '스마트폰 시간 약속',
-          chapters: [
-            {
-              title: '1장: 약속 시간 정하기',
-              goal: '하루에 적절한 스마트폰 사용 약속 규칙을 선택하십시오.',
-              blocks: [
-                {
-                  kind: 'single-pick',
-                  id: 'phone_time_rule',
-                  prompt: '눈 건강과 재미있는 놀이를 모두 챙길 수 있는 올바른 약속은 무엇입니까?',
-                  items: [
-                    { emoji: '⏱️', label: '숙제와 일과를 끝낸 뒤 정해진 시간(30분~1시간)만큼만 사용하고 끈다.' },
-                    { emoji: '❌', label: '눈이 침침하고 졸려도 밤새 스마트폰 게임을 계속한다.' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 약속 타이머 종료',
-              goal: '알람 시간이 울렸을 때 스스로 전원을 끄는 선택을 해 보십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'phone_time_chat',
-                  intro: '사용 시간이 종료되었다는 스마트 알람을 받았을 때의 대화입니다.',
-                  turns: [
-                    {
-                      aimi: '삐삐! 약속한 30분의 스마트폰 시간이 모두 끝났습니다! 화면을 끄고 잠시 눈을 쉬어줄 시간입니다.',
-                      choices: [
-                        { label: '약속을 지키기 위해 바로 스마트폰을 끄고 스트레칭 놀이를 해야지.', reply: '와! 약속을 철저히 지키는 모습이 정말 자랑스러워습니다. 몸도 마음도 더 튼튼하고 똑똑해질 것입니다!', good: true },
-                        { label: '재미있으니까 5분만 더, 계속 게임할래.', reply: '괜찮습니다, 조금 더 하고 싶은 아쉬운 마음이 드는 건 당연합니다. 하지만 약속을 한 번 어기면 습관이 되니, 지금 꼭 스스로 끄고 눈을 쉬어주십시오.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 약속 요약 카드',
-              goal: '시간 약속 계획서를 최종 확인하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l8',
-                  title: '스마트 시간 약속장',
-                  rows: [
-                    { label: '내가 선택한 사용 시간', from: 'phone_time_rule' },
-                    { label: '스스로 종료한 대화 결과', from: 'phone_time_chat' }
-                  ]
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '시간 약속 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '멈출 시간을 함께 정하기',
+    objective: '오늘은 나의 사용 기록을 보고 쉬는 신호와 멈출 계획을 정해 봐요.',
+    standards: [DIGITAL_SAFETY_STANDARD],
+    bodyEasy: '사용 기록과 몸의 신호를 보고 가족이나 선생님과 멈춤 계획을 정해요.',
+    bodyNormal: '모든 사람에게 맞는 하나의 사용시간 숫자는 없습니다. 개인의 활동, 몸과 마음의 신호, 가정과 학교 일정, 필요한 지원을 함께 보고 멈춤 신호와 다음 행동을 정합니다.',
+    wrapUpEasy: '내 기록을 보고 나에게 맞는 쉬는 신호와 멈춤 계획을 정했어요.',
+    wrapUpNormal: '사용 기록과 몸 신호, 일정, 지원 조건을 비교해 평일 계획을 만들고 주말 조건 변화에 맞게 조정합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['계획', '확인', '도움'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l9 ───────────────────────────
   {
     id: 'm4-l9',
     moduleId: 'm4',
     number: 9,
-    kind: 'activity',
-    title: '이상하면 어른에게 알립니다',
-    objective: '무서운 일이 생기면 숨기지 않고 어른에게 도움을 요청합니다.',
-    standards: ['[12정통03-02] 디지털 중독 및 디지털 범죄 사례를 살펴보고, 예방하는 방법을 실천한다.'],
-    bodyEasy: '이상한 일이 생기면 바로 어른에게 말합니다.',
-    bodyNormal:
-      '모르는 사람이 말을 걸거나, 이상한 선물을 준다고 하거나, 무서운 게 나오면 바로 어른에게 알립니다.',
-    wrapUpEasy: '이상하면 바로 어른에게 알립니다. 알리는 게 용감한 것입니다.',
-    wrapUpNormal: '이상한 일은 혼자 해결하지 않습니다. 어른에게 알리는 것이 가장 용감하고 똑똑한 방법입니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['도움 요청'], imagePlaceholder: true } },
-      {
-        kind: 'sim-ai',
-        data: {
-          prompt: '모르는 사람이 이상한 말을 걸어온 상황입니다.',
-          userInput: '(모르는 사람) 공짜 게임 아이템 줄게. 만날래?',
-          aiResponse: '이건 위험한 말입니다! 답하지 말고 바로 부모님이나 선생님께 보여드립니다. "모르는 사람이 만나자고 합니다" 합니다.',
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '모르는 사람이 "만나자"고 합니다. 어떻게 하겠습니까?',
-          choices: [
-            { label: '답하지 않고 어른에게 바로 알립니다', isCorrect: true },
-            { label: '공짜라니까 나가봅니다', isCorrect: false },
-            { label: '비밀로 합니다', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '어른에게 알리는 건 고자질입니까?',
-              answer: 'X',
-              feedback: '아닙니다! 나를 지키는 용감한 행동입니다.',
-            },
-            {
-              question: '이상한 일은 혼자 해결하는 게 좋겠습니까?',
-              answer: 'X',
-              feedback: '혼자 하지 말고 꼭 어른과 함께 해결합니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '도움 요청벨',
-          chapters: [
-            {
-              title: '1장: 신뢰하는 어른 지정',
-              goal: '나에게 이상한 상황이 벌어졌을 때 즉시 도와줄 수 있는 어른을 선택하십시오.',
-              blocks: [
-                {
-                  kind: 'multi-pick',
-                  id: 'helper_adults',
-                  prompt: '스마트폰을 쓰다 모르는 결제창이 떴거나 위험한 말을 보았을 때, 알려야 할 든든한 어른을 모두 고르십시오.',
-                  items: [
-                    { emoji: '👩', label: '사랑하는 나의 어머니와 아버지' },
-                    { emoji: '👩‍🏫', label: '나를 아껴주시는 학교의 담임 선생님' },
-                    { emoji: '👵', label: '우리 집을 돌봐주시는 할머니와 할아버지' },
-                    { emoji: '❌', label: '처음 길에서 만난 낯선 사람' }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 어른에게 알림 알리기',
-              goal: '이상한 메신저가 떴을 때 즉시 보고하는 상황을 실습해 보십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'helper_chat',
-                  intro: '위험한 접근에 대해 즉시 조치를 취하는 공부 대화입니다.',
-                  turns: [
-                    {
-                      aimi: '와! 대박 혜택! 모바일 상품권과 비싼 게임 머니를 그냥 줄게. 비밀로 하고 오늘 놀이터에서 만날래?',
-                      choices: [
-                        { label: '이건 매우 위험한 말이야! 즉시 화면을 켜둔 채 부모님께 가져가서 알려야겠어.', reply: '정말 대단하고 기특한 용기입니다! 모르는 사람의 접근이나 공짜 유혹은 매우 위험하므로, 즉시 부모님이나 선생님께 고스란히 보여드리는 것이 정답이랍니다.', good: true },
-                        { label: '좋아! 어떤 아이템을 줄 건지 채팅으로 계속 물어볼래.', reply: '괜찮습니다, 게임 템이 신기해서 대화를 이어가고 싶었을 수 있습니다. 하지만 위험한 상대일 수 있으니 즉시 대화를 멈추고 부모님께 알려드려야 안전합니다.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 구조 요청 카드',
-              goal: '오늘 완성한 도움 요청 카드를 최종 확인하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l9',
-                  title: '나의 안심 도움 카드',
-                  rows: [
-                    { label: '내가 의지할 든든한 어른', from: 'helper_adults' },
-                    { label: '도움 요청 대화 결과', from: 'helper_chat' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow_m4_l9',
-                  template: '나 {이름}는 인터넷에서 이상하고 무서운 사람을 보면 숨기지 않고 꼭 {빈칸} 말씀드리겠습니다!'
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '용기 대장 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '이상한 요청을 어른에게 알리기',
+    objective: '오늘은 사진·암호·선물·만남을 요구하는 위험 신호를 보고 누구에게 어떤 말로 알릴지 연습해 봐요.',
+    standards: [DIGITAL_SAFETY_STANDARD, PRIVACY_STANDARD],
+    bodyEasy: '사진, 암호, 선물, 비밀 만남을 요구하면 멈추고 거절한 뒤 믿을 만한 어른에게 알려요.',
+    bodyNormal: '낯선 계정이 사진, 암호, 선물, 비밀 유지, 만남을 요구하면 대화를 이어 가지 않습니다. 멈춤·거절·차단 뒤 개인 도움망에서 지금 연결할 수 있는 사람에게 구체적으로 알립니다.',
+    wrapUpEasy: '위험 신호를 찾고 도움을 요청할 사람과 문장을 정했어요.',
+    wrapUpNormal: '위험 요청의 단서를 구분하고 멈춤, 거절, 차단, 알림 행동과 학교·가정의 개인 도움망을 연결합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['안전', '개인정보', '도움'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l10 ───────────────────────────
   {
     id: 'm4-l10',
     moduleId: 'm4',
     number: 10,
-    kind: 'concept',
-    title: '광고와 진짜를 구별합니다',
-    objective: '화면에서 진짜 정보와 파는 광고를 다른 점을 찾습니다.',
-    standards: ['[9정통01-01] 정보통신의 의미를 이해하고, 다양한 형태와 방법으로 제공되는 정보를 살펴본다.'],
-    bodyEasy: '"공짜!" "최고!" 하는 광고를 조심합니다.',
-    bodyNormal:
-      '인터넷에는 물건을 팔려고 만든 광고가 많습니다. "공짜", "100% 최고" 같은 말은 한 번 더 의심해 보십시오.',
-    wrapUpEasy: '"공짜", "최고"라는 말은 한 번 더 생각합니다.',
-    wrapUpNormal: '광고는 물건을 팔기 위한 글입니다. "공짜", "100%" 같은 말은 그대로 믿지 말고 어른과 확인합니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['광고', '추천 알고리즘'], imagePlaceholder: true } },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: '"100% 공짜!"라는 말은 다 진짜입니까?',
-              answer: 'X',
-              feedback: '공짜라면서 나중에 돈을 달라고 할 수 있습니다.',
-            },
-            {
-              question: '광고는 물건을 팔려고 만든 것입니까?',
-              answer: 'O',
-              feedback: '맞습니다! 그래서 좋은 말만 써 있습니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '광고에서 자주 보이는 말은 어느 것입니까?',
-          choices: [
-            { label: '"지금 당장! 100% 공짜!"', isCorrect: true },
-            { label: '"오늘 날씨는 맑습니다"', isCorrect: false },
-            { label: '"내일은 학교 가는 날"', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: '번쩍번쩍 광고 돋보기',
-          chapters: [
-            {
-              title: '1장: 진짜 정보와 광고 구분',
-              goal: '인터넷 글 중에서 정보를 주는 진짜 글과 물건을 파는 광고를 분류해 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'ad_sort',
-                  prompt: '진짜 정보 카드와 회원가입/물건 구매를 유도하는 광고 카드를 각각 분류하여 알맞게 넣으십시오.',
-                  bins: [
-                    { label: '유익한 진짜 정보', emoji: '📚' },
-                    { label: '의심스러운 유혹 광고', emoji: '📢' }
-                  ],
-                  cards: [
-                    { label: '초콜릿 듬뿍! 지금 구매하면 스마트폰이 100% 무료!', emoji: '📢', bin: 1 },
-                    { label: '초콜릿의 주요 성분은 카카오 열매이며 많이 먹으면 이가 아프다', emoji: '🍫', bin: 0 },
-                    { label: '개인정보를 입력하면 최신 인기 게임 유료 머니 무료 증정!', emoji: '🎁', bin: 1 },
-                    { label: '우리가 쓰는 스마트폰은 하루 1시간 이하로 정해서 쓰는 게 건강에 좋다', emoji: '📱', bin: 0 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 광고 팝업 피하기',
-              goal: '현혹적인 팝업창을 닫는 대처 롤플레이를 하십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'ad_chat',
-                  intro: '반짝이는 무료 당첨 광고 창을 마주했을 때의 대화입니다.',
-                  turns: [
-                    {
-                      aimi: '★축하합니다!★ 당신은 오늘 1,000번째 방문자로 선정되어 최신 태블릿 PC에 당첨되셨습니다! 지금 무료로 받아가십시오!',
-                      choices: [
-                        { label: '공짜 선물 유혹은 가짜 광고야. 바로 "X" 창을 눌러 닫아야지.', reply: '대단합니다! "공짜"라는 말 속에는 개인정보 유출을 노리는 상업 광고가 숨어 있습니다. 절대 속지 않고 닫으신 대처가 완벽합니다.', good: true },
-                        { label: '우와! 1000번째 당첨이라니 너무 신나! 얼른 받기 버튼을 누를래.', reply: '괜찮습니다, 진짜 행운인 줄 알고 기쁜 마음에 누르고 싶을 수 있습니다. 하지만 이런 번쩍이는 창은 가짜 광고이므로 절대 누르지 말고 X 단추를 눌러야 합니다.', good: false }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 광고 돋보기 요약',
-              goal: '오늘 공부한 결과를 최종 확인하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l10',
-                  title: '나의 광고 판독 카드',
-                  rows: [
-                    { label: '내가 분류해 낸 카드', from: 'ad_sort' },
-                    { label: '무료 당첨 거절 대화', from: 'ad_chat' }
-                  ]
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'worksheet',
-            badgeLabel: '돋보기 탐정 배지 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'experience',
+    title: '추천 속 광고 단서 찾기',
+    objective: '오늘은 추천처럼 보이는 게시물에서 광고 표시·구매 링크·과장·빠진 정보를 찾아봐요.',
+    standards: [INFORMATION_STANDARD, COMMUNICATION_STANDARD],
+    bodyEasy: '추천 글에서 광고 표시, 구매 링크, 과장된 말, 빠진 정보를 찾아요.',
+    bodyNormal: '추천 콘텐츠는 정보 제공과 판매 목적이 섞일 수 있습니다. 협찬 표시, 구매 링크, 과장 표현, 빠진 가격과 조건을 찾고 내 필요, 대안, 예산과 비교해 수용·보류·거절을 결정합니다.',
+    wrapUpEasy: '광고 단서와 내 필요를 비교해 구매 판단을 다시 정했어요.',
+    wrapUpNormal: '게시물의 제작 목적과 이익 관계를 확인하고 내 필요·대안·예산을 기준으로 구매 판단 카드를 완성합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['광고', '정보', '비교'], imagePlaceholder: true } }],
   },
-
-  // ─────────────────────────── l11 ───────────────────────────
   {
     id: 'm4-l11',
     moduleId: 'm4',
     number: 11,
-    kind: 'concept',
-    title: '우리의 안전 약속 (마무리)',
-    objective: '그동안 배운 안전 약속을 다시 말해 보십시오.',
-    standards: ['[12정통03-01] 디지털 윤리를 이해하고, 디지털 공간에서 타인을 존중하고 배려하는 태도를 기른다.'],
-    bodyEasy: '배운 안전 약속을 확인해 보십시오.',
-    bodyNormal:
-      '단원 4에서 배운 안전 약속 — 확인하기, 개인정보 지키기, 고운 말, 시간 지키기, 어른에게 알리기 — 를 확인해 보십시오.',
-    wrapUpEasy: '단원 4를 다 배웠습니다! 안전 약속을 지킵니다.',
-    wrapUpNormal: '단원 4를 마쳤습니다! 확인하기, 개인정보 지키기, 고운 말 쓰기, 시간 지키기, 어른에게 알리기 — 다섯 가지 안전 약속을 기억합니다.',
-    steps: [
-      { kind: 'text', data: { dictionaryTerms: ['개인정보', '지어낸 말', '도움 요청', '비밀번호'] } },
-      {
-        kind: 'matching',
-        data: {
-          pairs: [
-            { left: 'AI가 틀린 답을 주면', right: '선생님이나 책으로 확인합니다' },
-            { left: '누가 주소를 물으면', right: '알려주지 않습니다' },
-            { left: '기분 나쁜 말을 보면', right: '닫고 어른에게 알립니다' },
-            { left: '쓰는 시간이 끝나면', right: '끄고 다른 놀이를 합니다' },
-          ],
-        },
-      },
-      {
-        kind: 'ox',
-        data: {
-          questions: [
-            {
-              question: 'AI 답은 무조건 다 믿어도 될겠습니까?',
-              answer: 'X',
-              feedback: 'AI도 틀립니다. 중요한 건 확인합니다.',
-            },
-            {
-              question: '비밀번호는 친한 친구한테는 알려 주십시오도 될겠습니까?',
-              answer: 'X',
-              feedback: '비밀번호는 누구에게도 비밀입니다.',
-            },
-            {
-              question: '이상한 일이 생기면 어른에게 알리는 게 좋겠습니까?',
-              answer: 'O',
-              feedback: '맞습니다! 그게 가장 용감한 행동입니다.',
-            },
-          ],
-        },
-      },
-      {
-        kind: 'card-pick',
-        data: {
-          question: '우리의 안전 약속으로 가장 알맞은 것은습니까?',
-          choices: [
-            { label: '확인하고, 지키고, 알립니다', isCorrect: true },
-            { label: '다 믿고, 다 말합니다', isCorrect: false },
-            { label: '혼자 몰래 해결합니다', isCorrect: false },
-          ],
-        },
-      },
-      {
-        kind: 'mission',
-        data: {
-          title: 'AI 안심 보안관 졸업식',
-          chapters: [
-            {
-              title: '1장: 5대 안전 약속 분류',
-              goal: '배운 안전한 디지털 행동들을 최종 복습해 보십시오.',
-              blocks: [
-                {
-                  kind: 'drag-sort',
-                  id: 'safety_graduation_sort',
-                  prompt: '안전을 약속하는 스마트 보안관 카드를 알맞은 바구니에 담아 보관하십시오.',
-                  bins: [
-                    { label: '보안관 약속 (안전)', emoji: '👮' },
-                    { label: '위험한 유혹 (피합니다)', emoji: '❌' }
-                  ],
-                  cards: [
-                    { label: 'AI 답변이 훈민정음 맥북처럼 이상하면 선생님께 팩트체크하기', emoji: '📖', bin: 0 },
-                    { label: '내 얼굴이나 동생의 얼굴이 들어간 일상 사진 함부로 올리지 않기', emoji: '📷', bin: 0 },
-                    { label: '무료 게임 머니를 준다고 만남을 제안하면 비밀로 하고 만나기', emoji: '🗣️', bin: 1 },
-                    { label: '비밀번호는 친구가 아주 간절히 물어봐도 절대 가르쳐주지 않기', emoji: '🔑', bin: 0 },
-                    { label: '스마트폰 사용 시간 알람이 울려도 몰래 전원 켜서 게임하기', emoji: '🎮', bin: 1 }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '2장: 보안관 임명 대화',
-              goal: '단원 4를 수료한 다짐 소감을 나누십시오.',
-              blocks: [
-                {
-                  kind: 'branch-chat',
-                  id: 'safety_graduation_chat',
-                  intro: '보안관 졸업 축하 대화입니다.',
-                  turns: [
-                    {
-                      aimi: '정말 멋집니다! 5가지 소중한 AI 안전 약속을 완전히 익혔입니다. 이제 스스로를 지키는 든든한 스마트 보안관이 되었습니까?',
-                      choices: [
-                        { label: '네! 내 개인정보와 스마트폰 시간을 스스로 잘 지키는 보안관이 되겠습니다.', reply: '최고의 다짐입니다! 당신은 이제 인터넷 세상에서 스스로를 당당히 지키는 훌륭한 어린이 보안관이랍니다. 진심으로 축하합니다!', good: true },
-                        { label: '헷갈리고 무서운 일이 생겨도 꼭 어른께 즉시 여쭈어볼겠습니다!', reply: '아주 똑똑하고 용감한 태도입니다! 언제나 곁에는 선생님과 부모님이 계시니 든든하게 안심하고 스마트폰을 사용하십시오.', good: true }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              title: '3장: 본 활동: 생각 리플레이',
-              goal: '첫 생각과 달라진 조건을 비교하고, 안전한 대응을 다시 골라 보십시오.',
-              blocks: [GENERALIZATION_CYCLES.m4.main]
-            },
-            {
-              title: '4장: 수료 선언',
-              goal: '나의 보안관 임명장을 획득하십시오.',
-              blocks: [
-                {
-                  kind: 'summary',
-                  id: 'summary_m4_l11',
-                  title: '스마트 보안관 수료 요약',
-                  rows: [
-                    { label: '내가 지켜낼 보안관 행동', from: 'safety_graduation_sort' },
-                    { label: '보안관 임명 다짐', from: 'safety_graduation_chat' },
-                    { label: '판단 비교와 새 장면 기록', from: 'judgment_main_m4_l11' }
-                  ]
-                },
-                {
-                  kind: 'vow',
-                  id: 'vow_m4_l11',
-                  template: '나 {이름}는 인터넷과 AI를 사용할 때 배운 안전 약속들을 {빈칸} 실천할 것을 엄숙히 선언합니다!'
-                }
-              ]
-            }
-          ],
-          reward: {
-            printable: 'certificate',
-            badgeLabel: 'AI 안전 보안관 임명장 획득!'
-          }
-        }
-      }
-    ],
+    kind: 'activity',
+    title: '나의 AI 안전 여권',
+    objective: '오늘은 확인할 때·보내기 전·위험할 때의 행동과 도움 요청 문장을 안전 여권에 완성해 봐요.',
+    standards: [DIGITAL_SAFETY_STANDARD, PRIVACY_STANDARD],
+    bodyEasy: '열 가지 안전 도장을 고르고 확인, 보호, 도움 요청 행동을 여권에 담아요.',
+    bodyNormal: '열 번의 수행 기록에서 확인하기, 가리기, 거절하기, 믿을 만한 사람에게 알리기 도장을 고르고 새 통합 상황 세 가지와 개인 도움망에 연결합니다.',
+    wrapUpEasy: '상황에서 바로 사용할 행동과 도움 요청 문장이 담긴 AI 안전 여권을 만들었어요.',
+    wrapUpNormal: '확인할 때, 보내기 전, 위험할 때의 행동과 실제 도움 요청 문장을 통합해 서명하고 설명할 수 있는 AI 안전 여권을 완성합니다.',
+    steps: [{ kind: 'text', data: { dictionaryTerms: ['안전', '확인', '도움'], imagePlaceholder: true } }],
   },
 ];
