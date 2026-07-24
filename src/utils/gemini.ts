@@ -59,7 +59,7 @@ export async function askGemini(userText: string, systemInstruction?: string): P
   if (!apiKey) {
     throw new GeminiError(
       'no-key',
-      '아직 AI가 준비되지 않았습니다. 선생님께 알려 주십시오.',
+      '인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.',
       'No Gemini API key set in localStorage (teacher must enter one in TeacherView).',
     );
   }

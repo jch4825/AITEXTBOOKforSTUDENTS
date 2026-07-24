@@ -42,16 +42,16 @@
     --warn-bg: #fed7aa;
     --done-bg: #e5e7eb;
 
-    /* 타이포그래피 (Pretendard Variable) — 추가 2포인트(총 +4px/25%) 상향 조정 */
-    --fs-display: 3rem;      /* 48 / 1.3 / 800 — Home 타이틀 */
-    --fs-h1: 2.25rem;        /* 36 / 1.4 / 700 — 차시 제목 */
-    --fs-h2: 1.75rem;        /* 28 / 1.45 / 700 — 게임 헤더 */
-    --fs-body-lg: 1.5rem;    /* 24 / 1.8 — 본문 */
-    --fs-body: 1.375rem;     /* 22 / 1.8 — 일반 */
-    --fs-label: 1.1875rem;   /* 19 / 1.5 / 600 — 이름표·버튼 보조 */
-    --font-base: 1.375rem;
-    --font-large: 1.75rem;
-    --leading: 1.8;
+    /* 타이포그래피 (Pretendard Variable) — 가독성 높은 표준 크기 */
+    --fs-display: 2.25rem;    /* 36px — Home 타이틀 */
+    --fs-h1: 1.75rem;         /* 28px — 차시 제목 */
+    --fs-h2: 1.375rem;        /* 22px — 영역 헤더 */
+    --fs-body-lg: 1.1875rem;  /* 19px — 주요 본문 */
+    --fs-body: 1.0625rem;     /* 17px — 일반 본문 */
+    --fs-label: 0.9375rem;    /* 15px — 이름표·버튼 */
+    --font-base: 1.0625rem;
+    --font-large: 1.25rem;
+    --leading: 1.6;
 
     /* 형태 — 중첩 시 안쪽 radius = 바깥 radius − gap */
     --r-sm: 10px;           /* 입력 */
@@ -63,20 +63,19 @@
     --e-1: 0 1px 3px rgba(43, 58, 85, 0.08);
     --e-2: 0 4px 16px rgba(43, 58, 85, 0.10);
 
-    /* 모션 — 생동감 있게. 반복·idle 모션 허용(저자극 원칙 폐지). 접근성은 prefers-reduced-motion으로 보장 */
+    /* 모션 — 생동감 있게 */
     --t-fast: 150ms;
     --t-base: 250ms;
     --t-slow: 500ms;
-    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* 살짝 튀는 오버슈트 */
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   html {
     background: var(--bg);
-    /* 글자 크기 스케일 (접근성) — 기본 글자 크기를 20px(125%)로 상향하여 모든 rem 텍스트 추가 +2px 확대 */
-    font-size: 125%;              /* 보통: 20px 기준 (+4px total) */
+    font-size: 100%;              /* 표준: 16px 기준 */
   }
   html[data-font-size="large"] {
-    font-size: 150%;              /* 크게: 24px 기준 → 모든 rem 텍스트 추가 확대 */
+    font-size: 112.5%;            /* 크게: 18px 기준 */
   }
 
   html, body, #root {

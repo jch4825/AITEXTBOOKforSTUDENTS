@@ -35,7 +35,7 @@ export default function LiveGeminiInteraction({
     if (!text) return;
 
     if (!isConnected) {
-      setErrorMessage('인공지능 연결이 되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
+      setErrorMessage('인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
       return;
     }
 
@@ -53,12 +53,12 @@ export default function LiveGeminiInteraction({
     } catch (err) {
       if (err instanceof GeminiError) {
         if (err.kind === 'no-key') {
-          setErrorMessage('인공지능 연결이 되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
+          setErrorMessage('인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
         } else {
           setErrorMessage(err.studentMessage);
         }
       } else {
-        setErrorMessage('인공지능 연결이 되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
+        setErrorMessage('인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
       }
     } finally {
       setLoading(false);
@@ -80,7 +80,7 @@ export default function LiveGeminiInteraction({
           <span>실시간 인공지능(Gemini) 대화 안내</span>
         </div>
         <p className="text-sm font-semibold leading-relaxed">
-          인공지능 연결이 되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.
+          인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.
         </p>
       </div>
     );
