@@ -22,7 +22,7 @@ export const M1_LESSONS: LessonContent[] = [
     wrapUpEasy: 'AI(인공지능)는 사람처럼 생각하고 배워서 번역·추천·분류 같은 다양한 일을 도와줘요.',
     wrapUpNormal: 'AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하는 기술로, 입력(말·글·사진)을 바탕으로 번역, 추천, 분류 등의 결과를 만듭니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['인공지능', '자료', '도구'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['인공지능', '데이터', '프로그램', '의사결정', '정보', '입력', '번역', '수행', '범주', '신호', '구조'], imagePlaceholder: true } },
     ],
   },
   {
