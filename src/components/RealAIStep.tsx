@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSpeak } from '../hooks/useSpeak';
 import { askGemini, GeminiError } from '../utils/gemini';
+import { hasApiKey } from '../utils/apiKey';
 import ErrorMessage from './ErrorMessage';
 import MicButton from './MicButton';
 import Button from './Button';
@@ -192,6 +193,12 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
       character={characterReaction}
     >
       <div className="flex flex-col items-center w-full">
+        {!hasApiKey() && (
+          <div className="w-full max-w-[360px] mb-3 p-3 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 text-amber-900 text-xs font-bold flex items-center gap-2">
+            <Icon name="warning" size={18} className="text-amber-600 shrink-0" />
+            <span>인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.</span>
+          </div>
+        )}
         <PhoneFrame
           messages={messages}
           typing={state.kind === 'loading'}
@@ -208,8 +215,8 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
               studentMessage={state.studentMessage}
               technicalDetail={state.technicalDetail}
             />
-            <p className="text-xs text-[color:var(--muted)]">
-              지금은 미리 준비된 답변을 보여드리겠습니다.
+            <p className="text-xs text-[color:var(--muted)] font-bold">
+              인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.
             </p>
           </div>
         )}
