@@ -185,6 +185,18 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
     }
   }
 
+  function selectToolMode(newMode: ToolMode, newColor?: string) {
+    if (activeText) {
+      if (activeText.text.trim()) {
+        commitActiveText();
+      } else {
+        setActiveText(null);
+      }
+    }
+    if (newColor) setColor(newColor);
+    setMode(newMode);
+  }
+
   function commitActiveText() {
     if (!activeText || !activeText.text.trim()) {
       setActiveText(null);
@@ -248,10 +260,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
                 <button
                   key={idx}
                   type="button"
-                  onClick={() => {
-                    setColor(col.value);
-                    setMode('pen');
-                  }}
+                  onClick={() => selectToolMode('pen', col.value)}
                   className="w-9 h-9 rounded-full border-2 transition-transform hover:scale-105 cursor-pointer relative shadow-2xs"
                   style={{
                     backgroundColor: col.value,
@@ -272,7 +281,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
             {/* Eraser */}
             <button
               type="button"
-              onClick={() => setMode('eraser')}
+              onClick={() => selectToolMode('eraser')}
               className="w-9 h-9 rounded-full border-2 flex items-center justify-center transition-all cursor-pointer shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white"
               style={{
                 borderColor: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
@@ -287,7 +296,13 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
             {/* AutoDraw-style Text Tool ('T') */}
             <button
               type="button"
-              onClick={() => setMode('text')}
+              onClick={() => {
+                if (mode === 'text') {
+                  selectToolMode('pen');
+                } else {
+                  selectToolMode('text');
+                }
+              }}
               className="w-9 h-9 rounded-full border-2 flex items-center justify-center font-black text-base transition-all cursor-pointer shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white"
               style={{
                 borderColor: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
@@ -345,7 +360,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
           />
 
           {/* AutoDraw-Style Frameless Text Tool Overlay */}
-          {activeText && (
+          {activeText && mode === 'text' && (
             <div
               ref={textContainerRef}
               className="absolute z-20 flex items-center gap-1.5 cursor-move touch-none"
