@@ -131,87 +131,89 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
         </button>
       </div>
 
-      {/* 초록색 팔레트 패널 (Green Palette Header) */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-t-[var(--r-md)] border-t border-x border-[color:var(--line)] bg-emerald-600 text-white shadow-xs">
-        {/* Colors Selection */}
-        <div className="flex items-center gap-2">
-          {COLORS.map((col, idx) => {
-            const isSelected = !isEraser && color === col.value;
-            return (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => {
-                  setColor(col.value);
-                  setIsEraser(false);
-                }}
-                className="w-9 h-9 rounded-full border-2 transition-transform hover:scale-105 cursor-pointer relative shadow-2xs"
-                style={{
-                  backgroundColor: col.value,
-                  borderColor: isSelected ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
-                  boxShadow: isSelected ? '0 0 0 2px #047857' : undefined,
-                }}
-                title={col.name}
-                aria-label={col.name}
-              >
-                {isSelected && (
-                  <span className="absolute inset-0 flex items-center justify-center" style={{ color: col.value === '#FFFFFF' ? '#047857' : '#FFFFFF' }}>
-                    <Icon name="check" size={16} strokeWidth={3} />
-                  </span>
-                )}
-              </button>
-            );
-          })}
-          {/* Eraser */}
-          <button
-            type="button"
-            onClick={() => setIsEraser(true)}
-            className="w-9 h-9 rounded-full border-2 flex items-center justify-center transition-all cursor-pointer shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white"
-            style={{
-              borderColor: isEraser ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
-              boxShadow: isEraser ? '0 0 0 2px #047857' : undefined,
-            }}
-            title="지우개"
-            aria-label="지우개"
-          >
-            <Icon name="eraser" size={18} color="#FFFFFF" />
-          </button>
-        </div>
-
-        {/* Thickness & Clear */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 border border-emerald-500 rounded-[var(--r-sm)] p-1 bg-emerald-700/60">
-            {WIDTHS.map((w, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setWidth(w)}
-                className="px-2.5 h-8 rounded-[4px] font-bold text-xs flex items-center justify-center cursor-pointer transition"
-                style={{
-                  background: width === w ? '#FFFFFF' : 'transparent',
-                  color: width === w ? '#047857' : '#FFFFFF',
-                }}
-              >
-                {w === WIDTHS[0] ? '얇게' : '굵게'}
-              </button>
-            ))}
+      {/* 통합 그림판 카드 (Unified Drawing Board Container) */}
+      <div className="rounded-[var(--r-md)] overflow-hidden border border-emerald-700 shadow-md">
+        {/* 초록색 팔레트 패널 (Green Palette Header) */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-emerald-600 text-white border-b border-white/30">
+          {/* Colors Selection */}
+          <div className="flex items-center gap-2">
+            {COLORS.map((col, idx) => {
+              const isSelected = !isEraser && color === col.value;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    setColor(col.value);
+                    setIsEraser(false);
+                  }}
+                  className="w-9 h-9 rounded-full border-2 transition-transform hover:scale-105 cursor-pointer relative shadow-2xs"
+                  style={{
+                    backgroundColor: col.value,
+                    borderColor: isSelected ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
+                    boxShadow: isSelected ? '0 0 0 2px #047857' : undefined,
+                  }}
+                  title={col.name}
+                  aria-label={col.name}
+                >
+                  {isSelected && (
+                    <span className="absolute inset-0 flex items-center justify-center" style={{ color: col.value === '#FFFFFF' ? '#047857' : '#FFFFFF' }}>
+                      <Icon name="check" size={16} strokeWidth={3} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+            {/* Eraser */}
+            <button
+              type="button"
+              onClick={() => setIsEraser(true)}
+              className="w-9 h-9 rounded-full border-2 flex items-center justify-center transition-all cursor-pointer shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white"
+              style={{
+                borderColor: isEraser ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
+                boxShadow: isEraser ? '0 0 0 2px #047857' : undefined,
+              }}
+              title="지우개"
+              aria-label="지우개"
+            >
+              <Icon name="eraser" size={18} color="#FFFFFF" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={clearAll}
-            className="px-3 h-9 rounded-[var(--r-sm)] border border-emerald-400 font-bold text-xs flex items-center gap-1 cursor-pointer bg-white text-rose-600 hover:bg-rose-50 transition shadow-2xs"
-          >
-            <Icon name="refresh" size={14} color="currentColor" /> 전체 지우기
-          </button>
-        </div>
-      </div>
+          {/* Thickness & Clear */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 border border-emerald-500 rounded-[var(--r-sm)] p-1 bg-emerald-700/60">
+              {WIDTHS.map((w, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setWidth(w)}
+                  className="px-2.5 h-8 rounded-[4px] font-bold text-xs flex items-center justify-center cursor-pointer transition"
+                  style={{
+                    background: width === w ? '#FFFFFF' : 'transparent',
+                    color: width === w ? '#047857' : '#FFFFFF',
+                  }}
+                >
+                  {w === WIDTHS[0] ? '얇게' : '굵게'}
+                </button>
+              ))}
+            </div>
 
-      {/* Canvas Area (칠판 감성의 딥 그린 캔버스) */}
-      <div
-        className="w-full h-64 border-b border-x border-emerald-700 rounded-b-[var(--r-md)] relative overflow-hidden"
-        style={{ background: '#064E3B', boxShadow: 'var(--e-1)' }}
-      >
+            <button
+              type="button"
+              onClick={clearAll}
+              className="px-3 h-9 rounded-[var(--r-sm)] border border-emerald-400 font-bold text-xs flex items-center gap-1 cursor-pointer bg-white text-rose-600 hover:bg-rose-50 transition shadow-2xs"
+            >
+              <Icon name="refresh" size={14} color="currentColor" /> 전체 지우기
+            </button>
+          </div>
+        </div>
+
+        {/* Canvas Area (칠판 감성의 딥 그린 캔버스) */}
+        <div
+          className="w-full h-64 relative overflow-hidden"
+          style={{ background: '#064E3B' }}
+        >
         <canvas
           ref={canvasRef}
           className="absolute inset-0 w-full h-full"
@@ -223,5 +225,6 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
         />
       </div>
     </div>
+  </div>
   );
 }
