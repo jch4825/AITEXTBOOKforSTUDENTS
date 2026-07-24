@@ -7,6 +7,7 @@ import PreparedStimulusPanel from './PreparedStimulusPanel';
 import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
+import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
@@ -244,39 +245,6 @@ export default function StudioExperience({
       </div>
     );
   } else if (state.stage === 'ai-compare') {
-    const spokenText = [
-      definition.aiContribution.role,
-      definition.aiContribution.text,
-      definition.aiContribution.question,
-    ].filter(Boolean).join('. ');
-    right = (
-      <div className="space-y-5 p-5 md:p-7">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="studio-kicker" style={{ color: accent }}>AI의 제안과 비교하기</p>
-            <h2 className="mt-1 text-xl font-extrabold">{definition.aiContribution.role}</h2>
-          </div>
-          <button
-            type="button"
-            onClick={() => speakNow(spokenText)}
-            aria-label="AI 의견 읽어주기"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2"
-            style={{ borderColor: accent, color: accent, background: 'var(--editorial-paper)' }}
-          >
-            <Icon name="speaker" size={20} />
-          </button>
-        </div>
-        <blockquote className="studio-margin-note text-lg font-semibold leading-relaxed">
-          {definition.aiContribution.text}
-        </blockquote>
-        {definition.aiContribution.question ? (
-          <p className="font-bold leading-relaxed" style={{ color: accent }}>
-            {definition.aiContribution.question}
-          </p>
-        ) : null}
-      </div>
-    );
-  } else if (state.stage === 'decision') {
     right = (
       <div className="p-5 md:p-7">
         <AiDecisionPanel
@@ -291,6 +259,28 @@ export default function StudioExperience({
           accent={accent}
           onDecision={(value) => dispatch({ type: 'set-ai-decision', value })}
           onExpression={(value) => dispatch({ type: 'set-final-expression', value })}
+        />
+      </div>
+    );
+  } else if (state.stage === 'decision') {
+    right = (
+      <div className="space-y-4 p-5 md:p-7">
+        <div>
+          <span className="studio-kicker" style={{ color: accent }}>5단계 · 실시간 AI 체험</span>
+          <h2 className="text-xl font-extrabold">실시간 AI 아이미와 직접 이야기해요</h2>
+          <p className="mt-1 text-sm text-[color:var(--muted)] font-medium">
+            인공지능(Gemini)에게 궁금한 점을 물어보고, 음성이나 사진/파일을 전달하며 답변을 탐구해 봐요.
+          </p>
+        </div>
+        <LiveGeminiInteraction
+          lessonId={definition.lessonId}
+          accent={accent}
+          promptHint="학습한 내용을 바탕으로 AI 아이미에게 질문하고 함께 탐구해 보세요!"
+          suggestedQuestions={
+            definition.lessonId === 'm1-l1'
+              ? ['AI는 어떤 일들을 할 수 있니?', 'AI와 일반 프로그램은 어떻게 달라?', '번역기 앱도 AI 기능이야?']
+              : undefined
+          }
         />
       </div>
     );
