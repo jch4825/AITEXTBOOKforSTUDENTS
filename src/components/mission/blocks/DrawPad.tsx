@@ -12,6 +12,16 @@ interface Props {
   accent: string;
 }
 
+interface FloatingTextItem {
+  id: string;
+  x: number;
+  y: number;
+  text: string;
+  color: string;
+  fontSize: number;
+  isEditing: boolean;
+}
+
 type ToolMode = 'pen' | 'eraser' | 'text';
 
 const COLORS = [
@@ -35,9 +45,10 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   const [width, setWidth] = useState(WIDTHS[1]); // 디폴트 굵게 (8px)
   const [mode, setMode] = useState<ToolMode>('pen');
 
-  // Text Box Tool state
-  const [activeTextPos, setActiveTextPos] = useState<{ x: number; y: number } | null>(null);
-  const [inputText, setInputText] = useState('');
+  // Text items for dragging & editing
+  const [textItems, setTextItems] = useState<FloatingTextItem[]>([]);
+  const draggingIdRef = useRef<string | null>(null);
+  const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const isEraser = mode === 'eraser';
 
@@ -49,12 +60,10 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas dimensions
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width;
     canvas.height = rect.height;
 
-    // Restore previous drawing if exists
     if (value) {
       const img = new Image();
       img.onload = () => {
@@ -65,16 +74,46 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
     }
   }, []);
 
-  function getPoint(e: ReactPointerEvent<HTMLCanvasElement>) {
-    const rect = e.currentTarget.getBoundingClientRect();
+  function saveCanvasWithTexts(updatedItems = textItems) {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Rasterize committed text items into canvas
+    updatedItems.forEach((item) => {
+      if (!item.isEditing && item.text.trim()) {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = item.color;
+        ctx.font = `bold ${item.fontSize}px sans-serif, "Segoe UI Emoji"`;
+        ctx.fillText(item.text, item.x + 8, item.y + item.fontSize);
+      }
+    });
+
+    onChange(canvas.toDataURL());
+  }
+
+  function getPoint(e: ReactPointerEvent<HTMLCanvasElement> | React.PointerEvent) {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   }
 
   function handlePointerDown(e: ReactPointerEvent<HTMLCanvasElement>) {
     const point = getPoint(e);
     if (mode === 'text') {
-      setActiveTextPos(point);
-      setInputText('');
+      // Create a new draggable text box at clicked location
+      const newItem: FloatingTextItem = {
+        id: `text-${Date.now()}`,
+        x: Math.max(10, Math.min(point.x, 260)),
+        y: Math.max(10, Math.min(point.y, 200)),
+        text: '',
+        color: color === '#FFFFFF' ? '#FFFFFF' : color,
+        fontSize: width === 8 ? 22 : 16,
+        isEditing: true,
+      };
+      setTextItems((prev) => [...prev, newItem]);
       return;
     }
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -83,6 +122,22 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   }
 
   function handlePointerMove(e: ReactPointerEvent<HTMLCanvasElement>) {
+    if (draggingIdRef.current) {
+      const point = getPoint(e);
+      const dx = point.x - dragStartRef.current.x;
+      const dy = point.y - dragStartRef.current.y;
+      dragStartRef.current = point;
+
+      setTextItems((prev) =>
+        prev.map((item) =>
+          item.id === draggingIdRef.current
+            ? { ...item, x: Math.max(0, item.x + dx), y: Math.max(0, item.y + dy) }
+            : item
+        )
+      );
+      return;
+    }
+
     if (!drawingRef.current || mode === 'text') return;
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
@@ -112,35 +167,39 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
   }
 
   function handlePointerUp() {
+    if (draggingIdRef.current) {
+      draggingIdRef.current = null;
+      saveCanvasWithTexts();
+      return;
+    }
+
     if (mode === 'text') return;
     drawingRef.current = false;
     lastPointRef.current = null;
 
-    const canvas = canvasRef.current;
-    if (canvas) {
-      onChange(canvas.toDataURL());
-    }
+    saveCanvasWithTexts();
   }
 
-  function commitText() {
-    if (!activeTextPos || !inputText.trim()) {
-      setActiveTextPos(null);
-      return;
-    }
+  function handleTextDragStart(id: string, e: React.PointerEvent) {
+    e.stopPropagation();
+    draggingIdRef.current = id;
+    dragStartRef.current = getPoint(e);
+  }
 
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    if (canvas && ctx) {
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.fillStyle = color;
-      const fontSize = width === 8 ? 24 : 18;
-      ctx.font = `bold ${fontSize}px sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`;
-      ctx.fillText(inputText, activeTextPos.x, activeTextPos.y + fontSize);
-      onChange(canvas.toDataURL());
-    }
+  function commitItemText(id: string) {
+    setTextItems((prev) => {
+      const next = prev.map((item) => (item.id === id ? { ...item, isEditing: false } : item));
+      saveCanvasWithTexts(next);
+      return next;
+    });
+  }
 
-    setActiveTextPos(null);
-    setInputText('');
+  function removeItem(id: string) {
+    setTextItems((prev) => {
+      const next = prev.filter((item) => item.id !== id);
+      saveCanvasWithTexts(next);
+      return next;
+    });
   }
 
   function clearAll() {
@@ -150,7 +209,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       onChange('');
     }
-    setActiveTextPos(null);
+    setTextItems([]);
   }
 
   return (
@@ -225,8 +284,8 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
                 borderColor: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
                 boxShadow: mode === 'text' ? '0 0 0 2px #047857' : undefined,
               }}
-              title="텍스트 상자 입력 (T)"
-              aria-label="텍스트 상자 입력"
+              title="텍스트 상자 입력 & 이동 (T)"
+              aria-label="텍스트 상자 입력 및 이동"
             >
               T
             </button>
@@ -269,51 +328,75 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
           <canvas
             ref={canvasRef}
             className="absolute inset-0 w-full h-full"
-            style={{ touchAction: 'none', cursor: mode === 'text' ? 'text' : 'crosshair' }}
+            style={{ touchAction: 'none', cursor: mode === 'text' ? 'crosshair' : 'default' }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
           />
 
-          {/* Text Tool Placement Overlay */}
-          {activeTextPos && (
+          {/* Draggable & Editable Text Items Layer */}
+          {textItems.map((item) => (
             <div
-              className="absolute z-20 flex items-center gap-1 bg-emerald-950/95 border-2 border-emerald-300 p-1.5 rounded-xl shadow-2xl animate-scale-in"
+              key={item.id}
+              className="absolute z-20 flex items-center gap-1 bg-emerald-950/90 border border-emerald-300/80 px-2 py-1 rounded-lg shadow-xl cursor-move touch-none group"
               style={{
-                left: Math.min(activeTextPos.x, 220),
-                top: Math.min(activeTextPos.y, 180),
+                left: item.x,
+                top: item.y,
               }}
+              onPointerDown={(e) => handleTextDragStart(item.id, e)}
             >
-              <input
-                type="text"
-                autoFocus
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') commitText();
-                  if (e.key === 'Escape') setActiveTextPos(null);
+              {/* Drag Handle Icon */}
+              <span className="text-emerald-400 text-xs font-mono cursor-grab active:cursor-grabbing select-none pr-1">
+                ⋮⋮
+              </span>
+
+              {item.isEditing ? (
+                <input
+                  type="text"
+                  autoFocus
+                  value={item.text}
+                  onChange={(e) =>
+                    setTextItems((prev) =>
+                      prev.map((t) => (t.id === item.id ? { ...t, text: e.target.value } : t))
+                    )
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') commitItemText(item.id);
+                  }}
+                  onBlur={() => commitItemText(item.id)}
+                  placeholder="글자 입력..."
+                  className="bg-transparent font-bold outline-none border-b border-emerald-400 w-28 sm:w-40"
+                  style={{ color: item.color, fontSize: `${item.fontSize}px` }}
+                />
+              ) : (
+                <span
+                  className="font-bold cursor-pointer select-none"
+                  style={{ color: item.color, fontSize: `${item.fontSize}px` }}
+                  onDoubleClick={() =>
+                    setTextItems((prev) =>
+                      prev.map((t) => (t.id === item.id ? { ...t, isEditing: true } : t))
+                    )
+                  }
+                >
+                  {item.text || '(빈 텍스트)'}
+                </span>
+              )}
+
+              {/* Delete button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeItem(item.id);
                 }}
-                placeholder="글자 입력..."
-                className="bg-transparent font-bold px-2 py-1 outline-none text-base border-b border-emerald-400 w-36 sm:w-48"
-                style={{ color: color === '#FFFFFF' ? '#FFFFFF' : color }}
-              />
-              <button
-                type="button"
-                onClick={commitText}
-                className="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold rounded-lg text-xs shrink-0 cursor-pointer shadow-xs"
+                aria-label="텍스트 삭제"
+                className="text-emerald-300 hover:text-rose-400 font-bold text-sm ml-1 px-1 cursor-pointer"
               >
-                입력
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTextPos(null)}
-                className="px-2 py-1 bg-emerald-900 hover:bg-emerald-800 text-emerald-200 font-bold rounded-lg text-xs shrink-0 cursor-pointer"
-              >
-                취소
+                ×
               </button>
             </div>
-          )}
+          ))}
         </div>
       </div>
     </div>
