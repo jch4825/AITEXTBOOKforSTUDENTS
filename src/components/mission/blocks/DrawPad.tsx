@@ -207,10 +207,10 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
         </div>
       </div>
 
-      {/* Canvas Area */}
+      {/* Canvas Area (칠판 감성의 딥 그린 캔버스) */}
       <div
-        className="w-full h-64 border-b border-x border-[color:var(--line)] rounded-b-[var(--r-md)] relative overflow-hidden"
-        style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-1)' }}
+        className="w-full h-64 border-b border-x border-emerald-700 rounded-b-[var(--r-md)] relative overflow-hidden"
+        style={{ background: '#064E3B', boxShadow: 'var(--e-1)' }}
       >
         <canvas
           ref={canvasRef}
