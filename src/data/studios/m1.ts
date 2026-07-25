@@ -514,6 +514,15 @@ export const M1_STUDIOS: StudioDefinition[] = [
       title: '실시간 검색 기능을 가진 AI라면',
       description: '요즘 인공지능은 인터넷 검색 도구를 연결해 실제 날씨 정보를 직접 찾아보고, 훨씬 더 사실에 가까운 정확한 답변을 냅니다!',
       prompt: '인터넷 검색 도구를 사용하는 AI의 답변을 접했을 때 어떻게 생각해야 할까요?',
+      stimuli: [
+        {
+          id: 'aimi-web-search-real',
+          kind: 'image',
+          src: '/images/aimi_web_search_real.webp',
+          alt: '연분홍빛 흰색 몸체와 남색 LED 화면의 아이미가 인터넷 검색으로 최신 날씨 정보를 확인하는 장면',
+          caption: '인터넷 실시간 검색 도구를 연결한 AI 아이미',
+        },
+      ],
       choices: [
         { id: 'check-official-forecast', emoji: '🔍', label: 'AI가 인터넷 검색을 연결하면 실제 최신 자료를 찾아 훨씬 사실에 가깝고 정확한 답을 내놓습니다.', isCorrect: true },
         { id: 'rewrite-with-source', emoji: '📌', label: '검색 기능이 있더라도 기상청 같은 공식 출처를 함께 확인하면 가장 안전하고 바른 정보를 얻습니다.', isCorrect: true },
