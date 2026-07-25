@@ -8,10 +8,10 @@ interface Balloon {
   probability: number; // 0 to 100
   x: number;
   y: number;
+  targetY: number;
   radius: number;
   color: string;
   borderColor: string;
-  isPopping?: boolean;
 }
 
 interface Particle {
@@ -48,21 +48,21 @@ const GAME_STAGES: StageConfig[] = [
     steps: [
       {
         balloons: [
-          { word: '맛있는', probability: 80 },
+          { word: '맛있는', probability: 85 },
           { word: '달콤한', probability: 55 },
           { word: '엉뚱한', probability: 25 },
         ],
       },
       {
         balloons: [
-          { word: '무지개', probability: 85 },
+          { word: '무지개', probability: 90 },
           { word: '얼큰한', probability: 50 },
           { word: '따뜻한', probability: 30 },
         ],
       },
       {
         balloons: [
-          { word: '아이스크림 떡볶이야!', probability: 90 },
+          { word: '아이스크림 떡볶이야!', probability: 95 },
           { word: '제육볶음이야!', probability: 65 },
           { word: '피자 치킨이야!', probability: 40 },
         ],
@@ -78,13 +78,13 @@ const GAME_STAGES: StageConfig[] = [
     steps: [
       {
         balloons: [
-          { word: '신나는', probability: 75 },
+          { word: '신나는', probability: 80 },
           { word: '조용한', probability: 40 },
         ],
       },
       {
         balloons: [
-          { word: '우주비행사', probability: 85 },
+          { word: '우주비행사', probability: 90 },
           { word: '공룡 친구들의', probability: 45 },
         ],
       },
@@ -105,19 +105,19 @@ const GAME_STAGES: StageConfig[] = [
     steps: [
       {
         balloons: [
-          { word: '햇살 쨍쨍한', probability: 80 },
+          { word: '햇살 쨍쨍한', probability: 85 },
           { word: '바람 쌩쌩', probability: 45 },
         ],
       },
       {
         balloons: [
-          { word: '무지개 구름과', probability: 75 },
+          { word: '무지개 구름과', probability: 80 },
           { word: '초콜릿 비가 내려', probability: 35 },
         ],
       },
       {
         balloons: [
-          { word: '소풍 가기 딱 좋아!', probability: 90 },
+          { word: '소풍 가기 딱 좋아!', probability: 95 },
           { word: '우산 꼭 챙겨요!', probability: 50 },
         ],
       },
@@ -133,30 +133,75 @@ export default function NextWordRunnerGame() {
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
   const [builtSentence, setBuiltSentence] = useState(GAME_STAGES[0].initialPrompt);
   const [gameState, setGameState] = useState<'idle' | 'playing' | 'completed' | 'fact_check'>('idle');
-  const [balloons, setBalloons] = useState<Balloon[]>([]);
-  const [particles, setParticles] = useState<Particle[]>([]);
   const [showHint, setShowHint] = useState(false);
+
+  // Animation state in refs to prevent 60fps React re-renders
+  const balloonsRef = useRef<Balloon[]>([]);
+  const particlesRef = useRef<Particle[]>([]);
+  const gameStateRef = useRef(gameState);
+  const currentStepRef = useRef(currentStepIdx);
+  const currentStageRef = useRef(currentStageIdx);
+  const builtSentenceRef = useRef(builtSentence);
+
+  useEffect(() => { gameStateRef.current = gameState; }, [gameState]);
+  useEffect(() => { currentStepRef.current = currentStepIdx; }, [currentStepIdx]);
+  useEffect(() => { currentStageRef.current = currentStageIdx; }, [currentStageIdx]);
+  useEffect(() => { builtSentenceRef.current = builtSentence; }, [builtSentence]);
 
   const stage = GAME_STAGES[currentStageIdx];
 
-  // Sound synthesizer using Web Audio API for balloon pops
   const playPopSound = () => {
     try {
       const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(400, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+      osc.frequency.setValueAtTime(450, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.35, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start();
-      osc.stop(ctx.currentTime + 0.08);
+      osc.stop(ctx.currentTime + 0.1);
     } catch {
-      // Audio context fallback
+      // Audio fallback
     }
+  };
+
+  const spawnBalloons = (s: StageConfig, stepIdx: number) => {
+    if (stepIdx >= s.steps.length) return;
+    const stepConfig = s.steps[stepIdx];
+    const canvas = canvasRef.current;
+    const width = canvas ? canvas.width : 540;
+    const height = canvas ? canvas.height : 280;
+
+    const colors = [
+      { bg: '#FDE047', border: '#EAB308' }, // High probability: Amber Gold
+      { bg: '#38BDF8', border: '#0284C7' }, // Mid probability: Sky Blue
+      { bg: '#F472B6', border: '#DB2777' }, // Low probability: Rose Pink
+    ];
+
+    const count = stepConfig.balloons.length;
+    const verticalGap = height / (count + 1);
+
+    balloonsRef.current = stepConfig.balloons.map((b, idx) => {
+      // Radius scale based on probability: 95% -> radius 46, 25% -> radius 32
+      const radius = 32 + (b.probability / 100) * 16;
+      const colorScheme = colors[idx % colors.length];
+
+      return {
+        id: `${stepIdx}-${idx}-${Date.now()}`,
+        word: b.word,
+        probability: b.probability,
+        x: width - 90 + (idx % 2 === 0 ? 0 : 35), // Visible right side spawn
+        y: verticalGap * (idx + 1),
+        targetY: verticalGap * (idx + 1),
+        radius,
+        color: colorScheme.bg,
+        borderColor: colorScheme.border,
+      };
+    });
   };
 
   const startStage = (stageIndex: number) => {
@@ -166,84 +211,48 @@ export default function NextWordRunnerGame() {
     setBuiltSentence(s.initialPrompt);
     setGameState('playing');
     setShowHint(false);
-    spawnBalloonsForStep(s, 0);
+    particlesRef.current = [];
+    spawnBalloons(s, 0);
   };
 
-  const spawnBalloonsForStep = (s: StageConfig, stepIdx: number) => {
-    if (stepIdx >= s.steps.length) return;
-    const stepConfig = s.steps[stepIdx];
-    const canvas = canvasRef.current;
-    const width = canvas ? canvas.width : 500;
-    const height = canvas ? canvas.height : 320;
-
-    const colors = [
-      { bg: '#FDE047', border: '#EAB308' }, // Amber / Gold for high prob
-      { bg: '#38BDF8', border: '#0284C7' }, // Sky / Blue for mid prob
-      { bg: '#F472B6', border: '#DB2777' }, // Rose / Pink for low prob
-    ];
-
-    const count = stepConfig.balloons.length;
-    const verticalGap = height / (count + 1);
-
-    const newBalloons: Balloon[] = stepConfig.balloons.map((b, idx) => {
-      // Radius scale based on probability: 85% prob -> radius 42, 30% prob -> radius 28
-      const radius = 26 + (b.probability / 100) * 20;
-      const colorScheme = colors[idx % colors.length];
-
-      return {
-        id: `${stepIdx}-${idx}-${Date.now()}`,
-        word: b.word,
-        probability: b.probability,
-        x: width + 60 + idx * 85, // staggered approach
-        y: verticalGap * (idx + 1),
-        radius,
-        color: colorScheme.bg,
-        borderColor: colorScheme.border,
-      };
-    });
-
-    setBalloons(newBalloons);
-  };
-
-  const handlePopBalloon = (targetBalloon: Balloon) => {
-    if (gameState !== 'playing') return;
+  const popBalloon = (b: Balloon) => {
+    if (gameStateRef.current !== 'playing') return;
 
     playPopSound();
-    speakNow(targetBalloon.word);
+    speakNow(b.word);
 
-    // Create particle explosion
-    const newParticles: Particle[] = [];
-    for (let i = 0; i < 18; i++) {
-      const angle = (Math.PI * 2 * i) / 18;
-      const speed = 2 + Math.random() * 3.5;
-      newParticles.push({
-        x: targetBalloon.x,
-        y: targetBalloon.y,
+    // Spawn 20 particle sparks
+    for (let i = 0; i < 20; i++) {
+      const angle = (Math.PI * 2 * i) / 20;
+      const speed = 2.5 + Math.random() * 4;
+      particlesRef.current.push({
+        x: b.x,
+        y: b.y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        color: targetBalloon.color,
-        radius: 3 + Math.random() * 3,
+        color: b.color,
+        radius: 3.5 + Math.random() * 3.5,
         life: 0,
-        maxLife: 20 + Math.random() * 10,
+        maxLife: 22 + Math.random() * 8,
       });
     }
-    setParticles((prev) => [...prev, ...newParticles]);
 
-    // Append word to sentence
-    const updatedSentence = `${builtSentence} ${targetBalloon.word}`;
-    setBuiltSentence(updatedSentence);
+    const newSentence = `${builtSentenceRef.current} ${b.word}`;
+    setBuiltSentence(newSentence);
 
-    const nextStep = currentStepIdx + 1;
-    if (nextStep < stage.steps.length) {
+    const nextStep = currentStepRef.current + 1;
+    const currentStage = GAME_STAGES[currentStageRef.current];
+
+    if (nextStep < currentStage.steps.length) {
       setCurrentStepIdx(nextStep);
-      spawnBalloonsForStep(stage, nextStep);
+      spawnBalloons(currentStage, nextStep);
     } else {
-      setBalloons([]);
+      balloonsRef.current = [];
       setGameState('completed');
     }
   };
 
-  // Main animation loop
+  // Smooth Canvas Animation Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -254,103 +263,95 @@ export default function NextWordRunnerGame() {
     let time = 0;
 
     const render = () => {
-      time += 0.05;
+      time += 0.03;
 
-      // 1. Clear background
-      ctx.fillStyle = '#0F172A'; // Dark slate
+      // 1. Draw Slate Canvas Background
+      ctx.fillStyle = '#0F172A';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 2. Draw moving speed lines / floor grid
-      ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)';
+      // 2. Draw Moving Floor & Grid
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.35)';
       ctx.lineWidth = 1.5;
-      const lineOffset = (time * 60) % 40;
-      for (let x = -lineOffset; x < canvas.width; x += 40) {
+      const gridOffset = (time * 30) % 40;
+      for (let x = -gridOffset; x < canvas.width; x += 40) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, canvas.height);
         ctx.stroke();
       }
 
-      // Draw floor path line
+      // Track floor line
       ctx.strokeStyle = '#38BDF8';
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(0, canvas.height - 35);
-      ctx.lineTo(canvas.width, canvas.height - 35);
+      ctx.moveTo(0, canvas.height - 30);
+      ctx.lineTo(canvas.width, canvas.height - 30);
       ctx.stroke();
 
       // 3. Draw Aimi Robot Hero (Hovering at x=80)
-      const aimiX = 85;
-      const aimiY = canvas.height / 2 - 10 + Math.sin(time * 2) * 8;
+      const aimiX = 80;
+      const aimiY = canvas.height / 2 - 5 + Math.sin(time * 2) * 6;
 
-      // Aimi Body (pinkish white round body)
       ctx.save();
       ctx.translate(aimiX, aimiY);
 
-      // Glowing aura
+      // Aura
       ctx.beginPath();
-      ctx.arc(0, 0, 32, 0, Math.PI * 2);
+      ctx.arc(0, 0, 30, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(56, 189, 248, 0.15)';
       ctx.fill();
 
-      // Robot Outer Body
+      // Body (Pale Pink White)
       ctx.beginPath();
-      ctx.arc(0, 0, 26, 0, Math.PI * 2);
+      ctx.arc(0, 0, 24, 0, Math.PI * 2);
       ctx.fillStyle = '#F8FAFC';
       ctx.fill();
       ctx.lineWidth = 3;
       ctx.strokeStyle = '#F472B6';
       ctx.stroke();
 
-      // LED Face Screen (Dark Navy)
+      // Face Screen (Dark Navy)
       ctx.beginPath();
-      ctx.roundRect(-16, -10, 32, 20, 8);
+      ctx.roundRect(-15, -9, 30, 18, 7);
       ctx.fillStyle = '#090D16';
       ctx.fill();
 
-      // LED Eyes (Glowing Cyan, blinking)
+      // Glowing Eyes (Cyan LED)
       ctx.fillStyle = '#38BDF8';
-      const eyeHeight = Math.sin(time * 3) > 0.95 ? 1 : 5;
+      const eyeH = Math.sin(time * 3) > 0.96 ? 1 : 4.5;
       ctx.beginPath();
-      ctx.ellipse(-7, 0, 3.5, eyeHeight, 0, 0, Math.PI * 2);
-      ctx.ellipse(7, 0, 3.5, eyeHeight, 0, 0, Math.PI * 2);
+      ctx.ellipse(-6, 0, 3, eyeH, 0, 0, Math.PI * 2);
+      ctx.ellipse(6, 0, 3, eyeH, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      // Antenna
+      // Antenna & Orb
       ctx.beginPath();
-      ctx.moveTo(0, -26);
-      ctx.lineTo(0, -36);
+      ctx.moveTo(0, -24);
+      ctx.lineTo(0, -33);
       ctx.strokeStyle = '#94A3B8';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Antenna Orb
       ctx.beginPath();
-      ctx.arc(0, -38, 4.5, 0, Math.PI * 2);
+      ctx.arc(0, -35, 4, 0, Math.PI * 2);
       ctx.fillStyle = '#F59E0B';
       ctx.fill();
 
-      // Hovering thruster ring underneath
+      // Thruster Ring
       ctx.beginPath();
-      ctx.ellipse(0, 26, 12, 4, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 24, 10, 3.5, 0, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(56, 189, 248, 0.6)';
       ctx.fill();
 
       ctx.restore();
 
-      // 4. Draw Particles (popping sparks)
-      setParticles((prevParticles) =>
-        prevParticles
-          .map((p) => ({
-            ...p,
-            x: p.x + p.vx,
-            y: p.y + p.vy,
-            life: p.life + 1,
-          }))
-          .filter((p) => p.life < p.maxLife)
-      );
+      // 4. Update and Draw Particles
+      particlesRef.current = particlesRef.current.filter((p) => p.life < p.maxLife);
+      particlesRef.current.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life += 1;
 
-      particles.forEach((p) => {
         const alpha = 1 - p.life / p.maxLife;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -361,29 +362,29 @@ export default function NextWordRunnerGame() {
       });
 
       // 5. Update and Draw Approaching Word Balloons
-      if (gameState === 'playing') {
-        setBalloons((prevBalloons) =>
-          prevBalloons.map((b) => {
-            let nextX = b.x - 2.8; // Moving speed towards left
-            // Recycle balloon if it passes Aimi without click
-            if (nextX < -50) {
-              nextX = canvas.width + 80;
-            }
-            return { ...b, x: nextX };
-          })
-        );
+      if (gameStateRef.current === 'playing') {
+        balloonsRef.current.forEach((b, idx) => {
+          // Slow, comfortable, crystal-clear approach speed (0.6px per frame)
+          b.x -= 0.6;
+          b.y = b.targetY + Math.sin(time * 2 + idx) * 4; // Gentle vertical floating
+
+          // If balloon floats past Aimi (x < 140), reset position to right so student never misses it!
+          if (b.x < 140) {
+            b.x = canvas.width - 60 + idx * 75;
+          }
+        });
       }
 
-      balloons.forEach((b) => {
-        // Draw Balloon String
+      balloonsRef.current.forEach((b) => {
+        // Balloon String
         ctx.beginPath();
         ctx.moveTo(b.x, b.y + b.radius);
-        ctx.quadraticCurveTo(b.x + Math.sin(time * 3) * 6, b.y + b.radius + 15, b.x, b.y + b.radius + 30);
+        ctx.quadraticCurveTo(b.x + Math.sin(time * 2.5) * 5, b.y + b.radius + 14, b.x, b.y + b.radius + 26);
         ctx.strokeStyle = '#94A3B8';
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Draw Balloon Body
+        // Balloon Outer Body
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
         ctx.fillStyle = b.color;
@@ -392,26 +393,25 @@ export default function NextWordRunnerGame() {
         ctx.strokeStyle = b.borderColor;
         ctx.stroke();
 
-        // Probability Label Badge (e.g. 85%)
+        // High Probability Badge (e.g. 95% / 80%)
         ctx.fillStyle = '#0F172A';
-        ctx.font = 'bold 11px sans-serif';
+        ctx.font = 'black 11px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(`${b.probability}%`, b.x, b.y - b.radius * 0.45);
+        ctx.fillText(`${b.probability}%`, b.x, b.y - b.radius * 0.42);
 
         // Word Label inside Balloon
         ctx.fillStyle = '#0F172A';
-        ctx.font = 'extrabold 12px sans-serif';
-        ctx.fillText(b.word, b.x, b.y + 6);
+        ctx.font = 'black 13px sans-serif';
+        ctx.fillText(b.word, b.x, b.y + 5);
       });
 
       animId = requestAnimationFrame(render);
     };
 
     render();
-
     return () => cancelAnimationFrame(animId);
-  }, [gameState, balloons, particles]);
+  }, []);
 
   // Handle Canvas Click to Pop Balloon
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -425,14 +425,14 @@ export default function NextWordRunnerGame() {
     const clickX = (e.clientX - rect.left) * scaleX;
     const clickY = (e.clientY - rect.top) * scaleY;
 
-    // Check hit test against balloons
-    const clickedBalloon = balloons.find((b) => {
+    // Generous hit test radius for easy student clicking
+    const clickedBalloon = balloonsRef.current.find((b) => {
       const dist = Math.hypot(clickX - b.x, clickY - b.y);
-      return dist <= b.radius + 10; // Generous hit radius for accessibility
+      return dist <= b.radius + 16;
     });
 
     if (clickedBalloon) {
-      handlePopBalloon(clickedBalloon);
+      popBalloon(clickedBalloon);
     }
   };
 
@@ -492,16 +492,16 @@ export default function NextWordRunnerGame() {
       {/* Hint Alert */}
       {showHint && (
         <div className="mb-2 p-2.5 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-200 text-xs font-bold leading-relaxed">
-          💡 <strong>게임 방법:</strong> 오른쪽에서 다가오는 말풍선 중 더 그럴듯한 단어(큰 풍선, 높은 % 수치)를 클릭하여 터뜨려 보세요!
+          💡 <strong>게임 방법:</strong> 오른쪽에서 천천히 다가오는 말풍선 중 더 그럴듯한 단어(큰 풍선, 높은 % 수치)를 손으로 눌러 터뜨려 보세요!
         </div>
       )}
 
       {/* Game Canvas Viewport */}
-      <div className="relative flex-1 min-h-[220px] w-full rounded-xl overflow-hidden border border-slate-700 bg-slate-950 shadow-inner">
+      <div className="relative flex-1 min-h-[240px] w-full rounded-xl overflow-hidden border border-slate-700 bg-slate-950 shadow-inner">
         <canvas
           ref={canvasRef}
-          width={520}
-          height={260}
+          width={540}
+          height={270}
           onClick={handleCanvasClick}
           className="w-full h-full object-cover cursor-pointer"
         />
@@ -566,7 +566,7 @@ export default function NextWordRunnerGame() {
                   onClick={() => startStage(currentStageIdx + 1)}
                   className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs rounded-xl cursor-pointer"
                 >
-                  ▶ 다음 단계 ({GAME_STAGES[currentStageIdx + 1].title})
+                  ▶ 다음 단계 ({GAME_STAGES[currentStageIdx + 1].title.split('·')[0]})
                 </button>
               ) : (
                 <button
