@@ -17,6 +17,7 @@ export default function CompletionAwardModal({
   inquirySummary,
 }: Props) {
   const [name, setName] = useState(defaultName);
+  const [teacherName, setTeacherName] = useState('');
 
   if (!isOpen) return null;
 
@@ -52,10 +53,10 @@ export default function CompletionAwardModal({
           </button>
         </div>
 
-        {/* Controls: Student Name Input & Print Button */}
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 bg-slate-800/80 p-4 rounded-2xl border border-amber-500/20">
-          <div className="flex items-center gap-3 flex-1 min-w-[16rem]">
-            <label htmlFor="completion-award-name" className="text-sm font-extrabold text-amber-300 shrink-0">
+        {/* Controls: Student Name, Teacher Name, Print Button */}
+        <div className="mb-6 space-y-3 bg-slate-800/80 p-4 rounded-2xl border border-amber-500/20">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+            <label htmlFor="completion-award-name" className="text-sm font-extrabold text-amber-300 shrink-0 sm:w-36">
               상장에 새길 이름:
             </label>
             <input
@@ -63,11 +64,24 @@ export default function CompletionAwardModal({
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="이름을 입력해 보세요"
-              className="flex-1 h-10 px-3.5 rounded-xl border border-amber-400/50 bg-slate-900 text-amber-100 font-bold text-sm outline-none focus:ring-2 focus:ring-amber-400"
+              placeholder="학생 이름"
+              className="w-full sm:flex-1 h-10 px-3.5 rounded-xl border border-amber-400/50 bg-slate-900 text-amber-100 font-bold text-sm outline-none focus:ring-2 focus:ring-amber-400"
             />
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+            <label htmlFor="completion-award-teacher" className="text-sm font-extrabold text-amber-300 shrink-0 sm:w-36">
+              담당 선생님 성명:
+            </label>
+            <input
+              id="completion-award-teacher"
+              type="text"
+              value={teacherName}
+              onChange={(e) => setTeacherName(e.target.value)}
+              placeholder="선생님 이름"
+              className="w-full sm:flex-1 h-10 px-3.5 rounded-xl border border-amber-400/50 bg-slate-900 text-amber-100 font-bold text-sm outline-none focus:ring-2 focus:ring-amber-400"
+            />
+          </div>
+          <div className="flex items-center justify-center gap-2 pt-1">
             <button
               type="button"
               onClick={handlePrint}
@@ -153,15 +167,16 @@ export default function CompletionAwardModal({
               <div className="mt-8 pt-6 border-t border-amber-400/50 flex flex-col md:flex-row items-center justify-between gap-6 px-4">
                 <div className="text-center md:text-left space-y-1 font-sans">
                   <p className="text-base font-bold text-slate-700">{todayStr}</p>
-                  <p className="text-lg font-black text-amber-950 tracking-wider">특수교육 AI 디지털교과서 교육위원회</p>
+                  <p className="text-sm text-slate-500 mt-3">담당 선생님</p>
+                  <p className="text-lg font-black text-slate-800 mt-1 min-w-[8rem] border-b-2 border-slate-400 pb-1">
+                    {teacherName || '\u00A0'}
+                  </p>
                 </div>
 
-                {/* Lavish Red/Gold Ribbon Seal */}
-                <div className="relative shrink-0 flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 p-1 shadow-lg border-2 border-amber-300">
-                  <div className="w-full h-full rounded-full bg-red-700 border-2 border-amber-300 flex flex-col items-center justify-center text-amber-100 text-center p-1 shadow-inner">
-                    <span className="text-[10px] font-extrabold tracking-tighter">AI DIGITAL</span>
-                    <span className="text-xs font-black text-amber-300 my-0.5">인증</span>
-                    <span className="text-[9px] font-bold">교육인증인</span>
+                {/* Decorative Gold Star Ornament */}
+                <div className="relative shrink-0 flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 p-1 shadow-lg border-2 border-amber-200">
+                  <div className="w-full h-full rounded-full bg-amber-50 border-2 border-amber-300 flex items-center justify-center shadow-inner">
+                    <span className="text-4xl select-none">🌟</span>
                   </div>
                 </div>
               </div>

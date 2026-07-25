@@ -146,17 +146,16 @@ export default function InquiryCertificateModal({
 
           {/* Bottom Footer & Official Stamp */}
           <div className="flex items-end justify-between pt-6 border-t-2 border-amber-300/80 mt-auto">
-            <div className="text-xs sm:text-sm text-amber-950 font-bold space-y-1">
+            <div className="text-xs sm:text-sm text-amber-950 font-bold space-y-2">
               <p>수여 일자: {todayStr}</p>
-              <p>발행 기관: 특수교육 AI 디지털교과서 교육위원회</p>
+              <p className="text-slate-500">담당 선생님</p>
+              <div className="w-36 border-b-2 border-slate-400" />
             </div>
 
-            {/* Official Gold Seal Badge */}
+            {/* Decorative Flower Ornament */}
             <div className="relative shrink-0 flex items-center justify-center">
-              <div className="w-22 h-22 sm:w-26 sm:h-26 rounded-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 border-4 border-amber-200 shadow-xl flex flex-col items-center justify-center text-center p-1 text-slate-950 rotate-[-6deg]">
-                <span className="text-xs font-black tracking-tighter">AI 탐구</span>
-                <span className="text-lg sm:text-2xl font-black">인 증</span>
-                <span className="text-[10px] font-extrabold text-amber-950">공식 성찰 기록</span>
+              <div className="w-22 h-22 sm:w-26 sm:h-26 rounded-full bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-4 border-amber-200 shadow-xl flex items-center justify-center rotate-[-6deg]">
+                <span className="text-3xl sm:text-4xl select-none">🌸</span>
               </div>
             </div>
           </div>
