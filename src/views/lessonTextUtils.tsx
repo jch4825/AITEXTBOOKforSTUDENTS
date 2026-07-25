@@ -8,10 +8,12 @@ import DictionaryTerm from '../components/DictionaryTerm';
 export function wrapDictionaryTerms(text: string, terms: string[]): ReactNode[] {
   if (terms.length === 0) return [text];
   
-  // Normalize and filter out '인공지능' (should not have underlines as requested)
+  // Normalize and filter out terms that should not have automatic substring underlines
+  // ('인공지능' per user directive, '인지' because it collides with Korean grammatical ending ~인지/~인지는)
+  const EXCLUDED_TERMS = ['인공지능', '인지'];
   const normalizedTerms = terms
     .map(t => t.normalize('NFC'))
-    .filter(t => t !== '인공지능');
+    .filter(t => !EXCLUDED_TERMS.includes(t));
   
   if (normalizedTerms.length === 0) return [text];
   
