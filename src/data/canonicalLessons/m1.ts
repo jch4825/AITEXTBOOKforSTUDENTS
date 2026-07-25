@@ -286,14 +286,14 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       ],
     },
     transfer: {
-      title: '날씨 소개글 검토',
-      scenario: '아이미가 작성한 "오늘 서울 날씨는 따뜻한 화창한 봄날입니다" 글을 만났을 때 어떻게 할까요?',
+      title: '검색 기능이 있는 AI의 오늘 날씨 답변',
+      scenario: '요즘 AI는 인터넷 검색을 연결해 실제 날씨 정보를 찾아보고 훨씬 정확하고 사실에 가까운 답변을 내놓을 수 있습니다.',
       activity: {
         id: 'act-transfer-m1-l3',
         kind: 'single-choice',
-        prompt: '그럴듯한 날씨 소개글을 보고 무엇을 해야 할까요?',
+        prompt: '인터넷 검색 기능이 연결된 AI가 답변할 때의 특징으로 가장 알맞은 것은 무엇일까요?',
         choices: [
-          { id: 'check-real', label: '기상청 공식 예보를 확인해서 진짜 맞는지 비교해요', emoji: '☀️' },
+          { id: 'check-real', label: '실제 검색 정보가 반영되어 훨씬 사실에 가깝고 정확해져요', emoji: '🔍' },
         ],
       },
     },
