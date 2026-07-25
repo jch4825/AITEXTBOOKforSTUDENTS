@@ -8,9 +8,9 @@ import { filterAiResponse } from './safetyFilter';
  * naturally lands on 2.5-flash for those keys).
  */
 export const MODEL_FALLBACK = [
-  'gemini-2.5-flash',        // GA — fast and reliable
-  'gemini-2.0-flash',        // GA — fallback
-  'gemini-1.5-flash',        // GA — standard fallback
+  'gemini-1.5-flash',        // GA — Primary standard model, 100% compatible
+  'gemini-2.0-flash-exp',    // GA — Fast 2.0 model
+  'gemini-1.5-pro',          // GA — Pro model fallback
 ] as const;
 
 const REQUEST_TIMEOUT_MS = 15_000;
@@ -24,7 +24,7 @@ export interface GeminiImageAttachment {
 
 export interface GeminiSuccess {
   text: string;                 // safety-filtered text ready to show a student
-  modelUsed: string;            // e.g. "gemini-2.5-flash"
+  modelUsed: string;            // e.g. "gemini-1.5-flash"
   safe: boolean;                // false → filter replaced the response
   attemptLog: string[];         // per-model attempt outcome (for teacher diagnostics)
 }
@@ -98,7 +98,7 @@ export async function askGemini(
 
   throw new GeminiError(
     'all-models-failed',
-    'AI가 졸려서 못 들었나봐. 다시 해보자!',
+    '인공지능 응답을 불러오는 중 잠시 지연이 발생했어요. 질문 카드나 전송 버튼을 한 번 더 눌러보세요!',
     `All ${MODEL_FALLBACK.length} models failed:\n${attemptLog.join('\n')}`,
   );
 }
