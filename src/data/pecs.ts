@@ -31,6 +31,13 @@ export const PECS_LABELS: Record<string, string> = {
   enter_store: '가게에 들어갑니다', do_nothing: '아무것도 안 합니다', give_up: '포기합니다',
   random_choice: '아무거나 골라습니다', long_time: '오래 걸립니다',
   tidy_room: '자동 정리 로봇',
+  electric_fan: '선풍기',
+  automatic_door: '자동문',
+  music_app: '음악 추천 앱',
+  robot_vacuum: '로봇청소기',
+  smart_light: '스마트 조명',
+  library_kiosk: '도서관 추천 기계',
+  translate: 'AI 번역',
 };
 
 // 기본 의사소통 욕구 — 모든 모듈에서 항상 노출
@@ -38,7 +45,22 @@ export const PECS_COMMON: string[] = ['toilet', 'faucet', 'paper_cup', 'snack'];
 
 // 모듈별 관련 단어 (초안 — 교사 피드백으로 조정)
 export const PECS_BY_MODULE: Record<ModuleId, string[]> = {
-  m1: ['smartphone', 'ai_speaker', 'ai_aimi', 'refrigerator', 'cat', 'rabbit', 'elephant', 'dinosaur', 'alarm_clock', 'window', 'tap_screen', 'toaster', 'aircon', 'tidy_room', 'umbrella'],
+  m1: [
+    'ai_aimi',
+    'smartphone',
+    'electric_fan',
+    'automatic_door',
+    'music_app',
+    'robot_vacuum',
+    'smart_light',
+    'library_kiosk',
+    'translate',
+    'cat',
+    'dog',
+    'medicine',
+    'personal_info',
+    'music',
+  ],
   m2: [
     'ai_aimi', 'smartphone', 'book', 'pencil', 'sunglasses', 'unclear_speech',
     'vague_request', 'ask_again', 'easy_explain', 'short_question', 'example_request',
