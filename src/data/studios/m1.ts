@@ -375,6 +375,11 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI는 어떻게 답을 만들까?',
     subtitle: 'AI가 다음 말을 이어 답을 만드는 모습을 보고, 확인할 문장을 찾아봐요.',
+    suggestedQuestions: [
+      '오늘 우리 학교 식단은 뭐야?',
+      '우리 학교에서 아이돌이 콘서트를 한다며?',
+      'AI가 모르는 소식에 대해 왜 자신 있게 말하니?',
+    ],
     visualNovel: {
       title: '아이미의 엉뚱 당당 급식 메뉴 발표!',
       objective: '오늘은 AI가 다음 말을 이어 답을 만드는 모습을 보고, 확인할 문장을 찾아봐요.',
