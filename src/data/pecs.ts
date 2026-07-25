@@ -42,6 +42,17 @@ export const PECS_LABELS: Record<string, string> = {
   flower: '꽃',
   stranger: '모르는 사람',
   camera: '사진 카메라',
+  dog: '강아지',
+  personal_info: '개인정보',
+  music: '음악·노래',
+  chatbot: '챗봇',
+  tell_adult: '어른에게 알리기',
+  meal: '식사하기',
+  homework: '숙제하기',
+  sleep: '잠자기',
+  grocery_shopping: '장보기',
+  weather: '일기예보/날씨',
+  map_app: '지도 앱/길찾기',
 };
 
 // 기본 의사소통 욕구 — 모든 모듈에서 항상 노출
