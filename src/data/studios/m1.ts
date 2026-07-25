@@ -380,6 +380,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
       '우리 학교에서 아이돌이 콘서트를 한다며?',
       'AI가 모르는 소식에 대해 왜 자신 있게 말하니?',
     ],
+    decisionTitle: '직접 아이미가 하는 말이 진짜인지 거짓인지 알아봐요.',
     visualNovel: {
       title: '아이미의 엉뚱 당당 급식 메뉴 발표!',
       objective: '오늘은 AI가 다음 말을 이어 답을 만드는 모습을 보고, 확인할 문장을 찾아봐요.',

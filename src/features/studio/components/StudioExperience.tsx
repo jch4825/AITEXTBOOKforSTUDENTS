@@ -362,7 +362,9 @@ export default function StudioExperience({
       <div className="space-y-4 p-5 md:p-7">
         <div>
           <span className="studio-kicker" style={{ color: accent }}>5단계 · 실시간 AI 체험</span>
-          <h2 className="text-xl font-extrabold">실시간 AI 아이미와 직접 이야기해요</h2>
+          <h2 className="text-xl font-extrabold">
+            {definition.decisionTitle || '직접 아이미가 하는 말이 진짜인지 거짓인지 알아봐요.'}
+          </h2>
           <p className="mt-1 text-sm text-[color:var(--muted)] font-medium">
             인공지능(Gemini)에게 궁금한 점을 물어보고, 음성이나 사진/파일을 전달하며 답변을 탐구해 봐요.
           </p>

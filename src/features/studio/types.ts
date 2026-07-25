@@ -113,6 +113,7 @@ export interface StudioDefinition {
     question?: string;
   };
   suggestedQuestions?: string[];
+  decisionTitle?: string;
   artifact: {
     kind:
       | 'action-card'
