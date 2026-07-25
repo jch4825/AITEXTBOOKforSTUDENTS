@@ -378,8 +378,8 @@ export default function StudioExperience({
 
           {/* 탐구 증서 인쇄 영역 */}
           <div className="pt-3">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/70 shadow-2xs">
-              <div className="flex items-center gap-2 flex-1">
+            <div className="flex flex-col gap-3 p-4 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/70 shadow-2xs">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                 <label htmlFor="student-certificate-name" className="text-sm font-extrabold text-amber-900 shrink-0">
                   👤 학생 이름 (선택):
                 </label>
@@ -389,13 +389,13 @@ export default function StudioExperience({
                   value={studentName}
                   onChange={(e) => setStudentName(e.target.value)}
                   placeholder="이름을 적으면 탐구 증서에 인쇄돼요"
-                  className="flex-1 min-w-0 h-10 px-3.5 rounded-xl border border-amber-300 text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-amber-500"
+                  className="w-full sm:flex-1 min-w-0 h-10 px-3.5 rounded-xl border border-amber-300 text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
               <button
                 type="button"
                 onClick={() => setShowCertificateModal(true)}
-                className="h-10 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0 hover:scale-102 active:scale-98"
+                className="w-full h-11 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md hover:scale-101 active:scale-98"
               >
                 <span>🏆</span> 탐구 증서로 인쇄하기
               </button>
