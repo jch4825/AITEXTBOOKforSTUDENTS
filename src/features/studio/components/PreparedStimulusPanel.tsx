@@ -16,15 +16,17 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
     setFailedImages((current) => current.includes(id) ? current : [...current, id]);
   }
 
+  const isSingle = stimuli.length === 1;
+
   return (
-    <div className="grid gap-3 sm:grid-cols-2" aria-label="교과서에 준비된 이미지와 소리">
+    <div className={`grid gap-3 ${isSingle ? 'grid-cols-1' : 'sm:grid-cols-2'}`} aria-label="교과서에 준비된 이미지와 소리">
       {stimuli.map((stimulus) => {
         if (stimulus.kind === 'image') {
           const failed = failedImages.includes(stimulus.id);
           return (
             <figure
               key={stimulus.id}
-              className="overflow-hidden rounded-2xl border-2 p-3"
+              className="overflow-hidden rounded-2xl border-2 p-3 shadow-2xs"
               style={{ borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' }}
             >
               {failed ? (
@@ -41,10 +43,10 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                   src={stimulus.src}
                   alt={stimulus.alt}
                   onError={() => markImageFailed(stimulus.id)}
-                  className="mx-auto h-36 w-full object-contain"
+                  className={`mx-auto w-full rounded-xl object-cover ${isSingle ? 'h-48 sm:h-56' : 'h-36 object-contain'}`}
                 />
               )}
-              <figcaption className="mt-2 text-sm font-semibold leading-relaxed">{stimulus.caption}</figcaption>
+              <figcaption className="mt-2 text-sm font-semibold leading-relaxed text-[color:var(--ink-1)]">{stimulus.caption}</figcaption>
             </figure>
           );
         }

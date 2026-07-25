@@ -156,7 +156,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'library-ai-kiosk-image',
           kind: 'image',
-          src: '/images/library_ai_kiosk.jpg',
+          src: '/images/library_ai_kiosk.webp',
           alt: '도서관에서 인공지능 추천 기계와 대화하며 책을 추천받는 모습',
           caption: '도서관에 설치된 인공지능 책 추천 기계',
         },
