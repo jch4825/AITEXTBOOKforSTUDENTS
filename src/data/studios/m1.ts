@@ -150,8 +150,17 @@ export const M1_STUDIOS: StudioDefinition[] = [
       prompt: '“AI(인공지능)는 …이며, …을 할 수 있는 도구예요” 문장을 내 말로 완성해 봐요.',
     },
     transfer: {
-      title: '새 안내 기기를 만났다면',
-      description: '도서관의 새 안내 기기가 질문을 받아 책을 추천합니다. 이 기기가 할 수 있는 일을 어떻게 설명하겠습니까?',
+      title: '도서관에 새로운 인공지능 추천 기계가 생겼어요.',
+      description: '도서관에 새로 설치된 인공지능 추천 기계는 나의 질문을 받아서 책을 추천해준다고 합니다.',
+      stimuli: [
+        {
+          id: 'library-ai-kiosk-image',
+          kind: 'image',
+          src: '/images/library_ai_kiosk.jpg',
+          alt: '도서관에서 인공지능 추천 기계와 대화하며 책을 추천받는 모습',
+          caption: '도서관에 설치된 인공지능 책 추천 기계',
+        },
+      ],
       choices: [
         { id: 'describe-input-output', emoji: '🗺️', label: '질문을 입력받아 관련 책을 찾아 추천하는 인공지능(AI) 기능이라고 소개합니다.' },
         { id: 'call-all-knowing', emoji: '⭐', label: '도서관의 모든 일을 완벽하게 아는 친구라고 소개합니다.' },

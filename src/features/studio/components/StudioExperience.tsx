@@ -86,11 +86,13 @@ export default function StudioExperience({
     : showingChangedContext
       ? definition.conditionChange.facts
       : definition.encounter.facts;
-  const contextStimuli = state.stage === 'transfer' || state.stage === 'complete'
+  const contextStimuli = state.stage === 'complete'
     ? undefined
-    : showingChangedContext
-      ? definition.conditionChange.stimuli
-      : definition.encounter.stimuli;
+    : state.stage === 'transfer'
+      ? definition.transfer.stimuli
+      : showingChangedContext
+        ? definition.conditionChange.stimuli
+        : definition.encounter.stimuli;
 
   if (state.stage === 'encounter' && definition.visualNovel) {
     return (
@@ -366,7 +368,7 @@ export default function StudioExperience({
           value={state.transferExpression}
           choices={definition.transfer.choices}
           modes={definition.firstAttempt.modes}
-          prompt="이 장면에서는 어떤 방법을 써 보겠습니까?"
+          prompt="나만의 표현으로 도서관의 인공지능 추천 기계를 친구에게 설명해보자."
           accent={accent}
           onChange={(value) => dispatch({ type: 'set-transfer', value })}
         />

@@ -129,6 +129,7 @@ export interface StudioDefinition {
     title: string;
     description: string;
     choices: StudioChoice[];
+    stimuli?: PreparedStimulus[];
   };
   safetyNote?: string;
 }
