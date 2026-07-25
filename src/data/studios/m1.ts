@@ -311,7 +311,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         { id: 'app-only-by-name', emoji: '📱', label: '기기의 겉모습이나 앱이라는 이름만 보고 판단합니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
-      reasonPrompt: '그 기능에서 먼저 확인하고 싶은 입력은 무엇인가요?',
+      reasonPrompt: '어떤 기기의 입력이 가장 궁금한가요?',
     },
     supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {

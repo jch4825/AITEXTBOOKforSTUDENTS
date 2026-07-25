@@ -267,7 +267,7 @@ export default function StudioExperience({
         />
         <label className="block">
           <span className="mb-2 block text-sm font-bold text-[color:var(--muted)]">
-            {definition.firstAttempt.reasonPrompt} · 선택 사항
+            {definition.firstAttempt.reasonPrompt} (자유롭게 작성)
           </span>
           <input
             value={state.reason ?? ''}
