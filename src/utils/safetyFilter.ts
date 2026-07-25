@@ -31,7 +31,14 @@ export function filterAiResponse(raw: string): FilterResult {
     }
   }
 
-  // Remove any residual leading English evaluation lines or schematic tokens
+  // Remove any residual leading English evaluation lines, prompt echoes, or schematic tokens
+  if (/No English|No symbols|Only Korean|쓰지 마시고|No letters/i.test(trimmed)) {
+    const match = trimmed.match(/([가-힣][^]*)/);
+    if (match) {
+      trimmed = match[1].replace(/^(?:를 쓰지 마시고|쓰지 마시고)["'\s\->]*/, '').trim();
+    }
+  }
+
   trimmed = trimmed.replace(/^(?:[a-zA-Z0-9\s.,:*_\-></()\n]+[:\n>])+(?=[가-힣])/, '').trim();
   if (/^[a-zA-Z0-9\s/\\>_<:-]{3,}\s*(?=[가-힣])/.test(trimmed)) {
     const koreanMatch = trimmed.match(/([가-힣][^]*)/);

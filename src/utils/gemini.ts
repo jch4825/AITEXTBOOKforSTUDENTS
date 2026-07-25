@@ -17,7 +17,7 @@ export const MODEL_FALLBACK = [
 
 const REQUEST_TIMEOUT_MS = 15_000;
 const RESPONSE_HINT =
-  '너의 이름은 "아이미"야. 너는 특수교육 AI 교과서의 친절한 로봇 친구야. 발달장애 학생이 이해하기 쉬운 친절하고 부드러운 어조로 2~3문장 이내의 완전한 문장으로 답변해 줘.';
+  '너는 특수교육 AI 교과서의 친절한 로봇 도우미 "아이미"야. 언제나 발달장애 학생의 눈높이에 맞춰 쉽고 따뜻한 한국어 2~3문장으로 완결된 대답을 해 줘.';
 
 export interface GeminiImageAttachment {
   mimeType: string;
@@ -113,9 +113,7 @@ async function callModel(
   imageAttachment?: GeminiImageAttachment
 ): Promise<RawGeminiResponse> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const GLOBAL_FORMAT_RULE =
-    ' [중요: 영어나 기호, 다이어그램을 쓰지 마시고, 2~3문장의 완결된 순수 한글로 답변하세요.]';
-  const systemText = (systemInstructionOverride || RESPONSE_HINT) + GLOBAL_FORMAT_RULE;
+  const systemText = systemInstructionOverride || RESPONSE_HINT;
 
   const parts: Array<Record<string, any>> = [];
 
