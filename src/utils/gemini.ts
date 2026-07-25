@@ -84,12 +84,24 @@ export async function askGemini(
           `Blocked by upstream safety: ${raw.promptFeedback.blockReason}`,
         );
       }
-      if (!rawText) {
-        attemptLog.push(`${model}: empty response (finish=${candidate?.finishReason ?? 'unknown'})`);
-        continue;
+      let textToFilter = rawText;
+
+      // Safeguard against mid-sentence truncation
+      if (textToFilter && !/[.!?~"'\u201D\u2019]$/.test(textToFilter)) {
+        const lastBoundary = Math.max(
+          textToFilter.lastIndexOf('.'),
+          textToFilter.lastIndexOf('!'),
+          textToFilter.lastIndexOf('?'),
+          textToFilter.lastIndexOf('~'),
+        );
+        if (lastBoundary > 20) {
+          textToFilter = textToFilter.substring(0, lastBoundary + 1).trim();
+        } else {
+          textToFilter = textToFilter.trim() + '!';
+        }
       }
 
-      const filtered = filterAiResponse(rawText);
+      const filtered = filterAiResponse(textToFilter);
       attemptLog.push(`${model}: OK`);
       return { text: filtered.text, modelUsed: model, safe: filtered.safe, attemptLog };
     } catch (err) {
