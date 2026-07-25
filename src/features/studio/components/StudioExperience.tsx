@@ -152,11 +152,53 @@ export default function StudioExperience({
     );
   }
 
+  const isCompleteStage = state.stage === 'complete';
   const contextTitle = state.stage === 'transfer'
     ? definition.transfer.title
     : definition.encounter.title;
 
-  const left = (
+  const left = isCompleteStage ? (
+    <div className="flex h-full flex-col justify-between rounded-2xl p-5 md:p-7 space-y-4 overflow-y-auto">
+      <div className="space-y-4">
+        <div>
+          <p className="studio-kicker" style={{ color: secondary }}>
+            차시 탐구 종합 정리
+          </p>
+          <h2 className="mt-1 text-xl font-extrabold" style={{ color: 'var(--brand-ink)' }}>
+            오늘 배운 핵심 이야기
+          </h2>
+        </div>
+
+        {/* Story 1: 조건 변화 탐구 (로봇청소기) */}
+        <div className="space-y-2 p-3.5 rounded-xl border border-slate-200 bg-white/80 shadow-2xs">
+          <div className="flex items-center gap-2 font-extrabold text-sm text-slate-800">
+            <span className="text-base">🤖</span>
+            <span>1. 로봇청소기와 센서·AI 기능 탐구</span>
+          </div>
+          <p className="text-xs font-semibold text-slate-700 leading-relaxed">
+            {definition.conditionChange.description}
+          </p>
+          {definition.conditionChange.stimuli?.length ? (
+            <PreparedStimulusPanel stimuli={definition.conditionChange.stimuli} accent={accent} />
+          ) : null}
+        </div>
+
+        {/* Story 2: 새로운 상황 적용 (스마트 조명) */}
+        <div className="space-y-2 p-3.5 rounded-xl border border-slate-200 bg-white/80 shadow-2xs">
+          <div className="flex items-center gap-2 font-extrabold text-sm text-slate-800">
+            <span className="text-base">💡</span>
+            <span>2. {definition.transfer.title} (새 상황 적용)</span>
+          </div>
+          <p className="text-xs font-semibold text-slate-700 leading-relaxed">
+            {definition.transfer.description}
+          </p>
+          {definition.transfer.stimuli?.length ? (
+            <PreparedStimulusPanel stimuli={definition.transfer.stimuli} accent={accent} />
+          ) : null}
+        </div>
+      </div>
+    </div>
+  ) : (
     <div className="flex h-full flex-col justify-between rounded-2xl p-5 md:p-7">
       <div className="space-y-5">
         <div>
@@ -447,7 +489,7 @@ export default function StudioExperience({
             </dd>
           </div>
           <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
-            <dt className="font-extrabold text-sm" style={{ color: accent }}>4. 새로운 도서관 AI 추천 기계 적용 (P07)</dt>
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>4. {definition.transfer.title} (P07)</dt>
             <dd>{renderExpressionDetail(state.transferExpression, definition.transfer.choices, accent)}</dd>
           </div>
         </dl>
