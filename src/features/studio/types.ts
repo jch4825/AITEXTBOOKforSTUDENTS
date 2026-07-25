@@ -128,6 +128,7 @@ export interface StudioDefinition {
   transfer: {
     title: string;
     description: string;
+    prompt?: string;
     choices: StudioChoice[];
     stimuli?: PreparedStimulus[];
   };

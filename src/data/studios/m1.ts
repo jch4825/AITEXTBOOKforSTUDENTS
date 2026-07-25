@@ -153,6 +153,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '도서관에 새로운 인공지능 추천 기계가 생겼어요.',
       description: '도서관에 새로 설치된 인공지능 추천 기계는 나의 질문을 받아서 책을 추천해준다고 합니다.',
+      prompt: '나만의 표현으로 도서관의 인공지능 추천 기계를 친구에게 설명해보자.',
       stimuli: [
         {
           id: 'library-ai-kiosk-image',
@@ -307,10 +308,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '스마트 조명을 살펴본다면',
       description: '스마트 조명이 움직임을 감지해 켜지고, 내가 자주 끄는 시간을 배워 밝기를 추천합니다.',
+      prompt: '나만의 표현으로 스마트 조명 속에 들어있는 여러 기능을 친구에게 설명해보자.',
       choices: [
-        { id: 'call-whole-device-ai', emoji: '💡', label: '조명 전체를 하나의 AI라고만 부릅니다.' },
-        { id: 'separate-functions', emoji: '🧩', label: '움직임 감지와 사용 기록 추천 기능을 나누어 설명합니다.' },
-        { id: 'check-lighting', emoji: '👀', label: '추천 밝기가 활동과 안전에 맞는지는 사람이 확인합니다.' },
+        { id: 'separate-sensor-action', emoji: '💡', label: '움직임 감지 센서 기능과 조명이 켜지는 기본 작동을 구분하여 설명합니다.', isCorrect: true },
+        { id: 'combine-sensor-ai', emoji: '🧩', label: '센서 감지 기능과 사용 습관을 배우는 밝기 추천 AI가 함께 작동함을 설명합니다.', isCorrect: true },
+        { id: 'call-whole-device-ai', emoji: '⚙️', label: '조명의 겉모습만 보고 기기 전체를 무조건 하나의 AI라고만 부릅니다.', isCorrect: false },
+        { id: 'all-electric-ai', emoji: '⚡', label: '전기로 켜지는 모든 조명은 스스로 생각하므로 무조건 AI라고 부릅니다.', isCorrect: false },
       ],
     },
   },
@@ -451,10 +454,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '오늘 날씨 소개문이라면',
       description: '아이미가 “오늘은 따뜻하고 맑아요”라고 썼지만 지역과 날짜를 표시하지 않았습니다.',
+      prompt: '나만의 표현으로 AI가 작성한 날씨 소개문을 어떻게 검토할지 설명해보자.',
       choices: [
-        { id: 'trust-weather-tone', emoji: '☀️', label: '문장이 자연스러우니 그대로 사용합니다.' },
-        { id: 'check-official-forecast', emoji: '🌦️', label: '지역과 날짜가 있는 공식 예보와 비교합니다.' },
-        { id: 'rewrite-with-source', emoji: '✍️', label: '확인한 예보를 바탕으로 소개문을 고칩니다.' },
+        { id: 'check-official-forecast', emoji: '🌦️', label: '지역과 날짜가 포함된 기상청 공식 예보 자료와 대조합니다.', isCorrect: true },
+        { id: 'rewrite-with-source', emoji: '✍️', label: '확인한 공식 예보를 바탕으로 빠진 지역과 날짜를 넣고 문장을 고칩니다.', isCorrect: true },
+        { id: 'trust-weather-tone', emoji: '☀️', label: '문장이 부드럽고 따뜻하게 느껴지므로 대조 없이 그대로 발표합니다.', isCorrect: false },
+        { id: 'ignore-verification', emoji: '❌', label: 'AI가 적어준 글은 무조건 사실이라고 믿고 즉시 공유합니다.', isCorrect: false },
       ],
     },
   },
@@ -595,10 +600,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '흐린 분리배출 표지판',
       description: '빛이 반사되어 흐릿한 분리배출 표지판을 AI가 “일반 쓰레기”라고 읽었습니다. 어떻게 확인하겠습니까?',
+      prompt: '나만의 표현으로 흐릿한 표지판 사진을 AI가 잘못 읽었을 때 어떻게 할지 설명해보자.',
       choices: [
-        { id: 'follow-first-sign', emoji: '➡️', label: 'AI가 처음 읽은 내용대로 바로 버립니다.' },
-        { id: 'change-sign-angle', emoji: '📐', label: '반사를 줄이도록 각도를 바꾸어 다시 확인합니다.' },
-        { id: 'ask-staff', emoji: '👤', label: '표지판 원본이나 담당자 안내와 비교합니다.' },
+        { id: 'change-sign-angle', emoji: '📐', label: '빛 반사를 줄이도록 표지판 사진의 각도와 밝기를 바꾸어 다시 인식해 봅니다.', isCorrect: true },
+        { id: 'ask-staff', emoji: '👤', label: '실물 표지판 원본을 눈으로 직접 보거나 관리 담당자 안내와 대조합니다.', isCorrect: true },
+        { id: 'follow-first-sign', emoji: '➡️', label: 'AI가 처음 잘못 읽은 판단 그대로 쓰레기를 분류해 버립니다.', isCorrect: false },
+        { id: 'believe-all-images', emoji: '🖼️', label: '사진 상태와 상관없이 AI는 언제나 정답만 말한다고 믿습니다.', isCorrect: false },
       ],
     },
     safetyNote: '수업용으로 준비된 사진만 사용하며 학생의 얼굴 사진은 입력하지 않습니다.',
@@ -740,10 +747,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '체육관 안내가 잘 들리지 않는다면',
       description: '넓은 체육관에서 다음 활동 장소를 알려 주는 음성 안내가 화면에 다르게 적혔습니다.',
+      prompt: '나만의 표현으로 주변이 시끄러울 때 음성 인식 결과를 어떻게 확인할지 설명해보자.',
       choices: [
-        { id: 'follow-gym-text', emoji: '🚶', label: '변환된 글자만 보고 바로 이동합니다.' },
-        { id: 'replay-gym-audio', emoji: '🎧', label: '안내를 다시 듣고 장소 표지와 비교합니다.' },
-        { id: 'use-accessible-option', emoji: '♿', label: '글자·그림 안내나 사람의 도움을 선택합니다.' },
+        { id: 'replay-gym-audio', emoji: '🎧', label: '안내 방송을 조용한 곳에서 다시 듣고 게시된 장소 표지와 대조합니다.', isCorrect: true },
+        { id: 'use-accessible-option', emoji: '♿', label: '타자 입력, 그림 안내판, 또는 선생님의 도움을 요청합니다.', isCorrect: true },
+        { id: 'follow-gym-text', emoji: '🚶', label: '시끄러운 소음 속에서 잘못 인식된 글자만 믿고 바로 이동합니다.', isCorrect: false },
+        { id: 'ignore-noise-condition', emoji: '📢', label: '소음 조건이 바뀌어도 음성 인식 결과는 무조건 정확하다고 봅니다.', isCorrect: false },
       ],
     },
     safetyNote: '실제 학생의 목소리를 저장하지 않고 수업용으로 준비된 음성만 사용합니다.',
@@ -885,10 +894,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '분리배출 모양을 배우는 AI라면',
       description: '원형 표시만 많이 배운 AI가 네모난 재활용 표지를 일반 쓰레기로 분류했습니다.',
+      prompt: '나만의 표현으로 부족한 학습 자료를 바르게 보완하는 방법을 설명해보자.',
       choices: [
-        { id: 'accept-recycle-result', emoji: '🏷️', label: 'AI 결과를 그대로 사용합니다.' },
-        { id: 'balance-recycle-data', emoji: '📚', label: '여러 모양과 재질의 표지 자료를 고르게 준비합니다.' },
-        { id: 'compare-recycle-test', emoji: '🔍', label: '같은 시험 자료로 바꾸기 전후를 비교합니다.' },
+        { id: 'balance-recycle-data', emoji: '📚', label: '동그라미, 네모 등 다양한 모양과 재질의 표지 자료를 고르게 추가합니다.', isCorrect: true },
+        { id: 'compare-recycle-test', emoji: '🔍', label: '자료를 보완한 뒤 같은 시험용 자료로 판정 결과를 전후 비교합니다.', isCorrect: true },
+        { id: 'accept-recycle-result', emoji: '🏷️', label: '학습 자료가 한쪽으로 치우쳐 나타난 오판 결과를 그대로 받아들입니다.', isCorrect: false },
+        { id: 'stop-data-learning', emoji: '🚫', label: '자료를 더 모으지 않고 처음 배운 잘못된 판단 기준을 유지합니다.', isCorrect: false },
       ],
     },
   },
@@ -1028,10 +1039,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '준비물 안내를 짧게 보낸다면',
       description: 'AI가 학급 준비물 안내를 한 문장으로 줄였는데 가져오는 날짜가 빠졌습니다.',
+      prompt: '나만의 표현으로 AI 요약문에서 중요한 내용이 빠졌을 때 어떻게 할지 설명해보자.',
       choices: [
-        { id: 'send-short-supply', emoji: '📨', label: '짧고 읽기 쉬우니 그대로 보냅니다.' },
-        { id: 'check-supply-source', emoji: '📰', label: '원문에서 날짜와 준비물을 확인합니다.' },
-        { id: 'repair-supply-summary', emoji: '✏️', label: '빠진 날짜를 넣고 확인한 안내를 공유합니다.' },
+        { id: 'check-supply-source', emoji: '📰', label: '원문 안내판과 대조하여 날짜와 핵심 준비물이 남아있는지 확인합니다.', isCorrect: true },
+        { id: 'repair-supply-summary', emoji: '✏️', label: '빠진 핵심 날짜를 직접 보완하여 정확한 완성본을 만듭니다.', isCorrect: true },
+        { id: 'send-short-supply', emoji: '📨', label: '날짜가 빠졌지만 글이 짧고 읽기 쉬우므로 그대로 전송합니다.', isCorrect: false },
+        { id: 'trust-summary-only', emoji: '⚡', label: 'AI 요약은 빨라야 하므로 원문 확인을 생략하고 공유합니다.', isCorrect: false },
       ],
     },
   },
@@ -1172,10 +1185,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '계정이 잠겼다면',
       description: '친구가 AI에게 비밀번호를 알려 주고 계정 잠금을 풀어 달라고 부탁하려 합니다.',
+      prompt: '나만의 표현으로 개인정보나 계정 관리처럼 AI에게 맡기기 어려운 일을 구분해보자.',
       choices: [
-        { id: 'share-password-ai', emoji: '🔑', label: '빠른 해결을 위해 비밀번호를 입력합니다.' },
-        { id: 'official-account-help', emoji: '🏛️', label: '비밀번호를 입력하지 않고 공식 복구 절차를 확인합니다.' },
-        { id: 'ask-trusted-adult', emoji: '🙋‍♂️', label: '신뢰할 수 있는 어른이나 담당자에게 도움을 요청합니다.' },
+        { id: 'official-account-help', emoji: '🏛️', label: '비밀번호를 입력하지 않고 학교 공식 본인 확인 및 복구 절차를 이용합니다.', isCorrect: true },
+        { id: 'ask-trusted-adult', emoji: '🙋‍♂️', label: '비밀번호는 알려주지 않고 신뢰할 수 있는 담당 선생님께 도움을 청합니다.', isCorrect: true },
+        { id: 'share-password-ai', emoji: '🔑', label: '빨리 해결하고 싶어서 AI 입력창에 개인 비밀번호를 그대로 적습니다.', isCorrect: false },
+        { id: 'trust-ai-security', emoji: '🔓', label: 'AI는 내 모든 민감한 정보나 비밀번호를 다 다루어도 안전하다고 믿습니다.', isCorrect: false },
       ],
     },
     safetyNote: '건강, 계정, 개인정보 사례에서는 실제 정보를 입력하지 않고 수업용 가상 상황만 사용합니다.',
@@ -1317,10 +1332,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '여행 사진을 설명한다면',
       description: '친구가 볼 수 있도록 여행 사진의 장면 설명과 짧은 음성 안내를 만들려고 합니다.',
+      prompt: '나만의 표현으로 목적에 맞는 AI 도구를 선택하는 방법을 설명해보자.',
       choices: [
-        { id: 'upload-private-photo', emoji: '📤', label: '사람 얼굴이 나온 원본을 아무 도구에나 올립니다.' },
-        { id: 'plan-photo-tools', emoji: '🗺️', label: '이미지 설명과 음성 제작에 필요한 입력·출력을 나눕니다.' },
-        { id: 'verify-photo-description', emoji: '👁️', label: '사진 원본과 사람이 장면 설명을 확인합니다.' },
+        { id: 'plan-photo-tools', emoji: '🗺️', label: '사진 묘사 도구와 음성 변환 도구 각각의 입력과 결과를 구분해 선택합니다.', isCorrect: true },
+        { id: 'verify-photo-description', emoji: '👁️', label: '얼굴 사진을 함부로 넣지 않고 생성된 설명이 실제 사진과 맞는지 확인합니다.', isCorrect: true },
+        { id: 'upload-private-photo', emoji: '📤', label: '친구의 얼굴이 그대로 들어간 사진을 검증되지 않은 외부 도구에 올립니다.', isCorrect: false },
+        { id: 'use-random-single-tool', emoji: '🎲', label: '도구의 기능이나 개인정보 위험을 고려하지 않고 무작위로 아무 도구나 씁니다.', isCorrect: false },
       ],
     },
     safetyNote: '학생의 실제 얼굴과 목소리는 도구에 입력하지 않고 수업용 대체 자료를 사용합니다.',
@@ -1462,10 +1479,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     transfer: {
       title: '체험회 안내 문구를 만든다면',
       description: 'AI가 만든 안내 문구에 확인되지 않은 행사 시간이 들어 있습니다. 어떻게 처리하겠습니까?',
+      prompt: '나만의 표현으로 AI 결과를 검토하여 사용, 수정, 거절을 판단하는 방법을 설명해보자.',
       choices: [
-        { id: 'publish-now', emoji: '📢', label: '문장이 자연스러우니 바로 게시합니다.' },
-        { id: 'modify-time', emoji: '✏️', label: '공식 공지에서 시간을 확인해 문구를 수정합니다.' },
-        { id: 'reject-unsafe', emoji: '🚫', label: '개인정보를 요구하는 결과라면 사용을 거절합니다.' },
+        { id: 'modify-time', emoji: '✏️', label: '학교 공식 공지표를 확인해 잘못된 행사 시간을 바르게 수정하여 사용합니다.', isCorrect: true },
+        { id: 'reject-unsafe', emoji: '🚫', label: '확인되지 않은 오정보가 너무 많거나 개인정보를 요구하면 사용을 거절합니다.', isCorrect: true },
+        { id: 'publish-now', emoji: '📢', label: '문장이 매끄러우므로 잘못된 시간 정보를 확인하지 않고 즉시 게시합니다.', isCorrect: false },
+        { id: 'auto-accept-ai', emoji: '🤖', label: 'AI가 작성해 준 결과물은 사람이 수정할 필요 없이 무조건 받아들입니다.', isCorrect: false },
       ],
     },
     safetyNote: '학생 개인정보를 입력하지 않으며, 화면의 AI 답은 수업용으로 준비된 응답임을 분명히 표시합니다.',
