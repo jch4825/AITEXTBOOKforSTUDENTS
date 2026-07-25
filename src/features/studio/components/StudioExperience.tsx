@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import Icon from '../../../components/Icon';
 import MicButton from '../../../components/MicButton';
 import { useSpeak } from '../../../hooks/useSpeak';
@@ -9,6 +10,7 @@ import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
 import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
+import InquiryCertificateModal from './InquiryCertificateModal';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
@@ -63,6 +65,8 @@ export default function StudioExperience({
   onSceneIndexChange,
 }: Props) {
   const { speakNow } = useSpeak();
+  const [studentName, setStudentName] = useState('');
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
   const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
     entry.term,
     ...(entry.aliases ?? []),
@@ -326,6 +330,32 @@ export default function StudioExperience({
               앞에서 표현한 내용으로 시작하기
             </button>
           )}
+
+          {/* 탐구 증서(상장) 인쇄 영역 */}
+          <div className="pt-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/70 shadow-2xs">
+              <div className="flex items-center gap-2 flex-1">
+                <label htmlFor="student-certificate-name" className="text-sm font-extrabold text-amber-900 shrink-0">
+                  👤 학생 이름 (선택):
+                </label>
+                <input
+                  id="student-certificate-name"
+                  type="text"
+                  value={studentName}
+                  onChange={(e) => setStudentName(e.target.value)}
+                  placeholder="이름을 적으면 탐구 증서에 인쇄돼요"
+                  className="flex-1 min-w-0 h-10 px-3.5 rounded-xl border border-amber-300 text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-amber-500"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowCertificateModal(true)}
+                className="h-10 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0 hover:scale-102 active:scale-98"
+              >
+                <span>🏆</span> 탐구 증서(상장)로 인쇄하기
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -379,13 +409,22 @@ export default function StudioExperience({
   }
 
   return (
-    <EditorialStudioFrame
-      definition={definition}
-      stage={state.stage}
-      accent={accent}
-      secondary={secondary}
-      left={left}
-      right={right}
-    />
+    <>
+      <EditorialStudioFrame
+        definition={definition}
+        stage={state.stage}
+        accent={accent}
+        secondary={secondary}
+        left={left}
+        right={right}
+      />
+      <InquiryCertificateModal
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        studentName={studentName}
+        lessonTitle={definition.title}
+        inquiryText={state.artifactSummary ?? ''}
+      />
+    </>
   );
 }
