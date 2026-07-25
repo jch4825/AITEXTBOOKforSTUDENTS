@@ -305,9 +305,9 @@ export default function RobotVacuumPathGame() {
                 onClick={() => handleTileClick(r, c)}
                 onMouseEnter={() => handleMouseEnter(r, c)}
                 disabled={gameState === 'running'}
-                className={`relative rounded-xl border-2 transition-all duration-300 flex flex-col items-center justify-center font-extrabold select-none cursor-pointer overflow-hidden ${
+                className={`relative rounded-xl border-2 transition-colors flex flex-col items-center justify-center font-extrabold select-none cursor-pointer overflow-hidden ${
                   isRobotHere
-                    ? 'border-amber-300 bg-amber-400/45 shadow-2xl scale-x-110 scale-y-125 z-30 ring-4 ring-amber-400/90 rounded-2xl'
+                    ? 'border-amber-400 bg-amber-400/30 shadow-md ring-2 ring-amber-400/80'
                     : inPath
                       ? 'border-cyan-400 bg-cyan-500/30 text-cyan-200 shadow-md'
                       : 'border-slate-700 bg-slate-900/80 text-slate-500 hover:border-amber-400/60 hover:bg-slate-800'
