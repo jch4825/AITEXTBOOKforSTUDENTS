@@ -277,9 +277,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '세 도구 중 AI가 쓰인 기능을 지금 어떻게 판단하겠습니까?',
       choices: [
-        { id: 'automatic-means-ai', emoji: '⚙️', label: '자동으로 움직이면 모두 AI 기능이라고 판단합니다.', isCorrect: false },
-        { id: 'app-only-by-name', emoji: '📱', label: '앱이라는 이름이 붙은 기능만 AI라고 판단합니다.', isCorrect: false },
         { id: 'inspect-input-output', emoji: '🔎', label: '각 기능이 받는 입력과 바꾸는 결과를 살펴본 뒤 판단합니다.', isCorrect: true },
+        { id: 'separate-input-modes', emoji: '⚡', label: '버튼, 센서, 타자/음성 입력에 따라 처리 방식이 달라짐을 고려합니다.', isCorrect: true },
+        { id: 'automatic-means-ai', emoji: '⚙️', label: '자동으로 움직이면 모두 AI 기능이라고 단순하게 판단합니다.', isCorrect: false },
+        { id: 'app-only-by-name', emoji: '📱', label: '기기의 겉모습이나 앱이라는 이름만 보고 판단합니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '그 기능에서 먼저 확인하고 싶은 입력은 무엇인가요?',
@@ -423,9 +424,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '자연스럽지만 남극 펭귄 유치원에서 25시에 열린다는 소개문을 받은 지금 어떻게 하겠습니까?',
       choices: [
-        { id: 'publish-smooth-copy', emoji: '✨', label: '문장이 자연스러우니 남극 유치원이라도 그대로 게시합니다.', isCorrect: false },
-        { id: 'reject-everything', emoji: '🗑️', label: 'AI 글은 틀릴 수 있으니 모두 버립니다.', isCorrect: false },
         { id: 'mark-checkable-claims', emoji: '🖍️', label: '확인할 주장에 표시하고 학교 공식 공지 문서와 비교합니다.', isCorrect: true },
+        { id: 'verify-facts-and-fix', emoji: '✍️', label: '틀린 시간과 장소를 공식 문서에 맞게 바르게 수정합니다.', isCorrect: true },
+        { id: 'publish-smooth-copy', emoji: '✨', label: '문장이 자연스러우니 남극 유치원이라도 그대로 게시합니다.', isCorrect: false },
+        { id: 'reject-everything', emoji: '🗑️', label: 'AI가 적은 글은 대조하지도 않고 무조건 모두 버립니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '소개문에서 먼저 확인하고 싶은 정보는 무엇인가요?',
@@ -569,9 +571,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '아이미의 첫 답을 본 지금, 무엇을 먼저 하겠습니까?',
       choices: [
-        { id: 'accept-first', emoji: '📄', label: '첫 답을 바로 정답으로 사용합니다.', isCorrect: false },
-        { id: 'change-one-condition', emoji: '🔬', label: '사진 조건을 하나씩 바꾸어 다시 시험합니다.', isCorrect: true },
-        { id: 'check-original', emoji: '🖼️', label: '원본 사진과 비교할 준비를 합니다.', isCorrect: true },
+        { id: 'change-one-condition', emoji: '🔬', label: '사진의 가림, 밝기, 각도 등 조건을 하나씩 바꾸어 다시 시험합니다.', isCorrect: true },
+        { id: 'check-original', emoji: '🖼️', label: 'AI 판정 결과와 실물 원본 사진을 꼼꼼하게 비교합니다.', isCorrect: true },
+        { id: 'accept-first', emoji: '📄', label: 'AI의 첫 답이 어두운 사진이라도 바로 정답으로 사용합니다.', isCorrect: false },
+        { id: 'ignore-conditions', emoji: '❌', label: '사진이 얼마나 잘렸든 AI는 무조건 알아본다고 생각합니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '어떤 사진 조건을 먼저 바꾸고 싶나요?',
@@ -716,9 +719,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '원래 말한 문장과 다른 오이 자막이 나타났을 때 무엇을 먼저 하겠습니까?',
       choices: [
-        { id: 'trust-transcript', emoji: '📜', label: '화면의 채소회 오이 글자를 그대로 믿습니다.', isCorrect: false },
-        { id: 'listen-again', emoji: '🔁', label: '조용한 곳에서 원래 목소리를 다시 들려주거나 글자로 입력합니다.', isCorrect: true },
-        { id: 'choose-another-input', emoji: '📊', label: '마이크 거리와 입력 방법을 함께 비교합니다.', isCorrect: true },
+        { id: 'listen-again', emoji: '🔁', label: '조용한 곳에서 원래 목소리를 다시 들려주거나 글자로 직접 입력합니다.', isCorrect: true },
+        { id: 'choose-another-input', emoji: '📊', label: '마이크 거리, 배경 소음, AAC 등 입력 방법의 조건을 비교합니다.', isCorrect: true },
+        { id: 'trust-transcript', emoji: '📜', label: '화면의 채소회 오이 글자를 대조 없이 그대로 믿습니다.', isCorrect: false },
+        { id: 'shout-loudly', emoji: '🗣️', label: '소음 환경을 개선하지 않고 무작정 소리만 크게 지릅니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '그 방법이 진우와 윤아에게 어떤 도움을 줄까요?',
@@ -863,9 +867,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: 'AI가 세모 과자를 찌그러진 동그라미라고 틀리게 부른 까닭을 어떻게 알아보겠습니까?',
       choices: [
-        { id: 'blame-random', emoji: '🎲', label: 'AI의 기분이 나빠서 틀렸다고 생각합니다.', isCorrect: false },
         { id: 'inspect-data', emoji: '📦', label: 'AI가 이전에 어떤 모양 자료를 배워 왔는지 학습 데이터를 조사합니다.', isCorrect: true },
-        { id: 'change-test-only', emoji: '🧪', label: '세모 과자를 치우고 쉬운 동그라미 카드만 보여줍니다.', isCorrect: false },
+        { id: 'balance-various-shapes', emoji: '📊', label: '세모, 동그라미, 네모 등 배움 재료의 비율과 다양성을 확인합니다.', isCorrect: true },
+        { id: 'blame-random', emoji: '🎲', label: '자료 조사 없이 AI의 기분이 나빠서 틀렸다고 생각합니다.', isCorrect: false },
+        { id: 'change-test-only', emoji: '🧪', label: '자료 보완 없이 세모 과자를 치우고 쉬운 카드만 보여줍니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '그 방법으로 무엇을 확인할 수 있을까요?',
@@ -1009,9 +1014,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '1초 만에 빠르게 만들어졌지만 준비물 실로폰이 빠진 요약글을 보고 어떻게 하겠습니까?',
       choices: [
-        { id: 'share-fast-result', emoji: '📤', label: '빠르게 만들어졌으니 실로폰이 빠졌어도 그대로 공유합니다.', isCorrect: false },
         { id: 'compare-key-facts', emoji: '📋', label: '핵심 항목을 원문과 나란히 놓고 빠진 요소를 대조합니다.', isCorrect: true },
-        { id: 'ignore-ai-help', emoji: '🛑', label: '틀릴 수 있으니 AI 도움은 모두 버립니다.', isCorrect: false },
+        { id: 'add-missing-items', emoji: '✏️', label: '빠진 준비물 실로폰 내용을 사람이 직접 고쳐 보완합니다.', isCorrect: true },
+        { id: 'share-fast-result', emoji: '📤', label: '빠르게 만들어졌으니 실로폰이 빠졌어도 그대로 공유합니다.', isCorrect: false },
+        { id: 'ignore-ai-help', emoji: '🛑', label: '원문 대조 없이 AI 결과는 쓸모없다고 무조건 다 버립니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '빠름과 정확함을 함께 지키려면 무엇이 필요할까요?',
@@ -1154,9 +1160,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '네 가지 부탁을 누구에게 연결하겠습니까?',
       choices: [
-        { id: 'assign-all-ai', emoji: '🤖', label: '빠르므로 모든 일을 AI에게 맡깁니다.', isCorrect: false },
-        { id: 'separate-roles', emoji: '🧩', label: 'AI, 사람, 공식 정보의 역할을 나눕니다.', isCorrect: true },
-        { id: 'refuse-all-tools', emoji: '❌', label: '위험할 수 있으니 어떤 도움도 사용하지 않습니다.', isCorrect: false },
+        { id: 'separate-roles', emoji: '🧩', label: 'AI, 사람, 공식 정보의 역할을 바르게 나눕니다.', isCorrect: true },
+        { id: 'check-human-responsibility', emoji: '🛡️', label: '안전, 개인정보, 최종 책임이 필요한 일은 사람이 맡습니다.', isCorrect: true },
+        { id: 'assign-all-ai', emoji: '🤖', label: '빠르고 편리하므로 개인정보나 약 복용까지 모두 AI에게 맡깁니다.', isCorrect: false },
+        { id: 'refuse-all-tools', emoji: '❌', label: '위험할 수 있으니 단순한 정보 분류조차 전혀 사용하지 않습니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '일마다 다른 도움이 필요한 까닭은 무엇일까요?',
@@ -1301,9 +1308,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '세 가지 일에 사용할 AI 도구를 어떻게 고르겠습니까?',
       choices: [
-        { id: 'choose-famous-tool', emoji: '⭐', label: '가장 유명한 도구 하나를 모든 일에 사용합니다.', isCorrect: false },
-        { id: 'match-input-output', emoji: '🎯', label: '일마다 입력과 필요한 결과를 먼저 비교합니다.', isCorrect: true },
-        { id: 'choose-fastest-tool', emoji: '⚡', label: '결과가 가장 빨리 나오는 도구만 고릅니다.', isCorrect: false },
+        { id: 'match-input-output', emoji: '🎯', label: '일마다 필요한 입력 자료와 결과를 먼저 비교하여 도구를 고릅니다.', isCorrect: true },
+        { id: 'check-privacy-fit', emoji: '🔒', label: '개인정보 보호와 사람이 확인할 수 있는지 여부를 고려합니다.', isCorrect: true },
+        { id: 'choose-famous-tool', emoji: '⭐', label: '가장 유명한 도구 하나를 모든 종류의 일에 무조건 사용합니다.', isCorrect: false },
+        { id: 'choose-fastest-tool', emoji: '⚡', label: '입력 조건이나 결과 검증 없이 가장 빠르게 나오는 도구만 씁니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '그 선택이 과제의 목적에 맞는지 어떻게 확인할까요?',
@@ -1448,9 +1456,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '댄스 타임에 쿨쿨 잠이 오는 자장가가 추천되었을 때 어떻게 하겠습니까?',
       choices: [
-        { id: 'use-all', emoji: '🎵', label: '아이미가 골랐으니 댄스 타임에 자장가를 그대로 틀어 줍니다.', isCorrect: false },
         { id: 'review-items', emoji: '🔍', label: '자장가는 거절하고 신나는 댄스곡 조건으로 다시 요청해 결정합니다.', isCorrect: true },
-        { id: 'reject-all', emoji: '🛑', label: '확인하지 않고 AI 결과를 모두 거절합니다.', isCorrect: false },
+        { id: 'modify-prompt-conditions', emoji: '⚙️', label: '댄스 타임 분위기와 공식 곡 목록에 맞춰 조건을 수정합니다.', isCorrect: true },
+        { id: 'use-all', emoji: '🎵', label: '아이미가 골랐으니 댄스 타임에 자장가를 그대로 틀어 줍니다.', isCorrect: false },
+        { id: 'reject-all', emoji: '🛑', label: '확인해보지도 않고 무작정 모든 결과를 배척합니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '결과를 판단할 때 사용할 근거는 무엇인가요?',
