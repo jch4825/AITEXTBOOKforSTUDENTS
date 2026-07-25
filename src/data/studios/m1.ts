@@ -273,6 +273,29 @@ export const M1_STUDIOS: StudioDefinition[] = [
         '자동문은 앞에 선 사람을 센서로 감지합니다.',
         '음악 추천 앱은 이전에 들은 음악 기록을 사용합니다.',
       ],
+      stimuli: [
+        {
+          id: 'pecs-fan',
+          kind: 'image',
+          src: '/images/pecs_electric_fan.webp',
+          alt: '선풍기 PECS 카드 (버튼 입력)',
+          caption: '선풍기 (버튼)',
+        },
+        {
+          id: 'pecs-door',
+          kind: 'image',
+          src: '/images/pecs_automatic_door.webp',
+          alt: '자동문 PECS 카드 (센서 감지)',
+          caption: '자동문 (센서)',
+        },
+        {
+          id: 'pecs-music-app',
+          kind: 'image',
+          src: '/images/pecs_music_app.webp',
+          alt: '음악 추천 앱 PECS 카드 (AI 추천)',
+          caption: '음악 추천 앱 (AI)',
+        },
+      ],
     },
     firstAttempt: {
       prompt: '세 도구 중 AI가 쓰인 기능을 지금 어떻게 판단하겠습니까?',

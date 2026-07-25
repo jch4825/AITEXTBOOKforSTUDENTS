@@ -17,17 +17,19 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
   }
 
   const isSingle = stimuli.length === 1;
+  const isTriple = stimuli.length === 3;
 
   return (
-    <div className={`grid gap-3 ${isSingle ? 'grid-cols-1' : 'sm:grid-cols-2'}`} aria-label="교과서에 준비된 이미지와 소리">
+    <div className={`grid gap-3 ${isSingle ? 'grid-cols-1' : isTriple ? 'grid-cols-1 xs:grid-cols-3' : 'sm:grid-cols-2'}`} aria-label="교과서에 준비된 이미지와 소리">
       {stimuli.map((stimulus) => {
         if (stimulus.kind === 'image') {
           const failed = failedImages.includes(stimulus.id);
+          const isPecs = stimulus.id.includes('pecs');
           return (
             <figure
               key={stimulus.id}
-              className="overflow-hidden rounded-2xl border-2 p-3 shadow-2xs"
-              style={{ borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' }}
+              className={`overflow-hidden rounded-2xl border-2 p-2 shadow-2xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md' : ''}`}
+              style={!isPecs ? { borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' } : undefined}
             >
               {failed ? (
                 <div
@@ -39,14 +41,23 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                   <p className="mt-1">{stimulus.caption}</p>
                 </div>
               ) : (
-                <img
-                  src={stimulus.src}
-                  alt={stimulus.alt}
-                  onError={() => markImageFailed(stimulus.id)}
-                  className={`mx-auto w-full rounded-xl object-cover ${isSingle ? 'h-48 sm:h-56' : 'h-36 object-contain'}`}
-                />
+                <div className="relative">
+                  {isPecs && (
+                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[9px] shadow-xs uppercase tracking-wider z-10">
+                      PECS
+                    </span>
+                  )}
+                  <img
+                    src={stimulus.src}
+                    alt={stimulus.alt}
+                    onError={() => markImageFailed(stimulus.id)}
+                    className={`mx-auto w-full rounded-xl object-cover ${isSingle ? 'h-48 sm:h-56' : isTriple ? 'h-24 sm:h-28 object-contain' : 'h-36 object-contain'}`}
+                  />
+                </div>
               )}
-              <figcaption className="mt-2 text-sm font-semibold leading-relaxed text-[color:var(--ink-1)]">{stimulus.caption}</figcaption>
+              <figcaption className={`mt-1.5 text-center text-xs font-black leading-tight ${isPecs ? 'text-amber-950 bg-amber-100/90 p-1.5 rounded-lg border border-amber-300' : 'text-[color:var(--ink-1)]'}`}>
+                {stimulus.caption}
+              </figcaption>
             </figure>
           );
         }
