@@ -115,20 +115,20 @@ export const M1_LESSONS: LessonContent[] = [
     title: 'AI는 어떻게 답을 만들까?',
     objective: '오늘은 AI가 다음 말을 이어 답을 만드는 모습을 보고, 확인할 문장을 찾아봐요.',
     standards: [AI_STANDARD],
-    bodyEasy: '글을 만드는 AI는 다음에 올 말을 하나씩 골라 답을 이어 가요. 자연스러운 답도 사실과 다를 수 있어요.',
-    bodyNormal: '생성형 AI는 배운 자료를 바탕으로 다음에 이어질 표현을 예측하며 답을 만듭니다. 문장이 자연스러워도 날짜나 장소 같은 사실이 맞는지는 따로 확인해야 합니다.',
-    wrapUpEasy: 'AI 답이 자연스러워도 날짜와 장소는 원래 자료에서 확인해요.',
-    wrapUpNormal: '생성형 AI는 다음 표현을 예측해 답을 만들므로, 자연스러운 문장과 확인된 사실을 구분해야 합니다.',
+    bodyEasy: 'AI는 아는 것이 없어도 다음 단어를 하나씩 이어 붙여 당당히 대답해요. 엉뚱한 대답도 자신 있게 말할 수 있으니 사실인지 꼭 확인해요.',
+    bodyNormal: '생성형 AI는 배운 글의 흐름을 바탕으로 다음에 올 말을 하나씩 이어 붙여 답을 만듭니다. 잘 모르는 정보도 엄청나게 자신감 넘치는 말투로 엉뚱하게 말할 수 있으니, 주간 식단표나 공식 공지에서 실제 사실인지 꼭 비교해야 합니다.',
+    wrapUpEasy: 'AI가 당당하게 말해도 거짓말(환각)일 수 있어요. 원래 식단표나 공지에서 사실을 확인해요.',
+    wrapUpNormal: '생성형 AI는 다음 단어를 이어 대답하므로, 자신감 있는 엉뚱한 대답(환각)을 진짜 사실과 구분해 확인해야 합니다.',
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['생성형 AI', '예측', '자료'], imagePlaceholder: true } },
       {
         kind: 'card-pick',
         data: {
-          question: '학교 공지에는 체험회가 “금요일 오후 2시, 도서관”이라고 적혀 있습니다. AI 답에서 먼저 확인할 부분은 무엇인가요?',
+          question: '아이미가 오늘 급식으로 “무지개 아이스크림 떡볶이”가 나온다고 당당하게 말했습니다. 가장 먼저 해야 할 일은 무엇인가요?',
           choices: [
-            { label: '“금요일 오후 3시”라는 시간', isCorrect: true, icon: 'alarm_clock' },
-            { label: '“친구들과 함께”라는 표현', isCorrect: false, icon: 'borrow_friend' },
-            { label: '문장이 자연스럽게 이어지는지', isCorrect: false, icon: 'chatbot' },
+            { label: '학교 게시판의 진짜 주간 식단표 확인하기', isCorrect: true, icon: 'alarm_clock' },
+            { label: '당당하게 말했으니 무조건 믿고 기다리기', isCorrect: false, icon: 'borrow_friend' },
+            { label: '확인해 보지도 않고 무조건 불평하기', isCorrect: false, icon: 'chatbot' },
           ],
         },
       },
