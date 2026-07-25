@@ -81,15 +81,15 @@ const ROOM_LAYOUTS: RoomLayout[] = [
 
 function CircularRobotVacuumIcon({ isRunning = false }: { isRunning?: boolean }) {
   return (
-    <div className={`relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-slate-900 via-cyan-950 to-slate-800 border-2 border-cyan-400 shadow-xl flex items-center justify-center ${isRunning ? 'animate-pulse scale-105' : ''}`}>
+    <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-slate-900 via-cyan-950 to-slate-800 border-2 border-cyan-400 shadow-md flex items-center justify-center">
       {/* Laser LiDAR Bump */}
-      <div className="w-3.5 h-3.5 rounded-full bg-cyan-400 border border-white shadow-xs flex items-center justify-center">
-        <div className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+      <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 border border-white flex items-center justify-center">
+        <div className="w-1 h-1 rounded-full bg-white" />
       </div>
       {/* Rotating brushes animation */}
       <div className={`absolute inset-0 rounded-full border border-dashed border-cyan-300/60 ${isRunning ? 'animate-spin' : ''}`} style={{ animationDuration: '3s' }} />
       {/* Front Bumper */}
-      <div className="absolute top-0.5 w-6 h-1.5 rounded-t-full bg-cyan-300/40" />
+      <div className="absolute top-0.5 w-4 h-1 rounded-t-full bg-cyan-300/40" />
       <span className="sr-only">원형 로봇청소기</span>
     </div>
   );
