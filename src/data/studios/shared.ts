@@ -15,6 +15,7 @@ export const STUDIO_SUPPORT_PROFILES = {
   },
   challenge: {
     visibleFactCount: 4,
+    choiceLimit: 4,
     hint: 'AI 의견의 장점과 한계를 비교해 내 판단을 설명해 보십시오.',
     aiRoleDepth: 'counterpoint',
   },

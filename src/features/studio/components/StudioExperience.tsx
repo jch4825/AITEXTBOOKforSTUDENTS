@@ -11,6 +11,7 @@ import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
 import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
 import InquiryCertificateModal from './InquiryCertificateModal';
+import { getScopedChoices } from '../studioChoiceUtils';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
@@ -72,12 +73,8 @@ export default function StudioExperience({
     ...(entry.aliases ?? []),
   ]);
   const profile = definition.supportProfiles[state.supportLevel];
-  const firstChoices = profile.choiceLimit
-    ? definition.firstAttempt.choices.slice(0, profile.choiceLimit)
-    : definition.firstAttempt.choices;
-  const transferChoices = profile.choiceLimit
-    ? definition.transfer.choices.slice(0, profile.choiceLimit)
-    : definition.transfer.choices;
+  const firstChoices = getScopedChoices(definition.firstAttempt.choices, profile.choiceLimit);
+  const transferChoices = getScopedChoices(definition.transfer.choices, profile.choiceLimit);
   const showingChangedContext = ['condition-change', 'ai-compare', 'decision', 'artifact', 'complete'].includes(state.stage);
   const contextDescription = state.stage === 'transfer'
     ? definition.transfer.description
