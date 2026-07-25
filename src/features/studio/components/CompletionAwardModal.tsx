@@ -153,7 +153,7 @@ export default function CompletionAwardModal({
               <div className="mt-8 pt-6 border-t border-amber-400/50 flex flex-col md:flex-row items-center justify-between gap-6 px-4">
                 <div className="text-center md:text-left space-y-1 font-sans">
                   <p className="text-base font-bold text-slate-700">{todayStr}</p>
-                  <p className="text-lg font-black text-amber-950 tracking-wider">초등학교 인공지능 디지털교과서 교육위원회</p>
+                  <p className="text-lg font-black text-amber-950 tracking-wider">특수교육 AI 디지털교과서 교육위원회</p>
                 </div>
 
                 {/* Lavish Red/Gold Ribbon Seal */}
