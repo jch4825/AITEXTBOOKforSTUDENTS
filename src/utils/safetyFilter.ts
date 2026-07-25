@@ -31,8 +31,14 @@ export function filterAiResponse(raw: string): FilterResult {
     }
   }
 
-  // Remove any residual leading English evaluation lines
-  trimmed = trimmed.replace(/^(?:[a-zA-Z0-9\s.,:*_\-()\n]+[:\n])+(?=[가-힣])/, '').trim();
+  // Remove any residual leading English evaluation lines or schematic tokens
+  trimmed = trimmed.replace(/^(?:[a-zA-Z0-9\s.,:*_\-></()\n]+[:\n>])+(?=[가-힣])/, '').trim();
+  if (/^[a-zA-Z0-9\s/\\>_<:-]{3,}\s*(?=[가-힣])/.test(trimmed)) {
+    const koreanMatch = trimmed.match(/([가-힣][^]*)/);
+    if (koreanMatch) {
+      trimmed = koreanMatch[1].trim();
+    }
+  }
 
   for (const rx of BAD_TERMS) {
     if (rx.test(trimmed)) {

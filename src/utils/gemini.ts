@@ -113,7 +113,9 @@ async function callModel(
   imageAttachment?: GeminiImageAttachment
 ): Promise<RawGeminiResponse> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const systemText = systemInstructionOverride || RESPONSE_HINT;
+  const GLOBAL_FORMAT_RULE =
+    ' [중요: 영어나 기호, 다이어그램, 계통도를 절대로 쓰지 마세요. 오직 친절한 1~2문장의 순수 한글로만 바로 답변해 주세요.]';
+  const systemText = (systemInstructionOverride || RESPONSE_HINT) + GLOBAL_FORMAT_RULE;
 
   const parts: Array<Record<string, any>> = [];
 
