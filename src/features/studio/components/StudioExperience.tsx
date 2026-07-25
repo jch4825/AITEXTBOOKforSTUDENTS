@@ -75,6 +75,9 @@ export default function StudioExperience({
   const firstChoices = profile.choiceLimit
     ? definition.firstAttempt.choices.slice(0, profile.choiceLimit)
     : definition.firstAttempt.choices;
+  const transferChoices = profile.choiceLimit
+    ? definition.transfer.choices.slice(0, profile.choiceLimit)
+    : definition.transfer.choices;
   const showingChangedContext = ['condition-change', 'ai-compare', 'decision', 'artifact', 'complete'].includes(state.stage);
   const contextDescription = state.stage === 'transfer'
     ? definition.transfer.description
@@ -366,7 +369,7 @@ export default function StudioExperience({
       <div className="p-5 md:p-7">
         <StudioExpressionInput
           value={state.transferExpression}
-          choices={definition.transfer.choices}
+          choices={transferChoices}
           modes={definition.firstAttempt.modes}
           prompt="나만의 표현으로 도서관의 인공지능 추천 기계를 친구에게 설명해보자."
           accent={accent}
