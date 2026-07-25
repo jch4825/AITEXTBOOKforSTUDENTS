@@ -236,7 +236,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
       knowledge: [
         {
           title: '기기보다 기능을 봐요',
-          core: '기기 전체가 아니라 어떤 기능을 판단하는지 먼저 확인합니다.',
+          core: '기기 전체가 아니라 어떤 기능을 가지고 있는지 먼저 확인합니다.',
           detail: {
             full: '한 기기에는 여러 기능이 있어요.',
             light: '같은 기기 안에도 버튼 기능, 센서 기능, AI 기능이 함께 있을 수 있습니다.',
