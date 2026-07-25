@@ -317,6 +317,15 @@ export const M1_STUDIOS: StudioDefinition[] = [
         '경로 추천 기능은 센서 정보와 이전 기록을 함께 사용합니다.',
         '사람은 위험한 물건과 청소 결과를 마지막에 확인합니다.',
       ],
+      stimuli: [
+        {
+          id: 'pecs-robot-vacuum',
+          kind: 'image',
+          src: '/images/pecs_robot_vacuum.webp',
+          alt: '로봇청소기 PECS 카드 (센서+AI 복합)',
+          caption: '로봇청소기 (센서+AI)',
+        },
+      ],
     },
     aiContribution: {
       source: 'prepared',
