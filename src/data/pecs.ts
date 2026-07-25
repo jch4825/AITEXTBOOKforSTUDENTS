@@ -53,6 +53,9 @@ export const PECS_LABELS: Record<string, string> = {
   grocery_shopping: '장보기',
   weather: '일기예보/날씨',
   map_app: '지도 앱/길찾기',
+  jeyuk_bokkeum: '제육볶음',
+  miyeokguk: '미역국',
+  school_lunch: '학교급식',
 };
 
 // 기본 의사소통 욕구 — 모든 모듈에서 항상 노출
@@ -70,6 +73,9 @@ export const PECS_BY_MODULE: Record<ModuleId, string[]> = {
     'smart_light',
     'library_kiosk',
     'translate',
+    'school_lunch',
+    'jeyuk_bokkeum',
+    'miyeokguk',
     'cat',
     'dog',
     'medicine',
