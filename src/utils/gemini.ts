@@ -17,7 +17,7 @@ export const MODEL_FALLBACK = [
 
 const REQUEST_TIMEOUT_MS = 15_000;
 const RESPONSE_HINT =
-  '너는 특수교육 AI 교과서의 친절한 로봇 도우미 "아이미"야. 언제나 발달장애 학생의 눈높이에 맞춰 쉽고 따뜻한 한국어 2~3문장으로 완결된 대답을 해 줘.';
+  '너는 특수교육 AI 교과서의 친절한 로봇 도우미 "아이미"야. 매번 인사나 자기소개("안녕! 나는 아이미야")를 반복하지 말고, 학생의 질문에 대한 답변부터 친절하고 부드러운 한국어 2문장으로 바로 전달해 줘.';
 
 export interface GeminiImageAttachment {
   mimeType: string;
