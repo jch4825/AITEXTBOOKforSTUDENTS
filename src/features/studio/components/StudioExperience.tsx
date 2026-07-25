@@ -1,4 +1,5 @@
 import Icon from '../../../components/Icon';
+import MicButton from '../../../components/MicButton';
 import { useSpeak } from '../../../hooks/useSpeak';
 import type { HardLessonContent, LessonContent } from '../../../types';
 import AiDecisionPanel from './AiDecisionPanel';
@@ -287,22 +288,32 @@ export default function StudioExperience({
     right = (
       <div className="space-y-5 p-5 md:p-7">
         <div>
-          <p className="studio-kicker" style={{ color: secondary }}>{definition.artifact.title}</p>
+          <p className="studio-kicker" style={{ color: secondary }}>탐구 기록 남기기</p>
           <h2 className="mt-1 text-xl font-extrabold">이번 차시의 탐구 기록을 완성해요</h2>
           <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">{definition.artifact.prompt}</p>
         </div>
-        <div className="studio-artifact-sheet">
-          <label className="block text-sm font-bold text-[color:var(--ink-1)]" htmlFor="studio-artifact-summary">
-            {definition.artifact.title}에 남길 내용
-          </label>
+        <div className="studio-artifact-sheet space-y-2">
+          <div className="flex items-center justify-between gap-2">
+            <label className="block text-base font-extrabold text-[color:var(--ink-1)]" htmlFor="studio-artifact-summary">
+              탐구 기록으로 남길 내용
+            </label>
+            <MicButton
+              accent={accent}
+              onResult={(speechText) => {
+                const current = state.artifactSummary ?? '';
+                const updated = current ? `${current} ${speechText}` : speechText;
+                dispatch({ type: 'set-artifact', value: updated });
+              }}
+            />
+          </div>
           <textarea
             id="studio-artifact-summary"
             value={state.artifactSummary ?? ''}
             onChange={(event) => dispatch({ type: 'set-artifact', value: event.target.value })}
-            placeholder={definition.artifact.prompt}
-            maxLength={300}
-            rows={4}
-            className="mt-2 w-full resize-y rounded-xl border-2 p-3 text-sm leading-relaxed"
+            placeholder="탐구 기록으로 남길 내용을 자유롭게 적어 보세요."
+            maxLength={600}
+            rows={8}
+            className="w-full min-h-[14rem] resize-y rounded-2xl border-2 p-4 text-base font-semibold leading-relaxed shadow-2xs"
             style={{ borderColor: accent, background: 'var(--editorial-paper)' }}
           />
           {!state.artifactSummary?.trim() && suggestion && (
