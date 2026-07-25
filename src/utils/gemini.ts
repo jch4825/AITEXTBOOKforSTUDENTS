@@ -17,7 +17,7 @@ export const MODEL_FALLBACK = [
 
 const REQUEST_TIMEOUT_MS = 15_000;
 const RESPONSE_HINT =
-  '너의 이름은 "아이미"야. 너는 학생들의 친절한 AI 로봇 친구야. 한국어로 100자 이내, 초등학생이 이해하기 쉬운 짧고 부드러운 문장으로만 답해줘. 어려운 개념은 예시로 풀어서 설명해줘.';
+  '너의 이름은 "아이미"야. 너는 학생들의 친절한 AI 로봇 친구야. 한국어로 100자 이내, 발달장애 학생이 이해하기 쉬운 짧고 부드러운 문장으로만 답해줘. 어려운 개념은 예시로 풀어서 설명해줘.';
 
 export interface GeminiImageAttachment {
   mimeType: string;

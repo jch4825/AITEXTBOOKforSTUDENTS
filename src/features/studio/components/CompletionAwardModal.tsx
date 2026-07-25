@@ -12,7 +12,7 @@ interface Props {
 export default function CompletionAwardModal({
   isOpen,
   onClose,
-  defaultName = '자랑스러운 AI 탐구 어린이',
+  defaultName = '자랑스러운 AI 탐구 학생',
   lessonTitle,
   inquirySummary,
 }: Props) {
@@ -126,7 +126,7 @@ export default function CompletionAwardModal({
               <div className="my-6 space-y-2 text-left pl-4 border-l-4 border-amber-500">
                 <p className="text-sm font-bold text-amber-800">제 2026-AI-EXCELLENCE 호</p>
                 <p className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-wide font-sans">
-                  성 명 : <span className="text-amber-900 underline underline-offset-8 decoration-amber-500">{name || '자랑스러운 AI 탐구 어린이'}</span>
+                  성 명 : <span className="text-amber-900 underline underline-offset-8 decoration-amber-500">{name || '자랑스러운 AI 탐구 학생'}</span>
                 </p>
               </div>
 
@@ -136,7 +136,7 @@ export default function CompletionAwardModal({
                   상목: 인공지능(AI) 탐구 학습 최고상
                 </h2>
                 <p className="text-lg md:text-xl font-medium text-slate-800 leading-loose break-keep font-serif">
-                  위 어린이는 초등학교 인공지능 디지털교과서 <br />
+                  위 학생은 특수교육 인공지능 디지털교과서 <br />
                   <strong className="text-amber-900 font-bold font-sans">『{lessonTitle}』</strong> 탐구 과정을 성실하게 이수하고, <br />
                   인공지능의 원리를 주도적으로 탐구하여 훌륭한 성찰 기록을 남겼으므로 이 상장을 수여합니다.
                 </p>

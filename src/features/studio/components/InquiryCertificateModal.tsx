@@ -28,7 +28,7 @@ export default function InquiryCertificateModal({
     day: 'numeric',
   });
 
-  const displayName = studentName.trim() || '자랑스러운 AI 탐구자';
+  const displayName = studentName.trim() || '자랑스러운 AI 탐구 학생';
 
   const handlePrint = () => {
     window.print();
@@ -97,7 +97,7 @@ export default function InquiryCertificateModal({
                 탐 구 증 서
               </h1>
               <p className="text-sm font-extrabold text-amber-900/80">
-                초등학교 AI 디지털교과서 성찰 및 활동 기록
+                특수교육 AI 디지털교과서 성찰 및 활동 기록
               </p>
             </div>
 
@@ -139,7 +139,7 @@ export default function InquiryCertificateModal({
             {/* Official Commendation Citation */}
             <div className="text-center space-y-2 px-4 py-4">
               <p className="text-base sm:text-lg font-bold text-slate-800 leading-relaxed font-serif">
-                위 학생은 초등학교 AI 디지털교과서 탐구 활동에 적극적으로 참여하여 인공지능의 원리를 바르게 이해하고, 자신만의 깊이 있는 탐구 기록을 올바르게 완성하였으므로 이 증서를 수여합니다.
+                위 학생은 특수교육 인공지능(AI) 디지털교과서 탐구 활동에 적극적으로 참여하여 인공지능의 원리를 바르게 이해하고, 자신만의 깊이 있는 탐구 기록을 올바르게 완성하였으므로 이 증서를 수여합니다.
               </p>
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function InquiryCertificateModal({
           <div className="flex items-end justify-between pt-6 border-t-2 border-amber-300/80 mt-auto">
             <div className="text-xs sm:text-sm text-amber-950 font-bold space-y-1">
               <p>수여 일자: {todayStr}</p>
-              <p>발행 기관: 초등학교 AI 디지털교과서 탐구센터</p>
+              <p>발행 기관: 특수교육 AI 디지털교과서 교육위원회</p>
             </div>
 
             {/* Official Gold Seal Badge */}
