@@ -53,14 +53,5 @@ export function filterAiResponse(raw: string): FilterResult {
     }
   }
 
-  const MAX_CHARS = 300;
-  if (trimmed.length > MAX_CHARS) {
-    const sub = trimmed.slice(0, MAX_CHARS);
-    const lastPunct = Math.max(sub.lastIndexOf('.'), sub.lastIndexOf('!'), sub.lastIndexOf('?'), sub.lastIndexOf('\n'));
-    if (lastPunct >= 0) {
-      return { safe: true, text: sub.slice(0, lastPunct + 1).trim() };
-    }
-    return { safe: true, text: sub.trimEnd() + '…' };
-  }
   return { safe: true, text: trimmed };
 }

@@ -133,7 +133,7 @@ async function callModel(
     contents: [{ role: 'user', parts }],
     generationConfig: {
       temperature: 0.3,
-      maxOutputTokens: 800,
+      maxOutputTokens: 1024,
     },
   };
 
