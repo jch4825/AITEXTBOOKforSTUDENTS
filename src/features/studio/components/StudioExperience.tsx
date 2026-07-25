@@ -12,6 +12,7 @@ import VisualNovelExperience from './VisualNovelExperience';
 import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
 import InquiryCertificateModal from './InquiryCertificateModal';
 import CompletionAwardModal from './CompletionAwardModal';
+import RobotVacuumPathGame from './RobotVacuumPathGame';
 import { getScopedChoices } from '../studioChoiceUtils';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
@@ -102,8 +103,8 @@ export default function StudioExperience({
   hard,
   state,
   dispatch,
-  accent,
-  secondary,
+  accent = 'var(--brand-accent)',
+  secondary = 'var(--brand-secondary)',
   sceneIndex,
   onSceneIndexChange,
 }: Props) {
@@ -153,52 +154,57 @@ export default function StudioExperience({
   }
 
   const isCompleteStage = state.stage === 'complete';
+  const isM1L2 = definition.lessonId === 'm1-l2' || definition.id === 'm1-robot-vacuum-lab';
   const contextTitle = state.stage === 'transfer'
     ? definition.transfer.title
     : definition.encounter.title;
 
   const left = isCompleteStage ? (
-    <div
-      className="relative flex h-full flex-col justify-between rounded-2xl p-6 md:p-8 space-y-5 overflow-hidden shadow-xl"
-      style={{
-        backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('${definition.transfer.stimuli?.[0] && 'src' in definition.transfer.stimuli[0] ? definition.transfer.stimuli[0].src : '/images/smart_light_real.webp'}')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      <div className="space-y-5 text-white relative z-10">
-        <div>
-          <span className="inline-block px-3 py-1 bg-amber-400/20 border border-amber-400/40 text-amber-300 rounded-full text-xs font-black tracking-wide uppercase">
-            차시 탐구 종합 정리
-          </span>
-          <h2 className="mt-2 text-2xl font-black text-white tracking-tight drop-shadow-sm">
-            오늘 배운 핵심 이야기
-          </h2>
-        </div>
-
-        {/* Story 1: 조건 변화 탐구 (로봇청소기) */}
-        <div className="space-y-2 p-4 rounded-2xl border border-slate-700/60 bg-slate-900/60 backdrop-blur-md shadow-inner">
-          <div className="flex items-center gap-2 font-extrabold text-sm text-amber-300">
-            <span className="text-lg">🤖</span>
-            <span>1. 로봇청소기와 센서·AI 기능 탐구</span>
+    isM1L2 ? (
+      <RobotVacuumPathGame />
+    ) : (
+      <div
+        className="relative flex h-full flex-col justify-between rounded-2xl p-6 md:p-8 space-y-5 overflow-hidden shadow-xl"
+        style={{
+          backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('${definition.transfer.stimuli?.[0] && 'src' in definition.transfer.stimuli[0] ? definition.transfer.stimuli[0].src : '/images/smart_light_real.webp'}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="space-y-5 text-white relative z-10">
+          <div>
+            <span className="inline-block px-3 py-1 bg-amber-400/20 border border-amber-400/40 text-amber-300 rounded-full text-xs font-black tracking-wide uppercase">
+              차시 탐구 종합 정리
+            </span>
+            <h2 className="mt-2 text-2xl font-black text-white tracking-tight drop-shadow-sm">
+              오늘 배운 핵심 이야기
+            </h2>
           </div>
-          <p className="text-xs font-medium text-slate-200 leading-relaxed">
-            {definition.conditionChange.description}
-          </p>
-        </div>
 
-        {/* Story 2: 새로운 상황 적용 (스마트 조명) */}
-        <div className="space-y-2 p-4 rounded-2xl border border-slate-700/60 bg-slate-900/60 backdrop-blur-md shadow-inner">
-          <div className="flex items-center gap-2 font-extrabold text-sm text-amber-300">
-            <span className="text-lg">💡</span>
-            <span>2. {definition.transfer.title} (새 상황 적용)</span>
+          {/* Story 1: 조건 변화 탐구 (로봇청소기) */}
+          <div className="space-y-2 p-4 rounded-2xl border border-slate-700/60 bg-slate-900/60 backdrop-blur-md shadow-inner">
+            <div className="flex items-center gap-2 font-extrabold text-sm text-amber-300">
+              <span className="text-lg">🤖</span>
+              <span>1. 로봇청소기와 센서·AI 기능 탐구</span>
+            </div>
+            <p className="text-xs font-medium text-slate-200 leading-relaxed">
+              {definition.conditionChange.description}
+            </p>
           </div>
-          <p className="text-xs font-medium text-slate-200 leading-relaxed">
-            {definition.transfer.description}
-          </p>
+
+          {/* Story 2: 새로운 상황 적용 (스마트 조명) */}
+          <div className="space-y-2 p-4 rounded-2xl border border-slate-700/60 bg-slate-900/60 backdrop-blur-md shadow-inner">
+            <div className="flex items-center gap-2 font-extrabold text-sm text-amber-300">
+              <span className="text-lg">💡</span>
+              <span>2. {definition.transfer.title} (새 상황 적용)</span>
+            </div>
+            <p className="text-xs font-medium text-slate-200 leading-relaxed">
+              {definition.transfer.description}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    )
   ) : (
     <div className="flex h-full flex-col justify-between rounded-2xl p-5 md:p-7">
       <div className="space-y-5">
