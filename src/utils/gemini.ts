@@ -19,6 +19,11 @@ const REQUEST_TIMEOUT_MS = 15_000;
 const RESPONSE_HINT =
   '너의 이름은 "아이미"야. 너는 학생들의 친절한 AI 로봇 친구야. 한국어로 100자 이내, 초등학생이 이해하기 쉬운 짧고 부드러운 문장으로만 답해줘. 어려운 개념은 예시로 풀어서 설명해줘.';
 
+export interface GeminiImageAttachment {
+  mimeType: string;
+  data: string; // raw base64 string without data url prefix
+}
+
 export interface GeminiSuccess {
   text: string;                 // safety-filtered text ready to show a student
   modelUsed: string;            // e.g. "gemini-2.5-flash"
@@ -49,12 +54,13 @@ interface RawGeminiResponse {
 }
 
 /**
- * Ask Gemini a single-turn question. Iterates the model fallback list on
- * transient errors (network / rate-limit / unknown model). Returns a
- * safety-filtered text or throws GeminiError with student- and teacher-
- * facing messages already populated.
+ * Ask Gemini a single-turn question with optional image multimodal attachment.
  */
-export async function askGemini(userText: string, systemInstruction?: string): Promise<GeminiSuccess> {
+export async function askGemini(
+  userText: string,
+  systemInstruction?: string,
+  imageAttachment?: GeminiImageAttachment
+): Promise<GeminiSuccess> {
   const apiKey = getApiKey();
   if (!apiKey) {
     throw new GeminiError(
@@ -67,14 +73,14 @@ export async function askGemini(userText: string, systemInstruction?: string): P
   const attemptLog: string[] = [];
   for (const model of MODEL_FALLBACK) {
     try {
-      const raw = await callModel(model, apiKey, userText, systemInstruction);
+      const raw = await callModel(model, apiKey, userText, systemInstruction, imageAttachment);
       const candidate = raw.candidates?.[0];
       const rawText = candidate?.content?.parts?.map(p => p.text ?? '').join('').trim() ?? '';
 
       if (raw.promptFeedback?.blockReason) {
         throw new GeminiError(
           'blocked',
-      '이 질문에는 답하기 어렵습니다. 다른 질문을 해 주십시오.',
+          '이 질문에는 답하기 어렵습니다. 다른 질문을 해 주십시오.',
           `Blocked by upstream safety: ${raw.promptFeedback.blockReason}`,
         );
       }
@@ -87,7 +93,7 @@ export async function askGemini(userText: string, systemInstruction?: string): P
       attemptLog.push(`${model}: OK`);
       return { text: filtered.text, modelUsed: model, safe: filtered.safe, attemptLog };
     } catch (err) {
-      if (err instanceof GeminiError) throw err;   // e.g. blocked — don't retry
+      if (err instanceof GeminiError) throw err;
       attemptLog.push(`${model}: ${(err as Error).message}`);
     }
   }
@@ -99,17 +105,34 @@ export async function askGemini(userText: string, systemInstruction?: string): P
   );
 }
 
-async function callModel(model: string, apiKey: string, userText: string, systemInstructionOverride?: string): Promise<RawGeminiResponse> {
+async function callModel(
+  model: string,
+  apiKey: string,
+  userText: string,
+  systemInstructionOverride?: string,
+  imageAttachment?: GeminiImageAttachment
+): Promise<RawGeminiResponse> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
   const systemText = systemInstructionOverride || RESPONSE_HINT;
+
+  const parts: Array<Record<string, any>> = [];
+
+  if (imageAttachment && imageAttachment.data) {
+    parts.push({
+      inlineData: {
+        mimeType: imageAttachment.mimeType || 'image/png',
+        data: imageAttachment.data,
+      },
+    });
+  }
+
+  parts.push({ text: userText });
+
   const body = {
     systemInstruction: { parts: [{ text: systemText }] },
-    contents: [{ role: 'user', parts: [{ text: userText }] }],
+    contents: [{ role: 'user', parts }],
     generationConfig: {
       temperature: 0.3,
-      // 3.x reasoning burns tokens on hidden thinking; give room for both
-      // thinking + a short user-facing response. Safety filter still caps
-      // the displayed length to ~100 Korean chars.
       maxOutputTokens: 1024,
     },
   };

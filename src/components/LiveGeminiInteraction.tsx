@@ -13,6 +13,19 @@ interface Props {
   suggestedQuestions?: string[];
 }
 
+interface AttachedImage {
+  name: string;
+  mimeType: string;
+  data: string; // base64 string without prefix
+  previewUrl: string; // full data URL for UI preview
+}
+
+interface ChatMessage {
+  role: 'user' | 'ai';
+  text: string;
+  imagePreview?: string;
+}
+
 export default function LiveGeminiInteraction({
   lessonId,
   promptHint = '실시간 AI 아이미에게 질문하거나 함께 탐구해 보세요!',
@@ -22,17 +35,16 @@ export default function LiveGeminiInteraction({
   const { speakNow } = useSpeak();
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
-  const [chatHistory, setChatHistory] = useState<Array<{ role: 'user' | 'ai'; text: string }>>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [fileAttached, setFileAttached] = useState<string | null>(null);
+  const [attachedImage, setAttachedImage] = useState<AttachedImage | null>(null);
 
   const isConnected = hasApiKey();
-
   const systemInstruction = getLessonSystemPrompt(lessonId);
 
   const handleSend = async (textToSend?: string) => {
     const text = (textToSend || inputText).trim();
-    if (!text) return;
+    if (!text && !attachedImage) return;
 
     if (!isConnected) {
       setErrorMessage('인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
@@ -42,12 +54,27 @@ export default function LiveGeminiInteraction({
     setLoading(true);
     setErrorMessage(null);
 
-    const userMessage = fileAttached ? `[첨부파일: ${fileAttached}] ${text}` : text;
-    setChatHistory((prev) => [...prev, { role: 'user', text: userMessage }]);
+    const imageToSend = attachedImage;
+    const userText = text || (imageToSend ? '이 사진(이미지)에 대해 설명하거나 질문에 답해 줘.' : '');
+
+    setChatHistory((prev) => [
+      ...prev,
+      {
+        role: 'user',
+        text: userText,
+        imagePreview: imageToSend?.previewUrl,
+      },
+    ]);
+
     setInputText('');
+    setAttachedImage(null);
 
     try {
-      const res = await askGemini(userMessage, systemInstruction);
+      const res = await askGemini(
+        userText,
+        systemInstruction,
+        imageToSend ? { mimeType: imageToSend.mimeType, data: imageToSend.data } : undefined
+      );
       setChatHistory((prev) => [...prev, { role: 'ai', text: res.text }]);
       speakNow(res.text);
     } catch (err) {
@@ -67,9 +94,29 @@ export default function LiveGeminiInteraction({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setFileAttached(file.name);
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setErrorMessage('이미지 파일(PNG, JPG, WEBP, GIF 등)을 선택해 주세요.');
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (result) {
+        const base64Data = result.split(',')[1] || '';
+        setAttachedImage({
+          name: file.name,
+          mimeType: file.type || 'image/png',
+          data: base64Data,
+          previewUrl: result,
+        });
+        setErrorMessage(null);
+      }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ''; // reset file input
   };
 
   if (!isConnected) {
@@ -97,12 +144,12 @@ export default function LiveGeminiInteraction({
           </div>
         </div>
         <span className="text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-800">
-          ● AI 연결됨
+          ● AI 연결됨 (사진 인식 지원)
         </span>
       </div>
 
       {chatHistory.length > 0 && (
-        <div className="max-h-64 overflow-y-auto space-y-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+        <div className="max-h-80 overflow-y-auto space-y-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
           {chatHistory.map((msg, index) => (
             <div
               key={index}
@@ -110,19 +157,28 @@ export default function LiveGeminiInteraction({
             >
               {msg.role === 'ai' && <span className="text-xl shrink-0">🤖</span>}
               <div
-                className={`max-w-[80%] p-3 rounded-2xl text-sm font-semibold leading-relaxed shadow-2xs ${
+                className={`max-w-[80%] p-3 rounded-2xl text-sm font-semibold leading-relaxed shadow-2xs space-y-2 ${
                   msg.role === 'user'
                     ? 'bg-indigo-600 text-white rounded-br-none'
                     : 'bg-white text-slate-800 border border-slate-200 rounded-bl-none'
                 }`}
               >
+                {msg.imagePreview && (
+                  <div className="overflow-hidden rounded-lg border border-white/20">
+                    <img
+                      src={msg.imagePreview}
+                      alt="학생 첨부 이미지"
+                      className="max-h-48 w-full object-contain bg-black/10 rounded-lg"
+                    />
+                  </div>
+                )}
                 <div className="flex items-center justify-between gap-2">
                   <span>{msg.text}</span>
                   {msg.role === 'ai' && (
                     <button
                       type="button"
                       onClick={() => speakNow(msg.text)}
-                      className="text-xs p-1 rounded-full hover:bg-slate-100 text-slate-500"
+                      className="text-xs p-1 rounded-full hover:bg-slate-100 text-slate-500 cursor-pointer shrink-0"
                       title="소리 듣기"
                     >
                       <Icon name="speaker" size={14} />
@@ -162,10 +218,17 @@ export default function LiveGeminiInteraction({
       )}
 
       <div className="space-y-2">
-        {fileAttached && (
-          <div className="flex items-center justify-between p-2 rounded-lg bg-indigo-50 text-indigo-900 text-xs font-bold border border-indigo-200">
-            <span>📎 첨부된 파일: {fileAttached}</span>
-            <button type="button" onClick={() => setFileAttached(null)} className="text-indigo-600 hover:text-indigo-900 cursor-pointer">
+        {attachedImage && (
+          <div className="flex items-center justify-between p-2 rounded-xl bg-indigo-50 text-indigo-900 text-xs font-bold border border-indigo-200">
+            <div className="flex items-center gap-2 overflow-hidden">
+              <img src={attachedImage.previewUrl} alt="미리보기" className="w-8 h-8 rounded-md object-cover shrink-0 border border-indigo-300" />
+              <span className="truncate">📷 첨부된 사진: {attachedImage.name}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAttachedImage(null)}
+              className="text-indigo-600 hover:text-rose-600 font-extrabold text-sm px-2 py-1 cursor-pointer shrink-0"
+            >
               ✕ 삭제
             </button>
           </div>
@@ -173,11 +236,11 @@ export default function LiveGeminiInteraction({
 
         <div className="flex items-center gap-2">
           <label
-            title="파일/사진 첨부하기"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer transition"
+            title="사진/이미지 파일 첨부하기"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer transition shadow-2xs"
           >
             <Icon name="link" size={20} />
-            <input type="file" onChange={handleFileChange} className="hidden" />
+            <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
           </label>
 
           <MicButton accent={accent} onResult={(text) => setInputText(text)} />
@@ -187,7 +250,7 @@ export default function LiveGeminiInteraction({
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="AI에게 질문이나 의견을 자유롭게 적어 보세요"
+            placeholder={attachedImage ? '사진에 대해 질문하거나 전송 버튼을 누르세요' : 'AI에게 질문이나 의견을 자유롭게 적어 보세요'}
             className="flex-1 min-w-0 h-11 px-4 rounded-xl border-2 text-sm font-semibold bg-white"
             style={{ borderColor: accent }}
           />
@@ -195,11 +258,11 @@ export default function LiveGeminiInteraction({
           <button
             type="button"
             onClick={() => handleSend()}
-            disabled={loading || !inputText.trim()}
-            className="h-11 px-4 rounded-xl font-bold text-white text-sm flex items-center gap-1 cursor-pointer transition disabled:opacity-50"
+            disabled={loading || (!inputText.trim() && !attachedImage)}
+            className="h-11 px-4 rounded-xl font-bold text-white text-sm flex items-center gap-1 cursor-pointer transition disabled:opacity-50 shadow-2xs"
             style={{ background: accent }}
           >
-            {loading ? '생각 중...' : '보내기'}
+            {loading ? '인식 중...' : '보내기'}
           </button>
         </div>
       </div>
