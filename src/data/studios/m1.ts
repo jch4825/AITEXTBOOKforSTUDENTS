@@ -124,7 +124,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         { id: 'tool-with-input', emoji: '🛠️', label: '컴퓨터가 사람처럼 학습하고 판단하여 번역, 추천, 분류 등 여러 일을 도와주는 기술이라고 소개합니다.', isCorrect: true },
         { id: 'magic-friend', emoji: '🪄', label: '모든 것을 알고 스스로 결정하는 마법 친구라고 소개합니다.', isCorrect: false },
         { id: 'just-machine', emoji: '⚙️', label: '전기로 움직이는 기계는 모두 AI라고 소개합니다.', isCorrect: false },
-        { id: 'human-like-helper', emoji: '🤖', label: '사람의 생각을 비슷하게 만들어 여러 가지 과제 해결을 돕는 유용한 프로그램이라고 덧붙입니다.', isCorrect: true },
+        { id: 'human-like-helper', emoji: '🤖', label: '대화를 통해 깊이 있는 생각을 이끌어내어 어려운 문제 해결을 도와주는 유용한 프로그램이라고 덧붙입니다.', isCorrect: true },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: 'AI(인공지능)의 뜻과 할 수 있는 일 중 꼭 말하고 싶은 내용은 무엇인가요?',
