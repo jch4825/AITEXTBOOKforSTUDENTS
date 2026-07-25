@@ -22,7 +22,19 @@ export interface FilterResult {
 }
 
 export function filterAiResponse(raw: string): FilterResult {
-  const trimmed = raw.trim();
+  let trimmed = raw.trim();
+
+  // Strip English self-correction, thinking headers, or review prompts leaked by LLM models
+  if (/Review and Refine|Self-Correction|vocabulary too hard|closing\./i.test(trimmed)) {
+    const match = trimmed.match(/([가-힣ㄱ-ㅎㅏ-ㅣ][^]*)/);
+    if (match) {
+      trimmed = match[1].replace(/^["'“”]/, '').replace(/["'“”]$/, '').trim();
+    }
+  }
+
+  // Remove any residual leading English evaluation lines
+  trimmed = trimmed.replace(/^(?:[a-zA-Z0-9\s.,:*_\-()\n]+[:\n])+(?=[가-힣])/, '').trim();
+
   for (const rx of BAD_TERMS) {
     if (rx.test(trimmed)) {
       return { safe: false, text: FALLBACK_TEXT };

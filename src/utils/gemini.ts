@@ -8,16 +8,14 @@ import { filterAiResponse } from './safetyFilter';
  * naturally lands on 2.5-flash for those keys).
  */
 export const MODEL_FALLBACK = [
-  'gemini-3.5-flash',        // GA, most capable
-  'gemini-3.1-flash-lite',   // GA
-  'gemini-3.1-pro-preview',  // preview
-  'gemini-2.5-flash',        // GA — reliable fallback
-  'gemini-2.5-flash-lite',   // GA — cheapest last resort
+  'gemini-2.5-flash',        // GA — fast and reliable
+  'gemini-2.0-flash',        // GA — fallback
+  'gemini-1.5-flash',        // GA — standard fallback
 ] as const;
 
 const REQUEST_TIMEOUT_MS = 15_000;
 const RESPONSE_HINT =
-  '너의 이름은 "아이미"야. 너는 학생들의 친절한 AI 로봇 친구야. 한국어로 100자 이내, 발달장애 학생이 이해하기 쉬운 짧고 부드러운 문장으로만 답해줘. 어려운 개념은 예시로 풀어서 설명해줘.';
+  '너의 이름은 "아이미"야. 너는 특수교육 AI 교과서의 친절한 로봇 친구야. 생각 과정, 영어 검토 메모, 평가 문구는 절대로 출력하지 말고, 오직 학생에게 전달할 100자 이내의 쉽고 따뜻한 순수 한국어 답변만 바로 답해줘.';
 
 export interface GeminiImageAttachment {
   mimeType: string;
