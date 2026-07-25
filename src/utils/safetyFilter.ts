@@ -14,7 +14,6 @@ const BAD_TERMS: RegExp[] = [
 ];
 
 const FALLBACK_TEXT = '다시 말해주겠습니다. 다른 질문 해 보십시오.';
-const MAX_CHARS = 200;
 
 export interface FilterResult {
   safe: boolean;
@@ -40,8 +39,15 @@ export function filterAiResponse(raw: string): FilterResult {
       return { safe: false, text: FALLBACK_TEXT };
     }
   }
+
+  const MAX_CHARS = 100;
   if (trimmed.length > MAX_CHARS) {
-    return { safe: true, text: trimmed.slice(0, MAX_CHARS).trimEnd() + '…' };
+    const sub = trimmed.slice(0, MAX_CHARS);
+    const lastPunct = Math.max(sub.lastIndexOf('.'), sub.lastIndexOf('!'), sub.lastIndexOf('?'));
+    if (lastPunct > 30) {
+      return { safe: true, text: sub.slice(0, lastPunct + 1).trim() };
+    }
+    return { safe: true, text: sub.trimEnd() + '…' };
   }
   return { safe: true, text: trimmed };
 }

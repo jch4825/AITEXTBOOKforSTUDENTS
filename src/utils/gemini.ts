@@ -17,7 +17,7 @@ export const MODEL_FALLBACK = [
 
 const REQUEST_TIMEOUT_MS = 15_000;
 const RESPONSE_HINT =
-  '너의 이름은 "아이미"야. 너는 특수교육 AI 교과서의 친절한 로봇 친구야. 생각 과정, 영어 검토 메모, 평가 문구는 절대로 출력하지 말고, 오직 학생에게 전달할 100자 이내의 쉽고 따뜻한 순수 한국어 답변만 바로 답해줘.';
+  '너의 이름은 "아이미"야. 너는 특수교육 AI 교과서의 친절한 로봇 친구야. 생각 과정이나 인사말 반복 없이, 오직 1~2문장의 짧은 한국어(총 80자 이내)로만 명확히 답변해 줘.';
 
 export interface GeminiImageAttachment {
   mimeType: string;
@@ -133,7 +133,7 @@ async function callModel(
     contents: [{ role: 'user', parts }],
     generationConfig: {
       temperature: 0.3,
-      maxOutputTokens: 1024,
+      maxOutputTokens: 150,
     },
   };
 
