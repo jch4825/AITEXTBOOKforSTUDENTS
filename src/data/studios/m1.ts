@@ -162,9 +162,9 @@ export const M1_STUDIOS: StudioDefinition[] = [
         },
       ],
       choices: [
-        { id: 'describe-input-output', emoji: '🗺️', label: '질문을 입력받아 관련 책을 찾아 추천하는 인공지능(AI) 기능이라고 소개합니다.' },
-        { id: 'call-all-knowing', emoji: '⭐', label: '도서관의 모든 일을 완벽하게 아는 친구라고 소개합니다.' },
-        { id: 'check-recommendation', emoji: '✅', label: '추천한 책이 내 목적에 맞는지는 사람이 확인한다고 덧붙입니다.' },
+        { id: 'describe-input-output', emoji: '🗺️', label: '질문을 입력받아 관련 책을 찾아 추천하는 인공지능(AI) 기능이라고 소개합니다.', isCorrect: true },
+        { id: 'call-all-knowing', emoji: '⭐', label: '도서관의 모든 일을 완벽하게 아는 친구라고 소개합니다.', isCorrect: false },
+        { id: 'check-recommendation', emoji: '✅', label: '추천한 책이 내 목적에 맞는지는 사람이 확인한다고 덧붙입니다.', isCorrect: true },
       ],
     },
   },

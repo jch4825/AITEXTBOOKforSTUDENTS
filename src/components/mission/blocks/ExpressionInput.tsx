@@ -98,7 +98,7 @@ export default function ExpressionInput({
         <div className={activeMode === 'choice' ? "grid grid-cols-1 gap-3" : "grid grid-cols-1 sm:grid-cols-2 gap-3"}>
           {choices.map((choice) => {
             const selected = value?.choiceIds?.includes(choice.id) ?? false;
-            const isCorrect = choice.isCorrect;
+            const isCorrect = choice.isCorrect !== undefined ? choice.isCorrect : (selected ? true : undefined);
 
             let borderStyle = selected ? `4px solid ${accent}` : '2.5px solid var(--line)';
             let bgStyle = selected ? 'var(--paper-1)' : 'var(--paper-0)';
