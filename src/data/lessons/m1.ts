@@ -33,12 +33,12 @@ export const M1_LESSONS: LessonContent[] = [
     title: '기계와 AI는 어떻게 다를까?',
     objective: '오늘은 기계가 결과를 바꾸는 데 어떤 정보를 쓰는지 살펴보고 AI가 쓰인 기능을 찾아봐요.',
     standards: [AI_STANDARD],
-    bodyEasy: '기계의 이름만 보고 AI인지 정하기는 어려워요. 무엇을 입력받고 어떻게 결과를 바꾸는지 살펴봐요.',
-    bodyNormal: '자동으로 움직이는 기계가 모두 AI인 것은 아닙니다. 버튼, 센서, 사용 기록처럼 어떤 정보를 받고 결과를 어떻게 바꾸는지 기능별로 살펴봐야 합니다.',
+    bodyEasy: '기계에 타자로 텍스트 넣기, 센서 감지, 사용 기록처럼 기기가 작동하는 기준을 살펴봐요.',
+    bodyNormal: '자동으로 움직이는 기계가 모두 AI인 것은 아닙니다. 버튼이나 타자로 텍스트 넣기, 센서 감지, 사용 기록처럼 기기가 작동하는 정보와 판단 기준을 살펴봐야 합니다.',
     wrapUpEasy: '기계가 받는 정보와 바꾸는 결과를 살펴보면 AI 기능을 찾을 수 있어요.',
     wrapUpNormal: '기기 전체의 이름보다 입력과 결과를 살펴보면 자동 기능, 센서 기능, AI 기능을 더 정확하게 판단할 수 있습니다.',
     steps: [
-      { kind: 'text', data: { dictionaryTerms: ['센서', '입력', '결과'], imagePlaceholder: true } },
+      { kind: 'text', data: { dictionaryTerms: ['넣기', '감지', '기준', '센서', '타자', '텍스트', '작동', '기록', '입력', '결과'], imagePlaceholder: true } },
       {
         kind: 'matching',
         data: {

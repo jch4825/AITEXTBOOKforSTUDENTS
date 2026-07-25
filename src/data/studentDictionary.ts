@@ -37,6 +37,48 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     ttsVersion: '기계는 사람이 정해준 순서대로만 똑같이 움직이는 도구입니다.',
   },
   {
+    term: '센서',
+    shortExplanation: '사람처럼 빛, 소리, 온도의 변화나 다가옴을 알아채는 기계 부품입니다.',
+    example: '자동문에 달린 센서가 다가오는 사람을 감지합니다.',
+  },
+  {
+    term: '감지',
+    shortExplanation: '센서가 주변의 빛, 소리, 사람의 움직임을 알아차리는 것입니다.',
+    example: '자동문 센서가 사람의 다가옴을 감지합니다.',
+  },
+  {
+    term: '넣기',
+    aliases: ['입력'],
+    shortExplanation: '버튼을 누르거나 글자를 입력하여 기기에 정보나 명령을 전달하는 일입니다.',
+    example: '버튼을 누르거나 화면을 눌러 명령을 넣습니다.',
+  },
+  {
+    term: '기준',
+    shortExplanation: '어떤 판단이나 분류를 할 때 바르게 비교하고 결정하는 중심 규칙입니다.',
+    example: '입력과 결과를 살펴보는 것이 AI인지 판단하는 기준이 됩니다.',
+  },
+  {
+    term: '타자',
+    shortExplanation: '글자판(키보드)을 손가락으로 가볍게 눌러 글자를 넣는 일입니다.',
+    example: '키보드로 타자를 쳐서 질문을 작성합니다.',
+  },
+  {
+    term: '텍스트',
+    aliases: ['글자'],
+    shortExplanation: '화면이나 종이에 적혀 읽을 수 있는 글자나 문장입니다.',
+    example: 'AI에게 텍스트로 질문을 써서 보냅니다.',
+  },
+  {
+    term: '작동',
+    shortExplanation: '기계나 프로그램이 명령을 받아 움직이고 일하는 것입니다.',
+    example: '버튼을 누르면 선풍기가 바람을 내며 작동합니다.',
+  },
+  {
+    term: '기록',
+    shortExplanation: '이전에 사용했던 내용이나 노래, 결과를 남겨 두는 정보입니다.',
+    example: '내가 들은 노래 기록을 보고 음악 추천 앱이 비슷한 노래를 찾습니다.',
+  },
+  {
     term: '인식',
     shortExplanation: '보거나 듣고 "이게 뭔지" 알아보는 것입니다.',
     example: 'AI가 사진 속 강아지를 보고 "강아지"라고 알아보는 것입니다.',

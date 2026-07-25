@@ -352,6 +352,15 @@ export const M1_STUDIOS: StudioDefinition[] = [
       title: '스마트 조명을 살펴본다면',
       description: '스마트 조명이 움직임을 감지해 켜지고, 내가 자주 끄는 시간을 배워 밝기를 추천합니다.',
       prompt: '나만의 표현으로 스마트 조명 속에 들어있는 여러 기능을 친구에게 설명해보자.',
+      stimuli: [
+        {
+          id: 'smart-light-real',
+          kind: 'image',
+          src: '/images/smart_light_real.webp',
+          alt: '스마트 조명 및 제어 단말기 사진',
+          caption: '스마트 조명 (센서 + AI 기능)',
+        },
+      ],
       choices: [
         { id: 'separate-sensor-action', emoji: '💡', label: '움직임 감지 센서 기능과 조명이 켜지는 기본 작동을 구분하여 설명합니다.', isCorrect: true },
         { id: 'combine-sensor-ai', emoji: '🧩', label: '센서 감지 기능과 사용 습관을 배우는 밝기 추천 AI가 함께 작동함을 설명합니다.', isCorrect: true },
