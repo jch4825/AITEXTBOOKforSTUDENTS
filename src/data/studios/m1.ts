@@ -329,9 +329,9 @@ export const M1_STUDIOS: StudioDefinition[] = [
     },
     aiContribution: {
       source: 'prepared',
-      role: '아이미의 첫 기능 분류',
-      text: '자동문과 로봇청소기는 스스로 움직이니 기기 전체를 AI라고 부르면 간단해요. 음악 추천 앱도 자동으로 목록을 만드니 같은 종류예요.',
-      question: '아이미의 분류를 그대로 쓸까요, 기능별 입력과 결과를 기준으로 고칠까요?',
+      role: '아이미의 생각',
+      text: '로봇청소기와 자동문은 기계입니다. 둘 다 스스로 움직이지요. 하지만 로봇청소기만 인공지능이라고 부릅니다. 자동문과 로봇청소기가 다른 점은 무엇일까요?',
+      question: '자동문과 로봇청소기가 다른 점은 무엇일까요?',
     },
     artifact: {
       kind: 'visual-plan',
