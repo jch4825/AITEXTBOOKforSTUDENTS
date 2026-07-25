@@ -376,7 +376,7 @@ export default function StudioExperience({
             </button>
           )}
 
-          {/* 탐구 증서(상장) 인쇄 영역 */}
+          {/* 탐구 증서 인쇄 영역 */}
           <div className="pt-3">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/70 shadow-2xs">
               <div className="flex items-center gap-2 flex-1">
@@ -397,7 +397,7 @@ export default function StudioExperience({
                 onClick={() => setShowCertificateModal(true)}
                 className="h-10 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md shrink-0 hover:scale-102 active:scale-98"
               >
-                <span>🏆</span> 탐구 증서(상장)로 인쇄하기
+                <span>🏆</span> 탐구 증서로 인쇄하기
               </button>
             </div>
           </div>
