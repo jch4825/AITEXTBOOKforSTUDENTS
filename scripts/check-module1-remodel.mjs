@@ -105,7 +105,7 @@ assert(
     && portfolioView.includes('completionMessage'),
   'm1-l11: explicit portfolio completion requirements are missing',
 );
-assert(studios.includes("title: 'AI 정의 카드'"), 'm1-l1: artifact must be an AI definition card');
+assert(studios.includes("title: '탐구 성찰 기록'"), 'm1-l1: artifact must be an inquiry reflection record');
 assert(studios.includes("title: '이미지 인식 실험 기록'"), 'm1-l4: artifact must be an image experiment record');
 assert(studios.includes("title: 'AI 결과 사용 판단 기록'"), 'm1-l10: artifact must be a use decision record');
 

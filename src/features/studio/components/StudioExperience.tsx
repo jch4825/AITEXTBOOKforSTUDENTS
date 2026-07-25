@@ -42,16 +42,57 @@ const AI_DECISION_SUMMARY: Record<AiDecision, string> = {
   reject: 'AI 의견을 사용하지 않고 내 방법을 선택했습니다.',
 };
 
-function expressionSummary(expression: StudioExpression | undefined, choices: StudioChoice[]): string {
-  if (!isMeaningfulStudioExpression(expression)) return '아직 표현을 남기지 않았습니다.';
-  if (expression.mode === 'choice' || expression.mode === 'aac') {
-    const labels = expression.choiceIds
-      ?.map((id) => choices.find((choice) => choice.id === id)?.label)
-      .filter((label): label is string => Boolean(label));
-    return labels?.join(' / ') || '선택으로 생각을 표현했습니다.';
+function renderExpressionDetail(
+  expression: StudioExpression | undefined,
+  choices: StudioChoice[],
+  accent: string
+) {
+  if (!expression) return <span className="text-[color:var(--muted)] font-medium">아직 표현을 남기지 않았습니다.</span>;
+
+  if (expression.mode === 'draw' && expression.drawing) {
+    return (
+      <div className="space-y-1.5 mt-1">
+        <span className="text-xs font-bold text-emerald-800 block">🎨 칠판에 그린 나만의 표현:</span>
+        <img
+          src={expression.drawing}
+          alt="학생이 그린 그림"
+          className="max-h-36 max-w-full rounded-xl border-2 border-emerald-400 bg-[#064E3B] object-contain p-1.5 shadow-sm"
+        />
+      </div>
+    );
   }
-  if (expression.mode === 'draw') return '그림으로 생각을 표현했습니다.';
-  return expression.text?.trim() || '아직 표현을 남기지 않았습니다.';
+
+  if (expression.mode === 'choice' || expression.mode === 'aac') {
+    const selectedChoices = choices.filter((c) => expression.choiceIds?.includes(c.id));
+    if (selectedChoices.length > 0) {
+      return (
+        <div className="space-y-1 mt-1">
+          {selectedChoices.map((c) => (
+            <div key={c.id} className="flex items-start gap-2 font-extrabold text-sm text-slate-800">
+              <span className="text-xl shrink-0 leading-none">{c.emoji}</span>
+              <span className="leading-tight">{c.label}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+  }
+
+  if (expression.text && expression.text.trim()) {
+    return <p className="font-extrabold text-sm text-slate-800 leading-relaxed mt-1">“{expression.text.trim()}”</p>;
+  }
+
+  return <span className="text-[color:var(--muted)] font-medium">선택으로 생각을 표현했습니다.</span>;
+}
+
+function getChoiceSummaryText(expression: StudioExpression | undefined, choices: StudioChoice[]): string {
+  if (!expression) return '';
+  if (expression.text?.trim()) return expression.text.trim();
+  if (expression.choiceIds?.length) {
+    const selected = choices.filter((c) => expression.choiceIds?.includes(c.id));
+    return selected.map((c) => c.label).join(' / ');
+  }
+  return '';
 }
 
 export default function StudioExperience({
@@ -289,7 +330,7 @@ export default function StudioExperience({
     );
   } else if (state.stage === 'artifact') {
     const suggestion = isMeaningfulStudioExpression(state.finalExpression)
-      ? expressionSummary(state.finalExpression, definition.firstAttempt.choices)
+      ? getChoiceSummaryText(state.finalExpression, definition.firstAttempt.choices)
       : null;
     right = (
       <div className="space-y-5 p-5 md:p-7">
@@ -378,34 +419,44 @@ export default function StudioExperience({
     right = (
       <div className="space-y-5 p-5 md:p-7">
         <div>
-          <p className="studio-kicker" style={{ color: accent }}>나의 학습 과정</p>
-          <h2 className="mt-1 text-xl font-extrabold">처음 생각부터 새 상황까지 돌아봅니다</h2>
+          <p className="studio-kicker" style={{ color: accent }}>나의 학습 성찰 기록</p>
+          <h2 className="mt-1 text-xl font-extrabold">오늘 차시에서 내가 한 생각과 탐구 기록을 한눈에 돌아봐요</h2>
         </div>
         <dl className="grid gap-3">
-          <div className="studio-fact-card">
-            <dt className="font-bold" style={{ color: accent }}>처음에는</dt>
-            <dd>{expressionSummary(state.firstAttempt, definition.firstAttempt.choices)}</dd>
+          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>1. 처음 내 생각 (P02)</dt>
+            <dd>{renderExpressionDetail(state.firstAttempt, definition.firstAttempt.choices, accent)}</dd>
           </div>
-          <div className="studio-fact-card">
-            <dt className="font-bold" style={{ color: accent }}>AI 의견을 보고</dt>
-            <dd>{state.aiDecision ? AI_DECISION_SUMMARY[state.aiDecision] : '내 판단을 살펴봤습니다.'}</dd>
+          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>2. 실시간 AI 아이미와 대화 & 내 판단 (P04-P05)</dt>
+            <dd>{renderExpressionDetail(state.finalExpression, definition.firstAttempt.choices, accent)}</dd>
           </div>
-          <div className="studio-fact-card">
-            <dt className="font-bold" style={{ color: accent }}>나는 이렇게 판단했습니다</dt>
-            <dd>{expressionSummary(state.finalExpression, definition.firstAttempt.choices)}</dd>
+          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>3. 나의 탐구 성찰 기록 (P06)</dt>
+            <dd>
+              {state.artifactSummary && state.artifactSummary.trim() ? (
+                <p className="font-extrabold text-sm text-slate-800 whitespace-pre-wrap leading-relaxed mt-1">
+                  “{state.artifactSummary.trim()}”
+                </p>
+              ) : (
+                <span className="text-[color:var(--muted)] font-medium">아직 탐구 성찰 기록을 작성하지 않았습니다.</span>
+              )}
+            </dd>
           </div>
-          <div className="studio-fact-card">
-            <dt className="font-bold" style={{ color: accent }}>다른 상황에서는</dt>
-            <dd>{expressionSummary(state.transferExpression, definition.transfer.choices)}</dd>
-          </div>
-          <div className="studio-fact-card">
-            <dt className="font-bold" style={{ color: accent }}>{definition.artifact.title}</dt>
-            <dd>{state.artifactSummary?.trim() || '탐구 기록을 완성했습니다.'}</dd>
+          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>4. 새로운 도서관 AI 추천 기계 적용 (P07)</dt>
+            <dd>{renderExpressionDetail(state.transferExpression, definition.transfer.choices, accent)}</dd>
           </div>
         </dl>
-        <p className="studio-margin-note">
-          선택을 바꾸지 않았더라도 달라진 정보를 살펴보고 이유 있게 판단했다면 좋은 과정입니다.
-        </p>
+        <div className="pt-2">
+          <button
+            type="button"
+            onClick={() => setShowCertificateModal(true)}
+            className="w-full h-12 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-base rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md hover:scale-102 active:scale-98"
+          >
+            <span>🏆</span> 나의 완성된 탐구 증서(상장) 보기 및 인쇄하기
+          </button>
+        </div>
       </div>
     );
   }

@@ -147,7 +147,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     },
     artifact: {
       kind: 'action-card',
-      title: 'AI 정의 카드',
+      title: '탐구 성찰 기록',
       prompt: '“AI(인공지능)는 …이며, …을 할 수 있는 도구예요” 문장을 내 말로 완성해 봐요.',
     },
     transfer: {
