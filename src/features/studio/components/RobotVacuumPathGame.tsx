@@ -276,7 +276,7 @@ export default function RobotVacuumPathGame() {
       </div>
 
       {/* House Floor Plan Grid (집 조감도 그리드) */}
-      <div className="my-3 mx-auto w-full max-w-[280px] sm:max-w-[320px] aspect-square bg-slate-800/90 border-4 border-amber-500/50 rounded-2xl p-2.5 shadow-2xl relative grid grid-cols-4 gap-2 backdrop-blur-md">
+      <div className="my-3 mx-auto w-full max-w-[280px] sm:max-w-[320px] aspect-square bg-slate-800/90 border-4 border-amber-500/50 rounded-2xl p-2.5 shadow-2xl relative grid grid-cols-4 grid-rows-4 gap-2 backdrop-blur-md min-h-0">
         {Array.from({ length: GRID_SIZE }).map((_, r) =>
           Array.from({ length: GRID_SIZE }).map((_, c) => {
             const isStart = r === 0 && c === 0;
@@ -289,11 +289,13 @@ export default function RobotVacuumPathGame() {
               return (
                 <div
                   key={`${r}-${c}`}
-                  className="relative rounded-xl border-2 border-slate-800 bg-slate-950/90 flex flex-col items-center justify-center select-none shadow-inner opacity-90"
+                  className="relative w-full h-full aspect-square rounded-xl border-2 border-slate-800 bg-slate-950/90 flex flex-col items-center justify-center select-none shadow-inner opacity-90 overflow-hidden"
                   title={obstacle.label}
                 >
-                  <span className="text-xl sm:text-2xl">{obstacle.emoji}</span>
-                  <span className="text-[9px] font-bold text-slate-400 mt-0.5">{obstacle.label}</span>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-1">
+                    <span className="text-xl sm:text-2xl">{obstacle.emoji}</span>
+                    <span className="text-[9px] font-bold text-slate-400 mt-0.5">{obstacle.label}</span>
+                  </div>
                 </div>
               );
             }
@@ -305,7 +307,7 @@ export default function RobotVacuumPathGame() {
                 onClick={() => handleTileClick(r, c)}
                 onMouseEnter={() => handleMouseEnter(r, c)}
                 disabled={gameState === 'running'}
-                className={`relative rounded-xl border-2 transition-colors flex flex-col items-center justify-center font-extrabold select-none cursor-pointer overflow-hidden ${
+                className={`relative w-full h-full aspect-square rounded-xl border-2 transition-colors select-none cursor-pointer overflow-hidden ${
                   isRobotHere
                     ? 'border-amber-400 bg-amber-400/30 shadow-md ring-2 ring-amber-400/80'
                     : inPath
@@ -313,22 +315,24 @@ export default function RobotVacuumPathGame() {
                       : 'border-slate-700 bg-slate-900/80 text-slate-500 hover:border-amber-400/60 hover:bg-slate-800'
                 }`}
               >
-                {/* Robot Vacuum Icon */}
-                {isRobotHere ? (
-                  <CircularRobotVacuumIcon isRunning={gameState === 'running'} />
-                ) : isStart ? (
-                  <div className="flex flex-col items-center">
-                    <span className="text-xl sm:text-2xl">🔌</span>
-                    <span className="text-[10px] font-black text-amber-300">충전소</span>
-                  </div>
-                ) : inPath ? (
-                  <div className="flex flex-col items-center">
-                    <span className="text-sm sm:text-base">✨</span>
-                    <span className="text-[10px] font-bold text-cyan-300">{pathIdx + 1}</span>
-                  </div>
-                ) : (
-                  <span className="text-xs opacity-40">🧹</span>
-                )}
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-1 pointer-events-none">
+                  {/* Robot Vacuum Icon */}
+                  {isRobotHere ? (
+                    <CircularRobotVacuumIcon isRunning={gameState === 'running'} />
+                  ) : isStart ? (
+                    <div className="flex flex-col items-center leading-none">
+                      <span className="text-lg sm:text-xl">🔌</span>
+                      <span className="text-[9px] font-black text-amber-300 mt-0.5">충전소</span>
+                    </div>
+                  ) : inPath ? (
+                    <div className="flex flex-col items-center leading-none">
+                      <span className="text-xs sm:text-sm">✨</span>
+                      <span className="text-[9px] font-bold text-cyan-300 mt-0.5">{pathIdx + 1}</span>
+                    </div>
+                  ) : (
+                    <span className="text-xs opacity-40">🧹</span>
+                  )}
+                </div>
               </button>
             );
           })
