@@ -1389,10 +1389,11 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  body > *:not(.certificate-print-wrapper) {
+  body > *:not(.certificate-print-wrapper):not(.award-print-wrapper) {
     display: none !important;
   }
-  .certificate-print-wrapper {
+  .certificate-print-wrapper,
+  .award-print-wrapper {
     display: block !important;
     position: absolute !important;
     left: 0 !important;
@@ -1403,6 +1404,8 @@
     padding: 0 !important;
     z-index: 999999 !important;
     background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
   .printable-certificate {
     width: 100% !important;

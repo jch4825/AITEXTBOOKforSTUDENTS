@@ -11,6 +11,7 @@ import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
 import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
 import InquiryCertificateModal from './InquiryCertificateModal';
+import CompletionAwardModal from './CompletionAwardModal';
 import { getScopedChoices } from '../studioChoiceUtils';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
@@ -109,6 +110,7 @@ export default function StudioExperience({
   const { speakNow } = useSpeak();
   const [studentName, setStudentName] = useState('');
   const [showCertificateModal, setShowCertificateModal] = useState(false);
+  const [showAwardModal, setShowAwardModal] = useState(false);
   const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
     entry.term,
     ...(entry.aliases ?? []),
@@ -451,10 +453,10 @@ export default function StudioExperience({
         <div className="pt-2">
           <button
             type="button"
-            onClick={() => setShowCertificateModal(true)}
-            className="w-full h-12 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-base rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-md hover:scale-102 active:scale-98"
+            onClick={() => setShowAwardModal(true)}
+            className="w-full h-12 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-base rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:scale-102 active:scale-98"
           >
-            <span>🏆</span> 나의 완성된 탐구 증서(상장) 보기 및 인쇄하기
+            <span>👑</span> 나의 차시 학습 완료 상장 보기 및 인쇄하기
           </button>
         </div>
       </div>
@@ -477,6 +479,13 @@ export default function StudioExperience({
         studentName={studentName}
         lessonTitle={definition.title}
         inquiryText={state.artifactSummary ?? ''}
+      />
+      <CompletionAwardModal
+        isOpen={showAwardModal}
+        onClose={() => setShowAwardModal(false)}
+        defaultName={studentName}
+        lessonTitle={definition.title}
+        inquirySummary={state.artifactSummary}
       />
     </>
   );
