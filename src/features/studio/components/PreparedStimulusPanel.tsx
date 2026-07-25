@@ -28,7 +28,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
           return (
             <figure
               key={stimulus.id}
-              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-2 shadow-2xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${isSingle ? 'w-32 sm:w-36 mx-auto' : 'w-full'}`}
+              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-2.5 shadow-2xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${isSingle ? 'w-48 sm:w-56 mx-auto' : 'w-full'}`}
               style={!isPecs ? { borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' } : undefined}
             >
               {failed ? (
