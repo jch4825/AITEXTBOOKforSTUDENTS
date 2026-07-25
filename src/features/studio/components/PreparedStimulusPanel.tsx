@@ -28,7 +28,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
           return (
             <figure
               key={stimulus.id}
-              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-2.5 shadow-2xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${isSingle ? 'w-48 sm:w-56 mx-auto' : 'w-full'}`}
+              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-3 shadow-xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${isSingle ? 'w-72 sm:w-80 md:w-96 max-w-full mx-auto' : 'w-full'}`}
               style={!isPecs ? { borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' } : undefined}
             >
               {failed ? (
@@ -43,7 +43,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
               ) : (
                 <div className={`relative w-full aspect-square overflow-hidden rounded-xl ${isPecs ? 'bg-amber-50/50' : ''}`}>
                   {isPecs && (
-                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[9px] shadow-xs uppercase tracking-wider z-10 select-none">
+                    <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[10px] shadow-xs uppercase tracking-wider z-10 select-none">
                       PECS
                     </span>
                   )}
@@ -55,7 +55,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                   />
                 </div>
               )}
-              <figcaption className={`mt-1.5 text-center text-[11px] sm:text-xs font-black leading-tight truncate ${isPecs ? 'text-amber-950 bg-amber-100/90 py-1 px-1 rounded-lg border border-amber-300/80' : 'text-[color:var(--ink-1)]'}`}>
+              <figcaption className={`mt-2 text-center text-xs sm:text-sm font-black leading-snug ${isPecs ? 'text-amber-950 bg-amber-100/90 py-1.5 px-2 rounded-lg border border-amber-300/80' : 'text-[color:var(--ink-1)]'}`}>
                 {stimulus.caption}
               </figcaption>
             </figure>
