@@ -20,7 +20,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
   const isTriple = stimuli.length === 3;
 
   return (
-    <div className={`grid gap-2.5 sm:gap-3 ${isSingle ? 'grid-cols-1' : isTriple ? 'grid-cols-3' : 'sm:grid-cols-2'}`} aria-label="교과서에 준비된 이미지와 소리">
+    <div className={`${isSingle ? 'flex justify-center' : `grid gap-2.5 sm:gap-3 ${isTriple ? 'grid-cols-3' : 'sm:grid-cols-2'}`}`} aria-label="교과서에 준비된 이미지와 소리">
       {stimuli.map((stimulus) => {
         if (stimulus.kind === 'image') {
           const failed = failedImages.includes(stimulus.id);
@@ -28,7 +28,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
           return (
             <figure
               key={stimulus.id}
-              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-2 shadow-2xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''}`}
+              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-2 shadow-2xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${isSingle ? 'w-32 sm:w-36 mx-auto' : 'w-full'}`}
               style={!isPecs ? { borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' } : undefined}
             >
               {failed ? (
