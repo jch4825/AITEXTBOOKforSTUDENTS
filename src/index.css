@@ -335,16 +335,15 @@
 /* AAC 카드 인쇄 — 화면엔 숨기고, 인쇄 시 A6(=A4의 1/4) 한 장에 카드 이미지만 (단어는 이미지에 인쇄됨) */
 .aac-print-card { display: none; }
 @media print {
-  @page { size: A6; margin: 8mm; }
-  html, body { background: #fff; }
-  #root { display: none !important; }
-  .aac-print-card {
+  body.printing-aac @page { size: A6; margin: 8mm; }
+  body.printing-aac #root { display: none !important; }
+  body.printing-aac .aac-print-card {
     display: flex !important;
     align-items: center;
     justify-content: center;
     min-height: 92vh;
   }
-  .aac-print-card img {
+  body.printing-aac .aac-print-card img {
     width: 88mm;
     height: 88mm;
     object-fit: contain;
@@ -1373,7 +1372,7 @@
   }
 }
 
-/* Print CSS rules for Award-Style Inquiry Certificate (A4 Portrait with Safe Printer Margins) */
+/* Print CSS rules for Award-Style Inquiry Certificate & Completion Award (A4 Portrait) */
 @media print {
   @page {
     size: A4 portrait;
@@ -1385,11 +1384,15 @@
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  body > *:not(.certificate-print-wrapper):not(.award-print-wrapper) {
+  #root {
+    display: none !important;
+  }
+  .no-print,
+  .print-hide {
     display: none !important;
   }
   .certificate-print-wrapper,
@@ -1399,7 +1402,7 @@
     left: 0 !important;
     top: 0 !important;
     width: 100% !important;
-    height: 100% !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     z-index: 999999 !important;
@@ -1407,9 +1410,9 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  .printable-certificate {
+  .printable-certificate,
+  .completion-award-printable {
     width: 100% !important;
-    height: 100% !important;
     box-sizing: border-box !important;
     margin: 0 !important;
     padding: 8mm 10mm !important;
@@ -1421,8 +1424,5 @@
     background-color: #fffdf9 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-  }
-  .print-hide {
-    display: none !important;
   }
 }

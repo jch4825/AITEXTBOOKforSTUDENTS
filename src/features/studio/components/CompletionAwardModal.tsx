@@ -32,10 +32,10 @@ export default function CompletionAwardModal({
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs overflow-y-auto no-print">
-      <div className="relative w-full max-w-4xl rounded-3xl bg-slate-900 p-6 text-white shadow-2xl border border-amber-500/40 my-auto">
-        {/* Modal Top Bar */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+    <div className="award-print-wrapper fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/85 backdrop-blur-md overflow-y-auto print:static print:p-0 print:bg-white print:overflow-visible">
+      <div className="relative w-full max-w-4xl rounded-3xl bg-slate-900 p-6 text-white shadow-2xl border border-amber-500/40 my-auto print:m-0 print:p-0 print:bg-white print:border-none print:shadow-none print:max-w-none print:w-[210mm] print:h-[297mm]">
+        {/* Modal Top Bar (hidden in print) */}
+        <div className="print-hide no-print flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
           <div className="flex items-center gap-2">
             <span className="text-2xl">👑</span>
             <div>
@@ -53,8 +53,8 @@ export default function CompletionAwardModal({
           </button>
         </div>
 
-        {/* Controls: Student Name, Teacher Name, Print Button */}
-        <div className="mb-6 space-y-3 bg-slate-800/80 p-4 rounded-2xl border border-amber-500/20">
+        {/* Controls: Student Name, Teacher Name, Print Button (hidden in print) */}
+        <div className="print-hide no-print mb-6 space-y-3 bg-slate-800/80 p-4 rounded-2xl border border-amber-500/20">
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
             <label htmlFor="completion-award-name" className="text-sm font-extrabold text-amber-300 shrink-0 sm:w-36">
               상장에 새길 이름:
@@ -100,10 +100,10 @@ export default function CompletionAwardModal({
         </div>
 
         {/* Printable Award Diploma Container (Visible on screen preview & media print) */}
-        <div className="overflow-auto max-h-[70vh] rounded-2xl bg-slate-950/80 p-2 border border-slate-800">
+        <div className="overflow-auto max-h-[70vh] rounded-2xl bg-slate-950/80 p-2 border border-slate-800 print:overflow-visible print:max-h-none print:p-0 print:border-none print:bg-white">
           <div
             id="completion-award-printable"
-            className="award-print-wrapper mx-auto my-0 bg-amber-50/90 text-slate-900 p-8 md:p-12 rounded-xl shadow-2xl relative border-8 border-double border-amber-600 font-serif leading-relaxed"
+            className="completion-award-printable mx-auto my-0 bg-amber-50/90 text-slate-900 p-8 md:p-12 rounded-xl shadow-2xl relative border-8 border-double border-amber-600 font-serif leading-relaxed print:shadow-none print:border-8 print:w-full print:m-0"
             style={{
               width: '100%',
               maxWidth: '210mm',
