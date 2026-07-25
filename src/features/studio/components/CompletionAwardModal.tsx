@@ -131,7 +131,7 @@ export default function CompletionAwardModal({
                   상 장
                 </h1>
                 <p className="text-xs tracking-widest text-amber-800 font-sans font-extrabold uppercase">
-                  AI Digital Textbook Excellence Award
+                  AI Inquiry Excellence Award
                 </p>
                 <div className="w-24 h-1 bg-amber-500 mx-auto rounded-full mt-2"></div>
               </div>
@@ -150,7 +150,7 @@ export default function CompletionAwardModal({
                   상목: 인공지능(AI) 탐구 학습 최고상
                 </h2>
                 <p className="text-lg md:text-xl font-medium text-slate-800 leading-loose break-keep font-serif">
-                  위 학생은 특수교육 인공지능 디지털교과서 <br />
+                  위 학생은 특수교육 인공지능 탐구 학습 <br />
                   <strong className="text-amber-900 font-bold font-sans">『{lessonTitle}』</strong> 탐구 과정을 성실하게 이수하고, <br />
                   인공지능의 원리를 주도적으로 탐구하여 훌륭한 성찰 기록을 남겼으므로 이 상장을 수여합니다.
                 </p>

@@ -91,13 +91,13 @@ export default function InquiryCertificateModal({
             {/* Certificate Header */}
             <div className="text-center space-y-2 pt-2">
               <div className="inline-block px-4 py-1 bg-amber-100/90 text-amber-950 rounded-full font-bold text-xs tracking-wider uppercase border border-amber-300">
-                AI DIGITAL TEXTBOOK CERTIFICATE
+                AI INQUIRY CERTIFICATE
               </div>
               <h1 className="text-3xl sm:text-5xl font-black text-amber-950 tracking-[0.3em] font-serif pt-2">
                 탐 구 증 서
               </h1>
               <p className="text-sm font-extrabold text-amber-900/80">
-                특수교육 AI 디지털교과서 성찰 및 활동 기록
+                특수교육 인공지능(AI) 성찰 및 탐구 기록
               </p>
             </div>
 
@@ -139,7 +139,7 @@ export default function InquiryCertificateModal({
             {/* Official Commendation Citation */}
             <div className="text-center space-y-2 px-4 py-4">
               <p className="text-base sm:text-lg font-bold text-slate-800 leading-relaxed font-serif">
-                위 학생은 특수교육 인공지능(AI) 디지털교과서 탐구 활동에 적극적으로 참여하여 인공지능의 원리를 바르게 이해하고, 자신만의 깊이 있는 탐구 기록을 올바르게 완성하였으므로 이 증서를 수여합니다.
+                위 학생은 특수교육 인공지능(AI) 탐구 활동에 적극적으로 참여하여 인공지능의 원리를 바르게 이해하고, 자신만의 깊이 있는 탐구 기록을 올바르게 완성하였으므로 이 증서를 수여합니다.
               </p>
             </div>
           </div>
