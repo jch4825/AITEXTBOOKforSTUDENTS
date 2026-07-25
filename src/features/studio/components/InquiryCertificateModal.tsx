@@ -45,7 +45,7 @@ export default function InquiryCertificateModal({
             <span className="text-2xl">🏆</span>
             <div>
               <h3 className="leading-tight">A4 탐구 증서 미리보기 (상장 양식)</h3>
-              <p className="text-xs text-amber-300/80 font-medium">A4 규격(210mm × 297mm) 비율로 자동 맞춰 인쇄됩니다.</p>
+              <p className="text-xs text-amber-300/80 font-medium">실제 프린터의 안전 여백(상하 12mm, 좌우 15mm)이 자동 적용되어 테마가 잘리지 않고 출력됩니다.</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -67,10 +67,10 @@ export default function InquiryCertificateModal({
           </div>
         </div>
 
-        {/* Printable Award-Style Certificate Sheet (Strict A4 210mm x 297mm) */}
+        {/* Printable Award-Style Certificate Sheet (A4 Portrait with Safe Printer Margins) */}
         <div
           ref={certificateRef}
-          className="printable-certificate mx-auto bg-[#FFFDF9] text-slate-900 border-[14px] border-double border-amber-600 rounded-2xl p-8 sm:p-12 shadow-2xl relative flex flex-col justify-between w-full max-w-[210mm] min-h-[297mm] box-border print:w-[210mm] print:h-[297mm] print:p-[14mm_16mm] print:m-0 print:border-[14px] print:shadow-none print:rounded-none"
+          className="printable-certificate mx-auto bg-[#FFFDF9] text-slate-900 border-[12px] border-double border-amber-600 rounded-2xl p-8 sm:p-12 shadow-2xl relative flex flex-col justify-between w-full max-w-[210mm] min-h-[297mm] box-border print:w-full print:h-full print:p-[8mm_10mm] print:m-0 print:border-[10px] print:shadow-none print:rounded-none"
         >
           {/* Decorative Corner Ornaments */}
           <div className="absolute top-4 left-4 text-amber-600 text-2xl font-serif select-none pointer-events-none">
