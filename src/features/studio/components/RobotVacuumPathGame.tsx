@@ -6,26 +6,81 @@ interface Position {
   c: number;
 }
 
+interface Obstacle {
+  r: number;
+  c: number;
+  emoji: string;
+  label: string;
+}
+
+interface RoomLayout {
+  id: string;
+  name: string;
+  obstacles: Obstacle[];
+}
+
 const GRID_SIZE = 4; // 4x4 = 16 tiles
-const TOTAL_TILES = GRID_SIZE * GRID_SIZE;
+
+const ROOM_LAYOUTS: RoomLayout[] = [
+  {
+    id: 'living_room',
+    name: '1단계: 거실 (소파·테이블·화분 피하기)',
+    obstacles: [
+      { r: 1, c: 1, emoji: '🛋️', label: '소파' },
+      { r: 2, c: 2, emoji: '🪵', label: '테이블' },
+      { r: 3, c: 0, emoji: '🪴', label: '화분' },
+    ],
+  },
+  {
+    id: 'bedroom',
+    name: '2단계: 침실 (침대·옷장 피하기)',
+    obstacles: [
+      { r: 0, c: 2, emoji: '🛏️', label: '침대' },
+      { r: 1, c: 2, emoji: '🛏️', label: '침대' },
+      { r: 3, c: 1, emoji: '🚪', label: '옷장' },
+    ],
+  },
+  {
+    id: 'toy_room',
+    name: '3단계: 아이방 (장난감·서랍장 피하기)',
+    obstacles: [
+      { r: 1, c: 0, emoji: '🧸', label: '곰인형' },
+      { r: 2, c: 2, emoji: '🎁', label: '장난감' },
+      { r: 3, c: 3, emoji: '🚗', label: '장난감차' },
+    ],
+  },
+];
 
 export default function RobotVacuumPathGame() {
   const { speakNow } = useSpeak();
   
-  // Path of positions [{r: 0, c: 0}, ...]
+  const [selectedRoomIdx, setSelectedRoomIdx] = useState(0);
+  const currentRoom = ROOM_LAYOUTS[selectedRoomIdx];
+
+  const totalCleanable = 16 - currentRoom.obstacles.length;
+
   const [path, setPath] = useState<Position[]>([{ r: 0, c: 0 }]);
   const [simulatingIndex, setSimulatingIndex] = useState<number | null>(null);
   const [gameState, setGameState] = useState<'drawing' | 'running' | 'success' | 'fail'>('drawing');
   const [isMouseDown, setIsMouseDown] = useState(false);
 
-  const startPos = { r: 0, c: 0 };
+  // Check if position is an obstacle
+  const getObstacleAt = (r: number, c: number) => {
+    return currentRoom.obstacles.find((o) => o.r === r && o.c === c);
+  };
 
   // Reset path to start
-  const handleReset = () => {
+  const handleReset = (roomIdx = selectedRoomIdx) => {
+    setSelectedRoomIdx(roomIdx);
     setPath([{ r: 0, c: 0 }]);
     setSimulatingIndex(null);
     setGameState('drawing');
-    speakNow('처음부터 경로를 다시 그려봐요.');
+  };
+
+  // Switch room
+  const handleSwitchRoom = (idx: number) => {
+    handleReset(idx);
+    speakNow(`${ROOM_LAYOUTS[idx].name}로 방을 바꿨어요. 장애물을 피해 바닥을 청소해 봐요.`);
   };
 
   // Check if position is in path
@@ -42,15 +97,18 @@ export default function RobotVacuumPathGame() {
   const tryAddTile = (r: number, c: number) => {
     if (gameState !== 'drawing') return;
 
+    // Obstacles cannot be stepped on
+    if (getObstacleAt(r, c)) return;
+
     const last = path[path.length - 1];
     
-    // If clicking the current last tile, do nothing
+    // If clicking current last tile, do nothing
     if (last.r === r && last.c === c) return;
 
     // Check if clicked tile is already in path
     const existingIndex = getPathIndex(r, c);
     if (existingIndex !== -1) {
-      // If clicking a previous tile in path, trim path back to that tile
+      // Trim path back to that tile
       setPath(path.slice(0, existingIndex + 1));
       return;
     }
@@ -98,19 +156,19 @@ export default function RobotVacuumPathGame() {
       return () => clearTimeout(timer);
     } else {
       // Finished moving through path
-      if (path.length === TOTAL_TILES) {
+      if (path.length === totalCleanable) {
         setGameState('success');
-        speakNow('성공! 방 전체를 빠짐없이 깨끗하게 청소했습니다!');
+        speakNow('성공! 장애물을 지혜롭게 피하고 모든 바닥을 완벽히 청소했습니다!');
       } else {
         setGameState('fail');
-        speakNow(`청소하지 않은 바닥이 ${TOTAL_TILES - path.length}칸 남았어요. 처음으로 돌아갑니다.`);
+        speakNow(`청소 안 한 바닥이 ${totalCleanable - path.length}칸 남았어요. 처음으로 되돌아갑니다.`);
         const resetTimer = setTimeout(() => {
-          handleReset();
+          handleReset(selectedRoomIdx);
         }, 2000);
         return () => clearTimeout(resetTimer);
       }
     }
-  }, [gameState, simulatingIndex, path]);
+  }, [gameState, simulatingIndex, path, totalCleanable, selectedRoomIdx]);
 
   // Current vacuum display position during simulation or drawing
   const currentPos =
@@ -119,7 +177,7 @@ export default function RobotVacuumPathGame() {
       : path[path.length - 1];
 
   const cleanedCount = path.length;
-  const isAllClean = cleanedCount === TOTAL_TILES;
+  const isAllClean = cleanedCount === totalCleanable;
 
   return (
     <div
@@ -132,17 +190,34 @@ export default function RobotVacuumPathGame() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <span className="px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/40 rounded-full text-xs font-black">
-            🤖 로봇청소기 한 붓 그리기 게임
+            🤖 로봇청소기 한 붓 그리기 퍼즐
           </span>
           <span className="text-xs font-black text-amber-200">
-            청소한 바닥: <strong className="text-base text-amber-400">{cleanedCount}</strong> / {TOTAL_TILES} 칸
+            청소한 바닥: <strong className="text-base text-amber-400">{cleanedCount}</strong> / {totalCleanable} 칸
           </span>
         </div>
-        <h3 className="text-lg font-black text-white tracking-tight">
-          거실 바닥 전체를 한 붓 달리기로 구석구석 청소해 봐요!
-        </h3>
-        <p className="text-xs text-slate-300 font-medium leading-relaxed">
-          충전소(시작점)에서 출발해 이웃한 바닥 칸을 차례대로 눌러 경로를 만드세요. 모든 칸을 건드리지 않으면 처음으로 되돌아갑니다!
+
+        {/* Room Stage Tabs */}
+        <div className="flex items-center gap-1.5 pt-1 overflow-x-auto">
+          {ROOM_LAYOUTS.map((room, idx) => (
+            <button
+              key={room.id}
+              type="button"
+              onClick={() => handleSwitchRoom(idx)}
+              disabled={gameState === 'running'}
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer shrink-0 ${
+                selectedRoomIdx === idx
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-md'
+                  : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700'
+              }`}
+            >
+              {room.name.split(':')[0]}
+            </button>
+          ))}
+        </div>
+
+        <p className="text-xs text-slate-300 font-semibold leading-relaxed pt-1">
+          충전소(시작점 🔌)에서 출발해 이웃한 바닥 칸을 차례대로 눌러 경로를 만드세요. <strong>장애물(소파·가구 등)은 지나갈 수 없으며, 모든 바닥 칸을 빠짐없이 청소해야 성공합니다!</strong>
         </p>
       </div>
 
@@ -151,9 +226,23 @@ export default function RobotVacuumPathGame() {
         {Array.from({ length: GRID_SIZE }).map((_, r) =>
           Array.from({ length: GRID_SIZE }).map((_, c) => {
             const isStart = r === 0 && c === 0;
+            const obstacle = getObstacleAt(r, c);
             const inPath = isTileInPath(r, c);
             const pathIdx = getPathIndex(r, c);
             const isRobotHere = currentPos.r === r && currentPos.c === c;
+
+            if (obstacle) {
+              return (
+                <div
+                  key={`${r}-${c}`}
+                  className="relative rounded-xl border-2 border-slate-800 bg-slate-950/90 flex flex-col items-center justify-center select-none shadow-inner opacity-90"
+                  title={obstacle.label}
+                >
+                  <span className="text-xl sm:text-2xl">{obstacle.emoji}</span>
+                  <span className="text-[9px] font-bold text-slate-400 mt-0.5">{obstacle.label}</span>
+                </div>
+              );
+            }
 
             return (
               <button
@@ -164,9 +253,9 @@ export default function RobotVacuumPathGame() {
                 disabled={gameState === 'running'}
                 className={`relative rounded-xl border-2 transition-all flex flex-col items-center justify-center font-extrabold select-none cursor-pointer overflow-hidden ${
                   isRobotHere
-                    ? 'border-amber-400 bg-amber-400/30 shadow-lg scale-105 z-20'
+                    ? 'border-amber-400 bg-amber-400/35 shadow-lg scale-105 z-20'
                     : inPath
-                      ? 'border-cyan-400 bg-cyan-500/25 text-cyan-200 shadow-md'
+                      ? 'border-cyan-400 bg-cyan-500/30 text-cyan-200 shadow-md'
                       : 'border-slate-700 bg-slate-900/80 text-slate-500 hover:border-amber-400/60 hover:bg-slate-800'
                 }`}
               >
@@ -176,7 +265,7 @@ export default function RobotVacuumPathGame() {
                 ) : isStart ? (
                   <div className="flex flex-col items-center">
                     <span className="text-xl sm:text-2xl">🔌</span>
-                    <span className="text-[10px] font-black text-amber-300">시작</span>
+                    <span className="text-[10px] font-black text-amber-300">충전소</span>
                   </div>
                 ) : inPath ? (
                   <div className="flex flex-col items-center">
@@ -195,13 +284,13 @@ export default function RobotVacuumPathGame() {
       {/* Game Status Feedback */}
       {gameState === 'success' && (
         <div className="p-3 bg-emerald-500/20 border border-emerald-400/60 rounded-xl text-center text-emerald-200 text-xs font-black animate-pulse">
-          🎉 성공! 방 전체 16칸을 빠짐없이 깨끗하게 청소했습니다! 🏆
+          🎉 성공! 가구를 피하고 바닥 {totalCleanable}칸을 빠짐없이 완벽하게 청소했습니다! 🏆
         </div>
       )}
 
       {gameState === 'fail' && (
         <div className="p-3 bg-rose-500/20 border border-rose-400/60 rounded-xl text-center text-rose-200 text-xs font-black animate-bounce">
-          ⚠️ 실패! 청소 안 한 바닥이 남아 처음으로 다시 돌아갑니다! 🔄
+          ⚠️ 실패! 청소하지 않은 바닥이 남아서 처음으로 돌아갑니다! 🔄
         </div>
       )}
 
@@ -209,11 +298,11 @@ export default function RobotVacuumPathGame() {
       <div className="mt-2 flex items-center gap-2">
         <button
           type="button"
-          onClick={handleReset}
+          onClick={() => handleReset(selectedRoomIdx)}
           disabled={gameState === 'running'}
           className="flex-1 h-11 bg-slate-800 hover:bg-slate-700 active:bg-slate-900 text-slate-200 font-bold text-xs rounded-xl border border-slate-700 transition cursor-pointer flex items-center justify-center gap-1"
         >
-          <span>🔄</span> 처음부터 그리기
+          <span>🔄</span> 경로 새로 그리기
         </button>
 
         <button
