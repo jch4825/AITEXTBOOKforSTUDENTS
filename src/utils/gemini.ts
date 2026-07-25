@@ -8,9 +8,11 @@ import { filterAiResponse } from './safetyFilter';
  * naturally lands on 2.5-flash for those keys).
  */
 export const MODEL_FALLBACK = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
+  'gemini-3.5-flash',        // GA, most capable
+  'gemini-3.1-flash-lite',   // GA
+  'gemini-3.1-pro-preview',  // preview
+  'gemini-2.5-flash',        // GA — reliable fallback
+  'gemini-2.5-flash-lite',   // GA — cheapest last resort
 ] as const;
 
 const REQUEST_TIMEOUT_MS = 15_000;
