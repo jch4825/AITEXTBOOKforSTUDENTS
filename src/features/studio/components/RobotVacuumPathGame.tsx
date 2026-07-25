@@ -79,6 +79,22 @@ const ROOM_LAYOUTS: RoomLayout[] = [
   },
 ];
 
+function CircularRobotVacuumIcon({ isRunning = false }: { isRunning?: boolean }) {
+  return (
+    <div className={`relative w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-tr from-slate-900 via-cyan-950 to-slate-800 border-2 border-cyan-400 shadow-xl flex items-center justify-center ${isRunning ? 'animate-pulse scale-105' : ''}`}>
+      {/* Laser LiDAR Bump */}
+      <div className="w-3.5 h-3.5 rounded-full bg-cyan-400 border border-white shadow-xs flex items-center justify-center">
+        <div className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+      </div>
+      {/* Rotating brushes animation */}
+      <div className={`absolute inset-0 rounded-full border border-dashed border-cyan-300/60 ${isRunning ? 'animate-spin' : ''}`} style={{ animationDuration: '3s' }} />
+      {/* Front Bumper */}
+      <div className="absolute top-0.5 w-6 h-1.5 rounded-t-full bg-cyan-300/40" />
+      <span className="sr-only">원형 로봇청소기</span>
+    </div>
+  );
+}
+
 export default function RobotVacuumPathGame() {
   const { speakNow } = useSpeak();
   
@@ -117,7 +133,7 @@ export default function RobotVacuumPathGame() {
   const handleUseHint = () => {
     setPath(currentRoom.solution);
     setShowHint(true);
-    speakNow('정답 경로가 완성되었습니다! 로봇청소기 출발 버튼을 눌러보세요.');
+    speakNow('정답 경로가 완성되었습니다! 원형 로봇청소기 출발 버튼을 눌러보세요.');
   };
 
   // Check if position is in path
@@ -179,7 +195,7 @@ export default function RobotVacuumPathGame() {
 
     setGameState('running');
     setSimulatingIndex(0);
-    speakNow('로봇청소기 청소를 시작합니다!');
+    speakNow('원형 로봇청소기 청소를 시작합니다!');
   };
 
   // Step-by-step animation loop
@@ -226,8 +242,9 @@ export default function RobotVacuumPathGame() {
       {/* Header Info */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <span className="px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/40 rounded-full text-xs font-black">
-            🤖 로봇청소기 한 붓 그리기 퍼즐
+          <span className="px-3 py-1 bg-amber-400/20 text-amber-300 border border-amber-400/40 rounded-full text-xs font-black flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping inline-block" />
+            원형 로봇청소기 한 붓 그리기 퍼즐
           </span>
           <span className="text-xs font-black text-amber-200">
             청소한 바닥: <strong className="text-base text-amber-400">{cleanedCount}</strong> / {totalCleanable} 칸
@@ -298,7 +315,7 @@ export default function RobotVacuumPathGame() {
               >
                 {/* Robot Vacuum Icon */}
                 {isRobotHere ? (
-                  <div className="text-2xl sm:text-3xl animate-bounce">🤖</div>
+                  <CircularRobotVacuumIcon isRunning={gameState === 'running'} />
                 ) : isStart ? (
                   <div className="flex flex-col items-center">
                     <span className="text-xl sm:text-2xl">🔌</span>
