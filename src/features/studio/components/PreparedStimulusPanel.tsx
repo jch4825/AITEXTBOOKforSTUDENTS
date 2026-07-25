@@ -20,7 +20,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
   const isTriple = stimuli.length === 3;
 
   return (
-    <div className={`grid gap-3 ${isSingle ? 'grid-cols-1' : isTriple ? 'grid-cols-1 xs:grid-cols-3' : 'sm:grid-cols-2'}`} aria-label="교과서에 준비된 이미지와 소리">
+    <div className={`grid gap-2.5 sm:gap-3 ${isSingle ? 'grid-cols-1' : isTriple ? 'grid-cols-3' : 'sm:grid-cols-2'}`} aria-label="교과서에 준비된 이미지와 소리">
       {stimuli.map((stimulus) => {
         if (stimulus.kind === 'image') {
           const failed = failedImages.includes(stimulus.id);
@@ -28,22 +28,22 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
           return (
             <figure
               key={stimulus.id}
-              className={`overflow-hidden rounded-2xl border-2 p-2 shadow-2xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md' : ''}`}
+              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-2 shadow-2xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''}`}
               style={!isPecs ? { borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' } : undefined}
             >
               {failed ? (
                 <div
                   role="img"
                   aria-label={stimulus.alt}
-                  className="studio-margin-note flex min-h-32 flex-col justify-center text-sm"
+                  className="studio-margin-note flex aspect-square flex-col justify-center text-center text-xs"
                 >
-                  <strong>이미지를 불러오지 못했습니다.</strong>
-                  <p className="mt-1">{stimulus.caption}</p>
+                  <strong>이미지 불러오기 실패</strong>
+                  <p className="mt-1 text-[10px] text-slate-500">{stimulus.caption}</p>
                 </div>
               ) : (
-                <div className="relative">
+                <div className={`relative w-full aspect-square overflow-hidden rounded-xl ${isPecs ? 'bg-amber-50/50' : ''}`}>
                   {isPecs && (
-                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[9px] shadow-xs uppercase tracking-wider z-10">
+                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[9px] shadow-xs uppercase tracking-wider z-10 select-none">
                       PECS
                     </span>
                   )}
@@ -51,11 +51,11 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                     src={stimulus.src}
                     alt={stimulus.alt}
                     onError={() => markImageFailed(stimulus.id)}
-                    className={`mx-auto w-full rounded-xl object-cover ${isSingle ? 'h-48 sm:h-56' : isTriple ? 'h-24 sm:h-28 object-contain' : 'h-36 object-contain'}`}
+                    className="w-full h-full object-cover rounded-xl"
                   />
                 </div>
               )}
-              <figcaption className={`mt-1.5 text-center text-xs font-black leading-tight ${isPecs ? 'text-amber-950 bg-amber-100/90 p-1.5 rounded-lg border border-amber-300' : 'text-[color:var(--ink-1)]'}`}>
+              <figcaption className={`mt-1.5 text-center text-[11px] sm:text-xs font-black leading-tight truncate ${isPecs ? 'text-amber-950 bg-amber-100/90 py-1 px-1 rounded-lg border border-amber-300/80' : 'text-[color:var(--ink-1)]'}`}>
                 {stimulus.caption}
               </figcaption>
             </figure>
