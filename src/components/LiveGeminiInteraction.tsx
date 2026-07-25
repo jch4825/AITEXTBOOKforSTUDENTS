@@ -191,7 +191,7 @@ export default function LiveGeminiInteraction({
         </div>
       )}
 
-      {suggestedQuestions && suggestedQuestions.length > 0 && chatHistory.length === 0 && (
+      {suggestedQuestions && suggestedQuestions.length > 0 && (
         <div className="space-y-1.5">
           <p className="text-xs font-bold text-slate-500">💡 무엇을 물어볼까요?</p>
           <div className="flex flex-wrap gap-1.5">

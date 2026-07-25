@@ -145,6 +145,11 @@ export const M1_STUDIOS: StudioDefinition[] = [
       text: '저는 사람이 만든 인공지능(AI) 도구예요! 말, 글, 사진을 받아 번역, 추천, 사진 찾기 같은 일을 도와줄 수 있어요.',
       question: '아이미의 소개를 그대로 쓸까요, 내 말에 맞게 고칠까요?',
     },
+    suggestedQuestions: [
+      'AI는 어떤 일들을 할 수 있니?',
+      'AI와 일반 프로그램은 어떻게 달라?',
+      '번역기 앱도 AI 기능이야?',
+    ],
     artifact: {
       kind: 'action-card',
       title: '탐구 성찰 기록',
@@ -333,6 +338,11 @@ export const M1_STUDIOS: StudioDefinition[] = [
       text: '로봇청소기와 자동문은 기계입니다. 둘 다 스스로 움직이지요. 하지만 로봇청소기만 인공지능이라고 부릅니다. 자동문과 로봇청소기가 다른 점은 무엇일까요?',
       question: '자동문과 로봇청소기가 다른 점은 무엇일까요?',
     },
+    suggestedQuestions: [
+      '로봇청소기와 자동문의 차이는 뭐야?',
+      '왜 로봇청소기는 AI라고 부르니?',
+      '스마트 조명에는 어떤 AI 기능이 들어갈 수 있어?',
+    ],
     artifact: {
       kind: 'visual-plan',
       title: '기능 분석 지도',

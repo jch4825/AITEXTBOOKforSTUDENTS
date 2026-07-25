@@ -112,6 +112,7 @@ export interface StudioDefinition {
     text: string;
     question?: string;
   };
+  suggestedQuestions?: string[];
   artifact: {
     kind:
       | 'action-card'

@@ -323,9 +323,10 @@ export default function StudioExperience({
           accent={accent}
           promptHint="학습한 내용을 바탕으로 AI 아이미에게 질문하고 함께 탐구해 보세요!"
           suggestedQuestions={
-            definition.lessonId === 'm1-l1'
+            definition.suggestedQuestions ||
+            (definition.lessonId === 'm1-l1'
               ? ['AI는 어떤 일들을 할 수 있니?', 'AI와 일반 프로그램은 어떻게 달라?', '번역기 앱도 AI 기능이야?']
-              : undefined
+              : undefined)
           }
         />
       </div>
