@@ -1,35 +1,49 @@
 # AI 교과서 — 발달장애 학생을 위한 AI 학습
 
-발달장애 학생이 인공지능을 안전하고 즐겁게 배울 수 있도록 만든 온라인 교과서입니다.
+발달장애 학생이 AI를 안전하게 이해하고 생활 속에서 판단하도록 돕는 온라인 교과서입니다.
+6개 단원 68차시를 PC 중심의 짧은 이야기, 선택 카드, 게임, 결과물 활동으로 제공합니다.
 
-## 모듈
+## 현재 구성
 
-1. **AI가 뭐야?** — 개념 이해
-2. **AI랑 말해보기** — 대화와 프롬프트
-3. **AI랑 같이 배우기** — 학습 활용
-4. **AI 안전하게 쓰기** — 안전·윤리·자기보호
-5. **AI로 문제해결하기** — 논리·사고력
-6. **AI랑 일상생활** — 직업·생활 실전
+- 경험 중심 스튜디오 62개
+- 단원 마무리 성장 포트폴리오 6개
+- 스토리 WebP 266개
+- 충분한 지원 / 보통 / 도전적 3단계
+- TTS, 쉬운 사전, 교사용 과정 기록과 암호화 백업
+- 준비된 AI 예시를 기본으로 사용하므로 카메라·마이크 권한 없이 학습 가능
 
-## 시작
+## 로컬 실행
 
 ```bash
 npm install
 npm run dev
 ```
 
-`http://localhost:3000` 에서 확인.
+기본 주소는 `http://localhost:3000/AITEXTBOOKforSTUDENTS/`입니다.
+
+## 검증
+
+```bash
+npm run lint
+npm run build
+npm run check:encoding
+npm run check:public-images
+npm run check:studio-rollout
+npm run check:modules-remodel
+```
 
 ## 배포
 
-- GitHub Pages — `https://jch4825.github.io/AITEXTBOOKforSTUDENTS/`
-- `main` 브랜치 push 시 자동 빌드·배포 (GitHub Actions)
+`main`에 push하면 GitHub Actions가 GitHub Pages로 배포합니다.
 
-## 설계 문서
+- 서비스: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
+- 교사 모드: 서비스 주소에 `?teacher=1`
 
-- 전체 설계: `docs/superpowers/specs/2026-06-30-student-textbook-design.md`
-- M0 계획: `docs/superpowers/plans/2026-06-30-m0-cleanup-and-init.md`
+## 문서
 
-## 라이선스
+- 개발 기준: `CLAUDE.md`
+- 교사 운영: `docs/teacher-guide.md`
+- 이미지 자산: `docs/ASSETS.md`
+- 교육과정 참고: `docs/reference/2022-special-education-curriculum.pdf`
 
-(추후 결정)
+과거 계획서와 생성 중간물은 저장소에 중복 보관하지 않으며 Git 기록에서 확인합니다.

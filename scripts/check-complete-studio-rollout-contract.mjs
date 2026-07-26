@@ -262,7 +262,7 @@ if (!requested) {
 
   const teacherCopy = [
     readRequired('src/features/teacher/TeacherHub.tsx'),
-    readRequired('docs/teacher-guide/m3-m4-m6-studio-expansion.md'),
+    readRequired('docs/teacher-guide.md'),
   ].join('\n');
   for (const text of ['1~6단원', '62개', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
     requireToken(teacherCopy, text, 'complete teacher guidance missing');

@@ -1,159 +1,123 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+이 문서는 저장소를 수정할 때 사용하는 현재 기준입니다. 과거 작업 계획과 완료 보고서는 Git
+기록에서 확인하고, 새 작업은 현재 코드와 이 문서를 기준으로 판단합니다.
 
-## Project Overview
+## 프로젝트
 
-**AI 교과서 (AI Textbook for Students)** — 발달장애 학생을 위한 AI 학습 온라인 교과서. 원본 AI Bridge(교사 연수용)에서 파생하여 학습자를 학생으로 전환. 6모듈 68차시 + 인터랙티브 게임 위주.
+발달장애 학생을 위한 PC 중심 AI 학습 교과서입니다.
 
-배포: GitHub Pages — base path `/AITEXTBOOKforSTUDENTS/`
+- React 19 + TypeScript + Vite + Tailwind CSS
+- 6개 단원, 68차시
+- 62개 경험 중심 스튜디오 + 6개 단원 마무리 포트폴리오
+- 배포: GitHub Pages, base path `/AITEXTBOOKforSTUDENTS/`
+- 학생 화면은 짧은 읽기, 카드 선택, 게임, 이야기 장면을 중심으로 구성
 
-설계 spec: `docs/superpowers/specs/2026-06-30-student-textbook-design.md`
-교육 업그레이드 spec: `docs/superpowers/specs/2026-07-06-education-upgrade-design.md`
-교사 가이드: `docs/teacher-guide.md`
+## 반드시 지킬 제품 계약
 
-캐릭터·스토리 spec: `docs/superpowers/specs/2026-07-07-character-story-design.md`
-디자인 업그레이드 플랜: `docs/design-upgrade-plan.md` (D1~D5 로드맵)
-차시별 이미지·영상 생성 프롬프트: `docs/asset-prompts/` (Gemini용, 68차시 전량 — 말풍선은 항상 공란 규칙)
+- API 연결과 키 관리는 교사 영역입니다. 학생 화면에 API 키, 모델명, 기술 오류를 노출하지 않습니다.
+- 현재 스튜디오의 AI 비교 자료는 `source: 'prepared'`인 준비된 예시입니다. 카메라나 마이크
+  권한이 없어도 핵심 학습이 완료되어야 합니다.
+- 지원 수준의 내부 값은 `full | light | challenge`, 화면 표시는 `충분한 지원 | 보통 | 도전적`입니다.
+- 난이도의 내부 `normal`과 화면의 `보통`을 그대로 유지합니다.
+- PC 1280px 이상을 우선하되, 모바일 390px와 글자 크기 125%에서도 주요 조작이 가려지지 않아야 합니다.
+- 차시 전환 시 상태가 섞이지 않도록 라우트 단위 상태는 `lessonId`로 격리합니다.
+- `tests/e2e`가 생기더라도 테스트를 맞추기 위해 수정하지 말고 애플리케이션 코드를 고칩니다.
+- 한국어 파일은 UTF-8, TypeScript는 strict 설정을 유지합니다.
 
-현재 마일스톤: **콘텐츠·차시 이미지 전량 완료 (68/68) + 캐릭터·스토리 레이어 + 디자인 D1~D5 배포 완료** —
-"AI 동아리" 4인 캐스트(강진우·서윤아·박민준쌤·아이미)가 사회상황이야기 방식으로 전 차시를 관통.
-디자인 스코어 C- → B(D0 감사) → B+(D2 재감사) → **A-(D4 재감사, 2026-07-08)**, 라이브 배포됨.
-(A 승급은 실제 일러스트 컷 교체 후 재감사 — 아래 1번.)
+## 현재 단일 진실 원천
 
-## 다음 할 일 (2026-07-08 세션 — D5 완료 시점)
+- 전체 차시와 단원: `src/data/modules.ts`, `src/data/lessons/`
+- 차시 역할: `src/data/lessonRoles.ts`
+- 스튜디오 62개: `src/data/studios/m1.ts` ~ `m6.ts`
+- 단원 마무리 6개: `src/data/modulePortfolios/m1.ts` ~ `m6.ts`
+- 정식 콘텐츠와 성취기준: `src/data/canonicalLessons/`, `src/data/aiAchievementStandards.ts`
+- 학생 사전: `src/data/studentDictionary.ts`
+- 교사용 실제 운영 설명: `src/features/teacher/TeacherOperationGuide.tsx`
+- 교육과정 원문 참고자료: `docs/reference/2022-special-education-curriculum.pdf`
 
-1. **에셋 생성 (사용자 작업, 남은 것)** — 차시 이미지는 **68/68 완료** (webp 페어 포함, Stage가
-   webp 우선 서빙). 남은 에셋 두 가지:
-   - **캐릭터 일러스트 컷**: 현재 `public/characters/{id}-{expression}.svg`는 코드 벡터의 추출본
-     (시각 동일). 시트(`docs/character-sheets/`) 첨부해 그림책풍 일러스트 컷을 생성한 뒤
-     `{id}-{expression}.png`(512px 투명)로 넣으면 **png가 svg보다 우선 로드** — 코드 수정 없음.
-     표정 7종: neutral/happy/surprised/thinking/cheer/curious/sleepy.
-   - **영상**: `public/lessons/{차시ID}.mp4` (8초) — 확보 시 Stage에 연결 작업 필요.
-2. ~~**D1 — 토큰 v2**~~ **완료 (2026-07-07)** — index.css 토큰 v2(브랜드 잉크 `#2B3A55`로 --accent 전환,
-   warm-gray 종이 뉴트럴, 타이포·radius·elevation·모션 토큰) + 종이 질감(2% SVG 노이즈) +
-   버튼 4종 체계(`.btn-primary/secondary/ghost/choice` + `Button.tsx`) + accentSoft 솔리드 파스텔 재정의.
-   레거시 변수(--bg/--fg/--accent/--border/--muted)는 신규 토큰의 별칭으로 유지.
-3. ~~**D2 — 무대(Stage)**~~ **완료 (2026-07-07)** — `Stage.tsx` 전폭 히어로 (차시 그림 자동 연결:
-   `public/lessons/{id}.png` 존재 시 표시, `onError` 시 아바타 장면 폴백 — 이미지가 추가되면 코드
-   수정 없이 반영됨). LessonView "무대 위→책상 위" 2단, 게임 4종 paper-0 카드화, 프레임 h-screen
-   전환(푸터 상시 노출·사이드바/본문 내부 스크롤), 히어로 2단은 lg(1024px+)에서만·태블릿은 스택.
-   StoryIntroCard는 Stage로 대체·삭제. **영상(mp4) 연결은 에셋 확보 후** (Stage에 추가 예정).
-4. ~~**D3 — 커스텀 아이콘**~~ **완료 (2026-07-08)** — `Icon.tsx`(UI 글리프 22종, Lucide 스타일
-   자체 SVG·currentColor·CDN 없음) + `ModuleIcon.tsx`(모듈 미니 일러스트 6종: 새싹/말풍선/책더미/
-   방패/퍼즐/집, 모듈 accent색). UI 크롬 이모지 전량 교체 (O/X 정답표도 자체 도형화 — OS 편차 제거,
-   색+아이콘+TTS 3중 피드백 유지). 콘텐츠 텍스트 이모지(프롬프트 🎤)·관리자 TeacherView는 유지.
-   `moduleThemes.emoji` 필드는 이제 미사용(레거시 fallback으로만 잔존).
-5. ~~**D4 — 배움 도장판**~~ **완료 (2026-07-08)** — 사이드바 완료 점→모듈색 별 도장(+모듈 완주 별),
-   정리 화면 88px 도장 메달리온(stamp-in 250ms 1회성, reduced-motion 대응) + "다음 시간: {제목}"
-   예고 한 줄, Home 배지 선반(모듈 완주 시 ModuleIcon 배지 획득, 미획득은 muted). 재감사 **A-** 달성.
-6. ~~**D5 — 교체점·시그니처**~~ **코드 완료 (2026-07-08)** — `CharacterAvatar` 파일 우선 로딩
-   (png→svg→플레이스홀더, 세션 404 캐시), Stage webp 우선 체인(webp→png→아바타), 아이미
-   시그니처 모먼트(§4.3: real-ai **성공 응답에만** 말풍선+아바타 brand-glow 1회 700ms —
-   sim-ai·준비된 답변엔 절대 금지, reduced-motion 대응). **A 승급은 실제 일러스트 컷(1번) 교체
-   후 재감사로 확정.** 영상 연결은 mp4 확보 시.
-7. **교사 베타 검토 (M8 게이트)** — 실사용 교사 1~2명. 라이브: https://jch4825.github.io/AITEXTBOOKforSTUDENTS/
+없는 차시 ID는 임의 데모로 대체하지 않고 `ComingSoonLesson`을 표시합니다.
 
-## Commands
+## 주요 구조
+
+```text
+src/
+├─ App.tsx                         URL 쿼리 기반 home/contents/lesson/teacher 라우팅
+├─ views/
+│  ├─ Home.tsx
+│  ├─ ContentsView.tsx
+│  ├─ LessonView.tsx               역할에 따라 스튜디오/단원 마무리 렌더링
+│  └─ TeacherView.tsx
+├─ features/
+│  ├─ studio/                      8단계 경험, 과정 기록, 지원 수준
+│  └─ teacher/                     운영 허브, 기록, 성취기준, 백업, AI 연결
+├─ data/
+│  ├─ studios/                     62개 스튜디오 데이터
+│  ├─ modulePortfolios/            6개 단원 마무리 데이터
+│  ├─ canonicalLessons/            정식 수업 콘텐츠
+│  └─ lessons/                     68차시 등록 데이터
+└─ utils/
+   ├─ publicAssetUrl.ts            GitHub Pages public 경로 보정
+   ├─ storage.ts                   학생 진도/설정
+   ├─ gemini.ts, apiKey.ts         교사 관리 AI 연결
+   └─ tts.ts, stt.ts               Web Speech API
+```
+
+## 이미지와 public 경로
+
+- 실제 서비스 이미지는 `public/` 아래에만 둡니다.
+- 스토리 이미지는 `public/lessons/story/`의 WebP 266개입니다.
+  - 스튜디오: 62차시 × 4장 = 248장
+  - 단원 마무리: 6개 × 3장 = 18장
+- 루트(`/lessons/...`, `/images/...`)로 작성한 public 경로는 렌더링 시
+  `src/utils/publicAssetUrl.ts`를 사용해 Pages base path를 붙입니다.
+- 원본 스토리보드, 생성 대기열, 캐릭터 참조 시트, 검수 스크린샷은 저장소에 보관하지 않습니다.
+  필요한 경우 Git 기록에서 꺼내거나 새 작업용 임시 폴더에서 생성합니다.
+- 자세한 현재 자산 규칙은 `docs/ASSETS.md`를 참고합니다.
+
+## 교사·학생 데이터 경계
+
+- 교사 모드: `?teacher=1`
+- Gemini 키: `ai-students-gemini-key`, 브라우저 localStorage에 교사가 직접 저장
+- 진도: `ai-students-progress`
+- 설정: `ai-students-settings`
+- 과정 기록: `ai-students-studio-evidence-v2`, 교사가 켠 경우에만 저장
+- 백업에는 API 키와 원본 음성·사진·그림을 포함하지 않습니다.
+
+## 명령
 
 ```bash
-npm run dev          # Dev server at http://localhost:3000
-npm run build        # Production bundle → dist/
-npm run preview      # Preview built app
-npm run lint         # TypeScript type check only
-npm run check:encoding  # Validate UTF-8 encoding
+npm install
+npm run dev
+npm run lint
+npm run build
+npm run check:encoding
+npm run check:public-images
+npm run check:visual-novel-story
+npm run check:portfolio-images
+npm run check:studio-rollout
+npm run check:modules-remodel
 ```
 
-## Environment Setup
+변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.
 
-복사: `.env.example` → `.env`
+## 완료 전 검증
 
-```
-GEMINI_API_KEY=<your key>
-```
+최소 기준:
 
-real-ai 차시(10차시)에서 사용. 키가 없으면 각 차시의 `fallbackResponse`로 우아하게 강등된다.
-교사 모드 비번은 `VITE_TEACHER_MODE_PASSWORD` (같은 `.env`에서 주입).
-런타임 키는 교사 모드(`?teacher=1`)에서 localStorage로도 등록 가능.
+1. `npm run lint`
+2. `npm run build`
+3. `npm run check:encoding`
+4. 이미지 변경 시 `check:public-images`, `check:visual-novel-story`, `check:portfolio-images`
+5. 차시 데이터 변경 시 `check:lesson-roles`, `check:studio-rollout`, `check:modules-remodel`
+6. UI 변경 시 실제 브라우저에서 1280px 이상과 390px/125% 확인
 
-## Architecture (현재 — 콘텐츠 전량 완료)
+`tests/e2e`는 수정하지 않습니다. 브라우저 검증 결과와 실행하지 못한 검사는 구분해서 보고합니다.
 
-```
-src/
-├── App.tsx                       — URL 기반 라우터 (home / contents / lesson / teacher)
-│                                   흐름: 프론트(Home) → 목차(Contents) → 차시(Lesson).
-│                                   차시의 홈 버튼·완료는 목차로 복귀(허브). ?contents=1
-├── main.tsx                      — React 19 + Settings/Progress Provider 래핑
-├── index.css                     — Pretendard, CSS 변수, 접근성 베이스
-│                                   글자 크기 토글은 <html> font-size 스케일(100→125%)
-│                                   — rem 기반 본문이 비례 확대됨(body만 바꾸면 안 닿음)
-├── types.ts                      — Difficulty, FontSize, DictionaryEntry, LessonContent 등
-├── views/
-│   ├── Home.tsx                  — 프론트(환영) 페이지: 캐릭터·배지 선반, CTA→목차
-│   ├── ContentsView.tsx          — 목차(차례): 링크 도서관 아코디언(모듈→차시 하이퍼링크)
-│   │                               + 상단 큰 "이어서 하기". 차시별 한 줄=wrapUpEasy
-│   ├── LessonView.tsx            — 차시 렌더 + 정리(wrap-up) 가상 최종 단계
-│   └── TeacherView.tsx           — ?teacher=1 + 비번 게이트 — API 키·진도·학습목표 패널
-├── components/
-│   ├── TopBar.tsx                — 브레드크럼 + TTS/Font/Difficulty/Dict 4토글
-│   ├── SidebarTree.tsx           — 모듈 아코디언 진도 도장판(현재 모듈만 펼침, 정보 과부하 방지)
-│   ├── MicroLessonFrame.tsx      — 3단 PC 레이아웃 골격 + 사전 이벤트 위임
-│   ├── DictionaryPanel.tsx       — 우측 사전 패널 + 검색 + TTS
-│   ├── DictionaryTerm.tsx        — 점선 밑줄 표제어 (data-dict-term 위임)
-│   ├── ProgressDots.tsx          — 차시 내 단계 인디케이터
-│   ├── ErrorMessage.tsx          — 학생 1줄 + 교사 상세 2단
-│   ├── RealAIStep.tsx            — real-ai step 렌더 (아이미 말풍선 + fallback)
-│   ├── MicButton.tsx             — STT 마이크 버튼 (real-ai 자유입력용)
-│   ├── CharacterAvatar.tsx       — 4인 아바타, 캐릭터 비주얼 단일 지점 — public/characters/
-│   │                               {id}-{expression}.png→.svg→플레이스홀더 3단 폴백 (일러스트는 파일만 교체)
-│   ├── SpeechBubble.tsx          — 캐릭터 말풍선 (이름표 + TTS + aiGlow 시그니처)
-│   ├── Button.tsx                — 버튼 4종 체계 (primary/secondary/ghost/choice, 토큰 v2)
-│   ├── Stage.tsx                 — 차시 도입 전폭 히어로 (lessons/{id}.webp→png→아바타 3단 폴백)
-│   ├── Icon.tsx                  — UI 글리프 22종 (자체 SVG, currentColor) — UI 아이콘 단일 지점
-│   ├── ModuleIcon.tsx            — 모듈 미니 일러스트 6종 (모듈 accent색)
-│   ├── controls/                 — TTS/FontSize/Difficulty/DictionaryTrigger
-│   └── games/                    — OXGame, CardPick, Matching, Sequence
-├── context/
-│   ├── SettingsContext.tsx       — difficulty · fontSize · ttsEnabled
-│   └── ProgressContext.tsx       — completedLessons (localStorage 동기화)
-├── data/
-│   ├── modules.ts                — 6모듈 메타 + lessonIds/moduleIdFromLessonId 헬퍼
-│   ├── lessons/m1.ts ~ m6.ts     — 정식 68차시 (모듈별 파일, index.ts에서 집계)
-│   ├── characters.ts             — AI 동아리 캐릭터 메타 (jinwoo·yoona·minjun·aimi)
-│   ├── story.ts                  — 사회상황이야기 레이어: MODULE_EPISODES + LESSON_STORIES (68차시 전량)
-│   └── studentDictionary.ts      — 학생용 사전 52개 항목 (차시 dictionaryTerms 전량 커버)
-├── hooks/useSpeak.ts             — TTS 래퍼 (Settings 감안)
-└── utils/
-    ├── tts.ts / stt.ts           — Web Speech API 래퍼 (TTS / STT)
-    ├── gemini.ts                 — Gemini 호출 + 5-모델 폴백 + 안전 가드
-    ├── apiKey.ts                 — 키 저장 (빌드타임 env + localStorage)
-    ├── safetyFilter.ts           — 응답 금칙어 사후 필터
-    ├── moduleThemes.ts           — 모듈별 컬러 + 이모지
-    ├── storage.ts                — ai-students-progress localStorage
-    └── teacherMode.ts            — ?teacher=1 + 비번 검증 + localStorage
-```
+## 저장소 위생
 
-**저장 키:** `ai-students-progress` (완료 차시), `ai-students-settings` (토글 상태), `ai-teacher-mode` (교사 인증).
-
-**Lesson 스키마:** `LessonContent { id, moduleId, number, title, kind, objective, standards?, bodyEasy, bodyNormal, wrapUpEasy, wrapUpNormal, steps }`.
-Step kinds: `text | ox | card-pick | matching | sequence | sim-ai | real-ai`.
-- `objective`: 교사용 학습목표 ("~할 수 있다"), `standards`: 2022 개정 특수교육 기본교육과정 성취기준 `"[코드] 원문"` — 둘 다 학생 화면 비노출, TeacherView에서만 표시.
-- `wrapUp*`: 차시 마지막 정리 화면("오늘 배운 것")에 표시 + 자동 TTS. 완료 마킹은 정리 화면에서.
-- text step에 `dictionaryTerms: string[]`를 넣으면 본문 자동 점선 밑줄. **새 어휘는 반드시 studentDictionary.ts에도 등록.**
-- real-ai step은 반드시 `fallbackResponse` 포함 (키 없는 교실 대응).
-- 성취기준 코드는 임의 창작 금지 — special-edu-curriculum-finder 스킬로 검증된 것만 사용 (검증된 풀: `docs/superpowers/plans/2026-07-06-education-upgrade.md`).
-
-**스토리 레이어 규칙:** 차시를 추가하면 `story.ts`의 `LESSON_STORIES`에도 반드시 항목 추가
-(scene 1~2명, introEasy/introNormal, reaction). 사회상황이야기 작법: 서술+관점 문장, 지시는
-부드럽게("~하면 좋아요"). AI 응답은 전부 아이미 화자 — Gemini 시스템 프롬프트에 페르소나 포함.
-캐릭터 비주얼 변경은 CharacterAvatar.tsx 한 곳에서만. 애니메이션은 생동감 있게 자유롭게 활용한다
-(과거 "저자극 원칙"의 반복·점멸·1회성 fade-in 한정 규칙은 폐지 — 프로그램이 너무 dull해졌기 때문).
-단, `prefers-reduced-motion` 사용자에게는 모션을 줄여 접근성은 지킨다(이건 저자극 원칙과 별개).
-
-## Key Constraints
-
-- **UTF-8 필수** (한국어 콘텐츠) — `npm run check:encoding`
-- **Strict TypeScript** — `tsc --noEmit` 통과 필수
-- **No test framework** — 수동 검증
-- **PC 우선** (1280px+), 모바일은 부차적
-- **학생에게 API 키·기술 용어 노출 금지** — 교사 영역
+- 완료된 날짜별 계획서·명세서·수락 보고서를 다시 추가하지 않습니다. 이력은 Git이 보관합니다.
+- 현재 의사결정은 이 파일이나 해당 기능 가까이의 코드 주석에 짧게 반영합니다.
+- `output/`, Playwright 임시 결과, 생성 중간 이미지, 로컬 도구 캐시는 커밋하지 않습니다.
+- 루트에 참고 이미지나 임시 파일을 놓지 않습니다.
+- 비밀키, `.env`, 학생 원본 미디어를 커밋하지 않습니다.

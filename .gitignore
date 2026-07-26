@@ -36,3 +36,6 @@ vite.std*.log
 
 # Local Playwright CLI artifacts
 .playwright-cli/
+
+# Local visual review artifacts
+output/

@@ -22,8 +22,7 @@ for (const token of ['SupportLessonBridge', 'getSupportBridge', "from '../data/s
 
 const currentGuidance = [
   fs.readFileSync('src/features/teacher/TeacherOperationGuide.tsx', 'utf8'),
-  fs.readFileSync('docs/teacher-guide/m1-m2-studio-expansion.md', 'utf8'),
-  fs.readFileSync('docs/teacher-guide/m3-m4-m6-studio-expansion.md', 'utf8'),
+  fs.readFileSync('docs/teacher-guide.md', 'utf8'),
 ].join('\n');
 
 for (const token of [

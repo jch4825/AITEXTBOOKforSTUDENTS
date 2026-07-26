@@ -30,8 +30,19 @@ for (const retiredDirectory of [
   'public/lessons/webtoon',
   'public/lessons/pecs/raw',
   'src/data/studios/visualStories',
+  'src/assets/images',
+  'docs/storyboards',
+  'docs/character-sheets',
+  'output',
 ]) {
   if (fs.existsSync(retiredDirectory)) throw new Error(`retired image directory remains: ${retiredDirectory}`);
+}
+
+for (const retiredRootFile of [
+  'toon-sample.webp',
+  'colorful-web-buttons-pack-different-purposes_1017-25889.avif',
+]) {
+  if (fs.existsSync(retiredRootFile)) throw new Error(`retired loose reference image remains: ${retiredRootFile}`);
 }
 
 const lessonRootFiles = fs.existsSync('public/lessons')

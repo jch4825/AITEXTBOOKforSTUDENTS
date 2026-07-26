@@ -94,7 +94,7 @@ for (const itemPath of [hubPath, onboardingPath, legacyPath]) {
 const hub = fs.readFileSync(hubPath, 'utf8');
 const onboarding = fs.readFileSync(onboardingPath, 'utf8');
 const teacherView = fs.readFileSync(teacherViewPath, 'utf8');
-for (const tab of ['운영 안내', '학생 기록', '포트폴리오', 'AI 연결', '학습목표·성취기준', '데이터 관리']) {
+for (const tab of ['운영 안내', '학생 기록', '포트폴리오', 'AI 연결', '교육과정·성취기준', '연계 성취기준', '데이터 관리']) {
   if (!hub.includes(tab)) throw new Error(`teacher hub tab is missing: ${tab}`);
 }
 if (!hub.includes('데이터 암호화 기능이 아닙니다')) throw new Error('teacher password boundary copy is missing');

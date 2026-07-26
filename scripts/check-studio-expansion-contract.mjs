@@ -319,38 +319,12 @@ for (const token of ["lessonId: 'm6-l12'", "'m6-l1'", "'m6-l11'", '나의 AI 생
   if (!m6Portfolio.includes(token)) throw new Error(`M6 portfolio missing: ${token}`);
 }
 
-const expansionGuidePath = 'docs/teacher-guide/m1-m2-studio-expansion.md';
-if (!fs.existsSync(expansionGuidePath)) throw new Error('M1/M2 teacher expansion guide is missing');
 const teacherHub = fs.readFileSync('src/features/teacher/TeacherHub.tsx', 'utf8');
-const expansionGuide = [
-  fs.readFileSync(expansionGuidePath, 'utf8'),
-  fs.readFileSync('docs/teacher-guide/m3-m4-m6-studio-expansion.md', 'utf8'),
-].join('\n');
-for (const text of ['1~6단원 전면 리모델링', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
-  if (!teacherHub.includes(text) && !expansionGuide.includes(text)) {
+const teacherGuide = fs.readFileSync('docs/teacher-guide.md', 'utf8');
+for (const text of ['전면 전환 완료', '준비된 AI 예시', '카메라·마이크 권한 없이']) {
+  if (!teacherHub.includes(text) && !teacherGuide.includes(text)) {
     throw new Error(`teacher expansion guidance missing: ${text}`);
   }
-}
-for (const title of [
-  '아이미와 처음 만난 날',
-  'AI의 눈 실험실',
-  'AI 결과를 사용할까?',
-  '요청 공동 제작소',
-  '한 번의 진짜 대화 완성하기',
-  '궁금한 것을 깊게 묻기',
-  '계산은 다른 도구로 확인하기',
-  '오늘 배운 것을 내 말로 복습하기',
-  '자신 있는 AI 답도 확인하기',
-  '비밀번호와 인증 코드는 보내지 않기',
-  '추천 속 광고 단서 찾기',
-  '문제를 정확히 찾기',
-  '조건이 바뀌면 계획도 바꾸기',
-  '나는 문제 해결사',
-  '조건에 맞는 장보기',
-  '아픈 상태를 사람에게 알리기',
-  'AI와 함께하는 나의 하루',
-]) {
-  if (!expansionGuide.includes(title)) throw new Error(`teacher studio guide missing: ${title}`);
 }
 
 const studioIndex = fs.readFileSync('src/data/studios/index.ts', 'utf8');

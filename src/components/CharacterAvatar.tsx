@@ -6,7 +6,7 @@ import { CHARACTERS } from '../data/characters';
  * AI 동아리 4인 아바타 — 캐릭터 비주얼 단일 지점 (D5 교체점 가동).
  * public/characters/{id}-{expression}.svg(경량 서비스본) → .png(선택 고해상도본) 순서로
  * 시도한다. 새 표정 컷을 같은 파일명으로 넣기만 하면 코드 수정 없이 확장된다.
- * (규격: 512×512, 투명 배경 — docs/design-upgrade-plan.md §6)
+ * 서비스 캐릭터 파일은 public/characters의 SVG를 사용한다.
  */
 
 export type Expression =
