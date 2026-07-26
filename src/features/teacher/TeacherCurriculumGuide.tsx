@@ -95,26 +95,26 @@ export default function TeacherCurriculumGuide() {
 
           <div>
             <h3 className="font-extrabold text-indigo-900 text-base mb-2">나. 목표</h3>
-            <p className="text-slate-700 font-semibold mb-2">
-              인공지능의 기초 지식과 기본 기능을 익혀 정보를 활용하고, 컴퓨팅 사고력 함양을 통해 생활 속 문제를 해결하며, 디지털 사회에 필요한 인공지능 활용 능력을 기른다.
+            <p className="text-slate-900 font-extrabold mb-3 leading-relaxed bg-amber-50/80 p-3.5 rounded-xl border border-amber-200/90 text-sm sm:text-base">
+              인공지능의 기초 지식과 기본 기능을 익혀 올바르게 활용하고, 컴퓨팅 사고력 함양을 통해 생활 속 문제를 해결하며, 정보 보안과 윤리적 활용을 실천하여 디지털 사회에 필요한 인공지능 활용 능력을 기른다.
             </p>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-xs font-black text-amber-800 bg-amber-100 px-2 py-0.5 rounded">지식 · 이해</span>
                 <p className="text-xs font-bold text-slate-800 pt-1">
-                  (1) 인공지능의 의미와 원리를 알고, 입력과 결과의 관계를 경험함으로써 인공지능 활용의 특성을 이해한다.
+                  (1) 인공지능의 의미와 원리를 알고, 입력과 결과의 관계를 경험함으로써 인공지능의 올바른 사용 방법과 활용 특성을 이해한다.
                 </p>
               </div>
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-xs font-black text-sky-800 bg-sky-100 px-2 py-0.5 rounded">과정 · 기능</span>
                 <p className="text-xs font-bold text-slate-800 pt-1">
-                  (2) 인공지능 기기와 소프트웨어 활용을 통해 정보를 탐색하고 검증하며, 실생활 문제 해결 능력을 기른다.
+                  (2) 인공지능 기기와 소프트웨어 활용을 통해 정보를 탐색·검증하고 정보 보안을 지키며, 실생활 문제 해결 능력을 기른다.
                 </p>
               </div>
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">가치 · 태도</span>
                 <p className="text-xs font-bold text-slate-800 pt-1">
-                  (3) 디지털 사회에서 지켜야 할 윤리 의식을 함양하고, 인공지능을 주체적이고 안전하게 활용하는 태도를 기른다.
+                  (3) 디지털 사회에서 지켜야 할 윤리 의식을 함양하고, 인공지능을 주체적이고 윤리적으로 활용하는 안전한 태도를 기른다.
                 </p>
               </div>
             </div>
