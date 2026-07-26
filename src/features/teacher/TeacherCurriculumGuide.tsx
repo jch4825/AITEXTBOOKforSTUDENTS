@@ -2,6 +2,141 @@ import React, { useState } from 'react';
 import { AI_ACHIEVEMENT_STANDARDS } from '../../data/aiAchievementStandards';
 import { MODULES } from '../../data/modules';
 
+// Detailed, comprehensive explanation & teaching material guides for each of the 24 achievement standards
+export const DETAILED_STANDARD_EXPLANATIONS: Record<string, { explanation: string; activityGuide: string; debuggingTip: string }> = {
+  // === 영역 1. 인공지능의 이해 ===
+  '[9인지01-01]': {
+    explanation: "인공지능이 사람처럼 스스로 생각하여 정답을 알아내는 것이 아니라, 사람이 수집하여 알려준 대용량 데이터(글·사진·음성)의 패턴을 학습하여 대답을 생성하는 프로그램임을 체득하기 위해 설정하였다.",
+    activityGuide: "교사는 선풍기 버튼(기계적 동작), 자동문 센서(단순 감지), AI 음악 추천(사용 정보 학습 대답)의 차이를 비교하는 카드 자료를 구성한다. \"AI도 사람이 준 데이터가 없으면 대답할 수 없다\"는 핵심 원리를 O/X 카드 및 낱말 고르기로 지도한다.",
+    debuggingTip: "학생이 AI를 \"모든 것을 다 아는 만능 로봇\"으로 오해할 때, 데이터를 주지 않은 새로운 낱말을 질문하여 AI가 대답하지 못하는 상황을 보여주며 개념을 교정한다.",
+  },
+  '[9인지01-02]': {
+    explanation: "인공지능이 항상 정답만 말하는 것이 아니며 때로는 그럴듯한 거짓말(환각)을 만들어낼 수 있음을 알고, 주간 급식 식단표, 학교 공지사항, 날씨 앱 등 실제 정보와 AI 대답을 1:1로 비교하여 오류를 찾아내는 사실 검증 능력을 기르기 위해 설정하였다.",
+    activityGuide: "교사는 요일이나 메뉴가 일부러 틀리게 작성된 AI 대답 출력지를 인쇄하여 제공한다. 학생이 식단표 원본과 대조하며 빨간 펜으로 틀린 단어나 숫자를 찾아서 동그라미 치고 올바른 단어로 고쳐 쓰는 실습 교재를 제작한다.",
+    debuggingTip: "AI의 대답 글꼴이나 말투가 정중하다고 해서 무조건 믿지 않도록, 원본 안내 자료와 1:1 단어 대조 체크리스트를 활용하도록 안내한다.",
+  },
+  '[12인지01-01]': {
+    explanation: "인공지능의 개념과 함께 데이터 입력 - 모델 학습 - 결과 생성으로 이어지는 메커니즘을 구조적으로 이해하고, 입력 조건과 데이터 뭉치가 바뀌면 인공지능 결과가 어떻게 변하는지 그 원인을 설명할 수 있도록 설정하였다.",
+    activityGuide: "강아지와 고양이 사진 10장을 분류하는 데이터 입력 판을 제작하고, 일부 사진에 잘못된 라벨(오류 데이터)을 섞었을 때 AI 결과가 어떻게 왜곡되는지 실험하는 학습지를 구성한다.",
+    debuggingTip: "결과 오작동의 원인이 AI 기기 자체의 고장이 아니라 \"사람이 제공한 학습 데이터의 편향이나 오류\" 때문임을 연결하여 이해하도록 조력한다.",
+  },
+  '[12인지01-02]': {
+    explanation: "생성형 AI의 대표적 한계인 환각(Hallucination) 현상을 파악하고, 출처가 확실한 공식 기관 문서나 뉴스 기사와 대조·검증하여 교정하는 비판적 정보 처리 역량을 키우기 위해 설정하였다.",
+    activityGuide: "존재하지 않는 역사적 인물이나 잘못된 날씨 정보가 포함된 AI 요약문 텍스트를 제공하고, 학생이 도서관 백과사전이나 공식 홈페이지를 직접 검색하여 사실 관계를 확인한 뒤 올바른 문장으로 고쳐 쓰는 정보 검수 교재를 제작한다.",
+    debuggingTip: "AI 대답 속 전문용어나 정중한 문체에 속지 않고, 출처(URL, 발행 기관, 작성 날짜)가 명시되어 있는지 필수 확인하는 3단계 검증 루틴을 지도한다.",
+  },
+
+  // === 영역 2. 인공지능 상호작용 ===
+  '[9인지02-01]': {
+    explanation: "인공지능에게 입력하는 낱말의 종류, 길이, 조건(이름·색상·개수 등)에 따라 출력 대답이 크게 달라짐을 직관적으로 체득하도록 설정하였다.",
+    activityGuide: "\"사과 그려줘\"라고 요청할 때와 \"빨간색 큰 사과 3개 그려줘\"라고 요청할 때 AI 결과의 차이를 비교하는 카드 자료를 구성한다. 단어 카드를 하나씩 더 붙일 때마다 AI 응답 결과 카드가 변화하는 시각적 판넬을 활용한다.",
+    debuggingTip: "원하는 대답이 안 나올 때 AI를 탓하기보다 \"내가 준 낱말과 조건이 부족했구나\"를 인지하고 낱말 카드를 추가하는 습관을 형성한다.",
+  },
+  '[9인지02-02]': {
+    explanation: "인공지능이 내 의도와 다르게 대답하거나 정보를 빠뜨렸을 때 포기하지 않고, 빠진 이름이나 조건(장소·시각·대상)을 구체적으로 보완하여 다시 프롬프트를 전달하는 피드백 소통 능력을 기르기 위해 설정하였다.",
+    activityGuide: "\"점심 메뉴 추천해줘\"라는 막연한 요청에 AI가 어울리지 않는 음식을 추천한 상황을 제시하고, \"매운 음식 빼고 밥 종류로 다시 추천해줘\"와 같이 구체적 힌트 카드를 더해 다시 요청하는 재입력 카드를 구성한다.",
+    debuggingTip: "한 번의 요청으로 끝내지 않고, AI의 대답을 확인한 후 빠진 정보를 덧붙여 2~3회 주고받는 '연속 대화 카드' 기법을 적용한다.",
+  },
+  '[12인지02-01]': {
+    explanation: "프롬프트의 구체성이 생성 대답의 정확도와 품질을 결정하는 핵심 변수임을 구조적으로 이해하고, 명칭(역할), 조건(제약), 예시(Few-shot)의 3요소가 입력될 때 대답이 정교해짐을 분석하기 위해 설정하였다.",
+    activityGuide: "[역할 부여 + 목적 지정 + 제약 조건 + 답변 예시]로 구성된 4단 프롬프트 템플릿 카드를 만들어, 학생들이 빈칸을 채워 AI에게 요청해보는 프롬프트 설계 워크시트를 제공한다.",
+    debuggingTip: "단순한 한 줄 질문과 4단 템플릿 질문의 결과를 좌우로 비교 배치하여 구체적 프롬프트의 효과를 눈으로 직접 확인시킨다.",
+  },
+  '[12인지02-02]': {
+    explanation: "복잡하고 큰 과제를 한 번에 요청하면 AI가 오답을 내기 쉽다는 점을 인지하고, 과제를 1단계-2단계-3단계로 잘게 나누어 순서대로 요청하며 원하는 답변 모양(표·목록) 예시를 포함하여 수정하는 전략적 소통 역량을 기르기 위해 설정하였다.",
+    activityGuide: "\"학교 행사 안내문 만들기\" 과제를 [1. 날짜와 장소 정리 -> 2. 초대의 글 작성 -> 3. 존댓말 표 형태로 변환]으로 나누어 순차 입력하는 다단계 활동지를 제작한다.",
+    debuggingTip: "AI 대답이 너무 길거나 엉뚱할 경우, \"한 번에 다 시키지 말고 첫 번째 단계만 먼저 시키자\"고 조언하여 하위 과제 분할 입력을 유도한다.",
+  },
+
+  // === 영역 3. 인공지능 활용 학습 ===
+  '[9인지03-01]': {
+    explanation: "교과 공부나 일상 대화 중 모르는 단어, 어려운 문장, 수학 풀이 과정이 나올 때 인공지능에게 \"쉽게 설명해줘\"라고 질문하고, 나온 대답을 읽어 자신의 낱말장에 기록하는 학습 보조 도구 활용법을 익히기 위해 설정하였다.",
+    activityGuide: "모르는 단어 카드(인플레이션, 분리배출, 컴퓨팅 등)를 준비하고, AI의 쉬운 대답에서 핵심 단어를 찾아 자신의 공책에 옮겨 적는 낱말 정리장 교재를 제작한다.",
+    debuggingTip: "AI의 대답을 그냥 눈으로 읽고 지나치지 않고, 반드시 자신의 손으로 낱말장에 써보는 신체적·언어적 재정리 과정을 거치도록 지도한다.",
+  },
+  '[9인지03-02]': {
+    explanation: "인공지능이 정답을 다 알려주더라도 전부 복사하여 베끼지 않고, AI는 힌트나 풀이 과정만 참고한 뒤 최종 정답은 학생 자신이 직접 생각하여 풀고 정리하는 주도적 학습 태도를 함양하기 위해 설정하였다.",
+    activityGuide: "AI 대답에 일부 가림막 힌트 카드를 덮어 두고, 힌트만 확인한 뒤 빈칸 정답은 학생이 직접 연필로 써보는 '스스로 풀기 힌트 카드'를 제작한다.",
+    debuggingTip: "AI 대답을 그대로 답안지에 베껴 적으려 할 때 \"AI는 힌트 도우미일 뿐, 정답표를 작성하는 주인은 나\"임을 상기시킨다.",
+  },
+  '[12인지03-01]': {
+    explanation: "학습 과제 수행 시 인공지능에게 다양한 각도로 질문하여 다채로운 설명을 수집하고, 내용을 이해한 후 자신만의 언어와 표현으로 재구성하여 요약·발표하는 고급 학업 역량을 기르기 위해 설정하였다.",
+    activityGuide: "AI가 출력한 길고 복잡한 글을 읽고 핵심 문장 3개로 간추려 자기 말로 다시 써보는 '나만의 요약 및 발표 노트' 활동지를 활용한다.",
+    debuggingTip: "AI의 전문 용어를 그대로 읽는 학생에게 \"이 단어를 친구에게 쉽게 설명한다면 어떻게 말할 수 있을까?\"라고 질문하여 자기 언어화를 촉진한다.",
+  },
+  '[12인지03-02]': {
+    explanation: "인공지능 도구의 편의성에 과도하게 의존하여 사고력이 저하되는 현상을 예방하고, AI의 대답과 나의 생각을 비교·분석하며 탐구의 주체는 항상 자신임을 인지하는 성찰적 태도를 기르기 위해 설정하였다.",
+    activityGuide: "[AI의 제안 내용] 대 [나의 독자적 생각]을 좌우에 비교하여 작성하고 최종 결론은 자신이 내리는 '주도적 생각 탐구지'를 수업 교재로 활용한다.",
+    debuggingTip: "AI가 내놓은 의견과 다른 학생 자신의 생각에 더 높은 가치를 부여하고 칭찬하여, 주도적 탐구에 대한 자긍심을 고취한다.",
+  },
+
+  // === 영역 4. 인공지능 안전과 윤리 ===
+  '[9인지04-01]': {
+    explanation: "사진 속 얼굴, 이름, 전화번호, 집 주소, 비밀번호 등 개인을 식별할 수 있는 정보를 AI 입력창에 넣지 않도록 사전에 찾아 가리고, 이상한 개인정보 요구 및 낯선 링크 발생 시 즉시 멈추고 알리는 안전 실천 능력을 기르기 위해 설정하였다.",
+    activityGuide: "개인정보(얼굴, 주민번호, 주소)가 노출된 예시 사진과 글 카드를 제공하고, 스티커나 마스킹 테이프로 위험 정보를 가리는 '개인정보 블라인드 스티커 활동'을 진행한다.",
+    debuggingTip: "학생이 실제 자기 얼굴이나 가족 전화번호를 AI 입력창에 치려고 할 때 \"STOP 카드\"를 제시하고 개인정보 가림막 규칙을 상기시킨다.",
+  },
+  '[9인지04-02]': {
+    explanation: "디지털 기기와 인공지능을 사용할 때 개인정보 보호 약속을 지키고, 스스로 하루 미디어 사용 시간(예: 30분)을 정하여 과몰입이나 중독 없이 건전하게 이용하는 윤리적 마음가짐을 기르기 위해 설정하였다.",
+    activityGuide: "학생별 '오늘의 AI 및 미디어 약속 시계' 판을 제공하고, 사용 시간이 지나면 알람이 울리고 스스로 기기를 끄는 실천 체크리스트를 활용한다.",
+    debuggingTip: "기기 사용 중단 시 칭찬 스티커를 제공하여 스스로 사용 시간을 조절한 경험에 대해 positive reinforcement(정적 강화)를 제공한다.",
+  },
+  '[12인지04-01]': {
+    explanation: "텍스트, 이미지, 파일에 포함된 민감한 정보(위치 데이터, 연락처, 개인 식별 코드)를 검출하여 가림 처리하고, 정보의 생산 출처와 게시 날짜를 확인하여 신뢰할 수 있는 안전한 정보만 선별·사용하는 보안 역량을 강화하기 위해 설정하였다.",
+    activityGuide: "SNS 게시물 모의 텍스트에서 위치 정보 및 개인 단서를 찾아 형광펜으로 가리고, 공식 뉴스 날짜와 비교하여 최신 유효 정보인지 판별하는 '디지털 보안 검수 시트'를 제작한다.",
+    debuggingTip: "사진 메타데이터(EXIF 위치 정보)나 문서 속 숨은 개인정보의 위험성을 시각화하여 정보 보안의 중요성을 실감하게 한다.",
+  },
+  '[12인지04-02]': {
+    explanation: "타인의 초상권과 개인정보 및 저작권을 존중하고, 디지털 공간에서 올바른 언어를 사용하며, 스스로 사용 시간을 계획하고 조절하는 민주시민으로서의 디지털 윤리 의식을 함양하기 위해 설정하였다.",
+    activityGuide: "타인의 사진이나 글을 함부로 쓰지 않는 저작권 및 초상권 수칙 판넬과 스스로 일주일 미디어 다이어리를 기록하는 '디지털 웰빙 타임 매니저'를 제공한다.",
+    debuggingTip: "인체 건강(수면, 시력)과 사회적 관계에 미치는 디지털 미디어 과몰입의 영향표를 함께 살피며 자율적 조절 태도를 도모한다.",
+  },
+
+  // === 영역 5. 인공지능과 문제 해결 ===
+  '[9인지05-01]': {
+    explanation: "문제가 무엇인지 명확히 알기 위해 '현재 상태(예: 방이 어질러짐)'와 '목표 상태(예: 방이 깨끗이 정돈됨)'를 비교하고, 그 사이에 필요한 변화를 찾아내는 컴퓨팅 사고의 기초 문제 정의 역량을 기르기 위해 설정하였다.",
+    activityGuide: "[지금 모습 그림]과 [완성된 모습 그림] 두 장을 대비하여 보여주고, 차이점 3가지를 찾아내는 문제 정의 카드를 수업 교재로 활용한다.",
+    debuggingTip: "막연히 \"어렵다\"고 할 때, \"지금 상태는 어떠니?\" \"나중에 완성되면 어떤 모습이어야 하니?\"로 이분화하여 질문해 문제를 명확히 해준다.",
+  },
+  '[9인지05-02]': {
+    explanation: "목표를 이루기 위해 일을 첫째, 둘째, 셋째 순서(알고리즘 순차)로 차례차례 나열하고, 순서가 틀리거나 오류가 생겼을 때 AI가 주는 힌트를 받아 틀린 순서 카드를 다시 알맞게 바꿔 끼우는 수정(디버깅) 경험을 위해 설정하였다.",
+    activityGuide: "라면 끓이기나 옷 입기 순서 카드가 섞여 있는 카드를 제공하고, 순서를 올바르게 재배치하고 오류를 고치는 '순서 징검다리 판'을 활용한다.",
+    debuggingTip: "틀린 순서를 바로 답으로 지적해주지 않고, \"이 순서대로 실행하면 어떤 어색한 일이 벌어질까?\"를 시뮬레이션해 보게 한다.",
+  },
+  '[12인지05-01]': {
+    explanation: "실생활의 복잡한 문제를 현재 상태와 목표 상태의 차이로 체계적으로 정의하고, 입력-처리-출력 및 순차·선택·반복의 컴퓨팅 문제 해결 절차(Algorithm)를 설계하는 고도화된 사고력을 함양하기 위해 설정하였다.",
+    activityGuide: "[문제 상황 분석표]를 제공하여 현재 문제점, 도달 목표, 필요 입력 자료, 처리 순서를 4단계 표 형태로 직접 설계해보는 문제 해결 설계지를 제공한다.",
+    debuggingTip: "문제 정의 단계에서 원인과 결과를 혼동하지 않도록 \"무엇이 진짜 방해 요소인가?\"를 계통도로 시각화해 준다.",
+  },
+  '[12인지05-02]': {
+    explanation: "규모가 큰 과제를 한 번에 해결하려 하지 않고 독립적인 작은 하위 과제(Decomposition)로 분할한 뒤, 마감 시간과 중요도에 따른 우선순위(Priority)를 정하고, AI의 오류 힌트를 분석하여 오답을 끈기 있게 교정하는 능력을 기르기 위해 설정하였다.",
+    activityGuide: "\"학급 축제 준비하기\"라는 큰 과제를 [1. 홍보지 만들기, 2. 물품 구매하기, 3. 자리 배치하기]로 나누고 1-2-3 순위를 정해 디버깅하는 '과제 분할 및 디버깅 시트'를 활용한다.",
+    debuggingTip: "한꺼번에 많은 오류가 터져 당황할 때 \"가장 먼저 해결해야 할 1번 과제 하나만 잘라내서 해결하자\"고 조각 과제 접근을 지도한다.",
+  },
+
+  // === 영역 6. 인공지능과 일상생활 ===
+  '[9인지06-01]': {
+    explanation: "오늘 날씨에 맞는 옷차림을 고르거나 급식 메뉴, 버스 도착 시간, 학급 일정을 AI 스피커나 화면 기기를 통해 음성이나 터치로 직접 확인하는 실생활 정보 활용 능력을 기르기 위해 설정하였다.",
+    activityGuide: "날씨·급식 아이콘 버튼을 터치하거나 \"오늘 날씨 어때?\"라고 말하여 정보를 확인하고 오늘의 옷차림 스티커를 붙이는 '생활 정보 모니터링 카드'를 제공한다.",
+    debuggingTip: "기기 음성 인식이 잘 안 될 때 음성 속도나 단어를 정제하여 말해보도록 안내하고, 실패 시 터치 버튼 대안을 사용할 수 있게 한다.",
+  },
+  '[9인지06-02]': {
+    explanation: "인공지능 도구가 교실이나 집에서 나의 일상을 더 편리하게 돕는 유용한 도구임을 인지하고, 타인의 도움 없이도 스스로 AI 기기를 이용하여 생활 습관을 관리하려는 자주적인 태도를 기르기 위해 설정하였다.",
+    activityGuide: "나의 하루 AI 도우미 체크리스트를 만들어 아침 날씨 확인, 일정 확인, 건강 관리를 스스로 완료했을 때 도장을 받는 자주생활 매뉴얼을 활용한다.",
+    debuggingTip: "처음에는 교사의 힌트를 받아 수행하더라도 점차 힌트 양을 줄여(fading) 최종적으로 독립 수행이 이루어지도록 유도한다.",
+  },
+  '[12인지06-01]': {
+    explanation: "키오스크 주문, 대중교통 경로 검색, 건강 식단 관리, 스마트홈 제어 등 다양한 AI 도구를 통합적으로 활용하여 개인의 일상을 관리하고, 화면 멈춤이나 오류가 발생했을 때 당황하지 않고 다른 기기를 쓰거나 직원에게 문의하는 대안 적용 역량을 키우기 위해 설정하였다.",
+    activityGuide: "키오스크 품절 시 다른 메뉴 선택하기, 버스 미운행 시 지하철 경로 재검색하기 등 대안 선택 시나리오 카드를 활용한 '디지털 자립 시뮬레이션 매뉴얼'을 제작한다.",
+    debuggingTip: "돌발 상황(오류, 멈춤) 발생 시 당황하지 않고 사용할 수 있는 \"대안 3단계 수칙 카드\"를 기기 옆에 부착해 둔다.",
+  },
+  '[12인지06-02]': {
+    explanation: "인공지능 기술을 기반으로 타인에게 과도하게 의존하지 않고 지역사회(도서관, 관공서, 마트, 대중교통)에서 독립적으로 이동하고 생활하며, 미래의 예비 직업인이자 민주시민으로서 주체적인 자립을 이루려는 적극적인 삶의 태도를 기르기 위해 설정하였다.",
+    activityGuide: "나의 지역사회 자립 마스터 플랜을 제공하여 혼자서 AI 앱으로 버스 타고 마트 가서 키오스크로 장보고 오기 미션을 구성하고 스스로 평가하는 '지역사회 자립 포트폴리오'를 제공한다.",
+    debuggingTip: "지역사회 현장 체험 시 학생이 직접 AI 앱을 활용하도록 측면에서 관찰·지원하고, 성공적인 자립 경험을 축하해 준다.",
+  },
+};
+
 export default function TeacherCurriculumGuide() {
   const [activeSchoolLevel, setActiveSchoolLevel] = useState<'middle' | 'high'>('middle');
 
@@ -434,7 +569,7 @@ export default function TeacherCurriculumGuide() {
         </div>
       </section>
 
-      {/* 4. 영역별 성취기준, 해설 및 적용 시 고려 사항 */}
+      {/* 4. 영역별 24개 성취기준 상세 해설 및 지도 팁 (교과서 없이도 수업 교재 제작 가능 수준) */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-5">
         <div className="flex flex-wrap items-center justify-between border-b border-slate-200 pb-3 gap-2">
           <div className="flex items-center gap-2">
@@ -451,6 +586,10 @@ export default function TeacherCurriculumGuide() {
           </div>
         </div>
 
+        <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          교과서나 추가 지침서 없이 본 <strong>성취기준 해설 및 수업 교재 제작 가이드</strong>만으로도 특수교육 현장에서 학생 수준별 수업 활동지와 평가 자료를 제작할 수 있도록 24개 개별 성취기준별로 상세 명세화하였습니다.
+        </p>
+
         <div className="space-y-6">
           {Object.values(AI_ACHIEVEMENT_STANDARDS).map((meta) => {
             const standardsList = activeSchoolLevel === 'middle' ? meta.middleSchool : meta.highSchool;
@@ -458,7 +597,7 @@ export default function TeacherCurriculumGuide() {
             return (
               <div
                 key={meta.moduleId}
-                className="border-2 border-slate-200 rounded-2xl p-5 md:p-6 bg-slate-50/50 space-y-4"
+                className="border-2 border-slate-200 rounded-2xl p-5 md:p-6 bg-slate-50/50 space-y-5"
               >
                 {/* Domain Header */}
                 <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
@@ -473,48 +612,65 @@ export default function TeacherCurriculumGuide() {
                   </span>
                 </div>
 
-                {/* Achievement Standard Box */}
-                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
-                  <p className="text-xs font-extrabold text-indigo-900">
-                    📌 [{activeSchoolLevel === 'middle' ? '중학교 1~3학년' : '고등학교 1~3학년'}] 성취기준 명세
-                  </p>
-                  <ul className="space-y-2">
-                    {standardsList.map((s) => (
-                      <li key={s.code} className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs sm:text-sm font-bold text-slate-800 flex items-start gap-2">
-                        <span className="shrink-0 px-2 py-0.5 rounded bg-slate-900 text-amber-300 font-mono text-xs font-black">
-                          {s.code}
-                        </span>
-                        <span className="leading-relaxed">{s.statement}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {/* Individual Standards Detailed Explanation */}
+                <div className="space-y-4">
+                  {standardsList.map((s) => {
+                    const detail = DETAILED_STANDARD_EXPLANATIONS[s.code] || {
+                      explanation: '해당 성취기준의 핵심 목표와 개념을 이해하고 지도합니다.',
+                      activityGuide: '실생활 관련 카드 및 체험 활동 교재를 구성하여 지도합니다.',
+                      debuggingTip: '학생의 오개념을 확인하고 단계별 힌트를 제공합니다.',
+                    };
+
+                    return (
+                      <div key={s.code} className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                        {/* Standard Code & Title */}
+                        <div className="flex items-start gap-2 border-b border-slate-100 pb-2.5">
+                          <span className="shrink-0 px-2.5 py-1 rounded bg-slate-900 text-amber-300 font-mono text-xs font-black">
+                            {s.code}
+                          </span>
+                          <strong className="text-sm sm:text-base font-extrabold text-slate-900 leading-snug">
+                            {s.statement}
+                          </strong>
+                        </div>
+
+                        {/* (가) 성취기준 상세 해설 */}
+                        <div className="bg-amber-50/80 p-3.5 rounded-xl border border-amber-200/80 text-xs sm:text-sm text-slate-900 space-y-1">
+                          <p className="font-extrabold text-amber-950 flex items-center gap-1.5">
+                            <span>💡</span> <span>(가) 성취기준 취지 및 상세 해설</span>
+                          </p>
+                          <p className="text-slate-800 font-medium leading-relaxed pl-5">
+                            {detail.explanation}
+                          </p>
+                        </div>
+
+                        {/* (나) 비 교과서 자율 수업 교재 제작 가이드 */}
+                        <div className="bg-indigo-50/80 p-3.5 rounded-xl border border-indigo-200/80 text-xs sm:text-sm text-slate-900 space-y-1">
+                          <p className="font-extrabold text-indigo-950 flex items-center gap-1.5">
+                            <span>✏️</span> <span>(나) 수업 교재 및 활동지 제작 가이드</span>
+                          </p>
+                          <p className="text-slate-800 font-medium leading-relaxed pl-5">
+                            {detail.activityGuide}
+                          </p>
+                        </div>
+
+                        {/* (다) 학생 학생 오류 교정 팁 */}
+                        <div className="bg-emerald-50/80 p-3.5 rounded-xl border border-emerald-200/80 text-xs sm:text-sm text-slate-900 space-y-1">
+                          <p className="font-extrabold text-emerald-950 flex items-center gap-1.5">
+                            <span>🛠️</span> <span>(다) 오개념 피드백 & 지도 팁</span>
+                          </p>
+                          <p className="text-slate-800 font-medium leading-relaxed pl-5">
+                            {detail.debuggingTip}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
-                {/* (가) 성취기준 해설 */}
-                <div className="bg-amber-50/70 p-4 rounded-xl border border-amber-200/80 text-xs sm:text-sm text-slate-800 space-y-1">
-                  <p className="font-extrabold text-amber-900 flex items-center gap-1.5">
-                    <span>💡</span> <span>(가) 성취기준 해설</span>
-                  </p>
-                  <p className="text-slate-800 font-medium leading-relaxed pl-5">
-                    {meta.domainNumber === 1 &&
-                      '이 성취기준은 인공지능이 사람이 준 데이터를 기반으로 작동함을 이해하고, 생성된 답변의 그럴듯한 오류(환각)를 실제 식단표나 안내문 등 원본 정보와 대조하여 스스로 검증하고 수정하는 기초 소양을 기르기 위해 설정하였다.'}
-                    {meta.domainNumber === 2 &&
-                      '이 성취기준은 구체적인 명칭, 종류, 개수 및 조건과 예시를 포함하여 인공지능에게 요청할 때 원하는 대답의 품질이 향상됨을 경험하고, 오해가 생긴 답변에 필요한 정보를 더해 다시 요청하는 소통 능력을 기르기 위해 설정하였다.'}
-                    {meta.domainNumber === 3 &&
-                      '이 성취기준은 학습 과정에서 인공지능을 설명 보조 및 요약 도구로 활용하되, 인공지능에 무비판적으로 의존하지 않고 얻은 설명을 내 말로 다시 정리하며 주도적으로 공부하는 습관을 기르기 위해 설정하였다.'}
-                    {meta.domainNumber === 4 &&
-                      '이 성취기준은 사진이나 글을 인공지능에 입력하기 전 개인식별 단서를 찾아 가리고, 비밀번호 요구나 불편한 글 등 디지털 위험 신호 발생 시 올리기를 멈추고 도움을 요청하는 디지털 안전 행동을 실천하기 위해 설정하였다.'}
-                    {meta.domainNumber === 5 &&
-                      '이 성취기준은 인공지능으로 해결할 문제의 현재 상태와 목표 상태를 파악하고, 필요한 순서를 정해 힌트를 활용하며 오류를 포기하지 않고 차근차근 수정하는 컴퓨팅 사고 능력을 기르기 위해 설정하였다.'}
-                    {meta.domainNumber === 6 &&
-                      '이 성취기준은 일상생활 및 지역사회(날씨, 급식, 버스, 키오스크, 스마트홈)에서 인공지능 도구를 스스로 활용하여 필요한 정보를 확인하고, 자신의 자립 생활을 도모하는 태도를 기르기 위해 설정하였다.'}
-                  </p>
-                </div>
-
-                {/* (나) 성취기준 적용 시 고려 사항 (특수교육 현장 맞춤) */}
+                {/* (라) 특수교육 맞춤 적용 시 고려 사항 */}
                 <div className="bg-sky-50/70 p-4 rounded-xl border border-sky-200/80 text-xs sm:text-sm text-slate-800 space-y-1.5">
                   <p className="font-extrabold text-sky-900 flex items-center gap-1.5">
-                    <span>♿</span> <span>(나) 성취기준 적용 시 고려 사항 (거제애광학교 맞춤 지원)</span>
+                    <span>♿</span> <span>(라) 특수교육 현장 맞춤 적용 시 고려 사항 (거제애광학교)</span>
                   </p>
                   <ul className="list-inside list-disc space-y-1 text-slate-800 font-medium pl-2 leading-relaxed text-xs">
                     <li>
