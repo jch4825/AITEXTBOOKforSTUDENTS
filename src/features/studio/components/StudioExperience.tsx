@@ -367,7 +367,14 @@ export default function StudioExperience({
         <div>
           <span className="studio-kicker" style={{ color: accent }}>5단계 · 실시간 AI 체험</span>
           <h2 className="text-xl font-extrabold">
-            {definition.decisionTitle || '직접 아이미가 하는 말이 진짜인지 거짓인지 알아봐요.'}
+            {definition.decisionTitle || (() => {
+              if (definition.lessonId?.startsWith('m2')) return '직접 아이미에게 구체적인 조건으로 질문해 봐요.';
+              if (definition.lessonId?.startsWith('m3')) return '직접 아이미와 함께 궁금한 학습 내용을 탐구해 봐요.';
+              if (definition.lessonId?.startsWith('m4')) return '직접 아이미와 안전하고 윤리적인 사용법을 실천해 봐요.';
+              if (definition.lessonId?.startsWith('m5')) return '직접 아이미와 함께 순서대로 문제를 해결해 봐요.';
+              if (definition.lessonId?.startsWith('m6')) return '직접 아이미와 실생활 인공지능 서비스를 체험해 봐요.';
+              return '직접 아이미가 하는 말이 진짜인지 거짓인지 알아봐요.';
+            })()}
           </h2>
           <p className="mt-1 text-sm text-[color:var(--muted)] font-medium">
             인공지능(Gemini)에게 궁금한 점을 물어보고, 음성이나 사진/파일을 전달하며 답변을 탐구해 봐요.
