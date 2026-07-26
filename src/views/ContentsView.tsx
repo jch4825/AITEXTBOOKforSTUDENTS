@@ -61,7 +61,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
     </div>
     <ol className="comic-lesson-cuts">{lessonIdsForModule(moduleId).map((id, index) => {
       const lesson = getLesson(id); const done = isCompleted(id);
-      return <li key={id}><button onClick={() => lesson && onPickLesson(id)} disabled={!lesson} className="comic-lesson-cut"><span className="comic-cut-number">{done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}</span><span><strong>{lesson?.title ?? '곧 열립니다'}</strong>{lesson && <small>{lesson.wrapUpEasy}</small>}</span><Icon name="chevron-right" size={20} /></button></li>;
+      return <li key={id}><button onClick={() => lesson && onPickLesson(id)} disabled={!lesson} className="comic-lesson-cut"><span className="comic-cut-number">{done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}</span><span className="comic-cut-body"><strong>{lesson?.title ?? '곧 열립니다'}</strong>{lesson && <small>{lesson.wrapUpEasy}</small>}</span><Icon name="chevron-right" size={20} className="comic-cut-arrow" /></button></li>;
     })}</ol>
   </div>;
 }} /></section>

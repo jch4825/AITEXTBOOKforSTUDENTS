@@ -51,18 +51,22 @@ export default function SeasonMap({ episodes, activeId, onPick, renderLessons }:
                 aria-controls={drawerPanelId}
                 className={`season-episode ${active ? 'season-episode-active' : ''}`}
               >
-                <span className="season-number">{String(episode.number).padStart(2, '0')}</span>
-                <span className="season-icon"><ModuleIcon moduleId={episode.id} size={34} /></span>
-                <span className="season-copy">
-                  <strong>{episode.title}</strong>
-                  <small>{episode.synopsis}</small>
-                </span>
-                <span className="season-progress">
-                  {episode.complete ? <Icon name="star" size={18} filled color={theme.accent} /> : `${episode.done}/${episode.total}`}
-                </span>
-                <span className="season-toggle" aria-hidden>
-                  <Icon name={active ? 'chevron-up' : 'chevron-down'} size={18} />
-                </span>
+                <div className="season-episode-main">
+                  <span className="season-number">{String(episode.number).padStart(2, '0')}</span>
+                  <span className="season-icon"><ModuleIcon moduleId={episode.id} size={32} /></span>
+                  <span className="season-copy">
+                    <strong>{episode.title}</strong>
+                    <small>{episode.synopsis}</small>
+                  </span>
+                </div>
+                <div className="season-episode-meta">
+                  <span className="season-progress">
+                    {episode.complete ? <Icon name="star" size={18} filled color={theme.accent} /> : `${episode.done}/${episode.total}`}
+                  </span>
+                  <span className="season-toggle" aria-hidden>
+                    <Icon name={active ? 'chevron-up' : 'chevron-down'} size={18} />
+                  </span>
+                </div>
               </button>
               {active && <div id={inlinePanelId} className="season-lessons season-lessons-inline">{renderLessons(episode.id)}</div>}
             </li>
