@@ -81,14 +81,14 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
             {lesson && (
               <div className="comic-lesson-cut-tooltip" role="tooltip">
                 <div className="space-y-1">
-                  <strong className="block text-amber-300 font-extrabold text-xs">
+                  <span className="tooltip-title">
                     🎯 {index + 1}차시. {lesson.title}
-                  </strong>
-                  <p className="text-slate-100 font-semibold leading-relaxed text-xs">
+                  </span>
+                  <p className="tooltip-objective">
                     {lesson.objective}
                   </p>
                   {(lesson.wrapUpNormal || lesson.wrapUpEasy) && (
-                    <p className="text-slate-300 font-normal leading-relaxed text-[11px] border-t border-slate-700/80 pt-1 mt-1">
+                    <p className="tooltip-summary">
                       💡 {lesson.wrapUpNormal || lesson.wrapUpEasy}
                     </p>
                   )}

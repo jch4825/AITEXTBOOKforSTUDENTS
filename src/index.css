@@ -464,14 +464,12 @@
   transform: translateX(-50%) translateY(4px);
   width: max-content;
   max-width: 22rem;
-  padding: 0.65rem 0.85rem;
-  background: #0F172A;
-  border: 1.5px solid #334155;
-  color: #F8FAFC;
-  border-radius: 10px;
-  font-size: 0.82rem;
-  line-height: 1.45;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  padding: 0.75rem 0.9rem;
+  background: #090D16;
+  border: 2px solid #38BDF8;
+  color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.6);
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
@@ -486,9 +484,34 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-width: 6px;
+  border-width: 7px;
   border-style: solid;
-  border-color: #0F172A transparent transparent transparent;
+  border-color: #38BDF8 transparent transparent transparent;
+}
+.comic-lesson-cut-tooltip .tooltip-title {
+  display: block !important;
+  color: #FDE047 !important; /* Vivid Gold Amber */
+  font-size: 0.88rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+.comic-lesson-cut-tooltip .tooltip-objective {
+  display: block !important;
+  color: #FFFFFF !important; /* Crisp Pure White */
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  line-height: 1.45;
+}
+.comic-lesson-cut-tooltip .tooltip-summary {
+  display: block !important;
+  color: #CBD5E1 !important; /* High contrast bright slate */
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  border-top: 1px solid #334155;
+  padding-top: 0.35rem;
+  margin-top: 0.35rem;
+  line-height: 1.4;
 }
 
 /* Top-row items open tooltip DOWNWARDS to prevent top clipping */
@@ -502,7 +525,7 @@
 .comic-lesson-cuts > li:nth-child(-n+3) .comic-lesson-cut-tooltip::after {
   top: auto;
   bottom: 100%;
-  border-color: transparent transparent #0F172A transparent;
+  border-color: transparent transparent #38BDF8 transparent;
 }
 
 .comic-lesson-cut:hover .comic-lesson-cut-tooltip,
