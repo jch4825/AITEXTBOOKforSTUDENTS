@@ -122,66 +122,170 @@ export default function TeacherCurriculumGuide() {
         </div>
       </section>
 
-      {/* 3. 내용 체계 */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-4">
+      {/* 3. 내용 체계 (2022 개정 특수교육 기본 교육과정 표준 구조) */}
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-5">
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-xl">📊</span>
             <h2 className="text-xl font-extrabold text-slate-900">2. 내용 체계</h2>
           </div>
-          <span className="text-xs font-bold text-slate-500">6개 핵심 영역 체계 ('인공지능 활용')</span>
+          <span className="text-xs font-bold text-slate-500">삼차원 범주별 내용 요소 구조</span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left border-collapse border border-slate-300">
-            <thead>
-              <tr className="bg-slate-100 text-slate-900 font-extrabold border-b border-slate-300">
-                <th className="p-3 border-r border-slate-300 w-24">영역</th>
-                <th className="p-3 border-r border-slate-300">핵심 아이디어</th>
-                <th className="p-3 border-r border-slate-300 w-28">범주</th>
-                <th className="p-3 border-r border-slate-300">중학교 (1~3학년) 내용 요소</th>
-                <th className="p-3">고등학교 (1~3학년) 내용 요소</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-300 font-medium">
-              {Object.values(AI_ACHIEVEMENT_STANDARDS).map((meta) => (
-                <tr key={meta.moduleId} className="hover:bg-slate-50">
-                  <td className="p-3 border-r border-slate-300 font-extrabold text-indigo-900 bg-slate-50/50">
-                    {meta.domainNumber}. {meta.domainName}
-                  </td>
-                  <td className="p-3 border-r border-slate-300 text-slate-700 leading-relaxed">
-                    {meta.domainNumber === 1 && '인공지능은 사람이 제공한 데이터를 바탕으로 결과를 생성하며, 생성된 정보는 사실 검증이 필요하다.'}
-                    {meta.domainNumber === 2 && '구체적인 명칭, 조건, 예시를 포함하여 인공지능과 대화할 때 원하는 결과를 효과적으로 얻을 수 있다.'}
-                    {meta.domainNumber === 3 && '인공지능은 모르는 개념이나 학습 내용을 탐구하는 도구이며, 인간의 주도적 생각이 중심이 되어야 한다.'}
-                    {meta.domainNumber === 4 && '개인정보를 보호하고 위험 신호를 차단하며 타인을 존중하는 안전한 디지털 윤리를 실천한다.'}
-                    {meta.domainNumber === 5 && '문제의 현재와 목표 상태를 파악하고 절차에 따라 순서를 정하여 힌트를 활용해 문제 해결 능력을 기른다.'}
-                    {meta.domainNumber === 6 && '일상생활 및 지역사회에서 인공지능 서비스를 활용하여 주체적이고 독립적인 자립 생활을 이룬다.'}
-                  </td>
-                  <td className="p-3 border-r border-slate-300 font-bold bg-slate-50/30">
-                    <div className="space-y-3 py-1">
-                      <span className="block text-amber-800">지식·이해</span>
-                      <span className="block text-sky-800">과정·기능</span>
-                      <span className="block text-emerald-800">가치·태도</span>
-                    </div>
-                  </td>
-                  <td className="p-3 border-r border-slate-300 leading-relaxed">
-                    <div className="space-y-1.5">
-                      <p>• 인공지능의 대답 생성 방식 알아보기</p>
-                      <p>• 인공지능 대답과 실제 자료 비교하기</p>
-                      <p>• 사실 확인하는 마음 가지기</p>
-                    </div>
-                  </td>
-                  <td className="p-3 leading-relaxed">
-                    <div className="space-y-1.5">
-                      <p>• 인공지능 데이터 생성 원리 이해하기</p>
-                      <p>• 환각 오류 탐색 및 대조 수정하기</p>
-                      <p>• 직접 검증하고 사용 지침 만들기</p>
-                    </div>
-                  </td>
+        {/* (1) 상단 핵심 아이디어 (독립 배치 - 총 3개) */}
+        <div className="p-4 rounded-2xl bg-indigo-950 text-white space-y-3 border border-indigo-800">
+          <div className="flex items-center gap-2 border-b border-indigo-800 pb-2">
+            <span className="text-base">💡</span>
+            <h3 className="font-extrabold text-amber-300 text-sm sm:text-base">
+              '인공지능 활용' 과목 핵심 아이디어 (3대 영역)
+            </h3>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3 text-xs leading-relaxed">
+            <div className="p-3 rounded-xl bg-indigo-900/70 border border-indigo-700/70 space-y-1">
+              <strong className="text-amber-300 font-extrabold block mb-1">① 원리 이해 및 명확한 상호작용</strong>
+              <p className="text-slate-200">
+                인공지능은 사람이 준 데이터를 바탕으로 결과를 생성하므로, 대답의 원리를 이해하고 구체적인 이름·조건·예시를 전달하여 올바르게 상호작용한다.
+              </p>
+            </div>
+            <div className="p-3 rounded-xl bg-indigo-900/70 border border-indigo-700/70 space-y-1">
+              <strong className="text-sky-300 font-extrabold block mb-1">② 탐구 활용 및 실생활 문제 해결</strong>
+              <p className="text-slate-200">
+                인공지능 소프트웨어를 학습 보조 도구로 활용하여 정보를 수집·검증하고, 절차에 따라 순서를 정해 오답과 오류를 끈기 있게 해결한다.
+              </p>
+            </div>
+            <div className="p-3 rounded-xl bg-indigo-900/70 border border-indigo-700/70 space-y-1">
+              <strong className="text-emerald-300 font-extrabold block mb-1">③ 정보 보안, 윤리 및 일상 자립</strong>
+              <p className="text-slate-200">
+                개인정보와 정보 보안을 지키고 디지털 위험에 대응하며, 인공지능을 주체적이고 윤리적으로 활용하여 독립적인 일상생활 자립을 이룬다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* (2) 범주별 내용 요소 표 (지식·이해 / 과정·기능 / 가치·태도) */}
+        <div className="space-y-4">
+          <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
+            <span>📋</span> <span>범주별 내용 요소 (중학교 1~3학년 vs 고등학교 1~3학년)</span>
+          </h3>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs text-left border-collapse border border-slate-300">
+              <thead>
+                <tr className="bg-slate-100 text-slate-900 font-extrabold border-b border-slate-300">
+                  <th className="p-3 border-r border-slate-300 w-28 text-center">범주</th>
+                  <th className="p-3 border-r border-slate-300 w-36">영역 (단원 연동)</th>
+                  <th className="p-3 border-r border-slate-300">중학교 1~3학년 내용 요소</th>
+                  <th className="p-3">고등학교 1~3학년 내용 요소</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-300 font-medium">
+                {/* 1. 지식·이해 범주 */}
+                <tr className="bg-amber-50/30">
+                  <td rowSpan={6} className="p-3 border-r border-slate-300 font-black text-amber-900 text-center bg-amber-100/60 text-sm">
+                    지식 · 이해
+                  </td>
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">1. 인공지능의 이해</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">인공지능의 대답 생성 방식, 정보 바탕의 작동 원리</td>
+                  <td className="p-2.5 text-slate-800">인공지능 개념, 데이터 기반 결과 생성 원리, 환각 특성</td>
+                </tr>
+                <tr className="bg-amber-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">2. 인공지능 상호작용</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">입력 낱말과 조건에 따른 대답 결과의 변화</td>
+                  <td className="p-2.5 text-slate-800">입력 정보의 구체성(명칭·조건·예시)과 대답 품질의 관계</td>
+                </tr>
+                <tr className="bg-amber-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">3. 인공지능 활용 학습</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">공부할 때 물어볼 수 있는 질문과 나의 학습 역할</td>
+                  <td className="p-2.5 text-slate-800">학습 보조 도구로서의 AI와 직접 수행할 나의 역할 차이</td>
+                </tr>
+                <tr className="bg-amber-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">4. 인공지능 안전과 윤리</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">알려주면 안 되는 개인정보(얼굴·이름·비밀번호) 및 위험</td>
+                  <td className="p-2.5 text-slate-800">보호해야 할 개인식별 단서, 디지털 안전 위험 요소(피싱·광고)</td>
+                </tr>
+                <tr className="bg-amber-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">5. 인공지능과 문제 해결</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">현재 상황과 이루고 싶은 목표 상태의 차이 파악</td>
+                  <td className="p-2.5 text-slate-800">현재와 목표 상태 비교를 통한 문제 정의 및 문제 해결 절차</td>
+                </tr>
+                <tr className="bg-amber-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">6. 인공지능과 일상생활</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">일상생활(날씨·식단·버스)에서 인공지능이 주는 편리함</td>
+                  <td className="p-2.5 text-slate-800">지역사회(키오스크·스마트홈·교통) 인공지능 서비스의 특성</td>
+                </tr>
+
+                {/* 2. 과정·기능 범주 */}
+                <tr className="bg-sky-50/30">
+                  <td rowSpan={6} className="p-3 border-r border-slate-300 font-black text-sky-900 text-center bg-sky-100/60 text-sm">
+                    과정 · 기능
+                  </td>
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">1. 인공지능의 이해</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">인공지능 대답과 실제 안내 자료 비교하여 틀린 부분 찾기</td>
+                  <td className="p-2.5 text-slate-800">대답을 원본 자료와 대조하여 그럴듯한 거짓 정보 찾아 수정하기</td>
+                </tr>
+                <tr className="bg-sky-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">2. 인공지능 상호작용</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">구체적인 이름과 조건을 더해 인공지능에게 다시 요청하기</td>
+                  <td className="p-2.5 text-slate-800">과제 단계별 나누기 및 예시 포함 프롬프트 작성·수정하기</td>
+                </tr>
+                <tr className="bg-sky-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">3. 인공지능 활용 학습</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">모르는 낱말·풀이 질문하고 나온 설명 확인하여 정리하기</td>
+                  <td className="p-2.5 text-slate-800">학습 내용·낱말 질문하여 설명 얻고 자신의 언어로 정리하기</td>
+                </tr>
+                <tr className="bg-sky-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">4. 인공지능 안전과 윤리</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">개인정보 찾아 가리기, 위험한 요청 시 멈추고 알리기</td>
+                  <td className="p-2.5 text-slate-800">개인식별 단서 가리기, 출처·날짜 대조하여 안전하게 사용하기</td>
+                </tr>
+                <tr className="bg-sky-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">5. 인공지능과 문제 해결</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">목표 위한 순서 정하기, 힌트 받아 틀린 부분 고쳐 보기</td>
+                  <td className="p-2.5 text-slate-800">큰 과제 하위 단위 분할, 우선순위 정하기, 오답·오류 수정하기</td>
+                </tr>
+                <tr className="bg-sky-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">6. 인공지능과 일상생활</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">인공지능·기기 이용하여 필요한 정보(날씨·일정) 찾아 확인하기</td>
+                  <td className="p-2.5 text-slate-800">일정·이동·식단 도구 관리 및 오류 발생 시 대안 적용하기</td>
+                </tr>
+
+                {/* 3. 가치·태도 범주 */}
+                <tr className="bg-emerald-50/30">
+                  <td rowSpan={6} className="p-3 border-r border-slate-300 font-black text-emerald-900 text-center bg-emerald-100/60 text-sm">
+                    가치 · 태도
+                  </td>
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">1. 인공지능의 이해</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">대답을 그대로 믿지 않고 진짜 사실인지 확인하려는 마음</td>
+                  <td className="p-2.5 text-slate-800">맹신하지 않고 사람이 직접 검증하여 사용하려는 성찰적 태도</td>
+                </tr>
+                <tr className="bg-emerald-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">2. 인공지능 상호작용</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">내 생각을 분명하게 전달하며 인공지능과 대화하려는 태도</td>
+                  <td className="p-2.5 text-slate-800">올바르고 명확하게 의사 표현하며 적극 소통하려는 태도</td>
+                </tr>
+                <tr className="bg-emerald-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">3. 인공지능 활용 학습</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">도움 받으면서도 스스로 문제를 풀어보려는 자세</td>
+                  <td className="p-2.5 text-slate-800">과도하게 의존하지 않고 주도적으로 탐구하며 공부하는 태도</td>
+                </tr>
+                <tr className="bg-emerald-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">4. 인공지능 안전과 윤리</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">개인정보 보호하고 정해진 시간 바르게 사용하려는 마음</td>
+                  <td className="p-2.5 text-slate-800">타인·나의 정보 보호, 미디어 시간 조절 및 윤리적 사용 태도</td>
+                </tr>
+                <tr className="bg-emerald-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">5. 인공지능과 문제 해결</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">틀려도 포기하지 않고 차근차근 다시 고쳐보려는 태도</td>
+                  <td className="p-2.5 text-slate-800">발생한 오류를 두려워하지 않고 끈기 있게 수정하려는 태도</td>
+                </tr>
+                <tr className="bg-emerald-50/30">
+                  <td className="p-2.5 border-r border-slate-300 font-bold text-slate-900">6. 인공지능과 일상생활</td>
+                  <td className="p-2.5 border-r border-slate-300 text-slate-800">일상생활에서 인공지능을 스스로 활용하여 생활하려는 마음</td>
+                  <td className="p-2.5 text-slate-800">주체적으로 활용하여 독립적인 일상생활 자립 이루려는 태도</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
