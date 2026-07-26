@@ -62,7 +62,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
     <ol className="comic-lesson-cuts">{lessonIdsForModule(moduleId).map((id, index) => {
       const lesson = getLesson(id); const done = isCompleted(id);
       return (
-        <li key={id} className="relative">
+        <li key={id} className={`relative ${index < 3 ? 'is-top-row' : ''}`}>
           <button
             onClick={() => lesson && onPickLesson(id)}
             disabled={!lesson}

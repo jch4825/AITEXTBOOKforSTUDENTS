@@ -476,7 +476,7 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-  z-index: 60;
+  z-index: 100;
   white-space: normal;
   text-align: left;
 }
@@ -490,6 +490,21 @@
   border-style: solid;
   border-color: #0F172A transparent transparent transparent;
 }
+
+/* Top-row items open tooltip DOWNWARDS to prevent top clipping */
+.comic-lesson-cuts > li.is-top-row .comic-lesson-cut-tooltip,
+.comic-lesson-cuts > li:nth-child(-n+3) .comic-lesson-cut-tooltip {
+  bottom: auto;
+  top: calc(100% + 8px);
+  transform: translateX(-50%) translateY(-4px);
+}
+.comic-lesson-cuts > li.is-top-row .comic-lesson-cut-tooltip::after,
+.comic-lesson-cuts > li:nth-child(-n+3) .comic-lesson-cut-tooltip::after {
+  top: auto;
+  bottom: 100%;
+  border-color: transparent transparent #0F172A transparent;
+}
+
 .comic-lesson-cut:hover .comic-lesson-cut-tooltip,
 .comic-lesson-cut:focus-visible .comic-lesson-cut-tooltip {
   opacity: 1;
@@ -652,7 +667,7 @@
   border: 1.5px solid color-mix(in srgb, var(--episode-accent) 30%, var(--line));
   border-radius: 6px 16px 6px 16px;
   box-shadow: 0 6px 0 color-mix(in srgb, var(--episode-accent) 18%, var(--paper-2));
-  overflow: hidden;
+  overflow: visible;
 }
 .season-lessons-drawer .comic-lesson-cuts {
   display: grid;
