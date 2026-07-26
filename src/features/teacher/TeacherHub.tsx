@@ -4,6 +4,7 @@ import GeneralizationRecordsPanel from '../../components/mission/GeneralizationR
 import type { TeacherRecordingSettings } from '../studio/types';
 import { ApiKeyPanel, ObjectivesPanel, ProgressPanel } from './LegacyTeacherPanels';
 import StudioEvidencePanel from './StudioEvidencePanel';
+import LinkedStandardsGuide from './LinkedStandardsGuide';
 import TeacherCurriculumGuide from './TeacherCurriculumGuide';
 import TeacherDataManagement from './TeacherDataManagement';
 import TeacherOnboarding from './TeacherOnboarding';
@@ -20,6 +21,7 @@ const TEACHER_TABS = [
   '포트폴리오',
   'AI 연결',
   '교육과정·성취기준',
+  '연계 성취기준',
   '데이터 관리',
 ] as const;
 
@@ -142,6 +144,7 @@ export default function TeacherHub({ onExit }: Props) {
             </div>
           </div>
         )}
+        {activeTab === '연계 성취기준' && <LinkedStandardsGuide />}
 
         {activeTab === '데이터 관리' && (
           <TeacherDataManagement
