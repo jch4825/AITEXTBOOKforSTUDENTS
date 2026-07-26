@@ -43,7 +43,7 @@ export function ObjectivesPanel() {
   return (
     <section className="studio-editorial p-6 md:p-8 space-y-5">
       <div>
-        <p className="studio-kicker text-[color:var(--accent)] font-bold">거제애광학교 개설 2022 개정 특수교육 기본교육과정 학교 자율 교과</p>
+        <p className="studio-kicker text-[color:var(--accent)] font-bold">거제애광학교 제작 2022 개정 특수교육 기본교육과정 학교 자율 교과</p>
         <h2 className="text-2xl font-extrabold text-[color:var(--brand-ink)]">차시별 학습목표 · '인공지능 활용' 성취기준</h2>
         <p className="mt-1 text-sm text-[color:var(--muted)]">
           거제애광학교 '인공지능 활용' 선택 교과의 68차시 공통 학습 목표 및 연계 성취기준 명세입니다.

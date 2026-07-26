@@ -13,7 +13,7 @@ export default function TeacherCurriculumGuide() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950">
-                거제애광학교 개설 학교 자율 교과
+                거제애광학교 자체 제작 학교 자율 교과
               </span>
               <span className="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-800 text-indigo-100">
                 2022 개정 특수교육 기본 교육과정 기반
@@ -23,7 +23,7 @@ export default function TeacherCurriculumGuide() {
               '인공지능 활용' 과목 해설 및 교육과정 명세
             </h1>
             <p className="mt-2 text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-              2022 개정 특수교육 기본 교육과정에 제시된 3개 선택 교과의 한계를 넘어 특수교육 대상 학생의 디지털 기초소양 및 자립 역량을 다각도로 확장하기 위해 거제애광학교에서 자체 개설한 선택 교과 명세서입니다.
+              2022 개정 특수교육 기본 교육과정에 제시된 3개 선택 교과의 한계를 넘어 특수교육 대상 학생의 디지털 기초소양 및 자립 역량을 다각도로 확장하기 위해 거제애광학교에서 자체 제작한 선택 교과 명세서입니다.
             </p>
           </div>
 
@@ -54,19 +54,19 @@ export default function TeacherCurriculumGuide() {
         </div>
       </div>
 
-      {/* 1. 교육과정 개설 배경 및 개요 */}
+      {/* 1. 교육과정 제작 배경 및 개요 */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">📘</span>
-          <h2 className="text-xl font-extrabold text-slate-900">교육과정 개설 배경 및 개요</h2>
+          <h2 className="text-xl font-extrabold text-slate-900">교육과정 제작 배경 및 개요</h2>
         </div>
         <div className="text-sm text-slate-700 leading-relaxed space-y-3 font-medium">
           <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-slate-900 leading-relaxed space-y-2">
             <p className="font-extrabold text-amber-950 flex items-center gap-1.5 text-sm sm:text-base">
-              <span>🏫</span> <span>학교 자율 선택 교과 개설 취지 (거제애광학교)</span>
+              <span>🏫</span> <span>학교 자율 선택 교과 제작 취지 (거제애광학교)</span>
             </p>
             <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
-              2022 개정 특수교육 기본 교육과정 선택 교과는 국가 수준에서 3개 과목으로 제한적으로 제시되어 있습니다. <strong>거제애광학교</strong>에서는 디지털 전환 시대에 발맞추어 특수교육 대상 학생들에게 보다 다양하고 실질적인 인공지능 교육 기회를 제공하고자 <strong>'인공지능 활용'</strong> 과목을 학교 자율 교과로 편성·개설하였습니다.
+              2022 개정 특수교육 기본 교육과정 선택 교과는 국가 수준에서 3개 과목으로 제한적으로 제시되어 있습니다. <strong>거제애광학교</strong>에서는 디지털 전환 시대에 발맞추어 특수교육 대상 학생들에게 보다 다양하고 실질적인 인공지능 교육 기회를 제공하고자 <strong>'인공지능 활용'</strong> 과목을 학교 자율 교과로 자체 제작하였습니다.
             </p>
           </div>
           <p>

@@ -208,7 +208,7 @@ export default function LinkedStandardsGuide() {
               타 교과 연계 성취기준 지도 가이드
             </h1>
             <p className="mt-2 text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-              거제애광학교 개설 '인공지능 활용' 선택 교과와 기본 교육과정 타 교과(정보통신활용, 국어, 수학, 사회, 진로와 직업, 보건) 성취기준 간의 차시별 융합 수업 연계 지도 안내입니다.
+              거제애광학교 제작 '인공지능 활용' 선택 교과와 기본 교육과정 타 교과(정보통신활용, 국어, 수학, 사회, 진로와 직업, 보건) 성취기준 간의 차시별 융합 수업 연계 지도 안내입니다.
             </p>
           </div>
         </div>
