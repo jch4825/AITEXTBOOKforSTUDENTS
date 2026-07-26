@@ -132,10 +132,6 @@ export default function TeacherCurriculumGuide() {
           <span className="text-xs font-bold text-slate-500">6개 영역별 핵심 아이디어 & 범주별 내용 요소</span>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-200">
-          '인공지능 활용' 과목의 6개 영역별로 <strong>핵심 아이디어(1~2개)</strong>를 제시하고, <strong>범주(지식·이해, 과정·기능, 가치·태도)</strong>에 따른 <strong>중학교(1~3학년) 및 고등학교(1~3학년) 내용 요소</strong>를 명세화한 내용 체계입니다.
-        </p>
-
         {/* 6개 영역별 내용 체계 표 반복 */}
         <div className="space-y-8 divide-y divide-slate-200 pt-2">
 
