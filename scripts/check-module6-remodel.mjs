@@ -92,7 +92,10 @@ for (const lessonId of experienceLessonIds) {
   assert(start >= 0, `${lessonId}: studio mapping is missing`);
   const next = studios.indexOf("lessonId: 'm6-", start + 1);
   const definition = studios.slice(start, next < 0 ? studios.length : next);
-  assert((definition.match(/imageSrc: ''/g) ?? []).length === 4, `${lessonId}: expected 4 blank story scenes`);
+  assert(
+    (definition.match(/imageSrc: '\/lessons\/story\/m6\/m6-l\d+-scene-\d{2}\.webp'/g) ?? []).length === 4,
+    `${lessonId}: expected 4 connected story scenes`,
+  );
   for (const field of ['visualNovel:', 'encounter:', 'firstAttempt:', 'conditionChange:', 'aiContribution:', 'artifact:', 'transfer:']) {
     assert(definition.includes(field), `${lessonId}: missing ${field}`);
   }
@@ -125,7 +128,8 @@ for (const title of artifactTitles) {
 }
 
 assert(!studios.includes('visualStories/m6'), 'module 6 must not reuse the retired three-story imports');
-assert(!studios.includes('/lessons/m6-l'), 'module 6 story images must stay blank until new assets exist');
+assert(studios.includes('/lessons/story/m6/'), 'module 6 story images must use the production assets');
+assert(!studios.includes("imageSrc: ''"), 'module 6 story images must not retain blank slots');
 assert(visualNovel.includes('scene.imageSrc ?'), 'visual novel must render deliberate blank image slots');
 
 assert(portfolio.includes("lessonId: 'm6-l12'"), 'm6-l12: portfolio definition is missing');
@@ -137,7 +141,10 @@ const studioLessonIds = portfolio.match(/studioLessonIds:\s*\[([^\]]+)\]/s)?.[1]
 for (const lessonId of experienceLessonIds) {
   assert(studioLessonIds.includes(`'${lessonId}'`), `${lessonId}: portfolio does not collect studio evidence`);
 }
-assert((portfolio.match(/imageSrc: ''/g) ?? []).length === 3, 'm6-l12: closing story must reserve exactly three image slots');
+assert(
+  (portfolio.match(/imageSrc: '\/lessons\/story\/module-close\/m6\/m6-close-scene-\d{2}\.webp'/g) ?? []).length === 3,
+  'm6-l12: closing story must connect exactly three images',
+);
 assert(
   portfolioView.includes('selectedArtifacts.length < 3')
     && portfolioView.includes('isMeaningfulStudioExpression(nextMethod)'),

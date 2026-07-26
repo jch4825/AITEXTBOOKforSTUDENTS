@@ -80,8 +80,8 @@ for (let index = 0; index < studioMatches.length; index += 1) {
   const end = studioMatches[index + 1]?.index ?? studios.length;
   const definition = studios.slice(start, end);
   assert(
-    (definition.match(/imageSrc: ''/g) ?? []).length === 4,
-    `${lessonId}: expected 4 blank story scenes`,
+    (definition.match(/imageSrc: '\/lessons\/story\/m5\/m5-l\d+-scene-\d{2}\.webp'/g) ?? []).length === 4,
+    `${lessonId}: expected 4 connected story scenes`,
   );
   for (const field of ['visualNovel:', 'encounter:', 'firstAttempt:', 'conditionChange:', 'aiContribution:', 'artifact:', 'transfer:']) {
     assert(definition.includes(field), `${lessonId}: missing ${field}`);
@@ -121,7 +121,8 @@ for (const title of artifactTitles) {
 }
 
 assert(!studios.includes('visualStories/m5'), 'module 5 must not reuse the retired three-story imports');
-assert(!studios.includes('/lessons/m5-l'), 'module 5 story images must stay blank until new assets exist');
+assert(studios.includes('/lessons/story/m5/'), 'module 5 story images must use the production assets');
+assert(!studios.includes("imageSrc: ''"), 'module 5 story images must not retain blank slots');
 assert(visualNovel.includes('scene.imageSrc ?'), 'visual novel must render deliberate blank image slots');
 
 assert(portfolio.includes("lessonId: 'm5-l12'"), 'm5-l12: portfolio definition is missing');
@@ -134,8 +135,8 @@ for (const lessonId of experienceLessonIds) {
   assert(studioLessonIds.includes(`'${lessonId}'`), `${lessonId}: portfolio does not collect studio evidence`);
 }
 assert(
-  (portfolio.match(/imageSrc: ''/g) ?? []).length === 3,
-  'm5-l12: closing story must reserve exactly three image slots',
+  (portfolio.match(/imageSrc: '\/lessons\/story\/module-close\/m5\/m5-close-scene-\d{2}\.webp'/g) ?? []).length === 3,
+  'm5-l12: closing story must connect exactly three images',
 );
 assert(
   portfolioView.includes('selectedArtifacts.length < 3')
@@ -152,7 +153,7 @@ assert(
   'module-close and studio route state must reset when the lesson changes',
 );
 assert(
-  /@media \(max-width: 767px\)[\s\S]*?\.comic-frame-footer \.btn\s*\{[^}]*font-size:\s*1rem;/.test(styles),
+  /@media \(max-width: 767px\)[\s\S]*?\.comic-frame-footer \.btn\s*\{[^}]*font-size:\s*0\.875rem;/.test(styles),
   'mobile 125% footer buttons must use a fitting explicit font size',
 );
 

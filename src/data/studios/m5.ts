@@ -31,7 +31,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l1-empty-space',
           label: '빈 설치 공간',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l1-scene-01.webp',
           alt: '체험회 부스 설치 공간에 필요한 물품이 도착하지 않은 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -44,7 +44,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l1-current-goal',
           label: '현재와 목표',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l1-scene-02.webp',
           alt: '빈 공간인 현재와 오후까지 기본 설치를 마친 목표가 나란히 놓인 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -57,7 +57,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l1-information',
           label: '정보 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l1-scene-03.webp',
           alt: '배송 공지 행사 시간표 먼저 할 수 있는 작업 카드가 펼쳐진 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -70,7 +70,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l1-definition-card',
           label: '문제 정의',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l1-scene-04.webp',
           alt: '현재 목표 정보 행동이 연결된 문제 정의 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -177,7 +177,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l2-large-task',
           label: '큰 부스',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l2-scene-01.webp',
           alt: '진우가 빈 체험회 부스 앞에서 큰 설치 과제를 바라보는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -190,7 +190,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l2-booth-plan',
           label: '구성도 보기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l2-scene-02.webp',
           alt: '안내판 책상 전원 자료 배치가 표시된 부스 구성도 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -203,7 +203,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l2-gap-overlap',
           label: '누락과 중복',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l2-scene-03.webp',
           alt: '과제 카드에서 빠진 전원 확인과 겹친 안내판 작업을 찾는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -216,7 +216,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l2-task-board',
           label: '분해 보드',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l2-scene-04.webp',
           alt: '개인 역할과 공동 역할이 구분된 과제 분해 보드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -323,7 +323,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l3-blocked-install',
           label: '막힌 설치',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l3-scene-01.webp',
           alt: '장식을 먼저 붙여 전원선을 안전하게 놓기 어려워진 모의 설치 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -336,7 +336,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l3-dependencies',
           label: '앞 단계 이유',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l3-scene-02.webp',
           alt: '전원 안전 확인 책상 배치 장식 자료 배치 카드 사이에 이유 선을 잇는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -349,7 +349,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l3-simulation',
           label: '모의 실행',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l3-scene-03.webp',
           alt: '단계 카드를 모의 실행하며 막히는 지점에 표시하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -362,7 +362,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l3-reason-lines',
           label: '절차표 완성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l3-scene-04.webp',
           alt: '단계 사이에 선행 조건과 안전 이유 연결선이 그려진 절차표 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -469,7 +469,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l4-three-jobs',
           label: '세 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l4-scene-01.webp',
           alt: '전원선 정리 포스터 수정 간식 배치 요청 카드가 동시에 도착한 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -482,7 +482,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l4-first-choice',
           label: '첫 선택',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l4-scene-02.webp',
           alt: '진우가 하고 싶은 포스터 수정 카드를 먼저 고르는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -495,7 +495,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l4-criteria-badges',
           label: '기준 배지',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l4-scene-03.webp',
           alt: '세 작업 카드에 안전 마감 영향 도움 가능성 배지가 나타난 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -508,7 +508,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l4-priority-table',
           label: '우선순위 완성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l4-scene-04.webp',
           alt: '기준과 이유가 적힌 우선순위 판단표 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -615,7 +615,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l5-first-layout',
           label: '첫 배치',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l5-scene-01.webp',
           alt: '진우가 포스터 제목 그림 안내 문장을 처음 배치한 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -628,7 +628,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l5-help-levels',
           label: '도움 수준',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l5-scene-02.webp',
           alt: '작은 단서 과정 질문 부분 예시 완성 답 도움 카드가 가림막 뒤에 놓인 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -641,7 +641,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l5-answer-vs-hint',
           label: '영향 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l5-scene-03.webp',
           alt: '완성 답을 본 뒤와 작은 힌트 뒤의 학생 수정 과정이 비교되는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -654,7 +654,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l5-revised-layout',
           label: '수정 결과',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l5-scene-04.webp',
           alt: '첫 시도 힌트 수정 결과가 연결된 포스터 기록 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -761,7 +761,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l6-wrong-library',
           label: '다른 장소',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l6-scene-01.webp',
           alt: '아이미가 학교 안 부스 대신 다른 도서관을 안내한 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -774,7 +774,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l6-request-assumption',
           label: '요청과 추정',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l6-scene-02.webp',
           alt: '첫 요청과 아이미 추정 공식 배치도가 세 갈래로 비교되는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -787,7 +787,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l6-safe-clues',
           label: '안전한 단서',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l6-scene-03.webp',
           alt: '건물 안 2층 초록 표지 같은 안전한 위치 단서와 개인정보 제안이 비교되는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -800,7 +800,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l6-corrected-route',
           label: '수정 경로',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l6-scene-04.webp',
           alt: '수정 요청과 공식 배치도 경로가 일치해 확인 표시가 생기는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -907,7 +907,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l7-long-guide',
           label: '긴 안내',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l7-scene-01.webp',
           alt: '체험회 기기 설치 순서가 한 화면에 길게 나타난 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -920,7 +920,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l7-missed-step',
           label: '놓친 단계',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l7-scene-02.webp',
           alt: '모의 설치판에서 가운데 단계가 비어 다음 단계가 진행되지 않는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -932,7 +932,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l7-checkpoint-board',
           label: '체크포인트',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l7-scene-03.webp',
           alt: '한 단계 실행과 확인 기준이 짝을 이룬 안전한 모의 설치판 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -944,7 +944,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l7-step-dialogue',
           label: '단계별 대화',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l7-scene-04.webp',
           alt: '학생이 한 단계씩 요청하고 확인 결과를 말한 뒤 다음 안내를 받는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1051,7 +1051,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l8-finished-guide',
           label: '완성처럼 보이는 안내문',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l8-scene-01.webp',
           alt: '제목과 장소가 잘 보이지만 시작 시간이 빠진 체험회 안내문 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1063,7 +1063,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l8-original-conditions',
           label: '처음 정한 조건',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l8-scene-02.webp',
           alt: '제목 장소 시작 시간 세 가지 조건이 적힌 원래 요청 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1075,7 +1075,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l8-independent-check',
           label: '독립 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l8-scene-03.webp',
           alt: 'AI의 완성 의견 옆에서 학생이 원래 조건 체크리스트로 결과를 확인하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1087,7 +1087,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l8-corrected-result',
           label: '조건을 채운 결과',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l8-scene-04.webp',
           alt: '시작 시간이 추가되고 세 조건 모두 확인 표시가 된 안내문 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1194,7 +1194,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l9-printer-stopped',
           label: '멈춘 방법',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l9-scene-01.webp',
           alt: '체험회 직전 프린터를 사용할 수 없어 안내문 출력이 멈춘 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1206,7 +1206,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l9-three-options',
           label: '세 가지 대안',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l9-scene-02.webp',
           alt: '손글씨 안내 다른 교실 프린터 화면 안내 세 가지 대안 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1218,7 +1218,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l9-criteria-table',
           label: '같은 기준',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l9-scene-03.webp',
           alt: '시간 안전 비용 도움 필요 기준으로 세 대안을 비교하는 표 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1230,7 +1230,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l9-context-choice',
           label: '상황에 맞는 선택',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l9-scene-04.webp',
           alt: '남은 시간과 도움 가능성을 보고 화면 안내와 손글씨 안내를 고르는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1337,7 +1337,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l10-wrong-route',
           label: '다른 화면으로 간 방문객',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l10-scene-01.webp',
           alt: '안내 화면의 단추 순서를 따라간 방문객이 다른 메뉴에 도착한 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1349,7 +1349,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l10-reproduce',
           label: '같은 조건으로 재현',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l10-scene-02.webp',
           alt: '학생들이 모의 화면에서 안내 카드와 같은 단추 순서를 천천히 다시 시험하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1361,7 +1361,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l10-locate-fix',
           label: '오류 위치와 수정',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l10-scene-03.webp',
           alt: '실제 화면 순서와 안내 카드 순서를 비교해 뒤바뀐 두 단계를 고치는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1373,7 +1373,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l10-retest',
           label: '다시 시험',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l10-scene-04.webp',
           alt: '수정된 안내를 처음부터 다른 학생이 시험해 목표 화면에 도착하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1480,7 +1480,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l11-original-plan',
           label: '처음 간식 계획',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l11-scene-01.webp',
           alt: '실제 조리가 아닌 카드 활동으로 간식 준비 순서를 계획하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1492,7 +1492,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l11-new-conditions',
           label: '바뀐 조건',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l11-scene-02.webp',
           alt: '도구 없음 카드와 알레르기 정보 확인 필요 카드가 새로 놓이는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1505,7 +1505,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l11-stop-compare',
           label: '멈추고 다시 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l11-scene-03.webp',
           alt: '처음 계획의 전제와 현재 조건을 나란히 비교하며 멈춤 표시를 놓는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1517,7 +1517,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         {
           id: 'm5-l11-revised-plan',
           label: '안전하게 고친 계획',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m5/m5-l11-scene-04.webp',
           alt: '교사와 보호된 안전 정보를 확인한 뒤 조리 없는 대체 간식 안내 계획으로 고친 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(

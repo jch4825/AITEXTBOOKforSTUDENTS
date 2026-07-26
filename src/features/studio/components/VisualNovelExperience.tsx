@@ -4,6 +4,7 @@ import type { StudioDefinition, SupportLevel, VisualNovelStory } from '../types'
 import EditorialStudioFrame from './EditorialStudioFrame';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
+import { publicAssetUrl } from '../../../utils/publicAssetUrl';
 
 interface Props {
   definition: StudioDefinition;
@@ -60,7 +61,7 @@ export default function VisualNovelExperience({
       <div className="visual-novel-stage">
         <div className="visual-novel-image-frame">
           {scene.imageSrc ? (
-            <img className="visual-novel-scene" src={scene.imageSrc} alt={scene.alt} />
+            <img className="visual-novel-scene" src={publicAssetUrl(scene.imageSrc)} alt={scene.alt} />
           ) : (
             <div
               className="visual-novel-scene flex min-h-72 items-center justify-center bg-[color:var(--paper-1)]"

@@ -64,8 +64,10 @@ for (let index = 0; index < studioMatches.length; index += 1) {
   const start = studioMatches[index].index ?? 0;
   const end = studioMatches[index + 1]?.index ?? studios.length;
   const definition = studios.slice(start, end);
-  const blankSceneCount = (definition.match(/imageSrc: ''/g) ?? []).length;
-  assert(blankSceneCount === 4, `${lessonId}: expected 4 blank story scenes, found ${blankSceneCount}`);
+  const connectedSceneCount = (
+    definition.match(/imageSrc: '\/lessons\/story\/m1\/m1-l\d+-scene-\d{2}\.webp'/g) ?? []
+  ).length;
+  assert(connectedSceneCount === 4, `${lessonId}: expected 4 connected story scenes, found ${connectedSceneCount}`);
   for (const field of ['visualNovel:', 'encounter:', 'firstAttempt:', 'conditionChange:', 'aiContribution:', 'artifact:', 'transfer:']) {
     assert(definition.includes(field), `${lessonId}: missing ${field}`);
   }
@@ -96,8 +98,8 @@ for (const lessonId of experienceLessonIds) {
 }
 assert(portfolio.includes('closingStory:'), 'm1-l11: closing story is missing');
 assert(
-  (portfolio.match(/imageSrc: ''/g) ?? []).length === 3,
-  'm1-l11: closing story must reserve exactly three image slots',
+  (portfolio.match(/imageSrc: '\/lessons\/story\/module-close\/m1\/m1-close-scene-\d{2}\.webp'/g) ?? []).length === 3,
+  'm1-l11: closing story must connect exactly three images',
 );
 assert(
   portfolioView.includes('selectedArtifacts.length < 3')
@@ -110,8 +112,8 @@ assert(studios.includes("title: '이미지 인식 실험 기록'"), 'm1-l4: arti
 assert(studios.includes("title: 'AI 결과 사용 판단 기록'"), 'm1-l10: artifact must be a use decision record');
 
 assert(!studios.includes('/lessons/remodel/'), 'module 1 must not use generated remodel assets');
-assert(!studios.includes('/lessons/m1-l'), 'module 1 studio scenes must stay blank until new images exist');
-assert(studios.includes("imageSrc: ''"), 'module 1 studio scenes need explicit blank image slots');
+assert(studios.includes('/lessons/story/m1/'), 'module 1 studio scenes must use the production story assets');
+assert(!studios.includes("imageSrc: ''"), 'module 1 studio scenes must not retain blank image slots');
 assert(visualNovel.includes("scene.imageSrc ?"), 'visual novel must render a deliberate blank slot');
 
 assert(!lessonView.includes('M1_L2_VISUAL_STORY'), 'hard mode must not bypass the preserved lesson shell');

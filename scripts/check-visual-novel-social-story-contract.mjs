@@ -19,16 +19,9 @@ if (requestedModule && !(requestedModule in CORE_EXPERIENCES)) {
 
 const selectedModules = requestedModule ? [requestedModule] : Object.keys(CORE_EXPERIENCES);
 
-function storyConstantName(lessonId) {
-  return `${lessonId.replaceAll('-', '_').toUpperCase()}_VISUAL_STORY`;
-}
-
 function readStorySource(moduleId) {
   const studioPath = `src/data/studios/${moduleId}.ts`;
-  const storyPath = `src/data/studios/visualStories/${moduleId}.ts`;
-  const studioSource = fs.readFileSync(studioPath, 'utf8');
-  const storySource = fs.existsSync(storyPath) ? fs.readFileSync(storyPath, 'utf8') : '';
-  return { studioSource, combinedSource: `${studioSource}\n${storySource}` };
+  return fs.readFileSync(studioPath, 'utf8');
 }
 
 function lessonObjective(moduleId, lessonId) {
@@ -54,76 +47,36 @@ function arrayWindow(source, marker) {
 }
 
 for (const moduleId of selectedModules) {
-  const { studioSource, combinedSource } = readStorySource(moduleId);
+  const studioSource = readStorySource(moduleId);
 
   for (const lessonId of CORE_EXPERIENCES[moduleId]) {
-    if (moduleId === 'm1' || moduleId === 'm2' || moduleId === 'm3' || moduleId === 'm4' || moduleId === 'm5' || moduleId === 'm6') {
-      const lessonStart = studioSource.indexOf(`lessonId: '${lessonId}'`);
-      const nextLessonStart = studioSource.indexOf(`lessonId: '${moduleId}-`, lessonStart + 1);
-      const storyWindow = studioSource.slice(
-        lessonStart,
-        nextLessonStart < 0 ? studioSource.length : nextLessonStart,
-      );
-      const expectedObjective = lessonObjective(moduleId, lessonId);
-      if (!storyWindow.includes(`objective: '${expectedObjective}'`)) {
-        throw new Error(`${lessonId} visual story objective must match the lesson objective`);
-      }
-      if ((storyWindow.match(/imageSrc: ''/g) ?? []).length !== 4) {
-        throw new Error(`${lessonId} must expose four pending image slots`);
-      }
-      for (const supportLevel of ['full', 'light', 'challenge']) {
-        if (!storyWindow.includes(`${supportLevel}:`)) {
-          throw new Error(`${lessonId} visual story is missing ${supportLevel} support copy`);
-        }
-      }
-      const knowledgeWindow = arrayWindow(storyWindow, 'knowledge: [');
-      const knowledgeTitles = knowledgeWindow.match(/title: '/g) ?? [];
-      if (knowledgeTitles.length !== 3) {
-        throw new Error(`${lessonId} visual story must have exactly 3 knowledge steps`);
-      }
-      continue;
-    }
-
-    const assetPrefix = `public/lessons/${lessonId}-vn-`;
-    const publicPathPrefix = `/AITEXTBOOKforSTUDENTS/lessons/${lessonId}-vn-`;
-
-    for (const number of [1, 2, 3, 4]) {
-      const suffix = `${String(number).padStart(2, '0')}.webp`;
-      const asset = `${assetPrefix}${suffix}`;
-      const imageReference = `${publicPathPrefix}${suffix}`;
-      if (!fs.existsSync(asset)) throw new Error(`missing visual novel scene: ${asset}`);
-      if (fs.statSync(asset).size < 20_000) {
-        throw new Error(`visual novel scene is unexpectedly small: ${asset}`);
-      }
-      if (!combinedSource.includes(imageReference)) {
-        throw new Error(`visual novel scene is not referenced by ${lessonId}: ${imageReference}`);
-      }
-    }
-
-    if (lessonId !== 'm1-l1') {
-      const constantName = storyConstantName(lessonId);
-      if (!combinedSource.includes(`export const ${constantName}`)) {
-        throw new Error(`missing visual story data export: ${constantName}`);
-      }
-      if (!studioSource.includes(`visualNovel: ${constantName}`)) {
-        throw new Error(`visual story is not connected to studio ${lessonId}: ${constantName}`);
-      }
-    }
-
-    const firstImageIndex = combinedSource.indexOf(`${publicPathPrefix}01.webp`);
-    const objectiveIndex = combinedSource.lastIndexOf('objective:', firstImageIndex);
-    const nextObjectiveIndex = combinedSource.indexOf('objective:', objectiveIndex + 1);
-    const storyWindow = combinedSource.slice(
-      objectiveIndex,
-      nextObjectiveIndex < 0 ? combinedSource.length : nextObjectiveIndex,
+    const lessonStart = studioSource.indexOf(`lessonId: '${lessonId}'`);
+    const nextLessonStart = studioSource.indexOf(`lessonId: '${moduleId}-`, lessonStart + 1);
+    const storyWindow = studioSource.slice(
+      lessonStart,
+      nextLessonStart < 0 ? studioSource.length : nextLessonStart,
     );
-    const storyObjective = storyWindow.match(/objective: '([^']+)'/)?.[1];
     const expectedObjective = lessonObjective(moduleId, lessonId);
-
-    if (storyObjective !== expectedObjective) {
-      throw new Error(
-        `${lessonId} visual story objective must match the lesson objective: expected "${expectedObjective}", got "${storyObjective ?? ''}"`,
-      );
+    if (!storyWindow.includes(`objective: '${expectedObjective}'`)) {
+      throw new Error(`${lessonId} visual story objective must match the lesson objective`);
+    }
+    const imageReferences = [...storyWindow.matchAll(/imageSrc: '([^']+)'/g)].map(
+      (match) => match[1],
+    );
+    const expectedImageReferences = [1, 2, 3, 4].map(
+      (number) => `/lessons/story/${moduleId}/${lessonId}-scene-${String(number).padStart(2, '0')}.webp`,
+    );
+    if (imageReferences.join('|') !== expectedImageReferences.join('|')) {
+      throw new Error(`${lessonId} must connect four ordered story WebP scenes`);
+    }
+    for (const imageReference of expectedImageReferences) {
+      const assetPath = `public${imageReference}`;
+      if (!fs.existsSync(assetPath)) {
+        throw new Error(`missing visual novel scene: ${assetPath}`);
+      }
+      if (fs.statSync(assetPath).size < 20_000) {
+        throw new Error(`visual novel scene is unexpectedly small: ${assetPath}`);
+      }
     }
     for (const supportLevel of ['full', 'light', 'challenge']) {
       if (!storyWindow.includes(`${supportLevel}:`)) {
@@ -132,9 +85,8 @@ for (const moduleId of selectedModules) {
     }
     const knowledgeWindow = arrayWindow(storyWindow, 'knowledge: [');
     const knowledgeTitles = knowledgeWindow.match(/title: '/g) ?? [];
-    const expectedCount = lessonId === 'm1-l1' ? 2 : 3;
-    if (knowledgeTitles.length !== expectedCount) {
-      throw new Error(`${lessonId} visual story must have exactly ${expectedCount} knowledge steps`);
+    if (knowledgeTitles.length !== 3) {
+      throw new Error(`${lessonId} visual story must have exactly 3 knowledge steps`);
     }
   }
 }
@@ -152,7 +104,7 @@ if (types.includes('speaker: string') || m1Studio.includes('speaker:')) {
 for (const token of [
   "title: '아이미의 어려운 자기소개'",
   "objective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.'",
-  "imageSrc: ''",
+  "imageSrc: '/lessons/story/m1/m1-l1-scene-01.webp'",
   '아이미의 설명에는 어려운 말이 많았어요.',
   'AI(인공지능)는 사람처럼 학습하고 판단하여 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
   'AI는 번역, 음악 추천, 사진 찾기 등 사람이 정한 다양한 목적을 도와줍니다.',

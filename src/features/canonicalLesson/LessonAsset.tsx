@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { CanonicalAssetSpec } from '../../data/canonicalLessons/types';
+import { publicAssetUrl } from '../../utils/publicAssetUrl';
 
 interface LessonAssetProps {
   asset: CanonicalAssetSpec;
@@ -42,7 +43,7 @@ export const LessonAsset: React.FC<LessonAssetProps> = ({ asset, className = '' 
   return (
     <div className={`relative overflow-hidden rounded-xl bg-slate-50 border border-slate-200/80 ${className}`}>
       <img
-        src={asset.src}
+        src={publicAssetUrl(asset.src)}
         alt={asset.alt}
         onError={() => setHasError(true)}
         className="w-full h-full object-cover max-h-[360px]"

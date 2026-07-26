@@ -201,16 +201,16 @@ function checkModule(label, config) {
   );
 
   if (label === 'M3') {
-    if ((studio.match(/imageSrc: ''/g) ?? []).length !== 40) {
-      throw new Error('M3 must expose 40 pending story image slots');
+    if ((studio.match(/imageSrc: '\/lessons\/story\/m3\/m3-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 40) {
+      throw new Error('M3 must expose 40 production story images');
     }
     if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m3-l')) {
       throw new Error('M3 must not reuse retired lesson images');
     }
   }
   if (label === 'M4') {
-    if ((studio.match(/imageSrc: ''/g) ?? []).length !== 40) {
-      throw new Error('M4 must expose 40 pending story image slots');
+    if ((studio.match(/imageSrc: '\/lessons\/story\/m4\/m4-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 40) {
+      throw new Error('M4 must expose 40 production story images');
     }
     if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m4-l')) {
       throw new Error('M4 must not reuse retired lesson images');
@@ -218,8 +218,8 @@ function checkModule(label, config) {
     requireToken(studio, '믿을 만한 어른', 'M4 trusted-adult safety wording missing');
   }
   if (label === 'M5') {
-    if ((studio.match(/imageSrc: ''/g) ?? []).length !== 44) {
-      throw new Error('M5 must expose 44 pending story image slots');
+    if ((studio.match(/imageSrc: '\/lessons\/story\/m5\/m5-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 44) {
+      throw new Error('M5 must expose 44 production story images');
     }
     if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m5-l')) {
       throw new Error('M5 must not reuse retired lesson images');
@@ -228,8 +228,8 @@ function checkModule(label, config) {
     requireToken(studio, '독립 검증', 'M5 independent verification wording missing');
   }
   if (label === 'M6') {
-    if ((studio.match(/imageSrc: ''/g) ?? []).length !== 44) {
-      throw new Error('M6 must expose 44 pending story image slots');
+    if ((studio.match(/imageSrc: '\/lessons\/story\/m6\/m6-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 44) {
+      throw new Error('M6 must expose 44 production story images');
     }
     if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m6-l')) {
       throw new Error('M6 must not reuse retired lesson images');

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { AnnotateActivity } from '../../data/canonicalLessons/types';
+import { publicAssetUrl } from '../../utils/publicAssetUrl';
 
 interface EvidenceAnnotateProps {
   activity: AnnotateActivity;
@@ -24,7 +25,7 @@ export const EvidenceAnnotate: React.FC<EvidenceAnnotateProps> = ({
     <div className="space-y-4">
       {activity.targetImage && (
         <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
-          <img src={activity.targetImage} alt="관찰 대상" className="w-full object-cover max-h-[320px]" />
+          <img src={publicAssetUrl(activity.targetImage)} alt="관찰 대상" className="w-full object-cover max-h-[320px]" />
           {activity.markers.map(m => {
             const isChecked = selected.includes(m.id);
             return (

@@ -27,6 +27,8 @@
     "check:no-lesson-support-selector": "node scripts/check-no-lesson-support-selector-contract.mjs",
     "check:expression-input-mobile": "node scripts/check-expression-input-mobile-contract.mjs",
     "check:visual-novel-story": "node scripts/check-visual-novel-social-story-contract.mjs",
+    "check:portfolio-images": "node scripts/check-portfolio-story-assets.mjs",
+    "check:public-images": "node scripts/check-public-image-inventory.mjs",
     "check:module1-remodel": "node scripts/check-module1-remodel.mjs",
     "check:debug-navigation": "node scripts/check-debug-navigation-contract.mjs",
     "check:canonical-content": "node scripts/check-canonical-content.mjs --migrated",

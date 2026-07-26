@@ -31,7 +31,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l1-snack-purpose',
           label: '간식 준비 목적',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l1-scene-01.webp',
           alt: '동아리 친구들이 마을 행사 간식 준비 목적과 인원 카드를 확인하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -44,7 +44,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l1-first-cart',
           label: '첫 장바구니',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l1-scene-02.webp',
           alt: 'AI 초안의 모든 품목이 담긴 첫 장바구니와 예상 합계가 보이는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -56,7 +56,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l1-condition-cards',
           label: '실제 조건',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l1-scene-03.webp',
           alt: '집에 있는 바나나 예산 가격표 견과류 알레르기 카드가 장바구니 옆에 놓이는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -68,7 +68,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l1-revised-cart',
           label: '고친 최종 목록',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l1-scene-04.webp',
           alt: '바나나와 견과류가 빠지고 안전한 대체 재료와 수량이 표시된 최종 목록 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -175,7 +175,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l2-price-cards',
           label: '가격표와 수량',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l2-scene-01.webp',
           alt: '물 두 병과 과일 한 팩의 가격표와 수량 카드가 놓인 모의 계산대 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -187,7 +187,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l2-ai-total',
           label: '다른 AI 합계',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l2-scene-02.webp',
           alt: '아이미가 6500원이라고 말하고 학생 예상과 다른 값이 표시된 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -199,7 +199,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l2-calculator-receipt',
           label: '계산기와 영수증',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l2-scene-03.webp',
           alt: '1200 곱하기 2 더하기 3200 계산기 식과 5600원 영수증을 대조하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -211,7 +211,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l2-change-check',
           label: '거스름돈 검산',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l2-scene-04.webp',
           alt: '10000원에서 5600원을 빼 4400원 거스름돈을 확인하는 모의 화폐 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -318,7 +318,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l3-practice-map',
           label: '고정된 연습 지도',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l3-scene-01.webp',
           alt: '학교 도서관 횡단보도 공원 안내소가 표시된 가상의 고정 연습 지도 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -330,7 +330,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l3-ai-shortcut',
           label: '지도에 없는 지름길',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l3-scene-02.webp',
           alt: '아이미가 지도에 표시되지 않은 골목 지름길을 제안하고 학생이 의문을 갖는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -342,7 +342,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l3-sign-check',
           label: '지도와 표지 대조',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l3-scene-03.webp',
           alt: '횡단보도와 파란 도서관 표지 핀이 연습 지도 경로와 일치하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -354,7 +354,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l3-safe-route',
           label: '확인된 안전 경로',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l3-scene-04.webp',
           alt: '확인된 기준점과 안내소 도움 요청 위치가 표시된 안전 경로 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -461,7 +461,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l4-similar-routes',
           label: '비슷한 노선',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l4-scene-01.webp',
           alt: '12번과 21번 버스 카드에 서로 다른 방향과 목적지가 적힌 연습 정류장 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -473,7 +473,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l4-old-ai-answer',
           label: '오래된 일반 안내',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l4-scene-02.webp',
           alt: '아이미의 일반 안내와 오늘 운행 변경 공지가 서로 다른 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -485,7 +485,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l4-direction-notice',
           label: '방향과 공지 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l4-scene-03.webp',
           alt: '목적지 방향 표지와 우회 공지를 노선 카드에 연결하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -497,7 +497,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l4-help-choice',
           label: '직원에게 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l4-scene-04.webp',
           alt: '학생이 연습 정류장 직원 카드에 목적지와 공지를 보여주며 도움을 요청하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -604,7 +604,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l5-vague-weather',
           label: '빠진 지역과 날짜',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l5-scene-01.webp',
           alt: '아이미가 지역과 날짜 없이 따뜻하다고 답한 날씨 화면 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -616,7 +616,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l5-first-outfit',
           label: '첫 준비',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l5-scene-02.webp',
           alt: '학생들이 지역 없는 답을 보고 서로 다른 옷과 준비물을 고르는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -628,7 +628,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l5-official-card',
           label: '공식 예보 카드',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l5-scene-03.webp',
           alt: '지역 날짜 기온 오후 비 강한 바람이 표시된 공식 예보 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -640,7 +640,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l5-personal-prep',
           label: '나에게 맞는 준비',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l5-scene-04.webp',
           alt: '두 학생이 공식 예보를 근거로 서로 다른 겉옷과 우산 준비 이유를 설명하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -747,7 +747,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l6-ai-recipe',
           label: 'AI 음식 초안',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l6-scene-01.webp',
           alt: '아이미가 과일 요거트 컵 재료와 칼 사용 단계를 제안한 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -759,7 +759,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l6-first-plan',
           label: '첫 계획 카드',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l6-scene-02.webp',
           alt: '학생들이 실제 조리 대신 그림 카드로 AI 순서를 처음 배열하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -771,7 +771,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l6-safety-conditions',
           label: '건강과 도구 조건',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l6-scene-03.webp',
           alt: '유제품 알레르기 키위 없음 미리 자른 과일 성인 도움 카드가 공개되는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -783,7 +783,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l6-safe-plan',
           label: '안전하게 고친 계획',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l6-scene-04.webp',
           alt: '위험 단계가 빠지고 확인된 대체 재료와 성인 도움 순서가 들어간 안전 음식 계획 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -890,7 +890,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l7-day-blocks',
           label: '하루 블록',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l7-scene-01.webp',
           alt: '이동 행사 점심 휴식 도움 시간 블록이 놓인 마을 활동 계획 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -902,7 +902,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l7-ai-packed-plan',
           label: '빽빽한 AI 계획',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l7-scene-02.webp',
           alt: '아이미 일정에서 휴식이 빠지고 도움 시간과 이동이 겹친 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -914,7 +914,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l7-rain-change',
           label: '바뀐 출발 시간',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l7-scene-03.webp',
           alt: '비 때문에 출발이 늦어지고 일정 블록이 겹쳐 경고가 나타난 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -926,7 +926,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l7-revised-plan',
           label: '나에게 맞춘 계획',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l7-scene-04.webp',
           alt: '학생이 체험 하나를 줄이고 휴식과 도움 시간을 유지한 변경 계획 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1033,7 +1033,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l8-discomfort',
           label: '몸의 불편함',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l8-scene-01.webp',
           alt: '마을 활동 중 진우가 배 쪽 불편함을 느끼고 멈춰 서는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1046,7 +1046,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l8-expression-cards',
           label: '상태 표현 카드',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l8-scene-02.webp',
           alt: '몸 그림 느낌 시작 시점 도움 필요 카드와 AAC 선택지가 놓인 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1058,7 +1058,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l8-ai-boundary',
           label: 'AI의 역할 경계',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l8-scene-03.webp',
           alt: '아이미가 실제 진단은 할 수 없고 사람에게 먼저 알리라고 안내하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1070,7 +1070,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l8-adult-help',
           label: '사람에게 바로 알리기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l8-scene-04.webp',
           alt: '진우가 민준 선생님에게 상태 카드를 보여주고 안전한 곳에서 도움받는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1178,7 +1178,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l9-store-help',
           label: '물건 위치 묻기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l9-scene-01.webp',
           alt: '윤아가 가게 연습 장면에서 물건 위치를 말 글 AAC 중 하나로 묻는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1190,7 +1190,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l9-misunderstanding',
           label: '다른 물건을 안내받음',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l9-scene-02.webp',
           alt: '상대가 다른 물건을 가리켜 윤아가 이름과 그림으로 다시 설명하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1202,7 +1202,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l9-unwanted-offer',
           label: '원하지 않는 권유',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l9-scene-03.webp',
           alt: '원하지 않는 상품 권유에 학생이 거절 카드를 보여주는 연습 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1215,7 +1215,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l9-repeat-request',
           label: '다시 설명 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l9-scene-04.webp',
           alt: '정류장 안내가 어려워 학생이 천천히 다시 말해 달라는 AAC 카드를 사용하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1321,7 +1321,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l10-question-prep',
           label: '인터뷰 질문 준비',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l10-scene-01.webp',
           alt: '학생들이 실제 직업인에게 묻고 싶은 일 도구 협력 도움 질문 카드를 만드는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1333,7 +1333,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l10-ai-stereotype',
           label: 'AI의 한 가지 예상',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l10-scene-02.webp',
           alt: '아이미가 사서는 책 정리만 한다고 단순하게 예상한 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1345,7 +1345,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l10-worker-interview',
           label: '실제 직업인 설명',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l10-scene-03.webp',
           alt: '실제 사서 인터뷰 카드와 AI 예상의 같은 점 다른 점을 표시하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1357,7 +1357,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l10-personal-link',
           label: '나와 연결하기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l10-scene-04.webp',
           alt: '학생이 자신의 흥미 강점 필요한 도움을 직업 활동 카드와 연결하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1464,7 +1464,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l11-student-draft',
           label: '내가 먼저 쓴 초안',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l11-scene-01.webp',
           alt: '윤아와 진우가 좋아하는 것 강점 도움받고 싶은 것을 자기 말로 적는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1477,7 +1477,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l11-ai-suggestion',
           label: 'AI의 표현 제안',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l11-scene-02.webp',
           alt: '아이미가 표현을 다듬는 제안과 학교명 연락처를 더하라는 위험 제안을 함께 보여주는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1489,7 +1489,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l11-audience-cards',
           label: '교실과 온라인 청중',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l11-scene-03.webp',
           alt: '교실 친구용과 공개 온라인용 청중 카드에 서로 다른 정보 범위가 표시된 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1501,7 +1501,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         {
           id: 'm6-l11-two-versions',
           label: '내 목소리의 두 소개',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m6/m6-l11-scene-04.webp',
           alt: '학생이 AI 제안의 수용 수정 거절 표시와 함께 교실용 온라인용 자기소개 두 장을 완성한 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(

@@ -11,7 +11,7 @@
 ## 앱이 에셋을 읽는 방식 (파일명이 load-bearing인 이유)
 
 `src/components/CharacterAvatar.tsx`가
-`public/characters/{id}-{expression}.png` → `.svg` → 플레이스홀더 순으로 로드한다.
+`public/characters/{id}-{expression}.svg` → 선택 고해상도 `.png` → 플레이스홀더 순으로 로드한다.
 → **PNG를 넣으면 기존 SVG를 자동으로 이긴다(코드 수정 0).** SVG로 갈 거면 같은 이름의 `.svg`를 덮어쓴다.
 현재 `public/characters/`의 28개 `.svg`는 코드 벡터 추출본(시각 동일) — **이걸 실제 그림책풍 컷으로 바꾸는 것이 목표.**
 
@@ -20,7 +20,7 @@
 ## 캐릭터 컷 — 28개 (4인 × 표정 7종)
 
 ### 규격 (불변)
-- **경로/파일명**: `public/characters/{id}-{expression}.png` (권장) 또는 `.svg` (기존 덮어쓰기)
+- **경로/파일명**: `public/characters/{id}-{expression}.svg` (기본 서비스본) 또는 선택 고해상도 `.png`
   - `{id}` = `aimi` · `jinwoo` · `yoona` · `minjun`
   - `{expression}` = `neutral` · `happy` · `surprised` · `thinking` · `cheer` · `curious` · `sleepy`
 - **크기**: 512 × 512 px, 정사각

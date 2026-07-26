@@ -75,8 +75,8 @@ for (let index = 0; index < studioMatches.length; index += 1) {
   const end = studioMatches[index + 1]?.index ?? studios.length;
   const definition = studios.slice(start, end);
   assert(
-    (definition.match(/imageSrc: ''/g) ?? []).length === 4,
-    `${lessonId}: expected 4 blank story scenes`,
+    (definition.match(/imageSrc: '\/lessons\/story\/m4\/m4-l\d+-scene-\d{2}\.webp'/g) ?? []).length === 4,
+    `${lessonId}: expected 4 connected story scenes`,
   );
   for (const field of ['visualNovel:', 'encounter:', 'firstAttempt:', 'conditionChange:', 'aiContribution:', 'artifact:', 'transfer:']) {
     assert(definition.includes(field), `${lessonId}: missing ${field}`);
@@ -115,7 +115,8 @@ for (const title of artifactTitles) {
 }
 
 assert(!studios.includes('visualStories/m4'), 'module 4 must not reuse the retired three-story imports');
-assert(!studios.includes('/lessons/m4-l'), 'module 4 story images must stay blank until new assets exist');
+assert(studios.includes('/lessons/story/m4/'), 'module 4 story images must use the production assets');
+assert(!studios.includes("imageSrc: ''"), 'module 4 story images must not retain blank slots');
 assert(visualNovel.includes('scene.imageSrc ?'), 'visual novel must render deliberate blank image slots');
 
 assert(portfolio.includes("lessonId: 'm4-l11'"), 'm4-l11: portfolio definition is missing');
@@ -128,8 +129,8 @@ for (const lessonId of experienceLessonIds) {
   assert(studioLessonIds.includes(`'${lessonId}'`), `${lessonId}: portfolio does not collect studio evidence`);
 }
 assert(
-  (portfolio.match(/imageSrc: ''/g) ?? []).length === 3,
-  'm4-l11: closing story must reserve exactly three image slots',
+  (portfolio.match(/imageSrc: '\/lessons\/story\/module-close\/m4\/m4-close-scene-\d{2}\.webp'/g) ?? []).length === 3,
+  'm4-l11: closing story must connect exactly three images',
 );
 assert(
   portfolioView.includes('selectedArtifacts.length < 3')

@@ -6,6 +6,7 @@ import type { ModulePortfolioDefinition } from '../../data/modulePortfolios/type
 import { getStudioDefinition } from '../../data/studios';
 import type { LessonId } from '../../types';
 import { themeFor } from '../../utils/moduleThemes';
+import { publicAssetUrl } from '../../utils/publicAssetUrl';
 import StudioExpressionInput from './components/StudioExpressionInput';
 import { loadStudioEvidence } from './evidenceStorage';
 import { formatPersistedStudioExpression, isMeaningfulStudioExpression } from './studioCompletion';
@@ -112,7 +113,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
                 {definition.closingStory.map((scene) => (
                   <article key={scene.id} className="overflow-hidden rounded-2xl border" style={{ borderColor: 'var(--editorial-line)' }}>
                     {scene.imageSrc ? (
-                      <img src={scene.imageSrc} alt={scene.alt} className="aspect-[4/3] w-full object-cover" />
+                      <img src={publicAssetUrl(scene.imageSrc)} alt={scene.alt} className="aspect-[4/3] w-full object-cover" />
                     ) : (
                       <div
                         className="flex aspect-[4/3] items-center justify-center bg-[color:var(--paper-1)]"

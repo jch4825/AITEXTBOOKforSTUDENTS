@@ -28,7 +28,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'club-room',
           label: '장면 1 · 첫 만남',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l1-scene-01.webp',
           alt: 'AI 동아리방에서 진우가 아이미를 처음 만나는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -41,7 +41,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'difficult-introduction',
           label: '장면 2 · 어려운 설명',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l1-scene-02.webp',
           alt: '아이미의 어려운 설명을 듣고 진우가 곤란해하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -54,7 +54,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'daily-examples',
           label: '장면 3 · 생활 속 사례',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l1-scene-03.webp',
           alt: '민준 선생님과 생활 속 AI 기능을 살펴보는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -67,7 +67,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'my-definition',
           label: '장면 4 · 나의 생각 소개',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l1-scene-04.webp',
           alt: '진우가 자신이 만든 AI 정의 카드를 발표하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -189,7 +189,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'three-tools',
           label: '장면 1 · 세 가지 도구',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l2-scene-01.webp',
           alt: '윤아가 선풍기와 자동문과 음악 추천 앱을 함께 살펴보는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -202,7 +202,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'first-sort',
           label: '장면 2 · 첫 번째 분류',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l2-scene-02.webp',
           alt: '윤아가 세 도구를 AI 기능과 일반 기능으로 처음 나누는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -215,7 +215,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'signal-board',
           label: '장면 3 · 입력 신호 조사',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l2-scene-03.webp',
           alt: '버튼과 센서와 사용 기록 카드를 도구에 연결하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -228,7 +228,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'feature-map',
           label: '장면 4 · 기능 분석 지도',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l2-scene-04.webp',
           alt: '윤아가 입력과 기능과 결과와 사람 확인을 연결한 지도를 완성하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -388,7 +388,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'word-candidates',
           label: '장면 1 · 오늘 급식 메뉴는?',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l3-scene-01.webp',
           alt: '윤아가 오늘 급식 메뉴를 묻자 아이미가 다음 단어 후보들을 펼치기 시작하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -401,7 +401,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'smooth-answer',
           label: '장면 2 · 자신감 뿜뿜 엉뚱 대답!',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l3-scene-02.webp',
           alt: '아이미가 엄청 당당하게 무지개 아이스크림 떡볶이라고 외쳐 윤아가 황당해하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -414,7 +414,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'official-notice',
           label: '장면 3 · 진짜 급식표 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l3-scene-03.webp',
           alt: '윤아가 학교 게시판의 진짜 주간 식단표와 아이미 대답을 비교하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -427,7 +427,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'review-sheet',
           label: '장면 4 · 팩트 체크 완료!',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l3-scene-04.webp',
           alt: '아이미가 헤헤 웃으며 고백하고 윤아가 바른 식단 정보로 수정한 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -544,7 +544,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'covered-fox',
           label: '장면 1 · 가려진 사진',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l4-scene-01.webp',
           alt: '얼굴 일부가 가려진 여우 사진을 윤아가 살펴보는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -557,7 +557,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'first-answer',
           label: '장면 2 · 첫 번째 답',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l4-scene-02.webp',
           alt: '아이미가 가려진 여우 사진을 고양이라고 답하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -570,7 +570,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'change-conditions',
           label: '장면 3 · 조건 바꾸기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l4-scene-03.webp',
           alt: '윤아가 사진의 가림, 밝기, 각도를 바꾸어 다시 시험하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -583,7 +583,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'reveal-original',
           label: '장면 4 · 원본 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l4-scene-04.webp',
           alt: '원본 여우 사진과 여러 AI 답을 나란히 비교하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -692,7 +692,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'noisy-announcement',
           label: '장면 1 · 시끄러운 복도',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l5-scene-01.webp',
           alt: '민서가 시끄러운 복도에서 학교 방송을 듣는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -705,7 +705,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'wrong-transcript',
           label: '장면 2 · 달라진 글자',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l5-scene-02.webp',
           alt: '방송의 준비물과 음성 인식 글자가 다르게 표시된 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -718,7 +718,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'change-listening-condition',
           label: '장면 3 · 듣는 조건 바꾸기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l5-scene-03.webp',
           alt: '민서가 조용한 곳과 가까운 거리에서 음성 인식을 다시 시험하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -731,7 +731,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'choose-input-method',
           label: '장면 4 · 나에게 맞는 방법',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l5-scene-04.webp',
           alt: '민서가 음성, 글자, 그림 입력 방법 카드를 비교하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -840,7 +840,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'shape-training-box',
           label: '장면 1 · 모양 카드 상자',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l6-scene-01.webp',
           alt: '세모 카드가 대부분인 학습 자료 상자를 학생들이 보는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -853,7 +853,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'biased-shape-result',
           label: '장면 2 · 자꾸 세모라는 답',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l6-scene-02.webp',
           alt: 'AI가 둥근 표지판도 세모라고 분류하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -866,7 +866,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'diverse-shape-data',
           label: '장면 3 · 자료 다시 준비하기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l6-scene-03.webp',
           alt: '여러 색과 크기의 세모 동그라미 네모 카드를 고르게 준비하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -879,7 +879,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'compare-before-after',
           label: '장면 4 · 전후 결과 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l6-scene-04.webp',
           alt: '학습 자료를 바꾸기 전과 후의 도형 분류 결과표를 비교하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -987,7 +987,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'long-event-notice',
           label: '장면 1 · 긴 안내문',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l7-scene-01.webp',
           alt: '긴 체험회 안내문 앞에서 중요한 정보를 찾는 학생들의 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1000,7 +1000,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'missing-summary-detail',
           label: '장면 2 · 빠르지만 빠진 정보',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l7-scene-02.webp',
           alt: 'AI 요약에서 신청 마감 시간이 빠진 것을 발견하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1013,7 +1013,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'compare-source-notice',
           label: '장면 3 · 원문과 나란히 보기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l7-scene-03.webp',
           alt: '원문과 AI 요약 및 번역을 항목별로 나란히 비교하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1026,7 +1026,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'share-checked-version',
           label: '장면 4 · 확인한 안내 공유',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l7-scene-04.webp',
           alt: '확인 표시가 있는 짧은 안내문을 친구들과 공유하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1133,7 +1133,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'four-help-requests',
           label: '장면 1 · 네 가지 부탁',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l8-scene-01.webp',
           alt: '친구 위로 약 복용 행사 정보 상자 옮기기 부탁 카드가 놓인 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1146,7 +1146,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'one-answer-for-all',
           label: '장면 2 · 같은 방식의 답',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l8-scene-02.webp',
           alt: '아이미가 네 부탁에 모두 글로 답하려는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1159,7 +1159,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'check-help-boundaries',
           label: '장면 3 · 도움의 경계 찾기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l8-scene-03.webp',
           alt: '학생들이 위험 근거 최신성 실제 행동 기준으로 부탁을 분류하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1172,7 +1172,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'route-to-right-helper',
           label: '장면 4 · 알맞은 도움 연결',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l8-scene-04.webp',
           alt: 'AI 사람 공식 정보로 역할을 나눈 도움 경계 지도를 완성한 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1281,7 +1281,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'three-event-tasks',
           label: '장면 1 · 서로 다른 세 가지 일',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l9-scene-01.webp',
           alt: '안내문 요약 포스터 만들기 영상 자막 넣기 과제 카드가 놓인 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1294,7 +1294,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'one-tool-suggestion',
           label: '장면 2 · 한 도구만 쓰자는 제안',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l9-scene-02.webp',
           alt: '한 AI 도구로 세 가지 과제를 모두 처리하자는 제안이 나온 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1307,7 +1307,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'compare-tool-fit',
           label: '장면 3 · 입력과 결과 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l9-scene-03.webp',
           alt: '학생들이 도구별 입력 결과 확인 방법 개인정보를 표로 비교하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1320,7 +1320,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'tool-workflow-plan',
           label: '장면 4 · 도구와 사람의 역할 나누기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l9-scene-04.webp',
           alt: '각 과제에 알맞은 도구와 사람의 확인 단계를 연결한 작업 흐름',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1429,7 +1429,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'music-request',
           label: '장면 1 · 안전한 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l10-scene-01.webp',
           alt: '진우가 개인정보 없이 체험회 배경음악을 요청하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1442,7 +1442,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'first-list',
           label: '장면 2 · 첫 번째 결과',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l10-scene-02.webp',
           alt: '아이미의 첫 음악 목록을 행사 조건표와 비교하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1455,7 +1455,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'revise-request',
           label: '장면 3 · 조건을 넣어 수정',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l10-scene-03.webp',
           alt: '진우가 행사 조건과 공식 곡 목록을 넣어 요청을 수정하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1468,7 +1468,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         {
           id: 'final-decision',
           label: '장면 4 · 최종 결정',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m1/m1-l10-scene-04.webp',
           alt: '진우가 음악별로 사용, 수정, 거절 결정을 발표하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(

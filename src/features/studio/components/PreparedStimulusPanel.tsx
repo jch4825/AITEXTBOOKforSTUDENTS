@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Icon from '../../../components/Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
+import { publicAssetUrl } from '../../../utils/publicAssetUrl';
 import type { PreparedStimulus } from '../types';
 
 interface Props {
@@ -48,7 +49,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                     </span>
                   )}
                   <img
-                    src={stimulus.src}
+                    src={publicAssetUrl(stimulus.src)}
                     alt={stimulus.alt}
                     onError={() => markImageFailed(stimulus.id)}
                     className="w-full h-full object-cover rounded-xl"

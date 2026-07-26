@@ -31,7 +31,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l1-short-answer',
           label: '짧은 답',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l1-scene-01.webp',
           alt: '윤아가 펭귄은 새인지 묻고 짧은 답만 받은 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -44,7 +44,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l1-purpose',
           label: '궁금한 점 더하기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l1-scene-02.webp',
           alt: '윤아가 펭귄의 날개와 생활 모습을 보고 다음 질문을 만드는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -57,7 +57,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l1-three-answers',
           label: '세 답 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l1-scene-03.webp',
           alt: '예 아니오 질문, 열린 질문, 구체화 질문의 답 카드를 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -70,7 +70,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l1-question-stair',
           label: '질문 계단 완성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l1-scene-04.webp',
           alt: '윤아가 첫 질문과 최종 질문을 계단 모양 기록에 정리하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -177,7 +177,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l2-word-found',
           label: '낱말 발견',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l2-scene-01.webp',
           alt: '윤아가 전시 안내문에서 생태계라는 낱말을 발견하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -190,7 +190,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l2-first-guess',
           label: '뜻 짐작',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l2-scene-02.webp',
           alt: '윤아가 연못 그림과 앞뒤 문장을 보고 생태계 뜻을 짐작하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -203,7 +203,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l2-definition-compare',
           label: 'AI와 사전 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l2-scene-03.webp',
           alt: 'AI 설명과 학생 사전 정의에서 공통 핵심어를 찾는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -216,7 +216,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l2-word-card',
           label: '낱말 카드 완성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l2-scene-04.webp',
           alt: '윤아가 뜻 근거 예문 그림이 있는 생태계 낱말 카드를 만드는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -323,7 +323,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l3-hard-text',
           label: '복잡한 설명',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l3-scene-01.webp',
           alt: '진우가 광합성의 어려운 교과서 설명을 읽는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -336,7 +336,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l3-first-metaphor',
           label: '첫 쉬운 비유',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l3-scene-02.webp',
           alt: '아이미가 식물이 햇빛을 먹는다는 쉬운 비유를 보여 주는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -349,7 +349,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l3-missing-fact',
           label: '빠진 사실 발견',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l3-scene-03.webp',
           alt: '진우가 교과서 그림과 쉬운 설명을 비교해 물과 공기 단서를 찾는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -362,7 +362,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l3-final-card',
           label: '정확한 쉬운 설명',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l3-scene-04.webp',
           alt: '진우가 핵심 사실 배지가 남은 쉬운 광합성 설명 카드를 완성하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -469,7 +469,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l4-word-choice',
           label: '전시 낱말 발견',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l4-scene-01.webp',
           alt: '윤아가 전시 제목에 넣을 선명하다라는 낱말을 고르는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -482,7 +482,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l4-scene-clues',
           label: '장면 첫 선택',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l4-scene-02.webp',
           alt: '또렷한 사진과 흐린 사진을 비교해 선명하다가 어울리는 장면을 고르는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -495,7 +495,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l4-example-check',
           label: '예문 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l4-scene-03.webp',
           alt: '윤아가 아이미의 두 예문을 상황 그림과 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -508,7 +508,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l4-own-sentence',
           label: '내 문장 전시',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l4-scene-04.webp',
           alt: '윤아가 선명하다를 사용한 자기 문장과 그림 카드를 전시하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -615,7 +615,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l5-rainy-school',
           label: '이야기 시작',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l5-scene-01.webp',
           alt: '비 오는 학교 복도에 작은 로봇이 혼자 남은 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -628,7 +628,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l5-first-ending',
           label: '내 결말 먼저',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l5-scene-02.webp',
           alt: '진우가 즐거운 결말 신기한 결말 조용한 해결 중 원하는 방향을 고르는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -641,7 +641,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l5-ai-endings',
           label: '결말 제안 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l5-scene-03.webp',
           alt: '아이미의 세 결말 제안을 분위기와 안전 조건 카드로 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -654,7 +654,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l5-story-board',
           label: '내 이야기 완성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l5-scene-04.webp',
           alt: '진우가 작은 로봇 이야기의 세 장면과 선택 이유를 만화 보드에 완성하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -761,7 +761,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l6-price-list',
           label: '가격표와 예상',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l6-scene-01.webp',
           alt: '윤아가 전시 간식 가격표와 수량을 보고 합계를 예상하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -774,7 +774,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l6-ai-work',
           label: '아이미의 풀이',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l6-scene-02.webp',
           alt: '아이미가 간식 합계를 5600원으로 잘못 계산한 풀이를 보여 주는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -787,7 +787,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l6-calculator',
           label: '계산기 대조',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l6-scene-03.webp',
           alt: '윤아가 가격표 식과 계산기 결과 6600원을 AI 풀이와 줄별로 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -800,7 +800,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l6-correction',
           label: '오류 수정 기록',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l6-scene-04.webp',
           alt: '윤아가 예상값 AI 답 계산기 결과 오류 위치를 기록하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -907,7 +907,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l7-long-text',
           label: '긴 전시 설명문',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l7-scene-01.webp',
           alt: '진우가 방문자용으로 너무 긴 전시 설명문을 읽는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -920,7 +920,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l7-key-points',
           label: '핵심 먼저 선택',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l7-scene-02.webp',
           alt: '진우가 장소 체험 내용 준비 시간을 핵심 정보로 표시하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -933,7 +933,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l7-ai-summary',
           label: '누락 근거 찾기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l7-scene-03.webp',
           alt: 'AI의 세 문장 요약과 원문을 연결해 준비 시간 누락을 찾는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -946,7 +946,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l7-final-summary',
           label: '세 문장 안내판',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l7-scene-04.webp',
           alt: '진우가 원문 근거가 연결된 세 문장 전시 안내판을 완성하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1054,7 +1054,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l8-answer-visible',
           label: '정답이 보이는 퀴즈',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l8-scene-01.webp',
           alt: '전시 퀴즈 문제 바로 아래에 정답이 공개된 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1067,7 +1067,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l8-first-order',
           label: '학습 순서 판단',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l8-scene-02.webp',
           alt: '윤아가 문제 풀기와 정답 확인의 순서를 고르는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1080,7 +1080,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l8-quiz-compare',
           label: '두 퀴즈 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l8-scene-03.webp',
           alt: '정답 공개 퀴즈와 정답 숨김 퀴즈의 학습 경험을 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1093,7 +1093,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l8-two-sided-card',
           label: '양면 퀴즈 카드',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l8-scene-04.webp',
           alt: '앞면에는 문제 뒷면에는 정답과 해설이 있는 퀴즈 카드를 완성하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1200,7 +1200,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l9-original-picture',
           label: '원본 관찰',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l9-scene-01.webp',
           alt: '가방을 든 두 학생이 함께 서 있는 원본 그림을 관찰하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1213,7 +1213,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l9-ai-inference',
           label: '아이미의 추측',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l9-scene-02.webp',
           alt: '아이미가 두 학생은 소풍을 가서 행복하다고 설명하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1226,7 +1226,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l9-evidence-pins',
           label: '문장별 근거 핀',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l9-scene-03.webp',
           alt: '설명 문장을 누르고 가방 학생 건물에 근거 핀을 표시하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1239,7 +1239,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l9-repaired-description',
           label: '근거 있는 설명',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l9-scene-04.webp',
           alt: '윤아가 사실 추측 모름으로 분류해 그림 설명을 고치는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1346,7 +1346,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l10-forgotten-part',
           label: '기억이 멈춘 순간',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l10-scene-01.webp',
           alt: '진우가 배움 전시 준비를 마치고 이전 학습 내용을 떠올리는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1359,7 +1359,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l10-first-recall',
           label: '자료 없이 먼저 설명',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l10-scene-02.webp',
           alt: '진우가 이전 결과물을 보지 않고 기억나는 내용을 먼저 말하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1372,7 +1372,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l10-record-check',
           label: '이전 기록과 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l10-scene-03.webp',
           alt: '진우가 낱말 카드와 AI 요약을 첫 회상과 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1385,7 +1385,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         {
           id: 'm3-l10-self-explanation',
           label: '내 말로 다시 설명',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m3/m3-l10-scene-04.webp',
           alt: '진우가 고친 자기 설명과 다음 복습 계획 카드를 완성하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(

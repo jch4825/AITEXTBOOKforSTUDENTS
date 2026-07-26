@@ -30,7 +30,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'vague-tomorrow-request',
           label: '장면 1 · 모호한 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l1-scene-01.webp',
           alt: '윤아가 아이미에게 내일 안내를 알려 달라고 부탁하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -43,7 +43,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'wrong-event-result',
           label: '장면 2 · 엉뚱한 결과',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l1-scene-02.webp',
           alt: '아이미가 다른 동아리의 오래된 행사를 보여 주는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -56,7 +56,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'inspect-event-cards',
           label: '장면 3 · 행사 카드 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l1-scene-03.webp',
           alt: '윤아가 체험회 일정표와 개인정보 카드를 나누어 보는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -69,7 +69,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'repaired-event-request',
           label: '장면 4 · 수정한 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l1-scene-04.webp',
           alt: '윤아가 수정한 요청과 알맞은 체험회 결과를 확인하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -175,7 +175,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'three-requests-one-sentence',
           label: '장면 1 · 긴 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l2-scene-01.webp',
           alt: '진우가 안내문 간식 목록 음악 추천을 한 문장에 부탁하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -188,7 +188,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'mixed-request-result',
           label: '장면 2 · 뒤엉킨 결과',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l2-scene-02.webp',
           alt: '아이미의 결과에서 안내문과 간식과 음악이 섞인 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -201,7 +201,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'order-purpose-cards',
           label: '장면 3 · 목적 카드 나누기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l2-scene-03.webp',
           alt: '진우가 마감 시간에 따라 세 부탁의 순서를 정하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -214,7 +214,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'separated-dialogue',
           label: '장면 4 · 정리된 대화',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l2-scene-04.webp',
           alt: '목적별로 나눈 두 번의 요청과 결과가 대화선에 놓인 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -320,7 +320,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'any-game-request',
           label: '장면 1 · 넓은 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l3-scene-01.webp',
           alt: '윤아가 체험회 놀이를 아무거나 추천해 달라고 요청하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -333,7 +333,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'unsuitable-game-result',
           label: '장면 2 · 맞지 않는 놀이',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l3-scene-02.webp',
           alt: '아이미가 어린 참가자에게 어렵고 긴 놀이를 추천하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -346,7 +346,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'select-game-conditions',
           label: '장면 3 · 조건 추가',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l3-scene-03.webp',
           alt: '윤아가 연령 인원 시간 공간 조건 카드를 고르는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -359,7 +359,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'matching-game-result',
           label: '장면 4 · 알맞은 결과',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l3-scene-04.webp',
           alt: '수정한 요청과 조건을 충족한 놀이 결과를 비교하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -465,7 +465,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'verbal-format-only',
           label: '장면 1 · 말로만 설명',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l4-scene-01.webp',
           alt: '학생들이 안내 문구 형식을 말로만 길게 설명하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -478,7 +478,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'three-example-results',
           label: '장면 2 · 세 가지 결과',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l4-scene-02.webp',
           alt: '예시 없음 좋은 예시 틀린 예시에 따른 결과 세 가지를 비교하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -491,7 +491,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'inspect-example-criteria',
           label: '장면 3 · 예시 기준 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l4-scene-03.webp',
           alt: '내용 길이 형식 사실 기준으로 예시를 점검하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -504,7 +504,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'desired-format-result',
           label: '장면 4 · 원하는 결과 완성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l4-scene-04.webp',
           alt: '좋은 예시를 넣은 요청과 원하는 한 줄 안내 결과가 완성된 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -610,7 +610,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'two-audiences',
           label: '장면 1 · 두 독자',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l5-scene-01.webp',
           alt: '진우가 어린 동생과 학부모에게 같은 안내를 보내려는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -623,7 +623,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'same-first-notice',
           label: '장면 2 · 같은 첫 안내',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l5-scene-02.webp',
           alt: '어린 동생에게는 어렵고 학부모에게는 가벼운 같은 안내문이 보이는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -636,7 +636,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'separate-fact-and-tone',
           label: '장면 3 · 내용과 말투 분리',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l5-scene-03.webp',
           alt: '학생들이 변하지 않을 사실과 바꿀 말투 카드를 두 층으로 나누는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -649,7 +649,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'two-audience-notices',
           label: '장면 4 · 대상별 안내 완성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l5-scene-04.webp',
           alt: '어린 동생용과 학부모용 안내문 두 종류를 나란히 확인하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -755,7 +755,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'one-big-event-request',
           label: '장면 1 · 막연한 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l6-scene-01.webp',
           alt: '학생들이 아이미에게 체험회 준비를 한 번에 모두 부탁하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -768,7 +768,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'incomplete-event-plan',
           label: '장면 2 · 빠진 준비표',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l6-scene-02.webp',
           alt: '아이미가 장소와 시간과 담당이 빠진 준비표를 보여 주는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -781,7 +781,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'collect-event-materials',
           label: '장면 3 · 자료와 단계 모으기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l6-scene-03.webp',
           alt: '학생들이 장소도 일정 준비물 카드를 단계별로 정리하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -794,7 +794,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'stepwise-event-plan',
           label: '장면 4 · 단계별 완성표',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l6-scene-04.webp',
           alt: '앞 단계 결과가 이어진 체험회 준비표를 학생들이 확인하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -900,7 +900,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'first-difficult-notice',
           label: '장면 1 · 첫 안내',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l7-scene-01.webp',
           alt: '진우가 길고 어려운 첫 체험회 안내문을 읽는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -913,7 +913,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'easy-but-missing-facts',
           label: '장면 2 · 정보 누락',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l7-scene-02.webp',
           alt: '쉬워진 두 번째 안내문에서 시간과 장소가 빠진 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -926,7 +926,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'lock-facts-mark-edits',
           label: '장면 3 · 기준을 넣은 재요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l7-scene-03.webp',
           alt: '시간과 장소에 자물쇠 표시를 하고 어려운 표현만 수정하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -939,7 +939,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'verified-revised-notice',
           label: '장면 4 · 개선본 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l7-scene-04.webp',
           alt: '수정 전후 안내문과 공식 일정표를 나란히 확인하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1045,7 +1045,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'three-long-paragraphs',
           label: '장면 1 · 긴 문단 세 개',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l8-scene-01.webp',
           alt: '시간표 설치 순서 홍보 문구가 모두 긴 문단으로 나온 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1058,7 +1058,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'first-format-match',
           label: '장면 2 · 형식 첫 선택',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l8-scene-02.webp',
           alt: '윤아가 표 번호 목록 한 문장 카드를 세 과제와 연결하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1071,7 +1071,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'compare-three-formats',
           label: '장면 3 · 세 형식 변환',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l8-scene-03.webp',
           alt: '같은 내용을 표 목록 문장으로 바꾸어 비교하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1084,7 +1084,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'purpose-fit-results',
           label: '장면 4 · 목적별 결과 완성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l8-scene-04.webp',
           alt: '시간표 설치 목록 홍보 문구가 목적에 맞는 모양으로 완성된 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1190,7 +1190,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'confident-wrong-time',
           label: '장면 1 · 아이미의 주장',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l9-scene-01.webp',
           alt: '아이미가 체험회 종료 시간을 자신 있게 잘못 말하는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1203,7 +1203,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'ask-ai-again',
           label: '장면 2 · 같은 AI에게 다시 묻기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l9-scene-02.webp',
           alt: '학생이 아이미에게 정말 맞는지 다시 묻는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1216,7 +1216,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'compare-source-cards',
           label: '장면 3 · 근거 자료 탐색',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l9-scene-03.webp',
           alt: '최신 학교 공지 오래된 공지 익명 글의 출처와 날짜를 비교하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1229,7 +1229,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'correct-claim-with-evidence',
           label: '장면 4 · 근거로 수정',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l9-scene-04.webp',
           alt: '학생들이 최신 공식 공지를 근거로 종료 시간을 수정하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1335,7 +1335,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'choose-authentic-task',
           label: '장면 1 · 과제 선택',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l10-scene-01.webp',
           alt: '학생이 홍보 문구 준비 목록 소개 대본 중 하나를 고르는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1348,7 +1348,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'first-dialogue-result',
           label: '장면 2 · 첫 대화',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l10-scene-02.webp',
           alt: '학생이 첫 요청과 준비된 AI 결과를 나란히 살펴보는 장면',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1361,7 +1361,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'repair-and-verify-dialogue',
           label: '장면 3 · 수정과 근거 확인',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l10-scene-03.webp',
           alt: '학생이 수정 요청을 보내고 과제별 사실 카드와 결과를 비교하는 장면',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1374,7 +1374,7 @@ export const M2_STUDIOS: StudioDefinition[] = [
         {
           id: 'present-final-decision',
           label: '장면 4 · 최종 결과 발표',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m2/m2-l10-scene-04.webp',
           alt: '학생이 전체 대화 기록과 사용 수정 거절 결정을 발표하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(

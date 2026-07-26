@@ -6,7 +6,7 @@ if (!fs.existsSync(file)) throw new Error('M5 studio definitions are missing');
 const source = fs.readFileSync(file, 'utf8');
 const sharedSource = fs.readFileSync('src/data/studios/shared.ts', 'utf8');
 
-for (const id of ['m5-ambiguous-problem', 'm5-clarify-request', 'm5-changing-cooking-plan']) {
+for (const id of ['m5-problem-definition-map', 'm5-safe-clarification', 'm5-condition-change-plan']) {
   if (!source.includes(`id: '${id}'`)) throw new Error(`missing studio: ${id}`);
 }
 for (const lessonId of ['m5-l1', 'm5-l6', 'm5-l11']) {
@@ -16,11 +16,13 @@ for (const mode of ['choice', 'text', 'speech', 'draw']) {
   if (!sharedSource.includes(`'${mode}'`)) throw new Error(`missing expression mode: ${mode}`);
 }
 if (sharedSource.includes("'aac'")) throw new Error('studio expression modes must not expose AAC without dedicated cards');
-for (const artifact of ['action-card', 'repair-card', 'visual-plan']) {
+for (const artifact of ['review-sheet', 'repair-card', 'workflow-plan']) {
   if (!source.includes(`kind: '${artifact}'`)) throw new Error(`missing artifact kind: ${artifact}`);
 }
-if ((source.match(/source: 'prepared'/g) ?? []).length !== 3) throw new Error('pilot AI must be prepared in all studios');
-if (!source.includes('실제 불이나 뜨거운 물을 사용하지 않습니다')) throw new Error('cooking safety copy is missing');
+if ((source.match(/source: 'prepared'/g) ?? []).length !== 11) throw new Error('M5 AI must be prepared in all studios');
+if (!source.includes('실제 연결이나 실제 기기 조작이 아닌 준비된 연습 예시')) {
+  throw new Error('prepared-example safety copy is missing');
+}
 if (source.includes('정답입니다') || source.includes('틀렸습니다')) throw new Error('studio must not grade a single correct answer');
 
 const reducerPath = 'src/features/studio/studioReducer.ts';
@@ -62,8 +64,8 @@ for (const componentPath of [expressionPath, decisionPath]) {
 }
 const expressionSource = fs.readFileSync(expressionPath, 'utf8');
 const decisionSource = fs.readFileSync(decisionPath, 'utf8');
-for (const label of ['이 의견을 받아들입니다', '내 생각에 맞게 고칩니다', '이 의견은 사용하지 않습니다']) {
-  if (!decisionSource.includes(label)) throw new Error(`AI decision label is missing: ${label}`);
+for (const token of ['AI의 안내 사례', '<DrawPad', "onExpression({ mode: 'draw', drawing })"]) {
+  if (!decisionSource.includes(token)) throw new Error(`AI comparison expression control is missing: ${token}`);
 }
 if (!expressionSource.includes('ExpressionInput')) throw new Error('existing multimodal input must be reused');
 if (expressionSource.includes('useEffect')) throw new Error('expression adapter must not auto-trigger effects');
@@ -81,7 +83,7 @@ const editorialSource = fs.readFileSync(editorialPath, 'utf8');
 const explanationSource = fs.readFileSync(explanationPath, 'utf8');
 const experienceSource = fs.readFileSync(experiencePath, 'utf8');
 const lessonViewSource = fs.readFileSync(lessonViewPath, 'utf8');
-for (const label of ['상황 만나기', '첫 생각', '조건이 달라졌습니다', 'AI의 다른 관점', '내가 판단하기', '생각을 결과물로', '다른 상황에 적용하기', '과정 돌아보기']) {
+for (const label of ['상황 만나기', '첫 생각', '조건이 달라졌습니다', 'AI의 제안과 내 판단', '실시간 AI 아이미와 대화하기', '생각을 결과물로', '다른 상황에 적용하기', '과정 돌아보기']) {
   if (!editorialSource.includes(label)) throw new Error(`studio stage label is missing: ${label}`);
 }
 for (const token of ['bodyEasy', 'bodyNormal', 'hard.concept', '생각 도구 열기']) {
@@ -109,4 +111,4 @@ for (const token of ['getModulePortfolioDefinition', '<ModuleCloseLessonView']) 
   if (!rootLessonView.includes(token)) throw new Error(`M5 route connection is missing: ${token}`);
 }
 
-console.log('M5 studio content contract: 3 definitions ready');
+console.log('M5 studio content contract: 11 definitions ready');

@@ -4,8 +4,8 @@ import { CHARACTERS } from '../data/characters';
 
 /**
  * AI 동아리 4인 아바타 — 캐릭터 비주얼 단일 지점 (D5 교체점 가동).
- * public/characters/{id}-{expression}.png(실제 일러스트 컷) → .svg(벡터 폴백) 순서로
- * 시도한다. 일러스트 컷을 같은 파일명으로 넣기만 하면 코드 수정 없이 교체된다.
+ * public/characters/{id}-{expression}.svg(경량 서비스본) → .png(선택 고해상도본) 순서로
+ * 시도한다. 새 표정 컷을 같은 파일명으로 넣기만 하면 코드 수정 없이 확장된다.
  * (규격: 512×512, 투명 배경 — docs/design-upgrade-plan.md §6)
  */
 
@@ -49,7 +49,7 @@ export default function CharacterAvatar({ character, expression = 'neutral', siz
   const charMeta = CHARACTERS[character];
   const cls = [idle ? 'float-soft' : '', className].filter(Boolean).join(' ') || undefined;
   const base = `${import.meta.env.BASE_URL}characters/${character}-${expression}`;
-  const candidates = [`${base}.png`, `${base}.svg`];
+  const candidates = [`${base}.svg`, `${base}.png`];
   const [src, setSrc] = useState<string | null>(() => pickSrc(candidates));
 
   // 캐릭터·표정이 바뀌면 후보 체인을 다시 시도한다.

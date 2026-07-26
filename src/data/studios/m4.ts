@@ -31,7 +31,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l1-confident-answer',
           label: '자신 있는 답',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l1-scene-01.webp',
           alt: '아이미가 체험회 준비물 배부 시간을 자신 있게 알려 주는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -44,7 +44,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l1-two-schedules',
           label: '두 시간표',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l1-scene-02.webp',
           alt: '지난주 시간표와 오늘 게시된 공식 시간표가 나란히 놓인 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -57,7 +57,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l1-evidence-match',
           label: '근거 연결',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l1-scene-03.webp',
           alt: '답의 문장과 공식 시간표의 날짜 게시자 시간을 연결하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -70,7 +70,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l1-corrected-record',
           label: '확인 기록',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l1-scene-04.webp',
           alt: '진우가 원래 답 확인 자료 수정 내용이 있는 AI 답 확인 기록을 완성하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -177,7 +177,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l2-rumor-arrives',
           label: '익명 소문',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l2-scene-01.webp',
           alt: '보낸 사람과 날짜가 분명하지 않은 체험회 취소 소문이 도착한 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -190,7 +190,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l2-three-sources',
           label: '세 자료',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l2-scene-02.webp',
           alt: '익명 캡처 지난달 공지 오늘 학교 공지가 나란히 놓인 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -203,7 +203,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l2-source-grid',
           label: '출처 기준',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l2-scene-03.webp',
           alt: '작성자 날짜 원문 공식성 일치 여부를 표시하는 비교표 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -216,7 +216,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l2-correction-share',
           label: '확인해 알리기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l2-scene-04.webp',
           alt: '윤아가 최신 공식 공지를 근거로 체험회 정상 운영 소식을 알리는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -323,7 +323,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l3-draft',
           label: '초안 작성',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l3-scene-01.webp',
           alt: '진우가 이름 학교 하교 시간이 들어간 도움 요청 초안을 쓰는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -336,7 +336,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l3-clue-layers',
           label: '정보 층 찾기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l3-scene-02.webp',
           alt: '이름 학교 시간 요청 목적이 서로 다른 색 층으로 표시된 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -349,7 +349,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l3-minimum-needed',
           label: '필요한 만큼',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l3-scene-03.webp',
           alt: '요청 목적에 필요한 포스터 크기와 마감 조건만 남기는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -362,7 +362,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l3-before-after',
           label: '가리기 전후',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l3-scene-04.webp',
           alt: '개인정보를 가리기 전 초안과 안전하게 고친 요청을 나란히 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -469,7 +469,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l4-code-request',
           label: '인증 코드 요구',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l4-scene-01.webp',
           alt: '선생님 확인을 주장하는 계정이 인증 코드를 요구하는 안전하게 가린 메시지 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -482,7 +482,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l4-secret-types',
           label: '보안 정보 구분',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l4-scene-02.webp',
           alt: '계정 이름 비밀번호 인증 코드 공식 복구 버튼을 구분하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -495,7 +495,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l4-refuse-close-tell',
           label: '거절과 알림',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l4-scene-03.webp',
           alt: '진우가 코드 전송을 거절하고 화면을 닫은 뒤 민준 선생님에게 알리는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -508,7 +508,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l4-official-recovery',
           label: '공식 복구',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l4-scene-04.webp',
           alt: '민준 선생님과 공식 계정 복구 페이지의 주소를 확인하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -615,7 +615,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l5-photo-ready',
           label: '사진 선택',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l5-scene-01.webp',
           alt: '윤아가 체험회 준비 사진을 단체 채팅에 보내려는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -628,7 +628,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l5-photo-clues',
           label: '단서 찾기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l5-scene-02.webp',
           alt: '사진 속 이름표 친구 얼굴 교실 위치 일정표가 표시된 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -641,7 +641,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l5-audience-purpose',
           label: '대상과 목적',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l5-scene-03.webp',
           alt: '공개 채팅과 학급 내부 공유 목적을 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -654,7 +654,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l5-redacted-photo',
           label: '가린 이미지',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l5-scene-04.webp',
           alt: '이름 위치 일정 친구 얼굴을 가리고 장식만 남긴 사진과 확인 카드 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -761,7 +761,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l6-covered-message',
           label: '안전 덮개',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l6-scene-01.webp',
           alt: '불편한 메시지 내용이 안전 덮개로 가려진 체험회 채팅 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -774,7 +774,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l6-body-signal',
           label: '멈춤 신호',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l6-scene-02.webp',
           alt: '몸과 감정 신호 아이콘 옆에서 진우가 화면과 거리를 두는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -787,7 +787,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l6-help-route',
           label: '도움 경로',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l6-scene-03.webp',
           alt: '민준 선생님과 학교 도움 경로가 밝아지고 화면은 계속 가려진 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -800,7 +800,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l6-action-order',
           label: '안전 순서',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l6-scene-04.webp',
           alt: '멈춤 가리기 거리두기 알리기 카드가 순서대로 놓인 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -907,7 +907,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l7-rushed-request',
           label: '급한 입력',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l7-scene-01.webp',
           alt: '진우가 목적과 조건이 빠진 급한 요청을 입력하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -920,7 +920,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l7-two-results',
           label: '다른 해석',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l7-scene-02.webp',
           alt: '같은 불분명한 요청에서 서로 다른 두 결과가 나온 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -933,7 +933,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l7-sentence-layers',
           label: '문장 층 정리',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l7-scene-03.webp',
           alt: '목적 행동 조건 존중 표현 카드가 문장 층으로 정리되는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -946,7 +946,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l7-clear-request',
           label: '분명한 부탁',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l7-scene-04.webp',
           alt: '진우가 목적 행동 조건 존중 표현이 담긴 최종 부탁을 완성하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1053,7 +1053,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l8-video-flow',
           label: '계속된 추천',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l8-scene-01.webp',
           alt: '진우가 추천 영상을 계속 보다가 체험회 준비 시간을 놓치는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1066,7 +1066,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l8-usage-log',
           label: '기록 보기',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l8-scene-02.webp',
           alt: '영상 사용 기록 몸 신호 준비 일정 도움 조건을 함께 살펴보는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1079,7 +1079,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l8-fixed-vs-personal',
           label: '두 계획 비교',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l8-scene-03.webp',
           alt: '모두에게 같은 고정 시간 제안과 진우의 기록 기반 계획을 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1092,7 +1092,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l8-stop-flag',
           label: '멈춤 깃발',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l8-scene-04.webp',
           alt: '시간 흐름 막대에 멈춤 신호와 다음 행동 깃발을 놓는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1199,7 +1199,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l9-unknown-account',
           label: '위험 요청',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l9-scene-01.webp',
           alt: '낯선 계정의 선물과 비밀 만남 제안이 안전하게 가려진 채팅 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1212,7 +1212,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l9-risk-clues',
           label: '위험 단서',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l9-scene-02.webp',
           alt: '사진 암호 선물 비밀 만남 위험 단서 카드가 표시되는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1225,7 +1225,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l9-help-network',
           label: '도움망 연결',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l9-scene-03.webp',
           alt: '윤아를 중심으로 민준 선생님 보호자 학교 도움 담당자에게 연결선이 생기는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1238,7 +1238,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l9-alert-sentence',
           label: '실제 알림',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l9-scene-04.webp',
           alt: '윤아가 민준 선생님에게 위험 요청과 필요한 도움을 구체적으로 말하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1345,7 +1345,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l10-recommendation-video',
           label: '추천 영상',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l10-scene-01.webp',
           alt: '모두에게 가장 좋다는 체험회 준비물 추천 영상 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
           copy: sceneCopy(
@@ -1358,7 +1358,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l10-ad-layers',
           label: '광고 단서',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l10-scene-02.webp',
           alt: '작은 협찬 표시 구매 링크 과장 표현 빠진 가격이 층별로 드러나는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
@@ -1371,7 +1371,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l10-needs-budget',
           label: '내 기준',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l10-scene-03.webp',
           alt: '필요 대안 예산 카드와 추천 이유를 나란히 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
@@ -1384,7 +1384,7 @@ export const M4_STUDIOS: StudioDefinition[] = [
         {
           id: 'm4-l10-purchase-decision',
           label: '구매 판단',
-          imageSrc: '',
+          imageSrc: '/lessons/story/m4/m4-l10-scene-04.webp',
           alt: '광고 단서 표시판과 수용 보류 거절 구매 판단 카드가 완성된 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(

@@ -21,7 +21,7 @@ const experience = fs.readFileSync('src/features/studio/components/StudioExperie
 for (const token of ['export type PreparedStimulus', "kind: 'image'", "kind: 'speech'", 'stimuli?: PreparedStimulus[]']) {
   if (!types.includes(token)) throw new Error(`prepared stimulus type missing: ${token}`);
 }
-for (const token of ['이미지를 불러오지 못했습니다', '소리 듣기', 'speakNow(stimulus.text)']) {
+for (const token of ['이미지 불러오기 실패', '소리 듣기', 'speakNow(stimulus.text)']) {
   if (!panel.includes(token)) throw new Error(`prepared stimulus fallback missing: ${token}`);
 }
 if (!experience.includes('<PreparedStimulusPanel')) throw new Error('studio does not render prepared stimuli');
@@ -78,8 +78,8 @@ if ((m1.match(/source: 'prepared'/g) ?? []).length !== 10) throw new Error('M1 A
 for (const artifact of ['AI 정의 카드', '이미지 인식 실험 기록', 'AI 결과 사용 판단 기록']) {
   if (!m1.includes(artifact)) throw new Error(`M1 artifact missing: ${artifact}`);
 }
-if (!m1.includes("imageSrc: ''") || m1.includes('/lessons/remodel/')) {
-  throw new Error('M1 visual stories must use pending image slots until new assets exist');
+if ((m1.match(/imageSrc: '\/lessons\/story\/m1\/m1-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 40 || m1.includes('/lessons/remodel/')) {
+  throw new Error('M1 visual stories must use 40 production story images');
 }
 
 const m1PortfolioPath = 'src/data/modulePortfolios/m1.ts';
@@ -170,8 +170,8 @@ for (const artifact of [
 ]) {
   if (!m3.includes(artifact)) throw new Error(`M3 artifact missing: ${artifact}`);
 }
-if ((m3.match(/imageSrc: ''/g) ?? []).length !== 40 || m3.includes('/lessons/m3-l')) {
-  throw new Error('M3 visual stories must use 40 pending image slots');
+if ((m3.match(/imageSrc: '\/lessons\/story\/m3\/m3-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 40) {
+  throw new Error('M3 visual stories must use 40 production story images');
 }
 
 const m3PortfolioPath = 'src/data/modulePortfolios/m3.ts';
@@ -216,8 +216,8 @@ for (const artifact of [
 ]) {
   if (!m4.includes(artifact)) throw new Error(`M4 artifact missing: ${artifact}`);
 }
-if ((m4.match(/imageSrc: ''/g) ?? []).length !== 40 || m4.includes('/lessons/m4-l')) {
-  throw new Error('M4 visual stories must use 40 pending image slots');
+if ((m4.match(/imageSrc: '\/lessons\/story\/m4\/m4-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 40) {
+  throw new Error('M4 visual stories must use 40 production story images');
 }
 
 const m4PortfolioPath = 'src/data/modulePortfolios/m4.ts';
@@ -264,8 +264,8 @@ for (const artifact of [
 ]) {
   if (!m5.includes(artifact)) throw new Error(`M5 artifact missing: ${artifact}`);
 }
-if ((m5.match(/imageSrc: ''/g) ?? []).length !== 44 || m5.includes('/lessons/m5-l')) {
-  throw new Error('M5 visual stories must use 44 pending image slots');
+if ((m5.match(/imageSrc: '\/lessons\/story\/m5\/m5-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 44) {
+  throw new Error('M5 visual stories must use 44 production story images');
 }
 
 const m5Portfolio = fs.readFileSync('src/data/modulePortfolios/m5.ts', 'utf8');
@@ -310,8 +310,8 @@ for (const artifact of [
 ]) {
   if (!m6.includes(artifact)) throw new Error(`M6 artifact missing: ${artifact}`);
 }
-if ((m6.match(/imageSrc: ''/g) ?? []).length !== 44 || m6.includes('/lessons/m6-l')) {
-  throw new Error('M6 visual stories must use 44 pending image slots');
+if ((m6.match(/imageSrc: '\/lessons\/story\/m6\/m6-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 44) {
+  throw new Error('M6 visual stories must use 44 production story images');
 }
 
 const m6Portfolio = fs.readFileSync('src/data/modulePortfolios/m6.ts', 'utf8');
