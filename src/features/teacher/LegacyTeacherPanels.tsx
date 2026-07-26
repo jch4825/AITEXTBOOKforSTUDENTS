@@ -3,6 +3,7 @@ import Button from '../../components/Button';
 import ErrorMessage from '../../components/ErrorMessage';
 import { ALL_LESSONS } from '../../data/lessons';
 import { MODULES, lessonIdsForModule } from '../../data/modules';
+import { AI_ACHIEVEMENT_STANDARDS } from '../../data/aiAchievementStandards';
 import { clearApiKey, getApiKey, maskApiKey, setApiKey } from '../../utils/apiKey';
 import { askGemini, GeminiError, MODEL_FALLBACK } from '../../utils/gemini';
 import { loadProgress } from '../../utils/storage';
@@ -38,7 +39,6 @@ export function ProgressPanel() {
     </section>
   );
 }
-
 export function ObjectivesPanel() {
   return (
     <section className="studio-editorial p-6 md:p-8 space-y-5">
@@ -46,21 +46,64 @@ export function ObjectivesPanel() {
         <p className="studio-kicker text-[color:var(--accent)] font-bold">2022 개정 특수교육 기본교육과정 연동</p>
         <h2 className="text-2xl font-extrabold text-[color:var(--brand-ink)]">차시별 정식 학습목표 · 성취기준</h2>
         <p className="mt-1 text-sm text-[color:var(--muted)]">
-          학생 화면, 목차(TOC) 툴팁, 교사용 지침서에 동일하게 적용되는 68차시 공통 학습 목표입니다.
+          2022 개정 특수교육 기본교육과정 인공지능(인지) 정식 성취기준 및 연계 성취기준 명세입니다.
         </p>
       </div>
 
       {MODULES.map((module) => {
         const lessons = ALL_LESSONS.filter((lesson) => lesson.moduleId === module.id);
+        const aiMeta = AI_ACHIEVEMENT_STANDARDS[module.id];
+
         return (
           <details key={module.id} className="group border-2 border-[color:var(--line)] rounded-2xl bg-[color:var(--paper-0)] overflow-hidden shadow-xs mb-3">
             <summary className="cursor-pointer bg-[color:var(--paper-1)] p-4 font-extrabold text-base flex items-center justify-between hover:bg-slate-100 transition">
-              <span className="text-[color:var(--brand-ink)]">단원 {module.number}. {module.title}</span>
+              <span className="text-[color:var(--brand-ink)]">단원 {module.number}. {module.title} ({aiMeta.domainName})</span>
               <span className="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 font-extrabold">
                 {lessons.length}개 차시 완성
               </span>
             </summary>
             <div className="divide-y divide-slate-200 p-4 space-y-4">
+              {/* Module Level AI Achievement Standards Summary */}
+              {aiMeta && (
+                <div className="p-3.5 rounded-xl bg-indigo-950 text-white space-y-2 mb-2">
+                  <div className="flex items-center justify-between border-b border-indigo-800 pb-2">
+                    <p className="font-extrabold text-amber-300 text-sm">
+                      🤖 영역 {aiMeta.domainNumber}. {aiMeta.domainName} 정식 AI 성취기준
+                    </p>
+                    <a
+                      href="/data/achievement_standards.csv"
+                      download="특수교육_인공지능_성취기준.csv"
+                      className="text-[11px] font-bold px-2.5 py-1 rounded bg-indigo-800 hover:bg-indigo-700 text-indigo-100 transition flex items-center gap-1"
+                    >
+                      📥 CSV 내보내기
+                    </a>
+                  </div>
+                  <div className="grid gap-2 sm:grid-cols-2 text-xs">
+                    <div className="bg-indigo-900/60 p-2.5 rounded-lg border border-indigo-700/60">
+                      <p className="font-bold text-sky-300 mb-1">🏫 중학교 성취기준 (9학년군)</p>
+                      <ul className="space-y-1 text-slate-200 leading-snug">
+                        {aiMeta.middleSchool.map((s) => (
+                          <li key={s.code}>
+                            <strong className="text-amber-300 mr-1">{s.code}</strong> {s.statement}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="bg-indigo-900/60 p-2.5 rounded-lg border border-indigo-700/60">
+                      <p className="font-bold text-emerald-300 mb-1">🏫 고등학교 성취기준 (12학년군)</p>
+                      <ul className="space-y-1 text-slate-200 leading-snug">
+                        {aiMeta.highSchool.map((s) => (
+                          <li key={s.code}>
+                            <strong className="text-amber-300 mr-1">{s.code}</strong> {s.statement}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Lesson Detail Cards */}
               {lessons.map((lesson) => (
                 <div key={lesson.id} className="pt-4 first:pt-0">
                   <div className="flex items-center gap-2 mb-1.5">
@@ -89,7 +132,7 @@ export function ObjectivesPanel() {
 
                   {lesson.standards && lesson.standards.length > 0 && (
                     <div className="mt-2 bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs">
-                      <p className="font-extrabold text-slate-700 mb-1">📋 2022 개정 특수교육 성취기준:</p>
+                      <p className="font-extrabold text-slate-700 mb-1">📋 연계 성취기준:</p>
                       <ul className="list-inside list-disc space-y-1 text-slate-800 font-medium">
                         {lesson.standards.map((standard) => (
                           <li key={standard}>{standard}</li>
