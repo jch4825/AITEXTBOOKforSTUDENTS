@@ -61,7 +61,36 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
     </div>
     <ol className="comic-lesson-cuts">{lessonIdsForModule(moduleId).map((id, index) => {
       const lesson = getLesson(id); const done = isCompleted(id);
-      return <li key={id}><button onClick={() => lesson && onPickLesson(id)} disabled={!lesson} className="comic-lesson-cut"><span className="comic-cut-number">{done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}</span><span className="comic-cut-body"><strong>{lesson?.title ?? '곧 열립니다'}</strong>{lesson && <small>{lesson.wrapUpEasy}</small>}</span><Icon name="chevron-right" size={20} className="comic-cut-arrow" /></button></li>;
+      return (
+        <li key={id} className="relative">
+          <button
+            onClick={() => lesson && onPickLesson(id)}
+            disabled={!lesson}
+            className="comic-lesson-cut"
+            title={lesson ? `${index + 1}차시. ${lesson.title}\n전체 서술: ${lesson.wrapUpNormal || lesson.wrapUpEasy}` : undefined}
+          >
+            <span className="comic-cut-number">
+              {done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}
+            </span>
+            <span className="comic-cut-body">
+              <strong>{lesson?.title ?? '곧 열립니다'}</strong>
+              {lesson && <small>{lesson.wrapUpEasy}</small>}
+            </span>
+            <Icon name="chevron-right" size={20} className="comic-cut-arrow" />
+
+            {lesson && (
+              <div className="comic-lesson-cut-tooltip" role="tooltip">
+                <strong className="block text-amber-300 font-extrabold mb-1">
+                  {index + 1}차시. {lesson.title}
+                </strong>
+                <p className="text-slate-100 font-medium leading-relaxed">
+                  {lesson.wrapUpNormal || lesson.wrapUpEasy}
+                </p>
+              </div>
+            )}
+          </button>
+        </li>
+      );
     })}</ol>
   </div>;
 }} /></section>

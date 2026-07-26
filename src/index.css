@@ -450,12 +450,52 @@
 .season-progress { font-size:.84rem; font-weight:800; color:var(--ink-2); flex-shrink:0; white-space:nowrap; }
 .season-toggle { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--brand-ink); }
 
-.comic-lesson-cut { width:100%; min-height:3.6rem; padding:.55rem .75rem; display:flex; align-items:center; justify-content:space-between; gap:.65rem; border:1.5px solid var(--brand-ink); border-radius:6px; background:var(--paper-0); text-align:left; box-sizing:border-box; }
+.comic-lesson-cut { position:relative; width:100%; min-height:3.6rem; padding:.55rem .75rem; display:flex; align-items:center; justify-content:space-between; gap:.65rem; border:1.5px solid var(--brand-ink); border-radius:6px; background:var(--paper-0); text-align:left; box-sizing:border-box; }
 .comic-cut-number { width:2rem; height:2rem; display:grid; place-items:center; border:2px solid var(--brand-ink); border-radius:4px; font-weight:900; flex-shrink:0; }
 .comic-cut-body { min-width:0; flex:1; }
 .comic-lesson-cut strong { display:block; font-size:.92rem; font-weight:800; color:var(--brand-ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .comic-lesson-cut small { display:block; font-size:.82rem; color:var(--ink-2); margin-top:.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .comic-cut-arrow { flex-shrink:0; color:var(--brand-ink); margin-left:auto; }
+
+.comic-lesson-cut-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: max-content;
+  max-width: 22rem;
+  padding: 0.65rem 0.85rem;
+  background: #0F172A;
+  border: 1.5px solid #334155;
+  color: #F8FAFC;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 60;
+  white-space: normal;
+  text-align: left;
+}
+.comic-lesson-cut-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #0F172A transparent transparent transparent;
+}
+.comic-lesson-cut:hover .comic-lesson-cut-tooltip,
+.comic-lesson-cut:focus-visible .comic-lesson-cut-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
 
 @media (max-width: 767px) {
   .comic-contents-header { padding:.6rem 1rem; }
