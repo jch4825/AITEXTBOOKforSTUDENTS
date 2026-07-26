@@ -67,25 +67,32 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
             onClick={() => lesson && onPickLesson(id)}
             disabled={!lesson}
             className="comic-lesson-cut"
-            title={lesson ? `${index + 1}차시. ${lesson.title}\n전체 서술: ${lesson.wrapUpNormal || lesson.wrapUpEasy}` : undefined}
+            title={lesson ? `${index + 1}차시. ${lesson.title}\n🎯 학습 목표: ${lesson.objective}\n💡 핵심 정리: ${lesson.wrapUpNormal || lesson.wrapUpEasy}` : undefined}
           >
             <span className="comic-cut-number">
               {done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}
             </span>
             <span className="comic-cut-body">
               <strong>{lesson?.title ?? '곧 열립니다'}</strong>
-              {lesson && <small>{lesson.wrapUpEasy}</small>}
+              {lesson && <small>{lesson.objective || lesson.wrapUpNormal || lesson.wrapUpEasy}</small>}
             </span>
             <Icon name="chevron-right" size={20} className="comic-cut-arrow" />
 
             {lesson && (
               <div className="comic-lesson-cut-tooltip" role="tooltip">
-                <strong className="block text-amber-300 font-extrabold mb-1">
-                  {index + 1}차시. {lesson.title}
-                </strong>
-                <p className="text-slate-100 font-medium leading-relaxed">
-                  {lesson.wrapUpNormal || lesson.wrapUpEasy}
-                </p>
+                <div className="space-y-1">
+                  <strong className="block text-amber-300 font-extrabold text-xs">
+                    🎯 {index + 1}차시. {lesson.title}
+                  </strong>
+                  <p className="text-slate-100 font-semibold leading-relaxed text-xs">
+                    {lesson.objective}
+                  </p>
+                  {(lesson.wrapUpNormal || lesson.wrapUpEasy) && (
+                    <p className="text-slate-300 font-normal leading-relaxed text-[11px] border-t border-slate-700/80 pt-1 mt-1">
+                      💡 {lesson.wrapUpNormal || lesson.wrapUpEasy}
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </button>
