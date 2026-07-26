@@ -4,6 +4,7 @@ import GeneralizationRecordsPanel from '../../components/mission/GeneralizationR
 import type { TeacherRecordingSettings } from '../studio/types';
 import { ApiKeyPanel, ObjectivesPanel, ProgressPanel } from './LegacyTeacherPanels';
 import StudioEvidencePanel from './StudioEvidencePanel';
+import TeacherCurriculumGuide from './TeacherCurriculumGuide';
 import TeacherDataManagement from './TeacherDataManagement';
 import TeacherOnboarding from './TeacherOnboarding';
 import TeacherOperationGuide from './TeacherOperationGuide';
@@ -18,7 +19,7 @@ const TEACHER_TABS = [
   '학생 기록',
   '포트폴리오',
   'AI 연결',
-  '학습목표·성취기준',
+  '교육과정·성취기준',
   '데이터 관리',
 ] as const;
 
@@ -81,7 +82,7 @@ export default function TeacherHub({ onExit }: Props) {
               tabIndex={activeTab === tab ? 0 : -1}
               onClick={() => setActiveTab(tab)}
               onKeyDown={(event) => handleTabKey(event, index)}
-              className="rounded-full border-2 px-4 py-2 font-bold"
+              className="rounded-full border-2 px-4 py-2 font-bold cursor-pointer transition"
               style={{
                 borderColor: activeTab === tab ? 'var(--accent)' : 'var(--line)',
                 color: activeTab === tab ? 'var(--accent)' : 'var(--muted)',
@@ -133,7 +134,14 @@ export default function TeacherHub({ onExit }: Props) {
         {activeTab === '포트폴리오' && <StudioEvidencePanel mode="portfolio" />}
 
         {activeTab === 'AI 연결' && <ApiKeyPanel />}
-        {activeTab === '학습목표·성취기준' && <ObjectivesPanel />}
+        {activeTab === '교육과정·성취기준' && (
+          <div className="space-y-8">
+            <TeacherCurriculumGuide />
+            <div className="border-t-2 border-slate-200 pt-6">
+              <ObjectivesPanel />
+            </div>
+          </div>
+        )}
 
         {activeTab === '데이터 관리' && (
           <TeacherDataManagement

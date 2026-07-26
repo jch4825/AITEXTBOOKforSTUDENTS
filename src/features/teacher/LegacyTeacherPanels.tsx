@@ -66,17 +66,10 @@ export function ObjectivesPanel() {
               {/* Module Level AI Achievement Standards Summary */}
               {aiMeta && (
                 <div className="p-3.5 rounded-xl bg-indigo-950 text-white space-y-2 mb-2">
-                  <div className="flex items-center justify-between border-b border-indigo-800 pb-2">
+                  <div className="border-b border-indigo-800 pb-2">
                     <p className="font-extrabold text-amber-300 text-sm">
                       🤖 영역 {aiMeta.domainNumber}. {aiMeta.domainName} 정식 AI 성취기준
                     </p>
-                    <a
-                      href="/data/achievement_standards.csv"
-                      download="특수교육_인공지능_성취기준.csv"
-                      className="text-[11px] font-bold px-2.5 py-1 rounded bg-indigo-800 hover:bg-indigo-700 text-indigo-100 transition flex items-center gap-1"
-                    >
-                      📥 CSV 내보내기
-                    </a>
                   </div>
                   <div className="grid gap-2 sm:grid-cols-2 text-xs">
                     <div className="bg-indigo-900/60 p-2.5 rounded-lg border border-indigo-700/60">
