@@ -202,13 +202,13 @@ export default function LinkedStandardsGuide() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-sky-400 text-slate-950 mb-2">
-              2022 개정 특수교육 기본 교육과정 융합
+              거제애광학교 '인공지능 활용' 과목 융합
             </span>
             <h1 className="text-2xl sm:text-3xl font-black text-amber-300 tracking-tight">
               타 교과 연계 성취기준 지도 가이드
             </h1>
             <p className="mt-2 text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-              정보통신활용(정통), 국어, 수학, 사회, 진로와 직업, 보건 등 기본 교육과정 타 교과 성취기준과 본 인공지능 교과서의 차시별 융합 수업 연계 지도 안내입니다.
+              거제애광학교 개설 '인공지능 활용' 선택 교과와 기본 교육과정 타 교과(정보통신활용, 국어, 수학, 사회, 진로와 직업, 보건) 성취기준 간의 차시별 융합 수업 연계 지도 안내입니다.
             </p>
           </div>
         </div>

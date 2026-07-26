@@ -4,7 +4,6 @@ import { MODULES } from '../../data/modules';
 
 export default function TeacherCurriculumGuide() {
   const [activeSchoolLevel, setActiveSchoolLevel] = useState<'middle' | 'high'>('middle');
-  const [openSection, setOpenSection] = useState<'all' | 'overview' | 'goals' | 'structure' | 'standards' | 'teaching'>('all');
 
   return (
     <div className="space-y-6 text-slate-800">
@@ -12,14 +11,19 @@ export default function TeacherCurriculumGuide() {
       <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-8 text-white shadow-xl border border-indigo-900/50">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950 mb-2">
-              2022 개정 특수교육 기본 교육과정
-            </span>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-amber-400 text-slate-950">
+                거제애광학교 개설 학교 자율 교과
+              </span>
+              <span className="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-800 text-indigo-100">
+                2022 개정 특수교육 기본 교육과정 기반
+              </span>
+            </div>
             <h1 className="text-2xl sm:text-3xl font-black text-amber-300 tracking-tight">
-              인공지능 (AI) 과목 해설 및 교육과정 명세
+              '인공지능 활용' 과목 해설 및 교육과정 명세
             </h1>
             <p className="mt-2 text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-              특수교육 대상 학생의 디지털 기초소양 함양, 컴퓨팅 사고력 증진, 인공지능 기반 일상생활 자립을 위해 개발된 기본 교육과정 정식 교과 명세서입니다.
+              2022 개정 특수교육 기본 교육과정에 제시된 3개 선택 교과의 한계를 넘어 특수교육 대상 학생의 디지털 기초소양 및 자립 역량을 다각도로 확장하기 위해 거제애광학교에서 자체 개설한 선택 교과 명세서입니다.
             </p>
           </div>
 
@@ -50,21 +54,26 @@ export default function TeacherCurriculumGuide() {
         </div>
       </div>
 
-      {/* 1. 교육과정 설계의 개요 */}
+      {/* 1. 교육과정 개설 배경 및 개요 */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">📘</span>
-          <h2 className="text-xl font-extrabold text-slate-900">교육과정 설계의 개요</h2>
+          <h2 className="text-xl font-extrabold text-slate-900">교육과정 개설 배경 및 개요</h2>
         </div>
         <div className="text-sm text-slate-700 leading-relaxed space-y-3 font-medium">
+          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-slate-900 leading-relaxed space-y-2">
+            <p className="font-extrabold text-amber-950 flex items-center gap-1.5 text-sm sm:text-base">
+              <span>🏫</span> <span>학교 자율 선택 교과 개설 취지 (거제애광학교)</span>
+            </p>
+            <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
+              2022 개정 특수교육 기본 교육과정 선택 교과는 국가 수준에서 3개 과목으로 제한적으로 제시되어 있습니다. <strong>거제애광학교</strong>에서는 디지털 전환 시대에 발맞추어 특수교육 대상 학생들에게 보다 다양하고 실질적인 인공지능 교육 기회를 제공하고자 <strong>'인공지능 활용'</strong> 과목을 학교 자율 교과로 편성·개설하였습니다.
+            </p>
+          </div>
           <p>
-            <strong>인공지능과</strong>는 2022 개정 특수교육 기본 교육과정 선택 교과의 하나로, 특수교육 대상 학생이 인공지능 기기, 소프트웨어, 디지털 문화에 대한 경험과 활용을 통해 디지털 전환에 따른 사회 변화에 적응할 수 있도록 하는 과목이다.
+            <strong>'인공지능 활용'</strong> 과목은 특수교육 대상 학생이 인공지능 기기, 소프트웨어, 디지털 문화에 대한 경험과 활용을 통해 디지털 전환에 따른 사회 변화에 유연하게 적응할 수 있도록 지원하는 실생활 중심 과목입니다.
           </p>
           <p>
-            인공지능 기술의 발전은 인간의 삶을 빠르게 변화시키고 있으며, 학생이 인공지능의 원리와 활용법을 이해하고 올바른 태도로 활용하는 것은 미래 디지털 사회의 주체적인 시민으로 성장하는 데 필수적인 기초 역량이다.
-          </p>
-          <p>
-            본 교육과정은 <strong>‘성격 및 목표’</strong>, <strong>‘내용 체계’</strong>, <strong>‘성취기준’</strong>, <strong>‘교수·학습 및 평가’</strong>의 4개 핵심 영역으로 구성하였으며, 영역별 핵심 아이디어와 ‘지식·이해’, ‘과정·기능’, ‘가치·태도’ 내용 요소를 구체화하였다.
+            본 교육과정 명세는 국가 기본 교육과정의 삼차원 내용 체계(지식·이해, 과정·기능, 가치·태도)를 준용하여 <strong>'성격 및 목표'</strong>, <strong>'내용 체계'</strong>, <strong>'성취기준'</strong>, <strong>'교수·학습 및 평가'</strong>의 4개 핵심 구조로 정교하게 설계되었습니다.
           </p>
         </div>
       </section>
@@ -80,7 +89,7 @@ export default function TeacherCurriculumGuide() {
           <div>
             <h3 className="font-extrabold text-indigo-900 text-base mb-1.5">가. 성격</h3>
             <p className="text-slate-700 leading-relaxed font-medium">
-              인공지능과는 일상에서 접하는 인공지능의 원리를 이해하고, 인공지능 기기와 소프트웨어의 활용법을 익혀 실생활 문제를 해결할 수 있는 능력을 기르는 과목이다. 학생은 인공지능과의 상호작용 경험을 통해 정보의 가치와 사실 여부를 확인하고, 개인정보 보호 및 디지털 윤리를 실천하는 태도를 기른다.
+              <strong>'인공지능 활용'</strong> 과목은 일상에서 접하는 인공지능의 원리를 이해하고, 인공지능 기기와 소프트웨어의 활용법을 익혀 실생활 문제를 해결할 수 있는 능력을 기르는 선택 교과이다. 학생은 인공지능과의 상호작용 경험을 통해 정보의 가치와 사실 여부를 확인하고, 개인정보 보호 및 디지털 윤리를 실천하는 태도를 기른다.
             </p>
           </div>
 
@@ -113,14 +122,14 @@ export default function TeacherCurriculumGuide() {
         </div>
       </section>
 
-      {/* 3. 내용 체계 (2022 특수교육 기본교육과정 표준 틀) */}
+      {/* 3. 내용 체계 */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-4">
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-xl">📊</span>
             <h2 className="text-xl font-extrabold text-slate-900">2. 내용 체계</h2>
           </div>
-          <span className="text-xs font-bold text-slate-500">6개 핵심 영역 체계</span>
+          <span className="text-xs font-bold text-slate-500">6개 핵심 영역 체계 ('인공지능 활용')</span>
         </div>
 
         <div className="overflow-x-auto">
@@ -182,7 +191,7 @@ export default function TeacherCurriculumGuide() {
           <div className="flex items-center gap-2">
             <span className="text-xl">📜</span>
             <h2 className="text-xl font-extrabold text-slate-900">
-              3. 성취기준 해설 및 적용 시 고려 사항
+              3. 성취기준 해설 및 적용 시 고려 사항 ('인공지능 활용')
             </h2>
           </div>
           <div className="flex items-center gap-2">
@@ -256,7 +265,7 @@ export default function TeacherCurriculumGuide() {
                 {/* (나) 성취기준 적용 시 고려 사항 (특수교육 현장 맞춤) */}
                 <div className="bg-sky-50/70 p-4 rounded-xl border border-sky-200/80 text-xs sm:text-sm text-slate-800 space-y-1.5">
                   <p className="font-extrabold text-sky-900 flex items-center gap-1.5">
-                    <span>♿</span> <span>(나) 성취기준 적용 시 고려 사항 (특수교육 맞춤 지원)</span>
+                    <span>♿</span> <span>(나) 성취기준 적용 시 고려 사항 (거제애광학교 맞춤 지원)</span>
                   </p>
                   <ul className="list-inside list-disc space-y-1 text-slate-800 font-medium pl-2 leading-relaxed text-xs">
                     <li>
@@ -287,7 +296,7 @@ export default function TeacherCurriculumGuide() {
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
             <h3 className="font-extrabold text-indigo-900 text-sm">가. 교수·학습의 방향 및 방법</h3>
             <ul className="list-inside list-disc space-y-1.5 text-slate-700 font-medium leading-relaxed">
-              <li>실생활 문제 중심 체험 학습으로 구성하여 흥미와 몰입도를 제고한다.</li>
+              <li>'인공지능 활용' 과목의 특성을 살려 실생활 문제 중심 체험 학습으로 구성하여 흥미와 몰입도를 제고한다.</li>
               <li>직접 교수 및 시각적 모델링 기법을 통해 힌트를 단계적으로 제공한다.</li>
               <li>쉬운 지원, 보통 지원, 도전적 지원 수준을 고려한 맞춤형 과제를 제공한다.</li>
             </ul>
