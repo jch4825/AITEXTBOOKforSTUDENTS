@@ -41,27 +41,61 @@ export function ProgressPanel() {
 
 export function ObjectivesPanel() {
   return (
-    <section className="card mb-6 border border-[color:var(--border)] p-6">
-      <h2 className="mb-2 text-xl font-bold">차시별 학습목표 · 성취기준</h2>
-      <p className="mb-4 text-sm text-[color:var(--muted)]">
-        성취기준은 2022 개정 특수교육 기본교육과정 기준이에요. 단원을 눌러 펼쳐보세요.
-      </p>
+    <section className="studio-editorial p-6 md:p-8 space-y-5">
+      <div>
+        <p className="studio-kicker text-[color:var(--accent)] font-bold">2022 개정 특수교육 기본교육과정 연동</p>
+        <h2 className="text-2xl font-extrabold text-[color:var(--brand-ink)]">차시별 정식 학습목표 · 성취기준</h2>
+        <p className="mt-1 text-sm text-[color:var(--muted)]">
+          학생 화면, 목차(TOC) 툴팁, 교사용 지침서에 동일하게 적용되는 68차시 공통 학습 목표입니다.
+        </p>
+      </div>
+
       {MODULES.map((module) => {
         const lessons = ALL_LESSONS.filter((lesson) => lesson.moduleId === module.id);
         return (
-          <details key={module.id} className="mb-2 rounded border">
-            <summary className="cursor-pointer bg-[color:var(--paper-1)] p-3 font-semibold">
-              단원 {module.number}. {module.title} ({lessons.length}/{module.lessonCount}차시 구현)
+          <details key={module.id} className="group border-2 border-[color:var(--line)] rounded-2xl bg-[color:var(--paper-0)] overflow-hidden shadow-xs mb-3">
+            <summary className="cursor-pointer bg-[color:var(--paper-1)] p-4 font-extrabold text-base flex items-center justify-between hover:bg-slate-100 transition">
+              <span className="text-[color:var(--brand-ink)]">단원 {module.number}. {module.title}</span>
+              <span className="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 font-extrabold">
+                {lessons.length}개 차시 완성
+              </span>
             </summary>
-            <div className="space-y-3 p-3">
+            <div className="divide-y divide-slate-200 p-4 space-y-4">
               {lessons.map((lesson) => (
-                <div key={lesson.id} className="border-b pb-2">
-                  <p className="font-semibold">{lesson.number}. {lesson.title}</p>
-                  <p className="text-sm">🎯 {lesson.objective}</p>
+                <div key={lesson.id} className="pt-4 first:pt-0">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-xs font-black px-2.5 py-0.5 rounded bg-slate-800 text-white">
+                      {lesson.number}차시
+                    </span>
+                    <strong className="text-base font-extrabold text-[color:var(--brand-ink)]">
+                      {lesson.title}
+                    </strong>
+                  </div>
+
+                  <div className="bg-amber-500/10 border border-amber-400/50 rounded-xl p-3 my-2 text-sm text-slate-800 space-y-1">
+                    <p className="font-extrabold text-amber-900 flex items-center gap-1.5">
+                      <span>🎯</span> <span>공통 학습 목표:</span>
+                    </p>
+                    <p className="font-bold text-slate-900 leading-relaxed pl-5">
+                      {lesson.objective}
+                    </p>
+                  </div>
+
+                  {(lesson.wrapUpNormal || lesson.wrapUpEasy) && (
+                    <div className="text-xs text-slate-700 font-semibold pl-1 mb-2">
+                      💡 <strong>차시 핵심 정리 (보통 지원):</strong> {lesson.wrapUpNormal || lesson.wrapUpEasy}
+                    </div>
+                  )}
+
                   {lesson.standards && lesson.standards.length > 0 && (
-                    <ul className="mt-1 list-inside list-disc text-xs text-[color:var(--muted)]">
-                      {lesson.standards.map((standard) => <li key={standard}>{standard}</li>)}
-                    </ul>
+                    <div className="mt-2 bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs">
+                      <p className="font-extrabold text-slate-700 mb-1">📋 2022 개정 특수교육 성취기준:</p>
+                      <ul className="list-inside list-disc space-y-1 text-slate-800 font-medium">
+                        {lesson.standards.map((standard) => (
+                          <li key={standard}>{standard}</li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
               ))}
