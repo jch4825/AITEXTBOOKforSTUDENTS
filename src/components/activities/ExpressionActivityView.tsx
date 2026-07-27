@@ -44,7 +44,7 @@ export const ExpressionActivityView: React.FC<ExpressionActivityProps> = ({
               {mode === 'choice' && '카드 선택'}
               {mode === 'text' && '글 쓰기'}
               {mode === 'speech' && '말하기'}
-              {mode === 'aac' && 'AAC 그림말'}
+              {mode === 'aac' && '그림 카드'}
               {mode === 'draw' && '그리기'}
             </button>
           ))}

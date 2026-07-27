@@ -24,7 +24,7 @@ function printCard(name: string, label: string) {
   doc.open();
   doc.write(
     '<!doctype html><html lang="ko"><head><meta charset="utf-8">' +
-    `<title>${label} · AAC 카드</title><style>` +
+    `<title>${label} · 그림 카드</title><style>` +
     '@page{size:A6;margin:8mm;}' +
     'html,body{margin:0;height:100%;}' +
     'body{display:flex;align-items:center;justify-content:center;}' +
@@ -81,7 +81,7 @@ export default function PecsBoard({ moduleId }: Props) {
 
   return (
     <div className="p-3 w-72 md:w-[500px]">
-      <h3 className="text-lg font-bold mb-2 md:text-2xl md:mb-4" style={{ color: 'var(--accent)' }}>AAC 카드</h3>
+      <h3 className="text-lg font-bold mb-2 md:text-2xl md:mb-4" style={{ color: 'var(--accent)' }}>그림 카드</h3>
       <div className="grid grid-cols-4 gap-2 md:gap-3 max-h-64 md:max-h-[500px] overflow-y-auto">
         {words.map((w) => (
           <button

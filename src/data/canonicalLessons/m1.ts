@@ -444,7 +444,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       purpose: '소음이 있는 복도에서 녹음된 음성 인식 결과 검토하기',
       mismatch: '주변 소음 때문에 인식된 글자가 일부 틀림',
       evidence: ['깨끗한 소리 녹음', '소음 섞인 소리 녹음'],
-      resolution: '소음 조건의 영향을 이해하고 상황에 맞는 입력(글자, AAC, 가깝게 말하기)을 활용함',
+      resolution: '소음 조건의 영향을 이해하고 상황에 맞는 입력(글자, 그림 카드, 가깝게 말하기)을 활용함',
     },
     stages: [
       {
@@ -467,7 +467,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         id: 's2-concept',
         phase: 'concept',
         title: '내가 쓰기 편한 입력 방법 선택',
-        instruction: '소음이 심할 때는 글자 입력이나 AAC 카드를 사용하는 것이 더 정확할 수 있습니다.',
+        instruction: '소음이 심할 때는 글자 입력이나 그림 카드를 사용하는 것이 더 정확할 수 있습니다.',
         activity: {
           id: 'act-s2',
           kind: 'expression',
@@ -476,7 +476,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           choiceCards: [
             { id: 'mic-close', label: '마이크에 가깝게 다시 말하기', emoji: '🎙️' },
             { id: 'text-in', label: '글자로 직접 입력하기', emoji: '⌨️' },
-            { id: 'aac-in', label: 'AAC 그림 카드로 전달하기', emoji: '🖼️' },
+            { id: 'aac-in', label: '그림 카드로 전달하기', emoji: '🖼️' },
           ],
         },
         assetIds: ['m1-l5-story-02'],
@@ -507,7 +507,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       { id: 'm1-l5-story-01', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l5-story-01.webp', alt: '녹음하는 진우', required: true, purpose: '스토리 컷 1' },
       { id: 'm1-l5-story-02', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l5-story-02.webp', alt: '여러 입력 방법 활용', required: true, purpose: '스토리 컷 2' },
     ],
-    wrapUp: '음성 인식은 주변 소음의 영향을 받으므로 필요할 때 글자나 AAC 입력을 함께 사용합니다.',
+    wrapUp: '음성 인식은 주변 소음의 영향을 받으므로 필요할 때 글자나 그림 카드 입력을 함께 사용합니다.',
   },
 
   // ============================================================

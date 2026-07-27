@@ -765,7 +765,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '진우가 편한 입력 방법을 골랐어요.',
             '진우는 상황에 따라 말하기, 글자 입력, 그림 선택 중 편한 방법을 골랐습니다.',
-            '진우는 정확성, 편안함, 주변 환경을 기준으로 음성, 키보드, 그림·AAC 입력 방법을 비교해 자신에게 맞는 방법을 정했습니다.',
+            '진우는 정확성, 편안함, 주변 환경을 기준으로 음성, 키보드, 그림 카드를 비교해 자신에게 맞는 방법을 정했습니다.',
             '좋은 입력 방법은 사람과 상황에 따라 달라질 수 있어요.',
           ),
         },
@@ -823,7 +823,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
       prompt: '원래 말한 문장과 다르게 인공지능이 글자를 썼을 때 무엇을 먼저 하겠습니까?',
       choices: [
         { id: 'listen-again', emoji: '🔁', label: '조용한 곳에서 원래 목소리를 다시 들려주거나 글자로 직접 입력합니다.', isCorrect: true },
-        { id: 'choose-another-input', emoji: '📊', label: '마이크 거리, 배경 소음, AAC 등 입력 방법의 조건을 비교합니다.', isCorrect: true },
+        { id: 'choose-another-input', emoji: '📊', label: '마이크 거리, 배경 소음, 그림 카드 등 입력 방법의 조건을 비교합니다.', isCorrect: true },
         { id: 'trust-transcript', emoji: '📜', label: '화면의 “채소회 오이” 글자를 확인 없이 믿습니다.', isCorrect: false },
         { id: 'shout-loudly', emoji: '🗣️', label: '소음 환경을 개선하지 않고 무작정 소리만 크게 지릅니다.', isCorrect: false },
       ],
@@ -832,11 +832,11 @@ export const M1_STUDIOS: StudioDefinition[] = [
     },
     supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
-      description: '조용한 교실에서 마이크를 가까이 대고 말하거나 텍스트 및 AAC로 입력하자 정확한 글자가 나왔습니다.',
+      description: '조용한 교실에서 마이크를 가까이 대고 말하거나 텍스트 및 그림 카드로 입력하자 정확한 글자가 나왔습니다.',
       facts: [
         '복도 소음이 사라지면 소리 특징을 더 선명하게 찾을 수 있습니다.',
         '마이크와의 거리가 가까워지면 소음의 영향이 줄어듭니다.',
-        '글자나 AAC 보조공학 입력은 소음 환경에서도 정확하게 뜻을 전달합니다.',
+        '글자나 그림 카드 보조공학 입력은 소음 환경에서도 정확하게 뜻을 전달합니다.',
         '나에게 편하고 정확한 입력 방법을 상황에 맞게 고를 수 있습니다.',
       ],
     },

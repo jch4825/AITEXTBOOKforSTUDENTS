@@ -26,7 +26,7 @@ interface Props {
 
 const MODE_LABELS: Record<GeneralizationExpressionMode, string> = {
   choice: '문장 고르기',
-  aac: 'AAC 카드',
+  aac: '그림 카드',
   text: '글로 쓰기',
   speech: '말로 말하기',
   draw: '그림으로 표현',
