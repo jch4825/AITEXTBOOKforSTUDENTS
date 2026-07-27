@@ -521,6 +521,11 @@ export const M1_STUDIOS: StudioDefinition[] = [
       title: 'AI 엉뚱 대답 검토 기록표',
       prompt: '아이미의 엉뚱 대답, 진짜 식단표 정보, 수정한 바른 메뉴를 한 장에 정리해 봐요.',
     },
+    teacherGuidance: {
+      title: '선생님과 함께해요',
+      text: '학교 정보 나이스(NEIS) 대국민서비스 API를 연결해 주면 인공지능도 학교의 식당 정보를 확인할 수 있으며, 학교급식 통합플랫폼 등의 정보 접근권을 인공지능에게 제공하면 실시간 학교 급식 정보를 인공지능이 찾을 수도 있습니다. 단, 인공지능의 이 기능은 추가로 설정을 해줘야 하는 기능입니다.',
+      supportLevelOnly: 'challenge',
+    },
     transfer: {
       title: '실시간 검색 기능을 가진 AI라면',
       description: '요즘 인공지능은 인터넷 검색 도구를 연결해 실제 날씨 정보를 직접 찾아보고, 훨씬 더 사실에 가까운 정확한 답변을 냅니다!',

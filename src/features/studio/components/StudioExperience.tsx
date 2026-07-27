@@ -272,6 +272,30 @@ export default function StudioExperience({
             ))}
           </ul>
         ) : null}
+
+        {state.stage === 'artifact' && definition.teacherGuidance && (
+          (!definition.teacherGuidance.supportLevelOnly || state.supportLevel === definition.teacherGuidance.supportLevelOnly) && (
+            <div className="mt-5 p-4 rounded-2xl border-2 border-amber-300 bg-amber-50/90 text-amber-950 space-y-2 shadow-xs">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-extrabold text-sm text-amber-950 flex items-center gap-1.5">
+                  <span>👩‍🏫</span> {definition.teacherGuidance.title || '선생님과 함께해요'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => speakNow(`${definition.teacherGuidance?.title || '선생님과 함께해요'}. ${definition.teacherGuidance?.text}`)}
+                  className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-amber-400 bg-white shadow-xs transition-all hover:scale-110"
+                  style={{ color: accent }}
+                  title="선생님 설명 듣기"
+                >
+                  <Icon name="speaker" size={12} />
+                </button>
+              </div>
+              <p className="text-xs font-semibold leading-relaxed text-amber-900/90 whitespace-pre-wrap">
+                {definition.teacherGuidance.text}
+              </p>
+            </div>
+          )
+        )}
       </div>
 
       {state.supportLevel !== 'full' && definition.safetyNote ? (

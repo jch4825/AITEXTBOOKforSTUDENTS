@@ -81,6 +81,12 @@ export interface VisualNovelStory {
   knowledge: [VisualNovelKnowledge, VisualNovelKnowledge, VisualNovelKnowledge];
 }
 
+export interface TeacherGuidance {
+  title?: string;
+  text: string;
+  supportLevelOnly?: SupportLevel;
+}
+
 export interface StudioDefinition {
   id: string;
   lessonId: LessonId;
@@ -127,6 +133,7 @@ export interface StudioDefinition {
     title: string;
     prompt: string;
   };
+  teacherGuidance?: TeacherGuidance;
   transfer: {
     title: string;
     description: string;
