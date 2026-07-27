@@ -88,6 +88,12 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '사람이 말할 때 나는 소리입니다.',
   },
   {
+    term: '선명도',
+    shortExplanation: '소리나 모습이 뭉개지지 않고 아주 또렷하고 분명한 정도입니다.',
+    example: '목소리가 뚜렷할수록 음성 인식의 선명도가 높아집니다.',
+    ttsVersion: '선명도는 소리나 모습이 뭉개지지 않고 아주 또렷하고 분명한 정도입니다.',
+  },
+  {
     term: '학습',
     shortExplanation: '보고 들으면서 배우는 것입니다.',
     example: 'AI도 많은 예시를 보면서 학습합니다.',
