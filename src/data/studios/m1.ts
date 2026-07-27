@@ -809,6 +809,15 @@ export const M1_STUDIOS: StudioDefinition[] = [
         '원래 말한 문장은 "체험회에 놀러 오세요!"입니다.',
         '아이미 화면에는 "채소회 오이 사세요!"라고 적혔습니다.',
       ],
+      stimuli: [
+        {
+          id: 'm1-l5-noisy-announcement',
+          kind: 'image',
+          src: '/lessons/story/m1/m1-l5-scene-01.webp',
+          alt: '진우가 시끄러운 복도에서 학교 방송을 듣는 모습',
+          caption: '시끄러운 복도에서의 음성 인식 (채소회 오이)',
+        },
+      ],
     },
     firstAttempt: {
       prompt: '원래 말한 문장과 다른 오이 자막이 나타났을 때 무엇을 먼저 하겠습니까?',

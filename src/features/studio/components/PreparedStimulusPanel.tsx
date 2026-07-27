@@ -28,10 +28,11 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
           const isPecs = stimulus.id.includes('pecs');
           const isRobotVacuum = stimulus.id.includes('robot-vacuum');
           const isRainbowTteokbokki = stimulus.id.includes('rainbow-tteokbokki');
+          const isNoisyAnnouncement = stimulus.id.includes('noisy-announcement');
           const widthClass = isSingle
             ? isRobotVacuum
               ? 'w-36 sm:w-40 md:w-48 max-w-full mx-auto'
-              : isRainbowTteokbokki
+              : (isRainbowTteokbokki || isNoisyAnnouncement)
                 ? 'w-48 sm:w-56 md:w-64 max-w-full mx-auto'
                 : 'w-72 sm:w-80 md:w-96 max-w-full mx-auto'
             : 'w-full';
