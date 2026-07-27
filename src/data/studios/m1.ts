@@ -820,7 +820,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
       ],
     },
     firstAttempt: {
-      prompt: '원래 말한 문장과 다른 오이 자막이 나타났을 때 무엇을 먼저 하겠습니까?',
+      prompt: '원래 말한 문장과 다르게 인공지능이 글자를 썼을 때 무엇을 먼저 하겠습니까?',
       choices: [
         { id: 'listen-again', emoji: '🔁', label: '조용한 곳에서 원래 목소리를 다시 들려주거나 글자로 직접 입력합니다.', isCorrect: true },
         { id: 'choose-another-input', emoji: '📊', label: '마이크 거리, 배경 소음, AAC 등 입력 방법의 조건을 비교합니다.', isCorrect: true },
