@@ -26,10 +26,17 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
         if (stimulus.kind === 'image') {
           const failed = failedImages.includes(stimulus.id);
           const isPecs = stimulus.id.includes('pecs');
+          const isRobotVacuum = stimulus.id.includes('robot-vacuum');
+          const widthClass = isSingle
+            ? isRobotVacuum
+              ? 'w-36 sm:w-40 md:w-48 max-w-full mx-auto'
+              : 'w-72 sm:w-80 md:w-96 max-w-full mx-auto'
+            : 'w-full';
+
           return (
             <figure
               key={stimulus.id}
-              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-3 shadow-xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${isSingle ? 'w-72 sm:w-80 md:w-96 max-w-full mx-auto' : 'w-full'}`}
+              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-3 shadow-xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${widthClass}`}
               style={!isPecs ? { borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' } : undefined}
             >
               {failed ? (
