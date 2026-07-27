@@ -1059,6 +1059,239 @@
   }
 }
 
+/* Contents redesign: 단원 카드는 한 겹 종이로, 펼친 차시는 별도 박스가 아닌 열린 목록으로 표시한다. */
+.season-map {
+  gap: 1rem;
+}
+.season-map > .season-card {
+  border: 1px solid var(--line);
+  border-left: 0.42rem solid var(--episode-accent);
+  border-radius: 18px;
+  background: var(--paper-0);
+  box-shadow: none;
+  overflow: hidden;
+}
+.season-map > .season-card-active,
+.season-map > li:has(.season-episode-active) {
+  background: color-mix(in srgb, var(--episode-accent) 8%, var(--paper-0));
+  box-shadow: none;
+}
+.season-episode {
+  min-height: 7.25rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.season-episode:hover:not(:disabled),
+.season-episode-active {
+  background: color-mix(in srgb, var(--episode-accent) 7%, transparent);
+  transform: none;
+  box-shadow: none;
+}
+.season-number {
+  width: 2.25rem;
+  color: var(--episode-accent);
+  font-size: 1rem;
+  letter-spacing: -0.03em;
+}
+.season-icon {
+  width: 2.4rem;
+}
+.season-copy strong {
+  font-size: 1.04rem;
+  line-height: 1.28;
+}
+.season-copy small {
+  margin-top: 0.28rem;
+  font-size: 0.86rem;
+}
+.season-episode-meta {
+  min-width: 5.75rem;
+  align-items: center;
+}
+.season-progress {
+  width: 4.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: right;
+}
+.season-progress-bar {
+  width: 100%;
+  height: 0.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--episode-accent) 15%, var(--paper-2));
+  overflow: hidden;
+}
+.season-progress-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--episode-accent);
+}
+.season-toggle {
+  color: var(--ink-2);
+}
+.season-drawer-row {
+  grid-column: 1 / -1;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+.season-lessons,
+.season-lessons-drawer,
+.season-lessons-inline {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.season-lessons-drawer {
+  display: block;
+  padding: 0.3rem 0 0.2rem;
+}
+.season-lessons-drawer .comic-lesson-list,
+.season-lessons-inline .comic-lesson-list {
+  padding: 1rem 0 0.2rem;
+  border-top: 3px solid var(--episode-accent);
+}
+.comic-list-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.comic-list-heading h2 {
+  margin: 0.12rem 0 0;
+  font-size: 1.2rem;
+  line-height: 1.25;
+}
+.comic-count {
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  background: color-mix(in srgb, var(--comic-accent) 11%, var(--paper-0));
+  color: var(--brand-ink);
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+.comic-lesson-cuts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.season-lessons-drawer .comic-lesson-cuts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 1rem;
+}
+.comic-lesson-cut {
+  min-height: 3.55rem;
+  padding: 0.62rem 0.2rem;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--comic-accent) 18%, var(--line));
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.comic-lesson-cut:hover:not(:disabled),
+.comic-lesson-cut:focus-visible {
+  background: color-mix(in srgb, var(--comic-accent) 7%, var(--paper-0));
+}
+.comic-cut-number {
+  width: 2rem;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  color: var(--comic-accent);
+  font-size: 0.92rem;
+  line-height: 1;
+}
+.comic-lesson-cut strong {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--brand-ink);
+}
+.comic-cut-done {
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 0.08rem 0.45rem;
+  background: color-mix(in srgb, var(--comic-accent) 13%, var(--paper-0));
+  color: var(--ink-2);
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+@media (max-width: 1023px) {
+  .season-lessons-drawer .comic-lesson-cuts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  .season-map {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .season-map > .season-card {
+    border-radius: 16px;
+  }
+  .season-episode {
+    min-height: 6.4rem;
+    padding: 0.85rem;
+  }
+  .season-icon {
+    display: none;
+  }
+  .season-episode-meta {
+    min-width: 4.9rem;
+  }
+  .season-progress {
+    width: 4.2rem;
+    font-size: 0.74rem;
+  }
+  .season-drawer-row,
+  .season-lessons-drawer {
+    display: none !important;
+  }
+  .season-lessons-inline {
+    display: block;
+    padding: 0 0.85rem 0.85rem;
+  }
+  .season-lessons-inline .comic-lesson-list {
+    padding-top: 0.85rem;
+  }
+  .season-lessons-inline .comic-list-heading {
+    display: none;
+  }
+  .comic-lesson-cuts {
+    display: grid;
+    gap: 0;
+  }
+  .comic-lesson-cut {
+    min-height: 4rem;
+    padding-block: 0.65rem;
+  }
+  .comic-lesson-cut strong {
+    align-items: flex-start;
+    white-space: normal;
+  }
+  .comic-cut-done {
+    margin-top: 0.06rem;
+  }
+}
+
 @layer components {
   .studio-editorial {
     color: var(--editorial-ink);

@@ -37,6 +37,8 @@ export default function SeasonMap({ episodes, activeId, onPick, renderLessons }:
         const rowEpisodeIds = episodes.slice(rowStart, rowStart + 3).map((item) => item.id);
         const rowActiveEpisode = activeEpisode && rowEpisodeIds.includes(activeEpisode.id) ? activeEpisode : null;
         const rowActiveTheme = rowActiveEpisode ? themeFor(rowActiveEpisode.id) : null;
+        const progressLabel = episode.complete ? '모두 완료' : `${episode.done}/${episode.total} 완료`;
+        const progressPercent = episode.total > 0 ? Math.round((episode.done / episode.total) * 100) : 0;
 
         return (
           <Fragment key={episode.id}>
@@ -60,8 +62,11 @@ export default function SeasonMap({ episodes, activeId, onPick, renderLessons }:
                   </span>
                 </div>
                 <div className="season-episode-meta">
-                  <span className="season-progress">
-                    {episode.complete ? <Icon name="star" size={18} filled color={theme.accent} /> : `${episode.done}/${episode.total}`}
+                  <span className="season-progress" aria-label={`${episode.total}차시 중 ${episode.done}차시 완료`}>
+                    <span>{progressLabel}</span>
+                    <span className="season-progress-bar" aria-hidden>
+                      <span style={{ width: `${progressPercent}%` }} />
+                    </span>
                   </span>
                   <span className="season-toggle" aria-hidden>
                     <Icon name={active ? 'chevron-up' : 'chevron-down'} size={18} />

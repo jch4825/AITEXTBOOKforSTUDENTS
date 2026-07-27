@@ -143,6 +143,16 @@ const seasonMap = readFileSync(new URL('../src/components/SeasonMap.tsx', import
 if (!contents.includes('renderLessons=') || !seasonMap.includes('season-drawer-row') || !seasonMap.includes('aria-expanded')) {
   throw new Error('Active module lessons must render through the accessible season drawer.');
 }
+if (
+  contents.includes('name="star"')
+  || seasonMap.includes('name="star"')
+  || !seasonMap.includes('season-progress-bar')
+  || !contents.includes('comic-cut-done')
+  || !css.includes('.season-map > .season-card')
+  || !css.includes('border-bottom: 1px solid color-mix(in srgb, var(--comic-accent) 18%, var(--line))')
+) {
+  throw new Error('Contents must avoid star progress and nested card-like lesson cuts.');
+}
 
 
 const ox = readFileSync(new URL('../src/components/games/OXGame.tsx', import.meta.url), 'utf8');

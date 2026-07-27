@@ -70,10 +70,13 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
             title={lesson ? `${index + 1}차시. ${lesson.title}\n🎯 학습 목표: ${lesson.objective}\n💡 핵심 정리: ${lesson.wrapUpNormal || lesson.wrapUpEasy}` : undefined}
           >
             <span className="comic-cut-number">
-              {done ? <Icon name="star" size={18} filled color={moduleTheme.accent} /> : String(index + 1).padStart(2, '0')}
+              {String(index + 1).padStart(2, '0')}
             </span>
             <span className="comic-cut-body">
-              <strong>{lesson?.title ?? '곧 열립니다'}</strong>
+              <strong>
+                {lesson?.title ?? '곧 열립니다'}
+                {done && <span className="comic-cut-done">완료</span>}
+              </strong>
               {lesson && <small>{lesson.objective || lesson.wrapUpNormal || lesson.wrapUpEasy}</small>}
             </span>
             <Icon name="chevron-right" size={20} className="comic-cut-arrow" />
