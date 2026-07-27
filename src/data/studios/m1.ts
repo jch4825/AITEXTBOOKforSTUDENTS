@@ -864,6 +864,15 @@ export const M1_STUDIOS: StudioDefinition[] = [
       title: '체육관 안내가 잘 들리지 않는다면',
       description: '넓은 체육관에서 다음 활동 장소를 알려 주는 음성 안내가 화면에 다르게 적혔습니다.',
       prompt: '나만의 표현으로 주변이 시끄러울 때 음성 인식 결과를 어떻게 확인할지 설명해보자.',
+      stimuli: [
+        {
+          id: 'm1-l5-gym-announcement',
+          kind: 'image',
+          src: '/lessons/story/m1/m1-l5-scene-05.jpg',
+          alt: '체육관 스피커 소리를 듣고 아이미가 혼란스러워하는 장면',
+          caption: '체육관 스피커 소리와 아이미의 음성 인식 (잘못된 적힘)',
+        },
+      ],
       choices: [
         { id: 'replay-gym-audio', emoji: '🎧', label: '안내 방송을 조용한 곳에서 다시 듣고 장소 표지와 비교합니다.', isCorrect: true },
         { id: 'use-accessible-option', emoji: '♿', label: '타자 입력, 그림 안내판, 또는 선생님의 도움을 요청합니다.', isCorrect: true },
