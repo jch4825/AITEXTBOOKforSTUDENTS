@@ -14,6 +14,7 @@ import InquiryCertificateModal from './InquiryCertificateModal';
 import CompletionAwardModal from './CompletionAwardModal';
 import RobotVacuumPathGame from './RobotVacuumPathGame';
 import NextWordRunnerGame from './NextWordRunnerGame';
+import SttAudioCleanerGame from './SttAudioCleanerGame';
 import { getScopedChoices } from '../studioChoiceUtils';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
@@ -157,6 +158,7 @@ export default function StudioExperience({
   const isCompleteStage = state.stage === 'complete';
   const isM1L2 = definition.lessonId === 'm1-l2' || definition.id === 'm1-robot-vacuum-lab';
   const isM1L3 = definition.lessonId === 'm1-l3' || definition.id === 'm1-answer-making-lab';
+  const isM1L5 = definition.lessonId === 'm1-l5' || definition.id === 'm1-ear-lab';
   const contextTitle = state.stage === 'transfer'
     ? definition.transfer.title
     : definition.encounter.title;
@@ -166,6 +168,8 @@ export default function StudioExperience({
       <RobotVacuumPathGame />
     ) : isM1L3 ? (
       <NextWordRunnerGame />
+    ) : isM1L5 ? (
+      <SttAudioCleanerGame />
     ) : (
       <div
         className="relative flex h-full flex-col justify-between rounded-2xl p-6 md:p-8 space-y-5 overflow-hidden shadow-xl"
