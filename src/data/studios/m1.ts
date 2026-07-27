@@ -236,7 +236,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
           id: 'feature-map',
           label: '장면 4 · 기능 분석 지도',
           imageSrc: '/lessons/story/m1/m1-l2-scene-04.webp',
-          alt: '윤아가 입력과 기능과 결과와 사람 확인을 연결한 지도를 완성하는 장면',
+          alt: '윤아가 입력과 기능과 결과와 사람에게 직접 확인하기를 연결한 지도를 완성하는 장면',
           knowledgeStep: 2,
           copy: sceneCopy(
             '윤아는 도구들이 하는 일이 어떻게 다른지 나누어 봤어요.',

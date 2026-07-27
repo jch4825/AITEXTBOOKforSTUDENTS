@@ -516,7 +516,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['jinwoo', 'minjun'],
     introEasy: '진우가 아픈 몸 상태를 그림 카드로 선생님께 바로 알렸습니다.',
     introNormal:
-      '마을 활동 중 진우가 배가 아파왔습니다. 진우가 AAC 카드를 가리키며 민준 선생님께 말씀드렸습니다. "선생님, 복통이 심합니다. 도움이 필요합니다!"',
+      '마을 활동 중 진우가 배가 아파왔습니다. 진우가 그림 카드를 가리키며 민준 선생님께 말씀드렸습니다. "선생님, 복통이 심합니다. 도움이 필요합니다!"',
     reaction: { speaker: 'jinwoo', text: '정확한 병명을 몰라도 아프다고 바로 표현하고 사람에게 도움을 요청할 수 있어!' },
   },
   'm6-l9': {

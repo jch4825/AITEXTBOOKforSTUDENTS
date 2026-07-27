@@ -317,7 +317,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         id: 's1-encounter',
         phase: 'encounter',
         title: '4단계 1분 대본 구조',
-        instruction: '주제, AI 도우미 활용, 사람이 확인한 방법, 배운 점 4단계를 순서대로 맞춰봅시다.',
+        instruction: '주제, AI 도우미 활용, 사람이 직접 확인한 방법, 배운 점 4단계를 순서대로 맞춰봅시다.',
         activity: {
           id: 'act-s1',
           kind: 'sequence',
@@ -325,7 +325,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           items: [
             { id: 's1-topic', label: '1. 주제: 안녕하세요! 우리 동네 AI 탐구 보고서를 소개합니다.', correctOrder: 1 },
             { id: 's2-ai', label: '2. AI 도우미: AI로는 보고서의 초안 작성과 문장 다듬기 도움을 받았습니다.', correctOrder: 2 },
-            { id: 's3-human', label: '3. 사람 확인: 지어낸 장소 오류를 구청 공식 공지문과 비교해 직접 고쳤습니다.', correctOrder: 3 },
+            { id: 's3-human', label: '3. 사람에게 직접 확인하기: 지어낸 장소 오류를 구청 공식 공지문과 비교해 직접 고쳤습니다.', correctOrder: 3 },
             { id: 's4-learn', label: '4. 배운 점: AI 대답을 스스로 확인하고 내 생각을 보완해야 진짜 배움이 됨을 깨달았습니다.', correctOrder: 4 },
           ],
         },

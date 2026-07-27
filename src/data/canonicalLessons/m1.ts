@@ -709,7 +709,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '각 부탁 카드를 알맞은 경계 상자에 놓아보세요.',
           bins: [
             { id: 'ai-help', label: 'AI 도움 가능 (정보 정리)', emoji: '🤖' },
-            { id: 'human-check', label: '사람 확인 필요 (감정/건강/책임)', emoji: '👥' },
+            { id: 'human-check', label: '사람에게 직접 물어보기 (감정/건강/책임)', emoji: '👥' },
           ],
           cards: [
             { id: 'c-time', label: '행사 안내문 오타 찾기', binId: 'ai-help' },

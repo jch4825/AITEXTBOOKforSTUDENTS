@@ -81,7 +81,7 @@ export const M6_PORTFOLIO: ModulePortfolioDefinition = {
       id: 'health-communication-boundary',
       title: '건강·소통·정보 범위',
       prompt: '몸이 불편하거나 설명이 어렵거나 개인정보를 물을 때 누구에게 어떤 방식으로 표현할지 적어 보세요.',
-      placeholder: '예: 몸 상태는 AAC로 선생님께 먼저 알리고, 온라인에는 별칭과 취미만 소개할 거야.',
+      placeholder: '예: 몸 상태는 그림 카드로 선생님께 먼저 알리고, 온라인에는 별칭과 취미만 소개할 거야.',
     },
   ],
   transferPrompt:

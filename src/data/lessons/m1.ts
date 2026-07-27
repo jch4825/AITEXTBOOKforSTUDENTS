@@ -57,7 +57,7 @@ export const M1_LESSONS: LessonContent[] = [
           chapters: [
             {
               title: '1장 기능의 단서',
-              goal: '기계의 기능을 입력, 도움, 사람 확인으로 나눠 봐요.',
+              goal: '기계의 기능을 입력, 도움, 사람에게 직접 확인하기로 나눠 봐요.',
               blocks: [
                 {
                   kind: 'drag-sort',
@@ -219,7 +219,7 @@ export const M1_LESSONS: LessonContent[] = [
     standards: [AI_STANDARD],
     bodyEasy: '음성 인식은 소리를 글자로 바꿔요. 주변이 시끄럽거나 마이크가 멀면 다른 글자로 바뀔 수 있어요.',
     bodyNormal: '음성 인식은 들어온 소리를 글자로 바꾸는 기능입니다. 주변 소음, 마이크와의 거리, 기기 상태에 따라 같은 말도 다르게 인식될 수 있습니다.',
-    wrapUpEasy: '말이 잘 인식되지 않으면 다시 듣기, 글, 그림 카드, 사람 확인을 사용할 수 있어요.',
+    wrapUpEasy: '말이 잘 인식되지 않으면 다시 듣기, 글자, 그림 카드, 선생님께 물어보기를 사용할 수 있어요.',
     wrapUpNormal: '음성 인식이 다를 때는 말한 사람을 탓하지 않고 소음과 기기 상태를 살피며 다른 입력 방법을 함께 사용합니다.',
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['음성 인식', '입력', '결과'], imagePlaceholder: true } },
