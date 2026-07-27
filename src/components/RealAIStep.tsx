@@ -196,7 +196,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
         {!hasApiKey() && (
           <div className="w-full max-w-[360px] mb-3 p-3 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 text-amber-900 text-xs font-bold flex items-center gap-2">
             <Icon name="warning" size={18} className="text-amber-600 shrink-0" />
-            <span>인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.</span>
+            <span>인공지능이 연결되지 않아 이 페이지 활동은 지금 하기 어려워요. 다음에 다시 활용해 보세요.</span>
           </div>
         )}
         <PhoneFrame
@@ -216,7 +216,7 @@ export default function RealAIStep({ prompt, userInput, fallbackResponse, accent
               technicalDetail={state.technicalDetail}
             />
             <p className="text-xs text-[color:var(--muted)] font-bold">
-              인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.
+              인공지능이 연결되지 않아 이 페이지 활동은 지금 하기 어려워요. 다음에 다시 활용해 보세요.
             </p>
           </div>
         )}

@@ -2,7 +2,7 @@ import type { StudioDefinition, SupportLevel, VisualNovelCopy } from '../../feat
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
 
 const PREPARED_LEARNING_NOTE =
-  '화면의 답은 실제 AI 연결이 아닌 준비된 AI 예시입니다. AI 결과를 원문, 사전, 계산기, 그림과 비교하고 마지막 학습 결과는 내 말로 완성합니다.';
+  '화면의 답은 실제 AI가 바로 만든 답이 아니라 수업용 AI 예시입니다. AI 결과를 원문, 사전, 계산기, 그림과 비교하고 마지막 학습 결과는 내 말로 완성합니다.';
 
 function sceneCopy(
   full: string,
@@ -134,7 +134,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
     },
     supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
-      description: '세 질문의 준비된 답을 같은 과제 기준으로 비교합니다.',
+      description: '세 질문의 수업용 답을 같은 기준으로 비교합니다.',
       facts: [
         '예·아니오 답은 새라는 분류만 알려 줍니다.',
         '열린 답은 깃털과 알을 낳는 특징을 설명합니다.',
@@ -222,7 +222,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '윤아는 “생물과 환경이 서로 영향을 주며 함께 있는 것”이라고 내 말로 쓰고 연못 예문과 그림을 더했습니다.',
             '뜻, 근거, 예문, 그림을 한 카드에 담았어요.',
-            '자기 말 정의는 원래 뜻의 범위를 지키면서 이해한 내용을 다시 설명하는 학습 증거입니다.',
+            '자기 말 정의는 원래 뜻을 지키면서 내가 이해한 내용을 다시 설명한 기록입니다.',
             '윤아는 다음 낱말도 짐작, 비교, 자기 설명 순서로 확인하기로 했습니다.',
           ),
         },
@@ -234,7 +234,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '낱말 주변에서 보이는 단서를 골라요.',
             light: '첫 짐작과 그 까닭을 함께 적습니다.',
-            challenge: '문맥 추론은 임시 가설이므로 사전과 원문을 확인하기 전에는 확정하지 않습니다.',
+            challenge: '앞뒤 말로 한 첫 짐작은 아직 정답이 아닙니다. 사전과 원문을 보고 다시 확인합니다.',
           },
         },
         {
@@ -253,7 +253,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '뜻에 맞는 예문과 그림을 골라요.',
             light: '내 말로 뜻을 적고 문장을 만듭니다.',
-            challenge: '자기 설명은 사전 문장을 단순히 바꾸는 것이 아니라 핵심 의미를 새 문맥에 적용한 결과입니다.',
+            challenge: '내 말 설명은 사전 문장을 조금 바꾸는 일이 아닙니다. 뜻을 알고 새 장면에 맞게 말합니다.',
           },
         },
       ],
@@ -361,7 +361,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'm3-l3-final-card',
-          label: '정확한 쉬운 설명',
+          label: '맞고 쉬운 설명',
           imageSrc: '/lessons/story/m3/m3-l3-scene-04.webp',
           alt: '진우가 핵심 사실 배지가 남은 쉬운 광합성 설명 카드를 완성하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
@@ -380,7 +380,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '누가, 무엇으로, 무엇을 만드는지 찾아요.',
             light: '주체, 재료, 결과를 핵심 사실로 고릅니다.',
-            challenge: '학습목표와 직접 연결된 인과 관계를 핵심으로 남기고 주변 세부 정보와 구분합니다.',
+            challenge: '꼭 남길 원인과 결과를 찾고, 덜 중요한 설명과 나누어 봅니다.',
           },
         },
         {
@@ -389,7 +389,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '비유와 교과서 그림의 같은 점을 찾아요.',
             light: '유지된 사실과 빠진 사실을 나눕니다.',
-            challenge: '비유의 대응 관계가 끊기는 지점을 찾아 오개념이 생길 가능성을 확인합니다.',
+            challenge: '비유가 맞는 부분과 맞지 않는 부분을 찾아 오해가 생기지 않게 봅니다.',
           },
           flow: { input: '어려운 원문', process: '핵심 유지·낯선 말 풀기', output: '쉬우면서 정확한 설명' },
         },
@@ -399,7 +399,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '핵심 단어를 보며 한 문장으로 말해요.',
             light: '원문과 최종 설명을 마지막으로 비교합니다.',
-            challenge: '자기 설명에서 인과 순서와 필수 요소가 재구성되는지 확인해야 단순 암기와 구분할 수 있습니다.',
+            challenge: '내 설명에 원인, 순서, 꼭 필요한 말이 들어 있는지 봅니다.',
           },
         },
       ],
@@ -514,7 +514,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '윤아는 “확대하니 나뭇잎의 줄무늬가 선명하게 보였다”라는 문장을 그림과 함께 완성했습니다.',
             '장면에 맞는 내 문장을 만들어 전시했어요.',
-            '자기 문장은 낱말의 핵심 의미를 새로운 상황에 적용했는지 보여 주는 수행 증거입니다.',
+            '자기 문장은 낱말의 중요한 뜻을 새 상황에 써 볼 수 있는지 보여 주는 기록입니다.',
             '윤아는 문장을 소리 내어 읽고 장면과 뜻이 이어지는지 확인했습니다.',
           ),
         },
@@ -526,7 +526,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '낱말 뜻에 어울리는 그림을 찾아요.',
             light: '뜻, 장면, 문장을 함께 비교합니다.',
-            challenge: '정의 지식과 문맥 적용을 함께 살펴야 낱말을 실제 표현에 사용할 수 있습니다.',
+            challenge: '사전 뜻과 앞뒤 장면을 함께 봐야 낱말을 알맞게 쓸 수 있습니다.',
           },
         },
         {
@@ -544,7 +544,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '어울리는 예문과 어색한 예문을 골라요.',
             light: '어색한 부분을 고쳐 내 문장을 만듭니다.',
-            challenge: '문법적 자연스러움과 의미적 적합성을 구분해 예문의 타당성을 판단합니다.',
+            challenge: '문장이 자연스러운지와 뜻이 장면에 맞는지를 따로 봅니다.',
           },
           flow: { input: '뜻·반대말·장면', process: '예문 비교', output: '내 문장' },
         },
@@ -647,7 +647,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '아이미는 무서운 추격, 신기한 지도, 친구와 우산 찾기 결말을 제안했습니다. 진우는 조건에 맞는 부분만 골랐습니다.',
             'AI의 세 결말에서 마음에 드는 부분과 바꿀 부분을 찾았어요.',
-            'AI 제안은 완성본이 아니라 창작 재료입니다. 분위기, 인물 목적, 안전 조건에 따라 수용·수정·거절할 수 있습니다.',
+            'AI 제안은 완성본이 아니라 창작 재료입니다. 분위기, 인물 목적, 안전 조건에 따라 쓰거나, 고치거나, 거절할 수 있습니다.',
             '진우는 무서운 제안을 거절해도 창작을 잘못한 것이 아니라고 생각했습니다.',
           ),
         },
@@ -672,7 +672,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '마음에 드는 부분과 싫은 부분을 골라요.',
             light: 'AI 제안을 수용, 수정, 거절할 수 있습니다.',
-            challenge: '생성된 제안의 유창함과 학생의 창작 의도를 구분해 저작 선택의 주체를 유지합니다.',
+            challenge: 'AI 제안이 잘 읽혀도 내가 원하는 이야기와 맞는지 따로 봅니다.',
           },
         },
         {
@@ -681,7 +681,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '즐거움, 신기함, 조용함 중 원하는 느낌을 골라요.',
             light: '등장인물과 결말에 꼭 넣을 조건을 정합니다.',
-            challenge: '명시한 창작 제약은 아이디어를 줄이는 규칙이 아니라 선택 이유를 분명하게 하는 설계 기준입니다.',
+            challenge: '내가 정한 조건은 생각을 줄이는 말이 아닙니다. 왜 골랐는지 분명하게 해 줍니다.',
           },
           flow: { input: '이야기 시작', process: '내 조건과 AI 제안 비교', output: '내 결말' },
         },
@@ -691,7 +691,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '내가 고른 장면과 이유를 말해요.',
             light: 'AI 부분과 내가 만든 부분을 나눕니다.',
-            challenge: '최종 산출물뿐 아니라 선택, 수정, 거절의 근거가 학생의 창작 기여를 보여 주는 증거입니다.',
+            challenge: '마지막 결과뿐 아니라 고르고, 고치고, 거절한 이유도 내 창작의 일부입니다.',
           },
         },
       ],
@@ -735,7 +735,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
     artifact: {
       kind: 'visual-plan',
       title: '3컷 이야기 보드와 선택 이유',
-      prompt: '시작, 가운데, 결말을 세 칸에 놓고 AI 제안을 수용·수정·거절한 이유를 적어 보세요.',
+      prompt: '시작, 가운데, 결말을 세 칸에 놓고 AI 제안을 쓰거나, 고치거나, 거절한 이유를 적어 보세요.',
     },
     transfer: {
       title: '같은 시작을 다른 분위기로',
@@ -746,7 +746,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         { id: 'quiet-version', emoji: '🌙', label: '조용하고 편안한 이야기로 바꿔요.' },
       ],
     },
-    safetyNote: '준비된 이야기 제안은 창작 재료입니다. 불편하거나 무서운 제안은 거절하고 내 생각에 맞게 바꿀 수 있습니다.',
+    safetyNote: '수업용 이야기 제안은 창작 재료입니다. 불편하거나 무서운 제안은 거절하고 내 생각에 맞게 바꿀 수 있습니다.',
   },
   {
     id: 'm3-calculation-verification-lab',
@@ -786,7 +786,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'm3-l6-calculator',
-          label: '계산기 대조',
+          label: '계산기로 비교',
           imageSrc: '/lessons/story/m3/m3-l6-scene-03.webp',
           alt: '윤아가 가격표 식과 계산기 결과 6600원을 AI 풀이와 줄별로 비교하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
@@ -818,7 +818,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '가격과 수량을 보고 대략 얼마인지 골라요.',
             light: '예상 범위와 계산 결과를 비교합니다.',
-            challenge: '어림값은 정확한 계산을 대신하지 않지만 연산 오류를 탐지하는 독립된 합리성 기준을 제공합니다.',
+            challenge: '어림값은 정확한 계산은 아닙니다. 그래도 답이 너무 이상한지 먼저 볼 수 있습니다.',
           },
         },
         {
@@ -827,7 +827,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: 'AI 풀이와 계산기 결과를 나누어 봐요.',
             light: '각 줄의 식과 숫자를 비교합니다.',
-            challenge: '계산기의 정확성도 잘못 입력한 식까지 바로잡지는 못하므로 원문 조건과 식의 대응을 사람이 확인합니다.',
+            challenge: '계산기도 식을 잘못 넣으면 틀립니다. 원래 조건과 식이 맞는지 사람이 봅니다.',
           },
           flow: { input: '가격표·수량', process: '예상·AI 풀이·계산기 비교', output: '수정한 합계' },
         },
@@ -837,7 +837,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '다른 숫자에 표시해요.',
             light: '맞는 줄과 고칠 줄을 나눕니다.',
-            challenge: '오류 위치를 찾으면 올바른 추론은 유지하고 잘못된 연산만 수정할 수 있습니다.',
+            challenge: '틀린 위치를 찾으면 맞는 생각은 남기고 잘못 계산한 부분만 고칠 수 있습니다.',
           },
         },
       ],
@@ -892,7 +892,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         { id: 'compare-receipt', emoji: '🧾', label: '영수증의 받은 돈과 합계도 함께 확인해요.' },
       ],
     },
-    safetyNote: '실제 구매에서는 가격표와 영수증을 확인하고 필요하면 믿을 만한 사람에게 도움을 요청합니다. 준비된 AI 계산을 결제 근거로 사용하지 않습니다.',
+    safetyNote: '실제 구매에서는 가격표와 영수증을 확인하고 필요하면 믿을 만한 사람에게 도움을 요청합니다. 수업용 AI 계산을 결제 근거로 사용하지 않습니다.',
   },
   {
     id: 'm3-evidence-summary-lab',
@@ -973,7 +973,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '같은 내용끼리 선으로 이어요.',
             light: '남은 내용, 빠진 내용, 달라진 내용을 나눕니다.',
-            challenge: '근거 연결은 의미가 확대되거나 조건이 사라진 문장도 탐지하는 검토 방법입니다.',
+            challenge: '원문과 요약을 이어 보면 뜻이 커졌거나 조건이 빠진 문장을 찾을 수 있습니다.',
           },
           flow: { input: '긴 원문', process: '핵심 선택·근거 비교', output: '3문장 요약' },
         },
@@ -983,7 +983,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '꼭 필요한 정보가 모두 있는지 살펴요.',
             light: '중복은 줄이고 누락은 복원합니다.',
-            challenge: '형식 제한과 정보 완전성이 충돌하면 독자 안전과 과제 목적에 필요한 정보를 우선합니다.',
+            challenge: '문장 수를 줄여도 읽는 사람에게 꼭 필요한 안전 정보는 남깁니다.',
           },
         },
       ],
@@ -1066,7 +1066,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'm3-l8-first-order',
-          label: '학습 순서 판단',
+          label: '공부 순서 정하기',
           imageSrc: '/lessons/story/m3/m3-l8-scene-02.webp',
           alt: '윤아가 문제 풀기와 정답 확인의 순서를 고르는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
@@ -1111,7 +1111,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '문제를 보고 내 답을 먼저 골라요.',
             light: '정답을 보기 전에 이유를 표현합니다.',
-            challenge: '정답 선노출은 응답 정확도를 높여 보일 수 있지만 독립적인 회상 증거를 약화합니다.',
+            challenge: '정답을 먼저 보면 맞힌 것처럼 보일 수 있습니다. 먼저 내 답을 골라야 기억한 것을 볼 수 있습니다.',
           },
         },
         {
@@ -1130,7 +1130,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '맞고 틀린 까닭을 확인해요.',
             light: '첫 답과 다시 푼 답을 비교합니다.',
-            challenge: '설명 피드백은 오류의 원인을 찾고 다음 응답 전략을 조정할 수 있게 해야 합니다.',
+            challenge: '해설은 왜 틀렸는지 알려 주고 다음에는 어떻게 풀지 정하게 도와야 합니다.',
           },
         },
       ],
@@ -1185,7 +1185,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         { id: 'retry', emoji: '🔄', label: '해설을 본 뒤 한 번 더 풀어요.' },
       ],
     },
-    safetyNote: '퀴즈의 틀린 응답은 혼내거나 비교할 자료가 아니라 다음 설명과 지원을 정하는 학습 증거입니다.',
+    safetyNote: '퀴즈의 틀린 답은 혼낼 자료가 아니라 다음 설명과 도움을 정하는 기록입니다.',
   },
   {
     id: 'm3-image-evidence-review',
@@ -1219,7 +1219,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '아이미는 “두 학생은 소풍을 가서 매우 행복합니다”라고 설명했습니다.',
             'AI는 그림에 보이지 않는 소풍과 마음까지 말했어요.',
-            '이미지 설명 AI는 보이는 특징과 학습한 흔한 장면을 연결해 그럴듯한 맥락을 덧붙일 수 있습니다.',
+            '이미지 설명 AI는 보이는 특징과 자주 본 장면을 연결해 그럴듯한 앞뒤 이야기를 덧붙일 수 있습니다.',
             '윤아는 자연스러운 설명과 그림 근거가 있는 설명을 구분했습니다.',
           ),
         },
@@ -1245,7 +1245,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '윤아는 “가방을 든 두 학생이 건물 앞에 함께 서 있습니다. 목적지와 기분은 그림만으로 알 수 없습니다”라고 고쳤습니다.',
             '보이는 사실과 알 수 없는 내용을 나누어 설명을 고쳤어요.',
-            '수정 설명은 단정 표현을 근거 수준에 맞게 바꾸고 필요한 경우 추가 맥락을 요청합니다.',
+            '수정 설명은 너무 확실하게 말한 부분을 근거에 맞게 바꾸고, 필요하면 앞뒤 정보를 더 물어봅니다.',
             '윤아는 사람의 표정만으로 마음을 단정하지 않는 표현을 선택했습니다.',
           ),
         },
@@ -1257,7 +1257,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '그림에서 손가락으로 찾을 수 있는 것을 골라요.',
             light: '보이는 단서와 보이지 않는 정보를 나눕니다.',
-            challenge: '관찰 문장은 해석을 최소화하고 다른 관찰자가 같은 위치에서 확인할 수 있어야 합니다.',
+            challenge: '관찰 문장은 내 생각을 줄이고, 그림에서 손가락으로 찾을 수 있어야 합니다.',
           },
         },
         {
@@ -1266,7 +1266,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '“소풍”과 “행복”에 물음표를 붙여요.',
             light: '사실, 추측, 모름으로 문장을 나눕니다.',
-            challenge: '가능성이 높은 해석과 이미지에서 증명되는 사실은 다른 인식 수준입니다.',
+            challenge: '그럴 것 같은 생각과 그림에서 바로 보이는 사실은 다릅니다.',
           },
           flow: { input: '원본 그림·AI 문장', process: '근거 핀 찾기', output: '사실·추측·모름' },
         },
@@ -1331,7 +1331,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
         { id: 'ask-context', emoji: '🔍', label: '시간과 장소가 필요하면 추가 정보를 확인해요.' },
       ],
     },
-    safetyNote: '사람의 마음, 성격, 장애, 의도를 사진 한 장이나 AI 설명만으로 단정하지 않습니다. 필요한 맥락은 당사자나 믿을 수 있는 자료에서 확인합니다.',
+    safetyNote: '사람의 마음, 성격, 장애, 의도를 사진 한 장이나 AI 설명만으로 단정하지 않습니다. 필요한 앞뒤 정보는 당사자나 믿을 수 있는 자료에서 확인합니다.',
   },
   {
     id: 'm3-self-explanation-review-studio',
@@ -1378,7 +1378,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '낱말 카드를 다시 보니 생물뿐 아니라 물과 햇빛 같은 환경이 서로 영향을 준다는 부분이 빠져 있었습니다.',
             '이전 기록과 비교해 첫 설명에서 빠진 내용을 찾았어요.',
-            'AI 요약은 복습 자료 중 하나이며 학생이 만든 산출물과 원자료를 함께 확인해야 합니다.',
+            'AI 요약은 복습 자료 중 하나입니다. 학생이 만든 결과물과 원래 자료도 함께 확인해야 합니다.',
             '진우는 AI 문장을 외우지 않고 빠진 핵심을 자기 설명에 다시 연결했습니다.',
           ),
         },
@@ -1391,7 +1391,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '진우는 “생태계는 생물과 물, 햇빛 같은 환경이 서로 영향을 주며 이어진 모습”이라고 고치고 다음 복습 날짜를 정했습니다.',
             '빠진 내용을 넣어 내 말로 다시 설명했어요.',
-            '자기 설명은 확인한 핵심을 새로운 문장 구조로 재구성하며 다음 회상 시점을 정하는 활동입니다.',
+            '자기 설명은 확인한 중요한 내용을 내 말로 다시 쓰고, 다음에 다시 떠올릴 시간을 정하는 활동입니다.',
             '진우는 자료를 덮고 최종 설명을 한 번 더 말해 보았습니다.',
           ),
         },
@@ -1403,18 +1403,18 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '기억나는 낱말이나 그림부터 말해요.',
             light: '첫 회상과 모르는 부분을 함께 기록합니다.',
-            challenge: '자유 회상은 재인보다 학습자가 독립적으로 구성할 수 있는 지식 구조를 더 분명히 보여 줍니다.',
+            challenge: '자료를 보기 전에 먼저 말하면 내가 기억한 것을 더 잘 알 수 있습니다.',
           },
         },
         {
           title: '관련 자료와 AI 요약을 비교해요',
-          core: '학생 산출물, 원자료, AI 요약에서 빠진 점과 같은 점을 찾습니다.',
+          core: '학생 결과물, 원래 자료, AI 요약에서 빠진 점과 같은 점을 찾습니다.',
           detail: {
             full: '내 첫 설명에 없던 내용을 찾아요.',
             light: '회상, 기록, AI 요약을 나란히 놓습니다.',
-            challenge: '서로 다른 자료가 같은 핵심을 지지하는지 확인해 단일 요약의 오류나 누락에 의존하지 않습니다.',
+            challenge: '여러 자료에서 같은 핵심이 보이는지 확인합니다. 요약 하나만 믿지 않습니다.',
           },
-          flow: { input: '첫 회상', process: '산출물·AI 요약 확인', output: '자기 설명' },
+          flow: { input: '첫 회상', process: '결과물·AI 요약 확인', output: '자기 설명' },
         },
         {
           title: '마지막 설명은 내 말로 완성해요',
@@ -1422,18 +1422,18 @@ export const M3_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '빠진 내용을 넣어 한 문장으로 말해요.',
             light: '최종 설명과 다음 복습 방법을 적습니다.',
-            challenge: '자기 설명은 핵심 관계를 재구성하고 다른 사례에 적용할 수 있을 때 이해의 증거가 됩니다.',
+            challenge: '내 말 설명을 다른 예에도 써 볼 수 있으면 더 잘 이해한 것입니다.',
           },
         },
       ],
     },
     encounter: {
       title: '읽으면 아는데 말하려니 생각나지 않아요',
-      description: '이전 산출물 하나를 골라 자료 없이 먼저 회상하고 AI 요약과 근거를 확인해 자기 말로 고칩니다.',
+      description: '이전 결과물 하나를 골라 자료 없이 먼저 떠올리고, AI 요약과 이유를 확인해 자기 말로 고칩니다.',
       facts: [
         '복습 자료는 낱말 카드, 계산 기록, 요약, 이야기 보드 중에서 고릅니다.',
         '첫 회상은 자료를 열기 전에 남깁니다.',
-        'AI 요약과 학생 산출물의 같은 점과 빠진 점을 비교합니다.',
+        'AI 요약과 학생 결과물의 같은 점과 빠진 점을 비교합니다.',
         '최종 설명은 복사하지 않고 자기 말로 완성합니다.',
       ],
     },
@@ -1450,7 +1450,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
     },
     supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
-      description: '선택한 산출물과 원자료, 준비된 AI 요약을 다시 엽니다.',
+      description: '선택한 결과물과 원래 자료, 수업용 AI 요약을 다시 엽니다.',
       facts: [
         '첫 회상과 같은 핵심에는 확인 표시를 합니다.',
         '첫 회상에서 빠진 핵심에는 더하기 표시를 합니다.',
@@ -1462,7 +1462,7 @@ export const M3_STUDIOS: StudioDefinition[] = [
       source: 'prepared',
       role: '이전 학습 내용을 짧게 정리하는 AI',
       text: '생태계는 여러 생물이 함께 살아가는 모습입니다. 계산은 계산기로 확인하고, 요약은 중요한 내용을 짧게 줄이는 일입니다.',
-      question: '내가 고른 산출물의 핵심 중 이 요약에 빠졌거나 너무 단순해진 부분은 무엇인가요?',
+      question: '내가 고른 결과물의 중요한 내용 중 이 요약에 빠졌거나 너무 짧게 줄어든 부분은 무엇인가요?',
     },
     artifact: {
       kind: 'workflow-plan',

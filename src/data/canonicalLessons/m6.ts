@@ -17,7 +17,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     canonicalScenario: {
       characters: ['jinwoo', 'yuna', 'minjun'],
       location: '동아리방',
-      purpose: '배움 전시회 부스 주제(탐구 보고서 및 안전 여권)를 정하고 대상별 3구역 기획하기',
+      purpose: '배움 전시회 부스 주제(탐구 보고서 및 안전 여권)를 정하고 읽을 사람별 3구역 기획하기',
       mismatch: '무엇을 보여줄지 정하지 않고 부스 테이블부터 펼치려 함',
       evidence: ['주제 카드 목록', '방문자 캐릭터 카드', '3구역 기획도'],
       resolution: '주제와 방문자 눈높이에 맞춰 전시-체험-안전 3구역 공간을 완벽하게 기획함',
@@ -33,7 +33,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '우리 부스에서 선보일 주요 주제를 선택하세요.',
           choices: [
-            { id: 'topic-report', label: '우리 동네 탐구 보고서 & 올바른 AI 검증 부스', emoji: '📊' },
+            { id: 'topic-report', label: '우리 동네 탐구 보고서와 AI 확인 부스', emoji: '📊' },
             { id: 'topic-safety', label: '개인정보 가리기 & AI 안전 여권 체험 부스', emoji: '🛡️' },
           ],
         },
@@ -51,12 +51,12 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '부스 공간의 3구역 슬롯에 알맞은 활동 카드를 연결하세요.',
           slots: [
             { id: 'zone-display', label: '1구역: 대표작 전시 존' },
-            { id: 'zone-exp', label: '2구역: 팩트체크 체험 존' },
+            { id: 'zone-exp', label: '2구역: 사실 확인 체험 자리' },
             { id: 'zone-safe', label: '3구역: 안전 약속 및 방명록 존' },
           ],
           pieces: [
             { id: 'p-d', label: 'M5 탐구 보고서 패널 전시', slotId: 'zone-display' },
-            { id: 'p-e', label: '비교 대조 팩트체크 가림막 체험', slotId: 'zone-exp' },
+            { id: 'p-e', label: '비교하며 사실 확인하는 가림막 체험', slotId: 'zone-exp' },
             { id: 'p-s', label: '안전 약속 서명 & 스티커 방명록', slotId: 'zone-safe' },
           ],
         },
@@ -101,7 +101,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '전시 부스 기획서',
       portfolioLabel: '주제-방문자-3구역 기획서',
       fields: [
-        { id: 'boothPlanSummary', label: '내가 작성한 전시 부스 기획서 내용', input: 'text', required: true },
+        { id: 'boothPlanSummary', label: '내가 쓴 전시 부스 계획', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -157,7 +157,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '방문자 체험 3단계를 순서대로 놓아보세요.',
           items: [
             { id: 'st1', label: '1단계: 탐구 보고서 및 대표작 관찰하기', correctOrder: 1 },
-            { id: 'st2', label: '2단계: AI 결과와 공식 공지문 대조 팩트체크 체험하기', correctOrder: 2 },
+            { id: 'st2', label: '2단계: AI 결과와 공식 공지문을 비교해 사실 확인하기', correctOrder: 2 },
             { id: 'st3', label: '3단계: 안전 다짐 서명 및 방명록 스티커 붙이기', correctOrder: 3 },
           ],
         },
@@ -175,7 +175,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '부스 입구 안내 표지판 문장을 완성해보세요.',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'sign-text', label: '어서오세요! 1분 만에 경험하는 올바른 AI 팩트체크 체험 부스입니다.', emoji: '🪧' },
+            { id: 'sign-text', label: '어서 오세요! 1분 동안 AI 답을 확인해 보는 체험 부스입니다.', emoji: '🪧' },
           ],
         },
         assetIds: ['m6-l2-story-02'],
@@ -187,7 +187,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '부스 동선 및 안내 표지판',
       portfolioLabel: '체험 3단계 동선 및 입구 안내표',
       fields: [
-        { id: 'signBoardText', label: '내가 작성한 부스 입구 안내 표지판 문장', input: 'text', required: true },
+        { id: 'signBoardText', label: '내가 쓴 부스 입구 안내 문장', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -210,35 +210,35 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
   },
 
   // ============================================================
-  // m6-l3 안내 연습: 전시할 대표 산출물 고르기
+  // m6-l3 안내 연습: 전시할 대표 결과물 고르기
   // ============================================================
   {
     lessonId: 'm6-l3',
     moduleId: 'm6',
     number: 3,
     role: 'guided',
-    title: '전시할 대표 산출물 고르기',
+    title: '전시할 대표 결과물 고르기',
     masterObjective: '오늘은 모듈 1~5에서 완성한 내 작품 중 가장 잘한 것과 보완한 것을 골라 전시판을 꾸며 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_01],
-    coreConcepts: ['대표 산출물은 완벽한 결과뿐 아니라 발전 과정과 배운 점을 보여 주는 작품이다.'],
+    coreConcepts: ['대표 결과물은 완벽한 결과뿐 아니라 발전 과정과 배운 점을 보여 주는 작품이다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna'],
       location: '동아리방',
       purpose: 'M1~M5 완성작 중 대표작 2개(M4 안전 여권, M5 탐구 보고서)를 선정해 성장 비교판 꾸미기',
       mismatch: '어떤 작품을 보여줄지 고민하며 엉망으로 모두 펼쳐놓음',
-      evidence: ['M1~M5 산출물 썸네일 묶음', '성장 비교 게시판'],
+      evidence: ['M1~M5 결과물 썸네일 묶음', '성장 비교 게시판'],
       resolution: '처음 만든 모습과 보완된 완성본을 함께 나열하여 나의 성장 과정을 보여주는 게시판을 구성함',
     },
     stages: [
       {
         id: 's1-encounter',
         phase: 'encounter',
-        title: '대표 산출물 2종 선정',
-        instruction: '모듈 1~5의 나의 공부 산출물 썸네일 중 전시판에 걸 대표작 2개를 선택하세요.',
+        title: '대표 결과물 2종 고르기',
+        instruction: '모듈 1~5의 나의 공부 결과물 썸네일 중 전시판에 걸 대표작 2개를 선택하세요.',
         activity: {
           id: 'act-s1',
           kind: 'multi-choice',
-          prompt: '우리 부스에 전시할 대표 산출물 2개를 고르세요.',
+          prompt: '우리 부스에 전시할 대표 결과물 2개를 고르세요.',
           choices: [
             { id: 'pick-m4', label: '모듈 4: AI 안전 여권 (개인정보 가리기 편집)', emoji: '🛡️' },
             { id: 'pick-m5', label: '모듈 5: 우리 동네 탐구 보고서 (오류 수정 디프)', emoji: '📊' },
@@ -255,10 +255,10 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         activity: {
           id: 'act-s2',
           kind: 'expression',
-          prompt: '대표 산출물에 적을 나의 배움 성장 메모를 작성해보세요.',
+          prompt: '대표 결과물에 적을 나의 배움 성장 메모를 작성해보세요.',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'growth-memo', label: '처음엔 AI 대답을 다 믿었지만, 스스로 공식 공지와 대조하며 진짜 지식으로 발전시켰습니다!', emoji: '🌱' },
+            { id: 'growth-memo', label: '처음엔 AI 대답을 다 믿었지만, 이제는 공식 공지와 비교하며 스스로 확인합니다!', emoji: '🌱' },
           ],
         },
         assetIds: ['m6-l3-story-02'],
@@ -267,10 +267,10 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     ],
     artifact: {
       id: 'm6-l3-artifact',
-      title: '대표 산출물 전시판',
+      title: '대표 결과물 전시판',
       portfolioLabel: '대표작 2종 및 배움 성장 기록판',
       fields: [
-        { id: 'selectedWorks', label: '내가 고른 대표 산출물과 성장 소감 메모', input: 'text', required: true },
+        { id: 'selectedWorks', label: '내가 고른 대표 결과물과 성장 소감 메모', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -289,7 +289,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       { id: 'm6-l3-story-01', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m6/m6-l3-story-01.webp', alt: '대표작 고르기', required: true, purpose: '스토리 컷 1' },
       { id: 'm6-l3-story-02', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m6/m6-l3-story-02.webp', alt: '성장 게시판 붙이기', required: true, purpose: '스토리 컷 2' },
     ],
-    wrapUp: '대표 산출물 전시판은 완성된 모습뿐 아니라 내가 어떻게 배우고 성장했는지 보여 주는 자리입니다.',
+    wrapUp: '대표 결과물 전시판은 완성된 모습뿐 아니라 내가 어떻게 배우고 성장했는지 보여 주는 자리입니다.',
   },
 
   // ============================================================
@@ -301,13 +301,13 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     number: 4,
     role: 'guided',
     title: '설명 대본 작성하기',
-    masterObjective: '오늘은 내 대표 산출물을 1분 동안 설명할 대본을 목적·방법·배운 점 순서로 써 봐요.',
+    masterObjective: '오늘은 내 대표 결과물을 1분 동안 설명할 대본을 목적·방법·배운 점 순서로 써 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_01],
     coreConcepts: ['1분 설명은 주제, 사용한 AI 도우미, 사람이 확인한 방법, 배운 점을 알차게 담는다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'aimi'],
       location: '동아리방',
-      purpose: '대표 산출물을 방문자에게 1분 동안 명확하게 설명하는 4단계 대본 작성하기',
+      purpose: '대표 결과물을 방문자에게 1분 동안 분명하게 설명하는 4단계 대본 작성하기',
       mismatch: '말이 너무 길어지거나 어떤 점을 강조해야 할지 갈팡질팡함',
       evidence: ['타이머 화면', '4단계 1분 대본 양식'],
       resolution: '주제 -> AI 활용 -> 사람의 검증 -> 배운 점 4단계로 알차게 정리된 1분 대본을 완성함',
@@ -325,7 +325,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           items: [
             { id: 's1-topic', label: '1. 주제: 안녕하세요! 우리 동네 AI 탐구 보고서를 소개합니다.', correctOrder: 1 },
             { id: 's2-ai', label: '2. AI 도우미: AI로는 보고서의 초안 작성과 문장 다듬기 도움을 받았습니다.', correctOrder: 2 },
-            { id: 's3-human', label: '3. 사람 검증: 지어낸 거짓 장소 오류를 구청 공식 공지문과 대조하여 직접 고쳤습니다.', correctOrder: 3 },
+            { id: 's3-human', label: '3. 사람 확인: 지어낸 장소 오류를 구청 공식 공지문과 비교해 직접 고쳤습니다.', correctOrder: 3 },
             { id: 's4-learn', label: '4. 배운 점: AI 대답을 스스로 확인하고 내 생각을 보완해야 진짜 배움이 됨을 깨달았습니다.', correctOrder: 4 },
           ],
         },
@@ -343,7 +343,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '완성된 1분 부스 설명 대본을 완성해보세요.',
           modes: ['choice', 'text', 'speech'],
           choiceCards: [
-            { id: 'one-min-script', label: '안녕하세요! 우리 부스는 AI 초안 오류를 직접 잡고 공식 공지와 대조한 탐구 보고서를 소개합니다. 직접 팩트체크를 체험해보세요!', emoji: '🎤' },
+            { id: 'one-min-script', label: '안녕하세요! 우리 부스는 AI 초안의 오류를 직접 찾고 공식 공지와 비교한 탐구 보고서를 소개합니다. 사실 확인을 체험해 보세요!', emoji: '🎤' },
           ],
         },
         assetIds: ['m6-l4-story-02'],
@@ -355,7 +355,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '1분 부스 설명 대본',
       portfolioLabel: '4단계 구조 1분 발표 설명 대본',
       fields: [
-        { id: 'scriptText', label: '내가 작성한 1분 부스 설명 대본 전문', input: 'text', required: true },
+        { id: 'scriptText', label: '내가 쓴 1분 부스 설명 대본', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -427,7 +427,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '부스 입구 안전 약속 다짐 문장을 작성해보세요.',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'promise-text', label: '우리 부스는 개인정보를 보호하고 정직하게 팩트체크하는 안전한 배움 공간입니다!', emoji: '🛡️' },
+            { id: 'promise-text', label: '우리 부스는 개인정보를 지키고 정직하게 사실을 확인하는 안전한 배움 공간입니다!', emoji: '🛡️' },
           ],
         },
         assetIds: ['m6-l5-story-02'],
@@ -492,7 +492,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '리허설에서 발견한 문제점은 무엇인가요?',
           choices: [
-            { id: 'bottleneck-found', label: '2단계 설명이 길어 방문자가 기다리느라 동선이 막혔어요', emoji: '⚠️' },
+            { id: 'bottleneck-found', label: '2단계 설명이 길어 방문자가 기다리고 길이 막혔어요', emoji: '⚠️' },
           ],
         },
         assetIds: ['m6-l6-story-01', 'm6-l6-story-02'],
@@ -509,7 +509,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '개선 전 긴 대본과 개선 후 3문장 대본을 대조하세요.',
           left: { title: '개선 전 (3분 걸림)', content: '모듈 1부터 5까지 모든 과정을 길게 장황하게 설명함' },
           right: { title: '개선 후 (1분 30초 걸림)', content: '팩트체크 가림막 체험 핵심 3문장만 명확하게 설명함' },
-          criteria: [{ id: 'flow-speed', label: '방문자가 지루하지 않고 동선이 원활한가' }],
+          criteria: [{ id: 'flow-speed', label: '방문자가 지루하지 않고 잘 이동할 수 있는가' }],
         },
         assetIds: ['m6-l6-story-02', 'm6-l6-story-03'],
         support: {},
@@ -548,7 +548,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '리허설의 목적은?',
         choices: [
-          { id: 'rehearsal-purpose', label: '실제 무대에서 생길 수 있는 타이밍과 이동 동선의 어색함을 미리 찾아 고쳐요', emoji: '🎭' },
+          { id: 'rehearsal-purpose', label: '실제 무대에서 생길 수 있는 시간과 이동 문제를 미리 찾아 고쳐요', emoji: '🎭' },
         ],
       },
     },
@@ -611,7 +611,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '질문 1(AI 대답 확인)에 대한 자신 있는 답변을 작성해봅시다.',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'answer-proof', label: 'AI 대답을 그대로 믿지 않고, 학교 공식 홈페이지의 공지문과 대조하여 직접 팩트체크했습니다!', emoji: '🗣️' },
+            { id: 'answer-proof', label: 'AI 대답을 그대로 믿지 않고, 학교 공식 홈페이지 공지문과 비교해 직접 확인했습니다!', emoji: '🗣️' },
           ],
         },
         assetIds: ['m6-l7-story-02'],
@@ -623,7 +623,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: 'Q&A 예상 답변 카드',
       portfolioLabel: '방문자 질문 대비 근거 답변서',
       fields: [
-        { id: 'qaPairsText', label: '내가 작성한 3가지 질문 및 근거 답변', input: 'text', required: true },
+        { id: 'qaPairsText', label: '내가 쓴 질문 3개와 이유가 있는 답', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -681,9 +681,9 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
             { id: 'b-right', label: '오른쪽 (체험 및 방명록 존)', emoji: '📱' },
           ],
           cards: [
-            { id: 'c-title-banner', label: '부스 제목: AI 팩트체크 탐구 전시 부스', binId: 'b-top' },
+            { id: 'c-title-banner', label: '부스 제목: AI 사실 확인 탐구 전시 부스', binId: 'b-top' },
             { id: 'c-works', label: 'M4 안전 여권 & M5 탐구 보고서 패널', binId: 'b-left' },
-            { id: 'c-tablet', label: '팩트체크 체험 태블릿 & 방명록 스티커', binId: 'b-right' },
+            { id: 'c-tablet', label: '사실 확인 체험 태블릿과 방명록 스티커', binId: 'b-right' },
           ],
         },
         assetIds: ['m6-l8-story-01'],
@@ -764,7 +764,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'multi-choice',
           prompt: '방명록 카드에 포함할 2가지 질문을 선택하세요.',
           choices: [
-            { id: 'fb-q1', label: '1. 오늘 우리 부스에서 가장 유익했던 체험은 무엇인가요?', emoji: '💡' },
+            { id: 'fb-q1', label: '1. 오늘 우리 부스에서 가장 도움이 된 체험은 무엇인가요?', emoji: '💡' },
             { id: 'fb-q2', label: '2. 앞으로 AI를 사용할 때 지키고 싶은 다짐 한 가지는 무엇인가요?', emoji: '✨' },
           ],
         },
@@ -794,7 +794,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '부스 방명록 양식',
       portfolioLabel: '칭찬 스티커 및 소감 수집 방명록',
       fields: [
-        { id: 'guestbookFormatText', label: '내가 디자인한 부스 방명록 및 피드백 질문', input: 'text', required: true },
+        { id: 'guestbookFormatText', label: '내가 만든 부스 방명록과 의견 질문', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -864,7 +864,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '실제 부스를 진행하며 작성한 진행 일지 한 줄 소감을 적어보세요.',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'run-booth-log', label: '방문한 동생들이 팩트체크 체험에 신기해하며 재미있게 참여하고 칭찬 스티커를 붙여주었습니다!', emoji: '🎉' },
+            { id: 'run-booth-log', label: '방문한 동생들이 사실 확인 체험을 신기해하며 재미있게 참여하고 칭찬 스티커를 붙여주었습니다!', emoji: '🎉' },
           ],
         },
         assetIds: ['m6-l10-story-02'],
@@ -876,7 +876,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '부스 진행 완료 기록',
       portfolioLabel: '실제 부스 진행 일지 및 방명록 수집 기록',
       fields: [
-        { id: 'boothRunLogText', label: '내가 직접 부스를 운영하고 느낀 실전 현장 일지', input: 'text', required: true },
+        { id: 'boothRunLogText', label: '내가 직접 부스를 운영하고 느낀 점', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -887,7 +887,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '안내원의 올바른 습관은?',
         choices: [
-          { id: 'guide-polite', label: '친절하고 정확하게 동선을 안내하고 경청하는 자세를 유지해요', emoji: '🙋' },
+          { id: 'guide-polite', label: '친절하게 길을 안내하고 잘 들어요', emoji: '🙋' },
         ],
       },
     },
@@ -929,7 +929,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '디지털 교과서를 마치며 나의 가장 큰 진짜 성장은 무엇인가요?',
           choices: [
-            { id: 'true-growth-mind', label: 'AI 대답을 무조건 믿지 않고, 내 생각을 주체적으로 세우게 된 점이에요', emoji: '🌱' },
+            { id: 'true-growth-mind', label: 'AI 대답을 무조건 믿지 않고, 내 생각을 스스로 세우게 된 점이에요', emoji: '🌱' },
           ],
         },
         assetIds: ['m6-l11-story-01', 'm6-l11-story-02'],
@@ -946,7 +946,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '모듈 1의 내 모습과 모듈 6의 성숙해진 내 모습을 대조하세요.',
           left: { title: '모듈 1 첫 출발 때', content: 'AI가 주는 대답이 무조건 신기해서 그대로 다 믿으려 함' },
           right: { title: '모듈 6 현재 완성 모습', content: '공식 자료로 대조 확인하고, 개인정보를 가리며, 내 주장을 세움' },
-          criteria: [{ id: 'digital-citizen', label: '주체적인 디지털 시민으로 성장했는가' }],
+          criteria: [{ id: 'digital-citizen', label: '스스로 생각하는 디지털 시민으로 자랐는가' }],
         },
         assetIds: ['m6-l11-story-02', 'm6-l11-story-03'],
         support: {},
@@ -974,7 +974,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '배움 소감과 성장 포트폴리오',
       portfolioLabel: 'M1~M6 종합 성장 성찰 및 배움 소감문',
       fields: [
-        { id: 'reflectionText', label: '내가 작성한 68차시 종합 배움 소감문', input: 'text', required: true },
+        { id: 'reflectionText', label: '내가 쓴 68차시 배움 소감', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -985,7 +985,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '앞으로의 디지털 주체성 다짐은?',
         choices: [
-          { id: 'future-ai-promise', label: '항상 호기심을 갖고 쓰되, 사실을 대조 확인하고 안전하게 내 생각을 펼칩니다', emoji: '🌟' },
+          { id: 'future-ai-promise', label: '호기심을 갖고 쓰되, 사실을 확인하고 안전하게 내 생각을 펼칩니다', emoji: '🌟' },
         ],
       },
     },
@@ -1007,22 +1007,22 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     number: 12,
     role: 'project',
     title: 'AI 동아리 총괄 수료식',
-    masterObjective: '오늘은 모듈 1~6의 모든 산출물이 담긴 포트폴리오를 완성하고 AI 교육 수료증을 받아요.',
+    masterObjective: '오늘은 모듈 1~6의 모든 결과물이 담긴 포트폴리오를 완성하고 AI 교육 수료증을 받아요.',
     standards: [STANDARD_CODES.SPEC_AI_01, STANDARD_CODES.SPEC_AI_02, STANDARD_CODES.SPEC_AI_03],
     coreConcepts: ['수료는 68차시 배움의 완성이자 주체적인 디지털 시민으로 나아가는 시작이다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna', 'minjun'],
       location: '학교 강당 수료식장',
-      purpose: 'M1~M6 산출물 6종을 묶어 총괄 포트폴리오 북을 조립하고 수료증 수여받기',
+      purpose: 'M1~M6 결과물 6종을 묶어 총괄 포트폴리오 북을 조립하고 수료증 수여받기',
       mismatch: '수료식 준비 미흡으로 마지막 회고가 없음',
-      evidence: ['M1~M6 6종 완성 산출물 북', '수료증 템플릿'],
+      evidence: ['M1~M6 6종 완성 결과물 북', '수료증 템플릿'],
       resolution: '주체적인 AI 리더 수료증을 수여받고 68차시 대단원의 막을 완벽히 내림',
     },
     stages: [
       {
         id: 's1-encounter',
         phase: 'encounter',
-        title: 'M1~M6 6종 산출물 총집결',
+        title: 'M1~M6 6종 결과물 모으기',
         instruction: '모듈 1부터 6까지 완성한 6개 핵심 대표작을 총괄 포트폴리오 북에 묶어봅시다.',
         activity: {
           id: 'act-s1',
@@ -1045,12 +1045,12 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'build',
           prompt: '나만의 AI 학습 헌장 3대 슬롯을 완성해보세요.',
           slots: [
-            { id: 'c-check', label: '1헌장: 대조 확인의 원칙' },
+            { id: 'c-check', label: '1헌장: 비교하고 확인하기' },
             { id: 'c-safe', label: '2헌장: 개인정보 보호와 안전 원칙' },
-            { id: 'c-think', label: '3헌장: 내 생각 주체성의 원칙' },
+            { id: 'c-think', label: '3헌장: 내 생각 스스로 세우기' },
           ],
           pieces: [
-            { id: 'p-1', label: '유창한 답변도 공식 자료로 항상 검증한다', slotId: 'c-check' },
+            { id: 'p-1', label: '말이 자연스러운 답도 공식 자료로 확인한다', slotId: 'c-check' },
             { id: 'p-2', label: '비밀번호와 단서를 절대 남에게 안 주고 가린다', slotId: 'c-safe' },
             { id: 'p-3', label: 'AI 제안에 의존 않고 내 주장을 당당히 세운다', slotId: 'c-think' },
           ],
@@ -1069,7 +1069,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '수료증을 받는 소감과 완주 선언을 적어보세요.',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'graduation-declaration', label: '68차시 디지털 배움을 완료하고 주체적인 AI 리더로 성장했습니다! 성실히 지켜나가겠습니다!', emoji: '🎓' },
+            { id: 'graduation-declaration', label: '68차시 디지털 배움을 마쳤습니다! 앞으로도 스스로 생각하며 AI를 쓰겠습니다!', emoji: '🎓' },
           ],
         },
         assetIds: ['m6-l12-story-03'],
@@ -1082,7 +1082,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       portfolioLabel: '68차시 총괄 완주 포트폴리오 북 및 수료증',
       fields: [
         { id: 'charterRules', label: '내가 서명한 나만의 AI 3대 학습 헌장', input: 'text', required: true },
-        { id: 'completionCertificate', label: '68차시 디지털 수료증 번호 및 소감', input: 'text', required: true },
+        { id: 'completionCertificate', label: '68차시 디지털 수료증 번호와 느낀 점', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -1093,7 +1093,7 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '68차시 리모델링 축하 완주 버튼을 누르세요!',
         choices: [
-          { id: 'final-congratulations', label: '축하합니다! 68차시 초등 AI 교과서 전면 리모델링 완주 달성!', emoji: '🎉' },
+          { id: 'final-congratulations', label: '축하합니다! 68차시 AI 배움을 모두 마쳤어요!', emoji: '🎉' },
         ],
       },
     },

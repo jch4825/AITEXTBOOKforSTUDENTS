@@ -213,7 +213,7 @@ export const GENERALIZATION_CYCLES: Record<ModuleId, GeneralizationCycleContent>
         title: '아이미의 다른 생각',
         text: '답만 받기보다 첫 단계의 힌트를 받고, 내가 한 풀이와 비교하는 방법도 있습니다.',
         alternativeMethodId: 'check',
-        question: '내가 먼저 해 본 과정과 AI의 설명이 같은습니까?',
+        question: '내가 먼저 해 본 과정과 AI의 설명이 같습니까?',
       },
       finalChoices: [
         { id: 'hint', emoji: '💡', label: '힌트를 받아 내가 먼저 풀습니다' },

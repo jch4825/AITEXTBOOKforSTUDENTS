@@ -67,9 +67,9 @@ export const M5_LESSONS: LessonContent[] = [
     objective: '오늘은 안전·마감·필요·도움 가능성을 보고 먼저 할 일을 정해 봐요.',
     standards: [PROBLEM_STANDARD, FLOW_STANDARD],
     bodyEasy: '여러 일이 함께 오면 안전과 시간, 필요한 도움을 보고 먼저 할 일을 골라요.',
-    bodyNormal: '우선순위는 일의 이름만 보고 정하는 도덕적 단일 정답이 아닙니다. 안전 위험, 마감, 다른 일에 미치는 영향, 도움 가능성을 비교하며 조건이 바뀌면 순서도 다시 정합니다.',
+    bodyNormal: '먼저 할 일은 일의 이름만 보고 정하는 하나의 정답이 아닙니다. 안전 위험, 마감, 다른 일에 미치는 영향, 도움 가능성을 비교하며 조건이 바뀌면 순서도 다시 정합니다.',
     wrapUpEasy: '안전과 마감, 영향, 도움을 기준으로 먼저 할 일을 정했어요.',
-    wrapUpNormal: '동시에 들어온 세 요청을 상황 기준으로 비교하고 여러 타당한 순서 중 근거가 있는 우선순위를 선택합니다.',
+    wrapUpNormal: '동시에 들어온 세 요청을 상황 기준으로 비교하고, 여러 가능한 순서 중 이유가 있는 순서를 선택합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['순서', '조건', '도움'], imagePlaceholder: true } }],
   },
   {
@@ -181,7 +181,7 @@ export const M5_LESSONS: LessonContent[] = [
     bodyEasy: '열한 가지 기록을 모아 새 문제의 현재, 목표, 계획, 확인을 한 장에 연결해요.',
     bodyNormal: '안내판 위치 변경, 준비물 부족, 친구가 순서를 모르는 상황 중 하나를 골라 문제 정의, 분해, 순서, 대안, 실행 확인, 조건 변화에 따른 수정을 문제 해결 지도에 연결합니다.',
     wrapUpEasy: '새 문제를 처음부터 확인과 수정까지 해결하는 문제 해결 지도를 만들었어요.',
-    wrapUpNormal: '모듈 산출물을 새 생활 문제에 전이하고 정의→계획→실행·확인→수정의 순환이 보이는 문제 해결 지도를 완성합니다.',
+    wrapUpNormal: '모듈 결과물을 새 생활 문제에 써 보고, 정의→계획→실행·확인→수정의 흐름이 보이는 문제 해결 지도를 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['문제', '계획', '확인'], imagePlaceholder: true } }],
   },
 ];

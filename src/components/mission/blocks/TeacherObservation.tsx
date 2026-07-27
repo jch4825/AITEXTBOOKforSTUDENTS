@@ -14,16 +14,16 @@ const STATUS_OPTIONS: { value: GeneralizationObservationStatus; label: string }[
 ];
 
 const HELP_OPTIONS: { value: GeneralizationHelpLevel; label: string }[] = [
-  { value: 'independent', label: '혼자 수행' },
+  { value: 'independent', label: '혼자 하기' },
   { value: 'cue', label: '말·그림 단서' },
   { value: 'choice-support', label: '선택지 조정' },
-  { value: 'co-perform', label: '함께 수행' },
+  { value: 'co-perform', label: '함께 하기' },
 ];
 
 const CRITERIA: { key: keyof Pick<GeneralizationObservation, 'importantInfo' | 'attemptedMethod' | 'comparedAi' | 'adjustedToCondition'>; label: string }[] = [
   { key: 'importantInfo', label: '상황의 중요한 정보를 찾았는가' },
   { key: 'attemptedMethod', label: '스스로 방법을 시도했는가' },
-  { key: 'comparedAi', label: 'AI 의견을 비교하고 판단했는가' },
+  { key: 'comparedAi', label: 'AI 의견을 비교해 보았는가' },
   { key: 'adjustedToCondition', label: '조건이 달라졌을 때 방법을 조정했는가' },
 ];
 

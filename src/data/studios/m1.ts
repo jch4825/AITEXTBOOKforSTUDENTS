@@ -110,7 +110,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '번역하기, 음악 추천, 사진 찾기처럼 다양한 일을 도와줘요.',
             light: '어떤 입력을 주느냐에 따라 AI가 도와줄 수 있는 기능과 결과가 달라집니다.',
-            challenge: '입력 신호의 종류와 구조에 따라 인공지능 도구가 수행할 수 있는 일의 범주가 결정됩니다.',
+            challenge: '넣는 정보의 종류와 모양에 따라 AI 도구가 할 수 있는 일이 달라집니다.',
           },
         },
       ],
@@ -127,7 +127,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '어려운 인사를 한 아이미를 만났습니다. 친구에게 AI(인공지능)의 뜻과 할 수 있는 일을 어떻게 소개해 볼까요?',
       choices: [
-        { id: 'tool-with-input', emoji: '🛠️', label: '컴퓨터가 사람처럼 학습하고 판단하여 번역, 추천, 분류 등 여러 일을 도와주는 기술이라고 소개합니다.', isCorrect: true },
+        { id: 'tool-with-input', emoji: '🛠️', label: '많은 자료에서 비슷한 점을 찾아 번역, 추천, 분류를 돕는 기술이라고 소개합니다.', isCorrect: true },
         { id: 'magic-friend', emoji: '🪄', label: '모든 것을 알고 스스로 결정하는 마법 친구라고 소개합니다.', isCorrect: false },
         { id: 'just-machine', emoji: '⚙️', label: '전기로 움직이는 기계는 모두 AI라고 소개합니다.', isCorrect: false },
         { id: 'human-like-helper', emoji: '🤖', label: '대화를 통해 깊이 있는 생각을 이끌어내어 어려운 문제 해결을 도와주는 유용한 프로그램이라고 덧붙입니다.', isCorrect: true },
@@ -312,10 +312,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '세 도구 중 AI가 쓰인 기능을 지금 어떻게 판단하겠습니까?',
       choices: [
-        { id: 'inspect-input-output', emoji: '🔎', label: '각 기능이 받는 입력과 바꾸는 결과를 살펴본 뒤 판단합니다.', isCorrect: true },
-        { id: 'separate-input-modes', emoji: '⚡', label: '버튼, 센서, 타자/음성 입력에 따라 처리 방식이 달라짐을 고려합니다.', isCorrect: true },
-        { id: 'automatic-means-ai', emoji: '⚙️', label: '자동으로 움직이면 모두 AI 기능이라고 단순하게 판단합니다.', isCorrect: false },
-        { id: 'app-only-by-name', emoji: '📱', label: '기기의 겉모습이나 앱이라는 이름만 보고 판단합니다.', isCorrect: false },
+        { id: 'inspect-input-output', emoji: '🔎', label: '각 기능이 무엇을 받고 어떤 결과를 내는지 살펴봅니다.', isCorrect: true },
+        { id: 'separate-input-modes', emoji: '⚡', label: '버튼, 센서, 타자/음성 입력에 따라 처리 방법이 달라짐을 봅니다.', isCorrect: true },
+        { id: 'automatic-means-ai', emoji: '⚙️', label: '자동으로 움직이면 모두 AI라고 생각합니다.', isCorrect: false },
+        { id: 'app-only-by-name', emoji: '📱', label: '기기 모양이나 앱 이름만 보고 정합니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '어떤 기기의 입력이 가장 궁금한가요?',
@@ -456,7 +456,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '자신 있게 말해도 꼭 다시 확인해요.',
             light: '“무지개 아이스크림 떡볶이”처럼 엉뚱한 대답도 엄청나게 그럴듯하고 자신감 있게 말할 수 있습니다.',
-            challenge: 'AI의 유창한 문장 구성 능력과 주장의 객관적 사실성은 별개이므로, 식단표·공지 등 원본 자료와의 검증이 필수적입니다.',
+            challenge: 'AI가 문장을 자연스럽게 써도 내용이 사실이라는 뜻은 아닙니다. 식단표나 공지 같은 원래 자료와 꼭 비교해야 합니다.',
           },
           flow: { input: '윤아의 질문', process: '다음 단어 연결', output: '당당한 엉뚱 대답' },
         },
@@ -466,7 +466,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '진짜 식단표에서 찾아봐요.',
             light: '영양사 선생님의 식단표나 학교 공지에서 실제 메뉴를 대조해 바르게 수정합니다.',
-            challenge: '자연스러운 표현과 검증된 사실을 구분하여 진짜 출처 자료를 근거로 최종 수정을 판단합니다.',
+            challenge: '자연스러운 말과 확인한 사실을 나누어 보고, 진짜 자료를 보고 마지막으로 고칠지 정합니다.',
           },
         },
       ],
@@ -483,7 +483,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '아이미가 모르는 것도 자신감 넘치게 엉뚱한 대답(무지개 아이스크림 떡볶이)으로 만들어냈을 때, 어떻게 해야 할까요?',
       choices: [
-        { id: 'mark-checkable-claims', emoji: '🔍', label: '진짜 주간 식단표나 학교 공지에서 실제 사실을 직접 대조합니다.', isCorrect: true },
+        { id: 'mark-checkable-claims', emoji: '🔍', label: '진짜 주간 식단표나 학교 공지와 직접 비교합니다.', isCorrect: true },
         { id: 'verify-facts-and-fix', emoji: '✍️', label: '아이미의 엉뚱한 대답을 진짜 급식표 내용(제육볶음)으로 바르게 고칩니다.', isCorrect: true },
         { id: 'publish-smooth-copy', emoji: '🍧', label: '문장이 당당하고 맛있어 보이니 무지개 떡볶이가 나온다고 그대로 전합니다.', isCorrect: false },
         { id: 'reject-everything', emoji: '🗑️', label: 'AI 대답은 엉뚱하니 식단표를 찾아보지도 않고 무조건 버립니다.', isCorrect: false },
@@ -526,7 +526,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         },
       ],
       choices: [
-        { id: 'check-official-forecast', emoji: '🔍', label: 'AI가 인터넷 검색을 연결하면 실제 최신 자료를 찾아 훨씬 사실에 가깝고 정확한 답을 내놓습니다.', isCorrect: true },
+        { id: 'check-official-forecast', emoji: '🔍', label: 'AI가 인터넷 검색을 연결하면 최신 자료를 찾아 사실에 더 가까운 답을 냅니다.', isCorrect: true },
         { id: 'rewrite-with-source', emoji: '📌', label: '검색 기능이 있더라도 기상청 같은 공식 출처를 함께 확인하면 가장 안전하고 바른 정보를 얻습니다.', isCorrect: true },
         { id: 'trust-weather-tone', emoji: '❌', label: '검색하는 AI는 절대로 실수하지 않으므로 사람이 직접 확인할 필요가 전혀 없다고 믿습니다.', isCorrect: false },
         { id: 'ignore-verification', emoji: '🗑️', label: 'AI가 검색을 통해 알려준 최신 정보도 무조건 다 거짓말이라고 전부 무시합니다.', isCorrect: false },
@@ -680,12 +680,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
       prompt: '나만의 표현으로 흐릿한 표지판 사진을 AI가 잘못 읽었을 때 어떻게 할지 설명해보자.',
       choices: [
         { id: 'change-sign-angle', emoji: '📐', label: '빛 반사를 줄이도록 표지판 사진의 각도와 밝기를 바꾸어 다시 인식해 봅니다.', isCorrect: true },
-        { id: 'ask-staff', emoji: '👤', label: '실물 표지판 원본을 눈으로 직접 보거나 관리 담당자 안내와 대조합니다.', isCorrect: true },
-        { id: 'follow-first-sign', emoji: '➡️', label: 'AI가 처음 잘못 읽은 판단 그대로 쓰레기를 분류해 버립니다.', isCorrect: false },
+        { id: 'ask-staff', emoji: '👤', label: '실제 표지판을 눈으로 보거나 담당자 안내와 비교합니다.', isCorrect: true },
+        { id: 'follow-first-sign', emoji: '➡️', label: 'AI가 처음 잘못 읽은 말대로 쓰레기를 버립니다.', isCorrect: false },
         { id: 'believe-all-images', emoji: '🖼️', label: '사진 상태와 상관없이 AI는 언제나 정답만 말한다고 믿습니다.', isCorrect: false },
       ],
     },
-    safetyNote: '수업용으로 준비된 사진만 사용하며 학생의 얼굴 사진은 입력하지 않습니다.',
+    safetyNote: '수업용 사진만 사용하며 학생의 얼굴 사진은 입력하지 않습니다.',
   },
   {
     id: 'm1-speech-recognition-lab',
@@ -801,7 +801,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
       choices: [
         { id: 'listen-again', emoji: '🔁', label: '조용한 곳에서 원래 목소리를 다시 들려주거나 글자로 직접 입력합니다.', isCorrect: true },
         { id: 'choose-another-input', emoji: '📊', label: '마이크 거리, 배경 소음, AAC 등 입력 방법의 조건을 비교합니다.', isCorrect: true },
-        { id: 'trust-transcript', emoji: '📜', label: '화면의 채소회 오이 글자를 대조 없이 그대로 믿습니다.', isCorrect: false },
+        { id: 'trust-transcript', emoji: '📜', label: '화면의 “채소회 오이” 글자를 확인 없이 믿습니다.', isCorrect: false },
         { id: 'shout-loudly', emoji: '🗣️', label: '소음 환경을 개선하지 않고 무작정 소리만 크게 지릅니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
@@ -833,13 +833,13 @@ export const M1_STUDIOS: StudioDefinition[] = [
       description: '넓은 체육관에서 다음 활동 장소를 알려 주는 음성 안내가 화면에 다르게 적혔습니다.',
       prompt: '나만의 표현으로 주변이 시끄러울 때 음성 인식 결과를 어떻게 확인할지 설명해보자.',
       choices: [
-        { id: 'replay-gym-audio', emoji: '🎧', label: '안내 방송을 조용한 곳에서 다시 듣고 게시된 장소 표지와 대조합니다.', isCorrect: true },
+        { id: 'replay-gym-audio', emoji: '🎧', label: '안내 방송을 조용한 곳에서 다시 듣고 장소 표지와 비교합니다.', isCorrect: true },
         { id: 'use-accessible-option', emoji: '♿', label: '타자 입력, 그림 안내판, 또는 선생님의 도움을 요청합니다.', isCorrect: true },
         { id: 'follow-gym-text', emoji: '🚶', label: '시끄러운 소음 속에서 잘못 인식된 글자만 믿고 바로 이동합니다.', isCorrect: false },
         { id: 'ignore-noise-condition', emoji: '📢', label: '소음 조건이 바뀌어도 음성 인식 결과는 무조건 정확하다고 봅니다.', isCorrect: false },
       ],
     },
-    safetyNote: '실제 학생의 목소리를 저장하지 않고 수업용으로 준비된 음성만 사용합니다.',
+    safetyNote: '실제 학생의 목소리를 저장하지 않고 수업용 음성만 사용합니다.',
   },
   {
     id: 'm1-training-data-lab',
@@ -990,7 +990,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         { id: 'balance-recycle-data', emoji: '📚', label: '동그라미, 네모 등 다양한 모양과 재질의 표지 자료를 고르게 추가합니다.', isCorrect: true },
         { id: 'compare-recycle-test', emoji: '🔍', label: '자료를 보완한 뒤 같은 시험용 자료로 판정 결과를 전후 비교합니다.', isCorrect: true },
         { id: 'accept-recycle-result', emoji: '🏷️', label: '학습 자료가 한쪽으로 치우쳐 나타난 오판 결과를 그대로 받아들입니다.', isCorrect: false },
-        { id: 'stop-data-learning', emoji: '🚫', label: '자료를 더 모으지 않고 처음 배운 잘못된 판단 기준을 유지합니다.', isCorrect: false },
+        { id: 'stop-data-learning', emoji: '🚫', label: '자료를 더 모으지 않고 처음의 잘못된 기준을 그대로 둡니다.', isCorrect: false },
       ],
     },
   },
@@ -1106,10 +1106,10 @@ export const M1_STUDIOS: StudioDefinition[] = [
     firstAttempt: {
       prompt: '1초 만에 빠르게 만들어졌지만 준비물 실로폰이 빠진 요약글을 보고 어떻게 하겠습니까?',
       choices: [
-        { id: 'compare-key-facts', emoji: '📋', label: '핵심 항목을 원문과 나란히 놓고 빠진 요소를 대조합니다.', isCorrect: true },
+        { id: 'compare-key-facts', emoji: '📋', label: '중요한 내용을 원문과 나란히 놓고 빠진 점을 찾습니다.', isCorrect: true },
         { id: 'add-missing-items', emoji: '✏️', label: '빠진 준비물 실로폰 내용을 사람이 직접 고쳐 보완합니다.', isCorrect: true },
         { id: 'share-fast-result', emoji: '📤', label: '빠르게 만들어졌으니 실로폰이 빠졌어도 그대로 공유합니다.', isCorrect: false },
-        { id: 'ignore-ai-help', emoji: '🛑', label: '원문 대조 없이 AI 결과는 쓸모없다고 무조건 다 버립니다.', isCorrect: false },
+        { id: 'ignore-ai-help', emoji: '🛑', label: '원문과 비교하지 않고 AI 결과를 모두 버립니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '빠름과 정확함을 함께 지키려면 무엇이 필요할까요?',
@@ -1139,8 +1139,8 @@ export const M1_STUDIOS: StudioDefinition[] = [
       description: 'AI가 학급 준비물 안내를 한 문장으로 줄였는데 가져오는 날짜가 빠졌습니다.',
       prompt: '나만의 표현으로 AI 요약문에서 중요한 내용이 빠졌을 때 어떻게 할지 설명해보자.',
       choices: [
-        { id: 'check-supply-source', emoji: '📰', label: '원문 안내판과 대조하여 날짜와 핵심 준비물이 남아있는지 확인합니다.', isCorrect: true },
-        { id: 'repair-supply-summary', emoji: '✏️', label: '빠진 핵심 날짜를 직접 보완하여 정확한 완성본을 만듭니다.', isCorrect: true },
+        { id: 'check-supply-source', emoji: '📰', label: '원문 안내판과 비교해 날짜와 준비물이 남았는지 확인합니다.', isCorrect: true },
+        { id: 'repair-supply-summary', emoji: '✏️', label: '빠진 날짜를 직접 넣어 맞는 완성본을 만듭니다.', isCorrect: true },
         { id: 'send-short-supply', emoji: '📨', label: '날짜가 빠졌지만 글이 짧고 읽기 쉬우므로 그대로 전송합니다.', isCorrect: false },
         { id: 'trust-summary-only', emoji: '⚡', label: 'AI 요약은 빨라야 하므로 원문 확인을 생략하고 공유합니다.', isCorrect: false },
       ],
@@ -1259,7 +1259,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
       prompt: '네 가지 부탁을 누구에게 연결하겠습니까?',
       choices: [
         { id: 'separate-roles', emoji: '🧩', label: 'AI, 사람, 공식 정보의 역할을 바르게 나눕니다.', isCorrect: true },
-        { id: 'check-human-responsibility', emoji: '🛡️', label: '안전, 개인정보, 최종 책임이 필요한 일은 사람이 맡습니다.', isCorrect: true },
+        { id: 'check-human-responsibility', emoji: '🛡️', label: '안전, 개인정보, 마지막 책임이 필요한 일은 사람이 맡습니다.', isCorrect: true },
         { id: 'assign-all-ai', emoji: '🤖', label: '빠르고 편리하므로 개인정보나 약 복용까지 모두 AI에게 맡깁니다.', isCorrect: false },
         { id: 'refuse-all-tools', emoji: '❌', label: '위험할 수 있으니 단순한 정보 분류조차 전혀 사용하지 않습니다.', isCorrect: false },
       ],
@@ -1377,7 +1377,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '먼저 할 일을 정해요.',
             light: '요약, 이미지, 자막처럼 필요한 결과의 형태를 구체적으로 말합니다.',
-            challenge: '과제의 목적, 사용자, 출력 형식과 성공 기준을 먼저 정의해야 도구의 적합성을 비교할 수 있습니다.',
+            challenge: '과제 목적, 쓸 사람, 결과 모양, 성공 기준을 먼저 정해야 어떤 도구가 알맞은지 비교할 수 있습니다.',
           },
         },
         {
@@ -1414,9 +1414,9 @@ export const M1_STUDIOS: StudioDefinition[] = [
       prompt: '세 가지 일에 사용할 AI 도구를 어떻게 고르겠습니까?',
       choices: [
         { id: 'match-input-output', emoji: '🎯', label: '일마다 필요한 입력 자료와 결과를 먼저 비교하여 도구를 고릅니다.', isCorrect: true },
-        { id: 'check-privacy-fit', emoji: '🔒', label: '개인정보 보호와 사람이 확인할 수 있는지 여부를 고려합니다.', isCorrect: true },
+        { id: 'check-privacy-fit', emoji: '🔒', label: '개인정보를 지킬 수 있는지, 사람이 확인할 수 있는지 살펴봅니다.', isCorrect: true },
         { id: 'choose-famous-tool', emoji: '⭐', label: '가장 유명한 도구 하나를 모든 종류의 일에 무조건 사용합니다.', isCorrect: false },
-        { id: 'choose-fastest-tool', emoji: '⚡', label: '입력 조건이나 결과 검증 없이 가장 빠르게 나오는 도구만 씁니다.', isCorrect: false },
+        { id: 'choose-fastest-tool', emoji: '⚡', label: '입력 조건이나 결과 확인 없이 가장 빠른 도구만 씁니다.', isCorrect: false },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '그 선택이 과제의 목적에 맞는지 어떻게 확인할까요?',
@@ -1449,8 +1449,8 @@ export const M1_STUDIOS: StudioDefinition[] = [
       choices: [
         { id: 'plan-photo-tools', emoji: '🗺️', label: '사진 묘사 도구와 음성 변환 도구 각각의 입력과 결과를 구분해 선택합니다.', isCorrect: true },
         { id: 'verify-photo-description', emoji: '👁️', label: '얼굴 사진을 함부로 넣지 않고 생성된 설명이 실제 사진과 맞는지 확인합니다.', isCorrect: true },
-        { id: 'upload-private-photo', emoji: '📤', label: '친구의 얼굴이 그대로 들어간 사진을 검증되지 않은 외부 도구에 올립니다.', isCorrect: false },
-        { id: 'use-random-single-tool', emoji: '🎲', label: '도구의 기능이나 개인정보 위험을 고려하지 않고 무작위로 아무 도구나 씁니다.', isCorrect: false },
+        { id: 'upload-private-photo', emoji: '📤', label: '친구 얼굴이 보이는 사진을 확인되지 않은 외부 도구에 올립니다.', isCorrect: false },
+        { id: 'use-random-single-tool', emoji: '🎲', label: '도구 기능이나 개인정보 위험을 살피지 않고 아무 도구나 씁니다.', isCorrect: false },
       ],
     },
     safetyNote: '학생의 실제 얼굴과 목소리는 도구에 입력하지 않고 수업용 대체 자료를 사용합니다.',
@@ -1512,7 +1512,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'final-decision',
-          label: '장면 4 · 최종 결정',
+          label: '장면 4 · 마지막 결정',
           imageSrc: '/lessons/story/m1/m1-l10-scene-04.webp',
           alt: '진우가 음악별로 사용, 수정, 거절 결정을 발표하는 장면',
           knowledgeStep: 2,
@@ -1540,7 +1540,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '처음 결과를 바로 쓰지 않아요.',
             light: '행사 조건표와 공식 곡 목록을 기준으로 결과를 살펴봅니다.',
-            challenge: '결과의 적절성과 사실성을 별도의 확인 자료에 근거해 검토합니다.',
+            challenge: '결과가 알맞은지, 사실이 맞는지 다른 확인 자료를 보고 살펴봅니다.',
           },
           flow: { input: '안전한 요청', process: '조건·근거와 비교', output: '사용·수정·거절' },
         },
@@ -1587,7 +1587,7 @@ export const M1_STUDIOS: StudioDefinition[] = [
     },
     aiContribution: {
       source: 'prepared',
-      role: '준비된 AI 응답 · 실제 AI 연결 아님',
+      role: '수업용 AI 응답 · 실제 AI 연결 아님',
       text: '조용한 분위기와 공식 목록이라는 조건을 반영해 새 목록을 만들었습니다. 그래도 각 곡이 실제 조건에 맞는지는 사람이 확인해 주세요.',
       question: '첫 결과와 수정 결과 중 무엇을 사용하고, 무엇을 고치거나 거절하겠습니까?',
     },
@@ -1607,6 +1607,6 @@ export const M1_STUDIOS: StudioDefinition[] = [
         { id: 'auto-accept-ai', emoji: '🤖', label: 'AI가 작성해 준 결과물은 사람이 수정할 필요 없이 무조건 받아들입니다.', isCorrect: false },
       ],
     },
-    safetyNote: '학생 개인정보를 입력하지 않으며, 화면의 AI 답은 수업용으로 준비된 응답임을 분명히 표시합니다.',
+    safetyNote: '학생 개인정보를 입력하지 않으며, 화면의 AI 답은 수업용 응답임을 분명히 표시합니다.',
   },
 ];

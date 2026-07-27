@@ -151,7 +151,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '탐구에 함께 활용할 2가지 이상의 신뢰 출처를 고르세요.',
           choices: [
             { id: 'c-gov', label: '구청 공식 재활용 안내 문서', emoji: '🏛️' },
-            { id: 'c-obs', label: '우리 동네 수거함 직접 현장 관찰', emoji: '👁️' },
+            { id: 'c-obs', label: '우리 동네 수거함 직접 보기', emoji: '👁️' },
           ],
         },
         assetIds: ['m5-l2-story-01'],
@@ -167,7 +167,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '조사할 곳을 정하는 바람직한 원칙은?',
           choices: [
-            { id: 'multi-source-rule', label: '공식 문서와 현장 관찰 등 서로 다른 출처 2개 이상을 함께 비교해요', emoji: '📌' },
+            { id: 'multi-source-rule', label: '공식 문서와 직접 본 내용처럼 서로 다른 자료 2개 이상을 비교해요', emoji: '📌' },
           ],
         },
         assetIds: ['m5-l2-story-02'],
@@ -342,7 +342,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '자료 대조표',
       portfolioLabel: '자료 간 차이점 비교 및 바로잡기 기록',
       fields: [
-        { id: 'correctedData', label: '대조 후 내가 확정한 정확한 조사 정보', input: 'text', required: true },
+        { id: 'correctedData', label: '비교한 뒤 내가 정한 맞는 조사 정보', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -538,7 +538,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '역사 초안 오류 발견 시 대응은?',
         choices: [
-          { id: 'history-textbook-check', label: '역사 교과서 및 사전과 대조해 인물 이름을 올바르게 고칩니다', emoji: '📖' },
+          { id: 'history-textbook-check', label: '역사 교과서와 사전을 보고 인물 이름을 바르게 고칩니다', emoji: '📖' },
         ],
       },
     },
@@ -665,12 +665,12 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           bins: [
             { id: 'top-bin', label: '상단 (핵심 제목/요약)', emoji: '🔝' },
             { id: 'mid-bin', label: '중앙 (데이터 수거표)', emoji: '📊' },
-            { id: 'bot-bin', label: '하단 (현장 사진 및 출처)', emoji: '🖼️' },
+            { id: 'bot-bin', label: '아래쪽 (직접 찍은 사진과 자료)', emoji: '🖼️' },
           ],
           cards: [
             { id: 'c-title', label: '한 줄 요약: 올바른 분리배출 3가지 규칙', binId: 'top-bin' },
             { id: 'c-table', label: '품목별 수거 요일 비교표', binId: 'mid-bin' },
-            { id: 'c-img', label: '현장 수거함 관찰 사진', binId: 'bot-bin' },
+            { id: 'c-img', label: '직접 본 수거함 사진', binId: 'bot-bin' },
           ],
         },
         assetIds: ['m5-l8-story-01'],
@@ -698,7 +698,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '발표 레이아웃',
       portfolioLabel: '요약-표-그림 시각적 발표 패널 배치도',
       fields: [
-        { id: 'presentationLayout', label: '내가 구성한 한눈에 들어오는 발표 패널 배치', input: 'text', required: true },
+        { id: 'presentationLayout', label: '내가 만든 보기 쉬운 발표판 배치', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -781,7 +781,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '출처 및 도우미 표기 카드',
       portfolioLabel: '참고 출처 및 AI 활용 범위 솔직 표기서',
       fields: [
-        { id: 'citationText', label: '내가 보고서에 명시한 공식 출처와 AI 활용 범위', input: 'text', required: true },
+        { id: 'citationText', label: '내가 보고서에 적은 공식 자료와 AI를 쓴 부분', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -851,7 +851,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '피드백을 반영해 고쳐 쓴 보고서 내용을 작성해보세요.',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'feedback-improved', label: '친구 조언에 따라 품목별 수거 요일을 요약표로 깔끔히 정돈해 반영했습니다.', emoji: '📊' },
+            { id: 'feedback-improved', label: '친구 조언을 보고 품목별 수거 요일을 표로 깔끔하게 고쳤습니다.', emoji: '📊' },
           ],
         },
         assetIds: ['m5-l10-story-02'],
@@ -863,7 +863,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '피드백 반영 기록',
       portfolioLabel: '친구 조언 수용 및 보고서 개선 기록',
       fields: [
-        { id: 'improvedByFeedback', label: '친구 피드백을 반영해 내가 고친 부분', input: 'text', required: true },
+        { id: 'improvedByFeedback', label: '친구 의견을 듣고 내가 고친 부분', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -900,7 +900,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     canonicalScenario: {
       characters: ['jinwoo', 'yuna'],
       location: '동아리방',
-      purpose: '4가지 핵심 영역(질문-조사자료-내의견-출처표기)을 하나로 결합한 최종 탐구 보고서 조립하기',
+      purpose: '질문, 조사 자료, 내 의견, 출처 표시를 하나로 모아 마지막 탐구 보고서 만들기',
       mismatch: '흩어진 낱개 기록 조각들만 있고 통합 보고서 형태로 정돈되지 않음',
       evidence: ['탐구 질문 카드', '조사 기록표', '내 생각 단락', '출처 표기 태그'],
       resolution: '4개 핵심 요소를 통합 양식에 맞춰 조립하고 체크리스트 도장을 찍어 최종 완성함',
@@ -930,10 +930,10 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         activity: {
           id: 'act-s2',
           kind: 'build',
-          prompt: '4단 탐구 보고서 양식 슬롯에 내 산출물 조각을 배치해보세요.',
+          prompt: '4단 탐구 보고서 칸에 내 결과물 조각을 놓아 보세요.',
           slots: [
             { id: 'sec-q', label: '1단: 탐구 질문 (세부 3질문)' },
-            { id: 'sec-f', label: '2단: 조사 사실 (검증된 수치)' },
+            { id: 'sec-f', label: '2단: 조사 사실 (확인한 수치)' },
             { id: 'sec-o', label: '3단: 내 생각과 대안 (주장)' },
             { id: 'sec-c', label: '4단: 참고 출처 및 AI 표기' },
           ],
@@ -959,7 +959,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           choices: [
             { id: 'chk-fact', label: '지어낸 거짓 정보가 실제 자료로 고쳐졌는가?', emoji: '✅' },
             { id: 'chk-opinion', label: '조사 사실에 내 생각과 대안이 담겼는가?', emoji: '✅' },
-            { id: 'chk-cite', label: '참고 출처와 AI 활용 범위가 명시되었는가?', emoji: '✅' },
+          { id: 'chk-cite', label: '참고한 자료와 AI를 쓴 부분을 적었는가?', emoji: '✅' },
           ],
         },
         assetIds: ['m5-l11-story-04'],
@@ -971,8 +971,8 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '우리 동네 AI 탐구 보고서',
       portfolioLabel: '모듈 5 종합 탐구 보고서 최종 완성본',
       fields: [
-        { id: 'reportTitle', label: '탐구 보고서 최종 제목', input: 'text', required: true },
-        { id: 'fullReportBody', label: '질문-사실-의견-출처가 담긴 전체 보고서 전문', input: 'text', required: true },
+        { id: 'reportTitle', label: '탐구 보고서 마지막 제목', input: 'text', required: true },
+        { id: 'fullReportBody', label: '질문, 사실, 의견, 자료가 담긴 전체 보고서', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -983,7 +983,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '보고서 등록 준비완료 판단은?',
         choices: [
-          { id: 'ready-to-post', label: '네, 4단 구성을 완벽히 마친 탐구 보고서를 당당히 게시해요!', emoji: '🎉' },
+          { id: 'ready-to-post', label: '네, 4단계를 모두 마친 탐구 보고서를 자신 있게 올려요!', emoji: '🎉' },
         ],
       },
     },
@@ -1011,9 +1011,9 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     canonicalScenario: {
       characters: ['jinwoo', 'yuna'],
       location: '학교 배움 발표회장',
-      purpose: '전 모듈 5 산출물을 발표 보드로 완성하여 발표하고 친구들의 질문에 근거로 답변하기',
+      purpose: '전 모듈 5 결과물을 발표 보드로 완성하여 발표하고 친구들의 질문에 이유로 답변하기',
       mismatch: '발표 때 자료를 보지 않고 머뭇거리거나 당황함',
-      evidence: ['l1~l11 M5 탐구 산출물 묶음'],
+      evidence: ['l1~l11 M5 탐구 결과물 묶음'],
       resolution: '발표 보드를 완성하고 친구들의 질문에 내가 직접 조사한 출처 근거로 자신 있게 답변함',
     },
     stages: [
@@ -1021,7 +1021,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         id: 's1-encounter',
         phase: 'encounter',
         title: '탐구 발표 보드 준비',
-        instruction: '모듈 5의 11개 차시에서 완성한 산출물들을 발표 보드로 정돈해봅시다.',
+        instruction: '모듈 5의 11개 차시에서 완성한 결과물들을 발표 보드로 정돈해봅시다.',
         activity: {
           id: 'act-s1',
           kind: 'single-choice',
@@ -1044,7 +1044,7 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '친구들의 근거 질문에 답변할 성실한 답변 문장을 작성해보세요.',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'qna-answer', label: '네, 00구청 공식 홈페이지와 수거함 현장 직접 관찰 자료로 확인했습니다!', emoji: '🗣️' },
+            { id: 'qna-answer', label: '네, 00구청 공식 홈페이지와 직접 본 수거함 자료로 확인했습니다!', emoji: '🗣️' },
           ],
         },
         assetIds: ['m5-l12-story-02', 'm5-l12-story-03'],

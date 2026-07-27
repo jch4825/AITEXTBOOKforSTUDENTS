@@ -16,7 +16,7 @@ export const STUDIO_SUPPORT_PROFILES = {
   challenge: {
     visibleFactCount: 4,
     choiceLimit: 4,
-    hint: 'AI 의견의 장점과 한계를 비교해 내 판단을 설명해 보십시오.',
+    hint: 'AI 의견에서 좋은 점과 조심할 점을 찾아 내 생각을 말해 보십시오.',
     aiRoleDepth: 'counterpoint',
   },
 } satisfies StudioDefinition['supportProfiles'];

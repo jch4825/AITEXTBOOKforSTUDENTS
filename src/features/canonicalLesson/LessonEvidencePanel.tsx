@@ -19,7 +19,7 @@ export const LessonEvidencePanel: React.FC<LessonEvidencePanelProps> = ({
       <div className="flex items-center justify-between border-b border-slate-200 pb-2">
         <span className="font-bold text-slate-800 flex items-center space-x-1">
           <span>📋</span>
-          <span>수행 증거 패널</span>
+          <span>활동 기록 패널</span>
         </span>
         <span className="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-semibold">
           기록 {totalCount}개

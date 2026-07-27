@@ -402,7 +402,7 @@ export const LESSON_STORIES: Record<string, LessonStory> = {
     scene: ['jinwoo', 'yoona'],
     introEasy: '할 일이 한꺼번에 생기자 가장 급하고 중요한 일부터 먼저 정했습니다.',
     introNormal:
-      '바닥 정리와 포스터 고치기가 한꺼번에 몰렸습니다. 진우가 당황하자 윤아가 말했습니다. "좋아하는 일 말고 안전과 마감이 급한 일부터 우선순위를 정하자!"',
+      '바닥 정리와 포스터 고치기가 한꺼번에 몰렸습니다. 진우가 당황하자 윤아가 말했습니다. "좋아하는 일 말고 안전과 마감이 급한 일부터 먼저 하자!"',
     reaction: { speaker: 'jinwoo', text: '상황에 따라 기준이 달라질 수 있으니 선택 이유도 함께 남길게!' },
   },
   'm5-l5': {

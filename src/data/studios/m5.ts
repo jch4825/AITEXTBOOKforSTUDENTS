@@ -2,7 +2,7 @@ import type { StudioDefinition, SupportLevel, VisualNovelCopy } from '../../feat
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
 
 const PREPARED_PROBLEM_NOTE =
-  '화면의 AI 의견과 실행 결과는 실제 연결이나 실제 기기 조작이 아닌 준비된 연습 예시입니다. 중요한 정보는 원자료·체크리스트·사람과 확인하고, 안전 조건이 바뀌면 실행을 멈춘 뒤 믿을 만한 어른과 계획을 다시 정합니다.';
+  '화면의 AI 의견과 실행 결과는 실제 연결이나 실제 기기 조작이 아니라 수업용 연습 예시입니다. 중요한 정보는 원래 자료·체크리스트·사람과 확인하고, 안전 조건이 바뀌면 실행을 멈춘 뒤 믿을 만한 어른과 계획을 다시 정합니다.';
 
 function sceneCopy(
   full: string,
@@ -88,7 +88,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '지금과 원하는 모습을 한 장씩 골라요.',
             light: '누가 언제 무엇을 원하는지 더합니다.',
-            challenge: '감정 평가를 상태 기술과 분리하면 해결 범위와 성공 기준이 명확해집니다.',
+            challenge: '느낌과 지금 모습을 나누어 적으면 무엇을 해결할지 더 분명해집니다.',
           },
         },
         {
@@ -158,7 +158,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
       description: '활동 시작 전 색종이 한 묶음이 부족합니다. 문제를 어떻게 정의하겠어요?',
       choices: [
         { id: 'blame-preparer', emoji: '📣', label: '누가 준비를 잘못했는지 먼저 찾아요.' },
-        { id: 'check-missing-item', emoji: '🔎', label: '필요한 수량·현재 수량·대체 가능 여부를 확인해요.' },
+        { id: 'check-missing-item', emoji: '🔎', label: '필요한 수량, 지금 수량, 다른 물건으로 바꿀 수 있는지 확인해요.' },
         { id: 'stop-all-work', emoji: '⛔', label: '준비물이 하나 부족하니 모든 활동을 멈춰요.' },
       ],
     },
@@ -189,7 +189,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'm5-l2-booth-plan',
-          label: '구성도 보기',
+          label: '완성 모습 보기',
           imageSrc: '/lessons/story/m5/m5-l2-scene-02.webp',
           alt: '안내판 책상 전원 자료 배치가 표시된 부스 구성도 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
@@ -234,7 +234,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '완성 그림에서 필요한 일을 골라요.',
             light: '한 사람이 할 일과 함께 할 일을 나눕니다.',
-            challenge: '과제는 독립적으로 완료 여부를 확인할 수 있는 실행 단위로 정의합니다.',
+            challenge: '작은 일은 끝났는지 따로 확인할 수 있게 나눕니다.',
           },
         },
         {
@@ -243,7 +243,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '과제 카드를 먼저 모두 모아요.',
             light: '분해와 순서 정하기를 다른 단계로 표시합니다.',
-            challenge: '과제 식별과 의존 관계 분석을 분리하면 누락을 순서 문제로 오해하지 않습니다.',
+            challenge: '필요한 일을 찾는 단계와 순서를 정하는 단계를 나누면 빠진 일을 더 잘 볼 수 있습니다.',
           },
           flow: { input: '큰 목표', process: '과제 분해·검토', output: '과제 보드' },
         },
@@ -253,7 +253,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '같은 일과 빠진 일에 표시해요.',
             light: '목표와 관계없는 카드도 빼요.',
-            challenge: '목록의 완전성과 비중복성, 범위 적합성을 함께 검토합니다.',
+            challenge: '빠진 일, 겹친 일, 필요 없는 일을 함께 살펴봅니다.',
           },
         },
       ],
@@ -272,7 +272,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
       prompt: '큰 일을 나누는 첫 행동을 골라 보세요.',
       choices: [
         { id: 'pick-random-order', emoji: '🔢', label: '과제가 무엇인지 보기 전에 순서부터 정해요.' },
-        { id: 'list-needed-tasks', emoji: '🧩', label: '완성 구성도를 보고 필요한 작은 과제를 모두 찾아요.' },
+        { id: 'list-needed-tasks', emoji: '🧩', label: '완성 모습을 보고 필요한 작은 과제를 모두 찾아요.' },
         { id: 'one-person-all', emoji: '🙋', label: '진우 혼자 부스 전체를 맡아요.' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
@@ -355,7 +355,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '아이미 추천 순서를 모의 실행하자 책상을 너무 일찍 고정해 안전 확인이 어려운 지점이 발견되었습니다.',
             '순서를 따라 해 보며 막히는 곳을 찾았어요.',
-            '절차는 머릿속 추측뿐 아니라 안전한 시뮬레이션으로 실행 가능성을 확인합니다.',
+            '절차는 머릿속으로만 생각하지 않고, 안전한 연습으로 실제로 가능한지 확인합니다.',
             '윤아는 추천 순서를 그대로 따르지 않고 확인 결과로 고쳤습니다.',
           ),
         },
@@ -380,7 +380,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '먼저 필요한 카드를 골라요.',
             light: '각 단계에 필요한 공간과 도구를 연결합니다.',
-            challenge: '단계 간 의존 관계를 확인해 임의 배열과 인과적 절차를 구분합니다.',
+            challenge: '먼저 끝나야 다음으로 갈 수 있는 일을 찾으면 아무 순서와 이유 있는 순서를 구분할 수 있습니다.',
           },
         },
         {
@@ -399,7 +399,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '단계 카드를 차례로 움직여 봐요.',
             light: '멈춘 지점의 원인을 찾아 순서를 바꿉니다.',
-            challenge: '시뮬레이션 결과는 절차의 실행 가능성과 누락된 선행 조건을 드러냅니다.',
+            challenge: '미리 해 보면 순서가 가능한지, 먼저 해야 할 일이 빠졌는지 알 수 있습니다.',
           },
         },
       ],
@@ -461,7 +461,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
     lessonId: 'm5-l4',
     moduleId: 'm5',
     title: '무엇부터 할지 기준으로 정하기',
-    subtitle: '안전·마감·영향·도움 가능성을 보고 여러 타당한 우선순위를 비교해 봐요.',
+    subtitle: '안전·마감·영향·도움 가능성을 보고 먼저 할 일을 비교해 봐요.',
     visualNovel: {
       title: '세 가지 요청이 동시에 왔어요',
       objective: '오늘은 안전·마감·필요·도움 가능성을 보고 먼저 할 일을 정해 봐요.',
@@ -475,7 +475,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '전원선 통로 정리, 포스터 글자 수정, 간식 배치 요청이 동시에 들어왔습니다.',
             '세 가지 일이 한꺼번에 왔어요.',
-            '우선순위는 일의 이름이나 선호만으로 정하지 않고 지연과 위험의 영향을 비교합니다.',
+            '먼저 할 일은 일의 이름이나 좋아하는 마음만으로 정하지 않습니다. 늦어질 때 생기는 문제와 위험을 비교합니다.',
             '진우는 무엇이든 하나를 고르기 전에 판단 기준이 필요하다고 느꼈습니다.',
           ),
         },
@@ -507,14 +507,14 @@ export const M5_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'm5-l4-priority-table',
-          label: '우선순위 완성',
+          label: '먼저 할 일 완성',
           imageSrc: '/lessons/story/m5/m5-l4-scene-04.webp',
-          alt: '기준과 이유가 적힌 우선순위 판단표 장면을 위한 빈 이미지 자리',
+          alt: '기준과 이유가 적힌 먼저 할 일 판단표 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
           copy: sceneCopy(
             '학생들은 전원선 안전 확인을 먼저 하고 역할을 나눠 나머지 일을 진행하는 순서와 이유를 기록했습니다.',
             '먼저 할 일과 함께 할 일을 기준으로 정했어요.',
-            '우선순위는 한 사람이 모든 일을 차례로 하는 표가 아니라 병렬 도움과 의존 관계도 포함할 수 있습니다.',
+            '먼저 할 일 표에는 한 사람이 차례로 할 일뿐 아니라 함께 도울 일과 먼저 끝나야 할 일도 들어갈 수 있습니다.',
             '진우는 조건이 바뀌면 같은 기준으로 순서를 다시 정하기로 했습니다.',
           ),
         },
@@ -526,7 +526,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '각 일에 맞는 기준 그림을 붙여요.',
             light: '미루면 생기는 결과를 비교합니다.',
-            challenge: '우선순위는 가치 판단과 시간 제약, 위험, 상호 의존을 통합한 상황적 결정입니다.',
+            challenge: '먼저 할 일은 중요함, 시간, 위험, 먼저 필요한 일을 함께 보고 정합니다.',
           },
         },
         {
@@ -537,22 +537,22 @@ export const M5_STUDIOS: StudioDefinition[] = [
             light: '친구 도움으로 함께 진행할 일도 찾습니다.',
             challenge: '동일한 기준에서도 지원 자원과 마감 관계에 따라 여러 최적해가 존재할 수 있습니다.',
           },
-          flow: { input: '동시 요청', process: '기준·영향 비교', output: '근거 있는 우선순위' },
+          flow: { input: '동시 요청', process: '기준·영향 비교', output: '이유 있는 순서' },
         },
         {
           title: '조건이 바뀌면 다시 정해요',
-          core: '새 마감이나 도움 가능성이 생기면 우선순위를 조정합니다.',
+          core: '새 마감이나 도움 가능성이 생기면 먼저 할 일을 다시 정합니다.',
           detail: {
             full: '바뀐 카드에 새 기준을 붙여요.',
             light: '처음 순서를 고집하지 않고 이유를 다시 봅니다.',
-            challenge: '우선순위는 고정 목록이 아니라 새로운 제약에 반응하는 결정 모델입니다.',
+            challenge: '먼저 할 일은 고정된 목록이 아닙니다. 새 조건이 생기면 다시 바꿀 수 있습니다.',
           },
         },
       ],
     },
     encounter: {
       title: '세 일 중 무엇을 먼저 해야 할까',
-      description: '안전, 마감, 영향, 도움 가능성을 확인해 우선순위를 정해야 합니다.',
+      description: '안전, 마감, 영향, 도움 가능성을 확인해 먼저 할 일을 정해야 합니다.',
       facts: [
         '통로의 전원선은 사람이 걸릴 수 있습니다.',
         '포스터 수정 마감은 30분 뒤입니다.',
@@ -588,7 +588,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
     },
     artifact: {
       kind: 'comparison-table',
-      title: '우선순위 판단표',
+      title: '먼저 할 일 판단표',
       prompt: '일 세 가지, 안전·마감·영향·도움 기준, 먼저 할 일, 함께 할 일, 이유를 적어 보세요.',
     },
     transfer: {
@@ -596,7 +596,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
       description: '발표 마감이 앞당겨지고 친구 한 명이 도움을 줄 수 있게 됐습니다. 어떻게 하겠어요?',
       choices: [
         { id: 'keep-old-order', emoji: '📌', label: '조건이 달라도 처음 순서를 그대로 지켜요.' },
-        { id: 'recheck-criteria', emoji: '🔄', label: '새 마감과 도움 가능성으로 우선순위를 다시 정해요.' },
+        { id: 'recheck-criteria', emoji: '🔄', label: '새 마감과 도움 가능성으로 먼저 할 일을 다시 정해요.' },
         { id: 'only-easy-task', emoji: '🙂', label: '가장 쉬운 일만 계속해요.' },
       ],
     },
@@ -672,7 +672,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '내가 먼저 놓은 카드를 사진처럼 기억해요.',
             light: '잘된 부분과 막힌 부분을 나눕니다.',
-            challenge: '기초 수행 기록이 있어야 도움의 효과와 학생의 독립 기여를 구분할 수 있습니다.',
+            challenge: '첫 시도가 있어야 도움받은 뒤 내가 무엇을 고쳤는지 알 수 있습니다.',
           },
         },
         {
@@ -691,7 +691,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '힌트로 바꾼 카드를 찾아요.',
             light: '답을 복사하지 않고 내 이유를 말합니다.',
-            challenge: '지원은 정답 전달이 아니라 전략 수정과 자기 설명으로 이어질 때 학습 증거가 됩니다.',
+            challenge: '도움은 정답을 받는 데서 끝나지 않습니다. 방법을 고치고 내 말로 설명해야 배움이 남습니다.',
           },
         },
       ],
@@ -827,7 +827,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '필요한 위치 그림을 골라요.',
             light: '목적에 필요 없는 개인정보는 빼요.',
-            challenge: '명확성과 정보 최소화를 함께 만족하는 비식별 특성을 선택합니다.',
+            challenge: '분명하게 말하되, 누군지 알 수 있는 정보는 빼고 안전한 단서만 고릅니다.',
           },
           flow: { input: '첫 요청·AI 추정', process: '안전한 단서 추가', output: '수정 요청·외부 확인' },
         },
@@ -837,7 +837,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '수정 답과 배치도를 나란히 봐요.',
             light: 'AI에게 다시 묻는 것만으로 끝내지 않습니다.',
-            challenge: '프롬프트 명확화는 출력 신뢰성을 보장하지 않으므로 독립 검증을 유지합니다.',
+            challenge: '요청을 분명히 고쳐도 답이 꼭 맞는 것은 아닙니다. 다른 자료로 다시 확인합니다.',
           },
         },
       ],
@@ -962,7 +962,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '지금 할 한 단계만 골라요.',
             light: '여러 단계를 한꺼번에 하지 않아요.',
-            challenge: '의존 관계가 있는 절차를 원자적 실행 단위로 나누어 오류 범위를 제한합니다.',
+            challenge: '앞 단계가 필요한 일은 더 작은 단계로 나누어 어디서 틀렸는지 찾기 쉽게 합니다.',
           },
         },
         {
@@ -971,7 +971,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '행동 뒤에 무엇이 보여야 하는지 찾아요.',
             light: '완료 표시를 눈으로 확인해요.',
-            challenge: '각 단계에 관찰 가능한 완료 조건을 붙여 거짓 완료와 누락을 줄입니다.',
+            challenge: '각 단계마다 끝났는지 눈으로 확인할 기준을 붙입니다.',
           },
           flow: { input: '현재 단계', process: '실행·결과 확인', output: '다음 단계 요청' },
         },
@@ -981,7 +981,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '확인 결과를 말한 뒤 다음 안내를 받아요.',
             light: '다르면 다음으로 넘어가지 않아요.',
-            challenge: '검증 실패 시 후속 실행을 차단하고 마지막으로 확인된 상태에서 복구합니다.',
+            challenge: '확인에 실패하면 다음으로 가지 않습니다. 마지막으로 맞았던 단계로 돌아갑니다.',
           },
         },
       ],
@@ -1081,7 +1081,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '아이미는 “완성했어요”라고 말했지만, 학생들은 같은 말을 다시 묻지 않고 원래 조건 체크리스트에 직접 표시했습니다.',
             'AI의 말 대신 처음 조건표로 직접 확인했어요.',
-            '출력을 만든 주체의 자기 평가는 독립 검증이 아닙니다. 원자료나 별도 도구로 교차 확인해야 합니다.',
+            '답을 만든 쪽의 “맞다”는 말만으로는 충분하지 않습니다. 원래 자료나 다른 도구로 한 번 더 확인해야 합니다.',
           ),
         },
         {
@@ -1093,7 +1093,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '빠진 시작 시간을 추가한 뒤 학생들은 제목, 장소, 시간을 다시 비교했습니다. 세 조건이 모두 맞아야 비로소 완료 표시를 했습니다.',
             '빠진 시간을 고치고 세 조건을 다시 확인했어요.',
-            '수정 후에는 변경한 항목만 보지 않고 전체 조건을 회귀 검증해야 새로운 누락을 발견할 수 있습니다.',
+            '고친 뒤에는 고친 부분만 보지 않고 전체 조건을 다시 확인해야 새로 빠진 점을 찾을 수 있습니다.',
             '민준쌤은 결과를 의심하는 것이 아니라 약속한 목표를 지키는 확인이라고 설명했습니다.',
           ),
         },
@@ -1105,7 +1105,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '처음 필요하다고 적은 것을 찾아요.',
             light: '결과와 목표를 나란히 놓아요.',
-            challenge: '사후 인상 평가를 피하고 사전 정의한 수용 기준을 복원합니다.',
+            challenge: '끝난 뒤 느낌만 보지 않습니다. 처음 정한 조건을 다시 꺼내 봅니다.',
           },
         },
         {
@@ -1114,7 +1114,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '맞는 것과 빠진 것을 표시해요.',
             light: '조건을 한 줄씩 확인해요.',
-            challenge: '요구 사항 추적표로 각 조건과 결과 증거의 대응 관계를 기록합니다.',
+            challenge: '조건마다 결과에서 확인한 부분을 표에 적습니다.',
           },
           flow: { input: '처음 목표·완성 결과', process: '조건별 독립 확인', output: '수정·완료 판단' },
         },
@@ -1124,7 +1124,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '확인에 쓸 다른 자료를 골라요.',
             light: 'AI에게 같은 질문만 반복하지 않아요.',
-            challenge: '검증 경로의 독립성을 높여 동일한 오류가 반복 승인되는 위험을 줄입니다.',
+            challenge: '같은 실수가 또 맞다고 넘어가지 않게 다른 자료로 확인합니다.',
           },
         },
       ],
@@ -1391,7 +1391,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '원한 화면과 나온 화면을 비교해요.',
             light: '달라진 첫 지점을 찾아요.',
-            challenge: '실패 관찰을 구체적인 재현 조건과 기대 결과로 바꿉니다.',
+            challenge: '실패한 장면을 언제, 무엇을 했고, 무엇이 나와야 했는지로 나누어 적습니다.',
           },
         },
         {
@@ -1410,7 +1410,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '수정 전과 수정 후 결과를 적어요.',
             light: '한 번 성공했다고 바로 끝내지 않아요.',
-            challenge: '수정 검증과 회귀 시험을 분리하고 사용자 조건을 바꾸어 일반성을 확인합니다.',
+            challenge: '고친 뒤에는 같은 조건으로 한 번, 다른 사람이 쓰는 조건으로 한 번 더 시험합니다.',
           },
         },
       ],
@@ -1554,7 +1554,7 @@ export const M5_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '바꿀 단계와 도움받을 사람을 적어요.',
             light: '확인 전에는 실제 음식을 다루지 않아요.',
-            challenge: '대체 경로와 검증 책임을 배치하고 미확인 위험이 해소될 때까지 실행을 보류합니다.',
+            challenge: '다른 방법과 확인할 사람을 정합니다. 위험이 확인되기 전에는 실행을 멈춥니다.',
           },
         },
       ],

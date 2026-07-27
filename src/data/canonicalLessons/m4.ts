@@ -13,14 +13,14 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '자신 있는 AI 답도 확인하기',
     masterObjective: '오늘은 AI 답의 날짜와 근거를 공식 자료와 비교하고 잘못된 부분을 고쳐 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_03],
-    coreConcepts: ['유창하고 자신 있는 표현은 사실성의 증거가 아니며 AI 오류는 의도적 거짓말과 다르다.'],
+    coreConcepts: ['말이 자연스럽고 자신 있어도 사실이라는 뜻은 아니며, AI 오류는 일부러 한 거짓말과 다르다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'minjun', 'aimi'],
       location: '동아리방',
-      purpose: '준비물 질문에 매우 유창하게 대답한 아이미의 결과를 최신 공식 시간표와 대조하기',
+      purpose: '준비물 질문에 자연스럽게 대답한 아이미의 결과를 최신 공식 시간표와 비교하기',
       mismatch: '자신 있게 말한 답에 오래된 시간표 정보가 섞여서 과목과 날짜가 틀림',
       evidence: ['아이미의 자신 있는 대답', '오래된 시간표', '최신 학교 공식 시간표'],
-      resolution: '최신 공식 시간표와 대조하여 날짜와 준비물을 올바르게 수정함',
+      resolution: '최신 공식 시간표와 비교하여 날짜와 준비물을 올바르게 수정함',
     },
     stages: [
       {
@@ -33,7 +33,7 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '유창하고 자신감 넘치는 표현을 대할 때 우리의 올바른 태도는?',
           choices: [
-            { id: 'check-anyway', label: '표현이 유창해도 진짜 맞는지 공식 자료로 대조해봐요', emoji: '🔍' },
+            { id: 'check-anyway', label: '말이 자연스러워도 공식 자료와 비교해 봐요', emoji: '🔍' },
           ],
         },
         assetIds: ['m4-l1-story-01'],
@@ -43,14 +43,14 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         id: 's2-compare',
         phase: 'compare',
         title: '오래된 시간표 vs 최신 공식 시간표',
-        instruction: '아이미 답의 근거가 오래된 자료였음을 최신 공지문과 대조하여 찾아보세요.',
+        instruction: '아이미 답이 오래된 자료에서 나왔는지 최신 공지문과 비교해 찾아보세요.',
         activity: {
           id: 'act-s2',
           kind: 'compare',
-          prompt: '오래된 시간표와 최신 학교 공지문을 대조해보세요.',
+          prompt: '오래된 시간표와 최신 학교 공지문을 비교해 보세요.',
           left: { title: '오래된 시간표 (아이미가 참고함)', content: '5월 3일 준비물: 미술 도구' },
           right: { title: '최신 학교 공식 공지문', content: '변경 공지: 5월 3일 준비물: 체육복' },
-          criteria: [{ id: 'date-subject', label: '최신 변경 사항 반영 여부' }],
+          criteria: [{ id: 'date-subject', label: '최신 바뀐 내용이 들어 있는지' }],
         },
         assetIds: ['m4-l1-story-02', 'm4-l1-story-03'],
         support: {},
@@ -76,9 +76,9 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     artifact: {
       id: 'm4-l1-artifact',
       title: 'AI 답 확인 기록',
-      portfolioLabel: '자신 있는 AI 답의 공식 공지 대조 및 수정 기록',
+      portfolioLabel: '자신 있는 AI 답을 공식 공지와 비교해 고친 기록',
       fields: [
-        { id: 'verifiedAnswer', label: '공식 공지문으로 확인하여 정정한 정확한 답', input: 'text', required: true },
+        { id: 'verifiedAnswer', label: '공식 공지문으로 확인해 바로잡은 답', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -113,13 +113,13 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '더 믿을 만한 자료 고르기',
     masterObjective: '오늘은 같은 내용을 말하는 여러 자료의 출처와 날짜를 보고 더 믿을 만한 자료를 골라봐요.',
     standards: [STANDARD_CODES.SPEC_AI_03],
-    coreConcepts: ['공식성·최신성·근거·적용 범위를 함께 본다.'],
+    coreConcepts: ['공식 자료인지, 최신 자료인지, 근거가 있는지, 지금 일에 맞는지 함께 본다.'],
     canonicalScenario: {
       characters: ['yuna', 'aimi'],
       location: '동아리방',
-      purpose: '체험회 취소 소문이 담긴 익명 글과 최신 학교 공식 공지를 비교하여 진짜 정보 고르기',
-      mismatch: '익명 게시글 소문 때문에 많은 학생들이 혼란스러워함',
-      evidence: ['익명 인터넷 글', '오래된 공지', '최신 학교 공식 공지'],
+      purpose: '체험회 취소 소문이 담긴, 누가 쓴지 모르는 글과 최신 학교 공식 공지를 비교하여 진짜 정보 고르기',
+      mismatch: '누가 쓴지 모르는 글의 소문 때문에 많은 학생들이 헷갈림',
+      evidence: ['누가 쓴지 모르는 인터넷 글', '오래된 공지', '최신 학교 공식 공지'],
       resolution: '작성 출처와 작성 날짜를 확인하여 최신 학교 공식 공지를 선택함',
     },
     stages: [
@@ -131,8 +131,8 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         activity: {
           id: 'act-s1',
           kind: 'compare',
-          prompt: '가장 신뢰할 수 있는 출처 조건(공식성, 최신성)을 만족하는 자료를 골라보세요.',
-          left: { title: '익명 인터넷 소문 글', content: '출처: 불명 / 날짜: 어제 (체험회 취소됨!)' },
+          prompt: '가장 믿을 만한 자료 조건(공식 자료인지, 최신 자료인지)에 맞는 자료를 골라보세요.',
+          left: { title: '누가 쓴지 모르는 인터넷 소문 글', content: '출처: 알 수 없음 / 날짜: 어제 (체험회 취소됨!)' },
           right: { title: '최신 학교 공식 공지', content: '출처: 학교장 / 날짜: 오늘 (정상 진행)' },
           criteria: [{ id: 'source-trust', label: '공식 출처와 최신 작성 날짜 확인' }],
         },
@@ -328,7 +328,7 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '거절·도움 요청 대화 카드',
       portfolioLabel: '민감 정보 공유 거절 및 도움 요청 대화 기록',
       fields: [
-        { id: 'refusalSentence', label: '인증 요구에 내가 작성한 단호한 거절 문장', input: 'text', required: true },
+        { id: 'refusalSentence', label: '인증을 요구할 때 내가 쓴 거절 문장', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -452,7 +452,7 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '사진 공유 전 확인 카드',
       portfolioLabel: '사진 공유 전 단서 점검 및 블러 편집 기록',
       fields: [
-        { id: 'photoCheckResult', label: '사진에서 확인한 단서와 최종 공유 판단', input: 'text', required: true },
+        { id: 'photoCheckResult', label: '사진에서 찾은 단서와 마지막 공유 결정', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -621,7 +621,7 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       ],
     },
     transfer: {
-      title: '친구에게 부탁하기 전이',
+      title: '친구에게 부탁하기에 써 보기',
       scenario: '동아리 친구에게 물건을 빌려달라고 할 때 알맞은 표현은?',
       activity: {
         id: 'act-transfer-m4-l7',
@@ -732,11 +732,11 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '이상한 요청을 어른에게 알리기',
     masterObjective: '오늘은 사진·암호·선물·만남을 요구하는 위험 신호를 보고 누구에게 어떤 말로 알릴지 연습해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_03],
-    coreConcepts: ['멈춤·거절·믿을 만한 사람에게 알리기는 실제 수행해야 하는 자기보호 행동이다.'],
+    coreConcepts: ['멈춤·거절·믿을 만한 사람에게 알리기는 실제로 해야 하는 자기보호 행동이다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'minjun'],
       location: '동아리방',
-      purpose: '낯선 계정이 선물과 비밀 만남을 제안하는 위험 채팅 신호에 자기보호 행동 수행하기',
+      purpose: '낯선 계정이 선물과 비밀 만남을 제안하는 위험 채팅 신호에 자기보호 행동 하기',
       mismatch: '선물을 준다는 대가로 혼자만의 비밀 만남을 요구받음',
       evidence: ['가려진 위험 채팅 메시지', '믿을 사람 연결 지도'],
       resolution: '거절·차단 버튼을 누르고 민준 선생님께 알림 문장을 직접 말해 도움을 받음',
@@ -868,7 +868,7 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '광고 추천을 확인한 나의 최종 선택은?',
           choices: [
-            { id: 'hold-buy', label: '이미 있는 물건이므로 지금 구매하지 않고 보류해요 (보류)', emoji: '⏸️' },
+            { id: 'hold-buy', label: '이미 있는 물건이므로 지금은 사지 않아요', emoji: '⏸️' },
             { id: 'reject-ad', label: '나에게 필요 없는 물건이므로 사지 않아요 (거절)', emoji: '❌' },
           ],
         },
@@ -881,7 +881,7 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '광고 단서 판별표',
       portfolioLabel: '추천 콘텐츠 광고 단서 및 구매 판단 기록',
       fields: [
-        { id: 'adCheckDecision', label: '광고 단서 확인 후 내가 내린 판단과 이유', input: 'text', required: true },
+        { id: 'adCheckDecision', label: '광고 단서를 확인하고 내가 정한 이유', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -916,14 +916,14 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '나의 AI 안전 여권',
     masterObjective: '오늘은 확인할 때·보내기 전·위험할 때의 행동과 도움 요청 문장을 안전 여권에 완성해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_03],
-    coreConcepts: ['안전은 지식 암기가 아니라 상황에서 수행하는 확인·보호·도움 요청 행동이다.'],
+    coreConcepts: ['안전은 지식 암기가 아니라 상황에서 하는 확인·보호·도움 요청 행동이다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna'],
       location: '동아리방',
       purpose: '체험회 공개 전 3가지 안전 상황(확인할 때, 보내기 전, 위험할 때)의 서명 도장을 모아 <AI 안전 여권> 완성하기',
       mismatch: '새 동아리원이 디지털 안전 규칙을 행동으로 실천하는 법을 모름',
       evidence: ['l1~l10 안전 행동 도장 묶음'],
-      resolution: '모듈 4 산출물을 연결해 나만의 알림 문장과 서명이 담긴 AI 안전 여권을 완성하고 발표함',
+      resolution: '모듈 4 결과물을 연결해 나만의 알림 문장과 서명이 담긴 AI 안전 여권을 완성하고 발표함',
     },
     stages: [
       {
@@ -952,14 +952,14 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'build',
           prompt: '안전 여권의 각 영역에 올바른 안전 행동 도장을 놓아보세요.',
           slots: [
-            { id: 'stamp-check', label: '1. 확인할 때 (사실 대조 도장)' },
+            { id: 'stamp-check', label: '1. 확인할 때 (사실 비교 도장)' },
             { id: 'stamp-mask', label: '2. 보내기 전 (단서 가리기 도장)' },
             { id: 'stamp-report', label: '3. 위험할 때 (멈춤과 도움 알림 도장)' },
           ],
           pieces: [
             { id: 'p-check', label: '유창한 대답도 공식 자료와 팩트 체크하기', slotId: 'stamp-check' },
-            { id: 'p-mask', label: '이름표, 얼굴, 위치 단서는 블러 가리기', slotId: 'stamp-mask' },
-            { id: 'p-report', label: '이상한 요구 수신 시 화면 가리고 어른에게 말하기', slotId: 'stamp-report' },
+            { id: 'p-mask', label: '이름표, 얼굴, 위치 단서는 흐리게 가리기', slotId: 'stamp-mask' },
+            { id: 'p-report', label: '이상한 요구를 받으면 화면 가리고 어른에게 말하기', slotId: 'stamp-report' },
           ],
         },
         assetIds: ['m4-l11-story-03'],
@@ -971,8 +971,8 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: 'AI 안전 여권',
       portfolioLabel: '모듈 4 실천 중심 AI 안전 여권',
       fields: [
-        { id: 'safeRule1', label: '1. 정보 확인할 때 나의 실천 행동', input: 'text', required: true },
-        { id: 'safeRule2', label: '2. 사진/정보 보내기 전 나의 실천 행동', input: 'text', required: true },
+        { id: 'safeRule1', label: '1. 정보를 확인할 때 내가 할 일', input: 'text', required: true },
+        { id: 'safeRule2', label: '2. 사진이나 정보를 보내기 전 내가 할 일', input: 'text', required: true },
         { id: 'safeRule3', label: '3. 위험 신호를 보았을 때 도움 알림 문장', input: 'text', required: true },
       ],
     },

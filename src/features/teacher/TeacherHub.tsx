@@ -111,7 +111,7 @@ export default function TeacherHub({ onExit }: Props) {
               <div className="mt-5 grid gap-4 md:grid-cols-2">
                 <article className="studio-fact-card"><h3 className="font-bold">68차시 · 현재 62개 스튜디오</h3><p className="mt-1 text-sm leading-relaxed">행정적 차시 수는 유지합니다. 1~6단원의 모듈 마무리 전 차시는 모두 같은 8단계 경험이며, 여섯 마무리 차시는 성장 포트폴리오입니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">1~6단원 · 전면 전환 완료</h3><p className="mt-1 text-sm leading-relaxed">현재 1~6단원 전면 리모델링이 완성되어 있습니다. 이미지 슬롯, 소리, AI 응답은 준비된 AI 예시이며 카메라·마이크 권한 없이 활동할 수 있습니다.</p></article>
-                <article className="studio-fact-card"><h3 className="font-bold">평가 흐름</h3><p className="mt-1 text-sm leading-relaxed">첫 생각 → 조건 변화 → AI 비교 → 내 판단 → 새 상황의 전이를 살펴봅니다.</p></article>
+                <article className="studio-fact-card"><h3 className="font-bold">평가 흐름</h3><p className="mt-1 text-sm leading-relaxed">첫 생각 → 조건 변화 → AI 비교 → 내 판단 → 새 상황에 써 보기를 살펴봅니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">지원 수준</h3><p className="mt-1 text-sm leading-relaxed">충분한 지원, 보통, 도전적 수준은 정보 수·선택지·힌트·AI 역할의 깊이를 바꿉니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">저장 원칙</h3><p className="mt-1 text-sm leading-relaxed">교사가 켠 경우에만 정제된 과정증거를 저장하며 음성·사진·그림 원본과 전체 AI 대화는 남기지 않습니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">수업 전 1분 점검</h3><p className="mt-1 text-sm leading-relaxed">학생 별칭, 기록 상태, TTS·STT, AAC 카드, 오늘 사용할 지원 수준을 확인합니다.</p></article>

@@ -2,7 +2,7 @@ import type { StudioDefinition, SupportLevel, VisualNovelCopy } from '../../feat
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES } from './shared';
 
 const PREPARED_LIFE_NOTE =
-  '화면의 AI 의견, 가격, 지도, 교통, 날씨, 건강, 음식 정보는 실제 서비스가 아닌 준비된 연습 예시입니다. 실제 돈·이동·건강·개인정보 판단은 최신 공식 자료와 믿을 만한 사람에게 확인하고, 위험하거나 불편하면 실행을 멈추고 도움을 요청합니다.';
+  '화면의 AI 의견, 가격, 지도, 교통, 날씨, 건강, 음식 정보는 실제 서비스가 아니라 수업용 연습 예시입니다. 실제 돈·이동·건강·개인정보 결정은 최신 공식 자료와 믿을 만한 사람에게 확인하고, 위험하거나 불편하면 실행을 멈추고 도움을 요청합니다.';
 
 function sceneCopy(
   full: string,
@@ -67,7 +67,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'm6-l1-revised-cart',
-          label: '고친 최종 목록',
+          label: '마지막으로 고친 목록',
           imageSrc: '/lessons/story/m6/m6-l1-scene-04.webp',
           alt: '바나나와 견과류가 빠지고 안전한 대체 재료와 수량이 표시된 최종 목록 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
@@ -86,7 +86,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '간식 준비에 꼭 필요한 품목을 찾아요.',
             light: '목적에 맞는지 한 품목씩 봐요.',
-            challenge: '구매 목표와 선호를 분리해 목록의 범위를 정의합니다.',
+            challenge: '꼭 사야 할 것과 좋아해서 사고 싶은 것을 나누어 목록을 정합니다.',
           },
         },
         {
@@ -105,7 +105,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '바꾼 이유를 목록 옆에 적어요.',
             light: '최종 합계를 계산기로 확인해요.',
-            challenge: '수정 이력을 남겨 최종 선택이 어떤 조건에 근거했는지 설명합니다.',
+            challenge: '무엇을 왜 고쳤는지 남겨 마지막 선택의 이유를 설명합니다.',
           },
         },
       ],
@@ -238,7 +238,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: 'AI 값과 계산기 값을 나란히 봐요.',
             light: '다르면 가격과 수량부터 다시 확인해요.',
-            challenge: '독립 산술 도구로 결과를 재현하고 오차 원인을 입력과 연산으로 구분합니다.',
+            challenge: '계산기로 다시 계산하고, 틀린 까닭이 숫자 입력인지 계산인지 나눕니다.',
           },
           flow: { input: '가격표·수량·낸 돈', process: '예상·계산기·영수증 검산', output: '합계·거스름돈 기록' },
         },
@@ -248,7 +248,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '영수증 줄을 물건과 연결해요.',
             light: '거스름돈 카드를 금액별로 세어요.',
-            challenge: '산술 정확성과 거래 기록 정확성을 별도 증거로 교차 검증합니다.',
+            challenge: '계산이 맞는지와 영수증 내용이 맞는지를 따로 확인합니다.',
           },
         },
       ],
@@ -341,7 +341,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'm6-l3-sign-check',
-          label: '지도와 표지 대조',
+          label: '지도와 표지 비교',
           imageSrc: '/lessons/story/m6/m6-l3-scene-03.webp',
           alt: '횡단보도와 파란 도서관 표지 핀이 연습 지도 경로와 일치하는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
@@ -360,7 +360,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '윤아는 지도와 표지가 모두 확인되는 경로를 골랐고, 표지가 다르면 이동을 멈추고 안내소나 함께 있는 어른에게 물을 문장도 적었습니다.',
             '확인된 길과 도움받을 곳을 경로 카드에 적었어요.',
-            '안전 경로에는 검증된 기준점뿐 아니라 불일치 시 중단 지점과 믿을 만한 도움 경로가 포함됩니다.',
+            '안전 경로에는 확인한 기준뿐 아니라, 말이 맞지 않을 때 멈출 곳과 믿을 만한 도움 길도 들어갑니다.',
             '윤아는 길을 모르는 것이 부끄러운 일이 아니라 확인할 신호라고 느꼈습니다.',
           ),
         },
@@ -372,7 +372,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '학교, 횡단보도, 공원, 도서관을 찾아요.',
             light: '지도 기호와 이름을 연결해요.',
-            challenge: '경로를 기준점의 순서로 표현해 위치 추적 없이도 검증 가능하게 만듭니다.',
+            challenge: '길은 기준이 되는 장소 순서로 말합니다. 내 실시간 위치를 보내지 않아도 확인할 수 있습니다.',
           },
         },
         {
@@ -381,7 +381,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '같은 표지에 확인 표시를 해요.',
             light: '지도에 없는 길은 고르지 않아요.',
-            challenge: '서로 독립된 지도와 현장 표지 증거로 경로 일치 여부를 판단합니다.',
+            challenge: '지도와 현장 표지가 같은 길을 말하는지 함께 봅니다.',
           },
           flow: { input: '고정 지도·표지 카드', process: '기준점 순서 비교', output: '안전 경로·도움 지점' },
         },
@@ -410,7 +410,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
       prompt: '경로를 안전하게 고르는 방법을 선택해 보세요.',
       choices: [
         { id: 'follow-ai-shortcut', emoji: '↗️', label: 'AI가 빠르다고 한 지도 밖 길을 따라가요.' },
-        { id: 'use-fixed-map', emoji: '🗺️', label: '고정 지도와 현장 표지가 모두 확인되는 경로를 골라요.' },
+        { id: 'use-fixed-map', emoji: '🗺️', label: '지도와 눈앞의 표지가 모두 맞는 길을 골라요.' },
         { id: 'share-live-location', emoji: '📍', label: '낯선 채팅에 현재 위치를 보내 길을 물어요.' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
@@ -515,7 +515,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '목적지와 같은 방향 카드를 찾아요.',
             light: '비슷한 번호를 천천히 비교해요.',
-            challenge: '노선 번호, 방향, 목적지, 승차 지점의 일치 여부를 동시에 확인합니다.',
+            challenge: '노선 번호, 방향, 목적지, 타는 곳이 서로 맞는지 함께 확인합니다.',
           },
         },
         {
@@ -541,7 +541,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
     },
     encounter: {
       title: '비슷한 번호와 오늘 우회 공지',
-      description: '준비된 시뮬레이션에서 목적지, 방향, 정류장, 날짜가 있는 운행 공지를 확인해야 합니다.',
+      description: '수업용 연습 화면에서 목적지, 방향, 정류장, 날짜가 있는 운행 공지를 확인해야 합니다.',
       facts: [
         '목적지는 마을회관입니다.',
         '12번과 21번은 반대 방향입니다.',
@@ -610,7 +610,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '마을 활동 전 아이미는 “오늘은 따뜻해요”라고 답했습니다. 하지만 어느 지역인지, 어느 날짜와 시간인지 표시되지 않았습니다.',
             'AI 날씨 답에 지역과 날짜가 없었어요.',
-            '날씨 정보는 시공간 맥락이 없으면 현재 활동에 적용할 수 없습니다.',
+            '날씨 정보는 지역과 시간이 없으면 지금 활동에 바로 쓸 수 없습니다.',
           ),
         },
         {
@@ -634,7 +634,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '공식 예보 카드에는 오늘 지역, 날짜, 낮 14도, 오후 비, 강한 바람이 표시되었습니다. 마을 활동은 오후에 밖에서 진행됩니다.',
             '지역·날짜·기온·비·바람과 활동 시간을 확인했어요.',
-            '공식 최신 자료에서 변수와 적용 시간을 추출한 뒤 개인 조건과 결합해야 합니다.',
+            '공식 최신 자료에서 바뀌는 조건과 적용 시간을 찾은 뒤, 내 상황과 함께 보아야 합니다.',
           ),
         },
         {
@@ -658,7 +658,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '지역과 날짜 표시를 찾아요.',
             light: '출처와 업데이트 시간을 확인해요.',
-            challenge: '예보의 공간, 시간, 출처 유효성을 먼저 검증합니다.',
+            challenge: '예보의 지역, 시간, 출처가 맞는지 먼저 확인합니다.',
           },
         },
         {
@@ -677,7 +677,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '내가 편한 겉옷을 고르고 이유를 말해요.',
             light: '다른 사람과 달라도 근거가 있으면 괜찮아요.',
-            challenge: '안전 조건을 지키면서 개인 감각과 선호를 반영한 선택을 정당화합니다.',
+            challenge: '안전하게 준비하면서 내 더위·추위 느낌과 좋아하는 옷도 함께 봅니다.',
           },
         },
       ],
@@ -765,7 +765,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '학생들은 실제로 만들지 않고 그림 카드로 첫 순서를 배열했습니다. 아직 건강 정보와 도구 조건은 확인하지 않았습니다.',
             '그림 카드로 첫 음식 계획을 만들었어요.',
-            '계획 시뮬레이션은 실행 전에 위험 조건과 대체 경로를 검토하게 합니다.',
+            '계획 연습은 실제로 하기 전에 위험 조건과 다른 방법을 살펴보게 합니다.',
           ),
         },
         {
@@ -777,7 +777,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '조건 카드에는 유제품 알레르기 확인 필요, 키위 재고 없음, 학생 칼 사용 안 함, 교사가 준비한 미리 자른 과일과 확인된 대체 컵이 있었습니다.',
             '알레르기, 재료, 도구, 어른 도움 조건을 확인했어요.',
-            '건강 정보가 미확인인 단계는 보류하고, 위험 도구 단계는 제거하며, 검증된 대체 재료만 사용합니다.',
+            '건강 정보가 확인되지 않은 단계는 잠시 멈추고, 위험한 도구 단계는 빼며, 확인한 다른 재료만 사용합니다.',
           ),
         },
         {
@@ -801,7 +801,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: 'AI 단계와 실제 조건 카드를 나란히 봐요.',
             light: '바로 만들지 않고 먼저 확인해요.',
-            challenge: '제안된 각 단계의 전제 조건과 실제 실행 환경의 일치 여부를 검토합니다.',
+            challenge: '각 단계가 우리 재료, 도구, 도움 조건에 맞는지 살펴봅니다.',
           },
         },
         {
@@ -820,7 +820,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '바뀐 재료와 순서를 표시해요.',
             light: '확인 전에는 실제 음식을 다루지 않아요.',
-            challenge: '수정 이유와 재개 조건을 기록해 계획 변경을 추적 가능하게 합니다.',
+            challenge: '왜 고쳤는지와 언제 다시 시작할 수 있는지 적습니다.',
           },
         },
       ],
@@ -953,7 +953,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '겹친 블록에 표시해요.',
             light: '내가 쉬어야 할 신호도 계획에 넣어요.',
-            challenge: '시간 충돌과 개인 에너지 제약을 탐지해 실행 가능성을 검토합니다.',
+            challenge: '시간이 겹치는지, 내가 너무 지치지 않는지 보고 할 수 있는 계획인지 봅니다.',
           },
           flow: { input: '활동·시간·휴식·도움', process: '겹침 확인·조건 변화 반영', output: '전후 하루 계획' },
         },
@@ -963,7 +963,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '새 시간에 맞춰 블록을 옮겨요.',
             light: '알림은 나를 돕는 도구로 사용해요.',
-            challenge: '변경된 제약을 반영하고 알림을 수정 계획의 실행 신호로 재설정합니다.',
+            challenge: '바뀐 조건에 맞게 계획과 알림 시간을 다시 맞춥니다.',
           },
         },
       ],
@@ -1076,7 +1076,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '민준 선생님은 진우의 말을 듣고 활동을 멈추게 한 뒤 학교의 건강·응급 절차에 따라 보호자와 전문 도움에 연결했습니다.',
             '선생님에게 먼저 알리고 학교 절차로 도움받았어요.',
-            '신뢰 가능한 성인은 관찰 정보를 받아 상황의 긴급성과 다음 행동을 책임 있게 판단하고 전문 체계에 연결합니다.',
+            '믿을 만한 어른은 본 내용을 듣고 얼마나 급한지 판단한 뒤, 병원 같은 전문 도움으로 연결해 줍니다.',
             '진우는 아픔을 참거나 완벽히 설명할 때까지 기다리지 않고 바로 알린 것이 잘한 행동이라고 느꼈습니다.',
           ),
         },
@@ -1097,7 +1097,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '가까이 있는 믿을 만한 어른을 찾아요.',
             light: '갑자기 심하거나 위험하면 바로 알려요.',
-            challenge: '건강 의사결정 권한을 현장 성인과 전문 체계에 명확히 배치합니다.',
+            challenge: '건강 결정은 가까운 어른과 병원 같은 전문 도움에 맡깁니다.',
           },
           flow: { input: '몸 위치·느낌·시점', process: '편한 방식으로 즉시 알림', output: '사람·전문 도움 연결' },
         },
@@ -1107,7 +1107,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: 'AI에게 병명을 맞혀 달라고 하지 않아요.',
             light: '도움 요청 문장을 정리한 뒤 사람에게 가요.',
-            challenge: '정보 정리와 임상 판단을 분리해 자동화 권한의 경계를 유지합니다.',
+            challenge: 'AI는 아픈 말을 정리할 수는 있지만 병명이나 치료를 정하지 않습니다.',
           },
         },
       ],
@@ -1232,7 +1232,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '같은 뜻을 여러 방식으로 표현해 봐요.',
             light: '목소리를 내기 어려우면 카드나 글을 써요.',
-            challenge: '표현 양식이 달라도 의사소통 의도와 권리는 동일함을 적용합니다.',
+            challenge: '말, 글, 그림, AAC 중 어떤 방법을 써도 내 뜻과 권리는 같습니다.',
           },
         },
         {
@@ -1241,7 +1241,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '네 상황에 맞는 문장을 골라요.',
             light: '거절해도 나쁜 사람이 아니에요.',
-            challenge: '동의, 경계, 접근 요구를 생활 소통의 동등한 기능으로 다룹니다.',
+            challenge: '괜찮다고 말하기, 거절하기, 천천히 말해 달라고 하기 모두 중요한 소통입니다.',
           },
           flow: { input: '상황·내 의도', process: '표현 방식·문장 선택', output: '도움·거절·재설명 표현' },
         },
@@ -1488,14 +1488,14 @@ export const M6_STUDIOS: StudioDefinition[] = [
         },
         {
           id: 'm6-l11-audience-cards',
-          label: '교실과 온라인 청중',
+          label: '교실에서 듣는 사람과 온라인에서 보는 사람',
           imageSrc: '/lessons/story/m6/m6-l11-scene-03.webp',
           alt: '교실 친구용과 공개 온라인용 청중 카드에 서로 다른 정보 범위가 표시된 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneCopy(
             '교실 발표에서는 이름과 함께 활동한 경험을 말할 수 있지만, 공개 온라인 소개에서는 별칭과 일반적인 취미만 남기기로 했습니다.',
             '교실용과 온라인용 정보 범위를 다르게 정했어요.',
-            '자기소개 공개 범위는 청중, 장소, 저장 가능성, 목적에 따라 데이터 최소화 수준을 조정합니다.',
+            '자기소개에서 어디까지 말할지는 듣는 사람, 장소, 저장될 가능성, 목적을 보고 꼭 필요한 만큼만 정합니다.',
           ),
         },
         {
@@ -1507,7 +1507,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           copy: sceneCopy(
             '학생들은 문장 순서는 일부 수용하고, 어색한 표현은 자기 말로 고쳤으며, 학교명과 연락처 제안은 거절했습니다. 두 소개 모두 학생이 읽고 최종 승인했습니다.',
             'AI 제안을 골라 고쳐 두 가지 소개를 완성했어요.',
-            '변경 기록을 남기면 수용·수정·거절의 근거와 최종 저자성을 확인할 수 있습니다.',
+            '변경 기록을 남기면 어떤 제안을 썼고, 고쳤고, 거절했는지와 마지막 글이 내 선택인지 확인할 수 있습니다.',
             '진우는 AI가 문장을 도와도 나를 얼마나 어떻게 소개할지는 내가 결정한다고 발표했습니다.',
           ),
         },
@@ -1519,7 +1519,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '소개하고 싶은 내용을 먼저 골라요.',
             light: '완벽한 문장이 아니어도 내 생각을 남겨요.',
-            challenge: '첫 초안을 의도와 저자성을 판단하는 기준으로 보존합니다.',
+            challenge: '첫 글을 남겨 두면 내가 원래 말하고 싶던 내용을 지킬 수 있습니다.',
           },
         },
         {
@@ -1528,17 +1528,17 @@ export const M6_STUDIOS: StudioDefinition[] = [
           detail: {
             full: '이름, 별칭, 취미 카드를 청중에 맞게 나눠요.',
             light: '온라인에는 학교명·연락처·자세한 위치를 넣지 않아요.',
-            challenge: '목적 제한과 데이터 최소화 원칙을 청중별 소개에 적용합니다.',
+            challenge: '읽을 사람에 맞게 필요한 정보만 넣고 개인정보는 줄입니다.',
           },
-          flow: { input: '내 초안·AI 제안·청중', process: '수용·수정·거절·정보 최소화', output: '교실용·온라인용 소개' },
+          flow: { input: '내 초안·AI 제안·청중', process: '쓰기·고치기·거절하기·정보 줄이기', output: '교실용·온라인용 소개' },
         },
         {
           title: 'AI 제안을 골라서 사용해요',
           core: '내 목소리와 안전 기준에 맞는 제안만 수용하고 나머지는 고치거나 거절합니다.',
           detail: {
-            full: '제안마다 수용·수정·거절 표시를 해요.',
+            full: '제안마다 쓰기, 고치기, 거절하기 표시를 해요.',
             light: '최종 문장은 내가 읽고 승인해요.',
-            challenge: '편집 변경 이력으로 의도 보존, 개인정보 제거, 최종 승인 근거를 기록합니다.',
+            challenge: '무엇을 고쳤는지 적어 내 뜻을 지켰는지, 개인정보를 뺐는지 확인합니다.',
           },
         },
       ],
@@ -1557,7 +1557,7 @@ export const M6_STUDIOS: StudioDefinition[] = [
       prompt: '두 가지 자기소개를 만드는 방법을 골라 보세요.',
       choices: [
         { id: 'copy-ai-introduction', emoji: '📋', label: 'AI가 더 멋지게 썼으니 개인정보까지 그대로 복사해요.' },
-        { id: 'audience-safe-intro', emoji: '🛡️', label: '내 초안에서 시작해 청중별로 AI 제안을 수용·수정·거절해요.' },
+        { id: 'audience-safe-intro', emoji: '🛡️', label: '내 초안에서 시작해 듣는 사람별로 AI 제안을 쓰고, 고치고, 거절해요.' },
         { id: 'share-same-everywhere', emoji: '🌐', label: '교실용 소개를 공개 온라인에도 똑같이 올려요.' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
@@ -1570,19 +1570,19 @@ export const M6_STUDIOS: StudioDefinition[] = [
         '교실 발표는 알고 지내는 학생과 교사가 듣습니다.',
         '온라인 글은 모르는 사람도 보고 저장할 수 있습니다.',
         'AI는 학교명과 연락처 추가를 제안했습니다.',
-        '학생은 각 제안을 수용·수정·거절할 수 있습니다.',
+        '학생은 각 제안을 쓰거나, 고치거나, 거절할 수 있습니다.',
       ],
     },
     aiContribution: {
       source: 'prepared',
-      role: '학생의 저자성과 공개 범위를 존중하는 AI',
+      role: '학생의 선택과 공개 범위를 존중하는 AI',
       text: '학교명과 연락처를 넣자는 제안은 안전하지 않아 철회합니다. 교실용은 이름과 함께한 활동을, 온라인용은 별칭과 일반적인 취미만 남기고, 표현은 학생이 마음에 드는 것만 골라 고쳐 주세요.',
       question: '두 소개에서 공통으로 지킬 내 목소리와 다르게 정할 정보 범위는 무엇인가요?',
     },
     artifact: {
       kind: 'repair-card',
       title: '초안·변경 기록·최종 소개 2종',
-      prompt: '내 첫 초안, AI 제안별 수용·수정·거절 이유, 교실용 소개, 온라인용 소개, 최종 확인을 적어 보세요.',
+      prompt: '내 첫 초안, AI 제안별 쓰기·고치기·거절하기 이유, 교실용 소개, 온라인용 소개, 마지막 확인을 적어 보세요.',
     },
     transfer: {
       title: '온라인 게임 채팅 자기소개',

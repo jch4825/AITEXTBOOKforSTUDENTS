@@ -32,7 +32,7 @@ export default function AiDecisionPanel({
 
   return (
     <div className="space-y-5">
-      <section className="studio-margin-note" aria-label="준비된 AI 의견">
+      <section className="studio-margin-note" aria-label="수업용 AI 의견">
         <div className="mb-2 flex items-center justify-between gap-3">
           <div>
             <span className="studio-kicker" style={{ color: accent }}>AI의 안내 사례</span>

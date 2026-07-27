@@ -7,7 +7,7 @@ export const SUPPORT_PROFILES: Record<SupportLevel, { label: string; description
   },
   light: {
     label: '보통',
-    description: '기준 문안과 고유 증거 활동을 수행합니다.',
+    description: '기준 글과 고유 증거 활동을 합니다.',
   },
   challenge: {
     label: '도전적',
@@ -19,7 +19,7 @@ export const SUPPORT_PROFILES: Record<SupportLevel, { label: string; description
   },
   normal: {
     label: '보통',
-    description: '기준 문안과 고유 증거 활동을 수행합니다.',
+    description: '기준 글과 고유 증거 활동을 합니다.',
   },
   hard: {
     label: '도전적',

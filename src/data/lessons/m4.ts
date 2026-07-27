@@ -17,7 +17,7 @@ const DIGITAL_ETHICS_STANDARD =
  * 4단원 - 학교 AI 체험회 공개 전 완성하는 AI 안전 여권
  *
  * 정보 확인, 개인정보 보호, 거절, 멈춤, 도움 요청을 실제 상황에서
- * 수행하고 열 가지 안전 도장을 하나의 행동 계획으로 연결한다.
+ * 실천하고 열 가지 안전 도장을 하나의 행동 계획으로 연결한다.
  */
 export const M4_LESSONS: LessonContent[] = [
   {
@@ -43,9 +43,9 @@ export const M4_LESSONS: LessonContent[] = [
     objective: '오늘은 같은 내용을 말하는 여러 자료의 출처와 날짜를 보고 더 믿을 만한 자료를 골라봐요.',
     standards: [INFORMATION_STANDARD, COMMUNICATION_STANDARD],
     bodyEasy: '누가 언제 만든 자료인지 살펴보고 더 믿을 만한 자료를 골라요.',
-    bodyNormal: '자료의 믿을 만한 정도는 말투보다 작성 주체, 게시 장소, 날짜, 다른 자료와의 일치 여부로 판단합니다. 익명 소문, 지난 공지, 최신 공식 공지를 같은 기준으로 비교합니다.',
+    bodyNormal: '자료를 믿어도 되는지는 말투보다 누가 썼는지, 어디에 올라왔는지, 날짜가 언제인지, 다른 자료와 같은지를 보고 정합니다. 누가 쓴지 모르는 글, 지난 공지, 최신 공식 공지를 같은 기준으로 비교합니다.',
     wrapUpEasy: '출처와 날짜를 확인해 더 믿을 만한 자료를 골랐어요.',
-    wrapUpNormal: '여러 자료의 작성 주체와 날짜, 공식성, 일치 여부를 비교해 선택 근거가 있는 출처 비교 카드를 완성합니다.',
+    wrapUpNormal: '여러 자료의 쓴 사람, 날짜, 공식 자료인지, 다른 자료와 같은지를 비교해 왜 골랐는지 적은 출처 비교 카드를 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['출처', '정보', '비교'], imagePlaceholder: true } }],
   },
   {
@@ -73,7 +73,7 @@ export const M4_LESSONS: LessonContent[] = [
     bodyEasy: '비밀번호와 인증 코드는 누구에게도 메시지로 보내지 않고 믿을 만한 어른에게 도움을 요청해요.',
     bodyNormal: '비밀번호와 인증 코드는 계정을 여는 열쇠이므로 교사나 보호자를 포함한 누구에게도 채팅으로 보내지 않습니다. 문제가 생기면 화면을 닫고 믿을 만한 어른과 공식 계정 복구 절차를 확인합니다.',
     wrapUpEasy: '인증 코드 요구를 거절하고 어른과 공식 도움 경로를 확인했어요.',
-    wrapUpNormal: '계정 이름과 비밀번호·인증 코드를 구분하고 거절, 화면 닫기, 어른에게 알리기, 공식 복구 확인 순서를 수행합니다.',
+    wrapUpNormal: '계정 이름과 비밀번호·인증 코드를 구분하고 거절, 화면 닫기, 어른에게 알리기, 공식 복구 확인 순서를 실천합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['비밀번호', '개인정보', '도움'], imagePlaceholder: true } }],
   },
   {
@@ -101,7 +101,7 @@ export const M4_LESSONS: LessonContent[] = [
     bodyEasy: '불편한 내용은 다시 읽지 않아도 돼요. 멈추고 화면에서 떨어져 믿을 만한 사람에게 알려요.',
     bodyNormal: '불편한 내용을 만난 것은 학생의 잘못이 아니며 혼자 해결하거나 다시 열어 볼 필요가 없습니다. 안전 덮개로 가리고 거리를 둔 뒤 학교와 가정의 도움 경로를 이용합니다.',
     wrapUpEasy: '불편한 화면을 멈추고 거리를 둔 뒤 도움을 요청했어요.',
-    wrapUpNormal: '위험 신호와 몸·감정 신호를 확인하고 멈춤, 가리기, 거리두기, 믿을 만한 사람에게 알리기 순서를 수행합니다.',
+    wrapUpNormal: '위험 신호와 몸·감정 신호를 확인하고 멈춤, 가리기, 거리두기, 믿을 만한 사람에게 알리기 순서를 실천합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['안전', '도움', '단계'], imagePlaceholder: true } }],
   },
   {
@@ -169,7 +169,7 @@ export const M4_LESSONS: LessonContent[] = [
     objective: '오늘은 확인할 때·보내기 전·위험할 때의 행동과 도움 요청 문장을 안전 여권에 완성해 봐요.',
     standards: [DIGITAL_SAFETY_STANDARD, PRIVACY_STANDARD],
     bodyEasy: '열 가지 안전 도장을 고르고 확인, 보호, 도움 요청 행동을 여권에 담아요.',
-    bodyNormal: '열 번의 수행 기록에서 확인하기, 가리기, 거절하기, 믿을 만한 사람에게 알리기 도장을 고르고 새 통합 상황 세 가지와 개인 도움망에 연결합니다.',
+    bodyNormal: '열 번의 활동 기록에서 확인하기, 가리기, 거절하기, 믿을 만한 사람에게 알리기 도장을 고르고 새 안전 상황 세 가지와 개인 도움망에 연결합니다.',
     wrapUpEasy: '상황에서 바로 사용할 행동과 도움 요청 문장이 담긴 AI 안전 여권을 만들었어요.',
     wrapUpNormal: '확인할 때, 보내기 전, 위험할 때의 행동과 실제 도움 요청 문장을 통합해 서명하고 설명할 수 있는 AI 안전 여권을 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['안전', '확인', '도움'], imagePlaceholder: true } }],

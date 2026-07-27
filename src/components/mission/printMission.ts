@@ -191,7 +191,7 @@ export function printMission(
       let answerHtml = '';
 
       if (val === undefined) {
-        answerHtml = '<span style="color:#aaa; font-style:italic;">수행하지 않음</span>';
+        answerHtml = '<span style="color:#aaa; font-style:italic;">하지 않음</span>';
       } else {
         if (block.kind === 'multi-pick') {
           const arr = val as string[];

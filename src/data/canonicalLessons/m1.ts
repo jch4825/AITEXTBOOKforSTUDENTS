@@ -33,7 +33,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '아이미가 말한 인공지능(AI)은 무슨 뜻일까요?',
           choices: [
-            { id: 'human-tool', label: '컴퓨터가 사람처럼 학습하고 판단하여 문제 해결을 돕는 기술이라는 뜻이에요', emoji: '🤖' },
+            { id: 'human-tool', label: '많은 자료에서 비슷한 점을 찾아 문제 해결을 돕는 기술이라는 뜻이에요', emoji: '🤖' },
             { id: 'magic-robot', label: '스스로 태어난 마법 로봇이라는 뜻이에요', emoji: '🪄' },
           ],
         },
@@ -95,7 +95,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           modes: ['choice', 'text'],
           choiceCards: [
             { id: 'def1', label: '사람처럼 생각하고 배워서 번역과 추천을 도와줘요', emoji: '💡' },
-            { id: 'def2', label: '컴퓨터가 사람처럼 학습하고 판단하여 필요한 답과 결과를 찾아주는 프로그램이에요', emoji: '🔍' },
+            { id: 'def2', label: '많은 자료에서 비슷한 점을 찾아 필요한 답과 결과를 보여 주는 프로그램이에요', emoji: '🔍' },
           ],
         },
         assetIds: ['m1-l1-story-04'],
@@ -253,7 +253,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '아이미는 문장을 어떻게 만드나요?',
           choices: [
             { id: 'predict', label: '배운 글에서 다음에 올 가장 어울리는 말을 이어 붙여요', emoji: '🔗' },
-            { id: 'perfect', label: '모든 사실을 완벽히 검증해서 완성해요', emoji: '❌' },
+            { id: 'perfect', label: '모든 사실을 완벽히 확인해서 완성해요', emoji: '❌' },
           ],
         },
         assetIds: ['m1-l3-story-01'],
@@ -293,7 +293,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '인터넷 검색 기능이 연결된 AI가 답변할 때의 특징으로 가장 알맞은 것은 무엇일까요?',
         choices: [
-          { id: 'check-real', label: '실제 검색 정보가 반영되어 훨씬 사실에 가깝고 정확해져요', emoji: '🔍' },
+          { id: 'check-real', label: '실제 검색 정보가 들어가면 사실에 더 가까워져요', emoji: '🔍' },
         ],
       },
     },
@@ -628,7 +628,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '원문과 AI 요약을 대조해보고 누락된 핵심을 찾아보세요.',
           left: { title: '원문 안내', content: '일시: 5월 10일 / 장소: 3층 강당 / 내용: 로봇 체험' },
           right: { title: 'AI 3줄 요약', content: '5월 10일에 로봇 체험 행사가 열립니다.' },
-          criteria: [{ id: 'place', label: '장소(3층 강당) 포함 여부' }],
+          criteria: [{ id: 'place', label: '장소(3층 강당)가 들어 있는지' }],
         },
         assetIds: ['m1-l7-story-01'],
         support: {},
@@ -742,7 +742,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '도움 경계 지도',
       portfolioLabel: 'AI 사용과 사람 결정 분리 지도',
       fields: [
-        { id: 'boundaryRule', label: 'AI 대신 사람이 판단하고 결정해야 하는 일', input: 'text', required: true },
+        { id: 'boundaryRule', label: 'AI 대신 사람이 정해야 하는 일', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -863,7 +863,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: 'AI 결과를 사용할까?',
     masterObjective: '오늘은 AI에게 안전한 요청을 한 뒤 결과를 확인하고 사용·수정·거절을 골라봐요.',
     standards: [STANDARD_CODES.SPEC_AI_03],
-    coreConcepts: ['AI 사용의 마지막 결정과 책임은 사람에게 있다. 실제 AI와 준비된 응답을 화면에서 명확히 구분한다.'],
+    coreConcepts: ['AI 결과를 마지막으로 쓸지 정하고 책임지는 사람은 사람이다. 실제 AI 답과 수업용 답을 화면에서 구분한다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna', 'aimi'],
       location: '동아리방',
@@ -900,7 +900,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '수정 요청 후 아이미가 새로 제안한 음악 목록을 점검해보세요.',
           source: { title: '행사 조건표', text: '조건: 학생 체험회용, 신나고 조용한 소음 없는 경쾌한 곡' },
           response: { title: '아이미 수정 목록', text: '1. 신나는 동요 리믹스\n2. 경쾌한 클래식 소나타', isPrepared: true },
-          criteria: [{ id: 'mood', label: '행사 분위기 적합성' }],
+          criteria: [{ id: 'mood', label: '행사 분위기에 맞음' }],
           decisions: ['accept', 'modify'],
         },
         assetIds: ['m1-l10-story-03'],
@@ -916,7 +916,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '수정된 음악 목록에 대한 나의 최종 판단은?',
           choices: [
-            { id: 'use-modified', label: '수정된 목록 중 경쾌한 곡을 선택해서 사용해요 (수용)', emoji: '✅' },
+            { id: 'use-modified', label: '고친 목록에서 밝은 곡을 골라 써요', emoji: '✅' },
             { id: 'reject-all', label: '다시 사람 추천 목록으로 변경해요 (거절)', emoji: '❌' },
           ],
         },
@@ -929,7 +929,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '사용 판단 기록',
       portfolioLabel: 'AI 결과 수용/수정/거절 최종 판단표',
       fields: [
-        { id: 'finalDecision', label: 'AI 결과에 대한 나의 최종 결정과 이유', input: 'text', required: true },
+        { id: 'finalDecision', label: 'AI 결과를 마지막으로 정한 이유', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -940,7 +940,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '인쇄 전 마지막 사용 판단 행동은?',
         choices: [
-          { id: 'human-final', label: '사람이 오타와 사실을 최종 검토하고 사용할지 결정해요', emoji: '📌' },
+          { id: 'human-final', label: '사람이 오타와 사실을 마지막으로 확인하고 쓸지 정해요', emoji: '📌' },
         ],
       },
     },
@@ -950,7 +950,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       { id: 'm1-l10-story-03', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l10-story-03.webp', alt: '조건 비교 및 수정', required: true, purpose: '스토리 컷 3' },
       { id: 'm1-l10-story-04', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l10-story-04.webp', alt: '최종 선택 발표', required: true, purpose: '스토리 컷 4' },
     ],
-    wrapUp: 'AI 결과를 사용하는 최종 결정과 책임은 사람에게 있으므로 수용·수정·거절을 명확히 판단합니다.',
+    wrapUp: 'AI 결과를 마지막으로 쓸지 정하고 책임지는 사람은 사람입니다. 그대로 쓸지, 고칠지, 쓰지 않을지 분명히 정합니다.',
   },
 
   // ============================================================
@@ -970,7 +970,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       location: '동아리방',
       purpose: '동아리 첫 주 마무리, 새 동아리원을 위한 아이미 안전 사용 설명서 조립하기',
       mismatch: '새 친구가 AI를 어떻게 안전하고 올바르게 써야 하는지 모름',
-      evidence: ['l1~l10 탐구 수행 증거 묶음'],
+      evidence: ['l1~l10 탐구 활동 기록 묶음'],
       resolution: '모듈 1 탐구 기록 중 3가지를 선택하여 최종 사용 설명서를 완성하고 전달함',
     },
     stages: [
@@ -1007,7 +1007,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           pieces: [
             { id: 'p1', label: '많은 글 요약하기와 빠른 정보 검색', slotId: 'slot-good' },
             { id: 'p2', label: '가려진 사진이나 소음 속 음성 인식', slotId: 'slot-change' },
-            { id: 'p3', label: '중요한 날짜, 사실, 건강 및 안전 판단', slotId: 'slot-human' },
+            { id: 'p3', label: '중요한 날짜, 사실, 건강과 안전 정하기', slotId: 'slot-human' },
           ],
         },
         assetIds: ['m1-l11-story-03'],
@@ -1021,7 +1021,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       fields: [
         { id: 'goodJob', label: '1. AI가 잘 도와주는 일', input: 'text', required: true },
         { id: 'changeCondition', label: '2. 조건에 따라 결과가 달라지는 일', input: 'text', required: true },
-        { id: 'humanCheck', label: '3. 사람이 꼭 확인하고 판단할 일', input: 'text', required: true },
+        { id: 'humanCheck', label: '3. 사람이 꼭 확인하고 정할 일', input: 'text', required: true },
       ],
     },
     transfer: {

@@ -54,7 +54,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
             <br />
             본문의 <span className="dict-term">밑줄 친 단어</span>를 누르면
             <br />
-            아이미가 뜻을 알려 주십시오.
+            아이미가 뜻을 알려 줍니다.
           </p>
         </div>
       )}

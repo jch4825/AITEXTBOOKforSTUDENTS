@@ -46,9 +46,9 @@ export const M2_PORTFOLIO: ModulePortfolioDefinition = {
   artifactChoices: [
     { lessonId: 'm2-l1', label: '빠진 정보', artifact: '요청 수정 카드' },
     { lessonId: 'm2-l2', label: '한 번에 한 목적', artifact: '분할 요청 대화선' },
-    { lessonId: 'm2-l3', label: '정확한 대상', artifact: '전후 요청-결과 체크표' },
+    { lessonId: 'm2-l3', label: '맞는 대상', artifact: '전후 요청-결과 체크표' },
     { lessonId: 'm2-l4', label: '좋은 예시', artifact: '나의 좋은 예시 카드' },
-    { lessonId: 'm2-l5', label: '읽을 사람과 말투', artifact: '대상별 안내문 2종' },
+    { lessonId: 'm2-l5', label: '읽을 사람과 말투', artifact: '읽을 사람별 안내 글 2종' },
     { lessonId: 'm2-l6', label: '작은 단계', artifact: '단계별 요청 제작 기록' },
     { lessonId: 'm2-l7', label: '수정 기준', artifact: '수정 전후 차이와 수정 기준표' },
     { lessonId: 'm2-l8', label: '답의 모양', artifact: '형식 규칙 체크 결과물' },

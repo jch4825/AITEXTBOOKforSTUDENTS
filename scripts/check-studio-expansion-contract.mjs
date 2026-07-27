@@ -115,7 +115,7 @@ for (const artifact of [
   '분할 요청 대화선',
   '전후 요청-결과 체크표',
   '나의 좋은 예시 카드',
-  '대상별 안내문 2종',
+  '읽을 사람별 안내 글 2종',
   '단계별 요청 제작 기록',
   '수정 전후 차이와 수정 기준표',
   '형식 규칙 체크 결과물',
@@ -124,7 +124,7 @@ for (const artifact of [
 ]) {
   if (!m2.includes(artifact)) throw new Error(`M2 artifact missing: ${artifact}`);
 }
-for (const disclosure of ['준비된 AI 예시', '실제 AI 연결이 아닌']) {
+for (const disclosure of ['수업용 AI 예시', '실제 AI가 바로 만든 답이 아니라']) {
   if (!m2.includes(disclosure)) throw new Error(`prepared AI disclosure missing: ${disclosure}`);
 }
 
@@ -253,7 +253,7 @@ for (const artifact of [
   '현재-목표-정보-행동 문제 정의 카드',
   '과제 분해 보드',
   '이유 연결선이 있는 절차표',
-  '우선순위 판단표',
+  '먼저 할 일 판단표',
   '첫 시도-힌트-수정 결과 기록',
   '요청 수정과 외부 확인 기록',
   '체크포인트가 있는 단계별 대화',

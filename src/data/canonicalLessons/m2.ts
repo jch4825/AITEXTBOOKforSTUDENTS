@@ -350,7 +350,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '좋은 예시 기록',
       portfolioLabel: '원하는 답변 모양을 보여준 예시 작성표',
       fields: [
-        { id: 'myExample', label: '내가 작성한 한 줄 좋은 예시', input: 'text', required: true },
+        { id: 'myExample', label: '내가 쓴 좋은 한 줄 예시', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -383,7 +383,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '누구에게 보여 줄 답인지 말해요',
     masterObjective: '오늘은 답을 볼 사람과 원하는 말투를 넣고 내용의 정확성은 따로 확인해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_01],
-    coreConcepts: ['역할·말투 지정은 표현을 바꾸지만 전문성이나 사실성을 보장하지 않는다.'],
+    coreConcepts: ['역할과 말투를 정하면 표현은 바뀌지만, 내용이 맞는지는 따로 확인해야 한다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna', 'aimi'],
       location: '동아리방',
@@ -418,13 +418,13 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         id: 's2-concept',
         phase: 'concept',
         title: '말투와 내용의 독립성',
-        instruction: '역할이나 말투를 바꾼다고 해서 내용의 진실이나 정확성이 자동으로 높아지지는 않습니다.',
+        instruction: '역할이나 말투를 바꾼다고 해서 내용이 저절로 맞아지는 것은 아닙니다.',
         activity: {
           id: 'act-s2',
           kind: 'single-choice',
           prompt: '전문가 역할을 지정했을 때 기억할 사실은 무엇인가요?',
           choices: [
-            { id: 'check-fact-anyway', label: '말투만 전문적으로 변할 뿐 사실 확인은 사람이 따로 해야 해요', emoji: '💡' },
+            { id: 'check-fact-anyway', label: '말투만 그럴듯해질 뿐 사실은 사람이 따로 확인해야 해요', emoji: '💡' },
           ],
         },
         assetIds: ['m2-l5-story-02'],
@@ -433,10 +433,10 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     ],
     artifact: {
       id: 'm2-l5-artifact',
-      title: '대상별 안내문 2종',
+      title: '읽을 사람별 안내 글 2종',
       portfolioLabel: '읽는 이를 지정한 맞춤 말투 안내서',
       fields: [
-        { id: 'audiencePrompt', label: '독자를 지정하여 수정한 안내문', input: 'text', required: true },
+        { id: 'audiencePrompt', label: '읽을 사람을 정해 고친 안내 글', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -507,7 +507,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           items: [
             { id: 'step1', label: '1단계: 장소에 필요한 기본 조건 물어보기', correctOrder: 1 },
             { id: 'step2', label: '2단계: 1단계 장소에 맞춘 필수 준비물 목록 만들기', correctOrder: 2 },
-            { id: 'step3', label: '3단계: 준비물을 고려한 최종 시간표 표 구성', correctOrder: 3 },
+            { id: 'step3', label: '3단계: 준비물을 보고 마지막 시간표 만들기', correctOrder: 3 },
           ],
         },
         assetIds: ['m2-l6-story-02', 'm2-l6-story-03'],
@@ -634,7 +634,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '수정 기준표',
       portfolioLabel: '유지할 사실과 수정할 기준이 담긴 diff 기록',
       fields: [
-        { id: 'refinePrompt', label: '중요 사실을 지키며 다시 작성한 재요청문', input: 'text', required: true },
+        { id: 'refinePrompt', label: '중요한 사실을 지켜 다시 물은 말', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -667,25 +667,25 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '답의 모양을 정해요',
     masterObjective: '오늘은 할 일에 맞는 표·번호 목록·한 문장 형식을 고르고 결과가 형식을 지켰는지 확인해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_01],
-    coreConcepts: ['출력 형식은 목적에 맞게 선택하며 짧음만이 좋은 답의 기준은 아니다.'],
+    coreConcepts: ['답의 모양은 목적에 맞게 고르며 짧음만이 좋은 답의 기준은 아니다.'],
     canonicalScenario: {
       characters: ['yuna', 'aimi'],
       location: '동아리방',
       purpose: '시간표, 설치 순서, 홍보문 3가지 과제에 어울리는 모양(표/목록/한문장) 지정하기',
       mismatch: '모든 결과가 길고 빽빽한 줄글 문단으로 나와서 보기 불편함',
       evidence: ['긴 줄글 응답', '표/목록/문장 변환 예시'],
-      resolution: '과제 특성에 맞춰 표, 번호 목록, 한 문장 형식을 지정해 깔끔하게 출력함',
+      resolution: '과제 특성에 맞춰 표, 번호 목록, 한 문장 모양을 정해 깔끔하게 만듦',
     },
     stages: [
       {
         id: 's1-encounter',
         phase: 'encounter',
         title: '과제에 맞는 모양 매칭',
-        instruction: '시간표, 순서, 홍보문은 각각 어떤 모양(출력 형식)이 가장 보기 좋을까요?',
+        instruction: '시간표, 순서, 홍보문은 각각 어떤 답의 모양이 가장 보기 좋을까요?',
         activity: {
           id: 'act-s1',
           kind: 'sort',
-          prompt: '각 과제에 가장 어울리는 출력 형식을 연결해보세요.',
+          prompt: '각 과제에 가장 어울리는 답의 모양을 연결해보세요.',
           bins: [
             { id: 'table', label: '표 형식', emoji: '📊' },
             { id: 'list', label: '번호 목록 형식', emoji: '🔢' },
@@ -720,9 +720,9 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     artifact: {
       id: 'm2-l8-artifact',
       title: '형식 체크 결과물',
-      portfolioLabel: '과제별 맞춤 출력 형식 지정 기록',
+      portfolioLabel: '과제별 맞춤 답의 모양 지정 기록',
       fields: [
-        { id: 'formatChoice', label: '내 과제에 선택한 출력 형식과 이유', input: 'text', required: true },
+        { id: 'formatChoice', label: '내 과제에 선택한 답의 모양과 이유', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -731,7 +731,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       activity: {
         id: 'act-transfer-m2-l8',
         kind: 'single-choice',
-        prompt: '준비물 정리용 알맞은 출력 형식은?',
+        prompt: '준비물 정리용 알맞은 답의 모양은?',
         choices: [
           { id: 'check-list', label: '체크박스 기호가 있는 번호 목록으로 출력해 줘', emoji: '☑️' },
         ],
@@ -755,13 +755,13 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '다시 묻기와 확인하기는 달라요',
     masterObjective: '오늘은 AI 답의 주장 하나를 골라 학교 공지나 믿을 수 있는 자료와 비교해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_02],
-    coreConcepts: ['같은 AI에게 `정말이야?`라고 묻는 것은 독립 검증이 아니다.'],
+    coreConcepts: ['같은 AI에게 `정말이야?`라고 묻는 것은 다른 자료로 확인한 것이 아니다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna', 'minjun'],
       location: '동아리방',
       purpose: '아이미의 체험회 종료 시간 답이 맞는지 독립된 학교 공식 공지 자료로 확인하기',
       mismatch: '아이미에게 "너 정말 확실해?"라고 물었더니 "네, 확실합니다"라고 거침없이 거짓 대답함',
-      evidence: ['아이미 확신 대답', '최신 학교 공식 공지문', '인터넷 익명 게시글'],
+      evidence: ['아이미의 자신 있는 대답', '최신 학교 공식 공지문', '누가 쓴지 모르는 인터넷 글'],
       resolution: '같은 AI에게 다시 묻는 대신 학교 공식 공지와 대조하여 진짜 대답을 확인 함',
     },
     stages: [
@@ -803,7 +803,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '주장-근거 확인표',
       portfolioLabel: 'AI 주장과 독립 외부 근거 확인 대조표',
       fields: [
-        { id: 'independentEvidence', label: 'AI 답의 사실 확인을 위해 내가 직접 대조한 외부 근거', input: 'text', required: true },
+        { id: 'independentEvidence', label: 'AI 답을 확인하려고 내가 직접 비교한 자료', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -836,14 +836,14 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '한 번의 진짜 대화 완성하기',
     masterObjective: '오늘은 내가 정한 목적의 요청을 보내고, 결과를 고쳐 묻고, 근거를 확인해 최종 사용을 결정해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_01, STANDARD_CODES.SPEC_AI_02],
-    coreConcepts: ['실제 AI와 준비된 응답 경로를 구분하며 대화 기록 전체가 수행 증거다.'],
+    coreConcepts: ['실제 AI 답과 수업용 연습 답을 구분하며 대화 기록 전체가 활동 기록이다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna'],
       location: '동아리방',
       purpose: '홍보 문구, 준비 목록, 소개 대본 중 하나를 정해 첫 대화부터 수정 및 근거 확인까지 완성하기',
       mismatch: '첫 대화 결과에 빠진 정보와 확인 필요한 사실 존재',
       evidence: ['과제별 사실 카드', '독립 확인 공지', '전체 대화 타임라인'],
-      resolution: '최초 요청 -> 결과 평가 -> 수정 요청 -> 외부 대조 -> 최종 사용/수정/거절 결정을 수행함',
+      resolution: '최초 요청 -> 결과 평가 -> 수정 요청 -> 다른 자료 확인 -> 최종 사용/수정/거절 결정을 해 봄',
     },
     stages: [
       {
@@ -866,13 +866,13 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       {
         id: 's2-compare',
         phase: 'compare',
-        title: '결과 평가 및 독립 근거 확인',
-        instruction: '첫 대화 결과에서 빠진 조건을 찾아 수정 요청을 보내고 독립 근거와 대조해봅시다.',
+        title: '결과 평가 및 다른 자료 확인',
+        instruction: '첫 대화 결과에서 빠진 조건을 찾아 수정 요청을 보내고 다른 자료와 비교해봅시다.',
         activity: {
           id: 'act-s2',
           kind: 'ai-compare',
-          prompt: '첫 결과와 독립 공식 자료를 대조해 수정할 부분을 파악하세요.',
-          source: { title: '독립 공식 자료', text: '일시: 5월 10일 오후 2시 / 장소: 강당 / 무료 입장' },
+          prompt: '첫 결과와 공식 자료를 비교해 수정할 부분을 찾으세요.',
+          source: { title: '공식 자료', text: '일시: 5월 10일 오후 2시 / 장소: 강당 / 무료 입장' },
           response: { title: 'AI 첫 응답 결과', text: '5월 15일에 참가비 1000원 행사로 열립니다.' },
           criteria: [{ id: 'date-fee', label: '날짜 및 참가비 정확성' }],
           decisions: ['modify'],
@@ -890,7 +890,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '최종 수정된 결과물에 대한 결정은?',
           choices: [
-            { id: 'final-use', label: '독립 확인을 마친 수정본을 사용합니다 (수용)', emoji: '✅' },
+            { id: 'final-use', label: '다른 자료로 확인한 수정본을 사용합니다', emoji: '✅' },
           ],
         },
         assetIds: ['m2-l10-story-04'],
@@ -902,7 +902,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '전체 대화 검증 기록',
       portfolioLabel: '요청-수정-근거확인-결정이 담긴 전체 대화 기록',
       fields: [
-        { id: 'fullDialogHistory', label: '최초 요청부터 최종 검증까지의 대화 기록', input: 'text', required: true },
+        { id: 'fullDialogHistory', label: '처음 요청부터 마지막 확인까지의 대화 기록', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -913,7 +913,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '진짜 대화 완수를 위한 올바른 순서는?',
         choices: [
-          { id: 'flow-correct', label: '구체 요청 -> 결과 평가 -> 수정 요청 -> 외부 검증 -> 최종 결정', emoji: '🔄' },
+          { id: 'flow-correct', label: '자세히 묻기 -> 결과 보기 -> 고쳐 묻기 -> 다른 자료 확인 -> 마지막 결정', emoji: '🔄' },
         ],
       },
     },
@@ -944,7 +944,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       purpose: '새 동아리원을 위한 요청 기술 가이드북 <나의 프롬프트 노트> 작성하기',
       mismatch: '새 동아리원이 모호하게 물어보고 틀린 대답을 그대로 사용하려 함',
       evidence: ['l1~l10 요청 조각 기록 묶음'],
-      resolution: '모듈 2 산출물들을 종합하여 한 장짜리 프롬프트 노트를 조립하고 발표함',
+      resolution: '모듈 2 결과물들을 모아 한 장짜리 프롬프트 노트를 조립하고 발표함',
     },
     stages: [
       {
@@ -957,7 +957,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '나만의 프롬프트 노트에 담을 가장 중요한 원칙을 고르세요.',
           choices: [
-            { id: 'prompt-note-start', label: '요청 -> 확인 -> 수정 -> 최종 결정 과정이 담긴 노트를 만들어요!', emoji: '📒' },
+            { id: 'prompt-note-start', label: '요청 -> 확인 -> 고치기 -> 마지막 결정이 담긴 노트를 만들어요!', emoji: '📒' },
           ],
         },
         assetIds: ['m2-l11-story-01', 'm2-l11-story-02'],
@@ -980,7 +980,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           pieces: [
             { id: 'p-c', label: '이름, 수량, 시간 구체적 명시', slotId: 'slot-cond' },
             { id: 'p-e', label: '[시간] - [할일] 양식 예시 제공', slotId: 'slot-ex' },
-            { id: 'p-k', label: '학교 공식 공지와 일치 여부 확인', slotId: 'slot-check' },
+            { id: 'p-k', label: '학교 공식 공지와 같은지 확인', slotId: 'slot-check' },
           ],
         },
         assetIds: ['m2-l11-story-03'],

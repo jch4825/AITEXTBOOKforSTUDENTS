@@ -190,7 +190,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         kind: 'single-choice',
         prompt: '모르는 낱말을 학습하는 올바른 순서는?',
         choices: [
-          { id: 'ai-dict-check', label: 'AI 설명을 듣고 사전을 대조한 뒤 내 말로 정리해요', emoji: '📖' },
+          { id: 'ai-dict-check', label: 'AI 설명을 듣고 사전과 비교한 뒤 내 말로 정리해요', emoji: '📖' },
         ],
       },
     },
@@ -233,7 +233,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: '어려운 원문과 첫 쉬운 설명을 대조하고 빠진 핵심을 찾으세요.',
           left: { title: '어려운 원문 설명', content: '식물이 빛에너지를 이용해 물과 이산화탄소로 양분을 합성하는 과정' },
           right: { title: '첫 쉬운 비유 (오류)', content: '식물이 흙에서 물만 먹고 자라는 조리법이에요' },
-          criteria: [{ id: 'sunlight', label: '햇빛 에너지 역할 포함 여부' }],
+          criteria: [{ id: 'sunlight', label: '햇빛이 하는 일이 들어 있는지' }],
         },
         assetIds: ['m3-l3-story-01'],
         support: {},
@@ -453,7 +453,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: 'AI 제안과 나의 창작 관계는?',
           choices: [
-            { id: 'human-creator', label: 'AI 제안은 재미있는 재료이고 최종 선택과 만들기는 내가 해요', emoji: '🎨' },
+            { id: 'human-creator', label: 'AI 제안은 재미있는 재료이고 마지막 선택과 만들기는 내가 해요', emoji: '🎨' },
           ],
         },
         assetIds: ['m3-l5-story-04'],
@@ -469,7 +469,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       ],
     },
     transfer: {
-      title: '동화 재구성 창작',
+      title: '동화 다시 만들기',
       scenario: '알라딘 동화 결말을 AI와 함께 바꿀 때 내 생각을 넣는 방법은?',
       activity: {
         id: 'act-transfer-m3-l5',
@@ -538,7 +538,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           kind: 'single-choice',
           prompt: '계산 업무에서 도구 선택 원칙으로 올바른 것은?',
           choices: [
-            { id: 'calc-tool-first', label: '정확한 숫자 합계는 계산기로 구하고 AI 결과는 검산해요', emoji: '🔢' },
+            { id: 'calc-tool-first', label: '맞는 합계는 계산기로 구하고 AI 결과는 다시 확인해요', emoji: '🔢' },
           ],
         },
         assetIds: ['m3-l6-story-02'],
@@ -550,7 +550,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '계산-검산 기록',
       portfolioLabel: '계산기 합계 및 AI 풀이 오류 수정표',
       fields: [
-        { id: 'correctSum', label: '계산기로 직접 확인한 정확한 합계', input: 'text', required: true },
+        { id: 'correctSum', label: '계산기로 직접 확인한 맞는 합계', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -820,7 +820,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       title: '사실-추측 분리표',
       portfolioLabel: '그림 관찰 근거에 따른 사실과 추측 구분표',
       fields: [
-        { id: 'factOnlyDesc', label: '보이는 사실만으로 작성한 고쳐진 그림 설명', input: 'text', required: true },
+        { id: 'factOnlyDesc', label: '보이는 사실만으로 고쳐 쓴 그림 설명', input: 'text', required: true },
       ],
     },
     transfer: {
@@ -861,19 +861,19 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       location: '동아리방',
       purpose: '이번 모듈에서 만든 낱말, 요약, 계산, 이야기 자료 중 하나를 골라 자기 말로 복습하기',
       mismatch: 'AI 요약만 읽는 것으로는 스스로 복습이 잘 되었는지 확인하기 어려움',
-      evidence: ['이전 산출물 썸네일 묶음'],
+      evidence: ['이전 결과물 썸네일 묶음'],
       resolution: '보지 않고 스스로 먼저 설명해본 뒤 AI 요약과 비교하여 보완함',
     },
     stages: [
       {
         id: 's1-encounter',
         phase: 'encounter',
-        title: '복습할 산출물 선택',
+        title: '복습할 결과물 선택',
         instruction: '모듈 3에서 작성한 나의 공부 기록 중 하나를 고르세요.',
         activity: {
           id: 'act-s1',
           kind: 'single-choice',
-          prompt: '오늘 복습할 공부 산출물을 선택하세요.',
+          prompt: '오늘 복습할 공부 결과물을 선택하세요.',
           choices: [
             { id: 'pick-word', label: '생태계 낱말 카드 복습하기', emoji: '🌱' },
             { id: 'pick-summary', label: '3문장 핵심 요약판 복습하기', emoji: '📄' },
@@ -944,8 +944,8 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       location: '학교 배움 전시회',
       purpose: '"숙제를 AI가 다 해줘도 돼?"라는 새 친구의 질문에 공부 도구함과 사용 규칙으로 답하기',
       mismatch: 'AI가 숙제를 다 해주면 공부가 된다고 오해함',
-      evidence: ['l1~l10 공부 도구 산출물 묶음'],
-      resolution: 'AI 도움 범위와 사람 직접 수행 규칙이 담긴 <나의 공부 도우미 도구함>을 완성해 전시 발표함',
+      evidence: ['l1~l10 공부 도구 결과물 묶음'],
+      resolution: 'AI가 도와줄 일과 사람이 직접 할 일의 규칙이 담긴 <나의 공부 도우미 도구함>을 완성해 전시 발표함',
     },
     stages: [
       {
@@ -981,7 +981,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           pieces: [
             { id: 'p-q', label: '이유와 특징을 구체적으로 질문하기', slotId: 'drawer-q' },
             { id: 'p-c', label: '숫자 계산은 계산기로 직접 확인하기', slotId: 'drawer-calc' },
-            { id: 'p-w', label: '원문과 대조하고 제출 글은 내 말로 고쳐 쓰기', slotId: 'drawer-write' },
+            { id: 'p-w', label: '원문과 비교하고 제출 글은 내 말로 고쳐 쓰기', slotId: 'drawer-write' },
           ],
         },
         assetIds: ['m3-l11-story-03'],

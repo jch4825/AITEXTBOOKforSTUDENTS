@@ -20,7 +20,7 @@ for (const artifact of ['review-sheet', 'repair-card', 'workflow-plan']) {
   if (!source.includes(`kind: '${artifact}'`)) throw new Error(`missing artifact kind: ${artifact}`);
 }
 if ((source.match(/source: 'prepared'/g) ?? []).length !== 11) throw new Error('M5 AI must be prepared in all studios');
-if (!source.includes('실제 연결이나 실제 기기 조작이 아닌 준비된 연습 예시')) {
+if (!source.includes('실제 연결이나 실제 기기 조작이 아니라 수업용 연습 예시')) {
   throw new Error('prepared-example safety copy is missing');
 }
 if (source.includes('정답입니다') || source.includes('틀렸습니다')) throw new Error('studio must not grade a single correct answer');

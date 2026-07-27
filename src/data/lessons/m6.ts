@@ -182,7 +182,7 @@ export const M6_LESSONS: LessonContent[] = [
     standards: [INTRO_STANDARD],
     bodyEasy: '내가 먼저 소개를 만들고 상대와 장소에 맞게 공개 범위를 바꿔요.',
     bodyNormal:
-      '졸업 발표 자기소개를 먼저 쓴 뒤 AI 표현 제안을 수용·수정·거절하고 개인정보 범위가 다른 교실용과 온라인용 소개를 완성합니다.',
+      '졸업 발표 자기소개를 먼저 쓴 뒤 AI 표현 제안을 쓰거나, 고치거나, 거절하고 개인정보 범위가 다른 교실용과 온라인용 소개를 완성합니다.',
     wrapUpEasy: '자기소개는 내 목소리로 시작하고 공개 범위는 내가 정해요.',
     wrapUpNormal: 'AI 제안을 그대로 복사하지 않고 내 표현과 개인정보 기준에 맞게 두 가지 자기소개로 고쳤습니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['자기소개', '퇴고'], imagePlaceholder: true } }],

@@ -11,7 +11,7 @@ export const M4_PORTFOLIO: ModulePortfolioDefinition = {
   closingStory: [
     {
       id: 'm4-close-final-audit',
-      label: '최종 안전 점검',
+      label: '마지막 안전 점검',
       imageSrc: '/lessons/story/module-close/m4/m4-close-scene-01.webp',
       alt: '진우와 윤아가 체험회 공개 전 열 가지 안전 기록을 펼쳐 최종 점검하는 장면',
       copy: '체험회 공개를 앞두고 진우와 윤아는 시간표 확인 기록, 가린 요청과 사진, 거절 문장, 사용 계획, 도움망, 광고 판단 카드를 한자리에 펼쳤습니다. 각 기록에는 확인하기, 가리기, 거절하기, 믿을 만한 사람에게 알리기 도장이 남아 있었습니다.',
@@ -28,7 +28,7 @@ export const M4_PORTFOLIO: ModulePortfolioDefinition = {
       label: '안전 여권 전달',
       imageSrc: '/lessons/story/module-close/m4/m4-close-scene-03.webp',
       alt: '학생이 안전 도장과 개인 도움망이 담긴 AI 안전 여권에 서명해 발표하는 장면',
-      copy: '마지막으로 학생은 개인 도움망과 “같이 확인하고 도와주세요”라는 알림 문장을 적고 안전 여권에 서명했습니다. 보호막 문양이 완성되자 체험회는 지식을 아는 행사가 아니라 안전 행동을 실제로 수행하는 공간이 되었습니다.',
+      copy: '마지막으로 학생은 개인 도움망과 “같이 확인하고 도와주세요”라는 알림 문장을 적고 안전 여권에 서명했습니다. 보호막 문양이 완성되자 체험회는 지식을 아는 행사가 아니라 안전 행동을 실제로 해 보는 공간이 되었습니다.',
     },
   ],
   studioLessonIds: [
@@ -53,7 +53,7 @@ export const M4_PORTFOLIO: ModulePortfolioDefinition = {
     { lessonId: 'm4-l7', label: '존중하는 부탁', artifact: '전후 요청과 바꾼 이유 카드' },
     { lessonId: 'm4-l8', label: '사용·휴식 계획', artifact: '개인 사용·휴식 계획' },
     { lessonId: 'm4-l9', label: '위험 요청 알림', artifact: '도움 요청 표현과 개인 도움망' },
-    { lessonId: 'm4-l10', label: '광고 판단', artifact: '광고 단서 표시판과 구매 판단 카드' },
+    { lessonId: 'm4-l10', label: '광고 살펴보기', artifact: '광고 단서 표시판과 구매 결정 카드' },
   ],
   guideSections: [
     {

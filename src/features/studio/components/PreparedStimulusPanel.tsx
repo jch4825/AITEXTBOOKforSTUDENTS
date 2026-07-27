@@ -21,7 +21,7 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
   const isTriple = stimuli.length === 3;
 
   return (
-    <div className={`${isSingle ? 'flex justify-center' : `grid gap-2.5 sm:gap-3 ${isTriple ? 'grid-cols-3' : 'sm:grid-cols-2'}`}`} aria-label="교과서에 준비된 이미지와 소리">
+    <div className={`${isSingle ? 'flex justify-center' : `grid gap-2.5 sm:gap-3 ${isTriple ? 'grid-cols-3' : 'sm:grid-cols-2'}`}`} aria-label="수업용 이미지와 소리">
       {stimuli.map((stimulus) => {
         if (stimulus.kind === 'image') {
           const failed = failedImages.includes(stimulus.id);
