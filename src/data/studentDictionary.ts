@@ -455,7 +455,6 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '이미지',
-    aliases: ['그림'],
     shortExplanation: '눈으로 보는 사진이나 그림입니다.',
     example: 'AI가 이미지를 보고 무엇인지 알아봅니다.',
   },

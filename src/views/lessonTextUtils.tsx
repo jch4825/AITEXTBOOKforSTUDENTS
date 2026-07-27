@@ -9,7 +9,7 @@ export function wrapDictionaryTerms(text: string, terms: string[]): ReactNode[] 
   if (terms.length === 0) return [text];
   
   // Normalize and filter out terms that should not have automatic substring underlines
-  const EXCLUDED_TERMS = ['인공지능', '인지', '표', '기계', '추천', '기능', '표현', '도서관'];
+  const EXCLUDED_TERMS = ['인공지능', '인지', '표', '기계', '추천', '기능', '표현', '도서관', '그림'];
   const normalizedTerms = terms
     .map(t => t.normalize('NFC'))
     .filter(t => !EXCLUDED_TERMS.includes(t));
