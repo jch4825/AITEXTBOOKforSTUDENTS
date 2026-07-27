@@ -100,6 +100,27 @@ const frame = readFileSync(new URL('../src/components/MicroLessonFrame.tsx', imp
 if (!frame.includes('comic-frame-footer')) {
   throw new Error('Lesson navigation must use the comic cut navigator.');
 }
+const classroomDock = readFileSync(new URL('../src/components/ClassroomDock.tsx', import.meta.url), 'utf8');
+if (
+  !frame.includes('micro-lesson-frame')
+  || !frame.includes('visualViewport')
+  || !frame.includes('--ai-lesson-viewport-height')
+  || !frame.includes('--ai-lesson-footer-height')
+  || !frame.includes('ResizeObserver')
+  || !frame.includes('ref={footerRef}')
+  || !css.includes('.micro-lesson-frame')
+  || !css.includes('height: var(--ai-lesson-viewport-height, 100dvh)')
+) {
+  throw new Error('Lesson frame must follow the measured mobile viewport height.');
+}
+if (
+  !classroomDock.includes('classroom-dock absolute')
+  || classroomDock.includes('bottom-14')
+  || !css.includes('.classroom-dock')
+  || !css.includes('bottom: var(--ai-lesson-footer-height, 3.5rem)')
+) {
+  throw new Error('Classroom dock must be anchored to the measured footer height.');
+}
 
 const topBar = readFileSync(new URL('../src/components/TopBar.tsx', import.meta.url), 'utf8');
 for (const marker of ['flex-wrap md:flex-nowrap', 'order-3 md:order-none', 'w-full md:w-auto']) {

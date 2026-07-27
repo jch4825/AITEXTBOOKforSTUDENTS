@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import SidebarTree from './SidebarTree';
 import TopBar from './TopBar';
 import DictionaryPanel from './DictionaryPanel';
@@ -33,6 +33,7 @@ export default function MicroLessonFrame({
   const [dictOpen, setDictOpen] = useState(false);
   const [dictQuery, setDictQuery] = useState<string | null>(null);
   const [navOpen, setNavOpen] = useState(false);
+  const footerRef = useRef<HTMLElement | null>(null);
   // 데스크톱 사이드바 접기(집중 모드) — 선택을 기기에 기억한다.
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(
     () => { try { return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1'; } catch { return false; } },
@@ -46,6 +47,32 @@ export default function MicroLessonFrame({
         subPage,
       })
     : null;
+
+  useLayoutEffect(() => {
+    const syncFrameMetrics = () => {
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+      const footerHeight = footerRef.current?.getBoundingClientRect().height ?? 56;
+      document.documentElement.style.setProperty('--ai-lesson-viewport-height', `${viewportHeight}px`);
+      document.documentElement.style.setProperty('--ai-lesson-footer-height', `${footerHeight}px`);
+    };
+
+    syncFrameMetrics();
+    const footerObserver = typeof ResizeObserver === 'undefined'
+      ? null
+      : new ResizeObserver(syncFrameMetrics);
+    if (footerRef.current) footerObserver?.observe(footerRef.current);
+
+    window.addEventListener('resize', syncFrameMetrics);
+    window.visualViewport?.addEventListener('resize', syncFrameMetrics);
+    window.visualViewport?.addEventListener('scroll', syncFrameMetrics);
+
+    return () => {
+      footerObserver?.disconnect();
+      window.removeEventListener('resize', syncFrameMetrics);
+      window.visualViewport?.removeEventListener('resize', syncFrameMetrics);
+      window.visualViewport?.removeEventListener('scroll', syncFrameMetrics);
+    };
+  }, []);
 
   function toggleSidebar() {
     setSidebarCollapsed(v => {
@@ -64,7 +91,7 @@ export default function MicroLessonFrame({
     // h-dvh 고정 — 푸터(다음/이전)가 항상 보이고, 본문·사이드바가 각자 내부 스크롤된다.
     // dvh(동적 뷰포트): 모바일 주소창이 보여도 푸터가 화면 밖으로 밀리지 않는다(vh는 밀림).
     // relative: 교사 도구 도크(absolute)의 앵커 — 프레임 기준이라 모바일에서도 안 흔들린다.
-    <div className="h-dvh flex flex-col relative">
+    <div className="micro-lesson-frame h-dvh flex flex-col relative">
       <TopBar
         crumb={crumb}
         onOpenDictionary={() => { setDictQuery(null); setDictOpen(true); }}
@@ -151,7 +178,7 @@ export default function MicroLessonFrame({
         />
       </div>
       <ClassroomDock lessonId={lessonId} />
-      <footer className="comic-frame-footer h-14 shrink-0 px-3 md:px-6 flex items-center justify-between gap-2">
+      <footer ref={footerRef} className="comic-frame-footer h-14 shrink-0 px-3 md:px-6 flex items-center justify-between gap-2">
         <Button
           variant="secondary"
           onClick={() => {

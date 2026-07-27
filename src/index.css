@@ -114,6 +114,13 @@
     background: transparent;
   }
 
+  .micro-lesson-frame {
+    height: var(--ai-lesson-viewport-height, 100dvh);
+    min-height: var(--ai-lesson-viewport-height, 100dvh);
+    max-height: var(--ai-lesson-viewport-height, 100dvh);
+    overflow: hidden;
+  }
+
   /* font-size scale applied by SettingsContext via [data-font-size] on <html> */
   html[data-font-size="normal"] body { font-size: var(--font-base); }
   html[data-font-size="large"] body { font-size: var(--font-large); }
@@ -551,6 +558,11 @@
 .comic-frame-footer {
   border-top: 1px solid var(--line);
   background: var(--paper-0);
+}
+
+.classroom-dock {
+  bottom: var(--ai-lesson-footer-height, 3.5rem);
+  max-width: calc(100% - 1rem);
 }
 
 .comic-frame-footer .btn {
