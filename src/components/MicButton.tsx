@@ -6,9 +6,10 @@ interface Props {
   onResult: (text: string) => void;
   accent: string;
   disabled?: boolean;
+  onStart?: () => void;
 }
 
-export default function MicButton({ onResult, accent, disabled }: Props) {
+export default function MicButton({ onResult, accent, disabled, onStart }: Props) {
   const [listening, setListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const handleRef = useRef<SttHandle | null>(null);
@@ -31,6 +32,7 @@ export default function MicButton({ onResult, accent, disabled }: Props) {
       handleRef.current?.stop();
       return;
     }
+    onStart?.();
     setError(null);
     const handle = startListening({
       onResult: (text) => {

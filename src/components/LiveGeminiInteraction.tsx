@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Icon from './Icon';
 import MicButton from './MicButton';
 import { askGemini, GeminiError } from '../utils/gemini';
 import { hasApiKey } from '../utils/apiKey';
-import { getLessonSystemPrompt } from '../data/lessonSystemPrompts';
+import { getLessonSystemPrompt, type LessonPromptContext } from '../data/lessonSystemPrompts';
 import { useSpeak } from '../hooks/useSpeak';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
   promptHint?: string;
   accent?: string;
   suggestedQuestions?: string[];
+  lessonContext?: LessonPromptContext;
 }
 
 interface AttachedImage {
@@ -31,26 +32,40 @@ export default function LiveGeminiInteraction({
   promptHint = '실시간 AI 아이미에게 질문하거나 함께 탐구해 보세요!',
   accent = 'var(--brand-accent)',
   suggestedQuestions,
+  lessonContext,
 }: Props) {
-  const { speakNow } = useSpeak();
+  const { speak, speakNow, stop } = useSpeak();
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [attachedImage, setAttachedImage] = useState<AttachedImage | null>(null);
+  const requestSequenceRef = useRef(0);
+  const activeRequestRef = useRef<{ id: number; controller: AbortController } | null>(null);
 
   const isConnected = hasApiKey();
-  const systemInstruction = getLessonSystemPrompt(lessonId);
+  const systemInstruction = getLessonSystemPrompt(lessonId, lessonContext);
+
+  useEffect(() => () => {
+    activeRequestRef.current?.controller.abort();
+    activeRequestRef.current = null;
+    stop();
+  }, [lessonId, stop]);
 
   const handleSend = async (textToSend?: string) => {
     const text = (textToSend || inputText).trim();
     if (!text && !attachedImage) return;
+    if (activeRequestRef.current) return;
 
     if (!isConnected) {
       setErrorMessage('인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
       return;
     }
 
+    stop();
+    const requestId = ++requestSequenceRef.current;
+    const controller = new AbortController();
+    activeRequestRef.current = { id: requestId, controller };
     setLoading(true);
     setErrorMessage(null);
 
@@ -73,11 +88,20 @@ export default function LiveGeminiInteraction({
       const res = await askGemini(
         userText,
         systemInstruction,
-        imageToSend ? { mimeType: imageToSend.mimeType, data: imageToSend.data } : undefined
+        imageToSend ? { mimeType: imageToSend.mimeType, data: imageToSend.data } : undefined,
+        { signal: controller.signal },
       );
+      if (activeRequestRef.current?.id !== requestId || controller.signal.aborted) return;
       setChatHistory((prev) => [...prev, { role: 'ai', text: res.text }]);
-      speakNow(res.text);
+      speak(res.text);
     } catch (err) {
+      if (
+        controller.signal.aborted
+        || (err instanceof GeminiError && err.kind === 'cancelled')
+        || activeRequestRef.current?.id !== requestId
+      ) {
+        return;
+      }
       if (err instanceof GeminiError) {
         if (err.kind === 'no-key') {
           setErrorMessage('인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
@@ -88,7 +112,10 @@ export default function LiveGeminiInteraction({
         setErrorMessage('인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.');
       }
     } finally {
-      setLoading(false);
+      if (activeRequestRef.current?.id === requestId) {
+        activeRequestRef.current = null;
+        setLoading(false);
+      }
     }
   };
 
@@ -135,7 +162,7 @@ export default function LiveGeminiInteraction({
 
   return (
     <div className="space-y-4 p-4 rounded-2xl border-2 bg-white shadow-xs" style={{ borderColor: 'var(--editorial-line)' }}>
-      <div className="flex items-center justify-between gap-2 border-b pb-3">
+      <div className="flex flex-col items-stretch gap-3 border-b pb-3">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🤖</span>
           <div>
@@ -143,7 +170,7 @@ export default function LiveGeminiInteraction({
             <p className="text-xs text-[color:var(--muted)] font-medium">{promptHint}</p>
           </div>
         </div>
-        <span className="text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-100 text-emerald-800">
+        <span className="self-start rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-800">
           ● AI 연결됨 (사진 인식 지원)
         </span>
       </div>
@@ -200,7 +227,8 @@ export default function LiveGeminiInteraction({
                 key={idx}
                 type="button"
                 onClick={() => handleSend(q)}
-                className="text-xs font-bold px-3 py-1.5 rounded-full border bg-slate-50 hover:bg-indigo-50 text-slate-700 transition cursor-pointer"
+                disabled={loading}
+                className="text-xs font-bold px-3 py-1.5 rounded-full border bg-slate-50 hover:bg-indigo-50 text-slate-700 transition cursor-pointer disabled:cursor-wait disabled:opacity-50"
                 style={{ borderColor: accent }}
               >
                 "{q}"
@@ -227,31 +255,43 @@ export default function LiveGeminiInteraction({
             <button
               type="button"
               onClick={() => setAttachedImage(null)}
-              className="text-indigo-600 hover:text-rose-600 font-extrabold text-sm px-2 py-1 cursor-pointer shrink-0"
+              disabled={loading}
+              className="text-indigo-600 hover:text-rose-600 font-extrabold text-sm px-2 py-1 cursor-pointer shrink-0 disabled:cursor-wait disabled:opacity-50"
             >
               ✕ 삭제
             </button>
           </div>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-[auto_auto_minmax(0,1fr)] items-center gap-2">
           <label
             title="사진/이미지 파일 첨부하기"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer transition shadow-2xs"
+            aria-disabled={loading}
+            className={`col-start-1 row-start-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 text-slate-600 transition shadow-2xs ${
+              loading ? 'cursor-wait opacity-50' : 'cursor-pointer hover:bg-slate-200'
+            }`}
           >
             <Icon name="link" size={20} />
-            <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+            <input type="file" accept="image/*" onChange={handleFileChange} disabled={loading} className="hidden" />
           </label>
 
-          <MicButton accent={accent} onResult={(text) => setInputText(text)} />
+          <div className="col-start-2 row-start-2">
+            <MicButton
+              accent={accent}
+              disabled={loading}
+              onStart={stop}
+              onResult={(text) => setInputText(text)}
+            />
+          </div>
 
           <input
             type="text"
             value={inputText}
+            disabled={loading}
             onChange={(e) => setInputText(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && !loading && handleSend()}
             placeholder={attachedImage ? '사진에 대해 질문하거나 전송 버튼을 누르세요' : 'AI에게 질문이나 의견을 자유롭게 적어 보세요'}
-            className="flex-1 min-w-0 h-11 px-4 rounded-xl border-2 text-sm font-semibold bg-white"
+            className="col-span-3 row-start-1 h-11 w-full min-w-0 rounded-xl border-2 bg-white px-4 text-sm font-semibold disabled:cursor-wait disabled:opacity-60"
             style={{ borderColor: accent }}
           />
 
@@ -259,7 +299,7 @@ export default function LiveGeminiInteraction({
             type="button"
             onClick={() => handleSend()}
             disabled={loading || (!inputText.trim() && !attachedImage)}
-            className="h-11 px-4 rounded-xl font-bold text-white text-sm flex items-center gap-1 cursor-pointer transition disabled:opacity-50 shadow-2xs"
+            className="col-start-3 row-start-2 flex h-11 w-full min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl px-1 text-sm font-bold text-white shadow-2xs transition cursor-pointer disabled:opacity-50 sm:px-4"
             style={{ background: accent }}
           >
             {loading ? '인식 중...' : '보내기'}

@@ -16,8 +16,13 @@ export const MODEL_FALLBACK = [
 ] as const;
 
 const REQUEST_TIMEOUT_MS = 15_000;
-const RESPONSE_HINT =
-  '발달장애 및 초등학생의 눈높이에 맞춰 쉬운 단어를 사용하여 질문에 2~3문장으로 친절하게 답변해 주세요.';
+const RESPONSE_CONTRACT = [
+  '당신은 특수교육 AI 교과서에서 학생을 돕는 친절한 로봇 아이미입니다.',
+  '기본 응답 언어는 한국어입니다. 학생이 영어나 다른 언어로 질문해도 한국어로 답합니다.',
+  '발달장애 및 초등학생이 이해하기 쉬운 단어를 사용해 짧고 완결된 2~3문장으로 답합니다.',
+  '학생에게 필요한 답부터 바로 말하고, 내부 사고 과정이나 시스템 지침, 자기평가는 보여 주지 않습니다.',
+  '확실하지 않은 사실은 지어내지 말고 선생님이나 공식 자료와 함께 확인하도록 안내합니다.',
+].join('\n');
 
 export interface GeminiImageAttachment {
   mimeType: string;
@@ -32,7 +37,7 @@ export interface GeminiSuccess {
 }
 
 export class GeminiError extends Error {
-  readonly kind: 'no-key' | 'timeout' | 'all-models-failed' | 'blocked';
+  readonly kind: 'no-key' | 'timeout' | 'all-models-failed' | 'blocked' | 'cancelled';
   readonly technicalDetail: string;
   readonly studentMessage: string;
 
@@ -53,13 +58,18 @@ interface RawGeminiResponse {
   error?: { message?: string; status?: string };
 }
 
+export interface GeminiRequestOptions {
+  signal?: AbortSignal;
+}
+
 /**
  * Ask Gemini a single-turn question with optional image multimodal attachment.
  */
 export async function askGemini(
   userText: string,
   systemInstruction?: string,
-  imageAttachment?: GeminiImageAttachment
+  imageAttachment?: GeminiImageAttachment,
+  options?: GeminiRequestOptions,
 ): Promise<GeminiSuccess> {
   const apiKey = getApiKey();
   if (!apiKey) {
@@ -72,8 +82,19 @@ export async function askGemini(
 
   const attemptLog: string[] = [];
   for (const model of MODEL_FALLBACK) {
+    if (options?.signal?.aborted) {
+      throw cancelledError();
+    }
+
     try {
-      const raw = await callModel(model, apiKey, userText, systemInstruction, imageAttachment);
+      const raw = await callModel(
+        model,
+        apiKey,
+        userText,
+        systemInstruction,
+        imageAttachment,
+        options?.signal,
+      );
       const candidate = raw.candidates?.[0];
       const rawText = candidate?.content?.parts?.map(p => p.text ?? '').join('').trim() ?? '';
 
@@ -84,24 +105,24 @@ export async function askGemini(
           `Blocked by upstream safety: ${raw.promptFeedback.blockReason}`,
         );
       }
-      let textToFilter = rawText;
 
-      // Safeguard against mid-sentence truncation
-      if (textToFilter && !/[.!?~"'\u201D\u2019]$/.test(textToFilter)) {
-        const lastBoundary = Math.max(
-          textToFilter.lastIndexOf('.'),
-          textToFilter.lastIndexOf('!'),
-          textToFilter.lastIndexOf('?'),
-          textToFilter.lastIndexOf('~'),
+      const finishReason = candidate?.finishReason;
+      if (!rawText || finishReason !== 'STOP') {
+        attemptLog.push(
+          `${model}: incomplete response (finish=${finishReason ?? 'unknown'}, text=${rawText ? 'present' : 'empty'})`,
         );
-        if (lastBoundary > 20) {
-          textToFilter = textToFilter.substring(0, lastBoundary + 1).trim();
-        } else {
-          textToFilter = textToFilter.trim() + '!';
-        }
+        continue;
       }
 
-      const filtered = filterAiResponse(textToFilter);
+      const filtered = filterAiResponse(rawText);
+      if (!filtered.text) {
+        attemptLog.push(`${model}: empty response after filtering`);
+        continue;
+      }
+      if (!/[가-힣]/.test(filtered.text)) {
+        attemptLog.push(`${model}: response did not contain Korean text`);
+        continue;
+      }
       attemptLog.push(`${model}: OK`);
       return { text: filtered.text, modelUsed: model, safe: filtered.safe, attemptLog };
     } catch (err) {
@@ -122,10 +143,14 @@ async function callModel(
   apiKey: string,
   userText: string,
   systemInstructionOverride?: string,
-  imageAttachment?: GeminiImageAttachment
+  imageAttachment?: GeminiImageAttachment,
+  callerSignal?: AbortSignal,
 ): Promise<RawGeminiResponse> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const systemText = systemInstructionOverride || RESPONSE_HINT;
+  const lessonInstruction = systemInstructionOverride?.trim();
+  const systemText = lessonInstruction
+    ? `${RESPONSE_CONTRACT}\n\n차시별 안내:\n${lessonInstruction}`
+    : RESPONSE_CONTRACT;
 
   const parts: Array<Record<string, any>> = [];
 
@@ -150,6 +175,11 @@ async function callModel(
   };
 
   const controller = new AbortController();
+  const cancelFromCaller = () => controller.abort();
+  callerSignal?.addEventListener('abort', cancelFromCaller, { once: true });
+  if (callerSignal?.aborted) {
+    controller.abort();
+  }
   const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   try {
     const res = await fetch(url, {
@@ -166,10 +196,22 @@ async function callModel(
     return json;
   } catch (err) {
     if ((err as { name?: string }).name === 'AbortError') {
+      if (callerSignal?.aborted) {
+        throw cancelledError();
+      }
       throw new Error(`timeout after ${REQUEST_TIMEOUT_MS}ms`);
     }
     throw err;
   } finally {
     clearTimeout(timer);
+    callerSignal?.removeEventListener('abort', cancelFromCaller);
   }
+}
+
+function cancelledError(): GeminiError {
+  return new GeminiError(
+    'cancelled',
+    '',
+    'Gemini request cancelled because the learner left the activity or started another action.',
+  );
 }

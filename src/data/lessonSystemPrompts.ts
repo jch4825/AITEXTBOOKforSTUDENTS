@@ -15,12 +15,31 @@ export const LESSON_SYSTEM_PROMPTS: Record<string, string> = {
   'm1-l11': '발달장애 및 초등학생의 눈높이에 맞춰 쉬운 단어를 사용하여 모듈 1 전체에서 배운 AI의 원리와 환각 검증의 중요성을 2~3문장으로 정리하고 칭찬해 주세요.',
 };
 
+export interface LessonPromptContext {
+  title: string;
+  objective: string;
+  situation?: string;
+}
+
 /**
  * Get hidden system instruction for a specific lesson
  */
-export function getLessonSystemPrompt(lessonId: LessonId | string): string {
-  return (
-    LESSON_SYSTEM_PROMPTS[lessonId] ||
-    '발달장애 및 초등학생의 눈높이에 맞춰 쉬운 단어를 사용하여 질문에 2~3문장으로 친절하게 답변해 주세요.'
-  );
+export function getLessonSystemPrompt(
+  lessonId: LessonId | string,
+  context?: LessonPromptContext,
+): string {
+  const lessonFocus = LESSON_SYSTEM_PROMPTS[lessonId]
+    ?? '학생의 질문을 현재 차시의 학습목표와 연결해 설명해 주세요.';
+
+  if (!context) return lessonFocus;
+
+  const contextLines = [
+    `차시 제목: ${context.title}`,
+    `학습목표: ${context.objective}`,
+  ];
+  if (context.situation) {
+    contextLines.push(`활동 상황: ${context.situation}`);
+  }
+
+  return `${lessonFocus}\n\n현재 차시 맥락:\n${contextLines.join('\n')}`;
 }

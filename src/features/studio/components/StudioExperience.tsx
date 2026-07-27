@@ -384,6 +384,11 @@ export default function StudioExperience({
           lessonId={definition.lessonId}
           accent={accent}
           promptHint="학습한 내용을 바탕으로 AI 아이미에게 질문하고 함께 탐구해 보세요!"
+          lessonContext={{
+            title: lesson.title,
+            objective: lesson.objective,
+            situation: definition.encounter.description,
+          }}
           suggestedQuestions={
             definition.suggestedQuestions ||
             (definition.lessonId === 'm1-l1'
