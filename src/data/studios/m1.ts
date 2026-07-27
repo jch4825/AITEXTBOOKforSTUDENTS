@@ -479,6 +479,15 @@ export const M1_STUDIOS: StudioDefinition[] = [
         '아이미의 대답은 “무지개 아이스크림 떡볶이”처럼 엉뚱하지만 아주 당당하고 그럴듯하게 들립니다.',
         '진짜 급식 메뉴는 학교 게시판의 주간 식단표에서 직접 확인해야 합니다.',
       ],
+      stimuli: [
+        {
+          id: 'm1-l3-rainbow-tteokbokki',
+          kind: 'image',
+          src: '/lessons/story/m1/m1-l3-scene-02.webp',
+          alt: '아이미가 당당하게 무지개 아이스크림 떡볶이라고 발표하는 모습',
+          caption: '아이미의 당당한 엉뚱 급식 발표 (무지개 떡볶이)',
+        },
+      ],
     },
     firstAttempt: {
       prompt: '아이미가 모르는 것도 자신감 넘치게 엉뚱한 대답(무지개 아이스크림 떡볶이)으로 만들어냈을 때, 어떻게 해야 할까요?',
