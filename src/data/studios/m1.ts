@@ -839,6 +839,15 @@ export const M1_STUDIOS: StudioDefinition[] = [
         '글자나 그림 카드 보조공학 입력은 소음 환경에서도 정확하게 뜻을 전달합니다.',
         '나에게 편하고 정확한 입력 방법을 상황에 맞게 고를 수 있습니다.',
       ],
+      stimuli: [
+        {
+          id: 'm1-l5-change-listening-condition',
+          kind: 'image',
+          src: '/lessons/story/m1/m1-l5-scene-03.webp',
+          alt: '진우가 조용한 곳과 가까운 거리에서 음성 인식을 다시 시험하는 모습',
+          caption: '듣는 조건 바꾸기 (조용한 곳, 가까운 거리)',
+        },
+      ],
     },
     aiContribution: {
       source: 'prepared',
