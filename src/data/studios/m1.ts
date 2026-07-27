@@ -21,6 +21,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: '아이미와 처음 만난 날',
     subtitle: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아봐요.',
+    decisionTitle: '아이미에게 쉽게 물어봐요.',
+    suggestedQuestions: [
+      'AI는 어떤 일들을 할 수 있니?',
+      'AI와 일반 프로그램은 어떻게 달라?',
+      '번역기 앱도 AI 기능이야?',
+    ],
     visualNovel: {
       title: '아이미의 어려운 자기소개',
       objective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.',
@@ -145,11 +151,6 @@ export const M1_STUDIOS: StudioDefinition[] = [
       text: '저는 사람이 만든 인공지능(AI) 도구예요! 말, 글, 사진을 받아 번역, 추천, 사진 찾기 같은 일을 도와줄 수 있어요.',
       question: '아이미의 소개를 그대로 쓸까요, 내 말에 맞게 고칠까요?',
     },
-    suggestedQuestions: [
-      'AI는 어떤 일들을 할 수 있니?',
-      'AI와 일반 프로그램은 어떻게 달라?',
-      '번역기 앱도 AI 기능이야?',
-    ],
     artifact: {
       kind: 'action-card',
       title: '탐구 성찰 기록',
@@ -182,6 +183,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: '기계와 AI는 어떻게 다를까?',
     subtitle: '기계가 결과를 바꾸는 데 어떤 정보를 쓰는지 살펴보고 AI가 쓰인 기능을 찾아봐요.',
+    decisionTitle: '아이미에게 쉽게 물어봐요.',
+    suggestedQuestions: [
+      '인공지능은 어떻게 대답을 만드는 거야?',
+      '인공지능에게 공부에 대해 질문해도 돼?',
+      '컴퓨터는 사람처럼 생각할 수 있어?',
+    ],
     visualNovel: {
       title: '동아리방의 세 가지 도구',
       objective: '오늘은 기계가 결과를 바꾸는 데 어떤 정보를 쓰는지 살펴보고 AI가 쓰인 기능을 찾아봐요.',
@@ -338,11 +345,6 @@ export const M1_STUDIOS: StudioDefinition[] = [
       text: '로봇청소기와 자동문은 기계입니다. 둘 다 스스로 움직이지요. 하지만 로봇청소기만 인공지능이라고 부릅니다. 자동문과 로봇청소기가 다른 점은 무엇일까요?',
       question: '자동문과 로봇청소기가 다른 점은 무엇일까요?',
     },
-    suggestedQuestions: [
-      '로봇청소기와 자동문의 차이는 뭐야?',
-      '왜 로봇청소기는 AI라고 부르니?',
-      '스마트 조명에는 어떤 AI 기능이 들어갈 수 있어?',
-    ],
     artifact: {
       kind: 'visual-plan',
       title: '기능 분석 지도',
@@ -537,6 +539,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI의 눈 실험실',
     subtitle: '사진 조건을 바꾸어 AI의 답이 달라지는지 살펴보고 원본과 다시 비교해 봐요.',
+    decisionTitle: '아이미와 직접 실험해봐요.',
+    suggestedQuestions: [
+      '이 사진은 뭘 찍은 거지?',
+      '사진 속 물체를 인공지능이 어떻게 알아봐?',
+      '이미지 인식은 어떻게 작동해?',
+    ],
     visualNovel: {
       title: '가려진 여우 사진',
       objective: '오늘은 사진 조건을 바꾸어 AI의 답이 달라지는지 살펴보고 원본과 다시 비교해 봐요.',
@@ -685,6 +693,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI의 귀 실험실',
     subtitle: '소리가 글자로 바뀌는 과정을 살펴보고 나에게 맞는 입력 방법을 골라봐요.',
+    decisionTitle: '아이미와 직접 실험해봐요.',
+    suggestedQuestions: [
+      '데이터를 많이 보여줄수록 더 잘 알아봐?',
+      '사진을 여러 장 보여주면 정확해져?',
+      '학습 데이터 양이 많아지면 어떻게 돼?',
+    ],
     visualNovel: {
       title: '복도 방송이 다르게 적혔어요',
       objective: '오늘은 같은 말을 다른 조건에서 들려주고 인식된 글자를 비교해 봐요.',
@@ -833,6 +847,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI의 배움 재료 실험실',
     subtitle: '학습 자료가 달라지면 AI의 결과가 어떻게 달라지는지 비교해 봐요.',
+    decisionTitle: '아이미에게 직접 물어봐요.',
+    suggestedQuestions: [
+      '인공지능이 학습한 자료가 한 쪽으로 치우치면?',
+      '학습 데이터에 오류가 많으면 AI 대답은 어떻게 돼?',
+      'AI 편향성이 왜 위험한지 쉽게 설명해줘',
+    ],
     visualNovel: {
       title: '세모만 많이 본 분류기',
       objective: '오늘은 학습 자료가 달라지면 AI 결과가 어떻게 달라지는지 시험해 봐요.',
@@ -980,6 +1000,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: '빠른 도움 검토실',
     subtitle: 'AI의 요약과 번역을 원문과 비교하여 빠르면서도 안전하게 사용해 봐요.',
+    decisionTitle: '아이미에게 직접 자료를 주고 요약을 시켜봐요.',
+    suggestedQuestions: [
+      '긴 안내문을 짧게 핵심만 요약해줄래?',
+      '급식표나 소식지 내용을 세 줄로 요약해줘',
+      '어려운 글을 쉬운 말로 요약하는 방법 보여줘',
+    ],
     visualNovel: {
       title: '체험회 안내가 너무 길어요',
       objective: '오늘은 AI가 만든 요약과 번역을 원문과 비교하고 빠진 부분을 찾아봐요.',
@@ -1126,6 +1152,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI 도움 경계 지도',
     subtitle: 'AI가 잘 돕는 일과 사람·공식 정보가 꼭 필요한 일을 구별해 봐요.',
+    decisionTitle: '아이미에게 직접 물어봐요.',
+    suggestedQuestions: [
+      '내 건강 상태를 물어봐도 될까?',
+      '너는 사람의 마음을 이해할 수 있니?',
+      '너 우리 학교 행사 시간을 알고 있어?',
+    ],
     visualNovel: {
       title: '아이미에게 모두 맡겨도 될까?',
       objective: '오늘은 AI가 혼자 결정하기 어려운 일을 찾고 누구와 함께 확인할지 골라봐요.',
@@ -1274,6 +1306,13 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI 도구 선택 스튜디오',
     subtitle: '하려는 일의 입력과 결과를 먼저 정하고 알맞은 AI 도구를 골라봐요.',
+    decisionTitle: '아이미에게 직접 물어봐요.',
+    suggestedQuestions: [
+      '글쓰기를 잘 하는 인공지능은?',
+      '노래를 잘 만드는 인공지능은?',
+      '영상을 잘 만드는 인공지능은?',
+      '컴퓨터 프로그램을 잘하는 인공지능은?',
+    ],
     visualNovel: {
       title: '한 도구로 모두 만들 수 있을까?',
       objective: '오늘은 원하는 결과와 필요한 입력을 보고 알맞은 AI 도구를 골라봐요.',
@@ -1422,6 +1461,12 @@ export const M1_STUDIOS: StudioDefinition[] = [
     moduleId: 'm1',
     title: 'AI 결과를 사용할까?',
     subtitle: '안전한 요청을 한 뒤 결과를 확인하고 사용·수정·거절을 골라봐요.',
+    decisionTitle: '아이미에게 직접 상황에 맞는 노래를 추천해달라고 해봐요.',
+    suggestedQuestions: [
+      '비 오는 날 어울리는 신나는 노래 추천해줘',
+      '공부할 때 집중 잘 되는 잔잔한 음악 알려줘',
+      '기분이 우울할 때 힘이 나는 노래 추천해줘',
+    ],
     visualNovel: {
       title: '체험회 배경음악 고르기',
       objective: '오늘은 AI에게 안전한 요청을 한 뒤 결과를 확인하고 사용·수정·거절을 골라봐요.',
