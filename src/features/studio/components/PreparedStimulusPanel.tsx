@@ -27,15 +27,17 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
           const failed = failedImages.includes(stimulus.id);
           const isPecs = stimulus.id.includes('pecs');
           const isRobotVacuum = stimulus.id.includes('robot-vacuum');
-          const isRainbowTteokbokki = stimulus.id.includes('rainbow-tteokbokki');
-          const isNoisyAnnouncement = stimulus.id.includes('noisy-announcement');
+          const isLandscape = !isPecs;
+
           const widthClass = isSingle
             ? isRobotVacuum
               ? 'w-36 sm:w-40 md:w-48 max-w-full mx-auto'
-              : (isRainbowTteokbokki || isNoisyAnnouncement)
-                ? 'w-48 sm:w-56 md:w-64 max-w-full mx-auto'
+              : isLandscape
+                ? 'w-60 sm:w-72 md:w-80 max-w-full mx-auto'
                 : 'w-72 sm:w-80 md:w-96 max-w-full mx-auto'
             : 'w-full';
+
+          const aspectClass = isPecs ? 'aspect-square' : 'aspect-[16/9] max-h-40 sm:max-h-48';
 
           return (
             <figure
@@ -47,13 +49,13 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                 <div
                   role="img"
                   aria-label={stimulus.alt}
-                  className="studio-margin-note flex aspect-square flex-col justify-center text-center text-xs"
+                  className={`studio-margin-note flex ${aspectClass} flex-col justify-center text-center text-xs`}
                 >
                   <strong>이미지 불러오기 실패</strong>
                   <p className="mt-1 text-[10px] text-slate-500">{stimulus.caption}</p>
                 </div>
               ) : (
-                <div className={`relative w-full aspect-square overflow-hidden rounded-xl ${isPecs ? 'bg-amber-50/50' : ''}`}>
+                <div className={`relative w-full ${aspectClass} overflow-hidden rounded-xl ${isPecs ? 'bg-amber-50/50' : 'bg-slate-100'}`}>
                   {isPecs && (
                     <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[10px] shadow-xs uppercase tracking-wider z-10 select-none">
                       PECS
