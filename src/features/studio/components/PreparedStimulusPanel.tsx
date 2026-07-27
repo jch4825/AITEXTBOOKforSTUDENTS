@@ -31,13 +31,13 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
 
           const widthClass = isSingle
             ? isRobotVacuum
-              ? 'w-36 sm:w-40 md:w-48 max-w-full mx-auto'
+              ? 'w-48 sm:w-56 md:w-64 max-w-full mx-auto'
               : isLandscape
-                ? 'w-60 sm:w-72 md:w-80 max-w-full mx-auto'
-                : 'w-72 sm:w-80 md:w-96 max-w-full mx-auto'
+                ? 'w-full sm:w-[480px] md:w-[560px] max-w-full mx-auto'
+                : 'w-full sm:w-[480px] md:w-[560px] max-w-full mx-auto'
             : 'w-full';
 
-          const aspectClass = isPecs ? 'aspect-square' : 'aspect-[16/9] max-h-40 sm:max-h-48';
+          const aspectClass = isPecs ? 'aspect-square' : 'aspect-[16/9] max-h-72 sm:max-h-80 md:max-h-96';
 
           return (
             <figure
