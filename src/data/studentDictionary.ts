@@ -560,11 +560,6 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     example: 'AI 답에 빠진 말이 있는지 다시 봅니다.',
   },
   {
-    term: '표',
-    shortExplanation: '내용을 칸으로 나누어 보기 쉽게 적은 것입니다.',
-    example: '시간과 장소를 표로 정리합니다.',
-  },
-  {
     term: '주장',
     shortExplanation: '맞는지 확인할 수 있는 말입니다.',
     example: '"행사는 5시에 끝납니다"는 확인할 주장입니다.',
