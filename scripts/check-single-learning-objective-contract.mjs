@@ -155,8 +155,8 @@ const M6_OBJECTIVES = new Map([
   ['m6-l5', '오늘은 지역·날짜가 있는 예보에서 기온·비·바람을 보고 활동과 내 감각에 맞는 준비를 골라봐요.'],
   ['m6-l6', '오늘은 재료·알레르기·도구·사람 도움 조건을 보고 안전한 음식 계획을 골라 순서를 만들어 봐요.'],
   ['m6-l7', '오늘은 해야 할 일·쉬는 시간·도움·걸리는 시간을 넣어 계획을 만들고 일정이 바뀌면 고쳐 봐요.'],
-  ['m6-l8', '오늘은 몸의 불편함을 말·그림·AAC로 표현하고 믿을 만한 어른에게 먼저 알려 봐요.'],
-  ['m6-l9', '오늘은 인사·도움 요청·거절·다시 말해 달라는 표현을 말·글·AAC 중 편한 방법으로 연습해 봐요.'],
+  ['m6-l8', '오늘은 몸의 불편함을 말·그림 카드로 표현하고 믿을 만한 어른에게 먼저 알려 봐요.'],
+  ['m6-l9', '오늘은 인사·도움 요청·거절·다시 말해 달라는 표현을 말·글·그림 카드 중 편한 방법으로 연습해 봐요.'],
   ['m6-l10', '오늘은 직업 자료와 사람의 설명을 비교하고 나의 흥미·강점·필요한 도움을 적어 봐요.'],
   ['m6-l11', '오늘은 내가 먼저 자기소개를 만들고 AI 제안을 고쳐 교실용·온라인용 두 버전으로 완성해 봐요.'],
   ['m6-l12', '오늘은 예산·이동·날씨·소통이 연결된 하루 계획을 만들고 나의 AI 생활 원칙과 함께 발표해 봐요.'],
@@ -199,6 +199,9 @@ if (objectiveByLesson.size !== 68) {
   throw new Error(`regular lessons must define 68 objectives, got ${objectiveByLesson.size}`);
 }
 
+// 68차시를 끝까지 훑고 어긋난 것을 한 번에 보고한다. 첫 건에서 throw하면 나머지가 가려지고,
+// 스택 트레이스만 보여서 스크립트가 죽은 것처럼 읽힌다.
+const objectiveMismatches = [];
 for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
   const actual = objectiveByLesson.get(lessonId);
   const formalExpected = ['m1-', 'm2-', 'm3-', 'm4-', 'm5-', 'm6-'].some((prefix) => lessonId.startsWith(prefix)) ? expected : expected
@@ -216,8 +219,20 @@ for (const [lessonId, expected] of EXPECTED_OBJECTIVES) {
     .replaceAll('알아봐요', '알아봅니다')
     .replaceAll('알려요', '알립니다');
   if (actual !== formalExpected) {
-    throw new Error(`${lessonId} must use the canonical shared objective\nexpected: ${formalExpected}\nactual: ${actual}`);
+    objectiveMismatches.push({ lessonId, expected: formalExpected, actual });
   }
+}
+
+if (objectiveMismatches.length > 0) {
+  console.error(
+    `Single learning objective contract failed: ${objectiveMismatches.length} lesson(s) off the canonical objective.`,
+  );
+  for (const mismatch of objectiveMismatches) {
+    console.error(`- ${mismatch.lessonId}`);
+    console.error(`    expected: ${mismatch.expected}`);
+    console.error(`    actual  : ${mismatch.actual}`);
+  }
+  process.exit(1);
 }
 
 const types = read('src/types.ts');
