@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Icon from '../../../components/Icon';
-import { useSpeak } from '../../../hooks/useSpeak';
+import Icon from '../../../../components/Icon';
+import { useSpeak } from '../../../../hooks/useSpeak';
 
 interface Balloon {
   id: string;
@@ -395,14 +395,14 @@ export default function NextWordRunnerGame() {
 
         // High Probability Badge (e.g. 95% / 80%)
         ctx.fillStyle = '#0F172A';
-        ctx.font = 'black 11px sans-serif';
+        ctx.font = 'black 14px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(`${b.probability}%`, b.x, b.y - b.radius * 0.42);
 
         // Word Label inside Balloon
         ctx.fillStyle = '#0F172A';
-        ctx.font = 'black 13px sans-serif';
+        ctx.font = 'black 15px sans-serif';
         ctx.fillText(b.word, b.x, b.y + 5);
       });
 
@@ -449,21 +449,21 @@ export default function NextWordRunnerGame() {
             <h3 className="font-extrabold text-base leading-tight text-amber-300">
               아이미의 횡스크롤 다음 단어 잇기 런너
             </h3>
-            <p className="text-xs text-slate-300 font-medium">{stage.title}</p>
+            <p className="text-[14px] text-slate-300 font-medium">{stage.title}</p>
           </div>
         </div>
         <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={() => setShowHint(!showHint)}
-            className="text-xs px-2.5 py-1 rounded-full font-bold bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 hover:bg-indigo-500/50 cursor-pointer"
+            className="text-[14px] px-2.5 py-1 rounded-full font-bold bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 hover:bg-indigo-500/50 cursor-pointer"
           >
             💡 힌트
           </button>
           <button
             type="button"
             onClick={() => startStage(currentStageIdx)}
-            className="text-xs px-2.5 py-1 rounded-full font-bold bg-slate-800 text-slate-200 border border-slate-600 hover:bg-slate-700 cursor-pointer"
+            className="text-[14px] px-2.5 py-1 rounded-full font-bold bg-slate-800 text-slate-200 border border-slate-600 hover:bg-slate-700 cursor-pointer"
           >
             🔄 다시 시작
           </button>
@@ -474,14 +474,14 @@ export default function NextWordRunnerGame() {
       <div className="my-2 p-3 rounded-xl bg-slate-900/90 border-2 border-amber-400/70 shadow-inner flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-lg shrink-0">🤖</span>
-          <p className="text-sm sm:text-base font-extrabold text-amber-300 truncate">
+          <p className="text-[15px] sm:text-base font-extrabold text-amber-300 truncate">
             "{builtSentence}"
           </p>
         </div>
         <button
           type="button"
           onClick={() => speakNow(builtSentence)}
-          className="p-1.5 rounded-lg bg-amber-400 text-slate-950 font-bold hover:bg-amber-300 cursor-pointer shrink-0 text-xs flex items-center gap-1"
+          className="p-1.5 rounded-lg bg-amber-400 text-slate-950 font-bold hover:bg-amber-300 cursor-pointer shrink-0 text-[14px] flex items-center gap-1"
           title="문장 소리 들려주기"
         >
           <Icon name="speaker" size={14} />
@@ -491,7 +491,7 @@ export default function NextWordRunnerGame() {
 
       {/* Hint Alert */}
       {showHint && (
-        <div className="mb-2 p-2.5 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-200 text-xs font-bold leading-relaxed">
+        <div className="mb-2 p-2.5 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-200 text-[14px] font-bold leading-relaxed">
           💡 <strong>게임 방법:</strong> 오른쪽에서 천천히 다가오는 말풍선 중 더 그럴듯한 단어(큰 풍선, 높은 % 수치)를 손으로 눌러 터뜨려 보세요!
         </div>
       )}
@@ -511,13 +511,13 @@ export default function NextWordRunnerGame() {
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs flex flex-col items-center justify-center p-4 text-center space-y-3">
             <span className="text-4xl animate-bounce">🎈</span>
             <h4 className="text-lg font-black text-white">다음 단어를 잇는 횡스크롤 런너 미니 게임</h4>
-            <p className="text-xs text-slate-300 max-w-xs font-medium leading-relaxed">
+            <p className="text-[14px] text-slate-300 max-w-xs font-medium leading-relaxed">
               아이미에게 다가오는 말풍선 중 가장 그럴듯한 단어 풍선을 눌러 터뜨리고, 멋진 문장을 이어 완성해 봐요!
             </p>
             <button
               type="button"
               onClick={() => startStage(0)}
-              className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-sm rounded-xl shadow-lg cursor-pointer transform transition hover:scale-105 active:scale-95"
+              className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-[15px] rounded-xl shadow-lg cursor-pointer transform transition hover:scale-105 active:scale-95"
             >
               🚀 게임 시작하기
             </button>
@@ -531,17 +531,17 @@ export default function NextWordRunnerGame() {
             <h4 className="text-base sm:text-lg font-black text-amber-300">
               아이미의 완성된 당당한 문장!
             </h4>
-            <p className="text-sm font-extrabold text-white bg-slate-800/90 px-4 py-2 rounded-xl border border-amber-400/50 max-w-sm">
+            <p className="text-[15px] font-extrabold text-white bg-slate-800/90 px-4 py-2 rounded-xl border border-amber-400/50 max-w-sm">
               "{builtSentence}"
             </p>
-            <p className="text-xs text-slate-300 max-w-xs font-medium leading-relaxed">
+            <p className="text-[14px] text-slate-300 max-w-xs font-medium leading-relaxed">
               아이미가 가장 그럴듯한 다음 단어들을 이어 당당히 답을 만들었습니다! 그렇지만 이 대답이 진짜 사실인지 <strong>{stage.factCheckSource}</strong>에서 확인해야 할까요?
             </p>
 
             <button
               type="button"
               onClick={() => setGameState('fact_check')}
-              className="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-md cursor-pointer transform transition hover:scale-105"
+              className="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-black text-[14px] sm:text-[15px] rounded-xl shadow-md cursor-pointer transform transition hover:scale-105"
             >
               🔍 {stage.factCheckSource} 대조해보기!
             </button>
@@ -553,7 +553,7 @@ export default function NextWordRunnerGame() {
           <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-4 text-center space-y-3 z-30">
             <span className="text-4xl">🌟🎯</span>
             <h4 className="text-lg font-black text-emerald-400">팩트 체크 완료!</h4>
-            <div className="p-3 rounded-xl bg-slate-900 border border-slate-700 text-xs text-left space-y-1.5 max-w-xs">
+            <div className="p-3 rounded-xl bg-slate-900 border border-slate-700 text-[14px] text-left space-y-1.5 max-w-xs">
               <p className="text-amber-300 font-bold">🤖 아이미의 당당한 문장:</p>
               <p className="text-slate-200">"{builtSentence}"</p>
               <p className="text-emerald-400 font-bold mt-2">📋 진짜 {stage.factCheckSource} 정보:</p>
@@ -564,7 +564,7 @@ export default function NextWordRunnerGame() {
                 <button
                   type="button"
                   onClick={() => startStage(currentStageIdx + 1)}
-                  className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs rounded-xl cursor-pointer"
+                  className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-[14px] rounded-xl cursor-pointer"
                 >
                   ▶ 다음 단계 ({GAME_STAGES[currentStageIdx + 1].title.split('·')[0]})
                 </button>
@@ -572,7 +572,7 @@ export default function NextWordRunnerGame() {
                 <button
                   type="button"
                   onClick={() => startStage(0)}
-                  className="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-extrabold text-xs rounded-xl cursor-pointer"
+                  className="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-extrabold text-[14px] rounded-xl cursor-pointer"
                 >
                   🔄 처음부터 다시 하기
                 </button>
@@ -589,7 +589,7 @@ export default function NextWordRunnerGame() {
             key={s.id}
             type="button"
             onClick={() => startStage(idx)}
-            className={`text-[11px] font-bold px-3 py-1 rounded-lg border transition cursor-pointer ${
+            className={`text-[14px] font-bold px-3 py-1 rounded-lg border transition cursor-pointer ${
               idx === currentStageIdx
                 ? 'bg-amber-400 text-slate-950 border-amber-300 font-black'
                 : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'

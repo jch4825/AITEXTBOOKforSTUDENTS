@@ -12,9 +12,7 @@ import VisualNovelExperience from './VisualNovelExperience';
 import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
 import InquiryCertificateModal from './InquiryCertificateModal';
 import CompletionAwardModal from './CompletionAwardModal';
-import RobotVacuumPathGame from './RobotVacuumPathGame';
-import NextWordRunnerGame from './NextWordRunnerGame';
-import SttAudioCleanerGame from './SttAudioCleanerGame';
+import MiniGameSlot from '../minigames/MiniGameSlot';
 import { getScopedChoices } from '../studioChoiceUtils';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
@@ -156,22 +154,13 @@ export default function StudioExperience({
   }
 
   const isCompleteStage = state.stage === 'complete';
-  const isM1L2 = definition.lessonId === 'm1-l2' || definition.id === 'm1-robot-vacuum-lab';
-  const isM1L3 = definition.lessonId === 'm1-l3' || definition.id === 'm1-answer-making-lab';
-  const isM1L5 = definition.lessonId === 'm1-l5' || definition.id === 'm1-ear-lab';
   const contextTitle = state.stage === 'transfer'
     ? definition.transfer.title
     : definition.encounter.title;
 
-  const left = isCompleteStage ? (
-    isM1L2 ? (
-      <RobotVacuumPathGame />
-    ) : isM1L3 ? (
-      <NextWordRunnerGame />
-    ) : isM1L5 ? (
-      <SttAudioCleanerGame />
-    ) : (
-      <div
+  // 마무리 단계 왼쪽은 차시별 미니게임. 아직 등록되지 않은 차시는 정리 패널을 그대로 쓴다.
+  const completeSummaryPanel = (
+    <div
         className="relative flex h-full flex-col justify-between rounded-2xl p-6 md:p-8 space-y-5 overflow-hidden shadow-xl"
         style={{
           backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('${definition.transfer.stimuli?.[0] && 'src' in definition.transfer.stimuli[0] ? definition.transfer.stimuli[0].src : '/images/smart_light_real.webp'}')`,
@@ -211,8 +200,15 @@ export default function StudioExperience({
             </p>
           </div>
         </div>
-      </div>
-    )
+    </div>
+  );
+
+  const left = isCompleteStage ? (
+    <MiniGameSlot
+      lessonId={definition.lessonId}
+      supportLevel={state.supportLevel}
+      fallback={completeSummaryPanel}
+    />
   ) : (
     <div className="flex h-full flex-col justify-between rounded-2xl p-5 md:p-7">
       <div className="space-y-5">
