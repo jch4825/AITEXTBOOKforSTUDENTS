@@ -15,6 +15,7 @@
     "check:activity-icons": "node scripts/check-activity-icons.mjs",
     "check:generalization": "node scripts/check-generalization-contract.mjs",
     "check:lesson-roles": "node scripts/check-lesson-role-contract.mjs",
+    "check:support-consumption": "node scripts/check-support-consumption.mjs",
     "check:studio-pilot": "node scripts/check-studio-pilot-contract.mjs",
     "check:editorial-theme": "node scripts/check-editorial-theme-contract.mjs",
     "check:teacher-recording": "node scripts/check-teacher-recording-contract.mjs",

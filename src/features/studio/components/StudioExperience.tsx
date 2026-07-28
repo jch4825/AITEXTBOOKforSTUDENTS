@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from '../../../components/Icon';
 import MicButton from '../../../components/MicButton';
 import { useSpeak } from '../../../hooks/useSpeak';
@@ -112,6 +112,11 @@ export default function StudioExperience({
   const [studentName, setStudentName] = useState('');
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [showAwardModal, setShowAwardModal] = useState(false);
+  // 지원 수준이 정보를 줄이더라도 영영 감추지는 않는다. 단계가 바뀌면 다시 접는다.
+  const [showAllFacts, setShowAllFacts] = useState(false);
+  useEffect(() => {
+    setShowAllFacts(false);
+  }, [state.stage, state.supportLevel]);
   const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
     entry.term,
     ...(entry.aliases ?? []),
@@ -125,11 +130,16 @@ export default function StudioExperience({
     : showingChangedContext
       ? definition.conditionChange.description
       : definition.encounter.description;
-  const contextFacts = state.stage === 'transfer'
+  const allContextFacts = state.stage === 'transfer'
     ? []
     : showingChangedContext
       ? definition.conditionChange.facts
       : definition.encounter.facts;
+  // 한 번에 보는 정보량을 지원 수준에 맞춘다. full 2 · light 3 · challenge 4.
+  const contextFacts = showAllFacts
+    ? allContextFacts
+    : allContextFacts.slice(0, profile.visibleFactCount);
+  const hiddenFactCount = allContextFacts.length - contextFacts.length;
   const contextStimuli = state.stage === 'complete'
     ? undefined
     : state.stage === 'transfer'
@@ -273,6 +283,31 @@ export default function StudioExperience({
           </ul>
         ) : null}
 
+        {hiddenFactCount > 0 ? (
+          <button
+            type="button"
+            onClick={() => {
+              setShowAllFacts(true);
+              dispatch({ type: 'record-support-mode', value: `more-facts-${state.supportLevel}` });
+            }}
+            className="mt-2 flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed bg-white px-3 text-sm font-bold transition-all hover:scale-[1.01]"
+            style={{ borderColor: accent, color: accent }}
+          >
+            <Icon name="book" size={16} />
+            정보 {hiddenFactCount}개 더 보기
+          </button>
+        ) : null}
+
+        {profile.hint ? (
+          <p
+            className="mt-3 rounded-xl border border-dashed bg-[color:var(--editorial-paper)]/60 p-3 text-sm font-semibold leading-relaxed text-[color:var(--brand-ink)]"
+            style={{ borderColor: 'var(--editorial-line)' }}
+          >
+            <span className="font-extrabold" style={{ color: accent }}>도움말</span>{' '}
+            {profile.hint}
+          </p>
+        ) : null}
+
         {state.stage === 'artifact' && definition.teacherGuidance && (
           (!definition.teacherGuidance.supportLevelOnly || state.supportLevel === definition.teacherGuidance.supportLevelOnly) && (
             <div className="mt-5 p-4 rounded-2xl border-2 border-amber-300 bg-amber-50/90 text-amber-950 space-y-2 shadow-xs">
@@ -302,18 +337,19 @@ export default function StudioExperience({
           안전 정보를 덜 받는 역전을 만들지 않는다. */}
       {definition.safetyNote ? (
         <div
-          className="studio-margin-note mt-5 flex items-center justify-between gap-2 rounded-lg border border-dashed bg-white p-3 text-xs leading-relaxed"
+          className="studio-margin-note mt-5 flex items-center justify-between gap-2 rounded-lg border border-dashed bg-white p-3 text-sm leading-relaxed"
           style={{ borderColor: 'var(--editorial-line)' }}
         >
           <span><strong>안전 약속:</strong> {definition.safetyNote}</span>
           <button
             type="button"
             onClick={() => speakNow(`안전 약속. ${definition.safetyNote}`)}
-            className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-white transition-all hover:scale-110"
+            className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-white transition-all hover:scale-110"
             style={{ borderColor: accent, color: accent }}
+            aria-label="안전 약속 듣기"
             title="안전 약속 듣기"
           >
-            <Icon name="speaker" size={12} />
+            <Icon name="speaker" size={18} />
           </button>
         </div>
       ) : null}
@@ -381,6 +417,7 @@ export default function StudioExperience({
           role={definition.aiContribution.role}
           text={definition.aiContribution.text}
           question={definition.aiContribution.question}
+          depth={profile.aiRoleDepth}
           finalExpression={state.finalExpression}
           accent={accent}
           onExpression={(value) => dispatch({ type: 'set-final-expression', value })}
