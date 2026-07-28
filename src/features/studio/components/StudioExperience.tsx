@@ -10,6 +10,7 @@ import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
 import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
+import { hasApiKey } from '../../../utils/apiKey';
 import InquiryCertificateModal from './InquiryCertificateModal';
 import CompletionAwardModal from './CompletionAwardModal';
 import MiniGameSlot from '../minigames/MiniGameSlot';
@@ -43,6 +44,14 @@ const AI_DECISION_SUMMARY: Record<AiDecision, string> = {
   modify: 'AI 의견을 내 생각에 맞게 고쳤습니다.',
   reject: 'AI 의견을 사용하지 않고 내 방법을 선택했습니다.',
 };
+
+// 5단계는 AI 의견을 그대로 쓸지 고칠지 쓰지 않을지 학생이 정하는 자리다.
+// 이 선택이 aiDecision으로 저장되어 교사 기록의 'AI와 비교' 칸을 채운다.
+const AI_DECISION_CHOICES: { id: AiDecision; emoji: string; label: string }[] = [
+  { id: 'accept', emoji: '✅', label: '그대로 쓰기' },
+  { id: 'modify', emoji: '✏️', label: '고쳐서 쓰기' },
+  { id: 'reject', emoji: '❌', label: '쓰지 않기' },
+];
 
 function renderExpressionDetail(
   expression: StudioExpression | undefined,
@@ -426,39 +435,90 @@ export default function StudioExperience({
     );
   } else if (state.stage === 'decision') {
     right = (
-      <div className="space-y-4 p-5 md:p-7">
+      <div className="space-y-5 p-5 md:p-7">
         <div>
-          <span className="studio-kicker" style={{ color: accent }}>5단계 · 실시간 AI 체험</span>
-          <h2 className="text-xl font-extrabold">
-            {definition.decisionTitle || (() => {
-              if (definition.lessonId?.startsWith('m2')) return '직접 아이미에게 구체적인 조건으로 질문해 봐요.';
-              if (definition.lessonId?.startsWith('m3')) return '직접 아이미와 함께 궁금한 학습 내용을 탐구해 봐요.';
-              if (definition.lessonId?.startsWith('m4')) return '직접 아이미와 안전하고 윤리적인 사용법을 실천해 봐요.';
-              if (definition.lessonId?.startsWith('m5')) return '직접 아이미와 함께 순서대로 문제를 해결해 봐요.';
-              if (definition.lessonId?.startsWith('m6')) return '직접 아이미와 실생활 인공지능 서비스를 체험해 봐요.';
-              return '직접 아이미가 하는 말이 진짜인지 거짓인지 알아봐요.';
-            })()}
-          </h2>
-          <p className="mt-1 text-sm text-[color:var(--muted)] font-medium">
-            인공지능(Gemini)에게 궁금한 점을 물어보고, 음성이나 사진/파일을 전달하며 답변을 탐구해 봐요.
-          </p>
+          <span className="studio-kicker" style={{ color: accent }}>5단계 · 나의 판단</span>
+          <h2 className="text-xl font-extrabold">아이미의 의견을 어떻게 할까요?</h2>
         </div>
-        <LiveGeminiInteraction
-          lessonId={definition.lessonId}
-          accent={accent}
-          promptHint="학습한 내용을 바탕으로 AI 아이미에게 질문하고 함께 탐구해 보세요!"
-          lessonContext={{
-            title: lesson.title,
-            objective: lesson.objective,
-            situation: definition.encounter.description,
-          }}
-          suggestedQuestions={
-            definition.suggestedQuestions ||
-            (definition.lessonId === 'm1-l1'
-              ? ['AI는 어떤 일들을 할 수 있니?', 'AI와 일반 프로그램은 어떻게 달라?', '번역기 앱도 AI 기능이야?']
-              : undefined)
-          }
-        />
+
+        {/* 무엇을 판단하는지 눈앞에 두고 고르게 한다. 준비된 의견이라 연결이 없어도 활동이 성립한다. */}
+        <section className="studio-margin-note" aria-label="판단할 AI 의견">
+          <span className="studio-kicker" style={{ color: accent }}>
+            {definition.aiContribution.role}
+          </span>
+          <p className="mt-1 text-base font-semibold leading-relaxed">
+            {definition.aiContribution.text}
+          </p>
+        </section>
+
+        <div role="group" aria-label="AI 의견 판단 고르기" className="grid gap-2 sm:grid-cols-3">
+          {AI_DECISION_CHOICES.map((choice) => {
+            const selected = state.aiDecision === choice.id;
+            return (
+              <button
+                key={choice.id}
+                type="button"
+                onClick={() => dispatch({ type: 'set-ai-decision', value: choice.id })}
+                aria-pressed={selected}
+                className="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-3 text-base font-extrabold transition-all hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                style={{
+                  borderColor: selected ? accent : 'var(--editorial-line)',
+                  background: selected ? 'var(--editorial-paper)' : 'white',
+                  color: selected ? accent : 'var(--brand-ink)',
+                  outlineColor: accent,
+                  borderWidth: selected ? 4 : 2,
+                }}
+              >
+                <span aria-hidden="true">{choice.emoji}</span>
+                {choice.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <p role="status" className="text-sm font-bold" style={{ color: 'var(--muted)' }}>
+          {state.aiDecision
+            ? AI_DECISION_SUMMARY[state.aiDecision]
+            : '세 가지 중 하나를 골라 내 판단을 남겨 보세요.'}
+        </p>
+
+        {/* 실시간 AI는 교사가 연결했을 때만 얹는 확장이다. 연결이 없어도 위 판단만으로 5단계가 끝난다. */}
+        {hasApiKey() ? (
+          <div className="space-y-3 border-t pt-4" style={{ borderColor: 'var(--editorial-line)' }}>
+            <div>
+              <span className="studio-kicker" style={{ color: secondary }}>더 해보기 · 실시간 AI</span>
+              <h3 className="text-lg font-extrabold">
+                {definition.decisionTitle || (() => {
+                  if (definition.lessonId?.startsWith('m2')) return '직접 아이미에게 구체적인 조건으로 질문해 봐요.';
+                  if (definition.lessonId?.startsWith('m3')) return '직접 아이미와 함께 궁금한 학습 내용을 탐구해 봐요.';
+                  if (definition.lessonId?.startsWith('m4')) return '직접 아이미와 안전하고 윤리적인 사용법을 실천해 봐요.';
+                  if (definition.lessonId?.startsWith('m5')) return '직접 아이미와 함께 순서대로 문제를 해결해 봐요.';
+                  if (definition.lessonId?.startsWith('m6')) return '직접 아이미와 실생활 인공지능 서비스를 체험해 봐요.';
+                  return '직접 아이미가 하는 말이 진짜인지 거짓인지 알아봐요.';
+                })()}
+              </h3>
+              <p className="mt-1 text-sm text-[color:var(--muted)] font-medium">
+                인공지능(Gemini)에게 궁금한 점을 물어보고, 음성이나 사진/파일을 전달하며 답변을 탐구해 봐요.
+              </p>
+            </div>
+            <LiveGeminiInteraction
+              lessonId={definition.lessonId}
+              accent={accent}
+              promptHint="학습한 내용을 바탕으로 AI 아이미에게 질문하고 함께 탐구해 보세요!"
+              lessonContext={{
+                title: lesson.title,
+                objective: lesson.objective,
+                situation: definition.encounter.description,
+              }}
+              suggestedQuestions={
+                definition.suggestedQuestions ||
+                (definition.lessonId === 'm1-l1'
+                  ? ['AI는 어떤 일들을 할 수 있니?', 'AI와 일반 프로그램은 어떻게 달라?', '번역기 앱도 AI 기능이야?']
+                  : undefined)
+              }
+            />
+          </div>
+        ) : null}
       </div>
     );
   } else if (state.stage === 'artifact') {
