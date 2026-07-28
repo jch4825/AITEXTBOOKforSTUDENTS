@@ -18,7 +18,7 @@ import type { LessonId } from '../../../types';
  *  5) 실패해도 벌칙 없이 즉시 다시 할 수 있다
  */
 export const MINI_GAME_REGISTRY: Record<string, ReturnType<typeof lazy>> = {
-  'm1-l1': lazy(() => import('./m1/AimiBatteryGame')),
+  'm1-l1': lazy(() => import('./m1/AimiScanLensGame')),
   'm1-l2': lazy(() => import('./m1/RobotVacuumPathGame')),
   'm1-l3': lazy(() => import('./m1/NextWordRunnerGame')),
   'm1-l4': lazy(() => import('./m1/RecognitionTimingGame')),
