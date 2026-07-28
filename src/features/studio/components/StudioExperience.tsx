@@ -16,6 +16,7 @@ import CompletionAwardModal from './CompletionAwardModal';
 import MiniGameSlot from '../minigames/MiniGameSlot';
 import { getScopedChoices } from '../studioChoiceUtils';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
+import { getStudioContextMedia } from '../studioIllustrations';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 import type {
@@ -149,13 +150,8 @@ export default function StudioExperience({
     ? allContextFacts
     : allContextFacts.slice(0, profile.visibleFactCount);
   const hiddenFactCount = allContextFacts.length - contextFacts.length;
-  const contextStimuli = state.stage === 'complete'
-    ? undefined
-    : state.stage === 'transfer'
-      ? definition.transfer.stimuli
-      : showingChangedContext
-        ? definition.conditionChange.stimuli
-        : definition.encounter.stimuli;
+  const contextMedia = getStudioContextMedia(definition, state.stage);
+  const contextStimuli = contextMedia.stimuli;
 
   if (state.stage === 'encounter' && definition.visualNovel) {
     return (
@@ -255,7 +251,11 @@ export default function StudioExperience({
         </div>
 
         {contextStimuli?.length ? (
-          <PreparedStimulusPanel stimuli={contextStimuli} accent={accent} />
+          <PreparedStimulusPanel
+            stimuli={contextStimuli}
+            accent={accent}
+            compact={contextMedia.source === 'story'}
+          />
         ) : null}
 
         {contextFacts.length > 0 ? (

@@ -7,9 +7,10 @@ import type { PreparedStimulus } from '../types';
 interface Props {
   stimuli: PreparedStimulus[];
   accent: string;
+  compact?: boolean;
 }
 
-export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
+export default function PreparedStimulusPanel({ stimuli, accent, compact = false }: Props) {
   const { speakNow } = useSpeak();
   const [failedImages, setFailedImages] = useState<string[]>([]);
 
@@ -21,7 +22,11 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
   const isTriple = stimuli.length === 3;
 
   return (
-    <div className={`${isSingle ? 'flex justify-center' : `grid gap-2.5 sm:gap-3 ${isTriple ? 'grid-cols-3' : 'sm:grid-cols-2'}`}`} aria-label="수업용 이미지와 소리">
+    <div
+      className={`${isSingle ? 'flex justify-center' : `grid gap-2.5 sm:gap-3 ${isTriple ? 'grid-cols-3' : 'sm:grid-cols-2'}`}`}
+      aria-label="수업용 이미지와 소리"
+      data-context-illustration-source={compact ? 'story-reuse' : 'prepared'}
+    >
       {stimuli.map((stimulus) => {
         if (stimulus.kind === 'image') {
           const failed = failedImages.includes(stimulus.id);
@@ -37,12 +42,16 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                 : 'w-full sm:w-[480px] md:w-[560px] max-w-full mx-auto'
             : 'w-full';
 
-          const aspectClass = isPecs ? 'aspect-square' : 'aspect-[16/9] max-h-72 sm:max-h-80 md:max-h-96';
+          const aspectClass = isPecs
+            ? 'aspect-square'
+            : compact
+              ? 'aspect-[16/9] max-h-44 sm:max-h-48 md:max-h-52'
+              : 'aspect-[16/9] max-h-72 sm:max-h-80 md:max-h-96';
 
           return (
             <figure
               key={stimulus.id}
-              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 p-3 shadow-xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${widthClass}`}
+              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 ${compact ? 'p-2.5' : 'p-3'} shadow-xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${widthClass}`}
               style={!isPecs ? { borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' } : undefined}
             >
               {failed ? (
@@ -66,10 +75,11 @@ export default function PreparedStimulusPanel({ stimuli, accent }: Props) {
                     alt={stimulus.alt}
                     onError={() => markImageFailed(stimulus.id)}
                     className="w-full h-full object-cover rounded-xl"
+                    decoding="async"
                   />
                 </div>
               )}
-              <figcaption className={`mt-2 text-center text-xs sm:text-sm font-black leading-snug ${isPecs ? 'text-amber-950 bg-amber-100/90 py-1.5 px-2 rounded-lg border border-amber-300/80' : 'text-[color:var(--ink-1)]'}`}>
+              <figcaption className={`${compact ? 'mt-1.5' : 'mt-2'} text-center text-xs sm:text-sm font-black leading-snug ${isPecs ? 'text-amber-950 bg-amber-100/90 py-1.5 px-2 rounded-lg border border-amber-300/80' : 'text-[color:var(--ink-1)]'}`}>
                 {stimulus.caption}
               </figcaption>
             </figure>

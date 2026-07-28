@@ -34,6 +34,9 @@ export default function ConveyorQualityGame({ supportLevel }: MiniGameProps) {
   const [caught, setCaught] = useState<number[]>([]);
   const indexRef = useRef(0);
   const currentRef = useRef<Package | null>(null);
+  // 벨트 타이머는 잡아낸 목록을 읽어야 하지만, 그 목록을 의존성에 넣으면 상자를 잡을 때마다
+  // 타이머가 다시 시작돼 박자가 흐트러진다. 그래서 ref로 읽는다.
+  const caughtRef = useRef<number[]>([]);
 
   useEffect(() => {
     setFast(false);
@@ -42,6 +45,7 @@ export default function ConveyorQualityGame({ supportLevel }: MiniGameProps) {
     setCaught([]);
     indexRef.current = 0;
     currentRef.current = null;
+    caughtRef.current = [];
   }, [round, stageIndex]);
 
   useEffect(() => {
@@ -50,7 +54,7 @@ export default function ConveyorQualityGame({ supportLevel }: MiniGameProps) {
     const timer = window.setInterval(() => {
       const leaving = currentRef.current;
       if (leaving) {
-        if (leaving.bad && !caught.includes(leaving.id)) {
+        if (leaving.bad && !caughtRef.current.includes(leaving.id)) {
           window.clearInterval(timer);
           fail('불량 결과가 그대로 지나갔어요. 벨트를 늦추거나 빨간 상자를 잡아내요.');
           return;
@@ -75,7 +79,7 @@ export default function ConveyorQualityGame({ supportLevel }: MiniGameProps) {
       setCurrent(next);
     }, delay);
     return () => window.clearInterval(timer);
-  }, [status, fast, stage.pattern, caught, fail, succeed]);
+  }, [status, fast, stage.pattern, fail, succeed]);
 
   const start = () => {
     indexRef.current = 0;
@@ -83,12 +87,16 @@ export default function ConveyorQualityGame({ supportLevel }: MiniGameProps) {
   };
 
   const catchBad = () => {
-    if (status !== 'running' || !currentRef.current) return;
-    if (!currentRef.current.bad) {
+    // 상자를 지역 변수로 붙잡아 둔다. setCaught의 업데이터는 다음 렌더에서 실행되므로
+    // 그 안에서 currentRef를 읽으면 아래에서 이미 null로 비운 뒤라 터진다.
+    const target = currentRef.current;
+    if (status !== 'running' || !target) return;
+    if (!target.bad) {
       fail('멀쩡한 결과를 버렸어요. 빨간 금이 간 상자만 빼내요.');
       return;
     }
-    setCaught((ids) => [...ids, currentRef.current!.id]);
+    caughtRef.current = [...caughtRef.current, target.id];
+    setCaught(caughtRef.current);
     currentRef.current = null;
     setCurrent(null);
   };
