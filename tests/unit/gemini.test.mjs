@@ -79,6 +79,26 @@ test('개별 지침이 없는 차시도 제목과 학습목표를 시스템 입�
   assert.match(systemText, /요청에서 빠진 정보를 찾아 안전하게 더해 봐요/);
 });
 
+test('이야기 속 등장인물 이름을 현재 학생의 이름으로 사용하지 않는다', async () => {
+  let sentBody;
+  globalThis.fetch = async (_url, init) => {
+    sentBody = JSON.parse(init.body);
+    return geminiResponse('이름을 정하지 않고 학생의 질문에 답합니다.');
+  };
+
+  const lessonInstruction = getLessonSystemPrompt('m1-l1', {
+    title: '아이미와 처음 만난 날',
+    objective: 'AI가 할 수 있는 일을 알아봅니다.',
+    situation: '윤아와 진우가 민준 선생님과 아이미를 만났습니다.',
+  });
+  await askGemini('내가 누구야?', lessonInstruction);
+
+  const systemText = sentBody.systemInstruction.parts[0].text;
+  assert.doesNotMatch(systemText, /윤아|진우|민준/);
+  assert.match(systemText, /이름을 직접 알려 주지 않는 한/);
+  assert.match(systemText, /이름을 추측/);
+});
+
 test('자연 종료된 응답은 마지막 문장부호가 없어도 내용을 임의로 자르지 않는다', async () => {
   globalThis.fetch = async () => geminiResponse(
     '첫 문장입니다. 둘째 문장도 온전히 남습니다',

@@ -18,7 +18,6 @@ export const LESSON_SYSTEM_PROMPTS: Record<string, string> = {
 export interface LessonPromptContext {
   title: string;
   objective: string;
-  situation?: string;
 }
 
 /**
@@ -37,9 +36,6 @@ export function getLessonSystemPrompt(
     `차시 제목: ${context.title}`,
     `학습목표: ${context.objective}`,
   ];
-  if (context.situation) {
-    contextLines.push(`활동 상황: ${context.situation}`);
-  }
 
   return `${lessonFocus}\n\n현재 차시 맥락:\n${contextLines.join('\n')}`;
 }

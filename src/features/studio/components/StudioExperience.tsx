@@ -508,7 +508,6 @@ export default function StudioExperience({
               lessonContext={{
                 title: lesson.title,
                 objective: lesson.objective,
-                situation: definition.encounter.description,
               }}
               suggestedQuestions={
                 definition.suggestedQuestions ||
