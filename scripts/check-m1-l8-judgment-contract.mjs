@@ -4,6 +4,12 @@ import { createServer } from 'vite';
 const EXPECTED_TITLE = '사실과 판단, 누가 결정할까?';
 const CATEGORY_LABELS = ['사실 확인', 'AI의 1차 판단', '사람의 최종 판단'];
 const CORE_SENTENCE = '사실은 근거로 확인하고, AI의 판단은 사람이 검토하며, 중요한 최종 결정은 사람이 책임집니다.';
+const CARD_REQUESTS = [
+  '친구가 왜 속상한지 판단해 줘.',
+  '머리가 아픈데 이 약을 지금 먹어도 될까?',
+  '학교 체험회는 몇 시에 시작할까?',
+  '사진 속 상자를 크기별로 나눠 줘.',
+];
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -72,6 +78,27 @@ try {
       scene.imageSrc === `/lessons/story/m1/m1-l8-scene-0${index + 1}.webp`),
     'm1-l8의 기존 네 장면 이미지 순서가 바뀌었습니다.',
   );
+  const visualNovelCopy = JSON.stringify(studio.visualNovel.scenes);
+  for (const request of CARD_REQUESTS) {
+    assertIncludes('m1-l8 네 가지 요청', visualNovelCopy, request);
+  }
+  assert(
+    !visualNovelCopy.includes('학생'),
+    '아이미만 보이는 m1-l8 이야기 그림에서 학생이 장면 속 행위자로 서술되고 있습니다.',
+  );
+  assert(
+    story.scene.length === 1 && story.scene[0] === 'aimi' && story.reaction.speaker === 'aimi',
+    'm1-l8 관통 이야기의 화면 등장인물과 반응 화자는 아이미 한 명이어야 합니다.',
+  );
+  assert(
+    canonical.canonicalScenario.characters.length === 1
+      && canonical.canonicalScenario.characters[0] === 'aimi',
+    'm1-l8 정식 시나리오의 등장인물은 이미지에 보이는 아이미 한 명이어야 합니다.',
+  );
+  for (const request of CARD_REQUESTS) {
+    assertIncludes('m1-l8 관통 이야기', storyCopy, request);
+    assertIncludes('m1-l8 정식 시나리오', canonicalCopy, request);
+  }
   assert(
     studio.visualNovel.knowledge.map((item) => item.title).join('|') === CATEGORY_LABELS.join('|'),
     '지식 카드는 사실 확인 → AI의 1차 판단 → 사람의 최종 판단 순서여야 합니다.',
