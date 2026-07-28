@@ -298,7 +298,9 @@ export default function StudioExperience({
         )}
       </div>
 
-      {state.supportLevel !== 'full' && definition.safetyNote ? (
+      {/* 안전 약속은 지원 수준과 무관하게 항상 보인다. 지원이 많이 필요한 학생일수록
+          안전 정보를 덜 받는 역전을 만들지 않는다. */}
+      {definition.safetyNote ? (
         <div
           className="studio-margin-note mt-5 flex items-center justify-between gap-2 rounded-lg border border-dashed bg-white p-3 text-xs leading-relaxed"
           style={{ borderColor: 'var(--editorial-line)' }}
