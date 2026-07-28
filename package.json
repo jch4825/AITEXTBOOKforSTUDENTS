@@ -25,6 +25,7 @@
     "check:studio-expansion-all": "node scripts/check-studio-expansion.mjs",
     "check:studio-rollout": "node scripts/check-complete-studio-rollout-contract.mjs",
     "check:studio-illustrations": "node scripts/check-studio-context-illustrations.mjs",
+    "check:m1-l8-judgment": "node scripts/check-m1-l8-judgment-contract.mjs",
     "check:minigames": "node scripts/check-minigame-contract.mjs",
     "check:single-objective": "node scripts/check-single-learning-objective-contract.mjs",
     "check:no-experience-bridge": "node scripts/check-no-experience-bridge-contract.mjs",

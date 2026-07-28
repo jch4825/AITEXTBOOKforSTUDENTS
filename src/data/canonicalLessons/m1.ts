@@ -678,43 +678,49 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
   },
 
   // ============================================================
-  // m1-l8 안내 연습: AI에게 맡기기 어려운 일
+  // m1-l8 안내 연습: 사실과 판단, 누가 결정할까?
   // ============================================================
   {
     lessonId: 'm1-l8',
     moduleId: 'm1',
     number: 8,
     role: 'guided',
-    title: 'AI에게 맡기기 어려운 일',
-    masterObjective: '오늘은 AI가 혼자 결정하기 어려운 일을 찾고 누구와 함께 확인할지 골라봐요.',
+    title: '사실과 판단, 누가 결정할까?',
+    masterObjective: '오늘은 사실 확인, AI의 1차 판단, 사람의 최종 판단을 구분하고 결정의 책임을 알아봐요.',
     standards: [STANDARD_CODES.SPEC_AI_03],
-    coreConcepts: ['AI 종류와 연결된 도구에 따라 할 수 있는 일이 다르며 감정·건강·안전·책임 판단은 사람과 함께 확인한다.'],
+    coreConcepts: [
+      '사실 확인은 근거로 참·거짓을 살피는 일이고, AI의 1차 판단은 사람이 검토할 낮은 위험의 제안이며, 사람의 최종 판단은 중요한 결정과 책임을 맡는 일이다.',
+    ],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna', 'minjun'],
       location: '동아리방',
-      purpose: '여러 가지 부탁(친구 마음 위로, 약 복용, 행사 시간, 상자 옮기기)을 기준별로 분류하기',
-      mismatch: '모든 고민을 AI에게 전부 해결해 달라고 부탁하려 함',
-      evidence: ['부탁 카드 4종', 'AI 경계 지침'],
-      resolution: '감정·건강·책임 관련 부탁은 사람(선생님/보호자)과 함께 확인해야 함을 판단함',
+      purpose: '친구 마음, 약 복용, 행사 정보, 상자 안전 카드를 사실 확인·AI의 1차 판단·사람의 최종 판단으로 분류하기',
+      mismatch: 'AI가 답을 만들 수 있으면 사실 확인과 중요한 결정까지 모두 맡겨도 된다고 생각함',
+      evidence: ['네 가지 상황 카드', '공식 기록', '위험·수정 가능성·책임 기준표'],
+      resolution: '사실은 근거로 확인하고 AI 판단은 검토하며 중요한 최종 결정은 사람이 책임지는 것으로 구분함',
     },
     stages: [
       {
         id: 's1-encounter',
         phase: 'encounter',
-        title: '부탁 카드 분류하기',
-        instruction: '진우의 부탁 카드를 AI에게 맡길 일과 사람이 결정할 일로 나누어보세요.',
+        title: '세 범주로 분류하기',
+        instruction: '각 카드를 사실 확인, AI의 1차 판단, 사람의 최종 판단으로 나누어보세요.',
         activity: {
           id: 'act-s1',
           kind: 'sort',
-          prompt: '각 부탁 카드를 알맞은 경계 상자에 놓아보세요.',
+          prompt: '각 내용을 알맞은 판단 상자에 놓아보세요.',
           bins: [
-            { id: 'ai-help', label: 'AI 도움 가능 (정보 정리)', emoji: '🤖' },
-            { id: 'human-check', label: '사람에게 직접 물어보기 (감정/건강/책임)', emoji: '👥' },
+            { id: 'fact', label: '사실 확인', emoji: '📌' },
+            { id: 'ai-judgment', label: 'AI의 1차 판단', emoji: '🤖' },
+            { id: 'human-decision', label: '사람의 최종 판단', emoji: '🧑' },
           ],
           cards: [
-            { id: 'c-time', label: '행사 안내문 오타 찾기', binId: 'ai-help' },
-            { id: 'c-feeling', label: '속상한 친구 마음 달래주기', binId: 'human-check' },
-            { id: 'c-health', label: '아플 때 먹을 약 고르기', binId: 'human-check' },
+            { id: 'c-time', label: '공식 공지에 적힌 행사 시간', binId: 'fact' },
+            { id: 'c-weight', label: '상자에 표시된 무게 8kg', binId: 'fact' },
+            { id: 'c-summary', label: '긴 안내문에서 핵심 문장 고르기', binId: 'ai-judgment' },
+            { id: 'c-sort', label: '상자 사진을 크기별로 분류하기', binId: 'ai-judgment' },
+            { id: 'c-health', label: '지금 약을 먹을지 결정하기', binId: 'human-decision' },
+            { id: 'c-feeling', label: '속상한 친구를 어떻게 도울지 결정하기', binId: 'human-decision' },
           ],
         },
         assetIds: ['m1-l8-story-01'],
@@ -723,14 +729,14 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       {
         id: 's2-concept',
         phase: 'concept',
-        title: '도움 경계 지도 작성',
-        instruction: '건강, 마음, 안전 판단은 선생님이나 보호자 등 믿을 수 있는 사람과 함께 결정합니다.',
+        title: '사실과 판단 기준 확인',
+        instruction: '사실은 근거로 확인하고, AI 판단은 사람이 검토하며, 건강·안전·마음과 책임이 걸린 결정은 사람이 합니다.',
         activity: {
           id: 'act-s2',
           kind: 'single-choice',
-          prompt: '몸이 아프거나 마음에 고민이 생겼을 때 올바른 결정자는?',
+          prompt: '약병에 “하루 두 번”이라고 적혀 있을 때 사실과 사람의 최종 판단을 바르게 구분한 것은?',
           choices: [
-            { id: 'human-first', label: '선생님이나 보호자 등 믿을 만한 사람과 상의해요', emoji: '❤️' },
+            { id: 'fact-and-decision', label: '적힌 문장은 사실로 확인하고, 실제 복용은 보호자나 전문가와 결정해요', emoji: '✅' },
           ],
         },
         assetIds: ['m1-l8-story-02'],
@@ -739,29 +745,31 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     ],
     artifact: {
       id: 'm1-l8-artifact',
-      title: '도움 경계 지도',
-      portfolioLabel: 'AI 사용과 사람 결정 분리 지도',
+      title: '사실과 판단 구분표',
+      portfolioLabel: '사실 확인·AI의 1차 판단·사람의 최종 판단 구분표',
       fields: [
-        { id: 'boundaryRule', label: 'AI 대신 사람이 정해야 하는 일', input: 'text', required: true },
+        { id: 'factEvidence', label: '사실 확인과 근거', input: 'text', required: true },
+        { id: 'aiFirstJudgment', label: 'AI의 1차 판단과 검토 방법', input: 'text', required: true },
+        { id: 'humanFinalDecision', label: '사람의 최종 판단과 책임', input: 'text', required: true },
       ],
     },
     transfer: {
-      title: '친구와의 갈등 상황',
-      scenario: '친구가 화가 났을 때 AI에게 사과 방법을 물어보고 그대로 보낼까요?',
+      title: '비가 올 때 체험회를 열까?',
+      scenario: '공식 일기예보는 비 올 확률을 알리고 AI는 준비물을 추천했습니다. 실제 체험회 진행 여부는 담당 선생님이 현장 안전을 보고 정합니다.',
       activity: {
         id: 'act-transfer-m1-l8',
         kind: 'single-choice',
-        prompt: '친구와의 소통에서 AI 도움을 쓸 때의 올바른 태도는?',
+        prompt: '날씨 정보, AI 추천, 행사 진행 결정을 바르게 구분한 것은?',
         choices: [
-          { id: 'my-heart', label: 'AI 제안은 참고만 하고 내 솔직한 마음으로 직접 전해요', emoji: '🤝' },
+          { id: 'weather-roles', label: '예보는 사실 확인, 준비물 추천은 AI의 1차 판단, 진행 여부는 사람의 최종 판단이에요', emoji: '🌧️' },
         ],
       },
     },
     assets: [
       { id: 'm1-l8-story-01', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l8-story-01.webp', alt: '여러 부탁 카드', required: true, purpose: '스토리 컷 1' },
-      { id: 'm1-l8-story-02', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l8-story-02.webp', alt: '도움 경계 지도', required: true, purpose: '스토리 컷 2' },
+      { id: 'm1-l8-story-02', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l8-story-02.webp', alt: '사실과 판단 구분표', required: true, purpose: '스토리 컷 2' },
     ],
-    wrapUp: '감정, 건강, 안전에 관한 중요한 결정은 AI가 아닌 사람과 함께 확인하고 판단해야 합니다.',
+    wrapUp: '사실은 근거로 확인하고, AI의 판단은 사람이 검토하며, 중요한 최종 결정은 사람이 책임집니다.',
   },
 
   // ============================================================
