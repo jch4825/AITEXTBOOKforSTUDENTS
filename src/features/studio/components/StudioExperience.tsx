@@ -59,7 +59,12 @@ function renderExpressionDetail(
   choices: StudioChoice[],
   accent: string
 ) {
-  if (!expression) return <span className="text-[color:var(--muted)] font-medium">아직 표현을 남기지 않았습니다.</span>;
+  // undefined만 거르면 빈 껍데기가 통과한다. 고른 것 없는 choiceIds, 공백뿐인 텍스트,
+  // 그림 없는 draw는 모두 아래 마지막 줄로 떨어져 "표현했습니다"로 보고된다.
+  // 학생이 남기지 않은 것을 남긴 것처럼 기록하지 않는다.
+  if (!isMeaningfulStudioExpression(expression)) {
+    return <span className="text-[color:var(--muted)] font-medium">아직 표현을 남기지 않았습니다.</span>;
+  }
 
   if (expression.mode === 'draw' && expression.drawing) {
     return (
