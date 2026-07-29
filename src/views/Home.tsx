@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useProgress } from '../context/ProgressContext';
 import { MODULES, lessonIdsForModule } from '../data/modules';
-import * as THREE from 'three';
 import Button from '../components/Button';
 import Icon from '../components/Icon';
 import ModuleIcon from '../components/ModuleIcon';
@@ -189,104 +188,122 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
   }, [reducedMotion]);
 
   // 2. Three.js Holographic Globe Effect
+  //
+  // three는 이 홈 장식 하나에만 쓰이는데 정적으로 불러오면 라이브러리 전체가 첫 화면 번들에
+  // 실린다. 학교 네트워크에서 목차까지 가는 시간을 그만큼 늦추므로 동적으로 받아 온다.
+  // 모션 축소를 켠 학생은 이 효과 자체를 쓰지 않으므로 아예 내려받지 않는다.
   useEffect(() => {
     if (reducedMotion) return;
     const container = threejsContainerRef.current;
     if (!container) return;
 
-    let width = container.clientWidth || window.innerWidth;
-    let height = container.clientHeight || window.innerHeight;
+    let cancelled = false;
+    let disposeScene: (() => void) | undefined;
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.appendChild(renderer.domElement);
+    void import('three').then((THREE) => {
+      if (cancelled || !container.isConnected) return;
 
-    const geometry = new THREE.IcosahedronGeometry(4.8, 12);
-    const material = new THREE.MeshPhongMaterial({
-      color: 0x4f5b90,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.22,
-      emissive: 0x4f5b90,
-      emissiveIntensity: 0.45
-    });
-    const sphere = new THREE.Mesh(geometry, material);
-    scene.add(sphere);
+      let width = container.clientWidth || window.innerWidth;
+      let height = container.clientHeight || window.innerHeight;
 
-    const innerGeo = new THREE.SphereGeometry(4.5, 24, 24);
-    const innerMat = new THREE.MeshPhongMaterial({
-      color: 0xF8EEE1,
-      transparent: true,
-      opacity: 0.08,
-      shininess: 80
-    });
-    const innerSphere = new THREE.Mesh(innerGeo, innerMat);
-    scene.add(innerSphere);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
 
-    const light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(10, 10, 10);
-    scene.add(light);
-    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+      const geometry = new THREE.IcosahedronGeometry(4.8, 12);
+      const material = new THREE.MeshPhongMaterial({
+        color: 0x4f5b90,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.22,
+        emissive: 0x4f5b90,
+        emissiveIntensity: 0.45
+      });
+      const sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
 
-    // 우측 하단 코너에 배치하기 위한 위치 조정
-    const updatePosition = () => {
-      const isMobile = window.innerWidth < 768;
-      if (isMobile) {
-        sphere.position.set(2, -4.5, 0);
-      } else {
-        sphere.position.set(4.5, -3.2, 0);
-      }
-      innerSphere.position.copy(sphere.position);
-    };
-    updatePosition();
+      const innerGeo = new THREE.SphereGeometry(4.5, 24, 24);
+      const innerMat = new THREE.MeshPhongMaterial({
+        color: 0xF8EEE1,
+        transparent: true,
+        opacity: 0.08,
+        shininess: 80
+      });
+      const innerSphere = new THREE.Mesh(innerGeo, innerMat);
+      scene.add(innerSphere);
 
-    camera.position.z = 8;
+      const light = new THREE.PointLight(0xffffff, 1, 100);
+      light.position.set(10, 10, 10);
+      scene.add(light);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.55));
 
-    let mouseX = 0;
-    let mouseY = 0;
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
-    const handleResize = () => {
-      const w = container.clientWidth || window.innerWidth;
-      const h = container.clientHeight || window.innerHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      // 우측 하단 코너에 배치하기 위한 위치 조정
+      const updatePosition = () => {
+        const isMobile = window.innerWidth < 768;
+        if (isMobile) {
+          sphere.position.set(2, -4.5, 0);
+        } else {
+          sphere.position.set(4.5, -3.2, 0);
+        }
+        innerSphere.position.copy(sphere.position);
+      };
       updatePosition();
-    };
-    window.addEventListener('resize', handleResize);
 
-    let frameId: number;
-    const animate = () => {
-      frameId = requestAnimationFrame(animate);
-      sphere.rotation.y += 0.0002;
-      sphere.rotation.x += 0.0001;
-      sphere.rotation.y += mouseX * 0.001;
-      sphere.rotation.x += mouseY * 0.001;
+      camera.position.z = 8;
 
-      const scale = 1 + Math.sin(Date.now() * 0.0006) * 0.025;
-      sphere.scale.set(scale, scale, scale);
-      innerSphere.scale.set(scale, scale, scale);
+      let mouseX = 0;
+      let mouseY = 0;
+      const handleMouseMove = (e: MouseEvent) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+      };
+      window.addEventListener('mousemove', handleMouseMove);
 
-      renderer.render(scene, camera);
-    };
-    animate();
+      const handleResize = () => {
+        const w = container.clientWidth || window.innerWidth;
+        const h = container.clientHeight || window.innerHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+        updatePosition();
+      };
+      window.addEventListener('resize', handleResize);
 
+      let frameId: number;
+      const animate = () => {
+        frameId = requestAnimationFrame(animate);
+        sphere.rotation.y += 0.0002;
+        sphere.rotation.x += 0.0001;
+        sphere.rotation.y += mouseX * 0.001;
+        sphere.rotation.x += mouseY * 0.001;
+
+        const scale = 1 + Math.sin(Date.now() * 0.0006) * 0.025;
+        sphere.scale.set(scale, scale, scale);
+        innerSphere.scale.set(scale, scale, scale);
+
+        renderer.render(scene, camera);
+      };
+      animate();
+
+      disposeScene = () => {
+        cancelAnimationFrame(frameId);
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('resize', handleResize);
+        renderer.dispose();
+        if (container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
+      };
+    });
+
+    // 모듈이 도착하기 전에 화면을 떠나면 cancelled가 장면 생성을 막고,
+    // 이미 만들어졌다면 disposeScene이 렌더러와 리스너를 정리한다.
     return () => {
-      cancelAnimationFrame(frameId);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', handleResize);
-      renderer.dispose();
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
+      cancelled = true;
+      disposeScene?.();
     };
   }, [reducedMotion]);
 

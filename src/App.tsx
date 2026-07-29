@@ -1,10 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import Home from './views/Home';
-import ContentsView from './views/ContentsView';
-import LessonView from './views/LessonView';
-import TeacherView from './views/TeacherView';
 import type { LessonId, ViewName } from './types';
 import { isTeacherUrlRequested, isLogoutRequested, logout } from './utils/teacherMode';
+
+// 홈은 첫 화면이라 그대로 둔다. 나머지 셋은 들어갈 때 받아 온다.
+// 특히 차시 화면은 62개 스튜디오 데이터를 통째로 끌고 오므로 분리 효과가 가장 크고,
+// 교사 화면은 학생이 한 번도 열지 않는다.
+const ContentsView = lazy(() => import('./views/ContentsView'));
+const LessonView = lazy(() => import('./views/LessonView'));
+const TeacherView = lazy(() => import('./views/TeacherView'));
+
+function ViewLoading() {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      className="grid min-h-dvh place-items-center px-6 text-center"
+      style={{ color: 'var(--ink-2)' }}
+    >
+      <p className="text-lg font-extrabold">잠시만 기다려 주세요.</p>
+    </div>
+  );
+}
 
 function readViewFromUrl(): { view: ViewName; lessonId: LessonId | null } {
   const params = new URLSearchParams(window.location.search);
@@ -54,20 +71,32 @@ export default function App() {
     updateUrl('lesson', id);
   }, []);
 
-  if (state.view === 'teacher') return <TeacherView onExit={goHome} />;
+  if (state.view === 'teacher') {
+    return (
+      <Suspense fallback={<ViewLoading />}>
+        <TeacherView onExit={goHome} />
+      </Suspense>
+    );
+  }
   if (state.view === 'lesson' && state.lessonId) {
     // 차시의 "홈"은 학습 허브인 목차로 — 완료 후에도 목차로 돌아온다.
     return (
-      <LessonView
-        key={state.lessonId}
-        lessonId={state.lessonId}
-        onGoHome={goContents}
-        onPickLesson={goLesson}
-      />
+      <Suspense fallback={<ViewLoading />}>
+        <LessonView
+          key={state.lessonId}
+          lessonId={state.lessonId}
+          onGoHome={goContents}
+          onPickLesson={goLesson}
+        />
+      </Suspense>
     );
   }
   if (state.view === 'contents') {
-    return <ContentsView onPickLesson={goLesson} onGoHome={goHome} />;
+    return (
+      <Suspense fallback={<ViewLoading />}>
+        <ContentsView onPickLesson={goLesson} onGoHome={goHome} />
+      </Suspense>
+    );
   }
   return <Home onEnter={goContents} onEnterLesson={goLesson} />;
 }
