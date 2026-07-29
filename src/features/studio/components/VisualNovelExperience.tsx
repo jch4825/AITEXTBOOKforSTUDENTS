@@ -113,7 +113,9 @@ export default function VisualNovelExperience({
           className="visual-novel-next"
           style={{
             cursor: 'pointer',
-            transition: 'all 0.2s',
+            // all을 쓰면 outline·outline-offset까지 전환 대상이 되어 :focus-visible 링이
+            // 목표값에 도달하지 못하고 사라진다. 실제로 바뀌는 속성만 전환한다.
+            transition: 'background-color 0.2s, color 0.2s, border-color 0.2s',
             ...(sceneIndex === story.scenes.length - 1 ? {
               background: 'var(--paper-1)',
               color: 'var(--muted)',

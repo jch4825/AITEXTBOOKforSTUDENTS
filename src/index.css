@@ -63,6 +63,11 @@
     --e-1: 0 1px 3px rgba(43, 58, 85, 0.08);
     --e-2: 0 4px 16px rgba(43, 58, 85, 0.10);
 
+    /* 포커스 링 — 어두운 면과 밝은 면 위에서 모두 보여야 한다.
+       --accent(딥 네이비)만 쓰면 비주얼 노벨의 남색 버튼 위에서 링이 사라진다. */
+    --focus-ring: var(--ink-1);
+    --focus-ring-gap: var(--paper-0);
+
     /* 모션 — 생동감 있게 */
     --t-fast: 150ms;
     --t-base: 250ms;
@@ -1415,13 +1420,6 @@
     font-weight: 850;
   }
 
-  .visual-novel-listen:focus-visible,
-  .visual-novel-next:focus-visible,
-  .visual-novel-controls button:focus-visible {
-    outline: 3px solid var(--focus-ring);
-    outline-offset: 2px;
-  }
-
   .visual-novel-dialogue {
     position: relative;
     padding: 1rem;
@@ -1643,6 +1641,19 @@
       text-align: center;
     }
   }
+}
+
+/* 비주얼 노벨 조작 버튼의 포커스 링.
+   이 버튼들은 남색·금색·종이색 위에 섞여 앉으므로 어두운 링에 밝은 틈을 덧대어
+   어떤 배경에서도 끊기지 않게 한다.
+   @layer 밖에 두는 것이 핵심이다. 레이어 안의 규칙은 선택자가 아무리 구체적이어도
+   레이어 밖 규칙과 Tailwind 유틸리티에 밀려 포커스 링이 통째로 사라진다. */
+.visual-novel-listen:focus-visible,
+.visual-novel-next:focus-visible,
+.visual-novel-controls button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--focus-ring-gap);
 }
 
 /* 3D Jelly Navigation Buttons */

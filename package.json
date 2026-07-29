@@ -17,6 +17,7 @@
     "check:lesson-roles": "node scripts/check-lesson-role-contract.mjs",
     "check:support-consumption": "node scripts/check-support-consumption.mjs",
     "check:support-gradient": "node scripts/check-support-gradient.mjs",
+    "check:css-tokens": "node scripts/check-css-tokens.mjs",
     "check:studio-pilot": "node scripts/check-studio-pilot-contract.mjs",
     "check:editorial-theme": "node scripts/check-editorial-theme-contract.mjs",
     "check:teacher-recording": "node scripts/check-teacher-recording-contract.mjs",
