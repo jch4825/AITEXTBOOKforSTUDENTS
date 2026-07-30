@@ -54,9 +54,13 @@ export default function ScreentoneBackdrop({ moduleId, children }: Props) {
 
   const patternStyle = getPatternStyle(moduleId);
 
+  // 높이 바닥은 부모까지만(min-h-full). min-h-screen(=100vh)을 쓰면 안 된다 —
+  // 스튜디오 차시는 이 백드롭이 micro-lesson-frame의 조상이고, 프레임 높이는 실측
+  // 뷰포트(--ai-lesson-viewport-height)다. 100vh는 주소창이 숨은 기준의 큰 뷰포트라
+  // 항상 그보다 크거나 같아서, 차이만큼이 푸터 아래 빈 공간으로 남는다.
   return (
     <div
-      className="w-full h-full min-h-screen bg-[color:var(--paper-2)] relative overflow-x-hidden"
+      className="w-full h-full min-h-full bg-[color:var(--paper-2)] relative overflow-x-hidden"
       style={{ ...patternStyle, '--accent': accent } as CSSProperties}
     >
       {/* 옅은 비네트 효과 */}
@@ -66,7 +70,7 @@ export default function ScreentoneBackdrop({ moduleId, children }: Props) {
           background: `radial-gradient(circle, transparent 60%, color-mix(in srgb, ${accent} 4%, transparent) 100%)`
         }}
       />
-      <div className="relative z-10 w-full h-full min-h-screen">
+      <div className="relative z-10 w-full h-full min-h-full">
         {children}
       </div>
     </div>

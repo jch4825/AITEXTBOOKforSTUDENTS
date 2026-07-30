@@ -92,6 +92,20 @@ if (!existsSync(new URL('../src/components/lesson/ScreentoneBackdrop.tsx', impor
   throw new Error('Lesson screens must use the module screentone backdrop.');
 }
 
+// 스튜디오 62차시는 ScreentoneBackdrop이 micro-lesson-frame의 조상이다(StudioLessonView).
+// min-h-screen(=100vh)은 주소창이 숨은 기준의 큰 뷰포트라서 측정된 프레임 높이보다 항상
+// 크거나 같고, 그 차이가 푸터 아래 빈 공간으로 남는다. 백드롭은 부모를 채우기만 해야 한다.
+// 안티패턴을 설명하는 주석은 위반이 아니므로 주석을 걷어낸 코드만 본다.
+const screentoneBackdrop = readFileSync(new URL('../src/components/lesson/ScreentoneBackdrop.tsx', import.meta.url), 'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/\/\/[^\n]*/g, '');
+if (screentoneBackdrop.includes('min-h-screen') || screentoneBackdrop.includes('100vh')) {
+  throw new Error('Screentone backdrop must not floor its height to the large viewport (min-h-screen/100vh) — it leaves dead space under the lesson footer on mobile.');
+}
+if (!screentoneBackdrop.includes('min-h-full')) {
+  throw new Error('Screentone backdrop must fill its parent with min-h-full.');
+}
+
 if (!existsSync(new URL('../src/components/lesson/EpisodeEnding.tsx', import.meta.url)) || !lessonView.includes('<EpisodeEnding')) {
   throw new Error('Wrap-up must use EpisodeEnding.');
 }
