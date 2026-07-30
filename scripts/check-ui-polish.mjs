@@ -127,6 +127,13 @@ if (
 ) {
   throw new Error('Lesson frame must follow the measured mobile viewport height.');
 }
+// 레슨 프레임 높이가 실측 visualViewport라서, 키보드가 떠도 레이아웃 뷰포트(100dvh)가
+// 함께 줄어야 프레임 아래에 죽은 영역이 남지 않는다.
+const indexHtml = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+if (!indexHtml.includes('interactive-widget=resizes-content')) {
+  throw new Error('Viewport meta must set interactive-widget=resizes-content so the on-screen keyboard shrinks the layout viewport with the lesson frame.');
+}
+
 if (
   !classroomDock.includes('classroom-dock absolute')
   || classroomDock.includes('bottom-14')
