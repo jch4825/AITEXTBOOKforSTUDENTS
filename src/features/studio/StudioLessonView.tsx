@@ -7,8 +7,8 @@ import { getModule } from '../../data/modules';
 import { themeFor } from '../../utils/moduleThemes';
 import type { HardLessonContent, LessonContent, LessonId } from '../../types';
 import { DIFFICULTY_TO_SUPPORT } from './supportLevel';
-import { STUDIO_STAGES } from './studioReducer';
 import StudioExperience from './components/StudioExperience';
+import { crossesStage, getFormatBehavior } from './formats';
 import { useStudioSession } from './useStudioSession';
 import type { StudioDefinition } from './types';
 
@@ -41,11 +41,21 @@ export default function StudioLessonView({
     DIFFICULTY_TO_SUPPORT[difficulty],
     markStudioComplete,
   );
-  const currentStep = STUDIO_STAGES.indexOf(session.state.stage);
+
+  // 화면 순서는 포맷이 정하고, 기록 단계는 리듀서가 그대로 쥔다.
+  // 한 단계에 화면이 여럿일 수 있어 진행 표시는 뷰 기준으로 센다.
+  // 차시가 바뀌면 이 컴포넌트가 key={lessonId}로 통째로 다시 마운트되므로
+  // viewIndex는 초기값으로 되돌아간다 — 리셋 효과를 따로 두지 않는다.
+  const behavior = getFormatBehavior(definition.format);
+  const views = behavior.views;
+  const [viewIndex, setViewIndex] = useState(0);
+  const view = views[Math.min(viewIndex, views.length - 1)];
+
   useEffect(() => {
     setSceneIndex(0);
   }, [definition.id, session.state.stage]);
-  const debugSubPage = session.state.stage === 'encounter' && definition.visualNovel
+
+  const debugSubPage = view.id === 'story' && definition.visualNovel
     ? { current: sceneIndex + 1, total: definition.visualNovel.scenes.length }
     : undefined;
 
@@ -55,7 +65,17 @@ export default function StudioLessonView({
       onGoHome();
       return;
     }
+    setViewIndex(viewIndex + 1);
+    // 같은 기록 단계 안에서 화면만 넘어가는 경우에는 리듀서를 건드리지 않는다.
+    if (!crossesStage(view, views[viewIndex + 1])) return;
     session.goNext();
+  }
+
+  function handlePrevious() {
+    const previous = views[viewIndex - 1];
+    if (!previous) return;
+    if (crossesStage(previous, view)) session.goPrevious();
+    setViewIndex(viewIndex - 1);
   }
 
   return (
@@ -63,9 +83,9 @@ export default function StudioLessonView({
       <MicroLessonFrame
         lessonId={definition.lessonId}
         crumb={`${module?.number ?? 5}단원 · ${module?.title ?? 'AI로 문제해결하기'}`}
-        totalSteps={STUDIO_STAGES.length}
-        currentStep={currentStep}
-        onPrev={session.goPrevious}
+        totalSteps={views.length}
+        currentStep={viewIndex}
+        onPrev={handlePrevious}
         onNext={handleNext}
         onPickLesson={onPickLesson}
         onGoHome={onGoHome}
@@ -82,6 +102,8 @@ export default function StudioLessonView({
           secondary={theme.secondary}
           sceneIndex={sceneIndex}
           onSceneIndexChange={setSceneIndex}
+          view={view}
+          behavior={behavior}
         />
       </MicroLessonFrame>
     </ScreentoneBackdrop>

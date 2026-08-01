@@ -29,8 +29,10 @@
 
 - 전체 차시와 단원: `src/data/modules.ts`, `src/data/lessons/`
 - 차시 역할: `src/data/lessonRoles.ts`
-- 스튜디오 62개: `src/data/studios/m1.ts` ~ `m6.ts`
+- 스튜디오 62개: `src/data/studios/m1/` ~ `m6/` (차시당 1파일 + `index.ts` 배럴)
 - 단원 마무리 6개: `src/data/modulePortfolios/m1.ts` ~ `m6.ts`
+- 차시 학습목표: `src/data/lessonObjectives.ts` — studios·lessons의 objective가 여기를
+  따라야 하며 `npm run check:objectives`가 강제합니다.
 - 정식 콘텐츠와 성취기준: `src/data/canonicalLessons/`, `src/data/aiAchievementStandards.ts`
 - 학생 사전: `src/data/studentDictionary.ts`
 - 교사용 실제 운영 설명: `src/features/teacher/TeacherOperationGuide.tsx`
@@ -50,11 +52,14 @@ src/
 │  └─ TeacherView.tsx
 ├─ features/
 │  ├─ studio/                      8단계 경험, 과정 기록, 지원 수준
+│  │  ├─ formats/                  포맷 A~E별 화면 순서 선언(기록 단계는 불변)
+│  │  └─ speakerLine.ts            각본 속 `진우: "..."` 표기 → 화자 말풍선 파서
 │  └─ teacher/                     운영 허브, 기록, 성취기준, 백업, AI 연결
 ├─ data/
 │  ├─ studios/                     62개 스튜디오 데이터
 │  ├─ modulePortfolios/            6개 단원 마무리 데이터
 │  ├─ canonicalLessons/            정식 수업 콘텐츠
+│  ├─ lessonObjectives.ts          62차시 학습목표 단일 진실 원천
 │  └─ lessons/                     68차시 등록 데이터
 └─ utils/
    ├─ publicAssetUrl.ts            GitHub Pages public 경로 보정
@@ -97,6 +102,7 @@ npm run check:visual-novel-story
 npm run check:portfolio-images
 npm run check:studio-rollout
 npm run check:modules-remodel
+npm run check:objectives
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.

@@ -28,6 +28,7 @@
     "check:studio-illustrations": "node scripts/check-studio-context-illustrations.mjs",
     "check:m1-l8-judgment": "node scripts/check-m1-l8-judgment-contract.mjs",
     "check:minigames": "node scripts/check-minigame-contract.mjs",
+    "check:objectives": "node scripts/check-objectives.mjs",
     "check:single-objective": "node scripts/check-single-learning-objective-contract.mjs",
     "check:no-experience-bridge": "node scripts/check-no-experience-bridge-contract.mjs",
     "check:student-formal-style": "node scripts/check-student-formal-style-contract.mjs",

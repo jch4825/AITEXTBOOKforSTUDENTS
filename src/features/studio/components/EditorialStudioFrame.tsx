@@ -8,7 +8,10 @@ interface Props {
   accent: string;
   secondary: string;
   left: ReactNode;
-  right: ReactNode;
+  /** 비우면 왼쪽 면이 지면 전체를 쓴다. */
+  right?: ReactNode;
+  /** 한 단계에 화면이 여럿일 때 쓸 이름. 없으면 단계 이름을 쓴다. */
+  viewLabel?: string;
 }
 
 export const STAGE_LABELS: Record<StudioStage, string> = {
@@ -29,7 +32,9 @@ export default function EditorialStudioFrame({
   secondary,
   left,
   right,
+  viewLabel,
 }: Props) {
+  const label = viewLabel ?? STAGE_LABELS[stage];
   return (
     <article
       className="mx-auto w-full max-w-[min(96vw,110rem)] 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)] space-y-4"
@@ -37,7 +42,7 @@ export default function EditorialStudioFrame({
     >
       <header className="flex flex-wrap items-end justify-between gap-3 px-1">
         <div>
-          <p className="studio-kicker" style={{ color: secondary }}>{STAGE_LABELS[stage]}</p>
+          <p className="studio-kicker" style={{ color: secondary }}>{label}</p>
           <h1 className="text-2xl font-extrabold leading-tight md:text-3xl" style={{ color: accent }}>
             {definition.title}
           </h1>
@@ -54,7 +59,7 @@ export default function EditorialStudioFrame({
       <LessonSpread
         left={left}
         right={right}
-        label={`${definition.title} · ${STAGE_LABELS[stage]}`}
+        label={`${definition.title} · ${label}`}
         accent={accent}
         className="studio-editorial"
       />

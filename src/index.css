@@ -724,6 +724,10 @@
     linear-gradient(90deg, var(--paper-0), var(--paper-1) 49.8%, var(--paper-2) 50%, var(--paper-1) 50.2%, var(--paper-0)),
     var(--paper-0);
 }
+/* 한 면만 쓰는 지면(이야기 풀블리드). 가운데 접힘 자국이 남으면 지면을 반으로 잘라 보인다. */
+.lesson-spread--full {
+  background: var(--paper-0);
+}
 .lesson-spread-pages {
   min-height: clamp(34rem, 58vh, 42rem);
 }
@@ -1385,6 +1389,25 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    animation: visual-novel-scene-settle 7s cubic-bezier(0.16, 0.82, 0.28, 1) forwards;
+  }
+
+  /* 장면 이미지 미세 모션 (05-ENGINE-SPEC §7 · 켄 번스).
+     끝없이 흐르지 않고 장면마다 한 번만 내려앉는다. 대사를 읽는 동안 배경이 계속
+     움직이면 글자를 좇기 어려운 학생이 있어서다. 끝 상태를 확대 없는 원본으로 두어
+     멈춘 뒤에는 이미지가 가장 선명한 상태로 남는다.
+     프레임이 overflow: hidden이라 확대분은 잘려 나가고 지면은 흔들리지 않는다. */
+  @keyframes visual-novel-scene-settle {
+    from { transform: scale(1.035) translate(0.9%, -0.7%); }
+    to { transform: none; }
+  }
+
+  /* 같은 장면을 참고용으로 다시 걸어 둔 자리(포맷 D의 첫 시도 화면)는 움직이지 않는다.
+     방금 이야기에서 본 그림이라 또 흐르면 선택하는 순간에 눈만 끈다. */
+  .visual-novel-scene--static { animation: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .visual-novel-scene { animation: none; }
   }
 
   .visual-novel-scene-label {
@@ -1442,6 +1465,82 @@
     color: #d8e7e5;
     font-size: 0.9rem;
     font-weight: 580;
+  }
+
+  /* 시즌 오프닝 자막 (05-ENGINE-SPEC §4). 첫 장면에서만 뜬다. */
+  .visual-novel-season-tag {
+    margin: 0 0 0.65rem;
+    padding: 0.32rem 0.72rem;
+    border-left: 3px solid currentColor;
+    border-radius: 0 8px 8px 0;
+    background: color-mix(in srgb, currentColor 9%, transparent);
+    font-size: 0.86rem;
+    font-weight: 850;
+  }
+
+  /* 화자 말풍선 (05-ENGINE-SPEC §2).
+     화자 표기를 못 찾은 조각은 .speaker-narration으로 떨어져 기존 서술 문단과 같게 보인다. */
+  .speaker-dialogue {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .speaker-dialogue p {
+    margin: 0;
+    font-size: clamp(1rem, 1.5vw, 1.12rem);
+    line-height: 1.58;
+  }
+
+  .speaker-dialogue .speaker-line {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .speaker-dialogue .speaker-name {
+    align-self: start;
+    padding: 0.1rem 0.5rem;
+    border: 1.5px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .speaker-dialogue .speaker-quote {
+    font-weight: 760;
+  }
+
+  .speaker-dialogue--dark .speaker-narration {
+    color: #d8e7e5;
+    font-weight: 600;
+  }
+
+  .speaker-dialogue--light .speaker-narration {
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+
+  .speaker-dialogue--light .speaker-quote {
+    color: var(--ink-1);
+  }
+
+  .speaker-dialogue--light p {
+    font-size: 0.95rem;
+  }
+
+  /* 390px에서 이름표와 대사가 한 줄에 끼면 대사가 두 글자씩 끊긴다. 이름을 윗줄로 올린다. */
+  @media (max-width: 30rem) {
+    .speaker-dialogue .speaker-line {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+
+    .speaker-dialogue .speaker-name {
+      justify-self: start;
+    }
   }
 
   .visual-novel-next {

@@ -4,11 +4,20 @@ import MicButton from '../../../components/MicButton';
 import { useSpeak } from '../../../hooks/useSpeak';
 import type { HardLessonContent, LessonContent } from '../../../types';
 import AiDecisionPanel from './AiDecisionPanel';
+import ArtifactCanvas from './ArtifactCanvas';
+import ChoiceReactionPanel from './ChoiceReactionPanel';
+import ColdOpenView from './ColdOpenView';
+import ConceptNoteView from './ConceptNoteView';
 import EditorialStudioFrame from './EditorialStudioFrame';
+import LabIntroView from './LabIntroView';
 import PreparedStimulusPanel from './PreparedStimulusPanel';
+import SpeakerDialogue from './SpeakerDialogue';
 import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
+import { publicAssetUrl } from '../../../utils/publicAssetUrl';
+import { cleanStudioIllustrationAlt } from '../studioIllustrations';
+import type { FormatBehavior, StudioView } from '../formats';
 import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
 import { hasApiKey } from '../../../utils/apiKey';
 import InquiryCertificateModal from './InquiryCertificateModal';
@@ -38,6 +47,9 @@ interface Props {
   secondary: string;
   sceneIndex: number;
   onSceneIndexChange: (index: number) => void;
+  /** 지금 보여 줄 화면. 한 기록 단계에 화면이 여럿일 수 있다. */
+  view: StudioView;
+  behavior: FormatBehavior;
 }
 
 const AI_DECISION_SUMMARY: Record<AiDecision, string> = {
@@ -122,11 +134,15 @@ export default function StudioExperience({
   secondary = 'var(--brand-secondary)',
   sceneIndex,
   onSceneIndexChange,
+  view,
+  behavior,
 }: Props) {
   const { speakNow } = useSpeak();
   const [studentName, setStudentName] = useState('');
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [showAwardModal, setShowAwardModal] = useState(false);
+  // 포맷 C의 콜드오픈 답. 세션 메모리에만 두고 저장하지 않는다(05-ENGINE-SPEC §1-C).
+  const [coldOpenChoiceId, setColdOpenChoiceId] = useState<string | null>(null);
   // 지원 수준이 정보를 줄이더라도 영영 감추지는 않는다. 단계가 바뀌면 다시 접는다.
   const [showAllFacts, setShowAllFacts] = useState(false);
   useEffect(() => {
@@ -158,7 +174,32 @@ export default function StudioExperience({
   const contextMedia = getStudioContextMedia(definition, state.stage);
   const contextStimuli = contextMedia.stimuli;
 
-  if (state.stage === 'encounter' && definition.visualNovel) {
+  // 포맷이 정한 화면부터 먼저 가른다. 여기 걸리지 않는 화면은 아래의 단계별 지면을 그대로 쓴다.
+  if (view.id === 'lab-intro') {
+    return (
+      <LabIntroView
+        definition={definition}
+        supportLevel={state.supportLevel}
+        accent={accent}
+        secondary={secondary}
+      />
+    );
+  }
+
+  if (view.id === 'cold-open') {
+    return (
+      <ColdOpenView
+        definition={definition}
+        accent={accent}
+        secondary={secondary}
+        dictionaryTerms={allDictTerms}
+        picked={coldOpenChoiceId}
+        onPick={setColdOpenChoiceId}
+      />
+    );
+  }
+
+  if (view.id === 'story' && definition.visualNovel) {
     return (
       <VisualNovelExperience
         definition={definition}
@@ -169,6 +210,20 @@ export default function StudioExperience({
         onSupportMode={(value) => dispatch({ type: 'record-support-mode', value })}
         sceneIndex={sceneIndex}
         onSceneIndexChange={onSceneIndexChange}
+        showKnowledge={behavior.knowledgeInStory}
+      />
+    );
+  }
+
+  if (view.id === 'concept-note' && definition.visualNovel) {
+    return (
+      <ConceptNoteView
+        definition={definition}
+        story={definition.visualNovel}
+        supportLevel={state.supportLevel}
+        accent={accent}
+        secondary={secondary}
+        dictionaryTerms={allDictTerms}
       />
     );
   }
@@ -223,12 +278,58 @@ export default function StudioExperience({
     </div>
   );
 
-  const left = isCompleteStage ? (
+  const gameSlot = (
     <MiniGameSlot
       lessonId={definition.lessonId}
       supportLevel={state.supportLevel}
       fallback={completeSummaryPanel}
     />
+  );
+
+  // 포맷 B는 같은 놀이를 도입에서 한 번 겪었다. 마무리에서는 '재도전'으로 부른다.
+  const hasLabIntro = behavior.views.some((item) => item.id === 'lab-intro');
+
+  // 포맷 D는 첫 시도를 대화 한복판에서 하게 한다. 마지막 장면을 옆에 그대로 띄워
+  // 인물이 건넨 질문을 보면서 고르도록 만든다.
+  const lastScene = definition.visualNovel?.scenes[definition.visualNovel.scenes.length - 1];
+  const showDialogueAside =
+    behavior.dialogueFrame && view.id === 'first-attempt' && Boolean(lastScene);
+
+  const left = isCompleteStage ? (
+    hasLabIntro ? (
+      <div className="flex h-full flex-col gap-2 p-2">
+        <p className="studio-kicker px-2" style={{ color: secondary }}>
+          재도전 · 처음 해 봤을 때와 무엇이 달라졌나요
+        </p>
+        <div className="min-h-0 flex-1">{gameSlot}</div>
+      </div>
+    ) : (
+      gameSlot
+    )
+  ) : showDialogueAside && lastScene ? (
+    <section className="visual-novel-story-page" aria-label="이어지는 대화">
+      <div className="visual-novel-page-heading">
+        <h2>{definition.visualNovel?.title}</h2>
+      </div>
+      <div className="visual-novel-stage">
+        <div className="visual-novel-image-frame">
+          {lastScene.imageSrc ? (
+            <img
+              className="visual-novel-scene visual-novel-scene--static"
+              src={publicAssetUrl(lastScene.imageSrc)}
+              alt={cleanStudioIllustrationAlt(lastScene.alt)}
+            />
+          ) : null}
+          <span className="visual-novel-scene-label">{lastScene.label}</span>
+        </div>
+        <div className="visual-novel-dialogue">
+          <SpeakerDialogue
+            text={lastScene.copy[state.supportLevel].text}
+            dictionaryTerms={allDictTerms}
+          />
+        </div>
+      </div>
+    </section>
   ) : (
     <div className="flex h-full flex-col justify-between rounded-2xl p-5 md:p-7">
       <div className="space-y-5">
@@ -322,6 +423,11 @@ export default function StudioExperience({
           </p>
         ) : null}
 
+        {/* 포맷 E · 오늘 만들 결과물의 빈 틀을 첫 화면부터 띄워 두고 단계마다 채운다. */}
+        {behavior.persistentCanvas ? (
+          <ArtifactCanvas definition={definition} state={state} accent={accent} />
+        ) : null}
+
         {state.stage === 'artifact' && definition.teacherGuidance && (
           (!definition.teacherGuidance.supportLevelOnly || state.supportLevel === definition.teacherGuidance.supportLevelOnly) && (
             <div className="mt-5 p-4 rounded-2xl border-2 border-amber-300 bg-amber-50/90 text-amber-950 space-y-2 shadow-xs">
@@ -393,6 +499,12 @@ export default function StudioExperience({
           prompt={definition.firstAttempt.prompt}
           accent={accent}
           onChange={(value) => dispatch({ type: 'set-first-attempt', value })}
+        />
+        <ChoiceReactionPanel
+          choices={firstChoices}
+          expression={state.firstAttempt}
+          accent={accent}
+          dictionaryTerms={allDictTerms}
         />
         <label className="block">
           <span className="mb-2 block text-sm font-bold text-[color:var(--muted)]">
@@ -597,11 +709,39 @@ export default function StudioExperience({
             </div>
           </div>
         </div>
+
+        {/* 다음 화 예고 (05-ENGINE-SPEC §4). 궁금하게, 불안하지 않게 한 줄만. */}
+        {definition.visualNovel?.nextEpisodeHook ? (
+          <section
+            className="flex items-start gap-2.5 rounded-2xl border-2 border-dashed p-4"
+            style={{ borderColor: secondary, background: 'var(--editorial-quiet)' }}
+            aria-label="다음 시간 예고"
+          >
+            <span aria-hidden className="text-lg leading-none">🔖</span>
+            <p className="text-sm font-extrabold leading-relaxed" style={{ color: 'var(--brand-ink)' }}>
+              {definition.visualNovel.nextEpisodeHook}
+            </p>
+          </section>
+        ) : null}
       </div>
     );
   } else if (state.stage === 'transfer') {
+    const coldOpenChoice = definition.transfer.choices.find((choice) => choice.id === coldOpenChoiceId);
     right = (
-      <div className="p-5 md:p-7">
+      <div className="space-y-5 p-5 md:p-7">
+        {/* 포맷 C · 콜드오픈에서 고른 답을 되비춰 성장을 눈으로 보게 한다. 저장하지 않는다. */}
+        {coldOpenChoice ? (
+          <section
+            className="rounded-2xl border border-dashed p-3.5"
+            style={{ borderColor: 'var(--editorial-line)', background: 'var(--editorial-quiet)' }}
+          >
+            <p className="studio-kicker" style={{ color: secondary }}>처음 골랐던 답</p>
+            <p className="mt-1 flex items-start gap-2 text-sm font-bold" style={{ color: 'var(--muted)' }}>
+              <span aria-hidden className="text-base leading-none">{coldOpenChoice.emoji}</span>
+              <span className="leading-snug">{coldOpenChoice.label}</span>
+            </p>
+          </section>
+        ) : null}
         <StudioExpressionInput
           value={state.transferExpression}
           choices={transferChoices}
@@ -609,6 +749,12 @@ export default function StudioExperience({
           prompt={definition.transfer.prompt || `나만의 표현으로 ${definition.transfer.title} 상황을 친구에게 설명해보자.`}
           accent={accent}
           onChange={(value) => dispatch({ type: 'set-transfer', value })}
+        />
+        <ChoiceReactionPanel
+          choices={transferChoices}
+          expression={state.transferExpression}
+          accent={accent}
+          dictionaryTerms={allDictTerms}
         />
       </div>
     );
@@ -663,6 +809,7 @@ export default function StudioExperience({
       <EditorialStudioFrame
         definition={definition}
         stage={state.stage}
+        viewLabel={view.label}
         accent={accent}
         secondary={secondary}
         left={left}

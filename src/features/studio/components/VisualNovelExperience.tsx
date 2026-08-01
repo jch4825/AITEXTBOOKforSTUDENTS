@@ -1,7 +1,9 @@
 import Icon from '../../../components/Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
 import type { StudioDefinition, SupportLevel, VisualNovelStory } from '../types';
+import ConceptNotes from './ConceptNotes';
 import EditorialStudioFrame from './EditorialStudioFrame';
+import SpeakerDialogue from './SpeakerDialogue';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
@@ -16,6 +18,8 @@ interface Props {
   onSupportMode: (mode: string) => void;
   sceneIndex: number;
   onSceneIndexChange: (index: number) => void;
+  /** 개념 카드를 이야기 옆에 함께 둘지. 포맷 A~E는 정리 노트 화면으로 미룬다. */
+  showKnowledge?: boolean;
 }
 
 export default function VisualNovelExperience({
@@ -27,6 +31,7 @@ export default function VisualNovelExperience({
   onSupportMode,
   sceneIndex,
   onSceneIndexChange,
+  showKnowledge = true,
 }: Props) {
   const { speakNow, stop } = useSpeak();
   const scene = story.scenes[sceneIndex];
@@ -59,10 +64,20 @@ export default function VisualNovelExperience({
       <div className="visual-novel-page-heading">
         <h2>{story.title}</h2>
       </div>
+      {/* 시즌 자막은 이야기가 시작되는 첫 장면에서만 뜬다(05-ENGINE-SPEC §4). */}
+      {sceneIndex === 0 && story.seasonTag ? (
+        <p className="visual-novel-season-tag" style={{ color: secondary, borderColor: secondary }}>
+          {story.seasonTag}
+        </p>
+      ) : null}
       <div className="visual-novel-stage">
         <div className="visual-novel-image-frame">
           {scene.imageSrc ? (
+            // key를 장면마다 갈아 끼워야 새 장면에서 미세 모션이 다시 흐른다.
+            // 같은 노드에 src만 바꾸면 애니메이션이 재생되지 않고, 새 그림이 뜰 때까지
+            // 앞 장면 그림이 남아 대사와 어긋나 보이기도 한다.
             <img
+              key={scene.id}
               className="visual-novel-scene"
               src={publicAssetUrl(scene.imageSrc)}
               alt={cleanStudioIllustrationAlt(scene.alt)}
@@ -85,7 +100,7 @@ export default function VisualNovelExperience({
           </button>
         </div>
         <div className="visual-novel-dialogue">
-          <p>{wrapDictionaryTerms(copy.text, allDictTerms)}</p>
+          <SpeakerDialogue text={copy.text} dictionaryTerms={allDictTerms} />
           {copy.perspective && (
             <p className="visual-novel-perspective">
               {wrapDictionaryTerms(copy.perspective, allDictTerms)}
@@ -157,51 +172,13 @@ export default function VisualNovelExperience({
         <p>{wrapDictionaryTerms(story.objective, allDictTerms)}</p>
       </div>
       <h3>오늘 배울 개념</h3>
-      <div className="visual-novel-knowledge-list">
-        {story.knowledge.map((knowledge, index) => (
-          <article
-            key={knowledge.title}
-            className="visual-novel-knowledge flex justify-between items-start gap-3"
-            data-active={scene.knowledgeStep === index}
-          >
-            <div className="flex gap-3">
-              <span>{index + 1}</span>
-              <div>
-                <h4>{wrapDictionaryTerms(knowledge.title, allDictTerms)}</h4>
-                <p><strong>{wrapDictionaryTerms(knowledge.core, allDictTerms)}</strong></p>
-                {supportLevel !== 'full' && <p>{wrapDictionaryTerms(knowledge.detail[supportLevel], allDictTerms)}</p>}
-                {knowledge.flow && (
-                  <div
-                    className="visual-novel-flow"
-                    aria-label={`${knowledge.flow.input}, ${knowledge.flow.process}, ${knowledge.flow.output}`}
-                  >
-                    <b>{wrapDictionaryTerms(knowledge.flow.input, allDictTerms)}</b>
-                    <i aria-hidden>→</i>
-                    <b>{wrapDictionaryTerms(knowledge.flow.process, allDictTerms)}</b>
-                    <i aria-hidden>→</i>
-                    <b>{wrapDictionaryTerms(knowledge.flow.output, allDictTerms)}</b>
-                  </div>
-                )}
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                let text = `개념 ${index + 1}. ${knowledge.title}. ${knowledge.core}. ${supportLevel !== 'full' ? knowledge.detail[supportLevel] : ''}`;
-                if (knowledge.flow) {
-                  text += `. 입력은 ${knowledge.flow.input}, 과정은 ${knowledge.flow.process}, 출력은 ${knowledge.flow.output} 입니다.`;
-                }
-                speakNow(text);
-              }}
-              className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-1 shadow-xs bg-white"
-              style={{ borderColor: accent, color: accent }}
-              title="개념 카드 듣기"
-            >
-              <Icon name="speaker" size={14} />
-            </button>
-          </article>
-        ))}
-      </div>
+      <ConceptNotes
+        knowledge={story.knowledge}
+        supportLevel={supportLevel}
+        accent={accent}
+        dictionaryTerms={allDictTerms}
+        activeIndex={scene.knowledgeStep}
+      />
     </section>
   );
 
@@ -212,7 +189,9 @@ export default function VisualNovelExperience({
       accent={accent}
       secondary={secondary}
       left={left}
-      right={right}
+      // 개념 카드를 이야기 옆에 늘 띄우면 이야기를 읽기 전에 답이 보인다.
+      // 포맷 A~E는 오른쪽 면을 비워 이야기를 지면 전체로 펼친다.
+      right={showKnowledge ? right : undefined}
     />
   );
 }
