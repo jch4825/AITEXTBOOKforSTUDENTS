@@ -728,6 +728,13 @@
 .lesson-spread--full {
   background: var(--paper-0);
 }
+/* 오른쪽 면이 없는 지면은 세로로만 길어진다. .studio-editorial의 46rem 바닥값까지
+   더하면 장면 버튼이 첫 화면 밖으로 밀리므로 내용 높이에 맡긴다. */
+@media (min-width: 1024px) {
+  .studio-editorial.lesson-spread--full .lesson-spread-pages {
+    min-height: 0;
+  }
+}
 .lesson-spread-pages {
   min-height: clamp(34rem, 58vh, 42rem);
 }
@@ -1363,6 +1370,56 @@
   .visual-novel-stage {
     display: grid;
     gap: 0.75rem;
+  }
+
+  /* 이야기를 지면 전체로 펼친 화면(포맷 A~E)은 넓어진 폭을 가로로 쓴다.
+     위아래로 쌓으면 16:9 그림 한 장만 470px이 되어 대사와 장면 버튼이
+     첫 화면 밖으로 밀려난다. 행 높이는 그림이 정하고 대사가 거기 맞춘다. */
+  @media (min-width: 1024px) {
+    /* 넓은 화면에서 지면 끝까지 늘어나면 글 줄이 길어지고 그림이 커진다.
+       무대만 묶으면 자막·버튼줄과 폭이 어긋나므로 지면 내용을 통째로
+       묶어 가운데로 모은다. */
+    .lesson-spread--full .visual-novel-story-page {
+      width: 100%;
+      max-width: 62rem;
+      margin-inline: auto;
+    }
+
+    .lesson-spread--full .visual-novel-stage {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: stretch;
+      gap: 0.6rem;
+    }
+
+    /* 그림 높이에 맞춰 늘어난 대사창 아래가 비어 보이지 않도록 글을 세로 가운데에 둔다. */
+    .lesson-spread--full .visual-novel-dialogue {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* 대사가 그림보다 길면 늘어난 행 높이를 16:9가 폭으로 되밀어 그림이 칸을
+       삐져나온다. 폭을 먼저 못 박아 그림 크기를 장면마다 일정하게 둔다.
+       세로가 짧은 노트북에서는 더 잘라서라도 대사를 화면 안에 남긴다. */
+    .lesson-spread--full .visual-novel-image-frame {
+      align-self: start;
+      width: 100%;
+      max-height: 36vh;
+    }
+
+    /* 글자 크기를 올리면 대사가 길어져 장면 버튼이 다시 밀린다.
+       읽는 글자는 그대로 두고 고정 여백만 깎아 한 화면을 지킨다. */
+    .lesson-spread--full .visual-novel-page-heading {
+      margin-bottom: 0.4rem;
+    }
+
+    .lesson-spread--full .visual-novel-season-tag {
+      margin-bottom: 0.35rem;
+    }
+
+    .lesson-spread--full .visual-novel-controls {
+      padding-top: 0.45rem;
+    }
   }
 
   .visual-novel-image-frame {
