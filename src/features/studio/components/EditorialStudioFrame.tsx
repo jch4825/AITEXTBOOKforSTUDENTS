@@ -12,6 +12,10 @@ interface Props {
   right?: ReactNode;
   /** 한 단계에 화면이 여럿일 때 쓸 이름. 없으면 단계 이름을 쓴다. */
   viewLabel?: string;
+  /** 특정 지면의 레이아웃 계약을 좁게 적용할 때 쓰는 클래스. */
+  spreadClassName?: string;
+  /** 지면과 제목을 같은 읽기 폭으로 묶을 때 쓰는 프레임 클래스. */
+  frameClassName?: string;
 }
 
 export const STAGE_LABELS: Record<StudioStage, string> = {
@@ -33,11 +37,13 @@ export default function EditorialStudioFrame({
   left,
   right,
   viewLabel,
+  spreadClassName,
+  frameClassName,
 }: Props) {
   const label = viewLabel ?? STAGE_LABELS[stage];
   return (
     <article
-      className="mx-auto w-full max-w-[min(96vw,110rem)] 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)] space-y-4"
+      className={`mx-auto w-full max-w-[min(96vw,110rem)] 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)] space-y-4 ${frameClassName ?? ''}`}
       style={{ '--accent': accent, '--studio-secondary': secondary } as CSSProperties}
     >
       <header className="flex flex-wrap items-end justify-between gap-3 px-1">
@@ -61,7 +67,7 @@ export default function EditorialStudioFrame({
         right={right}
         label={`${definition.title} · ${label}`}
         accent={accent}
-        className="studio-editorial"
+        className={`studio-editorial ${spreadClassName ?? ''}`}
       />
     </article>
   );

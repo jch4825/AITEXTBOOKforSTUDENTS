@@ -25,6 +25,11 @@ interface Props {
 }
 
 const SIDEBAR_COLLAPSED_KEY = 'ai-students-sidebar-collapsed';
+const TABLET_QUERY = '(min-width: 768px) and (max-width: 1199px)';
+
+function isTabletViewport() {
+  return typeof window !== 'undefined' && window.matchMedia(TABLET_QUERY).matches;
+}
 
 export default function MicroLessonFrame({
   lessonId, crumb, totalSteps, currentStep,
@@ -35,8 +40,15 @@ export default function MicroLessonFrame({
   const [navOpen, setNavOpen] = useState(false);
   const footerRef = useRef<HTMLElement | null>(null);
   // 데스크톱 사이드바 접기(집중 모드) — 선택을 기기에 기억한다.
+  // 태블릿은 본문 폭을 먼저 확보하도록 새로 열 때 기본 접힘으로 시작한다.
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(
-    () => { try { return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1'; } catch { return false; } },
+    () => {
+      try {
+        return localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1' || isTabletViewport();
+      } catch {
+        return isTabletViewport();
+      }
+    },
   );
   const debugPageId = isDebugMode()
     ? formatDebugPageId({
@@ -72,6 +84,17 @@ export default function MicroLessonFrame({
       window.visualViewport?.removeEventListener('resize', syncFrameMetrics);
       window.visualViewport?.removeEventListener('scroll', syncFrameMetrics);
     };
+  }, []);
+
+  useLayoutEffect(() => {
+    const tabletQuery = window.matchMedia(TABLET_QUERY);
+    const syncTabletSidebar = () => {
+      if (tabletQuery.matches) setSidebarCollapsed(true);
+    };
+
+    syncTabletSidebar();
+    tabletQuery.addEventListener?.('change', syncTabletSidebar);
+    return () => tabletQuery.removeEventListener?.('change', syncTabletSidebar);
   }, []);
 
   function toggleSidebar() {

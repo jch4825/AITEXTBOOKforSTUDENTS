@@ -65,8 +65,16 @@ export default function VisualNovelExperience({
         <h2>{story.title}</h2>
       </div>
       {/* 시즌 자막은 이야기가 시작되는 첫 장면에서만 뜬다(05-ENGINE-SPEC §4). */}
-      {sceneIndex === 0 && story.seasonTag ? (
-        <p className="visual-novel-season-tag" style={{ color: secondary, borderColor: secondary }}>
+      {story.seasonTag ? (
+        <p
+          className="visual-novel-season-tag"
+          aria-hidden={sceneIndex !== 0}
+          style={{
+            color: secondary,
+            borderColor: secondary,
+            visibility: sceneIndex === 0 ? 'visible' : 'hidden',
+          }}
+        >
           {story.seasonTag}
         </p>
       ) : null}
@@ -192,6 +200,8 @@ export default function VisualNovelExperience({
       // 개념 카드를 이야기 옆에 늘 띄우면 이야기를 읽기 전에 답이 보인다.
       // 포맷 A~E는 오른쪽 면을 비워 이야기를 지면 전체로 펼친다.
       right={showKnowledge ? right : undefined}
+      spreadClassName="studio-editorial-scenario"
+      frameClassName={showKnowledge ? undefined : 'studio-editorial-scenario-frame'}
     />
   );
 }
