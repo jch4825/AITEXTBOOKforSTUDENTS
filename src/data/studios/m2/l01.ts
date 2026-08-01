@@ -1,0 +1,152 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_AI_NOTE } from './shared';
+
+export const M2_L1_STUDIO: StudioDefinition = {
+    id: 'm2-missing-information-lab',
+    lessonId: 'm2-l1',
+    moduleId: 'm2',
+    title: '빠진 정보를 찾아요',
+    subtitle: 'AI가 다르게 알아들은 요청에서 필요한 정보만 안전하게 더해 봐요.',
+    format: 'A',
+    visualNovel: {
+      title: '내일 안내를 알려 달라고 했더니',
+      objective: '아이미가 엉뚱하게 알아들은 부탁에서 빠진 정보를 찾아, 개인정보 없이 채워 다시 부탁해요.',
+      seasonTag: '[부탁의 달인 · 1화] 지난달 음악회 소동',
+      nextEpisodeHook: '다음 시간 — 부탁 세 개가 한 문장에 들어가면?',
+      scenes: [
+        {
+          id: 'vague-tomorrow-request',
+          label: '장면 1 · 모호한 요청',
+          imageSrc: '/lessons/story/m2/m2-l1-scene-01.webp',
+          alt: '윤아가 아이미에게 내일 안내를 알려 달라고 부탁하는 장면',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '윤아: "아이미야, 내일 안내 알려 줘!"',
+            '윤아: "아이미야, 내일 안내 알려 줘!" 진우가 갸우뚱했습니다.',
+            '윤아: "아이미야, 내일 안내 알려 줘!" 진우가 갸우뚱했습니다. 요청은 프롬프트 입력창에 그대로 전송됐습니다.',
+            'AI는 요청에 들어 있는 정보만 사용해 뜻을 추측해요.',
+          ),
+        },
+        {
+          id: 'wrong-event-result',
+          label: '장면 2 · 엉뚱한 결과',
+          imageSrc: '/lessons/story/m2/m2-l1-scene-02.webp',
+          alt: '아이미가 지난달 음악회 안내를 자신 있게 가져오는 장면',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "찾았어요! 지난달 음악회 안내입니다!"',
+            '아이미: "찾았어요! 지난달 음악회 안내입니다!" 진우: "…우리 체험회는?"',
+            '아이미: "찾았어요! 지난달 음악회 안내입니다!" 진우: "…우리 체험회는?" 서로 다른 행사 안내가 나온 상황이었습니다.',
+            '결과가 다르면 요청에서 빠진 정보를 먼저 찾아요.',
+          ),
+        },
+        {
+          id: 'inspect-event-cards',
+          label: '장면 3 · 행사 카드 확인',
+          imageSrc: '/lessons/story/m2/m2-l1-scene-03.webp',
+          alt: '윤아가 아이미가 아는 정보와 빠뜨린 정보를 확인 질문으로 짚는 장면',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "우리가 빠뜨린 게 뭘까?"',
+            '윤아: "아이미가 아는 건 \'내일\'과 \'안내\'뿐이었네. 우리가 빠뜨린 게 뭘까?"',
+            '윤아: "아이미가 아는 건 \'내일\'과 \'안내\'뿐이었네. 우리가 빠뜨린 게 뭘까? 목적이나 대상 같은 거 말이야."',
+            '필요한 조건과 불필요한 개인정보를 구별해요.',
+          ),
+        },
+        {
+          id: 'repaired-event-request',
+          label: '장면 4 · 이번엔 무엇을 알려주시겠어요?',
+          imageSrc: '/lessons/story/m2/m2-l1-scene-04.webp',
+          alt: '아이미가 다시 부탁해 달라고 학생에게 묻는 장면',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "다시 부탁해 주시면 잘 찾아볼게요."',
+            '아이미: "다시 부탁해 주시면 잘 찾아볼게요. 이번엔 무엇을 알려 주시겠어요?"',
+            '아이미: "다시 부탁해 주시면 잘 찾아볼게요. 이번엔 무엇을 알려 주시겠어요? 목적과 날짜를 함께 알려 주시면 더 정확해져요."',
+            '요청을 고친 뒤에도 결과가 목적과 자료에 맞는지 확인해요.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: 'AI는 요청의 정보를 사용해요',
+          core: 'AI는 요청에 적힌 말과 연결된 자료를 바탕으로 결과를 만듭니다.',
+          detail: {
+            full: '말하지 않은 뜻은 다르게 알아들을 수 있어요.',
+            light: '목적이나 대상이 빠지면 AI가 다른 뜻으로 추측할 수 있습니다.',
+            challenge: '모호한 요청은 가능한 해석의 범위를 넓혀 목적과 다른 결과가 나올 가능성을 높입니다.',
+          },
+          flow: { input: '요청에 적힌 정보', process: '가능한 뜻 추측', output: 'AI가 만든 결과' },
+        },
+        {
+          title: '필요한 정보만 더해요',
+          core: '목적, 대상, 날짜, 답의 모양 중 필요한 조건만 요청에 넣습니다.',
+          detail: {
+            full: '이름과 주소는 넣지 않아도 돼요.',
+            light: '결과에 필요하지 않은 개인정보는 요청에서 제외합니다.',
+            challenge: '과제를 하는 데 꼭 필요한 정보만 넣으면 요청도 분명해지고 개인정보도 지킬 수 있습니다.',
+          },
+        },
+        {
+          title: '수정한 결과도 확인해요',
+          core: '요청을 고친 뒤 새 결과를 원래 일정표와 비교합니다.',
+          detail: {
+            full: '다시 나온 답도 살펴봐요.',
+            light: '대상, 날짜, 준비물이 실제 안내와 같은지 확인합니다.',
+            challenge: '수정 요청은 정확성을 보장하지 않으므로 독립된 원래 자료와 결과를 다시 대조합니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '내일 안내를 알려 달라고 했더니',
+      description: '윤아가 “내일 안내 알려 줘”라고 요청하자 아이미는 지난달 음악회 안내를 보여 주었습니다.',
+      facts: [
+        '윤아가 찾는 것은 AI 체험회 준비물 안내입니다.',
+        '처음 요청에는 체험회라는 대상이 없습니다.',
+        '이름, 주소, 연락처는 결과를 찾는 데 필요하지 않습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '아이미가 다른 안내를 보여 주었을 때 무엇을 먼저 하겠습니까?',
+      choices: [
+        { id: 'repeat-vague', emoji: '🔁', label: '같은 요청을 그대로 반복합니다.', reaction: '아이미: "또 지난달 음악회 안내네요! 같은 요청엔 같은 답이에요."' },
+        { id: 'find-missing-info', emoji: '🔍', label: '목적과 대상 중 빠진 정보를 찾습니다.', reaction: '윤아: "그래, 목적이랑 날짜부터 채우자."' },
+        { id: 'share-private-info', emoji: '🔒', label: '내 이름과 주소를 자세히 넣습니다.', reaction: '아이미: "잠깐만요! 이름과 주소는 몰라도 찾을 수 있어요. 넣지 말아 주세요."' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '결과를 바꾸려면 어떤 정보가 필요할까요?',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '일정표를 보니 체험회는 금요일이고, 윤아가 필요한 것은 참가자 준비물 세 가지였습니다.',
+      facts: [
+        '목적은 AI 체험회 준비물 확인입니다.',
+        '대상은 체험회 참가자입니다.',
+        '날짜는 이번 주 금요일입니다.',
+        '원하는 답은 준비물 세 가지의 짧은 목록입니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '아이미의 빠진 정보 점검',
+      text: '“이번 주 금요일 AI 체험회에 참가할 때 필요한 준비물 세 가지를 알려 줘”라고 고치면 뜻이 더 분명해져요. 개인 이름이나 주소는 넣지 않아도 돼요.',
+      question: '아이미가 제안한 정보 중 꼭 필요한 것만 남겼나요?',
+    },
+    artifact: {
+      kind: 'repair-card',
+      title: '요청 수정 카드',
+      prompt: '첫 요청, 빠진 정보, 넣지 않을 개인정보, 수정 요청, 결과 확인을 나란히 기록해 봐요.',
+    },
+    transfer: {
+      title: '이름을 모르는 물건을 찾는다면',
+      description: '교실에서 이름은 모르지만 종이를 묶을 때 쓰는 작은 물건을 찾고 있습니다.',
+      choices: [
+        { id: 'say-that-object', emoji: '👉', label: '“그거 찾아 줘”라고만 말합니다.', reaction: '아이미: "그거요? 어떤 물건인지 알려 주시겠어요?"' },
+        { id: 'describe-object', emoji: '💡', label: '쓰임, 모양, 있는 장소를 말합니다.', reaction: '아이미: "종이를 묶는 물건이군요! 찾았어요!"' },
+        { id: 'share-home-address', emoji: '🏠', label: '내 집 주소를 먼저 알려 줍니다.', reaction: '아이미: "집 주소는 몰라도 괜찮아요. 물건 모양만 알려 주세요."' },
+      ],
+    },
+    safetyNote: PREPARED_AI_NOTE,
+  };

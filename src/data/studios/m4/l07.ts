@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_SAFETY_NOTE } from './shared';
+
+export const M4_L7_STUDIO: StudioDefinition = {
+    id: 'm4-respectful-request-rewrite',
+    lessonId: 'm4-l7',
+    moduleId: 'm4',
+    title: '분명하고 존중 있게 부탁하기',
+    subtitle: '거친 단어만 지우지 말고 목적·행동·조건이 보이는 부탁으로 고쳐 봐요.',
+    format: 'D',
+    visualNovel: {
+      title: '급한 요청이 엉뚱하게 전달됐어요',
+      objective: '같은 부탁을 거친 말과 존중하는 말로 아이미에게 해 보고, 사람에게도 쓸 분명한 표현을 골라요.',
+      seasonTag: '[안전 지킴이 · 7화] 빨리 그거 제대로 해',
+      nextEpisodeHook: '다음 시간 — 추천 영상이 멈추지 않아요.',
+      scenes: [
+        {
+          id: 'm4-l7-rushed-request',
+          label: '급한 입력',
+          imageSrc: '/lessons/story/m4/m4-l7-scene-01.webp',
+          alt: '진우가 빨리 그거 제대로 해 라고 입력하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "빨리 그거 제대로 해!"',
+            '진우: "빨리 그거 제대로 해!" 무엇을 언제까지 해야 하는지는 적혀 있지 않았습니다.',
+            '진우: "빨리 그거 제대로 해!" 무엇을 언제까지 해야 하는지는 적혀 있지 않았습니다. 급한 마음이 만든 결과였습니다.',
+            '진우는 급해서 짧게 말했지만 결과가 더 늦어지자 답답했습니다.',
+          ),
+        },
+        {
+          id: 'm4-l7-two-results',
+          label: '다른 해석',
+          imageSrc: '/lessons/story/m4/m4-l7-scene-02.webp',
+          alt: '아이미가 엉뚱한 일을 했다고 자백하고 진우가 무엇을 부탁했는지 잊어버리는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '아이미: "네! 포스터 제목을 고쳤어요!" 진우: "아니, 그거 말고!"',
+            '아이미: "네! 포스터 제목을 고쳤어요!" 진우: "아니, 그거 말고! …어? 내가 뭘 해 달라고 했더라?"',
+            '아이미: "네! 포스터 제목을 고쳤어요!" 진우: "아니, 그거 말고! …어? 내가 뭘 해 달라고 했더라?" 아이미의 기분이 아니라 정보 부재가 문제였습니다.',
+            '진우는 아이미의 기분을 달래기보다 자신의 부탁을 분명히 고치기로 했습니다.',
+          ),
+        },
+        {
+          id: 'm4-l7-sentence-layers',
+          label: '문장 층 정리',
+          imageSrc: '/lessons/story/m4/m4-l7-scene-03.webp',
+          alt: '윤아와 함께 목적 행동 조건 존중 네 층으로 문장을 나누는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '목적, 행동, 조건, 존중 표현 네 층을 찾았어요.',
+            '윤아와 함께 목적은 방문자 안내, 행동은 세 줄 요약, 조건은 쉬운 말과 오후 1시까지로 나누었습니다.',
+            '윤아와 함께 목적은 방문자 안내, 행동은 세 줄 요약, 조건은 쉬운 말과 오후 1시까지로 나누었습니다. 완성 문장은 아직 만들지 않았습니다.',
+            '윤아는 친구에게 부탁할 때도 같은 구조를 쓸 수 있다고 말했습니다.',
+          ),
+        },
+        {
+          id: 'm4-l7-clear-request',
+          label: '다시 부탁해 주시겠어요?',
+          imageSrc: '/lessons/story/m4/m4-l7-scene-04.webp',
+          alt: '아이미가 이번엔 무엇을 언제까지 어떻게 할지 다시 물어보는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "다시 부탁해 주시겠어요?"',
+            '아이미: "다시 부탁해 주시겠어요? 이번엔 무엇을, 언제까지, 어떻게 할까요?"',
+            '아이미: "다시 부탁해 주시겠어요? 이번엔 무엇을, 언제까지, 어떻게 할까요? 목적도 함께 알려 주세요."',
+            '진우는 같은 방식으로 친구에게 준비물을 부탁하는 문장도 만들 수 있겠다고 생각했습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '거친 말과 불명확한 말을 나눠 봐요',
+          core: '존중 표현과 요청 정보는 서로 다른 점검 항목입니다.',
+          detail: {
+            full: '기분 나쁜 말과 빠진 내용을 따로 찾아요.',
+            light: '말투를 고치면서 할 일도 분명히 합니다.',
+            challenge: '공손한 말만 붙여도 목적과 조건이 빠지면 좋은 요청이 아닙니다.',
+          },
+        },
+        {
+          title: '목적·행동·조건을 넣어요',
+          core: '왜 필요한지, 무엇을 할지, 어떤 조건인지 말합니다.',
+          detail: {
+            full: '세 가지 문장 카드를 순서대로 놓아요.',
+            light: '받는 사람이 바로 행동할 수 있는지 확인합니다.',
+            challenge: '무엇을 해 달라는지 분명히 말하면 AI가 다르게 알아들을 가능성이 줄어듭니다.',
+          },
+          flow: { input: '급한 요청', process: '목적·행동·조건 정리', output: '존중하는 부탁' },
+        },
+        {
+          title: '사람에게도 이어지는 언어 습관이에요',
+          core: '존중하는 표현은 AI 감정 때문이 아니라 의사소통과 관계를 위해 사용합니다.',
+          detail: {
+            full: '친구에게도 쓸 수 있는 말을 골라요.',
+            light: '명령 대신 부탁과 이유를 연결합니다.',
+            challenge: 'AI에게 분명하고 존중하는 말은 사람과 이야기할 때도 사용할 수 있습니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '“빨리 그거 제대로 해”에서 무엇을 바꿀까',
+      description: '원래 목적을 유지하며 분명하고 존중하는 요청으로 고쳐야 합니다.',
+      facts: [
+        '진우는 방문자 안내 글을 준비합니다.',
+        '원하는 행동은 쉬운 말 세 줄 요약입니다.',
+        '필요한 시간은 오후 1시까지입니다.',
+        '첫 요청에는 목적, 행동, 조건이 없습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '첫 요청에서 가장 먼저 보완할 것을 골라 보세요.',
+      choices: [
+        { id: 'polite-only', emoji: '🙂', label: '끝에 “부탁해”만 붙여요.', reaction: '공손해졌지만 아이미는 여전히 \'그거\'가 무엇인지 몰랐습니다.' },
+        { id: 'clear-structure', emoji: '🧩', label: '목적, 할 일, 조건, 존중 표현을 넣어요.', reaction: '아이미: "이제 완벽히 알겠어요! 세 줄 요약, 오후 1시까지요!"' },
+        { id: 'stronger-order', emoji: '📣', label: '더 크게 강조하는 말을 넣어요.', reaction: '더 크게 말해도 필요한 정보는 늘지 않았습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '바꾼 문장으로 상대가 무엇을 알 수 있는지 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '첫 요청에 대한 두 가지 수업용 해석 결과가 나옵니다.',
+      facts: [
+        '한 결과는 포스터 제목을 바꿨습니다.',
+        '다른 결과는 안내문 전체를 길게 다시 썼습니다.',
+        '진우가 원하는 것은 쉬운 말 세 줄 요약입니다.',
+        'AI 감정이 아니라 요청의 해석 범위가 결과 차이를 만들었습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '두 요청의 해석 범위를 비교하는 AI',
+      text: '첫 요청에서는 “그거”와 “제대로”가 무엇인지 정할 수 없었습니다. 목적, 요약할 대상, 세 줄, 쉬운 말, 마감이 들어간 요청은 해야 할 조건이 분명합니다.',
+      question: '존중하는 말만 더하는 것과 요청 전체를 분명하게 고치는 것은 어떻게 다른가요?',
+    },
+    artifact: {
+      kind: 'repair-card',
+      title: '전후 요청과 바꾼 이유 카드',
+      prompt: '첫 요청, 목적·행동·조건·존중 표현, 최종 요청, 바꾼 이유를 나란히 적어 보세요.',
+    },
+    transfer: {
+      title: '친구에게 준비물 부탁하기',
+      description: '친구에게 색종이 세 장을 쉬는 시간까지 빌리고 싶습니다. 어떻게 말하겠어요?',
+      choices: [
+        { id: 'rough-friend', emoji: '📣', label: '“야, 그거 빨리 줘”라고 말해요.', reaction: '친구도 무엇을 달라는 건지 알 수 없었습니다.' },
+        { id: 'clear-friend', emoji: '🤝', label: '쓸 목적, 색종이 세 장, 시간을 넣어 부탁해요.', reaction: '친구가 바로 무엇을 도와야 할지 알 수 있었습니다.' },
+        { id: 'no-action', emoji: '❓', label: '“잘 부탁해”만 말해요.', reaction: '공손했지만 정작 필요한 것은 전해지지 않았습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_SAFETY_NOTE,
+  };

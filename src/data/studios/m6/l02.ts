@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_LIFE_NOTE } from './shared';
+
+export const M6_L2_STUDIO: StudioDefinition = {
+    id: 'm6-money-calculator-check',
+    lessonId: 'm6-l2',
+    moduleId: 'm6',
+    title: '돈은 계산기로 확인하기',
+    subtitle: '가격표와 수량으로 식을 만들고 계산기·영수증으로 합계와 거스름돈을 검산해요.',
+    format: 'B',
+    visualNovel: {
+      title: 'AI 합계와 계산대 금액이 달라요',
+      objective: '아이미가 계산한 금액을 믿기 전에, 가격표를 보고 계산기로 합계와 거스름돈을 확인해요.',
+      seasonTag: '[나 혼자 일주일 · 2화] 계산대 앞에서',
+      nextEpisodeHook: '다음 시간 — 지도에 없는 지름길이 나타났다.',
+      scenes: [
+        {
+          id: 'm6-l2-price-cards',
+          label: '가격표와 수량',
+          imageSrc: '/lessons/story/m6/m6-l2-scene-01.webp',
+          alt: '윤아가 계산 전에 물 둘과 과일 하나로 어림해 보는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '윤아: "계산 전에 어림부터. 물 둘에 과일 하나면… 5천 원대쯤?"',
+            '윤아: "계산 전에 어림부터. 물 둘에 과일 하나면… 5천 원대쯤?" 모의 계산대에는 1,200원짜리 물 두 병과 3,200원짜리 과일 한 팩이 놓였습니다.',
+            '윤아: "계산 전에 어림부터. 물 둘에 과일 하나면… 5천 원대쯤?" 모의 계산대에는 1,200원짜리 물 두 병과 3,200원짜리 과일 한 팩이 놓였습니다. 정확한 계산은 아직이었습니다.',
+            '윤아는 어림값을 먼저 남겨야 나중에 비교할 수 있다고 생각했습니다.',
+          ),
+        },
+        {
+          id: 'm6-l2-ai-total',
+          label: '다른 AI 합계',
+          imageSrc: '/lessons/story/m6/m6-l2-scene-02.webp',
+          alt: '아이미가 합계는 6500원이라고 말하고 진우가 윤아 어림이랑 다르다며 갸우뚱하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "합계는 6,500원입니다!" 진우: "어? 윤아 어림이랑 다른데. 누가 맞지?"',
+            '아이미: "합계는 6,500원입니다!" 진우: "어? 윤아 어림이랑 다른데. 누가 맞지?"',
+            '아이미: "합계는 6,500원입니다!" 진우: "어? 윤아 어림이랑 다른데. 누가 맞지?" 확인이 필요한 순간이었습니다.',
+            '진우는 둘 중 하나를 그냥 믿기보다 확인할 방법을 찾고 싶었습니다.',
+          ),
+        },
+        {
+          id: 'm6-l2-calculator-receipt',
+          label: '계산기와 영수증',
+          imageSrc: '/lessons/story/m6/m6-l2-scene-03.webp',
+          alt: '1200 곱하기 2 더하기 3200 계산기 식으로 5600원을 확인하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '계산기에 `1,200×2+3,200`을 넣어 5,600원을 확인했어요.',
+            '학생들은 계산기에 `1,200×2+3,200`을 입력해 5,600원을 확인했습니다.',
+            '학생들은 계산기에 `1,200×2+3,200`을 입력해 5,600원을 확인했습니다. 거스름돈은 아직 계산하지 않았습니다.',
+            '학생들은 계산기 결과와 영수증 품목을 한 줄씩 대조하기로 했습니다.',
+          ),
+        },
+        {
+          id: 'm6-l2-change-check',
+          label: '거스름돈은 얼마일까?',
+          imageSrc: '/lessons/story/m6/m6-l2-scene-04.webp',
+          alt: '윤아가 합계는 5600원으로 확인했다며 1만 원을 내면 거스름돈이 얼마인지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "합계는 5,600원으로 확인했어. 거스름돈은 얼마를 받아야 하지?"',
+            '윤아: "합계는 5,600원으로 확인했어. 그럼 1만 원을 내면 — 거스름돈은 얼마를 받아야 하지?"',
+            '윤아: "합계는 5,600원으로 확인했어. 그럼 1만 원을 내면 — 거스름돈은 얼마를 받아야 하지? 계산기로 확인해 봐."',
+            '진우는 AI가 틀렸다는 사실보다 어떤 도구로 정확히 고쳤는지가 더 중요하다고 생각했습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '가격과 수량으로 식을 만들어요',
+          core: '같은 물건이 여러 개면 가격에 수량을 곱하고 다른 품목을 더합니다.',
+          detail: {
+            full: '가격 카드와 수량 카드를 짝지어요.',
+            light: '계산기에 넣을 식을 먼저 읽어요.',
+            challenge: '품목별 소계를 계산한 뒤 전체 합계로 집계해 입력 오류를 분리합니다.',
+          },
+        },
+        {
+          title: 'AI 답은 계산기로 검산해요',
+          core: '범용 AI가 말한 숫자를 정답으로 두지 않고 계산기로 다시 계산합니다.',
+          detail: {
+            full: 'AI 값과 계산기 값을 나란히 봐요.',
+            light: '다르면 가격과 수량부터 다시 확인해요.',
+            challenge: '계산기로 다시 계산하고, 틀린 까닭이 숫자 입력인지 계산인지 나눕니다.',
+          },
+          flow: { input: '가격표·수량·낸 돈', process: '예상·계산기·영수증 검산', output: '합계·거스름돈 기록' },
+        },
+        {
+          title: '영수증과 받은 돈도 확인해요',
+          core: '영수증의 품목·수량과 받은 화폐가 계산 결과와 같은지 봅니다.',
+          detail: {
+            full: '영수증 줄을 물건과 연결해요.',
+            light: '거스름돈 카드를 금액별로 세어요.',
+            challenge: '계산이 맞는지와 영수증 내용이 맞는지를 따로 확인합니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: 'AI가 말한 6,500원을 내도 될까',
+      description: '가격표와 수량, AI 합계가 함께 있지만 계산기와 영수증 확인은 아직 하지 않았습니다.',
+      facts: [
+        '물은 한 병에 1,200원이고 두 병입니다.',
+        '과일은 한 팩에 3,200원입니다.',
+        'AI는 합계를 6,500원이라고 말했습니다.',
+        '모의 계산기와 영수증 카드로 확인할 수 있습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '합계와 거스름돈을 확인하는 방법을 골라 보세요.',
+      choices: [
+        { id: 'trust-ai-money', emoji: '🤖', label: 'AI가 말한 합계를 그대로 내요.', reaction: '900원을 더 낼 뻔했습니다.' },
+        { id: 'calculator-check', emoji: '🧮', label: '가격×수량 식을 계산기에 넣고 영수증과 비교해요.', reaction: '아이미: "5,600원이 맞네요! 제 계산이 틀렸어요. 검산해 주셔서 고마워요."' },
+        { id: 'guess-round-money', emoji: '🎯', label: '가까워 보이는 둥근 금액으로 정해요.', reaction: '어림은 시작일 뿐, 실제로 낼 금액은 정확해야 했습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '계산기에 넣을 식과 확인할 영수증 줄을 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '모의 영수증과 1만 원을 냈을 때의 거스름돈 카드가 공개됩니다.',
+      facts: [
+        '계산기 식은 1,200×2+3,200입니다.',
+        '계산기 합계는 5,600원입니다.',
+        '모의 영수증에도 물 2개와 과일 1개가 있습니다.',
+        '1만 원에서 5,600원을 빼면 4,400원입니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '계산 오류를 인정하고 검산을 돕는 AI',
+      text: '제가 말한 6,500원은 잘못된 합계입니다. 가격과 수량으로 만든 식을 계산기에 입력하면 5,600원이고, 1만 원을 냈다면 거스름돈은 4,400원입니다. 영수증 품목도 함께 확인해 주세요.',
+      question: '계산기 값이 맞아도 영수증에서 다시 확인해야 하는 정보는 무엇인가요?',
+    },
+    artifact: {
+      kind: 'review-sheet',
+      title: '계산·검산 기록',
+      prompt: '첫 예상, 가격×수량 식, AI 답, 계산기 결과, 영수증 확인, 낸 돈, 거스름돈을 적어 보세요.',
+    },
+    transfer: {
+      title: '새 준비물 구매 계산',
+      description: '공책 두 권과 풀 한 개를 살 때 AI 합계가 나왔습니다. 어떻게 확인하겠어요?',
+      choices: [
+        { id: 'accept-new-ai-total', emoji: '💬', label: 'AI가 두 번 말했으니 맞다고 정해요.', reaction: '두 번 말해도 재질문은 확인이 아니었습니다.' },
+        { id: 'verify-new-purchase', emoji: '🔢', label: '가격표와 수량으로 식을 만들고 계산기·영수증으로 확인해요.', reaction: '계산기로 확인하니 정확한 금액을 알 수 있었습니다.' },
+        { id: 'pay-all-budget', emoji: '💸', label: '예산 전부를 내고 나중에 생각해요.', reaction: '필요 이상으로 돈을 내고 말았습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_LIFE_NOTE,
+  };

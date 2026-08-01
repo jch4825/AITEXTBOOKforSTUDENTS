@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_LIFE_NOTE } from './shared';
+
+export const M6_L7_STUDIO: StudioDefinition = {
+    id: 'm6-personal-day-plan',
+    lessonId: 'm6-l7',
+    moduleId: 'm6',
+    title: '나에게 맞는 하루 계획',
+    subtitle: '해야 할 일·쉼·도움·걸리는 시간을 함께 넣고 조건이 바뀌면 계획을 고쳐요.',
+    format: 'E',
+    visualNovel: {
+      title: '쉬는 시간이 빠진 빽빽한 하루',
+      objective: '아이미의 빽빽한 일정에 쉬는 시간과 도움 시간을 넣어 고치고, 출발이 늦어지면 계획을 다시 맞춰요.',
+      seasonTag: '[나 혼자 일주일 · 7화] 빽빽한 하루',
+      nextEpisodeHook: '다음 시간 — 활동 중에 배가 아프면?',
+      scenes: [
+        {
+          id: 'm6-l7-day-blocks',
+          label: '하루 블록',
+          imageSrc: '/lessons/story/m6/m6-l7-scene-01.webp',
+          alt: '윤아가 이동 체험 점심 휴식 도움 시간 블록을 기대에 차서 펼치는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '윤아는 하루에 필요한 블록을 하나씩 펼쳐 보았어요.',
+            '윤아는 마을 행사 하루를 계획하려고 이동, 체험, 점심, 휴식, 도움 시간 블록을 펼쳤습니다.',
+            '윤아는 마을 행사 하루를 계획하려고 이동, 체험, 점심, 휴식, 도움 시간 블록을 펼쳤습니다. 블록마다 걸리는 시간도 달랐습니다.',
+            '윤아는 블록을 다 채우기 전에 아이미의 초안을 먼저 보고 싶었습니다.',
+          ),
+        },
+        {
+          id: 'm6-l7-ai-packed-plan',
+          label: '빽빽한 AI 계획',
+          imageSrc: '/lessons/story/m6/m6-l7-scene-02.webp',
+          alt: '아이미가 체험 여덟 개를 전부 넣었다고 자랑하고 윤아가 쉬는 시간과 겹침을 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "체험 여덟 개를 전부 넣었어요! 알차죠?"',
+            '아이미: "체험 여덟 개를 전부 넣었어요! 알차죠?" 윤아: "…쉬는 시간은? 점심은?"',
+            '아이미: "체험 여덟 개를 전부 넣었어요! 알차죠?" 윤아: "…쉬는 시간은? 점심은? 도와주실 분 오는 시간이랑 이동이 겹치는데?"',
+            '윤아는 많이 넣은 것이 좋은 계획은 아니라고 생각했습니다.',
+          ),
+        },
+        {
+          id: 'm6-l7-rain-change',
+          label: '바뀐 출발 시간',
+          imageSrc: '/lessons/story/m6/m6-l7-scene-03.webp',
+          alt: '비 때문에 출발이 늦어졌다는 공지로 일정이 겹치는 것을 발견하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '비 때문에 출발이 30분 늦어져 계획이 겹쳤어요.',
+            '비 때문에 출발이 30분 늦어진다는 공지가 나왔습니다. 처음 계획을 그대로 두자 점심과 체험 시간이 겹쳤습니다.',
+            '비 때문에 출발이 30분 늦어진다는 공지가 나왔습니다. 처음 계획을 그대로 두자 점심과 체험 시간이 겹쳤습니다. 문제를 확인한 참이었습니다.',
+            '윤아는 다 넣을 수는 없게 됐다는 것을 알아차렸습니다.',
+          ),
+        },
+        {
+          id: 'm6-l7-revised-plan',
+          label: '무엇을 남기시겠어요?',
+          imageSrc: '/lessons/story/m6/m6-l7-scene-04.webp',
+          alt: '아이미가 다 넣을 수는 없게 됐다며 무엇을 남기고 옮기고 쉼은 어디에 둘지 학생에게 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "다 넣을 수는 없게 됐어요. 무엇을 남기시겠어요?"',
+            '아이미: "다 넣을 수는 없게 됐어요. 무엇을 남기고, 무엇을 옮기고, 쉼은 어디에 두시겠어요?"',
+            '아이미: "다 넣을 수는 없게 됐어요. 무엇을 남기고, 무엇을 옮기고, 쉼은 어디에 두시겠어요? 도움 시간도 함께 봐 주세요."',
+            '윤아는 계획을 바꾸는 것이 약속을 어기는 일이 아니라 실제로 해낼 수 있게 조정하는 일이라고 느꼈습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '일·쉼·도움·시간을 함께 넣어요',
+          core: '해야 할 일뿐 아니라 쉬는 시간과 도움받을 시간을 일정에 넣습니다.',
+          detail: {
+            full: '활동과 휴식 블록을 함께 골라요.',
+            light: '각 블록에 걸리는 시간을 확인해요.',
+            challenge: '활동, 회복, 지원, 이동을 동등한 일정 자원으로 모델링합니다.',
+          },
+        },
+        {
+          title: '겹침과 내 필요를 확인해요',
+          core: '시간이 겹치거나 너무 빽빽하면 줄이거나 옮깁니다.',
+          detail: {
+            full: '겹친 블록에 표시해요.',
+            light: '내가 쉬어야 할 신호도 계획에 넣어요.',
+            challenge: '시간이 겹치는지, 내가 너무 지치지 않는지 보고 할 수 있는 계획인지 봅니다.',
+          },
+          flow: { input: '활동·시간·휴식·도움', process: '겹침 확인·조건 변화 반영', output: '전후 하루 계획' },
+        },
+        {
+          title: '조건이 바뀌면 알림도 고쳐요',
+          core: '출발이나 도움 시간이 달라지면 활동 순서와 알림을 다시 정합니다.',
+          detail: {
+            full: '새 시간에 맞춰 블록을 옮겨요.',
+            light: '알림은 나를 돕는 도구로 사용해요.',
+            challenge: '바뀐 조건에 맞게 계획과 알림 시간을 다시 맞춥니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '모든 활동을 쉬지 않고 해도 될까',
+      description: 'AI 계획에는 휴식이 없고 도움 시간과 이동이 겹친 데다 출발도 늦어졌습니다.',
+      facts: [
+        '마을 행사에는 여러 체험이 있습니다.',
+        '윤아에게는 점심 뒤 휴식 시간이 필요합니다.',
+        '교사의 도움 가능 시간은 정해져 있습니다.',
+        '비 때문에 출발이 30분 늦어졌습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '나에게 맞는 하루 계획을 만드는 방법을 골라 보세요.',
+      choices: [
+        { id: 'pack-all-activities', emoji: '📚', label: '쉬지 않고 모든 활동을 일정에 넣어요.', reaction: '오후에 지쳐 정작 하고 싶던 체험을 못 했습니다.' },
+        { id: 'balanced-personal-plan', emoji: '🧩', label: '일·쉼·도움·걸리는 시간을 함께 보고 겹침을 고쳐요.', reaction: '윤아: "덜 넣었는데 더 해냈네. 이게 진짜 계획이야."' },
+        { id: 'copy-friend-schedule', emoji: '👯', label: '내 필요는 보지 않고 친구 계획을 그대로 써요.', reaction: '친구의 도움 시간과 내 도움 시간이 서로 맞지 않았습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '꼭 할 일, 쉬는 시간, 도움 시간, 옮기거나 줄일 일을 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '출발 지연과 도움 가능 시간, 일정 겹침이 공개됩니다.',
+      facts: [
+        '출발이 30분 늦어졌습니다.',
+        '처음 계획에서는 점심과 체험이 겹칩니다.',
+        '교사의 도움 가능 시간은 바뀌지 않았습니다.',
+        '활동 하나를 줄이거나 다음 기회로 옮길 수 있습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '개인 필요를 반영해 일정을 고치는 AI',
+      text: '제 첫 일정은 활동을 너무 많이 넣고 휴식과 도움 시간을 빼먹었습니다. 출발 지연을 반영해 겹침을 풀고, 가장 중요한 체험과 점심·휴식·도움을 남긴 뒤 알림 시간을 고쳐 주세요.',
+      question: '계획에서 반드시 지킬 필요와 다음 기회로 옮길 수 있는 활동은 무엇인가요?',
+    },
+    artifact: {
+      kind: 'workflow-plan',
+      title: '전후 하루 계획표와 알림',
+      prompt: '첫 계획, 일·쉼·도움·소요 시간, 바뀐 조건, 옮긴 활동, 최종 계획, 새 알림을 적어 보세요.',
+    },
+    transfer: {
+      title: '도움 가능 시간이 바뀌었을 때',
+      description: '함께 도와줄 사람이 오후가 아니라 오전에만 가능합니다. 어떻게 하겠어요?',
+      choices: [
+        { id: 'ignore-help-time', emoji: '🙉', label: '도움 시간이 달라도 처음 계획을 그대로 둬요.', reaction: '오후에 도와줄 사람이 없어 활동이 막혔습니다.' },
+        { id: 'revise-help-time', emoji: '🕘', label: '도움이 필요한 활동을 오전으로 옮기고 쉼과 이동도 다시 맞춰요.', reaction: '바뀐 도움 시간에 맞춰 계획이 자연스럽게 들어맞았습니다.' },
+        { id: 'remove-all-breaks', emoji: '⏩', label: '시간을 맞추려고 쉬는 시간을 모두 빼요.', reaction: '쉼도 일정의 일부라서 빼고 나니 오히려 지쳤습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_LIFE_NOTE,
+  };

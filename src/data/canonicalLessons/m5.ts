@@ -1,6 +1,11 @@
 import type { CanonicalLessonDesign } from './types';
 import { STANDARD_CODES } from './shared';
 
+// [폐기 예정 — 현행 교육과정과 다름]
+// 이 파일은 리모델링 전의 옛 5단원("우리 동네 탐구 보고서" 프로젝트) 설계입니다.
+// 학생이 실제로 보는 현행 5단원은 src/data/studios/m5/ (문제해결 기술, 체험회 배경)이며,
+// 여기 담긴 차시 목표·성취기준 매핑은 현행 차시와 일치하지 않습니다.
+// 새 콘텐츠 작업의 근거로 사용하지 마십시오. 현행 기준은 docs/remodel2/ 를 따릅니다.
 export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
   // ============================================================
   // m5-l1 플래그십: 탐구 질문 만들기

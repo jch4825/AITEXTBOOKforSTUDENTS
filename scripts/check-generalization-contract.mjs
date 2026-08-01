@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { readStudioSource } from './lib/studio-source.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const types = readFileSync(resolve(root, 'src/types.ts'), 'utf8');
@@ -47,7 +48,7 @@ for (const [moduleId, previewLesson, mainLesson] of lessonPairs) {
       if (!portfolio.includes(marker)) throw new Error(`missing project transfer marker for ${moduleId}: ${marker}`);
     }
     if (moduleId !== 'm1') {
-      const studios = readFileSync(resolve(root, `src/data/studios/${moduleId}.ts`), 'utf8');
+      const studios = readStudioSource(resolve(root, `src/data/studios/${moduleId}.ts`));
       const expectedTransferCount = moduleId === 'm5' || moduleId === 'm6' ? 11 : 10;
       if ((studios.match(/\btransfer:\s*\{/g) ?? []).length !== expectedTransferCount) {
         throw new Error(`${moduleId} must provide a transfer task in all ${expectedTransferCount} studios`);

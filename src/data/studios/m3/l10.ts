@@ -1,0 +1,154 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_LEARNING_NOTE } from './shared';
+
+export const M3_L10_STUDIO: StudioDefinition = {
+    id: 'm3-self-explanation-review-studio',
+    lessonId: 'm3-l10',
+    moduleId: 'm3',
+    title: '오늘 배운 것을 내 말로 복습하기',
+    subtitle: '이전 자료를 보기 전에 먼저 떠올리고 확인한 뒤 내 말로 다시 설명해요.',
+    format: 'E',
+    visualNovel: {
+      title: '기록을 보기 전에 무엇이 기억날까',
+      objective: '자료를 덮고 배운 것을 먼저 떠올린 뒤, 아이미의 요약과 비교해 내 말로 다시 설명해요.',
+      seasonTag: '[공부 짝꿍 · 10화] 기억 꺼내기 도전',
+      nextEpisodeHook: '다음 시간 — 아이미와 공부 짝꿍 약속을 완성해요.',
+      scenes: [
+        {
+          id: 'm3-l10-forgotten-part',
+          label: '기억이 멈춘 순간',
+          imageSrc: '/lessons/story/m3/m3-l10-scene-01.webp',
+          alt: '진우가 생태계를 배웠는데 말하려니 안 나온다며 답답해하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "생태계… 배웠는데. 읽으면 아는데 말하려니까 안 나와!"',
+            '진우: "생태계… 배웠는데. 읽으면 아는데 말하려니까 안 나와!" 생태계 낱말, 계산 검산, 세 문장 요약, 작은 로봇 이야기 중 하나였습니다.',
+            '진우: "생태계… 배웠는데. 읽으면 아는데 말하려니까 안 나와!" 생태계 낱말, 계산 검산, 세 문장 요약, 작은 로봇 이야기 중 하나였습니다. 어디부터 확인할지 아직 몰랐습니다.',
+            '진우는 잊은 것을 실패로 여기지 않고 다음에 확인할 위치로 보았습니다.',
+          ),
+        },
+        {
+          id: 'm3-l10-first-recall',
+          label: '자료 없이 먼저 설명',
+          imageSrc: '/lessons/story/m3/m3-l10-scene-02.webp',
+          alt: '윤아가 자료를 덮고 기억나는 만큼만 먼저 말해 보라고 하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "그게 정상이야. 자료 덮고, 기억나는 만큼만 먼저 말해 봐."',
+            '윤아: "그게 정상이야. 자료 덮고, 기억나는 만큼만 먼저 말해 봐." 진우는 “생태계는 여러 생물이 함께 사는 곳”이라고 먼저 말했습니다.',
+            '윤아: "그게 정상이야. 자료 덮고, 기억나는 만큼만 먼저 말해 봐." 진우는 “생태계는 여러 생물이 함께 사는 곳”이라고 먼저 말했습니다. 짧아도 그대로 남겨 두었습니다.',
+            '진우는 자신의 말이 짧아도 그대로 기록했습니다.',
+          ),
+        },
+        {
+          id: 'm3-l10-record-check',
+          label: '이전 기록과 비교',
+          imageSrc: '/lessons/story/m3/m3-l10-scene-03.webp',
+          alt: '진우가 첫 회상과 낱말 카드 기록을 비교해 빠진 것을 찾는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '첫 회상과 이전 기록을 비교하니 빠진 것이 보였어요.',
+            '낱말 카드를 다시 보니 생물뿐 아니라 물과 햇빛 같은 환경이 서로 영향을 준다는 부분이 빠져 있었습니다.',
+            '낱말 카드를 다시 보니 생물뿐 아니라 물과 햇빛 같은 환경이 서로 영향을 준다는 부분이 빠져 있었습니다. "빠진 게 뭔지 찾았네."',
+            '진우는 AI 문장을 외우지 않고 빠진 핵심을 자기 설명에 다시 연결했습니다.',
+          ),
+        },
+        {
+          id: 'm3-l10-self-explanation',
+          label: '어떤 기억부터 꺼내 볼까?',
+          imageSrc: '/lessons/story/m3/m3-l10-scene-04.webp',
+          alt: '아이미가 이제 학생 차례라며 어떤 기억부터 꺼내 볼지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "이제 당신 차례예요. 어떤 기억부터 꺼내 보시겠어요?"',
+            '아이미: "이제 당신 차례예요. 자료를 덮고, 어떤 기억부터 꺼내 보시겠어요?"',
+            '아이미: "이제 당신 차례예요. 자료를 덮고, 어떤 기억부터 꺼내 보시겠어요? 빠진 부분도 함께 찾아봐요."',
+            '진우는 자료를 덮고 최종 설명을 한 번 더 말해 보았습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '복습은 먼저 떠올리는 데서 시작해요',
+          core: '자료를 보기 전에 기억나는 것을 먼저 표현하면 확인할 부분을 찾을 수 있습니다.',
+          detail: {
+            full: '기억나는 낱말이나 그림부터 말해요.',
+            light: '첫 회상과 모르는 부분을 함께 기록합니다.',
+            challenge: '자료를 보기 전에 먼저 말하면 내가 기억한 것을 더 잘 알 수 있습니다.',
+          },
+        },
+        {
+          title: '관련 자료와 AI 요약을 비교해요',
+          core: '학생 결과물, 원래 자료, AI 요약에서 빠진 점과 같은 점을 찾습니다.',
+          detail: {
+            full: '내 첫 설명에 없던 내용을 찾아요.',
+            light: '회상, 기록, AI 요약을 나란히 놓습니다.',
+            challenge: '여러 자료에서 같은 핵심이 보이는지 확인합니다. 요약 하나만 믿지 않습니다.',
+          },
+          flow: { input: '첫 회상', process: '결과물·AI 요약 확인', output: '자기 설명' },
+        },
+        {
+          title: '마지막 설명은 내 말로 완성해요',
+          core: '확인한 핵심을 복사하지 않고 이해한 순서와 표현으로 다시 설명합니다.',
+          detail: {
+            full: '빠진 내용을 넣어 한 문장으로 말해요.',
+            light: '최종 설명과 다음 복습 방법을 적습니다.',
+            challenge: '내 말 설명을 다른 예에도 써 볼 수 있으면 더 잘 이해한 것입니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '읽으면 아는데 말하려니 생각나지 않아요',
+      description: '이전 결과물 하나를 골라 자료 없이 먼저 떠올리고, AI 요약과 이유를 확인해 자기 말로 고칩니다.',
+      facts: [
+        '복습 자료는 낱말 카드, 계산 기록, 요약, 이야기 보드 중에서 고릅니다.',
+        '첫 회상은 자료를 열기 전에 남깁니다.',
+        'AI 요약과 학생 결과물의 같은 점과 빠진 점을 비교합니다.',
+        '최종 설명은 복사하지 않고 자기 말로 완성합니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '이전 자료를 열기 전에 내가 기억하는 내용을 먼저 표현해 보세요.',
+      choices: [
+        { id: 'word-card-recall', emoji: '📘', label: '생태계 낱말 카드에서 기억나는 뜻을 말해요.', reaction: '아이미: "생태계! 2화의 낱말 카드가 기다리고 있어요."' },
+        { id: 'calculation-recall', emoji: '🧮', label: '계산 검산에서 기억나는 순서를 말해요.', reaction: '아이미: "검산! 6화의 5,600원 미스터리가 떠오르네요."' },
+        { id: 'summary-recall', emoji: '📝', label: '세 문장 요약에서 기억나는 핵심을 말해요.', reaction: '아이미: "요약! 7화의 사라진 준비 시간, 기억나세요?"' },
+        { id: 'story-recall', emoji: '🤖', label: '작은 로봇 이야기의 선택을 말해요.', reaction: '아이미: "로봇 이야기! 5화의 따뜻한 결말이 궁금해지네요."' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '확실히 기억나는 부분과 다시 확인하고 싶은 부분을 나누어 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '선택한 결과물과 원래 자료, 수업용 AI 요약을 다시 엽니다.',
+      facts: [
+        '첫 회상과 같은 핵심에는 확인 표시를 합니다.',
+        '첫 회상에서 빠진 핵심에는 더하기 표시를 합니다.',
+        'AI 요약에만 있는 내용은 원자료 근거를 다시 찾습니다.',
+        '최종 설명은 자료를 닫고 한 번 더 말해 봅니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '이전 학습 내용을 짧게 정리하는 AI',
+      text: '생태계는 여러 생물이 함께 살아가는 모습입니다. 계산은 계산기로 확인하고, 요약은 중요한 내용을 짧게 줄이는 일입니다.',
+      question: '내가 고른 결과물의 중요한 내용 중 이 요약에 빠졌거나 너무 짧게 줄어든 부분은 무엇인가요?',
+    },
+    artifact: {
+      kind: 'workflow-plan',
+      title: '자기 설명과 다음 복습 카드',
+      prompt: '첫 회상, 확인한 근거, 빠진 핵심, 고친 자기 설명, 다음 복습 방법을 연결해 보세요.',
+    },
+    transfer: {
+      title: '다른 과목에서 같은 복습 사용하기',
+      description: '사회나 과학에서 오늘 배운 내용 하나를 골라 회상, 확인, 자기 설명 순서로 복습해 보세요.',
+      choices: [
+        { id: 'recall-first', emoji: '🧠', label: '책을 덮고 기억나는 것을 먼저 말해요.', reaction: '기억나는 만큼 말해 보니 무엇을 확인할지 보였습니다.' },
+        { id: 'check-source', emoji: '📚', label: '교과서와 내 기록을 다시 확인해요.', reaction: '확인해 보니 빠졌던 부분이 분명해졌습니다.' },
+        { id: 'explain-own-words', emoji: '💬', label: '확인한 내용을 내 말로 다시 설명해요.', reaction: '내 말로 다시 설명하니 이해한 것이 확실해졌습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_LEARNING_NOTE,
+  };

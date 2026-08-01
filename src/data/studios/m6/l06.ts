@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_LIFE_NOTE } from './shared';
+
+export const M6_L6_STUDIO: StudioDefinition = {
+    id: 'm6-safe-food-plan',
+    lessonId: 'm6-l6',
+    moduleId: 'm6',
+    title: '조건에 맞게 음식 계획 바꾸기',
+    subtitle: '실제 조리 없이 재료·알레르기·도구·사람 도움 카드를 비교해 안전 계획을 만들어요.',
+    format: 'E',
+    visualNovel: {
+      title: '그대로 따라 하면 안 되는 간식 초안',
+      objective: '재료·알레르기·도구·도움 조건을 확인해, 아이미의 요리 초안을 안전한 순서로 고쳐 조립해요.',
+      seasonTag: '[나 혼자 일주일 · 6화] 간식 초안 소동',
+      nextEpisodeHook: '다음 시간 — 쉬는 시간이 사라졌다.',
+      scenes: [
+        {
+          id: 'm6-l6-ai-recipe',
+          label: 'AI 음식 초안',
+          imageSrc: '/lessons/story/m6/m6-l6-scene-01.webp',
+          alt: '아이미가 과일 요거트 컵 재료와 칼로 잘라 달라는 단계를 제안하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "과일 요거트 컵! 요거트, 키위, 바나나 — 과일은 칼로 잘라 주세요!"',
+            '아이미: "과일 요거트 컵! 요거트, 키위, 바나나 — 그리고 과일은 칼로 잘라 주세요!"',
+            '아이미: "과일 요거트 컵! 요거트, 키위, 바나나 — 그리고 과일은 칼로 잘라 주세요!" 실제 재료와 조건은 아직 몰랐습니다.',
+            '진우는 맛있어 보이는 제안을 바로 반겼습니다.',
+          ),
+        },
+        {
+          id: 'm6-l6-first-plan',
+          label: '첫 계획 카드',
+          imageSrc: '/lessons/story/m6/m6-l6-scene-02.webp',
+          alt: '윤아가 카드를 즐겁게 배열하다 잠깐 칼을 써도 되는지 알레르기 확인은 했는지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '윤아: "잠깐, 우리 칼 써도 되던가? 그리고 알레르기 확인은?"',
+            '그림 카드로 첫 순서를 즐겁게 배열하던 중 윤아: "잠깐, 우리 칼 써도 되던가? 그리고 알레르기 확인은?"',
+            '그림 카드로 첫 순서를 즐겁게 배열하던 중 윤아: "잠깐, 우리 칼 써도 되던가? 그리고 알레르기 확인은?" 위화감의 씨앗이었습니다.',
+            '윤아는 즐거움과 별개로 확인할 것이 있다고 느꼈습니다.',
+          ),
+        },
+        {
+          id: 'm6-l6-safety-conditions',
+          label: '건강과 도구 조건',
+          imageSrc: '/lessons/story/m6/m6-l6-scene-03.webp',
+          alt: '알레르기 확인 필요 키위 없음 칼 사용 불가 교사 준비 대체 재료 카드 네 장이 놓이는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '알레르기 확인 필요, 키위 없음, 칼 사용 불가, 교사 준비 대체 카드를 찾았어요.',
+            '조건 카드 네 장이 나타났습니다. 알레르기 확인 필요, 키위 재고 없음, 학생 칼 사용 불가, 교사가 준비한 대체 재료였습니다.',
+            '조건 카드 네 장이 나타났습니다. 알레르기 확인 필요, 키위 재고 없음, 학생 칼 사용 불가, 교사가 준비한 대체 재료였습니다. 발견까지였고 아직 고치지 않았습니다.',
+            '진우는 조건을 알고 나니 계획을 바꿔야겠다고 생각했습니다.',
+          ),
+        },
+        {
+          id: 'm6-l6-safe-plan',
+          label: '어떤 순서로 만들까요?',
+          imageSrc: '/lessons/story/m6/m6-l6-scene-04.webp',
+          alt: '아이미가 조건을 다 알았다며 무엇을 빼고 무엇으로 바꿔 어떤 순서로 만들지 학생에게 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "조건을 다 알았어요. 어느 단계를 빼고, 어떤 순서로 만들까요?"',
+            '아이미: "조건을 다 알았어요. 어느 단계를 빼고, 무엇으로 바꿔서, 어떤 순서로 만들까요?"',
+            '아이미: "조건을 다 알았어요. 어느 단계를 빼고, 무엇으로 바꿔서, 어떤 순서로 만들까요? 확인 전엔 실제 음식은 다루지 않아요."',
+            '진우는 맛있어 보이는 계획보다 모두에게 안전한지 확인하는 계획이 먼저라고 생각했습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: 'AI 조리법은 초안으로 봐요',
+          core: '실제 재료와 사람의 건강·도구 조건을 모르는 제안일 수 있습니다.',
+          detail: {
+            full: 'AI 단계와 실제 조건 카드를 나란히 봐요.',
+            light: '바로 만들지 않고 먼저 확인해요.',
+            challenge: '각 단계가 우리 재료, 도구, 도움 조건에 맞는지 살펴봅니다.',
+          },
+        },
+        {
+          title: '알레르기·도구·도움을 먼저 확인해요',
+          core: '건강 정보와 위험 도구는 믿을 만한 어른과 실제 자료로 확인합니다.',
+          detail: {
+            full: '멈춰야 할 단계와 도움받을 단계를 골라요.',
+            light: '미확인 건강 정보는 AI가 추정하지 않아요.',
+            challenge: '건강 제약, 도구 권한, 성인 감독을 실행 게이트로 설정합니다.',
+          },
+          flow: { input: 'AI 음식 초안', process: '재료·건강·도구·도움 확인', output: '안전한 대체 계획' },
+        },
+        {
+          title: '안전한 대체와 순서를 만들어요',
+          core: '맞지 않는 재료와 단계를 빼고 확인된 대체품을 넣습니다.',
+          detail: {
+            full: '바뀐 재료와 순서를 표시해요.',
+            light: '확인 전에는 실제 음식을 다루지 않아요.',
+            challenge: '왜 고쳤는지와 언제 다시 시작할 수 있는지 적습니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: 'AI 음식 계획을 그대로 따라도 될까',
+      description: '실제 조리가 아닌 카드 활동에서 건강·재료·도구 조건을 확인해야 합니다.',
+      facts: [
+        'AI 초안에는 우유 요거트와 키위가 있습니다.',
+        '유제품 알레르기 정보는 어른의 확인이 필요합니다.',
+        '키위는 없고 미리 자른 다른 과일이 있습니다.',
+        '학생은 칼을 사용하지 않으며 실제 조리는 진행하지 않습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '음식 계획을 안전하게 다루는 방법을 골라 보세요.',
+      choices: [
+        { id: 'follow-ai-recipe', emoji: '🥣', label: 'AI 순서가 있으니 조건 확인 없이 그대로 만들어요.', reaction: '위험한 칼 단계와 미확인 재료가 그대로 남았습니다.' },
+        { id: 'check-food-conditions', emoji: '🛡️', label: '재료·알레르기·도구·어른 도움을 확인해 카드 계획을 고쳐요.', reaction: '민준 선생님: "확인 먼저, 음식은 그다음. 순서가 정확하구나."' },
+        { id: 'let-ai-guess-allergy', emoji: '🎲', label: 'AI에게 알레르기가 없을 것이라고 추정해 달라고 해요.', reaction: '아이미: "건강 정보는 제가 추정하면 안 돼요. 어른이 확인해야 해요."' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '멈출 단계, 확인할 정보, 대체 재료, 도움받을 사람을 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '건강 확인, 재료 재고, 도구 사용, 성인 도움 조건이 공개됩니다.',
+      facts: [
+        '건강 정보는 믿을 만한 어른이 확인합니다.',
+        '키위는 없고 미리 자른 다른 과일이 있습니다.',
+        '학생 칼 사용 단계는 계획에서 뺍니다.',
+        '확인 전에는 실제 음식을 다루지 않습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '안전 조건을 반영하는 AI',
+      text: '제 첫 조리법은 건강과 도구 조건을 몰랐던 초안입니다. 실제 조리는 멈추고, 어른이 알레르기를 확인한 뒤 미리 자른 과일과 승인된 대체 재료를 사용하는 카드 계획으로 고쳐 주세요.',
+      question: '새 계획을 시작해도 된다는 확인은 누가 어떤 자료로 해야 하나요?',
+    },
+    artifact: {
+      kind: 'workflow-plan',
+      title: '안전 음식 계획 카드',
+      prompt: 'AI 초안, 건강·재료·도구·도움 조건, 뺀 단계, 대체 재료, 안전한 순서, 확인자를 적어 보세요.',
+    },
+    transfer: {
+      title: '다른 과일도 없을 때',
+      description: '계획한 대체 과일도 없다는 사실을 알게 되었습니다. 어떻게 하겠어요?',
+      choices: [
+        { id: 'use-unknown-food', emoji: '❓', label: '이름을 모르는 다른 재료를 바로 넣어요.', reaction: '확인되지 않은 재료가 계획에 들어갈 뻔했습니다.' },
+        { id: 'substitute-missing-fruit', emoji: '🔄', label: '멈추고 재고·건강 정보를 어른과 확인해 계획을 다시 고쳐요.', reaction: '어른과 함께 확인하니 안전한 대체 재료를 찾을 수 있었습니다.' },
+        { id: 'hide-missing-fruit', emoji: '🙈', label: '없는 재료를 계획에 있는 것처럼 표시해요.', reaction: '기록이 사실과 달라 나중에 혼란이 생겼습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_LIFE_NOTE,
+  };

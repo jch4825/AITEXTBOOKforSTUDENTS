@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_PROBLEM_NOTE } from './shared';
+
+export const M5_L11_STUDIO: StudioDefinition = {
+    id: 'm5-condition-change-plan',
+    lessonId: 'm5-l11',
+    moduleId: 'm5',
+    title: '조건이 바뀌면 계획도 바꾸기',
+    subtitle: '준비물·도구·시간·안전 정보가 달라지면 멈추고 계획을 다시 세워요.',
+    format: 'A',
+    visualNovel: {
+      title: '빠진 도구와 새로 확인된 알레르기 정보',
+      objective: '도구가 없고 안전 정보가 확인되지 않았을 때, 계획을 멈추고 어른과 확인해 안전한 새 계획으로 고쳐요.',
+      seasonTag: '[체험회 D-1 · 11화] 멈춰야 할 순간',
+      nextEpisodeHook: '다음 시간 — 드디어 체험회 당일!',
+      scenes: [
+        {
+          id: 'm5-l11-original-plan',
+          label: '처음 간식 계획',
+          imageSrc: '/lessons/story/m5/m5-l11-scene-01.webp',
+          alt: '진우가 내일이라며 간식 계획도 완벽하다고 설레하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "내일이다! 간식 계획도 완벽해!"',
+            '진우: "내일이다! 간식 계획도 완벽해!" 그림 카드로 세운 계획이었습니다.',
+            '진우: "내일이다! 간식 계획도 완벽해!" 그림 카드로 세운 계획이었습니다. 실제 조리는 아니었습니다.',
+            '진우는 필요한 도구와 안전 확인이 이미 되어 있다고 여겼습니다.',
+          ),
+        },
+        {
+          id: 'm5-l11-new-conditions',
+          label: '바뀐 조건',
+          imageSrc: '/lessons/story/m5/m5-l11-scene-02.webp',
+          alt: '윤아가 필요한 도구가 없고 알레르기 확인을 아직 안 했다고 담담하게 말하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '윤아: "잠깐… 필요한 도구가 없어. 그리고 이거, 알레르기 확인을 아직 안 했어."',
+            '윤아: "잠깐… 필요한 도구가 없어. 그리고 이거, 알레르기 확인을 아직 안 했어." 사실을 확인하는 담담한 말투였습니다.',
+            '윤아: "잠깐… 필요한 도구가 없어. 그리고 이거, 알레르기 확인을 아직 안 했어." 사실을 확인하는 담담한 말투였습니다. 두 조건이 함께 바뀌어 있었습니다.',
+            '진우는 계획을 바꾸는 것이 실패가 아니라 모두를 안전하게 지키는 선택이라고 생각했습니다.',
+          ),
+        },
+        {
+          id: 'm5-l11-stop-compare',
+          label: '멈추고 다시 비교',
+          imageSrc: '/lessons/story/m5/m5-l11-scene-03.webp',
+          alt: '윤아가 멈추는 게 실패가 아니라며 아이미가 알레르기를 추정할 수 없다고 밝히는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "멈추는 게 실패가 아니야. 모두를 지키는 선택이지."',
+            '진우: "여기까지 왔는데 멈춰야 해?" 윤아: "멈추는 게 실패가 아니야. 모두를 지키는 선택이지."',
+            '진우: "여기까지 왔는데 멈춰야 해?" 윤아: "멈추는 게 실패가 아니야. 모두를 지키는 선택이지." 아이미: "알레르기가 없을 거라고 추정해 드릴 수는 없어요. 이건 어른이 확인해야 해요."',
+            '진우는 확인 전까지 계획을 멈추는 것이 안전한 선택이라는 것을 이해했습니다.',
+          ),
+        },
+        {
+          id: 'm5-l11-revised-plan',
+          label: '새 계획을 어떻게 세울까',
+          imageSrc: '/lessons/story/m5/m5-l11-scene-04.webp',
+          alt: '민준 선생님이 안전 정보는 자신이 확인하겠다며 새 계획을 학생들에게 맡기는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '민준 선생님: "안전 정보는 내가 확인하마. 너희는 새 계획을 어떻게 세우겠니?"',
+            '민준 선생님: "안전 정보는 내가 확인하마. 그동안 너희는 — 새 계획을 어떻게 세우겠니?"',
+            '민준 선생님: "안전 정보는 내가 확인하마. 그동안 너희는 — 새 계획을 어떻게 세우겠니? 조리 없는 방법도 생각해 보렴."',
+            '민준쌤은 안전 정보가 확인될 때까지 실제 음식은 다루지 않는다고 다시 알려 주었습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '계획의 전제를 찾아요',
+          core: '준비물, 도구, 시간, 안전 정보가 있어야 가능한 단계를 표시합니다.',
+          detail: {
+            full: '계획에 꼭 필요한 조건을 찾아요.',
+            light: '시작 전에 조건 카드를 확인해요.',
+            challenge: '각 단계가 의존하는 자원과 안전 전제를 명시해 변경 영향을 추적합니다.',
+          },
+        },
+        {
+          title: '중요한 조건이 바뀌면 멈춰요',
+          core: '도구가 없거나 안전 정보가 확인되지 않으면 처음 계획을 계속하지 않습니다.',
+          detail: {
+            full: '멈춤이 필요한 조건을 골라요.',
+            light: '안전이 불확실하면 어른에게 알려요.',
+            challenge: '실행 중단 기준과 재계획 트리거를 사전에 정의합니다.',
+          },
+          flow: { input: '처음 계획·새 조건', process: '멈춤·영향 비교·도움 요청', output: '안전한 수정 계획' },
+        },
+        {
+          title: '대체·도움·확인을 넣어 고쳐요',
+          core: '할 수 있는 다른 방법과 믿을 만한 사람의 확인을 새 계획에 넣습니다.',
+          detail: {
+            full: '바꿀 단계와 도움받을 사람을 적어요.',
+            light: '확인 전에는 실제 음식을 다루지 않아요.',
+            challenge: '다른 방법과 확인할 사람을 정합니다. 위험이 확인되기 전에는 실행을 멈춥니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '처음 계획을 그대로 계속해도 될까',
+      description: '카드 활동에서 빠진 도구와 미확인 안전 정보를 발견하고 새 계획을 만들어야 합니다.',
+      facts: [
+        '활동은 실제 조리가 아닌 그림 카드 계획입니다.',
+        '처음 계획에 필요한 도구 하나가 없습니다.',
+        '먹는 사람의 알레르기 정보가 확인되지 않았습니다.',
+        '안전 정보는 AI가 추정하지 않고 믿을 만한 어른이 확인해야 합니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '새 조건을 알게 되었을 때 가장 안전한 방법을 골라 보세요.',
+      choices: [
+        { id: 'continue-original-plan', emoji: '▶️', label: '이미 만든 계획이니 새 정보를 빼고 그대로 계속해요.', reaction: '확인되지 않은 위험이 계획에 그대로 남아 있었습니다.' },
+        { id: 'stop-and-replan', emoji: '🛑', label: '멈추고 안전 정보를 어른과 확인하며 대체 계획을 만들어요.', reaction: '민준 선생님: "그게 지킴이의 판단이야. 확인 전엔 음식을 다루지 않는다."' },
+        { id: 'ask-ai-to-guess-allergy', emoji: '🎲', label: 'AI에게 알레르기가 없을 것이라고 추정해 달라고 해요.', reaction: '아이미: "그건 제가 추정해 드릴 수 없어요. 어른의 확인이 필요해요."' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '바뀐 조건, 멈춰야 하는 이유, 도움받을 사람을 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '준비물 목록과 안전 확인표에 새로운 조건 두 가지가 표시됩니다.',
+      facts: [
+        '필요한 도구 하나를 지금 사용할 수 없습니다.',
+        '알레르기 정보는 아직 확인되지 않았습니다.',
+        '확인 전에는 실제 음식을 준비하지 않습니다.',
+        '조리 없는 안내 활동 같은 대체 계획을 만들 수 있습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '조건 변화를 정리하는 AI',
+      text: '도구가 없고 알레르기 정보가 확인되지 않았으므로 처음 계획을 멈춰야 합니다. 믿을 만한 어른이 안전 정보를 확인할 때까지 실제 음식은 다루지 말고, 조리 없는 대체 활동을 계획해 보세요.',
+      question: '처음 계획에서 무엇을 빼거나 바꾸고, 누구의 확인을 받아야 하나요?',
+    },
+    artifact: {
+      kind: 'workflow-plan',
+      title: '처음 계획-바뀐 계획-수정 이유',
+      prompt: '처음 계획, 바뀐 조건, 멈춘 이유, 도움받을 사람, 대체 방법, 확인 뒤 새 계획을 적어 보세요.',
+    },
+    transfer: {
+      title: '체험회 장소와 시간이 바뀌었을 때',
+      description: '설치 장소가 좁아지고 준비 시간이 10분 줄었습니다. 어떻게 하겠어요?',
+      choices: [
+        { id: 'keep-plan-secretly', emoji: '📦', label: '처음 계획을 바꾸지 않고 준비물을 모두 가져가요.', reaction: '좁아진 공간과 줄어든 시간에 계획이 맞지 않았습니다.' },
+        { id: 'check-new-conditions', emoji: '🔄', label: '공간·시간·안전 조건을 다시 확인하고 단계와 준비물을 줄여요.', reaction: '바뀐 조건에 맞춰 계획이 자연스럽게 들어맞았습니다.' },
+        { id: 'ignore-time-change', emoji: '⏰', label: '시간 변화는 계획과 관계없다고 생각해요.', reaction: '줄어든 시간 안에 계획을 다 마치지 못했습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_PROBLEM_NOTE,
+  };

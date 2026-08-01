@@ -71,7 +71,7 @@ if (storyFiles.length !== 266) {
 }
 
 const dataFiles = [
-  ...filesUnder('src/data/studios').filter((file) => /^m\d\.ts$/.test(path.basename(file))),
+  ...filesUnder('src/data/studios').filter((file) => /[\\/]m\d[\\/]l\d+\.ts$/.test(file) || /^m\d\.ts$/.test(path.basename(file))),
   ...filesUnder('src/data/modulePortfolios').filter((file) => /^m\d\.ts$/.test(path.basename(file))),
 ];
 for (const file of dataFiles) {

@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_LEARNING_NOTE } from './shared';
+
+export const M3_L3_STUDIO: StudioDefinition = {
+    id: 'm3-accurate-simple-explanation-lab',
+    lessonId: 'm3-l3',
+    moduleId: 'm3',
+    title: '쉽지만 정확하게 다시 설명하기',
+    subtitle: '어려운 말을 줄여도 꼭 남아야 할 사실은 지켜 봐요.',
+    format: 'C',
+    visualNovel: {
+      title: '“식물이 햇빛을 먹어요”만으로 충분할까',
+      objective: '아이미의 쉬운 설명에서 빠진 사실을 찾고, 꼭 남을 내용을 정해 다시 설명해 달라고 해요.',
+      seasonTag: '[공부 짝꿍 · 3화] 햇빛 먹는 식물?',
+      nextEpisodeHook: '다음 시간 — 「선명하다」는 어디에 어울릴까?',
+      scenes: [
+        {
+          id: 'm3-l3-hard-text',
+          label: '복잡한 설명',
+          imageSrc: '/lessons/story/m3/m3-l3-scene-01.webp',
+          alt: '진우가 광합성 설명이 너무 어렵다고 아이미에게 말하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "이 설명이 너무 어려워."',
+            '진우: "광합성… 이산화탄소… 아이미야, 나 이 설명이 너무 어려워."',
+            '진우: "광합성… 이산화탄소… 아이미야, 나 이 설명이 너무 어려워." 낯선 말이 가득한 원문이었습니다.',
+            '진우는 이해하지 못한 것을 숨기지 않고 설명 방법을 바꾸기로 했습니다.',
+          ),
+        },
+        {
+          id: 'm3-l3-first-metaphor',
+          label: '첫 쉬운 비유',
+          imageSrc: '/lessons/story/m3/m3-l3-scene-02.webp',
+          alt: '아이미가 식물이 햇빛을 먹는다는 쉬운 비유를 보여 주는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '아이미: "식물이 햇빛을 먹고 밥을 만들어요!"',
+            '아이미: "쉽게 바꿨어요! \'식물이 햇빛을 먹고 밥을 만들어요!\' 어때요?" 진우: "오, 쉽다! …그런데 뭔가 허전한데?"',
+            '아이미: "쉽게 바꿨어요! \'식물이 햇빛을 먹고 밥을 만들어요!\' 어때요?" 진우: "오, 쉽다! …그런데 뭔가 허전한데?" 물과 공기 이야기가 사라져 있었습니다.',
+            '진우는 쉬운 말이라는 이유만으로 바로 사용하지 않았습니다.',
+          ),
+        },
+        {
+          id: 'm3-l3-missing-fact',
+          label: '빠진 사실 발견',
+          imageSrc: '/lessons/story/m3/m3-l3-scene-03.webp',
+          alt: '윤아가 그림엔 화살표가 세 개라며 비유엔 몇 개 남았는지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "그림엔 화살표가 세 개인데?"',
+            '윤아: "그림엔 화살표가 세 개야. 비유엔 몇 개 남았지?" 함께 교과서 그림을 다시 살펴보았습니다.',
+            '윤아: "그림엔 화살표가 세 개야. 비유엔 몇 개 남았지?" 함께 교과서 그림을 다시 살펴보았습니다. 햇빛, 물, 공기 중 무엇이 빠졌는지 짚어 보았습니다.',
+            '진우는 어려운 낱말은 바꾸고 과정의 핵심은 남기기로 했습니다.',
+          ),
+        },
+        {
+          id: 'm3-l3-final-card',
+          label: '꼭 남겨야 할 재료는?',
+          imageSrc: '/lessons/story/m3/m3-l3-scene-04.webp',
+          alt: '아이미가 꼭 남겨야 할 재료가 무엇인지 학생에게 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "꼭 남겨야 할 재료는 무엇인가요?"',
+            '아이미: "다시 만들어 볼게요. 꼭 남겨야 할 재료는 무엇 무엇인가요?"',
+            '아이미: "다시 만들어 볼게요. 꼭 남겨야 할 재료는 무엇 무엇인가요? 쉬운 말은 그대로 두고 싶어요."',
+            '진우는 자신이 이해한 설명을 다시 말해 보며 마지막 확인을 했습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '먼저 꼭 남길 사실을 찾아요',
+          core: '쉬운 설명을 만들기 전에 원문에서 반드시 유지할 사실을 표시합니다.',
+          detail: {
+            full: '누가, 무엇으로, 무엇을 만드는지 찾아요.',
+            light: '주체, 재료, 결과를 핵심 사실로 고릅니다.',
+            challenge: '꼭 남길 원인과 결과를 찾고, 덜 중요한 설명과 나누어 봅니다.',
+          },
+        },
+        {
+          title: '쉬운 비유도 원문과 비교해요',
+          core: '익숙한 비유가 핵심 사실을 빠뜨리거나 다르게 만들 수 있습니다.',
+          detail: {
+            full: '비유와 교과서 그림의 같은 점을 찾아요.',
+            light: '유지된 사실과 빠진 사실을 나눕니다.',
+            challenge: '비유가 맞는 부분과 맞지 않는 부분을 찾아 오해가 생기지 않게 봅니다.',
+          },
+          flow: { input: '어려운 원문', process: '핵심 유지·낯선 말 풀기', output: '쉬우면서 정확한 설명' },
+        },
+        {
+          title: '내가 다시 설명하며 확인해요',
+          core: '최종 설명을 자기 말로 다시 말해 핵심이 남았는지 확인합니다.',
+          detail: {
+            full: '핵심 단어를 보며 한 문장으로 말해요.',
+            light: '원문과 최종 설명을 마지막으로 비교합니다.',
+            challenge: '내 설명에 원인, 순서, 꼭 필요한 말이 들어 있는지 봅니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '쉬워졌지만 중요한 재료가 사라졌어요',
+      description: '광합성의 어려운 원문과 아이미의 첫 쉬운 비유를 비교해 꼭 남을 사실을 정합니다.',
+      facts: [
+        '원문에는 햇빛, 물, 이산화탄소, 양분이 있습니다.',
+        '첫 쉬운 설명은 “햇빛을 먹고 밥을 만든다”입니다.',
+        '교과서 그림에는 재료와 결과를 잇는 화살표가 있습니다.',
+        '어려운 낱말은 풀어 쓰되 과정은 바꾸지 않아야 합니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '쉬운 설명에도 꼭 남아야 할 사실을 먼저 골라 보세요.',
+      choices: [
+        { id: 'sun-only', emoji: '☀️', label: '식물은 햇빛을 좋아한다는 말만 남겨요.', reaction: '윤아가 그림을 가리켰습니다. "물이랑 공기 재료가 빠졌잖아."' },
+        { id: 'materials-result', emoji: '🌱', label: '햇빛의 도움, 물과 공기 속 재료, 양분 만들기를 남겨요.', reaction: '아이미: "그 세 가지가 있으면 쉽게 말해도 정확해요!"' },
+        { id: 'green-color', emoji: '🎨', label: '식물은 초록색이라는 말만 남겨요.', reaction: '그림을 보니 색은 이 과정의 재료가 아니었습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '왜 그 사실이 광합성을 설명하는 데 필요한지 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '교과서 그림과 첫 쉬운 설명을 줄별로 비교합니다.',
+      facts: [
+        '햇빛의 도움은 두 설명에 모두 있습니다.',
+        '물과 이산화탄소는 첫 쉬운 설명에서 빠졌습니다.',
+        '양분을 만든다는 결과는 비유 속 “밥”으로 바뀌었습니다.',
+        '식물이 실제로 햇빛을 음식처럼 먹는 것은 아닙니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '어려운 말을 쉬운 비유로 바꾸는 AI',
+      text: '식물은 작은 요리사처럼 햇빛의 도움을 받아 뿌리에서 온 물과 공기 속 이산화탄소로 자기 양분을 만들어요.',
+      question: '이 설명은 핵심 사실을 지키면서 오해할 수 있는 표현을 줄였나요?',
+    },
+    artifact: {
+      kind: 'repair-card',
+      title: '정확성을 지킨 쉬운 설명 카드',
+      prompt: '원문 핵심, 첫 비유의 누락, 고친 쉬운 설명, 내 확인 문장을 한 카드에 적어 보세요.',
+    },
+    transfer: {
+      title: '물의 순환을 쉽게 설명하기',
+      description: '증발, 구름, 비가 이어지는 물의 순환 설명을 쉬운 말로 바꿔 보세요.',
+      choices: [
+        { id: 'keep-cycle', emoji: '🔄', label: '물이 올라가고 모이고 다시 내리는 순서를 남겨요.', reaction: '순서가 남으니 순환 과정이 정확히 전해졌습니다.' },
+        { id: 'rain-only', emoji: '🌧️', label: '비가 온다는 결과만 남겨요.', reaction: '증발과 구름 과정이 빠져 순환을 알 수 없었습니다.' },
+        { id: 'check-diagram', emoji: '🗺️', label: '교과서 그림과 쉬운 설명을 다시 비교해요.', reaction: '비교해 보니 빠진 단계를 찾을 수 있었습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_LEARNING_NOTE,
+  };

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { readStudioSource } from './lib/studio-source.mjs';
 
 const MODULES = {
   M3: {
@@ -164,8 +165,7 @@ const MODULES = {
 };
 
 function readRequired(path) {
-  if (!fs.existsSync(path)) throw new Error(`${path} is missing`);
-  return fs.readFileSync(path, 'utf8');
+  return readStudioSource(path);
 }
 
 function requireToken(source, token, message) {

@@ -1,0 +1,154 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_LEARNING_NOTE } from './shared';
+
+export const M3_L7_STUDIO: StudioDefinition = {
+    id: 'm3-evidence-summary-lab',
+    lessonId: 'm3-l7',
+    moduleId: 'm3',
+    title: '긴 글의 핵심을 남기기',
+    subtitle: '읽는 목적에 맞는 핵심을 먼저 고르고 AI 요약의 누락을 원문에서 찾아요.',
+    format: 'C',
+    visualNovel: {
+      title: '준비 시간이 사라진 세 문장 요약',
+      objective: '긴 글에서 꼭 남길 내용을 내가 먼저 고르고, 아이미의 세 문장 요약에서 빠진 것을 찾아 채워요.',
+      seasonTag: '[공부 짝꿍 · 7화] 사라진 준비 시간',
+      nextEpisodeHook: '다음 시간 — 정답이 먼저 보이는 퀴즈?',
+      scenes: [
+        {
+          id: 'm3-l7-long-text',
+          label: '긴 전시 설명문',
+          imageSrc: '/lessons/story/m3/m3-l7-scene-01.webp',
+          alt: '진우가 여덟 문장짜리 전시 설명문을 방문자들이 다 읽을지 걱정하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "여덟 문장이나 돼. 방문자들이 다 읽을까?"',
+            '진우: "여덟 문장이나 돼. 방문자들이 다 읽을까?" 장소, 시작 시각, 체험 내용, 준비 시간, 안전 약속, 문의 방법이 적혀 있었습니다.',
+            '진우: "여덟 문장이나 돼. 방문자들이 다 읽을까?" 장소, 시작 시각, 체험 내용, 준비 시간, 안전 약속, 문의 방법이 적혀 있었습니다. 무엇을 남길지는 아직 정하지 못했습니다.',
+            '진우는 긴 글을 싫어해서가 아니라 방문자가 빨리 이해하도록 줄이려 했습니다.',
+          ),
+        },
+        {
+          id: 'm3-l7-key-points',
+          label: '핵심 먼저 선택',
+          imageSrc: '/lessons/story/m3/m3-l7-scene-02.webp',
+          alt: '윤아가 아이미에게 맡기기 전에 먼저 핵심을 골라 두자고 말하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "아이미한테 맡기기 전에, 우리가 먼저 골라 두자."',
+            '윤아: "아이미한테 맡기기 전에, 우리가 먼저 골라 두자. 나중에 비교하게." 진우는 방문 목적에 필요한 정보를 먼저 표시했습니다.',
+            '윤아: "아이미한테 맡기기 전에, 우리가 먼저 골라 두자. 나중에 비교하게." 진우는 방문 목적에 필요한 정보를 먼저 표시했습니다. 첫 선택을 남겨야 비교할 수 있었습니다.',
+            '진우는 자신의 첫 선택을 남겨 AI 요약과 비교하기로 했습니다.',
+          ),
+        },
+        {
+          id: 'm3-l7-ai-summary',
+          label: '누락 근거 찾기',
+          imageSrc: '/lessons/story/m3/m3-l7-scene-03.webp',
+          alt: '아이미의 세 문장 요약을 보고 윤아가 10분 전 도착 이야기가 어디 갔는지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "매끄럽네. 그런데… 10분 전 도착 얘기가 어디 갔지?"',
+            '아이미: "세 문장 완성!" 윤아: "매끄럽네. 그런데… 10분 전 도착 얘기가 어디 갔지?"',
+            '아이미: "세 문장 완성!" 윤아: "매끄럽네. 그런데… 10분 전 도착 얘기가 어디 갔지?" 장소와 체험 내용은 남아 있었습니다.',
+            '진우는 짧고 자연스럽다는 이유만으로 요약을 바로 전시하지 않았습니다.',
+          ),
+        },
+        {
+          id: 'm3-l7-final-summary',
+          label: '남길 세 가지는?',
+          imageSrc: '/lessons/story/m3/m3-l7-scene-04.webp',
+          alt: '진우가 방문자라면 뭐가 꼭 필요한지 학생에게 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '진우: "네가 방문자라면 뭐가 꼭 필요해?"',
+            '진우: "네가 방문자라면 뭐가 꼭 필요해? 남길 세 가지를 골라 줘."',
+            '진우: "네가 방문자라면 뭐가 꼭 필요해? 남길 세 가지를 골라 줘. 빠진 걸 채워서 안내판을 완성하자."',
+            '진우는 원문을 읽지 않은 사람도 필요한 행동을 알 수 있는지 마지막으로 확인했습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '요약 목적에 따라 핵심을 골라요',
+          core: '주제와 독자가 반드시 알아야 할 정보를 먼저 정합니다.',
+          detail: {
+            full: '누가 읽고 무엇을 해야 하는지 찾아요.',
+            light: '장소, 활동, 준비처럼 행동에 필요한 정보를 고릅니다.',
+            challenge: '핵심성은 문장 빈도보다 독자의 이해와 행동에 미치는 영향으로 판단할 수 있습니다.',
+          },
+        },
+        {
+          title: 'AI 요약을 원문 근거와 연결해요',
+          core: '요약의 각 문장이 원문의 어느 부분에서 나왔는지 확인합니다.',
+          detail: {
+            full: '같은 내용끼리 선으로 이어요.',
+            light: '남은 내용, 빠진 내용, 달라진 내용을 나눕니다.',
+            challenge: '원문과 요약을 이어 보면 뜻이 커졌거나 조건이 빠진 문장을 찾을 수 있습니다.',
+          },
+          flow: { input: '긴 원문', process: '핵심 선택·근거 비교', output: '3문장 요약' },
+        },
+        {
+          title: '짧음과 완전성을 함께 확인해요',
+          core: '세 문장 형식을 지키면서도 필수 정보가 빠지지 않아야 합니다.',
+          detail: {
+            full: '꼭 필요한 정보가 모두 있는지 살펴요.',
+            light: '중복은 줄이고 누락은 복원합니다.',
+            challenge: '문장 수를 줄여도 읽는 사람에게 꼭 필요한 안전 정보는 남깁니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '세 문장인데 중요한 시간이 없어요',
+      description: '방문자용 긴 설명문에서 핵심을 먼저 고르고 AI 요약을 원문 근거와 비교합니다.',
+      facts: [
+        '전시는 2층 배움실에서 열립니다.',
+        '방문자는 질문 만들기와 그림 설명 체험을 합니다.',
+        '참여자는 시작 10분 전에 도착해야 합니다.',
+        'AI 요약에는 준비 시간이 빠져 있습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '방문자가 꼭 알아야 할 핵심 세 가지를 먼저 골라 보세요.',
+      choices: [
+        { id: 'place', emoji: '📍', label: '전시 장소를 남겨요.', reaction: '장소가 없으면 방문자가 찾아올 수 없었습니다.' },
+        { id: 'activity', emoji: '🧩', label: '무엇을 체험하는지 남겨요.', reaction: '체험 내용은 방문 목적과 바로 연결됐습니다.' },
+        { id: 'arrival', emoji: '⏰', label: '시작 10분 전 도착을 남겨요.', reaction: '윤아: "그게 빠지면 늦게 와서 체험을 놓쳐."' },
+        { id: 'decoration', emoji: '🎈', label: '벽 장식의 색을 남겨요.', reaction: '벽 장식 색은 방문자의 행동과는 관계가 없었습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '내가 고른 정보가 방문자의 행동에 왜 필요한지 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '아이미의 세 문장 요약을 원문의 여덟 문장과 연결합니다.',
+      facts: [
+        '장소 문장은 원문 1번과 연결됩니다.',
+        '체험 내용 문장은 원문 3번과 4번을 줄였습니다.',
+        '준비 시간 문장은 어느 요약 문장에도 연결되지 않습니다.',
+        '벽 장식과 인사말은 방문 행동에 꼭 필요하지 않습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '긴 글을 세 문장으로 줄인 AI',
+      text: '배움 전시는 2층 배움실에서 열립니다. 질문 만들기와 그림 설명을 체험합니다. 궁금한 점은 안내 학생에게 물어보세요.',
+      question: '원문에서 꼭 남기기로 한 정보 중 빠진 것은 무엇인가요?',
+    },
+    artifact: {
+      kind: 'repair-card',
+      title: '근거가 연결된 3문장 요약',
+      prompt: '핵심 세 가지, AI 요약의 누락, 원문 근거 번호, 고친 세 문장을 정리해 보세요.',
+    },
+    transfer: {
+      title: '학급 안내문 요약하기',
+      description: '준비물, 제출 날짜, 제출 장소가 담긴 학급 안내문을 두 문장으로 줄여 보세요.',
+      choices: [
+        { id: 'mark-required', emoji: '🖍️', label: '준비물·날짜·장소를 먼저 표시해요.', reaction: '표시해 두니 요약과 비교할 기준이 생겼습니다.' },
+        { id: 'compare-source', emoji: '🔗', label: '요약 문장을 원문 근거와 연결해요.', reaction: '연결해 보니 빠진 부분이 눈에 띄었습니다.' },
+        { id: 'restore-missing', emoji: '➕', label: '빠진 필수 정보를 다시 넣어요.', reaction: '필수 정보를 되살리니 두 문장으로도 충분했습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_LEARNING_NOTE,
+  };

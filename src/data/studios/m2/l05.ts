@@ -1,0 +1,152 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_AI_NOTE } from './shared';
+
+export const M2_L5_STUDIO: StudioDefinition = {
+    id: 'm2-audience-tone-studio',
+    lessonId: 'm2-l5',
+    moduleId: 'm2',
+    title: '누구에게 보여 줄 답인지 말해요',
+    subtitle: '대상과 말투를 바꾸되 중요한 사실은 따로 지켜 봐요.',
+    format: 'D',
+    visualNovel: {
+      title: '한 안내문을 두 사람에게',
+      objective: '답을 읽을 사람과 말투를 아이미에게 알려 주고, 사실(시간·장소·준비물)이 맞는지는 따로 확인해요.',
+      seasonTag: '[부탁의 달인 · 5화] 두 독자',
+      nextEpisodeHook: '다음 시간 — 준비표에 구멍이 숭숭.',
+      scenes: [
+        {
+          id: 'two-audiences',
+          label: '장면 1 · 두 독자',
+          imageSrc: '/lessons/story/m2/m2-l5-scene-01.webp',
+          alt: '진우가 어린 동생과 학부모에게 같은 안내를 보내려는 장면',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "하나로 되겠지?"',
+            '진우: "동생한테도 보내고 부모님께도 보내야 해. 하나로 되겠지?"',
+            '진우: "동생한테도 보내고 부모님께도 보내야 해. 하나로 되겠지?" 두 사람은 읽는 경험이 서로 달랐습니다.',
+            '같은 사실도 보는 사람에 따라 표현을 바꿀 수 있어요.',
+          ),
+        },
+        {
+          id: 'same-first-notice',
+          label: '장면 2 · 같은 첫 안내',
+          imageSrc: '/lessons/story/m2/m2-l5-scene-02.webp',
+          alt: '어린 동생에게는 어렵고 학부모에게는 가벼운 같은 안내문이 보이는 장면',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '동생: "무슨 말인지 모르겠어…"',
+            '동생: "무슨 말인지 모르겠어…" 학부모용으로는 준비 정보가 부족했습니다.',
+            '동생: "무슨 말인지 모르겠어…" 학부모용으로는 준비 정보가 부족했습니다. 한 안내 글이 두 사람 모두에게 맞지 않았습니다.',
+            '대상 조건은 표현을 바꾸지만 사실을 바꾸지는 않아요.',
+          ),
+        },
+        {
+          id: 'separate-fact-and-tone',
+          label: '장면 3 · 내용과 말투 분리',
+          imageSrc: '/lessons/story/m2/m2-l5-scene-03.webp',
+          alt: '아이미가 바꿔도 되는 것과 안 되는 것을 되묻는 장면',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '아이미: "바꿔도 되는 건 뭔가요?"',
+            '아이미: "여쭤볼게요. 바꿔도 되는 건 무엇이고, 절대 바뀌면 안 되는 건 무엇인가요?"',
+            '아이미: "여쭤볼게요. 바꿔도 되는 건 무엇이고, 절대 바뀌면 안 되는 건 무엇인가요?" 시간, 장소, 준비물과 말투를 구분해 보기 시작했습니다.',
+            '표현이 자연스러워도 사실은 원래 안내와 확인해요.',
+          ),
+        },
+        {
+          id: 'two-audience-notices',
+          label: '장면 4 · 어떤 말투로 써 드릴까요?',
+          imageSrc: '/lessons/story/m2/m2-l5-scene-04.webp',
+          alt: '아이미가 두 사람에게 어떤 말투로 쓸지 학생에게 묻는 장면',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "어떤 말투로 써 드릴까요?"',
+            '아이미: "그럼 두 분께 어떤 말투로, 무엇은 그대로 두고 써 드릴까요?"',
+            '아이미: "그럼 두 분께 어떤 말투로, 무엇은 그대로 두고 써 드릴까요? 시간과 장소는 꼭 확인해 주세요."',
+            '역할과 말투를 정해도 내용이 저절로 맞아지는 것은 아니에요.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '답을 볼 사람을 말해요',
+          core: '누가 읽고 어떤 상황에서 사용할 답인지 요청에 넣습니다.',
+          detail: {
+            full: '누구에게 보여 줄지 말해요.',
+            light: '읽는 사람에 따라 필요한 단어와 설명의 길이가 달라집니다.',
+            challenge: '읽을 사람이 무엇을 알고 어디에서 읽는지 말하면 단어와 설명 순서를 알맞게 고를 수 있습니다.',
+          },
+        },
+        {
+          title: '사실과 말투를 나눠요',
+          core: '시간, 장소, 준비물은 지키고 단어, 문장 길이, 높임 표현을 바꿉니다.',
+          detail: {
+            full: '중요한 내용은 그대로 두어요.',
+            light: '바뀌면 안 되는 사실과 대상에 맞게 바꿀 표현을 따로 표시합니다.',
+            challenge: '내용 층과 표현 층을 분리하면 스타일 수정 중 사실이 누락되거나 변하는 문제를 줄일 수 있습니다.',
+          },
+          flow: { input: '사실과 읽을 사람 조건', process: '내용 고정·말투 조정', output: '읽을 사람별 안내 글' },
+        },
+        {
+          title: '말투는 정확성을 보장하지 않아요',
+          core: '전문가처럼 말하거나 공손하게 쓰인 결과도 사실은 따로 확인합니다.',
+          detail: {
+            full: '그럴듯해도 다시 확인해요.',
+            light: '자연스러운 표현과 정확한 내용을 서로 다른 기준으로 살펴봅니다.',
+            challenge: '역할과 말투를 넣은 요청은 표현을 바꿀 뿐, 내용이 맞는지는 따로 확인해야 합니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '한 안내문을 두 사람에게',
+      description: '진우가 어린 동생과 학부모에게 같은 체험회 안내문을 보내려 하지만 한 안내 글이 두 사람에게 모두 맞지 않습니다.',
+      facts: [
+        '체험회 시간, 장소, 준비물은 두 안내 글에서 같아야 합니다.',
+        '어린 동생에게는 짧고 쉬운 표현이 필요합니다.',
+        '학부모에게는 공손한 말과 신청 정보가 필요합니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '두 사람에게 어떤 안내 글을 만들겠습니까?',
+      choices: [
+        { id: 'same-notice-both', emoji: '👥', label: '한 안내 글을 두 사람에게 똑같이 보냅니다.', reaction: '동생이 안내문을 보고 어려워했습니다.' },
+        { id: 'two-tones-one-fact', emoji: '🗣️', label: '사실은 지키고 읽을 사람별 말투를 바꿉니다.', reaction: '아이미: "시간과 장소는 그대로, 말투만 바꾸는 거군요. 할 수 있어요!"' },
+        { id: 'expert-role-trust', emoji: '🎓', label: '그럴듯한 말투면 내용도 맞다고 믿습니다.', reaction: '윤아가 공손한 문장 속에서 틀린 시간을 발견했습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '대상에 따라 바꿀 부분과 지킬 부분은 무엇인가요?',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '공식 안내에서 시간은 오후 2시, 장소는 도서관, 준비물은 색연필이라는 사실이 확인되었습니다.',
+      facts: [
+        '두 안내 글 모두 오후 2시를 유지해야 합니다.',
+        '두 안내 글 모두 도서관이라는 장소를 유지해야 합니다.',
+        '동생 안내 글에는 쉬운 단어와 짧은 문장이 필요합니다.',
+        '학부모 안내 글에는 신청 마감과 공손한 표현이 필요합니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '아이미의 읽을 사람별 안내 글 제안',
+      text: '동생에게는 “오후 2시에 도서관으로 와. 색연필을 가져와”라고, 학부모에게는 같은 사실을 공손한 안내문으로 만들 수 있어요.',
+      question: '두 안내 글에서 바뀌면 안 되는 사실이 모두 남아 있나요?',
+    },
+    artifact: {
+      kind: 'repair-card',
+      title: '읽을 사람별 안내 글 2종',
+      prompt: '변하지 않을 사실과 읽을 사람별 단어·문장 길이·말투를 나누어 두 안내 글을 작성해 봐요.',
+    },
+    transfer: {
+      title: '친구와 선생님께 부탁한다면',
+      description: '같은 준비물 확인을 친구와 선생님에게 각각 부탁하려고 합니다.',
+      choices: [
+        { id: 'same-request-both', emoji: '👥', label: '두 사람에게 같은 표현만 사용합니다.', reaction: '친구에게는 너무 딱딱하고, 선생님께는 너무 편하게 들렸습니다.' },
+        { id: 'adapt-request-tone', emoji: '💬', label: '부탁 내용은 지키고 관계에 맞는 표현을 고릅니다.', reaction: '준비물 내용은 그대로, 표현만 자연스럽게 전달됐습니다.' },
+        { id: 'change-request-fact', emoji: '✏️', label: '말투에 맞추어 준비물 내용도 바꿉니다.', reaction: '말투를 바꾸다가 준비물 내용까지 달라져 버렸습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_AI_NOTE,
+  };

@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_PROBLEM_NOTE } from './shared';
+
+export const M5_L2_STUDIO: StudioDefinition = {
+    id: 'm5-task-decomposition-board',
+    lessonId: 'm5-l2',
+    moduleId: 'm5',
+    title: '큰 일을 작은 과제로 나누기',
+    subtitle: '순서를 정하기 전에 부스에 필요한 과제를 빠짐없이 찾아봐요.',
+    format: 'B',
+    visualNovel: {
+      title: '“부스를 설치해”라는 너무 큰 일',
+      objective: '`부스 설치`라는 큰 일을 작은 과제로 나누고, 아이미의 목록에서 빠진 과제와 필요 없는 과제를 찾아 고쳐요.',
+      seasonTag: '[체험회 D-6 · 2화] 너무 큰 일',
+      nextEpisodeHook: '다음 시간 — 장식을 먼저 붙였더니 큰일.',
+      scenes: [
+        {
+          id: 'm5-l2-large-task',
+          label: '큰 부스',
+          imageSrc: '/lessons/story/m5/m5-l2-scene-01.webp',
+          alt: '진우가 부스를 설치해 라는 한마디 앞에서 어디서 시작할지 막막해하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "\'부스를 설치해\'… 이 한마디가 이렇게 클 줄이야."',
+            '진우: "\'부스를 설치해\'… 이 한마디가 이렇게 클 줄이야. 어디서 시작하지?"',
+            '진우: "\'부스를 설치해\'… 이 한마디가 이렇게 클 줄이야. 어디서 시작하지?" 큰 목표 앞에서 막막했습니다.',
+            '진우는 순서를 서두르기보다 어떤 과제가 필요한지 먼저 찾기로 했습니다.',
+          ),
+        },
+        {
+          id: 'm5-l2-booth-plan',
+          label: '완성 모습 보기',
+          imageSrc: '/lessons/story/m5/m5-l2-scene-02.webp',
+          alt: '윤아가 완성된 모습부터 보자며 그림 속 구성 요소를 짚는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "완성된 모습부터 보자. 저 그림에 뭐가 들어 있지?"',
+            '윤아: "완성된 모습부터 보자. 저 그림에 뭐가 들어 있지?" 안내판, 책상, 전원, 자료 배치가 보였습니다.',
+            '윤아: "완성된 모습부터 보자. 저 그림에 뭐가 들어 있지?" 안내판, 책상, 전원, 자료 배치가 보였습니다. 아직 순서는 정하지 않았습니다.',
+            '윤아는 아직 이 단계에서는 먼저 할 순서를 정하지 않는다고 설명했습니다.',
+          ),
+        },
+        {
+          id: 'm5-l2-gap-overlap',
+          label: '누락과 중복',
+          imageSrc: '/lessons/story/m5/m5-l2-scene-03.webp',
+          alt: '아이미가 목록 완성을 외치다 안내판이 두 번 있고 전원 확인이 없다는 걸 발견하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "목록 완성! …어? 왜 안내판이 두 번 있죠?"',
+            '아이미: "목록 완성! …어? 왜 안내판이 두 번 있죠? 그리고 전원 확인이… 없네요?"',
+            '아이미: "목록 완성! …어? 왜 안내판이 두 번 있죠? 그리고 전원 확인이… 없네요?" 관계없는 장식 구매도 섞여 있었습니다.',
+            '진우는 과제가 많아지는 것보다 필요한 일이 정확히 있는지가 중요하다고 보았습니다.',
+          ),
+        },
+        {
+          id: 'm5-l2-task-board',
+          label: '무엇을 빼고 더할까?',
+          imageSrc: '/lessons/story/m5/m5-l2-scene-04.webp',
+          alt: '윤아가 이 목록을 그대로 쓸 수 없다며 무엇을 빼고 더할지 학생에게 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "이 목록, 그대로 쓸 순 없겠어."',
+            '윤아: "이 목록, 그대로 쓸 순 없겠어. 무엇을 빼고, 무엇을 더해야 할까?"',
+            '윤아: "이 목록, 그대로 쓸 순 없겠어. 무엇을 빼고, 무엇을 더해야 할까? 겹친 것도 하나만 남겨야지."',
+            '진우는 다음 차시에 이 과제들 사이의 앞뒤 관계를 찾기로 했습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '분해는 필요한 일을 찾는 단계예요',
+          core: '큰 목표를 실행 가능한 작은 과제로 나눕니다.',
+          detail: {
+            full: '완성 그림에서 필요한 일을 골라요.',
+            light: '한 사람이 할 일과 함께 할 일을 나눕니다.',
+            challenge: '작은 일은 끝났는지 따로 확인할 수 있게 나눕니다.',
+          },
+        },
+        {
+          title: '순서는 아직 정하지 않아요',
+          core: '무엇이 필요한지 찾은 뒤에 앞뒤 관계를 정합니다.',
+          detail: {
+            full: '과제 카드를 먼저 모두 모아요.',
+            light: '분해와 순서 정하기를 다른 단계로 표시합니다.',
+            challenge: '필요한 일을 찾는 단계와 순서를 정하는 단계를 나누면 빠진 일을 더 잘 볼 수 있습니다.',
+          },
+          flow: { input: '큰 목표', process: '과제 분해·검토', output: '과제 보드' },
+        },
+        {
+          title: '빠짐·겹침·불필요를 확인해요',
+          core: '목표와 구성도를 기준으로 목록을 검토합니다.',
+          detail: {
+            full: '같은 일과 빠진 일에 표시해요.',
+            light: '목표와 관계없는 카드도 빼요.',
+            challenge: '빠진 일, 겹친 일, 필요 없는 일을 함께 살펴봅니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '부스 설치에 어떤 과제가 필요할까',
+      description: '순서를 정하기 전 완성 구성도에서 필요한 작은 과제를 찾아야 합니다.',
+      facts: [
+        '완성 부스에는 안내판, 책상, 전원, 체험 자료가 있습니다.',
+        '진우의 첫 목록에는 안내판과 책상만 있습니다.',
+        '전원은 성인과 안전 확인이 필요합니다.',
+        '개인 역할과 함께 할 역할을 나눌 수 있습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '큰 일을 나누는 첫 행동을 골라 보세요.',
+      choices: [
+        { id: 'pick-random-order', emoji: '🔢', label: '과제가 무엇인지 보기 전에 순서부터 정해요.', reaction: '빠진 과제가 나중에 나타나 순서를 다시 짜야 했습니다.' },
+        { id: 'list-needed-tasks', emoji: '🧩', label: '완성 모습을 보고 필요한 작은 과제를 모두 찾아요.', reaction: '아이미: "그림을 보니 제 목록의 구멍이 보여요!"' },
+        { id: 'one-person-all', emoji: '🙋', label: '진우 혼자 부스 전체를 맡아요.', reaction: '혼자서는 D-6까지 다 끝내기 어려웠습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '큰 목표에서 찾은 작은 과제를 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '부스 구성도와 첫 과제 목록, 역할 조건이 공개됩니다.',
+      facts: [
+        '전원 안전 확인 과제가 빠져 있습니다.',
+        '안내판 붙이기가 두 번 적혀 있습니다.',
+        '새 장식 구매는 현재 목표에 필요하지 않습니다.',
+        '전원 확인은 성인과 함께 해야 합니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '누락과 중복을 보여 주는 AI',
+      text: '첫 목록에는 전원 안전 확인과 체험 자료 배치가 빠졌고 안내판 작업은 겹칩니다. 순서를 정하기 전에 필요한 과제를 한 번씩 모두 넣어야 합니다.',
+      question: '과제 분해 보드에서 추가·합치기·삭제할 카드는 무엇인가요?',
+    },
+    artifact: {
+      kind: 'workflow-plan',
+      title: '과제 분해 보드',
+      prompt: '큰 목표, 필요한 작은 과제, 빠진 과제, 겹친 과제, 불필요한 과제, 역할을 정리해 보세요.',
+    },
+    transfer: {
+      title: '학급 발표 준비 나누기',
+      description: '학급 발표라는 큰 일을 준비해야 합니다. 먼저 무엇을 하겠어요?',
+      choices: [
+        { id: 'start-slides-only', emoji: '🖥️', label: '필요한 일을 보지 않고 화면 자료부터 만들어요.', reaction: '나중에 빠진 준비가 있다는 걸 알게 됐습니다.' },
+        { id: 'separate-presentation-tasks', emoji: '🧩', label: '내용·말하기·자료·장소 과제를 먼저 나눠요.', reaction: '필요한 일이 한눈에 보이니 빠짐없이 준비할 수 있었습니다.' },
+        { id: 'set-order-first', emoji: '🔢', label: '과제 목록 없이 1번부터 번호를 붙여요.', reaction: '무엇이 필요한지도 모른 채 번호만 붙인 셈이었습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_PROBLEM_NOTE,
+  };

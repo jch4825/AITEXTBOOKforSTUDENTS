@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { readStudioSource } from './lib/studio-source.mjs';
 
 const CORE_EXPERIENCES = {
   m1: ['m1-l1', 'm1-l2', 'm1-l3', 'm1-l4', 'm1-l5', 'm1-l6', 'm1-l7', 'm1-l8', 'm1-l9', 'm1-l10'],
@@ -21,7 +22,7 @@ const selectedModules = requestedModule ? [requestedModule] : Object.keys(CORE_E
 
 function readStorySource(moduleId) {
   const studioPath = `src/data/studios/${moduleId}.ts`;
-  return fs.readFileSync(studioPath, 'utf8');
+  return readStudioSource(studioPath);
 }
 
 function lessonObjective(moduleId, lessonId) {
@@ -92,7 +93,7 @@ for (const moduleId of selectedModules) {
 }
 
 const types = fs.readFileSync('src/features/studio/types.ts', 'utf8');
-const m1Studio = fs.readFileSync('src/data/studios/m1.ts', 'utf8');
+const m1Studio = readStudioSource('src/data/studios/m1.ts');
 const m1Lesson = fs.readFileSync('src/data/lessons/m1.ts', 'utf8');
 
 for (const token of ['VisualNovelStory', 'VisualNovelScene', 'VisualNovelKnowledge', 'visualNovel?: VisualNovelStory']) {
@@ -103,7 +104,7 @@ if (types.includes('speaker: string') || m1Studio.includes('speaker:')) {
 }
 for (const token of [
   "title: '아이미의 어려운 자기소개'",
-  "objective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.'",
+  "objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 내 말로 소개해요.'",
   "imageSrc: '/lessons/story/m1/m1-l1-scene-01.webp'",
   '아이미의 설명에는 어려운 말이 많았어요.',
   'AI(인공지능)는 사람처럼 학습하고 판단하여 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
@@ -114,7 +115,7 @@ for (const token of [
 for (const retiredToken of ['어제 자리표', '아이미가 본 것은 어제 자리표']) {
   if (m1Studio.includes(retiredToken)) throw new Error(`retired m1-l1 story remains: ${retiredToken}`);
 }
-if (!m1Lesson.includes("objective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.'")) {
+if (!m1Lesson.includes("objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 내 말로 소개해요.'")) {
   throw new Error('m1-l1 must expose one shared learning objective');
 }
 

@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_LIFE_NOTE } from './shared';
+
+export const M6_L10_STUDIO: StudioDefinition = {
+    id: 'm6-real-work-exploration',
+    lessonId: 'm6-l10',
+    moduleId: 'm6',
+    title: '직업을 실제 사람과 함께 알아보기',
+    subtitle: 'AI의 직업 예상과 실제 자료·직업인 설명을 비교하고 나의 흥미·강점·도움을 연결해요.',
+    format: 'A',
+    visualNovel: {
+      title: 'AI가 예상한 사서의 하루와 실제 이야기',
+      objective: '아이미가 예상한 직업의 모습과 실제 직업인의 이야기를 비교하고, 나의 흥미·강점·필요한 도움을 적어요.',
+      seasonTag: '[나 혼자 일주일 · 10화] 사서의 하루',
+      nextEpisodeHook: '다음 시간 — 마지막 과제, 나를 소개하기.',
+      scenes: [
+        {
+          id: 'm6-l10-question-prep',
+          label: '인터뷰 질문 준비',
+          imageSrc: '/lessons/story/m6/m6-l10-scene-01.webp',
+          alt: '학생들이 실제 직업인을 만나기 전 설레하며 질문 카드를 만드는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '실제 직업인을 만나기 전 물을 질문을 준비했어요.',
+            'AI 동아리는 마을 사서를 만나기 전에 “하루에 무슨 일을 하나요?”, “누구와 협력하나요?”라는 질문을 만들었습니다.',
+            'AI 동아리는 마을 사서를 만나기 전에 “하루에 무슨 일을 하나요?”, “누구와 협력하나요?”라는 질문을 만들었습니다. 만남에 대한 기대가 있었습니다.',
+            '진우는 실제 직업인을 만나는 것이 기대됐습니다.',
+          ),
+        },
+        {
+          id: 'm6-l10-ai-stereotype',
+          label: 'AI의 한 가지 예상',
+          imageSrc: '/lessons/story/m6/m6-l10-scene-02.webp',
+          alt: '아이미가 사서는 하루 종일 책을 정리하는 분이라고 아마도요 라며 예상하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "사서는 하루 종일 책을 정리하는 분이에요! 아마도요."',
+            '아이미: "사서는 하루 종일 책을 정리하는 분이에요! 아마도요." 진우: "\'아마도\'?"',
+            '아이미: "사서는 하루 종일 책을 정리하는 분이에요! 아마도요." 진우: "\'아마도\'?" 아이미 스스로 예상의 한계를 내비쳤습니다.',
+            '진우는 아이미의 예상이 전부는 아닐 수 있다고 생각했습니다.',
+          ),
+        },
+        {
+          id: 'm6-l10-worker-interview',
+          label: '실제 직업인 설명',
+          imageSrc: '/lessons/story/m6/m6-l10-scene-03.webp',
+          alt: '아이미가 예상보다 훨씬 다양한 일을 한다며 예상을 수정하겠다고 말하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '아이미: "제 예상보다 훨씬 다양한 일을 하시는군요. 예상을 수정할게요!"',
+            '아이미: "제 예상보다 훨씬 다양한 일을 하시는군요. 예상을 수정할게요!" 사람 돕기, 행사 기획, 협력이 실제 이야기에 담겨 있었습니다.',
+            '아이미: "제 예상보다 훨씬 다양한 일을 하시는군요. 예상을 수정할게요!" 사람 돕기, 행사 기획, 협력이 실제 이야기에 담겨 있었습니다. 발견까지였습니다.',
+            '진우는 실제 이야기가 예상보다 훨씬 풍부하다고 느꼈습니다.',
+          ),
+        },
+        {
+          id: 'm6-l10-personal-link',
+          label: '나와 연결하기',
+          imageSrc: '/lessons/story/m6/m6-l10-scene-04.webp',
+          alt: '윤아가 이제 너와 연결할 차례라며 흥미와 강점이 어디에 닿아 있는지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "이제 너와 연결할 차례야. 너의 흥미와 강점은 어디에 닿아 있어?"',
+            '윤아: "이제 너와 연결할 차례야. 이 일들 중 너의 흥미와 강점은 어디에 닿아 있어?"',
+            '윤아: "이제 너와 연결할 차례야. 이 일들 중 너의 흥미와 강점은 어디에 닿아 있어? 필요한 도움도 함께 생각해 봐."',
+            '진우는 지금 하나의 직업을 확정하는 대신 더 알아볼 질문이 생긴 것을 중요한 결과로 보았습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: 'AI로 질문을 준비해요',
+          core: '일, 사람, 장소, 도구, 도움을 알아볼 질문을 만듭니다.',
+          detail: {
+            full: '직업인에게 묻고 싶은 질문을 골라요.',
+            light: '정답을 받기보다 질문을 넓혀요.',
+            challenge: 'AI를 정보 결론이 아닌 탐색 질문 생성 도구로 제한합니다.',
+          },
+        },
+        {
+          title: '실제 자료와 사람 설명을 비교해요',
+          core: '공식 직업 자료와 실제 직업인의 경험을 AI 예상과 나란히 봅니다.',
+          detail: {
+            full: '같은 점과 다른 점을 표시해요.',
+            light: '사람과 장소마다 일이 다를 수 있어요.',
+            challenge: '다중 출처를 비교해 고정관념과 조직별 직무 변이를 식별합니다.',
+          },
+          flow: { input: 'AI 예상·탐색 질문', process: '자료·실제 직업인 비교', output: '나의 직업 탐색 카드' },
+        },
+        {
+          title: '흥미·강점·필요한 도움을 연결해요',
+          core: '내가 해 보고 싶은 일과 잘하는 점, 필요한 지원을 함께 적습니다.',
+          detail: {
+            full: '흥미와 강점 카드를 하나씩 골라요.',
+            light: '도움이 필요해도 직업 탐색을 계속할 수 있어요.',
+            challenge: '개인 특성과 환경 지원을 함께 고려하여 사람과 환경에 알맞은 시각을 적용합니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: 'AI가 말한 직업 모습이 전부일까',
+      description: 'AI는 사서를 책 정리로만 설명했지만 실제 자료와 직업인 인터뷰에는 더 다양한 일이 있습니다.',
+      facts: [
+        'AI는 사서의 일을 책 정리로만 예상했습니다.',
+        '공식 자료에는 이용자 안내와 프로그램 준비가 있습니다.',
+        '실제 직업인은 디지털 자료와 동료 협력도 설명했습니다.',
+        '직업과 자동화의 변화는 사람과 장소에 따라 다르므로 단정하지 않습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '직업을 더 정확하게 알아보는 방법을 골라 보세요.',
+      choices: [
+        { id: 'trust-job-stereotype', emoji: '📚', label: 'AI가 말한 한 가지 일만 그 직업의 전부라고 생각해요.', reaction: '실제 이야기와 비교하니 절반도 맞지 않았습니다.' },
+        { id: 'compare-real-worker', emoji: '🎙️', label: '공식 자료와 실제 직업인 설명을 AI 예상과 비교해요.', reaction: '아이미: "세 가지를 겹쳐 보니 진짜 모습이 보여요. 사람의 이야기가 제일 생생하네요."' },
+        { id: 'pick-job-by-tool', emoji: '🛠️', label: '좋아하는 도구 하나만 보고 직업을 정해요.', reaction: '직업에는 그 도구 말고도 다양한 활동이 있었습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '실제 직업인에게 물을 질문과 내 흥미·강점·필요한 도움을 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '공식 직업 자료와 실제 직업인 인터뷰, 기관별 차이가 공개됩니다.',
+      facts: [
+        '사서는 책 정리 외에도 사람 안내와 프로그램을 준비합니다.',
+        '컴퓨터와 디지털 자료를 사용하는 일도 있습니다.',
+        '기관과 담당 역할에 따라 하는 일이 다릅니다.',
+        '자동화가 직업에 미치는 영향은 하나로 단정할 수 없습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '직업 예상을 수정하는 AI',
+      text: '제가 사서의 일을 책 정리로만 설명한 것은 너무 좁은 예상이었습니다. 공식 자료와 실제 사서의 설명을 비교하고, 기관마다 다른 일과 필요한 협력·지원을 더 물어보세요.',
+      question: 'AI 예상 뒤에 새로 알게 된 직업 모습과 더 확인할 질문은 무엇인가요?',
+    },
+    artifact: {
+      kind: 'comparison-table',
+      title: '나의 직업 탐색 카드',
+      prompt: 'AI 첫 예상, 공식 자료, 실제 직업인 설명, 같은 점·다른 점, 내 흥미·강점·필요한 도움, 다음 질문을 적어 보세요.',
+    },
+    transfer: {
+      title: '다른 직업인을 만나기 전',
+      description: '마을 제빵사를 만나기 전에 AI가 예상한 정보가 있습니다. 어떻게 준비하겠어요?',
+      choices: [
+        { id: 'repeat-ai-job-answer', emoji: '🤖', label: 'AI 예상만 읽고 실제 질문은 하지 않아요.', reaction: '실제로 만나 보니 예상과 다른 점이 많았습니다.' },
+        { id: 'prepare-next-interview', emoji: '📝', label: '일·협력·도구·도움 질문을 만들고 실제 사람 설명과 비교해요.', reaction: '질문을 준비하니 실제 이야기를 더 깊이 들을 수 있었습니다.' },
+        { id: 'predict-job-disappears', emoji: '📉', label: '자동화 때문에 곧 없어질 직업이라고 미리 정해요.', reaction: '단정하기보다 직접 물어보는 편이 나았습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_LIFE_NOTE,
+  };

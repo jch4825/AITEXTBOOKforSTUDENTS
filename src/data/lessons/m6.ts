@@ -28,7 +28,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 1,
     kind: 'experience',
     title: '조건에 맞는 장보기',
-    objective: '오늘은 필요한 것·집에 있는 것·예산·알레르기 정보를 보고 AI 장보기 목록을 고쳐 봐요.',
+    objective: '아이미의 장보기 목록을 재고·가격·예산·알레르기와 비교해, 빼거나 바꿔서 안전한 목록으로 고쳐요.',
     standards: [CHOICE_STANDARD],
     bodyEasy: 'AI 목록과 실제 재고·가격·건강 조건을 비교해 필요한 것만 남겨요.',
     bodyNormal:
@@ -43,7 +43,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 2,
     kind: 'experience',
     title: '돈은 계산기로 확인하기',
-    objective: '오늘은 가격표와 화폐를 보고 합계와 거스름돈을 계산기로 확인해 봐요.',
+    objective: '아이미가 계산한 금액을 믿기 전에, 가격표를 보고 계산기로 합계와 거스름돈을 확인해요.',
     standards: MONEY_STANDARDS,
     bodyEasy: '먼저 예상하고 가격표·계산기·영수증으로 확인해요.',
     bodyNormal:
@@ -58,7 +58,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 3,
     kind: 'experience',
     title: '지도와 현장 표지로 길 확인하기',
-    objective: '오늘은 고정된 지도에서 출발점·목적지·표지를 찾고 공식 안내나 믿을 사람에게 길을 확인해 봐요.',
+    objective: '연습 지도에서 출발점과 목적지를 찾고, 아이미의 길 안내를 지도·표지와 대조해 안전한 길을 골라요.',
     standards: [ROUTE_STANDARDS[0]],
     bodyEasy: '고정된 연습 지도와 현장 표지를 보고 안전한 길을 확인해요.',
     bodyNormal:
@@ -73,7 +73,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 4,
     kind: 'experience',
     title: '교통 정보와 방향 확인하기',
-    objective: '오늘은 버스 번호·방향·정류장·운행 공지를 확인하고 상황이 다르면 안전하게 도움을 요청해 봐요.',
+    objective: '버스 번호·방향·정류장을 오늘 공지와 확인하고, 헷갈리면 타기 전에 안전하게 도움을 요청해요.',
     standards: ROUTE_STANDARDS,
     bodyEasy: '번호가 비슷해도 방향과 목적지를 공식 안내로 다시 확인해요.',
     bodyNormal:
@@ -88,7 +88,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 5,
     kind: 'experience',
     title: '공식 예보로 옷 준비하기',
-    objective: '오늘은 지역·날짜가 있는 예보에서 기온·비·바람을 보고 활동과 내 감각에 맞는 준비를 골라봐요.',
+    objective: '공식 예보의 기온·비·바람을 확인하고, 아이미의 한마디 대신 활동과 내 감각에 맞는 준비물을 골라요.',
     standards: [LIFE_STANDARD],
     bodyEasy: '지역과 날짜가 있는 공식 예보를 보고 나에게 맞는 준비를 골라요.',
     bodyNormal:
@@ -103,7 +103,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 6,
     kind: 'experience',
     title: '조건에 맞게 음식 계획 바꾸기',
-    objective: '오늘은 재료·알레르기·도구·사람 도움 조건을 보고 안전한 음식 계획을 골라 순서를 만들어 봐요.',
+    objective: '재료·알레르기·도구·도움 조건을 확인해, 아이미의 요리 초안을 안전한 순서로 고쳐 조립해요.',
     standards: ['[9정통03-03] 가정생활에서 디지털 기술이 적용된 사례를 살펴보고 경험한다.'],
     bodyEasy: '실제 조리 대신 카드로 안전한 음식 계획과 대체 재료를 골라요.',
     bodyNormal:
@@ -118,7 +118,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 7,
     kind: 'experience',
     title: '나에게 맞는 하루 계획',
-    objective: '오늘은 해야 할 일·쉬는 시간·도움·걸리는 시간을 넣어 계획을 만들고 일정이 바뀌면 고쳐 봐요.',
+    objective: '아이미의 빽빽한 일정에 쉬는 시간과 도움 시간을 넣어 고치고, 출발이 늦어지면 계획을 다시 맞춰요.',
     standards: [LIFE_STANDARD],
     bodyEasy: '할 일과 쉼, 도움 시간을 함께 넣어 나에게 맞는 계획을 만들어요.',
     bodyNormal:
@@ -133,7 +133,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 8,
     kind: 'experience',
     title: '아픈 상태를 사람에게 알리기',
-    objective: '오늘은 몸의 불편함을 말·그림 카드로 표현하고 믿을 만한 어른에게 먼저 알려 봐요.',
+    objective: '몸이 불편할 때 말·그림 카드로 상태를 표현하는 연습을 아이미와 하고, 믿을 만한 어른에게 먼저 알려요.',
     standards: [LIFE_STANDARD],
     bodyEasy: '어디가 언제부터 어떻게 불편한지 표현하고 사람에게 먼저 알려요.',
     bodyNormal:
@@ -148,7 +148,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 9,
     kind: 'experience',
     title: '인사·도움·거절을 내 방식으로 표현하기',
-    objective: '오늘은 인사·도움 요청·거절·다시 말해 달라는 표현을 말·글·그림 카드 중 편한 방법으로 연습해 봐요.',
+    objective: '인사·도움 요청·거절·다시 말해 달라는 표현을, 말·글·그림 카드 중 편한 방법으로 아이미와 연습해요.',
     standards: [DIALOG_STANDARD],
     bodyEasy: '도움, 거절, 다시 설명을 내게 편한 방법으로 표현해요.',
     bodyNormal:
@@ -163,7 +163,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 10,
     kind: 'experience',
     title: '직업을 실제 사람과 함께 알아보기',
-    objective: '오늘은 직업 자료와 사람의 설명을 비교하고 나의 흥미·강점·필요한 도움을 적어 봐요.',
+    objective: '아이미가 예상한 직업의 모습과 실제 직업인의 이야기를 비교하고, 나의 흥미·강점·필요한 도움을 적어요.',
     standards: CAREER_STANDARDS,
     bodyEasy: 'AI의 예상과 실제 직업인의 설명을 비교하고 내 질문을 만들어요.',
     bodyNormal:
@@ -178,7 +178,7 @@ export const M6_LESSONS: LessonContent[] = [
     number: 11,
     kind: 'experience',
     title: '상대에 맞는 자기소개 만들기',
-    objective: '오늘은 내가 먼저 자기소개를 만들고 AI 제안을 고쳐 교실용·온라인용 두 버전으로 완성해 봐요.',
+    objective: '내가 먼저 쓴 자기소개에 아이미의 제안을 골라 반영해, 교실용과 온라인용 두 버전을 완성해요.',
     standards: [INTRO_STANDARD],
     bodyEasy: '내가 먼저 소개를 만들고 상대와 장소에 맞게 공개 범위를 바꿔요.',
     bodyNormal:

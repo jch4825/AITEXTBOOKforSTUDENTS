@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import ts from 'typescript';
+import { readStudioSource } from './lib/studio-source.mjs';
 
 const file = 'src/data/studios/m5.ts';
-if (!fs.existsSync(file)) throw new Error('M5 studio definitions are missing');
-const source = fs.readFileSync(file, 'utf8');
+const source = readStudioSource(file);
 const sharedSource = fs.readFileSync('src/data/studios/shared.ts', 'utf8');
 
 for (const id of ['m5-problem-definition-map', 'm5-safe-clarification', 'm5-condition-change-plan']) {

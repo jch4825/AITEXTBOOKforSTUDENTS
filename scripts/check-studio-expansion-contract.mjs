@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { readStudioSource } from './lib/studio-source.mjs';
 
 const lessonView = fs.readFileSync('src/views/LessonView.tsx', 'utf8');
 for (const forbidden of [
@@ -55,8 +56,7 @@ for (const forbidden of ["themeFor('m5')", "['m5-l1', 'm5-l6', 'm5-l11']", "less
 }
 
 const m1StudioPath = 'src/data/studios/m1.ts';
-if (!fs.existsSync(m1StudioPath)) throw new Error('M1 studio definitions are missing');
-const m1 = fs.readFileSync(m1StudioPath, 'utf8');
+const m1 = readStudioSource(m1StudioPath);
 for (const id of [
   'm1-aimi-introduction',
   'm1-feature-investigation',
@@ -90,8 +90,7 @@ for (const token of ["lessonId: 'm1-l11'", "'m1-l1'", "'m1-l10'", '아이미 사
 }
 
 const m2StudioPath = 'src/data/studios/m2.ts';
-if (!fs.existsSync(m2StudioPath)) throw new Error('M2 studio definitions are missing');
-const m2 = fs.readFileSync(m2StudioPath, 'utf8');
+const m2 = readStudioSource(m2StudioPath);
 for (const id of [
   'm2-missing-information-lab',
   'm2-one-purpose-at-a-time',
@@ -136,8 +135,7 @@ for (const token of ["lessonId: 'm2-l11'", "'m2-l1'", "'m2-l10'", '나의 프롬
 }
 
 const m3StudioPath = 'src/data/studios/m3.ts';
-if (!fs.existsSync(m3StudioPath)) throw new Error('M3 studio definitions are missing');
-const m3 = fs.readFileSync(m3StudioPath, 'utf8');
+const m3 = readStudioSource(m3StudioPath);
 for (const id of [
   'm3-question-depth-lab',
   'm3-word-evidence-lab',
@@ -182,8 +180,7 @@ for (const token of ["lessonId: 'm3-l11'", "'m3-l1'", "'m3-l10'", '나의 공부
 }
 
 const m4StudioPath = 'src/data/studios/m4.ts';
-if (!fs.existsSync(m4StudioPath)) throw new Error('M4 studio definitions are missing');
-const m4 = fs.readFileSync(m4StudioPath, 'utf8');
+const m4 = readStudioSource(m4StudioPath);
 for (const id of [
   'm4-confident-answer-audit',
   'm4-source-trust-lab',
@@ -228,8 +225,7 @@ for (const token of ["lessonId: 'm4-l11'", "'m4-l1'", "'m4-l10'", '나의 AI 안
 }
 
 const m5StudioPath = 'src/data/studios/m5.ts';
-if (!fs.existsSync(m5StudioPath)) throw new Error('M5 studio definitions are missing');
-const m5 = fs.readFileSync(m5StudioPath, 'utf8');
+const m5 = readStudioSource(m5StudioPath);
 for (const id of [
   'm5-problem-definition-map',
   'm5-task-decomposition-board',
@@ -274,8 +270,7 @@ for (const token of ["lessonId: 'm5-l12'", "'m5-l1'", "'m5-l11'", '문제 해결
 }
 
 const m6StudioPath = 'src/data/studios/m6.ts';
-if (!fs.existsSync(m6StudioPath)) throw new Error('M6 studio definitions are missing');
-const m6 = fs.readFileSync(m6StudioPath, 'utf8');
+const m6 = readStudioSource(m6StudioPath);
 for (const id of [
   'm6-shopping-choice',
   'm6-money-calculator-check',

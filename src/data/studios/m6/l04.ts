@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_LIFE_NOTE } from './shared';
+
+export const M6_L4_STUDIO: StudioDefinition = {
+    id: 'm6-transit-change',
+    lessonId: 'm6-l4',
+    moduleId: 'm6',
+    title: '교통 정보와 방향 확인하기',
+    subtitle: '비슷한 번호와 반대 방향을 구분하고 공식 공지와 현장 안내를 우선해요.',
+    format: 'B',
+    visualNovel: {
+      title: '12번과 21번, 어느 방향일까',
+      objective: '버스 번호·방향·정류장을 오늘 공지와 확인하고, 헷갈리면 타기 전에 안전하게 도움을 요청해요.',
+      seasonTag: '[나 혼자 일주일 · 4화] 12번과 21번',
+      nextEpisodeHook: '다음 시간 — 「따뜻해요」만 믿어도 될까.',
+      scenes: [
+        {
+          id: 'm6-l4-similar-routes',
+          label: '비슷한 노선',
+          imageSrc: '/lessons/story/m6/m6-l4-scene-01.webp',
+          alt: '진우가 버스가 왔는데 12번인지 21번인지 숫자가 헷갈린다고 말하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "왔다! …어? 12번이야 21번이야? 숫자가 헷갈려."',
+            '진우: "왔다! …어? 12번이야 21번이야? 숫자가 헷갈려." 두 버스는 반대 방향이었습니다.',
+            '진우: "왔다! …어? 12번이야 21번이야? 숫자가 헷갈려." 두 버스는 반대 방향이었습니다. 연습 정류장 화면이었습니다.',
+            '진우는 숫자만 보고 급하게 타면 안 된다고 느꼈습니다.',
+          ),
+        },
+        {
+          id: 'm6-l4-old-ai-answer',
+          label: '오래된 일반 안내',
+          imageSrc: '/lessons/story/m6/m6-l4-scene-02.webp',
+          alt: '아이미가 평소에는 12번이면 된다고 말하고 윤아가 오늘 공지에 우회한다고 말하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "평소에는 12번이면 돼요!" 윤아: "잠깐 — 오늘 공지에 12번은 우회한대."',
+            '아이미: "평소에는 12번이면 돼요!" 윤아: "잠깐 — 오늘 공지에 12번은 우회한대."',
+            '아이미: "평소에는 12번이면 돼요!" 윤아: "잠깐 — 오늘 공지에 12번은 우회한대." 평소 정보와 오늘 정보가 충돌했습니다.',
+            '윤아는 오늘 날짜가 있는 공지를 먼저 확인하려 했습니다.',
+          ),
+        },
+        {
+          id: 'm6-l4-direction-notice',
+          label: '방향과 공지 확인',
+          imageSrc: '/lessons/story/m6/m6-l4-scene-03.webp',
+          alt: '번호 방향 정류장 오늘 공지를 순서대로 짚어 확인하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '번호, 방향, 정류장, 오늘 공지를 순서대로 확인했어요.',
+            '학생들은 목적지, 버스 번호, 방향 표시, 정류장 번호, 오늘 우회 공지를 한 줄씩 확인했습니다.',
+            '학생들은 목적지, 버스 번호, 방향 표시, 정류장 번호, 오늘 우회 공지를 한 줄씩 확인했습니다. 확인 방법을 찾은 참이었습니다.',
+            '진우는 여러 가지를 함께 봐야 헷갈리지 않는다는 것을 알았습니다.',
+          ),
+        },
+        {
+          id: 'm6-l4-help-choice',
+          label: '탈래, 물어볼래?',
+          imageSrc: '/lessons/story/m6/m6-l4-scene-04.webp',
+          alt: '윤아가 공지가 복잡하다며 그냥 탈지 누구에게 물어볼지 학생에게 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "공지가 복잡하네. 이럴 때 너라면 — 그냥 탈래, 아니면 물어볼래?"',
+            '윤아: "공지가 복잡하네. 이럴 때 너라면 — 그냥 탈래, 아니면 누구에게 뭐라고 물어볼래?"',
+            '윤아: "공지가 복잡하네. 이럴 때 너라면 — 그냥 탈래, 아니면 누구에게 뭐라고 물어볼래? 목적지도 함께 말해 줘."',
+            '진우는 묻는 것이 이동을 늦추는 일이 아니라 잘못된 방향을 막는 행동이라고 느꼈습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '번호와 방향을 함께 봐요',
+          core: '같은 번호라도 가는 방향과 정류장 위치를 확인합니다.',
+          detail: {
+            full: '목적지와 같은 방향 카드를 찾아요.',
+            light: '비슷한 번호를 천천히 비교해요.',
+            challenge: '노선 번호, 방향, 목적지, 타는 곳이 서로 맞는지 함께 확인합니다.',
+          },
+        },
+        {
+          title: '오늘 공식 공지를 우선해요',
+          core: '날짜가 있는 공식 앱·정류장 공지와 현장 표지를 봅니다.',
+          detail: {
+            full: '오늘 날짜와 우회 표시를 찾아요.',
+            light: 'AI 일반 답만 보고 타지 않아요.',
+            challenge: '변동성이 높은 교통 정보는 최신성, 출처, 현장 일치성을 기준으로 평가합니다.',
+          },
+          flow: { input: '목적지·노선 후보', process: '방향·정류장·공식 공지 확인', output: '승차·대기·도움 요청' },
+        },
+        {
+          title: '다르면 타기 전에 도움을 요청해요',
+          core: '공지가 다르거나 이해하기 어려우면 직원이나 함께 있는 어른에게 묻습니다.',
+          detail: {
+            full: '목적지와 질문 문장을 함께 말해요.',
+            light: '움직이기 전에 안전한 곳에서 확인해요.',
+            challenge: '정보 불일치 시 실행을 보류하고 책임 있는 현장 확인자로 에스컬레이션합니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '비슷한 번호와 오늘 우회 공지',
+      description: '수업용 연습 화면에서 목적지, 방향, 정류장, 날짜가 있는 운행 공지를 확인해야 합니다.',
+      facts: [
+        '목적지는 마을회관입니다.',
+        '12번과 21번은 반대 방향입니다.',
+        '오늘 12번은 다른 정류장으로 우회합니다.',
+        '이 화면은 실시간 길 안내가 아닌 교실용 연습 자료입니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '탈 버스와 방향을 확인하는 방법을 골라 보세요.',
+      choices: [
+        { id: 'board-similar-number', emoji: '🚌', label: '숫자가 비슷한 먼저 온 버스를 바로 타요.', reaction: '반대 방향으로 갈 뻔했습니다.' },
+        { id: 'check-route-direction', emoji: '🧭', label: '번호·방향·정류장·오늘 공식 공지를 모두 확인해요.', reaction: '아이미: "네 가지를 다 보셨네요. 오늘은 저보다 공지가 정확해요!"' },
+        { id: 'follow-old-ai-route', emoji: '🤖', label: '오늘 공지보다 AI의 평소 답을 따라요.', reaction: '아이미: "오늘은 공지를 우선하세요. 저는 우회 정보를 몰랐어요."' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '목적지, 확인한 방향, 오늘 공지, 도움이 필요한 부분을 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '오늘 날짜가 있는 우회 공지와 반대 방향 표지가 공개됩니다.',
+      facts: [
+        '마을회관 방향 표지는 21번 카드와 같습니다.',
+        '12번은 오늘 다른 정류장으로 우회합니다.',
+        'AI 답에는 오늘 변경 내용이 없습니다.',
+        '현장 직원 역할의 교사에게 승차 위치를 확인할 수 있습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '최신 공지 확인을 권하는 AI',
+      text: '제 일반 안내에는 오늘 우회 정보가 없었습니다. 번호만 보지 말고 마을회관 방향, 정류장 번호, 오늘 공식 공지를 확인하고 헷갈리면 타기 전에 직원에게 물어보세요.',
+      question: '오늘의 이동 결정을 바꾼 가장 최신 공식 정보는 무엇인가요?',
+    },
+    artifact: {
+      kind: 'action-card',
+      title: '교통 확인 기록과 도움 요청 문장',
+      prompt: '목적지, 노선 후보, 방향, 정류장, 공식 공지, 최종 행동, 직원에게 물을 문장을 적어 보세요.',
+    },
+    transfer: {
+      title: '지하철 반대 방향 상황',
+      description: '노선 색은 같지만 승강장 방향이 반대이고 안내 방송이 어렵습니다. 어떻게 하겠어요?',
+      choices: [
+        { id: 'take-any-platform', emoji: '🚇', label: '노선 색이 같으니 가까운 승강장으로 가요.', reaction: '반대 방향 열차를 탈 뻔했습니다.' },
+        { id: 'ask-station-staff', emoji: '🙋', label: '목적지 방향 표지와 공지를 보고 역무원에게 다시 확인해요.', reaction: '역무원의 확인으로 정확한 방향을 알 수 있었습니다.' },
+        { id: 'guess-from-crowd', emoji: '👥', label: '사람이 많은 쪽이 맞다고 생각해요.', reaction: '사람이 많다고 방향이 맞는 것은 아니었습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_LIFE_NOTE,
+  };

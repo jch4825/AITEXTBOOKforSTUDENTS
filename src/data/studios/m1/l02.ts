@@ -1,0 +1,200 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+
+export const M1_L2_STUDIO: StudioDefinition = {
+    id: 'm1-feature-investigation',
+    lessonId: 'm1-l2',
+    moduleId: 'm1',
+    title: '기계와 AI는 어떻게 다를까?',
+    subtitle: '기계가 결과를 바꾸는 데 어떤 정보를 쓰는지 살펴보고 AI가 쓰인 기능을 찾아봐요.',
+    format: 'D',
+    decisionTitle: '아이미에게 쉽게 물어봐요.',
+    suggestedQuestions: [
+      '인공지능은 어떻게 대답을 만드는 거야?',
+      '인공지능에게 공부에 대해 질문해도 돼?',
+      '컴퓨터는 사람처럼 생각할 수 있어?',
+    ],
+    visualNovel: {
+      title: '동아리방의 세 가지 도구',
+      objective: '버튼 선풍기·센서 자동문·추천 앱이 받는 정보를 비교해, AI 기능이 쓰인 것을 이유와 함께 골라요.',
+      seasonTag: '[아이미가 왔다 · 2화] 동아리방의 세 가지 도구',
+      nextEpisodeHook: '다음 시간 — 아이미가 급식 메뉴를 발표한대요.',
+      scenes: [
+        {
+          id: 'three-tools',
+          label: '장면 1 · 세 가지 도구',
+          imageSrc: '/lessons/story/m1/m1-l2-scene-01.webp',
+          alt: '윤아가 선풍기와 자동문과 음악 추천 앱을 함께 살펴보는 장면',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "저도 궁금해요. 저랑 뭐가 다른가요?"',
+            '아이미: "궁금한 게 있어요. 선풍기도, 자동문도, 음악 앱도 움직이는데… 저랑 뭐가 다른가요?"',
+            '아이미: "궁금한 게 있어요. 선풍기도, 자동문도, 음악 앱도 움직이는데… 저랑 뭐가 다른가요?" 윤아는 세 도구를 나란히 놓고 살펴보기 시작했습니다.',
+            '움직이는 모습만 보면 모두 똑똑한 기계처럼 느껴질 수 있어요.',
+          ),
+        },
+        {
+          id: 'first-sort',
+          label: '장면 2 · 첫 번째 분류',
+          imageSrc: '/lessons/story/m1/m1-l2-scene-02.webp',
+          alt: '진우가 스스로 움직이면 전부 AI라고 성급하게 말하고 윤아가 갸웃하는 장면',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "간단해! 스스로 움직이면 전부 AI지!"',
+            '진우: "간단해! 스스로 움직이면 전부 AI지!" 윤아는 고개를 갸웃했습니다.',
+            '진우: "간단해! 스스로 움직이면 전부 AI지!" 윤아는 고개를 갸웃했습니다. "정말 그렇게 간단할까?"',
+            '처음 생각은 새 정보를 보기 전의 소중한 출발점이에요.',
+          ),
+        },
+        {
+          id: 'signal-board',
+          label: '장면 3 · 입력 신호 조사',
+          imageSrc: '/lessons/story/m1/m1-l2-scene-03.webp',
+          alt: '윤아의 확인 질문으로 버튼 센서 사용기록의 차이를 하나씩 찾아보는 장면',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "선풍기는 뭘 받고 움직이지?"',
+            '윤아: "잠깐, 하나씩 보자. 선풍기는 뭘 받고 움직이지?" 하나씩 짚어 보니 버튼, 센서, 사용 기록이 서로 달랐습니다.',
+            '윤아: "잠깐, 하나씩 보자. 선풍기는 뭘 받고 움직이지? 자동문은? 음악 앱은?" 하나씩 짚어 보니 버튼, 센서, 사용 기록이 서로 다른 신호였습니다.',
+            '기기 이름보다 그 기능이 무엇을 입력받는지 살펴봐요.',
+          ),
+        },
+        {
+          id: 'feature-map',
+          label: '장면 4 · 저는 어느 쪽인가요?',
+          imageSrc: '/lessons/story/m1/m1-l2-scene-04.webp',
+          alt: '아이미가 빈 지도를 함께 채우자며 학생에게 묻는 장면',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "저는 어느 쪽인가요?"',
+            '아이미: "그럼 저는 어느 쪽인가요? 세 도구 중 AI가 쓰인 건 무엇일까요?"',
+            '아이미: "그럼 저는 어느 쪽인가요? 세 도구 중 AI가 쓰인 건 무엇일까요? 입력, 기능, 결과를 나눠 보면 답이 보일까요?"',
+            '하나의 기기를 AI 또는 비AI로 단순하게 나누지 않아도 돼요.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '기기보다 기능을 봐요',
+          core: '기기 전체가 아니라 어떤 기능을 가지고 있는지 먼저 확인합니다.',
+          detail: {
+            full: '한 기기에는 여러 기능이 있어요.',
+            light: '같은 기기 안에도 버튼 기능, 센서 기능, AI 기능이 함께 있을 수 있습니다.',
+            challenge: '기기의 이름이나 겉모습이 아니라 분석하려는 기능의 입력, 처리 방식, 결과를 구분합니다.',
+          },
+        },
+        {
+          title: '입력 신호가 달라요',
+          core: '버튼, 센서, 타자, 음성 등으로 기계에게 요구할 수 있어요.',
+          detail: {
+            full: '무엇을 받는지 찾아봐요.',
+            light: '버튼은 직접 명령을, 센서는 주변 변화를, 타자와 음성은 글자나 말소리로 요구 사항을 전달합니다.',
+            challenge: '입력의 종류와 방식을 살펴보면 단순 작동과 감지, 텍스트/음성 기반 처리의 차이를 설명할 수 있습니다.',
+          },
+          flow: { input: '버튼·센서·타자·음성', process: '작동·감지·입력 처리', output: '바람·문 열림·결과 제공' },
+        },
+        {
+          title: '기능은 함께 쓰일 수 있어요',
+          core: '자동화, 센서, AI는 한 도구에서 함께 작동할 수 있습니다.',
+          detail: {
+            full: '한 가지만 들어 있는 것은 아니에요.',
+            light: '로봇청소기처럼 센서로 보고 AI로 경로를 고르는 도구도 있습니다.',
+            challenge: '기능을 겹치지 않는 상자로 나누기보다 각 기능이 맡은 역할과 사람의 확인 지점을 설명합니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '세 도구의 다른 작동 방식',
+      description: '선풍기, 자동문, 음악 추천 앱이 모두 움직이거나 결과를 바꿉니다. 어떤 기능에 AI가 쓰였는지는 아직 확인하지 않았습니다.',
+      facts: [
+        '선풍기는 사람이 누른 버튼 신호를 받습니다.',
+        '자동문은 앞에 선 사람을 센서로 감지합니다.',
+        '음악 추천 앱은 이전에 들은 음악 기록을 사용합니다.',
+      ],
+      stimuli: [
+        {
+          id: 'pecs-fan',
+          kind: 'image',
+          src: '/images/pecs_electric_fan.webp',
+          alt: '선풍기 PECS 카드 (버튼 입력)',
+          caption: '선풍기 (버튼)',
+        },
+        {
+          id: 'pecs-door',
+          kind: 'image',
+          src: '/images/pecs_automatic_door.webp',
+          alt: '자동문 PECS 카드 (센서 감지)',
+          caption: '자동문 (센서)',
+        },
+        {
+          id: 'pecs-music-app',
+          kind: 'image',
+          src: '/images/pecs_music_app.webp',
+          alt: '음악 추천 앱 PECS 카드 (AI 추천)',
+          caption: '음악 추천 앱 (AI)',
+        },
+      ],
+    },
+    firstAttempt: {
+      prompt: '세 도구 중 AI가 쓰인 기능을 지금 어떻게 판단하겠습니까?',
+      choices: [
+        { id: 'inspect-input-output', emoji: '🔎', label: '각 기능이 무엇을 받고 어떤 결과를 내는지 살펴봅니다.', isCorrect: true, reaction: '윤아: "그거야. 받는 정보부터 보면 헷갈리지 않아."' },
+        { id: 'separate-input-modes', emoji: '⚡', label: '버튼, 센서, 타자/음성 입력에 따라 처리 방법이 달라짐을 봅니다.', isCorrect: true, reaction: '아이미: "제 입력은 글과 말이에요!"' },
+        { id: 'automatic-means-ai', emoji: '⚙️', label: '자동으로 움직이면 모두 AI라고 생각합니다.', isCorrect: false, reaction: '윤아가 자동문을 가리켰습니다. "이건 그냥 센서로 열리는 건데?"' },
+        { id: 'app-only-by-name', emoji: '📱', label: '기기 모양이나 앱 이름만 보고 정합니다.', isCorrect: false, reaction: '진우: "이름만 보고 샀다가 후회한 적 있잖아…"' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '어떤 기기의 입력이 가장 궁금한가요?',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '새로 본 로봇청소기는 센서로 장애물을 감지하고, 이전 청소 기록을 사용해 다음 경로를 바꿉니다.',
+      facts: [
+        '장애물 센서는 주변 상태를 감지합니다.',
+        '청소 기록은 먼지가 많았던 위치를 남깁니다.',
+        '경로 추천 기능은 센서 정보와 이전 기록을 함께 사용합니다.',
+        '사람은 위험한 물건을 치우고, 청소가 잘 되었는지 최종 확인합니다.',
+      ],
+      stimuli: [
+        {
+          id: 'pecs-robot-vacuum',
+          kind: 'image',
+          src: '/images/pecs_robot_vacuum.webp',
+          alt: '로봇청소기 PECS 카드 (센서+AI 복합)',
+          caption: '로봇청소기 (센서+AI)',
+        },
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '아이미의 생각',
+      text: '로봇청소기와 자동문은 기계입니다. 둘 다 스스로 움직이지요. 하지만 로봇청소기만 인공지능이라고 부릅니다. 자동문과 로봇청소기가 다른 점은 무엇일까요?',
+      question: '자동문과 로봇청소기가 다른 점은 무엇일까요?',
+    },
+    artifact: {
+      kind: 'visual-plan',
+      title: '기능 분석 지도',
+      prompt: '도구 하나를 골라 입력, 기능, 결과, 사람이 확인할 일을 네 칸에 연결해 봐요.',
+    },
+    transfer: {
+      title: '스마트 조명을 살펴본다면',
+      description: '스마트 조명이 움직임을 감지해 켜지고, 내가 자주 끄는 시간을 배워 밝기를 추천합니다.',
+      prompt: '나만의 표현으로 스마트 조명 속에 들어있는 여러 기능을 친구에게 설명해보자.',
+      stimuli: [
+        {
+          id: 'smart-light-real',
+          kind: 'image',
+          src: '/images/smart_light_real.webp',
+          alt: '스마트 조명 및 제어 단말기 사진',
+          caption: '스마트 조명 (센서 + AI 기능)',
+        },
+      ],
+      choices: [
+        { id: 'separate-sensor-action', emoji: '💡', label: '움직임 감지 센서 기능과 조명이 켜지는 기본 작동을 구분하여 설명합니다.', isCorrect: true, reaction: '아이미: "정확해요! 센서와 기본 작동은 다른 기능이에요."' },
+        { id: 'combine-sensor-ai', emoji: '🧩', label: '센서 감지 기능과 사용 습관을 배우는 밝기 추천 AI가 함께 작동함을 설명합니다.', isCorrect: true, reaction: '윤아: "맞아, 한 기기에 여러 기능이 같이 있을 수 있어."' },
+        { id: 'call-whole-device-ai', emoji: '⚙️', label: '조명의 겉모습만 보고 기기 전체를 무조건 하나의 AI라고만 부릅니다.', isCorrect: false, reaction: '진우: "겉모습만 보면 또 헷갈리는데?"' },
+        { id: 'all-electric-ai', emoji: '⚡', label: '전기로 켜지는 모든 조명은 스스로 생각하므로 무조건 AI라고 부릅니다.', isCorrect: false, reaction: '아이미: "전기로 켜진다고 다 저 같은 건 아니에요."' },
+      ],
+    },
+  };

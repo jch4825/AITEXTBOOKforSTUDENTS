@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_PROBLEM_NOTE } from './shared';
+
+export const M5_L1_STUDIO: StudioDefinition = {
+    id: 'm5-problem-definition-map',
+    lessonId: 'm5-l1',
+    moduleId: 'm5',
+    title: '문제를 정확히 찾기',
+    subtitle: '배송 지연 상황에서 현재·목표·모르는 정보·도움을 나누어 봐요.',
+    format: 'A',
+    visualNovel: {
+      title: '물품이 오지 않은 빈 설치 공간',
+      objective: '물품이 안 온 상황에서 지금 모습과 원하는 모습을 나눠 적고, 아이미와 함께 진짜 문제를 한 문장으로 만들어요.',
+      seasonTag: '[체험회 D-7 · 1화] 오지 않은 물품',
+      nextEpisodeHook: '다음 시간 — 이번엔 「부스를 설치해」라는 큰 일이 온다.',
+      scenes: [
+        {
+          id: 'm5-l1-empty-space',
+          label: '빈 설치 공간',
+          imageSrc: '/lessons/story/m5/m5-l1-scene-01.webp',
+          alt: '진우가 책상도 안내판도 안 왔다며 행사를 못 한다고 말하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "…없어. 책상도 안내판도 안 왔어. 행사를 못 해!"',
+            '진우: "…없어. 책상도 안내판도 안 왔어. 행사를 못 해!" 체험회 전날 설치 공간은 텅 비어 있었습니다.',
+            '진우: "…없어. 책상도 안내판도 안 왔어. 행사를 못 해!" 체험회 전날 설치 공간은 텅 비어 있었습니다. 막막함이 앞섰습니다.',
+            '진우는 답답했지만 무엇을 알고 무엇을 모르는지부터 살펴보기로 했습니다.',
+          ),
+        },
+        {
+          id: 'm5-l1-current-goal',
+          label: '현재와 목표',
+          imageSrc: '/lessons/story/m5/m5-l1-scene-02.webp',
+          alt: '윤아가 못 해가 아니라 지금 뭐가 있고 언제까지 뭐가 필요한지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "\'못 해\'가 아니라 — 지금 뭐가 있고, 언제까지 뭐가 필요한 거야?"',
+            '윤아: "잠깐. \'못 해\'가 아니라 — 지금 뭐가 있고, 언제까지 뭐가 필요한 거야?"',
+            '윤아: "잠깐. \'못 해\'가 아니라 — 지금 뭐가 있고, 언제까지 뭐가 필요한 거야?" 막막함이 조금씩 쪼개지기 시작했습니다.',
+            '진우는 “행사를 못 한다”보다 더 정확한 말이 있을 것 같다고 느꼈습니다.',
+          ),
+        },
+        {
+          id: 'm5-l1-information',
+          label: '정보 확인',
+          imageSrc: '/lessons/story/m5/m5-l1-scene-03.webp',
+          alt: '아이미가 아는 것과 모르는 것을 나누어 알려 주는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "제가 아는 것: 목표는 오후 3시 설치. 제가 모르는 것: 배송이 언제 오는지."',
+            '아이미: "제가 아는 것: 목표는 오후 3시 설치. 제가 모르는 것: 배송이 언제 오는지. 이건 사람이 확인해야 해요."',
+            '아이미: "제가 아는 것: 목표는 오후 3시 설치. 제가 모르는 것: 배송이 언제 오는지. 이건 사람이 확인해야 해요." 지금 할 수 있는 일도 함께 보였습니다.',
+            '윤아는 바로 새 물건을 사자는 제안보다 배송 담당자와 시간을 확인하는 편이 먼저라고 보았습니다.',
+          ),
+        },
+        {
+          id: 'm5-l1-definition-card',
+          label: '진짜 문제는 뭘까',
+          imageSrc: '/lessons/story/m5/m5-l1-scene-04.webp',
+          alt: '윤아가 이제 한 문장으로 진짜 문제를 말해 보자고 청하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "이제 한 문장으로 말해 보자. 우리의 진짜 문제는 — 뭘까?"',
+            '윤아: "이제 한 문장으로 말해 보자. 우리의 진짜 문제는 — 뭘까?"',
+            '윤아: "이제 한 문장으로 말해 보자. 우리의 진짜 문제는 — 뭘까? 현재, 목표, 모르는 정보를 다 모아서."',
+            '진우는 문제를 정확히 말하니 막막함이 다음 행동으로 바뀌는 것을 느꼈습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '문제는 현재와 목표의 차이예요',
+          core: '지금 상태와 원하는 상태를 관찰 가능한 말로 나눕니다.',
+          detail: {
+            full: '지금과 원하는 모습을 한 장씩 골라요.',
+            light: '누가 언제 무엇을 원하는지 더합니다.',
+            challenge: '느낌과 지금 모습을 나누어 적으면 무엇을 해결할지 더 분명해집니다.',
+          },
+        },
+        {
+          title: '아는 것과 모르는 것을 나눠요',
+          core: '해결 전에 확인해야 할 정보를 따로 표시합니다.',
+          detail: {
+            full: '이미 아는 시간과 아직 모르는 시간을 찾아요.',
+            light: '공지와 시간표에서 확인 가능한 내용을 골라요.',
+            challenge: '정보 격차를 명시하면 성급한 해결책 선택과 불필요한 비용을 줄일 수 있습니다.',
+          },
+          flow: { input: '현재·목표', process: '정보·도움 구분', output: '문제 정의' },
+        },
+        {
+          title: '지금 할 행동을 정해요',
+          core: '확인, 대체 작업, 도움 요청 중 다음 행동을 고릅니다.',
+          detail: {
+            full: '지금 바로 할 수 있는 일을 골라요.',
+            light: '정보 확인 뒤 가능한 해결 방법을 비교합니다.',
+            challenge: '문제 정의와 해결책 생성을 분리해야 새로운 정보에 따라 방법을 바꿀 수 있습니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '“행사를 못 해”가 정확한 문제일까',
+      description: '배송 지연 상황의 현재와 목표, 모르는 정보, 지금 가능한 행동을 구분해야 합니다.',
+      facts: [
+        '부스 책상과 안내판이 아직 도착하지 않았습니다.',
+        '기본 설치 목표 시각은 오후 3시입니다.',
+        '새 배송 예정 시각은 아직 확인하지 않았습니다.',
+        '안내문 점검은 물품 없이 먼저 할 수 있습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '문제를 더 정확히 정의하는 행동을 골라 보세요.',
+      choices: [
+        { id: 'buy-immediately', emoji: '🛒', label: '배송을 확인하지 않고 같은 물품을 바로 다시 사요.', reaction: '오후에 물품이 두 배로 도착해 버렸습니다.' },
+        { id: 'define-gap', emoji: '🗺️', label: '현재·목표·모르는 정보·지금 할 일을 나눠요.', reaction: '아이미: "나누고 나니 제가 도울 곳이 보여요!"' },
+        { id: 'cancel-event', emoji: '✋', label: '물품이 늦으니 행사를 모두 취소해요.', reaction: '확인 한 번이면 그대로 진행할 수 있었습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '현재와 목표의 차이, 아직 확인할 정보를 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '배송 공지와 체험회 시간표, 먼저 할 수 있는 작업이 공개됩니다.',
+      facts: [
+        '배송은 오후 1시 30분 도착 예정입니다.',
+        '기본 설치 목표는 오후 3시입니다.',
+        '안내문과 이름표 점검은 지금 할 수 있습니다.',
+        '도착이 다시 늦어지면 담당자에게 대체 방법을 물을 수 있습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '문제와 해결책을 분리하는 AI',
+      text: '바로 다시 사기 전에 배송 예정 시각을 확인할 수 있습니다. 현재는 물품이 없고 목표는 오후 3시 설치 완료이므로, 지금은 안내문을 점검하고 도착 뒤 설치 순서를 정하는 방법이 있습니다.',
+      question: '문제, 모르는 정보, 필요한 도움은 각각 무엇인가요?',
+    },
+    artifact: {
+      kind: 'review-sheet',
+      title: '현재-목표-정보-행동 문제 정의 카드',
+      prompt: '현재 상태, 목표, 아는 정보, 모르는 정보, 도움받을 사람, 지금 할 행동을 적어 보세요.',
+    },
+    transfer: {
+      title: '준비물 한 개가 부족해요',
+      description: '활동 시작 전 색종이 한 묶음이 부족합니다. 문제를 어떻게 정의하겠어요?',
+      choices: [
+        { id: 'blame-preparer', emoji: '📣', label: '누가 준비를 잘못했는지 먼저 찾아요.', reaction: '누구 잘못인지 찾는 동안에도 문제는 그대로였습니다.' },
+        { id: 'check-missing-item', emoji: '🔎', label: '필요한 수량, 지금 수량, 다른 물건으로 바꿀 수 있는지 확인해요.', reaction: '확인해 보니 바로 대체할 방법이 보였습니다.' },
+        { id: 'stop-all-work', emoji: '⛔', label: '준비물이 하나 부족하니 모든 활동을 멈춰요.', reaction: '다른 활동은 그대로 이어갈 수 있었습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_PROBLEM_NOTE,
+  };

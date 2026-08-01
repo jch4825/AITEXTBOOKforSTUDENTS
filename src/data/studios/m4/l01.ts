@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_SAFETY_NOTE } from './shared';
+
+export const M4_L1_STUDIO: StudioDefinition = {
+    id: 'm4-confident-answer-audit',
+    lessonId: 'm4-l1',
+    moduleId: 'm4',
+    title: '자신 있는 AI 답도 확인하기',
+    subtitle: 'AI 답의 날짜와 근거를 최신 공식 시간표와 비교해 고쳐 봐요.',
+    format: 'C',
+    visualNovel: {
+      title: '체험회 시간표가 두 개예요',
+      objective: '자신 있게 답한 아이미의 시간을 오늘의 공식 시간표와 비교해, 맞는 부분과 고칠 부분을 나눠요.',
+      seasonTag: '[안전 지킴이 · 1화] 두 개의 시간표',
+      nextEpisodeHook: '다음 시간 — 이번엔 취소 소문이 돌아요.',
+      scenes: [
+        {
+          id: 'm4-l1-confident-answer',
+          label: '자신 있는 답',
+          imageSrc: '/lessons/story/m4/m4-l1-scene-01.webp',
+          alt: '아이미가 확실하다며 답하고 진우가 바로 알리려는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "준비물 배부는 오후 2시! 확실해요!"',
+            '아이미: "준비물 배부는 오후 2시! 확실해요!" 진우: "역시 아이미야. 바로 애들한테 알리자!"',
+            '아이미: "준비물 배부는 오후 2시! 확실해요!" 진우: "역시 아이미야. 바로 애들한테 알리자!" 게시판의 새 종이는 아직 보지 못했습니다.',
+            '진우는 또렷한 답을 들으니 곧바로 믿고 싶었지만, 게시판의 새 종이가 눈에 들어왔습니다.',
+          ),
+        },
+        {
+          id: 'm4-l1-two-schedules',
+          label: '두 시간표',
+          imageSrc: '/lessons/story/m4/m4-l1-scene-02.webp',
+          alt: '윤아가 게시판에 새로 붙은 오늘 시간표를 발견하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "잠깐. 게시판에 오늘 날짜 시간표가 새로 붙었는데… 1시 30분이라고 써 있어."',
+            '윤아: "잠깐. 게시판에 오늘 날짜 시간표가 새로 붙었는데… 1시 30분이라고 써 있어." 아이미의 답과 30분 차이가 났습니다.',
+            '윤아: "잠깐. 게시판에 오늘 날짜 시간표가 새로 붙었는데… 1시 30분이라고 써 있어." 아이미의 답과 30분 차이가 났습니다. 어느 쪽이 최신인지 확인해야 했습니다.',
+            '진우는 AI가 일부러 속인 것이 아니라 오래된 자료를 바탕으로 답했을 수 있다고 생각했습니다.',
+          ),
+        },
+        {
+          id: 'm4-l1-evidence-match',
+          label: '근거 연결',
+          imageSrc: '/lessons/story/m4/m4-l1-scene-03.webp',
+          alt: '아이미가 지난주 초안을 봤다고 담백하게 인정하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "제가 본 건 지난주 초안이었어요."',
+            '아이미: "아, 제가 본 건 지난주 초안이었어요. 일부러 속인 게 아니라, 오래된 자료를 봤네요."',
+            '아이미: "아, 제가 본 건 지난주 초안이었어요. 일부러 속인 게 아니라, 오래된 자료를 봤네요." 장소는 두 자료가 같았습니다.',
+            '윤아는 AI에게 다시 묻는 대신 독립된 공식 자료를 확인했습니다.',
+          ),
+        },
+        {
+          id: 'm4-l1-corrected-record',
+          label: '어느 쪽이 뭐야?',
+          imageSrc: '/lessons/story/m4/m4-l1-scene-04.webp',
+          alt: '윤아가 아이미 답에서 맞는 부분과 고칠 부분을 나눠 보자고 말하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "아이미 답에서 맞는 부분과 고칠 부분을 나눠 보자."',
+            '윤아: "자, 아이미 답에서 맞는 부분과 고칠 부분을 나눠 보자. 어느 쪽이 뭐야?"',
+            '윤아: "자, 아이미 답에서 맞는 부분과 고칠 부분을 나눠 보자. 어느 쪽이 뭐야? 근거를 하나씩 짚어 보자."',
+            '진우는 중요한 답일수록 말투보다 근거를 보겠다고 안전 도장을 찍었습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '자신 있는 말투와 정확성은 달라요',
+          core: 'AI는 틀리거나 오래된 답도 자신 있게 표현할 수 있습니다.',
+          detail: {
+            full: '또렷한 말투만 보고 맞다고 정하지 않아요.',
+            light: '답의 날짜와 근거를 따로 살펴봅니다.',
+            challenge: '말투가 자신 있어도 맞는 답이라는 뜻은 아닙니다. 출처, 날짜, 원자료를 봅니다.',
+          },
+        },
+        {
+          title: '최신 공식 자료와 비교해요',
+          core: '날짜, 작성 주체, 초안·최종 표시를 확인합니다.',
+          detail: {
+            full: '가장 최근의 공식 시간표를 찾아요.',
+            light: '두 시간표에서 바뀐 부분을 표시합니다.',
+            challenge: '자료의 권위뿐 아니라 버전과 게시 시점을 함께 확인해야 현재 상황에 적용할 수 있습니다.',
+          },
+          flow: { input: 'AI 답', process: '최신 공식 자료 비교', output: '수정한 판단' },
+        },
+        {
+          title: '맞는 부분과 고칠 부분을 나눠요',
+          core: '답 전체가 아니라 각 주장과 근거를 연결해 확인합니다.',
+          detail: {
+            full: '같은 내용과 다른 내용에 표시해요.',
+            light: '시간이 다른 까닭을 자료 날짜에서 찾습니다.',
+            challenge: '조금 맞는 답은 통째로 버리지 않습니다. 확인할 수 있는 문장마다 나누어 고칩니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '아이미 답과 오늘 시간표가 달라요',
+      description: '체험회 준비물 배부 시간을 실제로 안내하기 전에 어떤 자료를 믿을지 판단해야 합니다.',
+      facts: [
+        '아이미는 오후 2시라고 답했습니다.',
+        '아이미 답은 지난주 초안을 바탕으로 합니다.',
+        '오늘 학교 게시판에는 최종 시간표가 있습니다.',
+        '최종 시간표에는 오후 1시 30분이라고 적혀 있습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '친구에게 시간을 알려 주기 전에 무엇을 하겠어요?',
+      choices: [
+        { id: 'trust-tone', emoji: '💬', label: '자신 있게 말했으니 오후 2시라고 알려요.', reaction: '하마터면 1시 30분 배부를 놓칠 뻔했습니다.' },
+        { id: 'check-official', emoji: '🔎', label: '오늘의 공식 시간표와 날짜를 확인해요.', reaction: '윤아: "오늘 날짜, 담당 선생님 서명. 이게 근거야."' },
+        { id: 'ask-ai-again', emoji: '🔁', label: '같은 AI에게 맞는지 한 번 더 물어요.', reaction: '아이미는 같은 지난주 초안을 다시 읽어 똑같은 답을 내놓았습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '내가 고른 행동으로 무엇을 확인할 수 있는지 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '지난주 초안과 오늘 최종 시간표가 함께 공개됩니다.',
+      facts: [
+        '지난주 초안은 오후 2시입니다.',
+        '오늘 최종 시간표는 오후 1시 30분입니다.',
+        '두 자료 모두 학교 이름이 있지만 게시 날짜가 다릅니다.',
+        '장소 정보는 두 자료가 같습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '오래된 자료로 답한 AI',
+      text: '제가 사용한 자료는 지난주 초안이었습니다. 오늘 게시된 최종 시간표와 비교하면 배부 시간은 오후 1시 30분으로 고쳐야 합니다.',
+      question: 'AI 답에서 그대로 둘 부분과 고칠 부분은 각각 무엇인가요?',
+    },
+    artifact: {
+      kind: 'review-sheet',
+      title: 'AI 답 확인 기록',
+      prompt: '원래 답, 확인한 공식 자료와 날짜, 맞는 부분, 고친 부분을 기록해 보세요.',
+    },
+    transfer: {
+      title: '바뀐 교실 확인하기',
+      description: 'AI는 체험 장소가 2층이라고 했지만 오늘 안내판에는 변경 표시가 있습니다. 어떻게 확인하겠어요?',
+      choices: [
+        { id: 'follow-old-room', emoji: '2️⃣', label: 'AI가 말한 2층으로 바로 가요.', reaction: '2층에 도착해 보니 체험이 옮겨져 있었습니다.' },
+        { id: 'check-latest-board', emoji: '📋', label: '오늘 공식 안내판의 날짜와 변경 표시를 봐요.', reaction: '변경 표시 덕분에 바뀐 장소를 바로 확인할 수 있었습니다.' },
+        { id: 'ask-same-answer', emoji: '🔁', label: '같은 질문을 AI에게 반복해요.', reaction: 'AI는 같은 자료를 바탕으로 같은 답을 반복했습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_SAFETY_NOTE,
+  };

@@ -1,4 +1,4 @@
-import type { StudioDefinition } from '../../features/studio/types';
+import type { StudioDefinition, SupportLevel, VisualNovelCopy } from '../../features/studio/types';
 
 export const STUDIO_SUPPORT_PROFILES = {
   full: {
@@ -22,3 +22,17 @@ export const STUDIO_SUPPORT_PROFILES = {
 } satisfies StudioDefinition['supportProfiles'];
 
 export const STUDIO_EXPRESSION_MODES = ['choice', 'text', 'speech', 'draw'] as const;
+
+// 장면 텍스트를 지원 수준별 사본으로 만드는 공용 헬퍼. 분할 전에는 각 모듈 파일에 중복 정의되어 있었다.
+export function sceneCopy(
+  full: string,
+  light: string,
+  challenge: string,
+  perspective?: string,
+): Record<SupportLevel, VisualNovelCopy> {
+  return {
+    full: { text: full, perspective },
+    light: { text: light, perspective },
+    challenge: { text: challenge, perspective },
+  };
+}

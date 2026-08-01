@@ -18,7 +18,12 @@ export interface StudioChoice {
   emoji: string;
   label: string;
   isCorrect?: boolean;
+  /** 이 선택을 고른 직후 인물이 결과를 연기하는 반응 대사 1줄. (2차 리모델링 P4) */
+  reaction?: string;
 }
+
+/** 차시 구조 포맷. docs/remodel2/01-FORMATS.md 의 A~E. 렌더링 분기는 Wave 2 엔진이 담당한다. */
+export type StudioFormat = 'A' | 'B' | 'C' | 'D' | 'E';
 
 export type PreparedStimulus =
   | {
@@ -79,6 +84,10 @@ export interface VisualNovelStory {
   objective: string;
   scenes: VisualNovelScene[];
   knowledge: [VisualNovelKnowledge, VisualNovelKnowledge, VisualNovelKnowledge];
+  /** 시즌 오프닝 자막 1줄. 예: '[체험회 D-7 · 1화] 오늘의 사건 — 물품이 안 왔다' */
+  seasonTag?: string;
+  /** 기록 단계 뒤에 보여줄 다음 화 예고 1줄. 궁금하게, 불안하지 않게. */
+  nextEpisodeHook?: string;
 }
 
 export interface TeacherGuidance {
@@ -93,6 +102,8 @@ export interface StudioDefinition {
   moduleId: ModuleId;
   title: string;
   subtitle: string;
+  /** 2차 리모델링 구조 포맷 배정. 미지정이면 A(이야기 우선형)로 동작한다. */
+  format?: StudioFormat;
   visualNovel?: VisualNovelStory;
   encounter: {
     title: string;

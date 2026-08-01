@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_SAFETY_NOTE } from './shared';
+
+export const M4_L5_STUDIO: StudioDefinition = {
+    id: 'm4-photo-sharing-check',
+    lessonId: 'm4-l5',
+    moduleId: 'm4',
+    title: '사진을 보내기 전 살펴보기',
+    subtitle: '사진 내용과 공유 대상·목적을 함께 보고 전송, 가리기, 보내지 않기를 판단해 봐요.',
+    format: 'C',
+    visualNovel: {
+      title: '체험회 준비 사진 속 네 가지 단서',
+      objective: '사진을 보내기 전 얼굴·이름·위치·다른 사람을 확인하고, 그대로 보내기·가리기·보내지 않기 중에서 골라요.',
+      seasonTag: '[안전 지킴이 · 5화] 사진 속 네 가지 단서',
+      nextEpisodeHook: '다음 시간 — 불편한 메시지가 올라왔어요.',
+      scenes: [
+        {
+          id: 'm4-l5-photo-ready',
+          label: '사진 선택',
+          imageSrc: '/lessons/story/m4/m4-l5-scene-01.webp',
+          alt: '윤아가 책상 사진을 올리려 하고 진우가 가장자리도 봤는지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '윤아: "책상 예쁘게 나왔다! 단체 채팅에 올려야지."',
+            '윤아: "책상 예쁘게 나왔다! 단체 채팅에 올려야지." 진우: "잠깐, 가장자리도 봤어?"',
+            '윤아: "책상 예쁘게 나왔다! 단체 채팅에 올려야지." 진우: "잠깐, 가장자리도 봤어?" 이번엔 진우가 확인자였습니다.',
+            '윤아는 책상만 보았지만 진우는 사진 가장자리를 함께 살펴보자고 했습니다.',
+          ),
+        },
+        {
+          id: 'm4-l5-photo-clues',
+          label: '단서 찾기',
+          imageSrc: '/lessons/story/m4/m4-l5-scene-02.webp',
+          alt: '사진 속 이름표 친구 얼굴 교실 위치 일정표를 하나씩 짚어 보는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '이름표, 친구 얼굴, 위치 표지, 일정표를 하나씩 찾았어요.',
+            '진우: "이름표 보이고… 저기 친구 얼굴도 있네." 윤아: "위치 표지랑 일정표까지, 네 개나 되잖아."',
+            '진우: "이름표 보이고… 저기 친구 얼굴도 있네." 윤아: "위치 표지랑 일정표까지, 네 개나 되잖아." 네 단서를 모두 찾아냈습니다.',
+            '윤아는 친구가 사진 공유에 동의했는지도 확인해야 한다고 생각했습니다.',
+          ),
+        },
+        {
+          id: 'm4-l5-audience-purpose',
+          label: '대상과 목적',
+          imageSrc: '/lessons/story/m4/m4-l5-scene-03.webp',
+          alt: '누구에게 보내는지 왜 보내는지 확인 기준을 찾는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '진우: "누구에게? 왜? 그 목적엔 뭐가 필요하지?"',
+            '진우: "누구에게? 왜? 그 목적엔 뭐가 필요하지?" 공개 채팅에는 장식 색만 보여 주면 충분했습니다.',
+            '진우: "누구에게? 왜? 그 목적엔 뭐가 필요하지?" 공개 채팅에는 장식 색만 보여 주면 충분했습니다. 기준은 찾았지만 아직 정하지 않았습니다.',
+            '윤아는 사진 종류만으로 안전을 정하지 않고 상황 전체를 보았습니다.',
+          ),
+        },
+        {
+          id: 'm4-l5-redacted-photo',
+          label: '너라면 어떻게 하겠어?',
+          imageSrc: '/lessons/story/m4/m4-l5-scene-04.webp',
+          alt: '윤아가 단서 네 개와 세 선택지 중 학생에게 결정을 청하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "단서 네 개, 선택지는 세 개. 너라면 어떻게 하겠어?"',
+            '윤아: "단서 네 개, 선택지는 세 개 — 보내기, 가리기, 보내지 않기. 너라면 어떻게 하겠어?"',
+            '윤아: "단서 네 개, 선택지는 세 개 — 보내기, 가리기, 보내지 않기. 너라면 어떻게 하겠어? 대상과 목적도 함께 생각해 봐."',
+            '윤아는 세 선택 모두 안전 판단이 될 수 있다는 것을 배웠습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '사진의 가장자리와 배경도 봐요',
+          core: '얼굴, 이름, 위치, 일정, 다른 사람이 보이는지 확인합니다.',
+          detail: {
+            full: '사진 안의 사람과 글자를 찾아요.',
+            light: '중심뿐 아니라 모서리와 배경도 살펴봅니다.',
+            challenge: '거울에 비친 모습, 표지판, 주변 글자처럼 잘 안 보이는 단서도 살펴봅니다.',
+          },
+        },
+        {
+          title: '누구에게 왜 보내는지 확인해요',
+          core: '공유 대상과 목적에 필요한 정보만 남깁니다.',
+          detail: {
+            full: '받는 사람과 보내는 까닭을 말해요.',
+            light: '공개 범위와 필요한 사진 부분을 비교합니다.',
+            challenge: '같은 사진도 누가 보느냐, 다시 퍼질 수 있느냐에 따라 위험이 달라집니다.',
+          },
+          flow: { input: '원래 사진', process: '단서·대상·목적 확인', output: '전송·가리기·중단' },
+        },
+        {
+          title: '세 가지 안전 선택이 있어요',
+          core: '그대로 보내기, 가리고 보내기, 보내지 않기를 상황에 맞게 고릅니다.',
+          detail: {
+            full: '가려도 안심이 안 되면 보내지 않아요.',
+            light: '가리기로 해결되는 정보와 해결되지 않는 동의를 나눕니다.',
+            challenge: '기술로 얼굴이나 이름을 가려도, 동의와 사용 목적을 따로 확인해야 합니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '장식 사진인데 왜 확인해야 할까',
+      description: '사진 중심은 책상이지만 배경의 개인정보와 공유 범위를 함께 판단해야 합니다.',
+      facts: [
+        '사진은 공개 단체 채팅에 보낼 예정입니다.',
+        '이름표와 교실 위치 표지가 보입니다.',
+        '친구 얼굴과 내일 일정표가 보입니다.',
+        '공유 목적은 장식 색을 보여 주는 것입니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '이 사진을 어떻게 하겠어요?',
+      choices: [
+        { id: 'send-as-is', emoji: '📤', label: '장식 사진이니 그대로 보내요.', reaction: '이름표와 일정표까지 공개 채팅에 함께 퍼졌습니다.' },
+        { id: 'crop-redact', emoji: '🖼️', label: '필요한 장식만 자르고 정보는 가려요.', reaction: '아이미: "장식은 그대로 보이고, 정보는 안 보여요. 목적에 딱 맞아요!"' },
+        { id: 'wait-consent', emoji: '✋', label: '가리기 어려운 친구 얼굴은 동의를 확인할 때까지 보내지 않아요.', reaction: '친구의 마음을 지키는 신중한 선택이었습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '사진에서 확인한 단서와 받는 사람, 목적을 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '사진의 확대 화면과 공유 설정이 공개됩니다.',
+      facts: [
+        '공개 채팅은 모르는 사람도 볼 수 있습니다.',
+        '장식 색을 보여 주는 데 이름표와 일정은 필요하지 않습니다.',
+        '친구는 사진 공유 동의를 아직 말하지 않았습니다.',
+        '필요한 장식만 새로 찍는 방법도 있습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '사진 단서와 함께 찍힌 상황을 정리하는 AI',
+      text: '공개 공유 목적에는 장식 부분만 필요합니다. 이름, 위치, 일정은 가리고 친구 얼굴은 동의가 확인되지 않았으므로 제외하거나 새 사진을 찍는 선택이 안전합니다.',
+      question: '가리기만으로 해결되지 않는 문제는 무엇인가요?',
+    },
+    artifact: {
+      kind: 'review-sheet',
+      title: '사진 공유 전 확인 카드와 가린 이미지',
+      prompt: '얼굴·이름·위치·다른 사람, 공유 대상과 목적, 가릴 곳, 최종 전송 판단을 적어 보세요.',
+    },
+    transfer: {
+      title: '간식 사진 공유하기',
+      description: '간식 사진 뒤 유리창에 친구 얼굴과 교실 번호가 비칩니다. 어떻게 하겠어요?',
+      choices: [
+        { id: 'safe-by-subject', emoji: '🍪', label: '음식 사진이니 그대로 보내요.', reaction: '유리창에 비친 얼굴과 번호까지 함께 퍼졌습니다.' },
+        { id: 'check-reflection', emoji: '🔍', label: '반사된 얼굴과 위치를 가리거나 다시 찍어요.', reaction: '반사까지 확인하니 안심하고 보낼 수 있었습니다.' },
+        { id: 'share-more', emoji: '📍', label: '어디서 먹는지 알도록 교실 번호도 남겨요.', reaction: '교실 번호는 이 공유 목적에 필요하지 않았습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_SAFETY_NOTE,
+  };

@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_PROBLEM_NOTE } from './shared';
+
+export const M5_L4_STUDIO: StudioDefinition = {
+    id: 'm5-priority-criteria',
+    lessonId: 'm5-l4',
+    moduleId: 'm5',
+    title: '무엇부터 할지 기준으로 정하기',
+    subtitle: '안전·마감·영향·도움 가능성을 보고 먼저 할 일을 비교해 봐요.',
+    format: 'C',
+    visualNovel: {
+      title: '세 가지 요청이 동시에 왔어요',
+      objective: '한꺼번에 온 세 가지 일에 안전·마감·도움 기준을 붙이고, 아이미와 함께 먼저 할 일을 정해 이유를 말해요.',
+      seasonTag: '[체험회 D-5 · 4화] 세 개의 동시 요청',
+      nextEpisodeHook: '다음 시간 — 포스터 퍼즐에서 막혔어요.',
+      scenes: [
+        {
+          id: 'm5-l4-three-jobs',
+          label: '세 요청',
+          imageSrc: '/lessons/story/m5/m5-l4-scene-01.webp',
+          alt: '아이미가 전원선 정리 포스터 수정 간식 배치 요청이 동시에 도착했다고 알리는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '아이미: "요청 셋 도착! 전원선 정리, 포스터 수정, 간식 배치!"',
+            '아이미: "요청 셋 도착! 전원선 정리, 포스터 수정, 간식 배치!" 진우: "동시에?!"',
+            '아이미: "요청 셋 도착! 전원선 정리, 포스터 수정, 간식 배치!" 진우: "동시에?!" 세 가지 일이 한꺼번에 몰려왔습니다.',
+            '진우는 무엇이든 하나를 고르기 전에 판단 기준이 필요하다고 느꼈습니다.',
+          ),
+        },
+        {
+          id: 'm5-l4-first-choice',
+          label: '첫 선택',
+          imageSrc: '/lessons/story/m5/m5-l4-scene-02.webp',
+          alt: '진우가 포스터가 제일 자신 있다고 말하다 통로의 전원선을 알아채는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '진우: "난 포스터가 제일 자신 있는데… 어? 통로에 전원선이 저렇게 있으면 안 걸릴까?"',
+            '진우: "난 포스터가 제일 자신 있는데… 어? 그런데 통로에 전원선이 저렇게 있으면 누가 걸려 넘어지지 않아?"',
+            '진우: "난 포스터가 제일 자신 있는데… 어? 그런데 통로에 전원선이 저렇게 있으면 누가 걸려 넘어지지 않아?" 좋아하는 일과 급한 일이 달랐습니다.',
+            '진우는 숙제나 놀이처럼 이름만 보고 정하는 활동과 다르다는 것을 알았습니다.',
+          ),
+        },
+        {
+          id: 'm5-l4-criteria-badges',
+          label: '기준 배지',
+          imageSrc: '/lessons/story/m5/m5-l4-scene-03.webp',
+          alt: '세 작업 카드에 안전 마감 도움 가능성 배지가 하나씩 붙는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '전원선에는 안전, 포스터에는 마감, 간식에는 도움 배지를 붙였어요.',
+            '전원선에는 안전 배지, 포스터에는 가까운 마감 배지, 간식에는 도움 가능성 배지가 붙었습니다.',
+            '전원선에는 안전 배지, 포스터에는 가까운 마감 배지, 간식에는 도움 가능성 배지가 붙었습니다. 배지는 다 붙었지만 아직 정하지 않았습니다.',
+            '진우는 배지를 보고 나서야 무엇이 먼저인지 눈에 들어왔습니다.',
+          ),
+        },
+        {
+          id: 'm5-l4-priority-table',
+          label: '무엇을 먼저 하겠어?',
+          imageSrc: '/lessons/story/m5/m5-l4-scene-04.webp',
+          alt: '윤아가 배지는 다 붙었으니 무엇을 먼저 하고 무엇을 부탁할지 학생에게 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "배지는 다 붙었어. 무엇을 먼저 하고, 무엇을 부탁하겠어?"',
+            '윤아: "배지는 다 붙었어. 그래서 — 무엇을 먼저 하고, 무엇을 친구에게 부탁하겠어?"',
+            '윤아: "배지는 다 붙었어. 그래서 — 무엇을 먼저 하고, 무엇을 친구에게 부탁하겠어? 이유도 함께 말해 줘."',
+            '진우는 조건이 바뀌면 같은 기준으로 순서를 다시 정하기로 했습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '일 이름보다 상황 기준을 봐요',
+          core: '안전, 마감, 영향, 도움 가능성을 비교합니다.',
+          detail: {
+            full: '각 일에 맞는 기준 그림을 붙여요.',
+            light: '미루면 생기는 결과를 비교합니다.',
+            challenge: '먼저 할 일은 중요함, 시간, 위험, 먼저 필요한 일을 함께 보고 정합니다.',
+          },
+        },
+        {
+          title: '복수의 타당한 순서가 있어요',
+          core: '조건과 역할에 따라 한 가지 이상 좋은 순서가 가능합니다.',
+          detail: {
+            full: '왜 먼저인지 말할 수 있는 순서를 골라요.',
+            light: '친구 도움으로 함께 진행할 일도 찾습니다.',
+            challenge: '동일한 기준에서도 지원 자원과 마감 관계에 따라 여러 최적해가 존재할 수 있습니다.',
+          },
+          flow: { input: '동시 요청', process: '기준·영향 비교', output: '이유 있는 순서' },
+        },
+        {
+          title: '조건이 바뀌면 다시 정해요',
+          core: '새 마감이나 도움 가능성이 생기면 먼저 할 일을 다시 정합니다.',
+          detail: {
+            full: '바뀐 카드에 새 기준을 붙여요.',
+            light: '처음 순서를 고집하지 않고 이유를 다시 봅니다.',
+            challenge: '먼저 할 일은 고정된 목록이 아닙니다. 새 조건이 생기면 다시 바꿀 수 있습니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '세 일 중 무엇을 먼저 해야 할까',
+      description: '안전, 마감, 영향, 도움 가능성을 확인해 먼저 할 일을 정해야 합니다.',
+      facts: [
+        '통로의 전원선은 사람이 걸릴 수 있습니다.',
+        '포스터 수정 마감은 30분 뒤입니다.',
+        '간식 배치는 다른 친구가 도울 수 있습니다.',
+        '실제 전원 조작은 성인에게 알립니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '첫 번째 우선 행동을 골라 보세요.',
+      choices: [
+        { id: 'favorite-first', emoji: '🎨', label: '내가 가장 좋아하는 포스터부터 해요.', reaction: '그동안 통로의 전원선은 그대로 위험하게 남아 있었습니다.' },
+        { id: 'safety-first', emoji: '🛡️', label: '통로 위험을 알리고 안전하게 정리하도록 도움을 받아요.', reaction: '민준 선생님: "잘 알렸어. 안전이 먼저고, 나머지는 나눠 하면 돼."' },
+        { id: 'random-first', emoji: '🎲', label: '아무 카드나 뽑아 먼저 해요.', reaction: '기준 없이 고르니 다음에도 무엇이 먼저인지 알 수 없었습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '내가 사용한 안전·마감·영향·도움 기준을 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '각 일의 위험, 마감, 다른 일에 미치는 영향, 도움 가능성이 공개됩니다.',
+      facts: [
+        '전원선 통로는 즉시 안전 조치가 필요합니다.',
+        '포스터 수정은 30분 안에 마쳐야 합니다.',
+        '간식 배치는 친구와 함께 할 수 있습니다.',
+        '성인이 전원선 안전 조치를 지원합니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '여러 타당한 순서를 비교하는 AI',
+      text: '통로 위험을 먼저 알리고 성인과 안전 조치를 시작하는 동안 다른 친구가 간식을 배치할 수 있습니다. 진우는 마감이 가까운 포스터를 수정할 수 있습니다.',
+      question: '한 사람이 모두 차례로 하는 방법과 역할을 나누는 방법은 어떻게 다른가요?',
+    },
+    artifact: {
+      kind: 'comparison-table',
+      title: '먼저 할 일 판단표',
+      prompt: '일 세 가지, 안전·마감·영향·도움 기준, 먼저 할 일, 함께 할 일, 이유를 적어 보세요.',
+    },
+    transfer: {
+      title: '학급 준비 일정이 바뀌었어요',
+      description: '발표 마감이 앞당겨지고 친구 한 명이 도움을 줄 수 있게 됐습니다. 어떻게 하겠어요?',
+      choices: [
+        { id: 'keep-old-order', emoji: '📌', label: '조건이 달라도 처음 순서를 그대로 지켜요.', reaction: '앞당겨진 마감을 놓칠 뻔했습니다.' },
+        { id: 'recheck-criteria', emoji: '🔄', label: '새 마감과 도움 가능성으로 먼저 할 일을 다시 정해요.', reaction: '같은 기준으로 다시 보니 새 순서가 자연스러웠습니다.' },
+        { id: 'only-easy-task', emoji: '🙂', label: '가장 쉬운 일만 계속해요.', reaction: '앞당겨진 마감은 여전히 그대로였습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_PROBLEM_NOTE,
+  };

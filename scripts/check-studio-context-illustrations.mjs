@@ -22,7 +22,7 @@ const vite = await createServer({
 try {
   const studios = [];
   for (const moduleId of ['m1', 'm2', 'm3', 'm4', 'm5', 'm6']) {
-    const module = await vite.ssrLoadModule(`/src/data/studios/${moduleId}.ts`);
+    const module = await vite.ssrLoadModule(`/src/data/studios/${moduleId}/index.ts`);
     studios.push(...module[`${moduleId.toUpperCase()}_STUDIOS`]);
   }
 

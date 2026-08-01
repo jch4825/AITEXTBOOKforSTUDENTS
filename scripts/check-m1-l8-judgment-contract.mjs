@@ -28,7 +28,7 @@ const vite = await createServer({
 });
 
 try {
-  const studioModule = await vite.ssrLoadModule('/src/data/studios/m1.ts');
+  const studioModule = await vite.ssrLoadModule('/src/data/studios/m1/index.ts');
   const lessonModule = await vite.ssrLoadModule('/src/data/lessons/m1.ts');
   const hardModule = await vite.ssrLoadModule('/src/data/lessons/hard/m1.ts');
   const canonicalModule = await vite.ssrLoadModule('/src/data/canonicalLessons/m1.ts');

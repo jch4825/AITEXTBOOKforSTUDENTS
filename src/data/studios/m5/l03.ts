@@ -1,0 +1,153 @@
+import type { StudioDefinition } from '../../../features/studio/types';
+import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneCopy } from '../shared';
+import { PREPARED_PROBLEM_NOTE } from './shared';
+
+export const M5_L3_STUDIO: StudioDefinition = {
+    id: 'm5-reasoned-sequence',
+    lessonId: 'm5-l3',
+    moduleId: 'm5',
+    title: '이유가 있는 순서 만들기',
+    subtitle: '선행 조건·안전·도구를 연결하고 모의 실행으로 막히는 지점을 고쳐 봐요.',
+    format: 'E',
+    visualNovel: {
+      title: '장식을 먼저 붙이자 전원선이 막혔어요',
+      objective: '아이미가 추천한 설치 순서를 모의 실행으로 시험하고, 먼저 해야 하는 이유가 있는 순서로 다시 조립해요.',
+      seasonTag: '[체험회 D-6 · 3화] 막힌 전원선',
+      nextEpisodeHook: '다음 시간 — 요청 세 개가 한꺼번에!',
+      scenes: [
+        {
+          id: 'm5-l3-blocked-install',
+          label: '막힌 설치',
+          imageSrc: '/lessons/story/m5/m5-l3-scene-01.webp',
+          alt: '진우가 장식부터 완료했다가 전원선 놓을 자리가 없다며 당황하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 0,
+          copy: sceneCopy(
+            '진우: "예쁜 것부터! 장식 완료! …어? 전원선 놓을 자리가 없어."',
+            '진우: "예쁜 것부터! 장식 완료! …어? 전원선 놓을 자리가 없어." 모의 설치판에서 일어난 일이었습니다.',
+            '진우: "예쁜 것부터! 장식 완료! …어? 전원선 놓을 자리가 없어." 모의 설치판에서 일어난 일이었습니다. 실제 전기는 다루지 않았습니다.',
+            '윤아는 외운 순서가 아니라 단계 사이의 이유를 찾으려 했습니다.',
+          ),
+        },
+        {
+          id: 'm5-l3-dependencies',
+          label: '앞 단계 이유',
+          imageSrc: '/lessons/story/m5/m5-l3-scene-02.webp',
+          alt: '윤아가 순서를 외우지 말고 이유를 찾자며 책상이 왜 장식보다 먼저인지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 1,
+          copy: sceneCopy(
+            '윤아: "순서를 외우지 말고 이유를 찾자. 책상은 왜 장식보다 먼저야?"',
+            '윤아: "순서를 외우지 말고 이유를 찾자. 책상은 왜 장식보다 먼저야?" 전원 확인 뒤 책상, 책상 뒤 장식이라는 이유가 보였습니다.',
+            '윤아: "순서를 외우지 말고 이유를 찾자. 책상은 왜 장식보다 먼저야?" 전원 확인 뒤 책상, 책상 뒤 장식이라는 이유가 보였습니다. 장식과 자료는 순서를 바꿀 수도 있었습니다.',
+            '윤아는 장식과 자료 배치는 상황에 따라 순서를 바꿀 수도 있다고 보았습니다.',
+          ),
+        },
+        {
+          id: 'm5-l3-simulation',
+          label: '모의 실행',
+          imageSrc: '/lessons/story/m5/m5-l3-scene-03.webp',
+          alt: '아이미가 자신의 추천 순서도 모의 실행에서 막힌다고 인정하는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '아이미: "제 추천대로 하면… 어라, 책상을 너무 일찍 고정해서 안전 확인이 어렵네요."',
+            '아이미: "제 추천대로 하면… 어라, 책상을 너무 일찍 고정해서 안전 확인이 어렵네요. 제 추천이 틀릴 수도 있군요!"',
+            '아이미: "제 추천대로 하면… 어라, 책상을 너무 일찍 고정해서 안전 확인이 어렵네요. 제 추천이 틀릴 수도 있군요!" 모의 실행이 문제를 드러냈습니다.',
+            '윤아는 추천 순서를 그대로 따르지 않고 확인 결과로 고쳤습니다.',
+          ),
+        },
+        {
+          id: 'm5-l3-reason-lines',
+          label: '첫 칸에 무엇을 놓을까?',
+          imageSrc: '/lessons/story/m5/m5-l3-scene-04.webp',
+          alt: '윤아가 이유는 다 찾았으니 절차표 첫 칸에 무엇을 놓을지 묻는 장면을 위한 빈 이미지 자리',
+          knowledgeStep: 2,
+          copy: sceneCopy(
+            '윤아: "이유는 다 찾았어. 첫 칸에 무엇을 놓겠어?"',
+            '윤아: "이유는 다 찾았어. 이제 절차표를 조립하자 — 첫 칸에 무엇을 놓겠어?"',
+            '윤아: "이유는 다 찾았어. 이제 절차표를 조립하자 — 첫 칸에 무엇을 놓겠어? 안전 확인부터 생각해 봐."',
+            '윤아는 새 설치에서도 이유를 보고 순서를 판단하기로 했습니다.',
+          ),
+        },
+      ],
+      knowledge: [
+        {
+          title: '순서는 앞 단계의 필요를 봐요',
+          core: '뒤 단계가 시작되려면 먼저 끝나야 하는 일을 찾습니다.',
+          detail: {
+            full: '먼저 필요한 카드를 골라요.',
+            light: '각 단계에 필요한 공간과 도구를 연결합니다.',
+            challenge: '먼저 끝나야 다음으로 갈 수 있는 일을 찾으면 아무 순서와 이유 있는 순서를 구분할 수 있습니다.',
+          },
+        },
+        {
+          title: '안전 조건을 먼저 확인해요',
+          core: '위험이 있는 단계는 성인 확인과 모의 자료를 사용합니다.',
+          detail: {
+            full: '안전 확인 카드를 맨 앞에 놓아요.',
+            light: '실제 전기 대신 설치판으로 연습합니다.',
+            challenge: '안전 게이트가 충족되지 않으면 효율과 장식 완성도보다 실행 중지가 우선입니다.',
+          },
+          flow: { input: '과제 카드', process: '선행·안전·도구 연결', output: '이유 있는 절차' },
+        },
+        {
+          title: '모의 실행으로 순서를 고쳐요',
+          core: '막히는 지점을 찾아 앞뒤 단계를 다시 배치합니다.',
+          detail: {
+            full: '단계 카드를 차례로 움직여 봐요.',
+            light: '멈춘 지점의 원인을 찾아 순서를 바꿉니다.',
+            challenge: '미리 해 보면 순서가 가능한지, 먼저 해야 할 일이 빠졌는지 알 수 있습니다.',
+          },
+        },
+      ],
+    },
+    encounter: {
+      title: '장식부터 붙이는 순서는 왜 막혔을까',
+      description: '선행 조건과 안전을 찾아 모의 설치판의 순서를 고쳐야 합니다.',
+      facts: [
+        '장식이 전원선 통로를 가렸습니다.',
+        '실제 전기 작업은 하지 않습니다.',
+        '전원 위치는 성인과 먼저 확인해야 합니다.',
+        '책상 위치가 정해져야 장식 길이를 알 수 있습니다.',
+      ],
+    },
+    firstAttempt: {
+      prompt: '설치 순서를 정할 기준을 골라 보세요.',
+      choices: [
+        { id: 'prettiest-first', emoji: '✨', label: '가장 예쁜 장식을 먼저 놓아요.', reaction: '전원선 자리가 막혀 다시 뜯어야 했습니다.' },
+        { id: 'dependencies-first', emoji: '🔗', label: '선행 조건과 안전 확인이 필요한 단계를 먼저 놓아요.', reaction: '아이미: "안전 확인이 첫 칸이면 다음 문이 다 열려요!"' },
+        { id: 'alphabetical', emoji: '🔤', label: '과제 이름의 가나다순으로 놓아요.', reaction: '이름 순서와 일이 되는 순서는 서로 달랐습니다.' },
+      ],
+      modes: [...STUDIO_EXPRESSION_MODES],
+      reasonPrompt: '먼저 해야 할 단계와 그 이유를 표현해 보세요.',
+    },
+    supportProfiles: STUDIO_SUPPORT_PROFILES,
+    conditionChange: {
+      description: '각 단계의 선행 조건, 안전 조건, 필요한 도구가 공개됩니다.',
+      facts: [
+        '전원 위치는 책상을 고정하기 전에 확인합니다.',
+        '전원 확인은 성인과 모의 설치판에서 합니다.',
+        '장식 길이는 책상 위치 뒤에 정할 수 있습니다.',
+        '자료와 장식은 서로 방해하지 않으면 순서를 바꿀 수 있습니다.',
+      ],
+    },
+    aiContribution: {
+      source: 'prepared',
+      role: '절차를 모의 실행하는 AI',
+      text: '제가 처음 추천한 책상 고정은 너무 빨랐습니다. 전원 위치 안전 확인 뒤 책상을 놓아야 통로를 막지 않습니다. 장식과 자료 배치는 조건에 따라 바꿀 수 있습니다.',
+      question: '고정된 순서와 조건에 따라 바꿀 수 있는 순서를 어떻게 구분하나요?',
+    },
+    artifact: {
+      kind: 'workflow-plan',
+      title: '이유 연결선이 있는 절차표',
+      prompt: '단계, 먼저 필요한 조건, 안전 확인, 도구, 모의 실행에서 고친 지점을 연결해 보세요.',
+    },
+    transfer: {
+      title: '프로젝터 모의 설치 순서',
+      description: '프로젝터를 실제로 조작하지 않고 설치 카드의 순서를 정합니다. 무엇을 먼저 확인하겠어요?',
+      choices: [
+        { id: 'turn-on-first', emoji: '🔌', label: '위치와 도움 없이 전원부터 켜요.', reaction: '위치를 다시 확인해야 해 처음부터 다시 했습니다.' },
+        { id: 'safe-projector-order', emoji: '🧑‍🏫', label: '성인 도움·안전한 위치·모의 순서를 먼저 확인해요.', reaction: '안전한 위치부터 확인하니 나머지가 순조로웠습니다.' },
+        { id: 'decorate-projector', emoji: '🎀', label: '장식부터 붙이고 다음을 생각해요.', reaction: '장식이 다음 단계를 가로막았습니다.' },
+      ],
+    },
+    safetyNote: PREPARED_PROBLEM_NOTE,
+  };
