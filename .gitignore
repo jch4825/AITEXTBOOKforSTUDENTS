@@ -34,6 +34,9 @@ vite.std*.log
 # 로컬 원본 에셋 라이브러리 (게임 UI 팩·PSD 소스, 1.2GB) — 배포물 아님, 저장소에 부적합
 /assets/
 
+# 효과음 원본 WAV(6MB)와 구매 증빙. 배포본은 public/sounds/의 m4a만 커밋한다.
+/SE/
+
 # Local Playwright CLI artifacts
 .playwright-cli/
 
