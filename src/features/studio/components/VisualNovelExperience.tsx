@@ -64,17 +64,12 @@ export default function VisualNovelExperience({
       <div className="visual-novel-page-heading">
         <h2>{story.title}</h2>
       </div>
-      {/* 시즌 자막은 이야기가 시작되는 첫 장면에서만 뜬다(05-ENGINE-SPEC §4). */}
+      {/* 시즌 자막은 네 장면 내내 남는다. 05-ENGINE-SPEC §4는 첫 장면만 띄우도록
+          했지만, 장면을 넘기면 지금이 무슨 이야기인지 화면에서 사라져 상황을 다시
+          잡아야 했다. 자리는 원래도 비워 둔 채 숨기기만 했으므로 세로 공간은
+          그대로다(99-TRACKER 기록). */}
       {story.seasonTag ? (
-        <p
-          className="visual-novel-season-tag"
-          aria-hidden={sceneIndex !== 0}
-          style={{
-            color: secondary,
-            borderColor: secondary,
-            visibility: sceneIndex === 0 ? 'visible' : 'hidden',
-          }}
-        >
+        <p className="visual-novel-season-tag" style={{ color: secondary, borderColor: secondary }}>
           {story.seasonTag}
         </p>
       ) : null}
