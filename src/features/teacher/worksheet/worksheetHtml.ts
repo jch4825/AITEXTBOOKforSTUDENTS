@@ -1,4 +1,4 @@
-import type { LessonWorksheet, WorksheetActivity, WorksheetVariant } from './types';
+import type { LessonWorksheet, WorksheetBlock, WorksheetIllustration, WorksheetVariant } from './types';
 
 function escapeHtml(value: string): string {
   return value
@@ -9,45 +9,98 @@ function escapeHtml(value: string): string {
     .replaceAll("'", '&#39;');
 }
 
-function lines(count = 4): string {
-  return `<div class="worksheet-lines" aria-hidden="true">${Array.from({ length: count }, () => '<i></i>').join('')}</div>`;
+function safeColor(value: string | undefined): string {
+  return /^#[0-9a-f]{3,8}$/i.test(value ?? '') ? value as string : '#2f3341';
 }
 
-function activityHtml(activity: WorksheetActivity): string {
-  const title = escapeHtml(activity.title);
-  const instruction = escapeHtml(activity.instruction);
-  if (activity.kind === 'write') {
-    return `<section class="worksheet-activity worksheet-write"><h2>${title}</h2><p>${instruction}</p><div class="worksheet-prompt">${escapeHtml(activity.prompt ?? '')}</div>${lines(activity.lines)}</section>`;
+function safeFontSize(value: number | undefined): number {
+  return Number.isFinite(value) ? Math.max(10, Math.min(44, value as number)) : 15;
+}
+
+const FONT_FAMILIES = {
+  sans: '"Malgun Gothic", "Apple SD Gothic Neo", sans-serif',
+  serif: '"Batang", "Noto Serif KR", serif',
+  hand: '"Comic Sans MS", "Malgun Gothic", cursive',
+} as const;
+
+function blockStyle(block: WorksheetBlock): string {
+  const fontFamily = FONT_FAMILIES[block.fontFamily ?? 'sans'];
+  return `font-size:${safeFontSize(block.fontSize)}px;color:${safeColor(block.color)};font-family:${fontFamily};text-align:${block.align ?? 'left'};`;
+}
+
+function illustrationHtml(image: WorksheetIllustration | undefined, className = 'worksheet-image'): string {
+  if (!image?.src) return '';
+  return `<figure class="${className}"><img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt)}">${image.caption ? `<figcaption>${escapeHtml(image.caption)}</figcaption>` : ''}</figure>`;
+}
+
+function answerLines(count: number): string {
+  return `<div class="worksheet-answer-lines" aria-hidden="true">${Array.from({ length: Math.max(1, Math.min(8, count)) }, () => '<i></i>').join('')}</div>`;
+}
+
+function blockHtml(block: WorksheetBlock): string {
+  const style = blockStyle(block);
+  const title = escapeHtml(block.title ?? '');
+  const instruction = escapeHtml(block.instruction ?? '');
+  if (block.kind === 'heading') return `<section class="worksheet-block worksheet-block-heading" style="${style}"><h1>${escapeHtml(block.text ?? '')}</h1></section>`;
+  if (block.kind === 'text') return `<section class="worksheet-block worksheet-block-text" style="${style}"><p>${escapeHtml(block.text ?? '')}</p></section>`;
+  if (block.kind === 'short-answer' || block.kind === 'sentence') return `<section class="worksheet-block worksheet-block-form" style="${style}"><h2>${title}</h2><p>${instruction}</p>${answerLines(block.lineCount ?? (block.kind === 'sentence' ? 2 : 1))}</section>`;
+  if (block.kind === 'multiple-choice') {
+    const options = (block.options ?? []).map(option => `<li>□ ${escapeHtml(option)}</li>`).join('');
+    return `<section class="worksheet-block worksheet-block-form" style="${style}"><h2>${title}</h2><p>${instruction}</p><ul class="worksheet-options">${options}</ul></section>`;
   }
-  if (activity.kind === 'trace') {
-    return `<section class="worksheet-activity worksheet-trace"><h2>${title}</h2><p>${instruction}</p><div class="worksheet-trace-text">${escapeHtml(activity.traceText ?? '')}</div>${lines(2)}</section>`;
+  if (block.kind === 'trace') return `<section class="worksheet-block worksheet-block-form" style="${style}"><h2>${title}</h2><p>${instruction}</p><div class="worksheet-trace-text">${escapeHtml(block.traceText ?? '')}</div>${answerLines(2)}</section>`;
+  if (block.kind === 'cut-paste') {
+    const cards = (block.cards ?? []).map(card => `<span>${escapeHtml(card)}</span>`).join('');
+    return `<section class="worksheet-block worksheet-block-form" style="${style}"><h2>${title}</h2><p>${instruction}</p><div class="worksheet-paste-targets"><span>붙이는 곳</span><span>붙이는 곳</span><span>붙이는 곳</span></div><div class="worksheet-cut-cards">${cards}</div></section>`;
   }
-  if (activity.kind === 'cut-paste') {
-    const cards = (activity.items ?? []).map(item => `<span class="worksheet-cut-card">${escapeHtml(item)}</span>`).join('');
-    return `<section class="worksheet-activity worksheet-cut-paste"><h2>${title}</h2><p>${instruction}</p>${activity.prompt ? `<div class="worksheet-prompt">${escapeHtml(activity.prompt)}</div>` : ''}<div class="worksheet-blank-row"><span>붙이는 곳</span><span>붙이는 곳</span><span>붙이는 곳</span></div><div class="worksheet-card-bank">${cards}</div></section>`;
-  }
-  if (activity.kind === 'match') {
-    const pairs = (activity.pairs ?? []).map(pair => `<div class="worksheet-match-row"><span>${escapeHtml(pair.left)}</span><b>↔</b><span>${escapeHtml(pair.right)}</span></div>`).join('');
-    return `<section class="worksheet-activity worksheet-match"><h2>${title}</h2><p>${instruction}</p><div class="worksheet-match-list">${pairs}</div></section>`;
-  }
-  const items = (activity.items ?? []).map((item, index) => `<div class="worksheet-shape-row"><span class="worksheet-shape worksheet-shape-${index % 4}"></span><span>${escapeHtml(item)}</span><span class="worksheet-shape worksheet-shape-${(index + 2) % 4}"></span></div>`).join('');
-  return `<section class="worksheet-activity worksheet-connect"><h2>${title}</h2><p>${instruction}</p><div class="worksheet-shape-list">${items}</div></section>`;
+  if (block.kind === 'draw') return `<section class="worksheet-block worksheet-block-form" style="${style}"><h2>${title}</h2><p>${instruction}</p><div class="worksheet-draw-area">여기에 그려 보세요</div></section>`;
+  if (block.kind === 'image') return `<section class="worksheet-block worksheet-block-image" style="${style}">${illustrationHtml(block.image)}</section>`;
+  return '<div class="worksheet-block worksheet-block-divider"><hr></div>';
 }
 
 export function buildWorksheetHtml(worksheet: LessonWorksheet, variant: WorksheetVariant): string {
   const title = escapeHtml(worksheet.lessonTitle);
-  const objective = escapeHtml(worksheet.objective);
   const moduleTitle = escapeHtml(worksheet.moduleTitle);
   const variantLabel = escapeHtml(`${variant.label} · ${variant.subtitle}`);
-  const instruction = escapeHtml(variant.instruction);
-  const activities = variant.activities.map(activityHtml).join('');
-  const accent = escapeHtml(worksheet.accent);
-  const accentSoft = escapeHtml(worksheet.accentSoft);
+  const blocks = variant.blocks.map(blockHtml).join('');
   return `<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · ${variantLabel}</title>
 <style>
-@page{size:A4 portrait;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#eee;color:#2d2a26;font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif}body{print-color-adjust:exact;-webkit-print-color-adjust:exact}.worksheet-page{position:relative;width:210mm;height:297mm;margin:12mm auto;padding:14mm 15mm 18mm;background:#fffdf9;overflow:visible;border:1px solid #dedbe3}.worksheet-page-guide{position:absolute;left:15mm;right:15mm;bottom:10mm;border-top:1px dashed #b86358;color:#b86358;font-size:9pt;padding-top:1mm;text-align:right}.worksheet-header{border-bottom:3px solid ${accent};padding-bottom:5mm;margin-bottom:5mm}.worksheet-module{margin:0 0 2mm;color:${accent};font-size:11pt;font-weight:800}.worksheet-header h1{margin:0;font-size:23pt;line-height:1.25}.worksheet-level{display:inline-block;margin-top:3mm;padding:1mm 3mm;border-radius:999px;background:${accentSoft};color:${accent};font-weight:800}.worksheet-objective{margin:4mm 0 0;padding:3mm;background:#f7f4ee;border-radius:3mm;font-size:11pt;line-height:1.55}.worksheet-guide{margin:0 0 4mm;font-size:10.5pt;line-height:1.5}.worksheet-activity{break-inside:avoid;margin:0 0 5mm;padding:4mm;border:1.5px solid #dedbe3;border-radius:3mm}.worksheet-activity h2{margin:0 0 1.5mm;color:${accent};font-size:14pt;line-height:1.3}.worksheet-activity p{margin:0 0 2.5mm;font-size:10pt;line-height:1.45}.worksheet-prompt{padding:2.5mm 3mm;background:#f6f4f1;border-left:3px solid ${accent};font-size:11pt;font-weight:700;line-height:1.45}.worksheet-lines{display:grid;gap:6mm;margin-top:4mm}.worksheet-lines i{display:block;height:0;border-bottom:1px solid #96908a}.worksheet-trace-text{padding:4mm 3mm;margin-top:2mm;border-bottom:2px dashed #9d9690;color:#aaa;font-size:18pt;font-weight:800;letter-spacing:.04em;line-height:1.4}.worksheet-blank-row{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin:4mm 0}.worksheet-blank-row span{display:grid;place-items:center;min-height:16mm;border:2px dashed #c7c0b8;border-radius:2mm;color:#9b948b;font-size:9pt}.worksheet-card-bank{display:flex;flex-wrap:wrap;gap:3mm;padding-top:3mm;border-top:1px dashed #bdb5ad}.worksheet-cut-card{display:inline-flex;min-width:28mm;min-height:14mm;align-items:center;justify-content:center;padding:2mm;border:1.5px dashed ${accent};border-radius:2mm;background:#fff;color:#2d2a26;font-size:10pt;font-weight:700;text-align:center}.worksheet-match-list{display:grid;gap:2mm}.worksheet-match-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:3mm;min-height:13mm}.worksheet-match-row span{padding:2.5mm;border:1px solid #dedbe3;border-radius:2mm;font-size:10pt;line-height:1.4}.worksheet-match-row b{color:${accent};font-size:14pt}.worksheet-shape-list{display:grid;grid-template-columns:1fr;gap:3mm}.worksheet-shape-row{display:grid;grid-template-columns:10mm 1fr 10mm;gap:4mm;align-items:center;min-height:14mm}.worksheet-shape-row>span:nth-child(2){font-size:10pt}.worksheet-shape{display:block;width:8mm;height:8mm;border:2px solid ${accent};justify-self:center}.worksheet-shape-0{border-radius:50%}.worksheet-shape-1{transform:rotate(45deg);border-radius:1mm}.worksheet-shape-2{clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0}.worksheet-shape-3{transform:rotate(45deg);border-radius:2mm}.worksheet-footer{position:absolute;left:15mm;right:15mm;bottom:13mm;display:flex;justify-content:space-between;color:#777;font-size:9pt}.worksheet-page+.worksheet-page{page-break-before:always}@media print{html,body{background:#fff}.worksheet-page{margin:0;border:0;overflow:visible}.worksheet-page-guide{display:block}}
-</style></head><body><main class="worksheet-page" style="--worksheet-accent:${accent};--worksheet-soft:${accentSoft}"><header class="worksheet-header"><p class="worksheet-module">${moduleTitle}</p><h1>${title}</h1><span class="worksheet-level">${variantLabel}</span><p class="worksheet-objective">학습 목표: ${objective}</p></header><p class="worksheet-guide">${instruction}</p>${activities}<div class="worksheet-page-guide">A4 한 장 기준선 · 다음 장으로 넘어가면 이 선 아래 내용을 확인하세요.</div><footer class="worksheet-footer"><span>이름: ____________________</span><span>${escapeHtml(worksheet.lessonId)}</span></footer></main></body></html>`;
+@page { size: A4 portrait; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #eee; color: #2d2a26; font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
+body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.worksheet-page { position: relative; width: 210mm; min-height: 297mm; margin: 12mm auto; padding: 12mm 15mm 24mm; background: #fffdf9; border: 1px solid #dedbe3; overflow: visible; }
+.worksheet-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 5mm; padding-bottom: 4mm; margin-bottom: 5mm; border-bottom: 3px solid #66509a; color: #66509a; }
+.worksheet-meta strong { font-size: 11pt; }
+.worksheet-meta span { min-width: 0; color: #2d2a26; font-size: 20pt; font-weight: 800; overflow-wrap: anywhere; }
+.worksheet-meta small { color: #777; font-size: 8pt; white-space: nowrap; }
+.worksheet-block { break-inside: avoid; margin: 0 0 5mm; padding: 4mm; border: 1.5px solid #dedbe3; border-radius: 3mm; overflow-wrap: anywhere; }
+.worksheet-block-heading { padding: 0 0 3mm; border-width: 0 0 1.5px; border-radius: 0; }
+.worksheet-block-heading h1 { margin: 0; font-size: inherit; line-height: 1.25; }
+.worksheet-block-text { padding: 3mm; background: #f7f4ee; }
+.worksheet-block-text p, .worksheet-block-form p { margin: 0 0 3mm; font-size: inherit; line-height: 1.5; }
+.worksheet-block-form h2 { margin: 0 0 2mm; color: #66509a; font-size: 1.12em; line-height: 1.3; }
+.worksheet-answer-lines { display: grid; grid-auto-rows: 7mm; gap: 4mm; margin-top: 3mm; }
+.worksheet-answer-lines i { display: block; border-bottom: 1px solid #96908a; }
+.worksheet-options { display: grid; gap: 3mm; padding: 0; margin: 0; list-style: none; }
+.worksheet-options li { padding: 2.5mm 3mm; border: 1px solid #dedbe3; border-radius: 2mm; line-height: 1.4; }
+.worksheet-trace-text { padding: 3mm; margin: 2mm 0 0; border-bottom: 2px dashed #9d9690; color: #aaa; font-size: 1.35em; font-weight: 800; line-height: 1.4; }
+.worksheet-paste-targets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin: 3mm 0; }
+.worksheet-paste-targets span { display: grid; min-height: 17mm; place-items: center; border: 2px dashed #c7c0b8; border-radius: 2mm; color: #9b948b; font-size: 9pt; }
+.worksheet-cut-cards { display: flex; flex-wrap: wrap; gap: 3mm; padding-top: 3mm; border-top: 1px dashed #bdb5ad; }
+.worksheet-cut-cards span { display: inline-flex; min-width: 28mm; min-height: 14mm; max-width: 100%; align-items: center; justify-content: center; padding: 2mm; border: 1.5px dashed #66509a; border-radius: 2mm; text-align: center; overflow-wrap: anywhere; }
+.worksheet-draw-area { display: grid; min-height: 65mm; place-items: center; border: 2px dashed #66509a; border-radius: 3mm; background: repeating-linear-gradient(0deg, #fffdf9, #fffdf9 8mm, #f0ece7 8.2mm, #fffdf9 8.4mm); color: #8d857d; }
+.worksheet-block-image { padding: 0; border: 0; }
+.worksheet-image { margin: 0; }
+.worksheet-image img { display: block; width: 100%; max-height: 62mm; object-fit: contain; border: 1px solid #dedbe3; border-radius: 3mm; }
+.worksheet-image figcaption { margin-top: 1.5mm; color: #777; font-size: 8pt; text-align: center; }
+.worksheet-block-divider { padding: 0; border: 0; }
+.worksheet-block-divider hr { border: 0; border-top: 1px dashed #aaa39b; }
+.worksheet-page-guide { position: absolute; right: 15mm; bottom: 14mm; left: 15mm; border-top: 1px dashed #b86358; color: #b86358; padding-top: 1mm; font-size: 8pt; text-align: right; }
+.worksheet-footer { position: absolute; right: 15mm; bottom: 7mm; left: 15mm; display: flex; justify-content: space-between; color: #777; font-size: 8pt; }
+@media print { html, body { background: #fff; } .worksheet-page { width: 210mm; min-height: 297mm; margin: 0; border: 0; } }
+</style></head><body><main class="worksheet-page"><header class="worksheet-meta"><strong>${moduleTitle}</strong><span>${title}</span><small>${variantLabel}</small></header>${blocks}<div class="worksheet-page-guide">A4 한 장 기준선 · 다음 장으로 넘어가면 다음 페이지로 나누세요.</div><footer class="worksheet-footer"><span>이름: ____________________</span><span>${escapeHtml(worksheet.lessonId)}</span></footer></main></body></html>`;
 }
 
 export function downloadWorksheetHtml(worksheet: LessonWorksheet, variant: WorksheetVariant): void {
@@ -72,10 +125,7 @@ export function printWorksheet(worksheet: LessonWorksheet, variant: WorksheetVar
   printWindow.document.open();
   printWindow.document.write(buildWorksheetHtml(worksheet, variant));
   printWindow.document.close();
-  const print = () => {
-    printWindow.focus();
-    printWindow.print();
-  };
+  const print = () => { printWindow.focus(); printWindow.print(); };
   if (printWindow.document.readyState === 'complete') window.setTimeout(print, 160);
   else printWindow.addEventListener('load', () => window.setTimeout(print, 160), { once: true });
 }

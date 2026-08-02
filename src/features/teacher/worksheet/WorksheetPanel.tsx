@@ -3,7 +3,7 @@ import Icon from '../../../components/Icon';
 import { buildLessonWorksheet, mergeWorksheetDraft, worksheetStorageKey } from './buildWorksheet';
 import { downloadWorksheetHtml, printWorksheet } from './worksheetHtml';
 import type { LessonId } from '../../../types';
-import type { LessonWorksheet, WorksheetActivity, WorksheetLevel, WorksheetPair, WorksheetVariant } from './types';
+import type { LessonWorksheet, WorksheetBlock, WorksheetBlockKind, WorksheetIllustration, WorksheetLevel, WorksheetVariant } from './types';
 
 interface Props {
   lessonId: LessonId;
@@ -11,12 +11,32 @@ interface Props {
 }
 
 const LEVEL_ORDER: WorksheetLevel[] = ['high', 'middle', 'low'];
-
 const LEVEL_DESCRIPTIONS: Record<WorksheetLevel, string> = {
   high: '상 · 직접 써요',
   middle: '중 · 덧쓰고 붙여요',
   low: '하 · 오리고 찾아요',
 };
+
+const FORMAT_CATALOG: Array<{ kind: WorksheetBlockKind; label: string; description: string; glyph: string }> = [
+  { kind: 'heading', label: '제목 상자', description: '큰 제목과 소제목', glyph: 'T' },
+  { kind: 'text', label: '문구 상자', description: '설명·안내·짧은 글', glyph: '▤' },
+  { kind: 'short-answer', label: '단답형', description: '짧은 낱말이나 답', glyph: '가' },
+  { kind: 'sentence', label: '문장형', description: '두 줄 문장 답안', glyph: '문' },
+  { kind: 'multiple-choice', label: '선다형', description: '보기와 선택 칸', glyph: '○' },
+  { kind: 'trace', label: '덧쓰기형', description: '연한 글자 따라 쓰기', glyph: '〰' },
+  { kind: 'cut-paste', label: '오려 붙이기형', description: '카드와 붙이는 칸', glyph: '✂' },
+  { kind: 'draw', label: '그림 그리기형', description: '자유롭게 그리는 칸', glyph: '✎' },
+  { kind: 'image', label: '이미지 상자', description: '파일·주소로 그림 넣기', glyph: '▧' },
+  { kind: 'divider', label: '구분선', description: '내용을 나누는 선', glyph: '—' },
+];
+
+const FONT_SIZES = [12, 14, 16, 18, 22, 26, 32];
+const DEFAULT_TEXT_COLOR = '#2f3341';
+const FONT_FAMILIES = {
+  sans: '"Malgun Gothic", "Apple SD Gothic Neo", sans-serif',
+  serif: '"Batang", "Noto Serif KR", serif',
+  hand: '"Comic Sans MS", "Malgun Gothic", cursive',
+} as const;
 
 function loadWorksheet(lessonId: LessonId): LessonWorksheet {
   const base = buildLessonWorksheet(lessonId);
@@ -28,12 +48,30 @@ function loadWorksheet(lessonId: LessonId): LessonWorksheet {
   }
 }
 
-function setActivityField(
-  worksheet: LessonWorksheet,
-  level: WorksheetLevel,
-  index: number,
-  patch: Partial<WorksheetActivity>,
-): LessonWorksheet {
+function newBlockId(kind: WorksheetBlockKind): string {
+  const randomId = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.round(Math.random() * 100000)}`;
+  return `${kind}-${randomId}`;
+}
+
+function defaultBlock(kind: WorksheetBlockKind, worksheet: LessonWorksheet): WorksheetBlock {
+  const base = { id: newBlockId(kind), kind, color: DEFAULT_TEXT_COLOR, align: 'left' as const };
+  switch (kind) {
+    case 'heading': return { ...base, title: '제목 상자', text: '새 제목을 입력하세요.', fontSize: 26 };
+    case 'text': return { ...base, title: '문구 상자', text: '설명이나 안내 문구를 입력하세요.', fontSize: 14 };
+    case 'short-answer': return { ...base, title: '단답형', instruction: '짧은 낱말이나 답을 적어 보세요.', lineCount: 1, fontSize: 15 };
+    case 'sentence': return { ...base, title: '문장형', instruction: '문장으로 답해 보세요.', lineCount: 2, fontSize: 15 };
+    case 'multiple-choice': return { ...base, title: '선다형', instruction: '알맞은 답을 골라 보세요.', options: ['보기 1', '보기 2', '보기 3'], fontSize: 15 };
+    case 'trace': return { ...base, title: '덧쓰기형', instruction: '연한 글자를 따라 천천히 써 보세요.', traceText: '따라 쓸 문장을 입력하세요.', fontSize: 21 };
+    case 'cut-paste': return { ...base, title: '오려 붙이기형', instruction: '카드를 오려 알맞은 곳에 붙여 보세요.', cards: ['카드 1', '카드 2', '카드 3'], fontSize: 15 };
+    case 'draw': return { ...base, title: '그림 그리기형', instruction: '떠오른 장면이나 생각을 그림으로 보여 주세요.', fontSize: 15 };
+    case 'image': return { ...base, title: '이미지 상자', image: worksheet.illustration, fontSize: 14 };
+    case 'divider': return { ...base, title: '구분선' };
+  }
+}
+
+function updateBlock(worksheet: LessonWorksheet, level: WorksheetLevel, blockId: string, patch: Partial<WorksheetBlock>): LessonWorksheet {
   const variant = worksheet.variants[level];
   return {
     ...worksheet,
@@ -41,173 +79,234 @@ function setActivityField(
       ...worksheet.variants,
       [level]: {
         ...variant,
-        activities: variant.activities.map((activity, activityIndex) => activityIndex === index ? { ...activity, ...patch } : activity),
+        blocks: variant.blocks.map(block => block.id === blockId ? { ...block, ...patch } : block),
       },
     },
   };
 }
 
-function updateItems(
-  worksheet: LessonWorksheet,
-  level: WorksheetLevel,
-  activityIndex: number,
-  itemIndex: number,
-  value: string,
-): LessonWorksheet {
-  const activity = worksheet.variants[level].activities[activityIndex];
-  const items = [...(activity.items ?? [])];
-  items[itemIndex] = value;
-  return setActivityField(worksheet, level, activityIndex, { items });
+function replaceBlocks(worksheet: LessonWorksheet, level: WorksheetLevel, blocks: WorksheetBlock[]): LessonWorksheet {
+  return {
+    ...worksheet,
+    variants: { ...worksheet.variants, [level]: { ...worksheet.variants[level], blocks } },
+  };
 }
 
-function updatePair(
-  worksheet: LessonWorksheet,
-  level: WorksheetLevel,
-  activityIndex: number,
-  pairIndex: number,
-  side: keyof WorksheetPair,
-  value: string,
-): LessonWorksheet {
-  const activity = worksheet.variants[level].activities[activityIndex];
-  const pairs = (activity.pairs ?? []).map((pair, index) => index === pairIndex ? { ...pair, [side]: value } : pair);
-  return setActivityField(worksheet, level, activityIndex, { pairs });
+function clampLineCount(value: string, fallback = 2): number {
+  return Math.max(1, Math.min(8, Number(value) || fallback));
 }
 
-function InputField({ label, value, onChange, multiline = false }: {
+function safeColor(value: string | undefined): string {
+  return /^#[0-9a-f]{3,8}$/i.test(value ?? '') ? value as string : DEFAULT_TEXT_COLOR;
+}
+
+function InputField({ label, value, onChange, multiline = false, placeholder }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   multiline?: boolean;
+  placeholder?: string;
 }) {
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value);
   return (
-    <label className="teacher-worksheet-field">
+    <label className="teacher-worksheet-block-field">
       <span>{label}</span>
       {multiline ? (
-        <textarea value={value} onChange={handleChange} rows={2} />
+        <textarea value={value} placeholder={placeholder} onChange={handleChange} rows={2} />
       ) : (
-        <input value={value} onChange={handleChange} />
+        <input value={value} placeholder={placeholder} onChange={handleChange} />
       )}
     </label>
   );
 }
 
-function ActivityEditor({
+function ImageEditor({ block, onChange }: { block: WorksheetBlock; onChange: (patch: Partial<WorksheetBlock>) => void }) {
+  const image = block.image;
+  const updateImage = (patch: Partial<WorksheetIllustration>) => onChange({ image: { src: image?.src ?? '', alt: image?.alt ?? '학습지 이미지', caption: image?.caption, ...patch } });
+  const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') updateImage({ src: reader.result, alt: file.name });
+    };
+    reader.readAsDataURL(file);
+  };
+  return (
+    <div className="teacher-worksheet-image-editor">
+      <InputField label="이미지 주소" value={image?.src?.startsWith('data:') ? '' : image?.src ?? ''} placeholder="https://… 또는 파일 선택" onChange={(value) => updateImage({ src: value })} />
+      <label className="teacher-worksheet-block-field">
+        <span>내 컴퓨터에서 이미지 넣기</span>
+        <input type="file" accept="image/*" onChange={handleFile} />
+      </label>
+      <InputField label="이미지 설명" value={image?.alt ?? ''} onChange={(value) => updateImage({ alt: value })} />
+    </div>
+  );
+}
+
+function BlockStyleToolbar({ block, onChange }: { block: WorksheetBlock; onChange: (patch: Partial<WorksheetBlock>) => void }) {
+  const label = block.title || '포맷';
+  return (
+    <div className="teacher-worksheet-block-toolbar">
+      <label>
+        <span>글꼴</span>
+        <select aria-label={`${label} 글꼴`} value={block.fontFamily ?? 'sans'} onChange={(event) => onChange({ fontFamily: event.target.value as WorksheetBlock['fontFamily'] })}>
+          <option value="sans">고딕</option>
+          <option value="serif">명조</option>
+          <option value="hand">손글씨</option>
+        </select>
+      </label>
+      <label>
+        <span>글자 크기</span>
+        <select aria-label={`${label} 글자 크기`} value={block.fontSize ?? 15} onChange={(event) => onChange({ fontSize: Number(event.target.value) })}>
+          {FONT_SIZES.map(size => <option key={size} value={size}>{size}px</option>)}
+        </select>
+      </label>
+      <label>
+        <span>글자 색</span>
+        <input aria-label={`${label} 글자 색`} type="color" value={safeColor(block.color)} onChange={(event) => onChange({ color: event.target.value })} />
+      </label>
+      <label>
+        <span>정렬</span>
+        <select aria-label={`${label} 정렬`} value={block.align ?? 'left'} onChange={(event) => onChange({ align: event.target.value as WorksheetBlock['align'] })}>
+          <option value="left">왼쪽</option>
+          <option value="center">가운데</option>
+          <option value="right">오른쪽</option>
+        </select>
+      </label>
+    </div>
+  );
+}
+
+function EditableBlock({
+  block,
+  index,
+  count,
   worksheet,
   level,
-  activity,
-  activityIndex,
   onChange,
+  onMove,
+  onDuplicate,
+  onRemove,
 }: {
   key?: string;
+  block: WorksheetBlock;
+  index: number;
+  count: number;
   worksheet: LessonWorksheet;
   level: WorksheetLevel;
-  activity: WorksheetActivity;
-  activityIndex: number;
   onChange: (next: LessonWorksheet) => void;
+  onMove: (direction: -1 | 1) => void;
+  onDuplicate: () => void;
+  onRemove: () => void;
 }) {
+  const patch = (next: Partial<WorksheetBlock>) => onChange(updateBlock(worksheet, level, block.id, next));
+  const blockLabel = FORMAT_CATALOG.find(item => item.kind === block.kind)?.label ?? '포맷';
+  const blockStyle = { '--block-font-size': `${block.fontSize ?? 15}px`, '--block-color': safeColor(block.color), fontFamily: FONT_FAMILIES[block.fontFamily ?? 'sans'], textAlign: block.align ?? 'left' } as CSSProperties;
   return (
-    <article className="teacher-worksheet-editor-activity">
-      <InputField label="활동 제목" value={activity.title} onChange={(value) => onChange(setActivityField(worksheet, level, activityIndex, { title: value }))} />
-      <InputField label="안내 문구" value={activity.instruction} multiline onChange={(value) => onChange(setActivityField(worksheet, level, activityIndex, { instruction: value }))} />
-      {(activity.kind === 'write' || activity.kind === 'cut-paste') && activity.prompt !== undefined && (
-        <InputField label="문제 문구" value={activity.prompt} multiline onChange={(value) => onChange(setActivityField(worksheet, level, activityIndex, { prompt: value }))} />
-      )}
-      {activity.kind === 'trace' && (
-        <InputField label="덧쓰기 문구" value={activity.traceText ?? ''} multiline onChange={(value) => onChange(setActivityField(worksheet, level, activityIndex, { traceText: value }))} />
-      )}
-      {activity.kind === 'write' && (
-        <label className="teacher-worksheet-field teacher-worksheet-lines-field">
-          <span>쓰기 줄 수</span>
-          <input
-            type="number"
-            min={2}
-            max={8}
-            value={activity.lines ?? 4}
-            onChange={(event) => onChange(setActivityField(worksheet, level, activityIndex, { lines: Math.max(2, Math.min(8, Number(event.target.value) || 4)) }))}
-          />
-        </label>
-      )}
-      {activity.items && (
-        <div className="teacher-worksheet-list-editor">
-          <span className="teacher-worksheet-list-label">카드·낱말</span>
-          {activity.items.map((item, itemIndex) => (
-            <input
-              key={`${activity.id}-item-${itemIndex}`}
-              aria-label={`카드 ${itemIndex + 1}`}
-              value={item}
-              onChange={(event) => onChange(updateItems(worksheet, level, activityIndex, itemIndex, event.target.value))}
-            />
-          ))}
+    <article className={`teacher-worksheet-canvas-block teacher-worksheet-canvas-block-${block.kind}`} style={blockStyle}>
+      <div className="teacher-worksheet-canvas-block-header">
+        <span className="teacher-worksheet-canvas-block-kind">{blockLabel}</span>
+        <div className="teacher-worksheet-canvas-block-actions">
+          <button type="button" aria-label={`${blockLabel} 위로 이동`} disabled={index === 0} onClick={onMove.bind(null, -1)}>↑</button>
+          <button type="button" aria-label={`${blockLabel} 아래로 이동`} disabled={index === count - 1} onClick={onMove.bind(null, 1)}>↓</button>
+          <button type="button" aria-label={`${blockLabel} 복제`} onClick={onDuplicate}>⧉</button>
+          <button type="button" aria-label={`${blockLabel} 삭제`} onClick={onRemove}>×</button>
         </div>
-      )}
-      {activity.pairs && (
-        <div className="teacher-worksheet-pairs-editor">
-          <span className="teacher-worksheet-list-label">연결할 내용</span>
-          {activity.pairs.map((pair, pairIndex) => (
-            <div className="teacher-worksheet-pair-editor" key={`${activity.id}-pair-${pairIndex}`}>
-              <input aria-label={`왼쪽 ${pairIndex + 1}`} value={pair.left} onChange={(event) => onChange(updatePair(worksheet, level, activityIndex, pairIndex, 'left', event.target.value))} />
-              <span aria-hidden="true">↔</span>
-              <input aria-label={`오른쪽 ${pairIndex + 1}`} value={pair.right} onChange={(event) => onChange(updatePair(worksheet, level, activityIndex, pairIndex, 'right', event.target.value))} />
-            </div>
-          ))}
+      </div>
+      <BlockStyleToolbar block={block} onChange={patch} />
+      <div className="teacher-worksheet-canvas-block-body">
+        {(block.kind === 'heading' || block.kind === 'text') && (
+          <InputField label={block.kind === 'heading' ? '제목' : '문구'} value={block.text ?? ''} multiline={block.kind === 'text'} onChange={(value) => patch({ text: value })} />
+        )}
+        {(block.kind === 'short-answer' || block.kind === 'sentence' || block.kind === 'multiple-choice' || block.kind === 'trace' || block.kind === 'cut-paste' || block.kind === 'draw') && (
+          <InputField label="포맷 제목" value={block.title ?? ''} onChange={(value) => patch({ title: value })} />
+        )}
+        {(block.kind === 'short-answer' || block.kind === 'sentence' || block.kind === 'multiple-choice' || block.kind === 'trace' || block.kind === 'cut-paste' || block.kind === 'draw') && (
+          <InputField label="안내 문구" value={block.instruction ?? ''} multiline onChange={(value) => patch({ instruction: value })} />
+        )}
+        {(block.kind === 'short-answer' || block.kind === 'sentence') && (
+          <label className="teacher-worksheet-block-field teacher-worksheet-line-count">
+            <span>답안 줄 수</span>
+            <input type="number" min={1} max={8} value={block.lineCount ?? (block.kind === 'sentence' ? 2 : 1)} onChange={(event) => patch({ lineCount: clampLineCount(event.target.value, block.kind === 'sentence' ? 2 : 1) })} />
+          </label>
+        )}
+        {block.kind === 'multiple-choice' && (
+          <div className="teacher-worksheet-array-editor">
+            <span>보기</span>
+            {(block.options ?? []).map((option, optionIndex) => (
+              <div className="teacher-worksheet-array-row" key={`${block.id}-option-${optionIndex}`}>
+                <input aria-label={`보기 ${optionIndex + 1}`} value={option} onChange={(event) => patch({ options: (block.options ?? []).map((item, index) => index === optionIndex ? event.target.value : item) })} />
+                <button type="button" aria-label={`보기 ${optionIndex + 1} 삭제`} onClick={() => patch({ options: (block.options ?? []).filter((_, index) => index !== optionIndex) })}>×</button>
+              </div>
+            ))}
+            <button type="button" className="teacher-worksheet-array-add" onClick={() => patch({ options: [...(block.options ?? []), `보기 ${(block.options?.length ?? 0) + 1}`] })}>+ 보기 추가</button>
+          </div>
+        )}
+        {block.kind === 'trace' && <InputField label="따라 쓸 문장" value={block.traceText ?? ''} multiline onChange={(value) => patch({ traceText: value })} />}
+        {block.kind === 'cut-paste' && (
+          <div className="teacher-worksheet-array-editor">
+            <span>오릴 카드</span>
+            {(block.cards ?? []).map((card, cardIndex) => (
+              <div className="teacher-worksheet-array-row" key={`${block.id}-card-${cardIndex}`}>
+                <input aria-label={`카드 ${cardIndex + 1}`} value={card} onChange={(event) => patch({ cards: (block.cards ?? []).map((item, index) => index === cardIndex ? event.target.value : item) })} />
+                <button type="button" aria-label={`카드 ${cardIndex + 1} 삭제`} onClick={() => patch({ cards: (block.cards ?? []).filter((_, index) => index !== cardIndex) })}>×</button>
+              </div>
+            ))}
+            <button type="button" className="teacher-worksheet-array-add" onClick={() => patch({ cards: [...(block.cards ?? []), `카드 ${(block.cards?.length ?? 0) + 1}`] })}>+ 카드 추가</button>
+          </div>
+        )}
+        {block.kind === 'image' && <ImageEditor block={block} onChange={patch} />}
+        {block.kind === 'divider' && <p className="teacher-worksheet-divider-help">학습지 내용을 나누는 선입니다. 별도 문구 없이 인쇄됩니다.</p>}
+        <div className="teacher-worksheet-block-paper-preview" aria-hidden="true">
+          {block.kind === 'heading' && <strong>{block.text || '제목을 입력하세요.'}</strong>}
+          {block.kind === 'text' && <p>{block.text || '문구를 입력하세요.'}</p>}
+          {(block.kind === 'short-answer' || block.kind === 'sentence') && <><strong>{block.title}</strong><p>{block.instruction}</p><div className="teacher-worksheet-answer-lines">{Array.from({ length: block.lineCount ?? (block.kind === 'sentence' ? 2 : 1) }, (_, lineIndex) => <i key={lineIndex} />)}</div></>}
+          {block.kind === 'multiple-choice' && <><strong>{block.title}</strong><p>{block.instruction}</p><div className="teacher-worksheet-options-preview">{(block.options ?? []).map((option, optionIndex) => <span key={optionIndex}>□ {option}</span>)}</div></>}
+          {block.kind === 'trace' && <><strong>{block.title}</strong><p>{block.instruction}</p><span className="teacher-worksheet-trace-preview">{block.traceText}</span></>}
+          {block.kind === 'cut-paste' && <><strong>{block.title}</strong><p>{block.instruction}</p><div className="teacher-worksheet-cut-preview">{(block.cards ?? []).map((card, cardIndex) => <span key={cardIndex}>{card}</span>)}</div></>}
+          {block.kind === 'draw' && <><strong>{block.title}</strong><p>{block.instruction}</p><div className="teacher-worksheet-draw-preview">여기에 그려 보세요</div></>}
+          {block.kind === 'image' && block.image?.src && <img src={block.image.src} alt="" />}
+          {block.kind === 'divider' && <hr />}
         </div>
-      )}
+      </div>
     </article>
   );
 }
 
-function Shape({ index }: { index: number }) {
-  return <span className={`teacher-worksheet-shape teacher-worksheet-shape-${index % 4}`} aria-hidden="true" />;
-}
-
-function WorksheetSheet({ worksheet, variant, sheetRef }: {
+function WorksheetSheet({ worksheet, variant, sheetRef, onChange, onMove, onDuplicate, onRemove }: {
   worksheet: LessonWorksheet;
   variant: WorksheetVariant;
   sheetRef: RefObject<HTMLDivElement | null>;
+  onChange: (next: LessonWorksheet) => void;
+  onMove: (blockId: string, direction: -1 | 1) => void;
+  onDuplicate: (blockId: string) => void;
+  onRemove: (blockId: string) => void;
 }) {
   return (
     <div className="teacher-worksheet-sheet" ref={sheetRef} style={{ '--worksheet-accent': worksheet.accent, '--worksheet-soft': worksheet.accentSoft } as CSSProperties}>
       <div className="teacher-worksheet-sheet-content">
-        <header className="teacher-worksheet-sheet-header">
-          <p className="teacher-worksheet-sheet-module">{worksheet.moduleTitle}</p>
-          <h2>{worksheet.lessonTitle}</h2>
-          <span className="teacher-worksheet-sheet-level">{variant.label} · {variant.subtitle}</span>
-          <p className="teacher-worksheet-sheet-objective"><strong>학습 목표</strong> {worksheet.objective}</p>
+        <header className="teacher-worksheet-sheet-meta">
+          <span>{worksheet.moduleTitle}</span>
+          <strong>{variant.label} · {variant.subtitle}</strong>
+          <small>A4 학습지 · {worksheet.lessonId}</small>
         </header>
-        <p className="teacher-worksheet-sheet-instruction">{variant.instruction}</p>
-        <div className="teacher-worksheet-sheet-activities">
-          {variant.activities.map((activity) => (
-            <section className={`teacher-worksheet-sheet-activity teacher-worksheet-sheet-activity-${activity.kind}`} key={activity.id}>
-              <h3>{activity.title}</h3>
-              <p>{activity.instruction}</p>
-              {activity.kind === 'write' && (
-                <>
-                  <div className="teacher-worksheet-sheet-prompt">{activity.prompt}</div>
-                  <div className="teacher-worksheet-sheet-lines" aria-hidden="true">{Array.from({ length: activity.lines ?? 4 }, (_, index) => <i key={index} />)}</div>
-                </>
-              )}
-              {activity.kind === 'trace' && (
-                <>
-                  <div className="teacher-worksheet-sheet-trace">{activity.traceText}</div>
-                  <div className="teacher-worksheet-sheet-lines" aria-hidden="true"><i /><i /></div>
-                </>
-              )}
-              {activity.kind === 'cut-paste' && (
-                <>
-                  {activity.prompt && <div className="teacher-worksheet-sheet-prompt">{activity.prompt}</div>}
-                  <div className="teacher-worksheet-sheet-blanks"><span>붙이는 곳</span><span>붙이는 곳</span><span>붙이는 곳</span></div>
-                  <div className="teacher-worksheet-sheet-card-bank">{(activity.items ?? []).map((item, index) => <span key={`${activity.id}-card-${index}`}>{item}</span>)}</div>
-                </>
-              )}
-              {activity.kind === 'match' && (
-                <div className="teacher-worksheet-sheet-match">{(activity.pairs ?? []).map((pair, index) => <div key={`${activity.id}-match-${index}`}><span>{pair.left}</span><b>↔</b><span>{pair.right}</span></div>)}</div>
-              )}
-              {activity.kind === 'connect' && (
-                <div className="teacher-worksheet-sheet-shapes">{(activity.items ?? []).map((item, index) => <div key={`${activity.id}-shape-${index}`}><Shape index={index} /><span>{item}</span><Shape index={index + 2} /></div>)}</div>
-              )}
-            </section>
+        <div className="teacher-worksheet-canvas-blocks">
+          {variant.blocks.map((block, index) => (
+            <EditableBlock
+              key={block.id}
+              block={block}
+              index={index}
+              count={variant.blocks.length}
+              worksheet={worksheet}
+              level={variant.level}
+              onChange={onChange}
+              onMove={(direction) => onMove(block.id, direction)}
+              onDuplicate={() => onDuplicate(block.id)}
+              onRemove={() => onRemove(block.id)}
+            />
           ))}
+          {variant.blocks.length === 0 && <div className="teacher-worksheet-empty-canvas">왼쪽의 포맷을 눌러 이 A4 페이지에 추가하세요.</div>}
         </div>
       </div>
       <div className="teacher-worksheet-page-guide">A4 한 장 기준선</div>
@@ -228,9 +327,7 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
   }, [lessonId, worksheet]);
 
   useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-    };
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onClose]);
@@ -239,23 +336,54 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
     const measure = () => {
       const sheet = sheetRef.current;
       if (!sheet) return;
-      setOverflow(sheet.scrollHeight > sheet.clientHeight + 4);
+      const guide = sheet.querySelector<HTMLElement>('.teacher-worksheet-page-guide');
+      const canvas = sheet.querySelector<HTMLElement>('.teacher-worksheet-canvas-blocks');
+      const printBlocks = sheet.querySelectorAll<HTMLElement>('.teacher-worksheet-block-paper-preview');
+      const guideTop = guide?.getBoundingClientRect().top;
+      const canvasTop = canvas?.getBoundingClientRect().top;
+      const rowGap = canvas ? Number.parseFloat(getComputedStyle(canvas).rowGap || '0') : 0;
+      let printableHeight = 0;
+      printBlocks.forEach((block: HTMLElement) => {
+        printableHeight += block.getBoundingClientRect().height + Number.parseFloat(getComputedStyle(block).marginTop || '0');
+      });
+      const estimatedPrintBottom = typeof canvasTop === 'number' ? canvasTop + printableHeight + Math.max(0, printBlocks.length - 1) * rowGap : undefined;
+      setOverflow(typeof guideTop === 'number' && typeof estimatedPrintBottom === 'number' && estimatedPrintBottom > guideTop - 4);
     };
     measure();
     const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
     if (sheetRef.current) observer?.observe(sheetRef.current);
     window.addEventListener('resize', measure);
-    return () => {
-      observer?.disconnect();
-      window.removeEventListener('resize', measure);
-    };
+    return () => { observer?.disconnect(); window.removeEventListener('resize', measure); };
   }, [worksheet, level]);
 
-  function updateVariant(patch: Partial<WorksheetVariant>) {
-    setWorksheet((current) => ({
-      ...current,
-      variants: { ...current.variants, [level]: { ...current.variants[level], ...patch } },
-    }));
+  function addBlock(kind: WorksheetBlockKind) {
+    setWorksheet(current => replaceBlocks(current, level, [...current.variants[level].blocks, defaultBlock(kind, current)]));
+  }
+
+  function moveBlock(blockId: string, direction: -1 | 1) {
+    setWorksheet(current => {
+      const blocks = [...current.variants[level].blocks];
+      const index = blocks.findIndex(block => block.id === blockId);
+      const nextIndex = index + direction;
+      if (index < 0 || nextIndex < 0 || nextIndex >= blocks.length) return current;
+      [blocks[index], blocks[nextIndex]] = [blocks[nextIndex], blocks[index]];
+      return replaceBlocks(current, level, blocks);
+    });
+  }
+
+  function duplicateBlock(blockId: string) {
+    setWorksheet(current => {
+      const blocks = [...current.variants[level].blocks];
+      const index = blocks.findIndex(block => block.id === blockId);
+      if (index < 0) return current;
+      const original = blocks[index];
+      blocks.splice(index + 1, 0, { ...original, id: newBlockId(original.kind), image: original.image ? { ...original.image } : undefined, options: original.options ? [...original.options] : undefined, cards: original.cards ? [...original.cards] : undefined });
+      return replaceBlocks(current, level, blocks);
+    });
+  }
+
+  function removeBlock(blockId: string) {
+    setWorksheet(current => replaceBlocks(current, level, current.variants[level].blocks.filter(block => block.id !== blockId)));
   }
 
   return (
@@ -263,23 +391,15 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
       <section className="teacher-worksheet-modal" role="dialog" aria-modal="true" aria-labelledby="teacher-worksheet-title">
         <header className="teacher-worksheet-modal-header">
           <div>
-            <p className="teacher-worksheet-kicker">교사 도구 · 학습지</p>
+            <p className="teacher-worksheet-kicker">교사 도구 · A4 학습지 편집기</p>
             <h2 id="teacher-worksheet-title">{worksheet.lessonTitle} 학습지 만들기</h2>
-            <p>파란 테두리 글상자는 클릭하여 문구를 수정할 수 있습니다.</p>
+            <p>왼쪽 포맷을 누르면 오른쪽 A4 페이지에 추가됩니다. 추가한 블록은 직접 수정하거나 삭제할 수 있습니다.</p>
           </div>
           <button className="teacher-worksheet-close" onClick={onClose} aria-label="학습지 편집기 닫기"><Icon name="close" size={22} /></button>
         </header>
 
         <div className="teacher-worksheet-level-tabs" role="tablist" aria-label="학습지 수준">
-          {LEVEL_ORDER.map((candidate) => (
-            <button
-              key={candidate}
-              role="tab"
-              aria-selected={level === candidate}
-              className={level === candidate ? 'is-active' : ''}
-              onClick={() => setLevel(candidate)}
-            >{LEVEL_DESCRIPTIONS[candidate]}</button>
-          ))}
+          {LEVEL_ORDER.map(candidate => <button key={candidate} role="tab" aria-selected={level === candidate} className={level === candidate ? 'is-active' : ''} onClick={() => setLevel(candidate)}>{LEVEL_DESCRIPTIONS[candidate]}</button>)}
         </div>
 
         <div className="teacher-worksheet-actions">
@@ -288,30 +408,23 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
         </div>
 
         <div className="teacher-worksheet-workspace">
-          <div className="teacher-worksheet-editor" aria-label="학습지 문구 편집">
-            <div className="teacher-worksheet-editor-section">
-              <h3>공통 문구</h3>
-              <InputField label="학습지 제목" value={worksheet.lessonTitle} onChange={(value) => setWorksheet(current => ({ ...current, lessonTitle: value }))} />
-              <InputField label="학습 목표" value={worksheet.objective} multiline onChange={(value) => setWorksheet(current => ({ ...current, objective: value }))} />
+          <aside className="teacher-worksheet-palette" aria-label="학습지 포맷 팔레트">
+            <div className="teacher-worksheet-palette-heading">
+              <h3>포맷 추가</h3>
+              <p>문제 유형을 골라 A4에 넣으세요.</p>
             </div>
-            <div className="teacher-worksheet-editor-section">
-              <h3>{LEVEL_DESCRIPTIONS[level]} 문구</h3>
-              <InputField label="수준 이름" value={variant.label} onChange={(value) => updateVariant({ label: value })} />
-              <InputField label="설명" value={variant.subtitle} onChange={(value) => updateVariant({ subtitle: value })} />
-              <InputField label="첫 안내 문구" value={variant.instruction} multiline onChange={(value) => updateVariant({ instruction: value })} />
+            <div className="teacher-worksheet-palette-list">
+              {FORMAT_CATALOG.map(format => <button key={format.kind} type="button" className="teacher-worksheet-palette-item" onClick={() => addBlock(format.kind)}><span className="teacher-worksheet-palette-glyph" aria-hidden="true">{format.glyph}</span><span><strong>{format.label}</strong><small>{format.description}</small></span><b aria-hidden="true">+</b></button>)}
             </div>
-            <div className="teacher-worksheet-editor-section">
-              <h3>활동 문구</h3>
-              {variant.activities.map((activity, index) => <ActivityEditor key={activity.id} worksheet={worksheet} level={level} activity={activity} activityIndex={index} onChange={setWorksheet} />)}
-            </div>
-          </div>
+            <p className="teacher-worksheet-palette-note">페이지 안의 블록에서 글자 크기·색·정렬을 바꾸고, 위·아래 이동·복제·삭제를 할 수 있습니다.</p>
+          </aside>
           <div className="teacher-worksheet-preview-panel">
             <div className="teacher-worksheet-preview-heading">
-              <div><strong>A4 미리보기</strong><span>210 × 297 mm</span></div>
-              {overflow && <span className="teacher-worksheet-overflow-warning" role="status"><Icon name="warning" size={16} /> 내용이 기준선을 넘습니다. 다음 A4로 나눌 수 있도록 줄여 보세요.</span>}
+              <div><strong>A4 편집 캔버스</strong><span>210 × 297 mm</span></div>
+              {overflow && <span className="teacher-worksheet-overflow-warning" role="status"><Icon name="warning" size={16} /> 내용이 기준선을 넘습니다. 블록을 줄이거나 다음 장으로 나누세요.</span>}
             </div>
             <div className="teacher-worksheet-preview-viewport">
-              <WorksheetSheet worksheet={worksheet} variant={variant} sheetRef={sheetRef} />
+              <WorksheetSheet worksheet={worksheet} variant={variant} sheetRef={sheetRef} onChange={setWorksheet} onMove={moveBlock} onDuplicate={duplicateBlock} onRemove={removeBlock} />
             </div>
           </div>
         </div>

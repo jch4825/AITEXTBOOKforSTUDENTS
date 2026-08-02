@@ -2,32 +2,46 @@ import type { LessonId, ModuleId } from '../../../types';
 
 export type WorksheetLevel = 'high' | 'middle' | 'low';
 
-export type WorksheetActivityKind = 'write' | 'trace' | 'cut-paste' | 'match' | 'connect';
+export type WorksheetBlockKind =
+  | 'heading'
+  | 'text'
+  | 'short-answer'
+  | 'sentence'
+  | 'multiple-choice'
+  | 'trace'
+  | 'cut-paste'
+  | 'draw'
+  | 'image'
+  | 'divider';
 
-export interface WorksheetPair {
-  left: string;
-  right: string;
+export interface WorksheetIllustration {
+  src: string;
+  alt: string;
+  caption?: string;
 }
 
-export interface WorksheetActivity {
+export interface WorksheetBlock {
   id: string;
-  kind: WorksheetActivityKind;
-  title: string;
-  instruction: string;
-  prompt?: string;
-  lines?: number;
-  items?: string[];
-  pairs?: WorksheetPair[];
+  kind: WorksheetBlockKind;
+  title?: string;
+  text?: string;
+  instruction?: string;
+  options?: string[];
+  cards?: string[];
   traceText?: string;
-  shape?: 'circle' | 'square' | 'triangle' | 'star';
+  lineCount?: number;
+  image?: WorksheetIllustration;
+  fontSize?: number;
+  fontFamily?: 'sans' | 'serif' | 'hand';
+  color?: string;
+  align?: 'left' | 'center' | 'right';
 }
 
 export interface WorksheetVariant {
   level: WorksheetLevel;
   label: string;
   subtitle: string;
-  instruction: string;
-  activities: WorksheetActivity[];
+  blocks: WorksheetBlock[];
 }
 
 export interface LessonWorksheet {
@@ -38,5 +52,6 @@ export interface LessonWorksheet {
   objective: string;
   accent: string;
   accentSoft: string;
+  illustration?: WorksheetIllustration;
   variants: Record<WorksheetLevel, WorksheetVariant>;
 }
