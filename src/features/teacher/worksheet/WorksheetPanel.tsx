@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ChangeEvent, type CSSProperties, type RefObject } from 'react';
 import Icon from '../../../components/Icon';
-import { buildLessonWorksheet, mergeWorksheetDraft, worksheetStorageKey } from './buildWorksheet';
+import { buildLessonWorksheet, mergeWorksheetDraft, worksheetLegacyStorageKey, worksheetStorageKey } from './buildWorksheet';
 import { downloadWorksheetHtml, printWorksheet } from './worksheetHtml';
 import type { LessonId } from '../../../types';
 import type { LessonWorksheet, WorksheetBlock, WorksheetBlockKind, WorksheetIllustration, WorksheetLevel, WorksheetVariant } from './types';
@@ -41,7 +41,8 @@ const FONT_FAMILIES = {
 function loadWorksheet(lessonId: LessonId): LessonWorksheet {
   const base = buildLessonWorksheet(lessonId);
   try {
-    const saved = localStorage.getItem(worksheetStorageKey(lessonId));
+    const saved = localStorage.getItem(worksheetStorageKey(lessonId))
+      ?? localStorage.getItem(worksheetLegacyStorageKey(lessonId));
     return saved ? mergeWorksheetDraft(base, JSON.parse(saved) as unknown) : base;
   } catch {
     return base;
