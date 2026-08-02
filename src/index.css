@@ -2122,6 +2122,69 @@
     color: #fff;
   }
 
+  /* m1-l1 시범: 마지막 장면과 '처음부터' 버튼이 함께 뜨는 프레임에만 한 번 재생된다. */
+  .final-scene-sparkles {
+    position: fixed;
+    z-index: 70;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .final-scene-sparkle {
+    position: absolute;
+    width: var(--sparkle-size);
+    height: var(--sparkle-size);
+    opacity: 0;
+    filter: drop-shadow(0 0 5px currentColor);
+    animation: final-scene-sparkle-bloom var(--sparkle-duration) ease-out var(--sparkle-delay) both;
+  }
+
+  .final-scene-sparkle::before,
+  .final-scene-sparkle::after {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    border-radius: 999px;
+    background: currentColor;
+    content: '';
+    transform: translate(-50%, -50%);
+  }
+
+  .final-scene-sparkle::before {
+    width: 100%;
+    height: 18%;
+  }
+
+  .final-scene-sparkle::after {
+    width: 18%;
+    height: 100%;
+  }
+
+  @keyframes final-scene-sparkle-bloom {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.15) rotate(var(--sparkle-rotation));
+    }
+    22% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1) rotate(var(--sparkle-rotation));
+    }
+    48% {
+      opacity: 0.9;
+      transform: translate(-50%, -50%) scale(0.62) rotate(var(--sparkle-rotation));
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, calc(-50% - var(--sparkle-rise))) scale(0.12) rotate(var(--sparkle-rotation));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .final-scene-sparkle {
+      animation: none;
+    }
+  }
+
   .visual-novel-goal {
     margin-bottom: 1rem;
     padding: 0.85rem 1rem;

@@ -84,6 +84,8 @@ export interface VisualNovelStory {
   objective: string;
   scenes: VisualNovelScene[];
   knowledge: [VisualNovelKnowledge, VisualNovelKnowledge, VisualNovelKnowledge];
+  /** 마지막 장면 진입 때 화면 전체에 완료 반짝이를 한 번 보여 줄지 여부. */
+  celebrateFinalScene?: boolean;
   /** 시즌 오프닝 자막 1줄. 예: '[체험회 D-7 · 1화] 오늘의 사건 — 물품이 안 왔다' */
   seasonTag?: string;
   /** 기록 단계 뒤에 보여줄 다음 화 예고 1줄. 궁금하게, 불안하지 않게. */

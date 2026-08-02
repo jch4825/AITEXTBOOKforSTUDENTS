@@ -9,6 +9,7 @@ import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
 import { playSound } from '../../../utils/sound';
 import { cleanStudioIllustrationAlt } from '../studioIllustrations';
+import FinalSceneSparkles from './FinalSceneSparkles';
 
 interface Props {
   definition: StudioDefinition;
@@ -36,6 +37,8 @@ export default function VisualNovelExperience({
 }: Props) {
   const { speakNow, stop } = useSpeak();
   const scene = story.scenes[sceneIndex];
+  const isFinalScene = sceneIndex === story.scenes.length - 1;
+  const showFinalSceneSparkles = story.celebrateFinalScene === true && isFinalScene;
   const copy = scene.copy[supportLevel];
   const activeKnowledge = story.knowledge[scene.knowledgeStep];
   const spokenText = [
@@ -137,18 +140,18 @@ export default function VisualNovelExperience({
             // all을 쓰면 outline·outline-offset까지 전환 대상이 되어 :focus-visible 링이
             // 목표값에 도달하지 못하고 사라진다. 실제로 바뀌는 속성만 전환한다.
             transition: 'background-color 0.2s, color 0.2s, border-color 0.2s',
-            ...(sceneIndex === story.scenes.length - 1 ? {
+            ...(isFinalScene ? {
               background: 'var(--paper-1)',
               color: 'var(--muted)',
               border: '2px solid var(--editorial-line)',
               boxShadow: 'none'
             } : {})
           }}
-          onClick={() => selectScene(sceneIndex === story.scenes.length - 1 ? 0 : sceneIndex + 1)}
-          aria-label={sceneIndex === story.scenes.length - 1 ? '이야기 처음부터 보기' : '다음 장면 보기'}
+          onClick={() => selectScene(isFinalScene ? 0 : sceneIndex + 1)}
+          aria-label={isFinalScene ? '이야기 처음부터 보기' : '다음 장면 보기'}
         >
-          <span>{sceneIndex === story.scenes.length - 1 ? '처음부터' : '다음 장면'}</span>
-          <Icon name={sceneIndex === story.scenes.length - 1 ? 'refresh' : 'chevron-right'} size={20} />
+          <span>{isFinalScene ? '처음부터' : '다음 장면'}</span>
+          <Icon name={isFinalScene ? 'refresh' : 'chevron-right'} size={20} />
         </button>
       </div>
     </section>
@@ -189,17 +192,25 @@ export default function VisualNovelExperience({
   );
 
   return (
-    <EditorialStudioFrame
-      definition={definition}
-      stage="encounter"
-      accent={accent}
-      secondary={secondary}
-      left={left}
-      // 개념 카드를 이야기 옆에 늘 띄우면 이야기를 읽기 전에 답이 보인다.
-      // 포맷 A~E는 오른쪽 면을 비워 이야기를 지면 전체로 펼친다.
-      right={showKnowledge ? right : undefined}
-      spreadClassName="studio-editorial-scenario"
-      frameClassName={showKnowledge ? undefined : 'studio-editorial-scenario-frame'}
-    />
+    <>
+      {showFinalSceneSparkles ? (
+        <>
+          <FinalSceneSparkles />
+          <span className="sr-only" role="status">이야기를 모두 보았습니다.</span>
+        </>
+      ) : null}
+      <EditorialStudioFrame
+        definition={definition}
+        stage="encounter"
+        accent={accent}
+        secondary={secondary}
+        left={left}
+        // 개념 카드를 이야기 옆에 늘 띄우면 이야기를 읽기 전에 답이 보인다.
+        // 포맷 A~E는 오른쪽 면을 비워 이야기를 지면 전체로 펼친다.
+        right={showKnowledge ? right : undefined}
+        spreadClassName="studio-editorial-scenario"
+        frameClassName={showKnowledge ? undefined : 'studio-editorial-scenario-frame'}
+      />
+    </>
   );
 }

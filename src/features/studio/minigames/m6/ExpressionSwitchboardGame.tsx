@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import type { MiniGameProps } from '../types';
+import { AacCardVisual } from '../../../../components/AacCard';
+import { EXPRESSION_MESSAGE_AAC_CARDS } from '../../../../data/aacCards';
 
 const STAGES = [
   { id: 'help', label: '기본', message: '도와주세요' },
@@ -17,6 +19,7 @@ const MODES = [
 export default function ExpressionSwitchboardGame({ supportLevel }: MiniGameProps) {
   const game = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
   const stage = STAGES[game.stageIndex];
+  const messageCard = EXPRESSION_MESSAGE_AAC_CARDS[stage.id];
   const [mode, setMode] = useState('');
   const [sent, setSent] = useState(false);
   useEffect(() => {
@@ -56,13 +59,24 @@ export default function ExpressionSwitchboardGame({ supportLevel }: MiniGameProp
             </button>
           ))}
         </div>
-        <div className="flex w-[90%] items-center">
-          <span className="text-[33px]" aria-hidden="true">🧍</span>
-          <span className={`mx-2 h-3 flex-1 rounded ${mode ? 'bg-emerald-400' : 'bg-slate-600'}`} />
-          <div className="grid min-h-24 flex-1 place-items-center rounded-[40px] border-4 border-sky-300 bg-sky-950 px-4 text-center text-[17px] font-black text-white">
-            {sent ? `✅ ${stage.message}` : stage.message}
-          </div>
-          <span className="text-[33px]" aria-hidden="true">🧑</span>
+        <div className="flex w-full min-h-0 flex-1 items-center justify-center">
+          {!mode && (
+            <p className="rounded-xl border-2 border-dashed border-slate-500 px-4 py-5 text-center text-[15px] font-bold text-slate-200">
+              위에서 편한 표현 방법을 먼저 골라요.
+            </p>
+          )}
+          {mode === 'card' && <AacCardVisual card={messageCard} selected={sent} />}
+          {mode === 'voice' && (
+            <div className="flex items-center gap-3 rounded-[32px] border-4 border-sky-300 bg-sky-950 px-5 py-4 text-center text-[17px] font-black text-white">
+              <span className="text-[30px]" aria-hidden="true">🗣️</span>
+              <span>{sent ? `✅ ${stage.message}` : stage.message}</span>
+            </div>
+          )}
+          {mode === 'text' && (
+            <div className="rounded-xl border-4 border-slate-300 bg-white px-5 py-4 text-center text-[17px] font-black text-slate-900">
+              {sent ? `✅ ${stage.message}` : stage.message}
+            </div>
+          )}
         </div>
       </div>
     </MiniGameFrame>
