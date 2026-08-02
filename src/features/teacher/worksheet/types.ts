@@ -37,11 +37,18 @@ export interface WorksheetBlock {
   align?: 'left' | 'center' | 'right';
 }
 
+export interface WorksheetPage {
+  id: string;
+  blocks: WorksheetBlock[];
+}
+
 export interface WorksheetVariant {
   level: WorksheetLevel;
   label: string;
   subtitle: string;
   blocks: WorksheetBlock[];
+  /** 기존 저장본과의 호환을 위해 blocks를 유지하면서 페이지 단위 편집을 지원한다. */
+  pages?: WorksheetPage[];
 }
 
 export interface LessonWorksheet {
@@ -54,4 +61,16 @@ export interface LessonWorksheet {
   accentSoft: string;
   illustration?: WorksheetIllustration;
   variants: Record<WorksheetLevel, WorksheetVariant>;
+}
+
+export function worksheetPagesForVariant(variant: WorksheetVariant): WorksheetPage[] {
+  const savedPages = Array.isArray(variant.pages)
+    ? variant.pages.filter(page => page && typeof page.id === 'string' && Array.isArray(page.blocks))
+    : [];
+  if (savedPages.length > 0) return savedPages;
+  return [{ id: `${variant.level}-page-1`, blocks: variant.blocks }];
+}
+
+export function worksheetVariantWithPages(variant: WorksheetVariant, pages: WorksheetPage[]): WorksheetVariant {
+  return { ...variant, pages, blocks: pages.flatMap(page => page.blocks) };
 }

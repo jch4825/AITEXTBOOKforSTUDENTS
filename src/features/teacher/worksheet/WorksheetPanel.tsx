@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ChangeEvent, type CSSProperties, type RefObject } from 'react';
 import Icon from '../../../components/Icon';
-import { buildLessonWorksheet, mergeWorksheetDraft, worksheetLegacyStorageKey, worksheetStorageKey } from './buildWorksheet';
+import { buildLessonWorksheet, mergeWorksheetDraft, worksheetStorageKey } from './buildWorksheet';
 import { downloadWorksheetHtml, printWorksheet } from './worksheetHtml';
 import type { LessonId } from '../../../types';
-import type { LessonWorksheet, WorksheetBlock, WorksheetBlockKind, WorksheetIllustration, WorksheetLevel, WorksheetVariant } from './types';
+import { worksheetPagesForVariant, worksheetVariantWithPages, type LessonWorksheet, type WorksheetBlock, type WorksheetBlockKind, type WorksheetIllustration, type WorksheetLevel, type WorksheetPage, type WorksheetVariant } from './types';
 
 interface Props {
   lessonId: LessonId;
@@ -41,8 +41,7 @@ const FONT_FAMILIES = {
 function loadWorksheet(lessonId: LessonId): LessonWorksheet {
   const base = buildLessonWorksheet(lessonId);
   try {
-    const saved = localStorage.getItem(worksheetStorageKey(lessonId))
-      ?? localStorage.getItem(worksheetLegacyStorageKey(lessonId));
+    const saved = localStorage.getItem(worksheetStorageKey(lessonId));
     return saved ? mergeWorksheetDraft(base, JSON.parse(saved) as unknown) : base;
   } catch {
     return base;
@@ -54,6 +53,13 @@ function newBlockId(kind: WorksheetBlockKind): string {
     ? crypto.randomUUID()
     : `${Date.now()}-${Math.round(Math.random() * 100000)}`;
   return `${kind}-${randomId}`;
+}
+
+function newPageId(level: WorksheetLevel): string {
+  const randomId = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.round(Math.random() * 100000)}`;
+  return `${level}-page-${randomId}`;
 }
 
 function defaultBlock(kind: WorksheetBlockKind, worksheet: LessonWorksheet): WorksheetBlock {
@@ -74,22 +80,21 @@ function defaultBlock(kind: WorksheetBlockKind, worksheet: LessonWorksheet): Wor
 
 function updateBlock(worksheet: LessonWorksheet, level: WorksheetLevel, blockId: string, patch: Partial<WorksheetBlock>): LessonWorksheet {
   const variant = worksheet.variants[level];
+  const pages = worksheetPagesForVariant(variant).map(page => ({
+    ...page,
+    blocks: page.blocks.map(block => block.id === blockId ? { ...block, ...patch } : block),
+  }));
   return {
     ...worksheet,
-    variants: {
-      ...worksheet.variants,
-      [level]: {
-        ...variant,
-        blocks: variant.blocks.map(block => block.id === blockId ? { ...block, ...patch } : block),
-      },
-    },
+    variants: { ...worksheet.variants, [level]: worksheetVariantWithPages(variant, pages) },
   };
 }
 
-function replaceBlocks(worksheet: LessonWorksheet, level: WorksheetLevel, blocks: WorksheetBlock[]): LessonWorksheet {
+function replacePages(worksheet: LessonWorksheet, level: WorksheetLevel, pages: WorksheetPage[]): LessonWorksheet {
+  const variant = worksheet.variants[level];
   return {
     ...worksheet,
-    variants: { ...worksheet.variants, [level]: { ...worksheet.variants[level], blocks } },
+    variants: { ...worksheet.variants, [level]: worksheetVariantWithPages(variant, pages) },
   };
 }
 
@@ -179,6 +184,80 @@ function BlockStyleToolbar({ block, onChange }: { block: WorksheetBlock; onChang
   );
 }
 
+function PreviewReferenceImage({ image }: { image?: WorksheetIllustration }) {
+  if (!image?.src) return null;
+  return (
+    <figure className="teacher-worksheet-preview-reference">
+      <img src={image.src} alt={image.alt} />
+      {image.caption && <figcaption>{image.caption}</figcaption>}
+    </figure>
+  );
+}
+
+function PreviewAnswerLines({ count }: { count: number }) {
+  return <div className="teacher-worksheet-preview-answer-lines" aria-hidden="true">{Array.from({ length: Math.max(1, Math.min(8, count)) }, (_, index) => <i key={index} />)}</div>;
+}
+
+function WorksheetBlockPreview({
+  block,
+  onEdit,
+}: {
+  key?: string;
+  block: WorksheetBlock;
+  onEdit: () => void;
+}) {
+  const blockLabel = FORMAT_CATALOG.find(item => item.kind === block.kind)?.label ?? '포맷';
+  const blockStyle = { '--block-font-size': `${block.fontSize ?? 15}px`, '--block-color': safeColor(block.color), fontFamily: FONT_FAMILIES[block.fontFamily ?? 'sans'], textAlign: block.align ?? 'left' } as CSSProperties;
+  return (
+    <article className={`teacher-worksheet-preview-block teacher-worksheet-preview-block-${block.kind}`} style={blockStyle}>
+      <div className="teacher-worksheet-preview-block-actions" aria-label={`${blockLabel} 조작`}>
+        <span className="teacher-worksheet-preview-kind">{blockLabel}</span>
+        <div>
+          <button type="button" className="teacher-worksheet-preview-edit" aria-label={`${blockLabel} 수정`} onClick={onEdit}>수정</button>
+        </div>
+      </div>
+      <div className="teacher-worksheet-preview-block-content">
+        {block.kind === 'heading' && <h1>{block.text || '제목을 입력하세요.'}</h1>}
+        {block.kind === 'text' && <p className="teacher-worksheet-preview-text">{block.text || '문구를 입력하세요.'}</p>}
+        {(block.kind === 'short-answer' || block.kind === 'sentence') && <>
+          <h2>{block.title}</h2>
+          <PreviewReferenceImage image={block.image} />
+          <p>{block.instruction}</p>
+          <PreviewAnswerLines count={block.lineCount ?? (block.kind === 'sentence' ? 2 : 1)} />
+        </>}
+        {block.kind === 'multiple-choice' && <>
+          <h2>{block.title}</h2>
+          <PreviewReferenceImage image={block.image} />
+          <p>{block.instruction}</p>
+          <div className="teacher-worksheet-preview-options">{(block.options ?? []).map((option, optionIndex) => <span key={optionIndex}>□ {option}</span>)}</div>
+        </>}
+        {block.kind === 'trace' && <>
+          <h2>{block.title}</h2>
+          <PreviewReferenceImage image={block.image} />
+          <p>{block.instruction}</p>
+          <span className="teacher-worksheet-preview-trace">{block.traceText}</span>
+          <PreviewAnswerLines count={block.lineCount ?? 1} />
+        </>}
+        {block.kind === 'cut-paste' && <>
+          <h2>{block.title}</h2>
+          <PreviewReferenceImage image={block.image} />
+          <p>{block.instruction}</p>
+          <div className="teacher-worksheet-preview-paste-targets"><span>붙이는 곳</span><span>붙이는 곳</span><span>붙이는 곳</span></div>
+          <div className="teacher-worksheet-preview-cards">{(block.cards ?? []).map((card, cardIndex) => <span key={cardIndex}>{card}</span>)}</div>
+        </>}
+        {block.kind === 'draw' && <>
+          <h2>{block.title}</h2>
+          <PreviewReferenceImage image={block.image} />
+          <p>{block.instruction}</p>
+          <div className="teacher-worksheet-preview-draw">여기에 그려 보세요</div>
+        </>}
+        {block.kind === 'image' && <PreviewReferenceImage image={block.image} />}
+        {block.kind === 'divider' && <hr />}
+      </div>
+    </article>
+  );
+}
+
 function EditableBlock({
   block,
   index,
@@ -189,6 +268,7 @@ function EditableBlock({
   onMove,
   onDuplicate,
   onRemove,
+  onDone,
 }: {
   key?: string;
   block: WorksheetBlock;
@@ -200,6 +280,7 @@ function EditableBlock({
   onMove: (direction: -1 | 1) => void;
   onDuplicate: () => void;
   onRemove: () => void;
+  onDone: () => void;
 }) {
   const patch = (next: Partial<WorksheetBlock>) => onChange(updateBlock(worksheet, level, block.id, next));
   const blockLabel = FORMAT_CATALOG.find(item => item.kind === block.kind)?.label ?? '포맷';
@@ -209,6 +290,7 @@ function EditableBlock({
       <div className="teacher-worksheet-canvas-block-header">
         <span className="teacher-worksheet-canvas-block-kind">{blockLabel}</span>
         <div className="teacher-worksheet-canvas-block-actions">
+          <button type="button" className="teacher-worksheet-editor-done" onClick={onDone}>수정 완료</button>
           <button type="button" aria-label={`${blockLabel} 위로 이동`} disabled={index === 0} onClick={onMove.bind(null, -1)}>↑</button>
           <button type="button" aria-label={`${blockLabel} 아래로 이동`} disabled={index === count - 1} onClick={onMove.bind(null, 1)}>↓</button>
           <button type="button" aria-label={`${blockLabel} 복제`} onClick={onDuplicate}>⧉</button>
@@ -257,32 +339,21 @@ function EditableBlock({
             <button type="button" className="teacher-worksheet-array-add" onClick={() => patch({ cards: [...(block.cards ?? []), `카드 ${(block.cards?.length ?? 0) + 1}`] })}>+ 카드 추가</button>
           </div>
         )}
-        {block.kind === 'image' && <ImageEditor block={block} onChange={patch} />}
+        {(block.kind === 'image' || block.image) && <ImageEditor block={block} onChange={patch} />}
         {block.kind === 'divider' && <p className="teacher-worksheet-divider-help">학습지 내용을 나누는 선입니다. 별도 문구 없이 인쇄됩니다.</p>}
-        <div className="teacher-worksheet-block-paper-preview" aria-hidden="true">
-          {block.kind === 'heading' && <strong>{block.text || '제목을 입력하세요.'}</strong>}
-          {block.kind === 'text' && <p>{block.text || '문구를 입력하세요.'}</p>}
-          {(block.kind === 'short-answer' || block.kind === 'sentence') && <><strong>{block.title}</strong><p>{block.instruction}</p><div className="teacher-worksheet-answer-lines">{Array.from({ length: block.lineCount ?? (block.kind === 'sentence' ? 2 : 1) }, (_, lineIndex) => <i key={lineIndex} />)}</div></>}
-          {block.kind === 'multiple-choice' && <><strong>{block.title}</strong><p>{block.instruction}</p><div className="teacher-worksheet-options-preview">{(block.options ?? []).map((option, optionIndex) => <span key={optionIndex}>□ {option}</span>)}</div></>}
-          {block.kind === 'trace' && <><strong>{block.title}</strong><p>{block.instruction}</p><span className="teacher-worksheet-trace-preview">{block.traceText}</span></>}
-          {block.kind === 'cut-paste' && <><strong>{block.title}</strong><p>{block.instruction}</p><div className="teacher-worksheet-cut-preview">{(block.cards ?? []).map((card, cardIndex) => <span key={cardIndex}>{card}</span>)}</div></>}
-          {block.kind === 'draw' && <><strong>{block.title}</strong><p>{block.instruction}</p><div className="teacher-worksheet-draw-preview">여기에 그려 보세요</div></>}
-          {block.kind === 'image' && block.image?.src && <img src={block.image.src} alt="" />}
-          {block.kind === 'divider' && <hr />}
-        </div>
       </div>
     </article>
   );
 }
 
-function WorksheetSheet({ worksheet, variant, sheetRef, onChange, onMove, onDuplicate, onRemove }: {
+function WorksheetSheet({ worksheet, variant, page, pageIndex, pageCount, sheetRef, onEdit }: {
   worksheet: LessonWorksheet;
   variant: WorksheetVariant;
+  page: WorksheetPage;
+  pageIndex: number;
+  pageCount: number;
   sheetRef: RefObject<HTMLDivElement | null>;
-  onChange: (next: LessonWorksheet) => void;
-  onMove: (blockId: string, direction: -1 | 1) => void;
-  onDuplicate: (blockId: string) => void;
-  onRemove: (blockId: string) => void;
+  onEdit: (blockId: string) => void;
 }) {
   return (
     <div className="teacher-worksheet-sheet" ref={sheetRef} style={{ '--worksheet-accent': worksheet.accent, '--worksheet-soft': worksheet.accentSoft } as CSSProperties}>
@@ -290,24 +361,17 @@ function WorksheetSheet({ worksheet, variant, sheetRef, onChange, onMove, onDupl
         <header className="teacher-worksheet-sheet-meta">
           <span>{worksheet.moduleTitle}</span>
           <strong>{variant.label} · {variant.subtitle}</strong>
-          <small>A4 학습지 · {worksheet.lessonId}</small>
+          <small>A4 학습지 · {pageIndex + 1}/{pageCount}</small>
         </header>
         <div className="teacher-worksheet-canvas-blocks">
-          {variant.blocks.map((block, index) => (
-            <EditableBlock
+          {page.blocks.map(block => (
+            <WorksheetBlockPreview
               key={block.id}
               block={block}
-              index={index}
-              count={variant.blocks.length}
-              worksheet={worksheet}
-              level={variant.level}
-              onChange={onChange}
-              onMove={(direction) => onMove(block.id, direction)}
-              onDuplicate={() => onDuplicate(block.id)}
-              onRemove={() => onRemove(block.id)}
+              onEdit={() => onEdit(block.id)}
             />
           ))}
-          {variant.blocks.length === 0 && <div className="teacher-worksheet-empty-canvas">왼쪽의 포맷을 눌러 이 A4 페이지에 추가하세요.</div>}
+          {page.blocks.length === 0 && <div className="teacher-worksheet-empty-canvas">포맷 추가 버튼으로 이 페이지를 채우세요.</div>}
         </div>
       </div>
       <div className="teacher-worksheet-page-guide">A4 한 장 기준선</div>
@@ -319,9 +383,17 @@ function WorksheetSheet({ worksheet, variant, sheetRef, onChange, onMove, onDupl
 export default function WorksheetPanel({ lessonId, onClose }: Props) {
   const [worksheet, setWorksheet] = useState<LessonWorksheet>(() => loadWorksheet(lessonId));
   const [level, setLevel] = useState<WorksheetLevel>('high');
+  const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
+  const [showPalette, setShowPalette] = useState(false);
   const sheetRef = useRef<HTMLDivElement | null>(null);
+  const previewViewportRef = useRef<HTMLDivElement | null>(null);
   const [overflow, setOverflow] = useState(false);
+  const [activePageId, setActivePageId] = useState<string | null>(null);
   const variant = worksheet.variants[level];
+  const pages = worksheetPagesForVariant(variant);
+  const activePageIndex = Math.max(0, pages.findIndex(page => page.id === activePageId));
+  const activePage = pages[activePageIndex] ?? pages[0];
+  const editingBlock = activePage.blocks.find(block => block.id === editingBlockId);
 
   useEffect(() => {
     try { localStorage.setItem(worksheetStorageKey(lessonId), JSON.stringify(worksheet)); } catch { /* 저장소가 막힌 환경에서도 편집은 계속한다. */ }
@@ -333,22 +405,20 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onClose]);
 
+  useEffect(() => {
+    setActivePageId(current => current && pages.some(page => page.id === current) ? current : pages[0]?.id ?? null);
+  }, [level, worksheet]);
+
   useLayoutEffect(() => {
     const measure = () => {
       const sheet = sheetRef.current;
       if (!sheet) return;
       const guide = sheet.querySelector<HTMLElement>('.teacher-worksheet-page-guide');
-      const canvas = sheet.querySelector<HTMLElement>('.teacher-worksheet-canvas-blocks');
-      const printBlocks = sheet.querySelectorAll<HTMLElement>('.teacher-worksheet-block-paper-preview');
+      const printBlocks = sheet.querySelectorAll<HTMLElement>('.teacher-worksheet-preview-block');
       const guideTop = guide?.getBoundingClientRect().top;
-      const canvasTop = canvas?.getBoundingClientRect().top;
-      const rowGap = canvas ? Number.parseFloat(getComputedStyle(canvas).rowGap || '0') : 0;
-      let printableHeight = 0;
-      printBlocks.forEach((block: HTMLElement) => {
-        printableHeight += block.getBoundingClientRect().height + Number.parseFloat(getComputedStyle(block).marginTop || '0');
-      });
-      const estimatedPrintBottom = typeof canvasTop === 'number' ? canvasTop + printableHeight + Math.max(0, printBlocks.length - 1) * rowGap : undefined;
-      setOverflow(typeof guideTop === 'number' && typeof estimatedPrintBottom === 'number' && estimatedPrintBottom > guideTop - 4);
+      const lastBlock = printBlocks.item(printBlocks.length - 1);
+      const estimatedPrintBottom = lastBlock?.getBoundingClientRect().bottom;
+      setOverflow(typeof guideTop === 'number' && typeof estimatedPrintBottom === 'number' && estimatedPrintBottom > guideTop);
     };
     measure();
     const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure);
@@ -357,34 +427,72 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
     return () => { observer?.disconnect(); window.removeEventListener('resize', measure); };
   }, [worksheet, level]);
 
+  useLayoutEffect(() => {
+    previewViewportRef.current?.scrollTo({ top: 0, left: 0 });
+  }, [level, activePageId]);
+
   function addBlock(kind: WorksheetBlockKind) {
-    setWorksheet(current => replaceBlocks(current, level, [...current.variants[level].blocks, defaultBlock(kind, current)]));
+    setWorksheet(current => {
+      const currentVariant = current.variants[level];
+      const currentPages = worksheetPagesForVariant(currentVariant);
+      const pageIndex = Math.max(0, currentPages.findIndex(page => page.id === activePageId));
+      const nextPages = currentPages.map((page, index) => index === pageIndex
+        ? { ...page, blocks: [...page.blocks, defaultBlock(kind, current)] }
+        : page);
+      return replacePages(current, level, nextPages);
+    });
+  }
+
+  function addPage() {
+    const pageId = newPageId(level);
+    setWorksheet(current => replacePages(current, level, [...worksheetPagesForVariant(current.variants[level]), { id: pageId, blocks: [] }]));
+    setActivePageId(pageId);
+    setEditingBlockId(null);
+  }
+
+  function removePage() {
+    if (pages.length <= 1) return;
+    const pageIndex = Math.max(0, pages.findIndex(page => page.id === activePageId));
+    const nextPages = pages.filter((_, index) => index !== pageIndex);
+    setWorksheet(current => replacePages(current, level, nextPages));
+    setActivePageId(nextPages[Math.max(0, pageIndex - 1)]?.id ?? nextPages[0]?.id ?? null);
+    setEditingBlockId(null);
   }
 
   function moveBlock(blockId: string, direction: -1 | 1) {
     setWorksheet(current => {
-      const blocks = [...current.variants[level].blocks];
+      const currentPages = worksheetPagesForVariant(current.variants[level]);
+      const pageIndex = Math.max(0, currentPages.findIndex(page => page.id === activePageId));
+      const blocks = [...currentPages[pageIndex].blocks];
       const index = blocks.findIndex(block => block.id === blockId);
       const nextIndex = index + direction;
       if (index < 0 || nextIndex < 0 || nextIndex >= blocks.length) return current;
       [blocks[index], blocks[nextIndex]] = [blocks[nextIndex], blocks[index]];
-      return replaceBlocks(current, level, blocks);
+      return replacePages(current, level, currentPages.map((page, index) => index === pageIndex ? { ...page, blocks } : page));
     });
   }
 
   function duplicateBlock(blockId: string) {
     setWorksheet(current => {
-      const blocks = [...current.variants[level].blocks];
+      const currentPages = worksheetPagesForVariant(current.variants[level]);
+      const pageIndex = Math.max(0, currentPages.findIndex(page => page.id === activePageId));
+      const blocks = [...currentPages[pageIndex].blocks];
       const index = blocks.findIndex(block => block.id === blockId);
       if (index < 0) return current;
       const original = blocks[index];
       blocks.splice(index + 1, 0, { ...original, id: newBlockId(original.kind), image: original.image ? { ...original.image } : undefined, options: original.options ? [...original.options] : undefined, cards: original.cards ? [...original.cards] : undefined });
-      return replaceBlocks(current, level, blocks);
+      return replacePages(current, level, currentPages.map((page, index) => index === pageIndex ? { ...page, blocks } : page));
     });
   }
 
   function removeBlock(blockId: string) {
-    setWorksheet(current => replaceBlocks(current, level, current.variants[level].blocks.filter(block => block.id !== blockId)));
+    setWorksheet(current => {
+      const currentPages = worksheetPagesForVariant(current.variants[level]);
+      const pageIndex = Math.max(0, currentPages.findIndex(page => page.id === activePageId));
+      return replacePages(current, level, currentPages.map((page, index) => index === pageIndex
+        ? { ...page, blocks: page.blocks.filter(block => block.id !== blockId) }
+        : page));
+    });
   }
 
   return (
@@ -394,39 +502,65 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
           <div>
             <p className="teacher-worksheet-kicker">교사 도구 · A4 학습지 편집기</p>
             <h2 id="teacher-worksheet-title">{worksheet.lessonTitle} 학습지 만들기</h2>
-            <p>왼쪽 포맷을 누르면 오른쪽 A4 페이지에 추가됩니다. 추가한 블록은 직접 수정하거나 삭제할 수 있습니다.</p>
+            <p>완성된 A4 미리보기로 시작합니다. 각 문항의 수정 버튼을 눌러 글꼴·문구·그림을 바꿀 수 있습니다.</p>
           </div>
           <button className="teacher-worksheet-close" onClick={onClose} aria-label="학습지 편집기 닫기"><Icon name="close" size={22} /></button>
         </header>
 
         <div className="teacher-worksheet-level-tabs" role="tablist" aria-label="학습지 수준">
-          {LEVEL_ORDER.map(candidate => <button key={candidate} role="tab" aria-selected={level === candidate} className={level === candidate ? 'is-active' : ''} onClick={() => setLevel(candidate)}>{LEVEL_DESCRIPTIONS[candidate]}</button>)}
+          {LEVEL_ORDER.map(candidate => <button key={candidate} role="tab" aria-selected={level === candidate} className={level === candidate ? 'is-active' : ''} onClick={() => { setLevel(candidate); setActivePageId(null); setEditingBlockId(null); }}>{LEVEL_DESCRIPTIONS[candidate]}</button>)}
         </div>
 
         <div className="teacher-worksheet-actions">
+          <button className="teacher-worksheet-action teacher-worksheet-action-secondary" aria-expanded={showPalette} onClick={() => setShowPalette(current => !current)}><Icon name="pen" size={18} /> {showPalette ? '포맷 닫기' : '포맷 추가'}</button>
           <button className="teacher-worksheet-action teacher-worksheet-action-secondary" onClick={() => downloadWorksheetHtml(worksheet, variant)}><Icon name="link" size={18} /> HTML 저장</button>
           <button className="teacher-worksheet-action teacher-worksheet-action-primary" onClick={() => printWorksheet(worksheet, variant)}><Icon name="printer" size={18} /> 인쇄 미리보기 / 인쇄</button>
         </div>
 
-        <div className="teacher-worksheet-workspace">
-          <aside className="teacher-worksheet-palette" aria-label="학습지 포맷 팔레트">
+        <div className="teacher-worksheet-page-controls" role="group" aria-label="학습지 페이지">
+          <span className="teacher-worksheet-page-controls-label">페이지</span>
+          {pages.map((page, pageIndex) => <button key={page.id} type="button" aria-pressed={page.id === activePage.id} className={page.id === activePage.id ? 'is-active' : ''} onClick={() => { setActivePageId(page.id); setEditingBlockId(null); }}>{pageIndex + 1}</button>)}
+          <button type="button" className="teacher-worksheet-page-add" onClick={addPage}>+ 페이지 추가</button>
+          <button type="button" className="teacher-worksheet-page-remove" onClick={removePage} disabled={pages.length <= 1}>페이지 삭제</button>
+        </div>
+
+        <div className={`teacher-worksheet-workspace${showPalette ? ' has-palette' : ''}`}>
+          {showPalette && <aside className="teacher-worksheet-palette" aria-label="학습지 포맷 팔레트">
             <div className="teacher-worksheet-palette-heading">
               <h3>포맷 추가</h3>
-              <p>문제 유형을 골라 A4에 넣으세요.</p>
+              <p>필요한 문제 유형을 골라 현재 페이지의 다음 위치에 추가하세요. 새 페이지를 만든 뒤에는 그 페이지 첫 부분에 들어갑니다.</p>
             </div>
             <div className="teacher-worksheet-palette-list">
               {FORMAT_CATALOG.map(format => <button key={format.kind} type="button" className="teacher-worksheet-palette-item" onClick={() => addBlock(format.kind)}><span className="teacher-worksheet-palette-glyph" aria-hidden="true">{format.glyph}</span><span><strong>{format.label}</strong><small>{format.description}</small></span><b aria-hidden="true">+</b></button>)}
             </div>
-            <p className="teacher-worksheet-palette-note">페이지 안의 블록에서 글자 크기·색·정렬을 바꾸고, 위·아래 이동·복제·삭제를 할 수 있습니다.</p>
-          </aside>
+            <p className="teacher-worksheet-palette-note">기본 학습지는 이미 완성되어 있습니다. 필요한 포맷만 추가하세요.</p>
+          </aside>}
           <div className="teacher-worksheet-preview-panel">
             <div className="teacher-worksheet-preview-heading">
-              <div><strong>A4 편집 캔버스</strong><span>210 × 297 mm</span></div>
+              <div><strong>A4 미리보기 · 페이지 {activePageIndex + 1}/{pages.length}</strong><span>210 × 297 mm · 인쇄본과 같은 내용</span></div>
               {overflow && <span className="teacher-worksheet-overflow-warning" role="status"><Icon name="warning" size={16} /> 내용이 기준선을 넘습니다. 블록을 줄이거나 다음 장으로 나누세요.</span>}
             </div>
-            <div className="teacher-worksheet-preview-viewport">
-              <WorksheetSheet worksheet={worksheet} variant={variant} sheetRef={sheetRef} onChange={setWorksheet} onMove={moveBlock} onDuplicate={duplicateBlock} onRemove={removeBlock} />
+            <div className="teacher-worksheet-preview-viewport" ref={previewViewportRef}>
+              <WorksheetSheet worksheet={worksheet} variant={variant} page={activePage} pageIndex={activePageIndex} pageCount={pages.length} sheetRef={sheetRef} onEdit={setEditingBlockId} />
             </div>
+            {editingBlock && <div className="teacher-worksheet-editor-dock">
+              <div className="teacher-worksheet-editor-dock-heading">
+                <div><strong>{editingBlock.title || FORMAT_CATALOG.find(item => item.kind === editingBlock.kind)?.label || '문항'} 수정</strong><span>수정한 내용은 미리보기와 인쇄본에 바로 반영됩니다.</span></div>
+                <button type="button" onClick={() => setEditingBlockId(null)}>닫기</button>
+              </div>
+              <EditableBlock
+                block={editingBlock}
+                index={activePage.blocks.findIndex(block => block.id === editingBlock.id)}
+                count={activePage.blocks.length}
+                worksheet={worksheet}
+                level={variant.level}
+                onChange={setWorksheet}
+                onMove={(direction) => moveBlock(editingBlock.id, direction)}
+                onDuplicate={() => duplicateBlock(editingBlock.id)}
+                onRemove={() => { removeBlock(editingBlock.id); setEditingBlockId(null); }}
+                onDone={() => setEditingBlockId(null)}
+              />
+            </div>}
           </div>
         </div>
       </section>

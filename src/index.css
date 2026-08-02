@@ -344,6 +344,59 @@
   }
 }
 
+/* 학습지 기본 상태는 완성된 A4 미리보기로 시작하고, 수정 버튼을 눌렀을 때만 편집 패널을 연다. */
+.teacher-worksheet-workspace:not(.has-palette) { grid-template-columns: 1fr; }
+.teacher-worksheet-preview-panel { gap: 0.45rem; }
+.teacher-worksheet-preview-viewport { display: flex; align-items: flex-start; justify-content: center; }
+.teacher-worksheet-sheet { --worksheet-scale: clamp(0.42, calc(100cqw / 794px), 1); }
+.teacher-worksheet-canvas-blocks { gap: calc(0.55rem * var(--worksheet-scale)); }
+.teacher-worksheet-preview-block { position: relative; min-width: 0; margin-top: calc(0.45rem * var(--worksheet-scale)); padding: calc(0.55rem * var(--worksheet-scale)); border: 1px solid var(--editorial-line); border-radius: calc(0.5rem * var(--worksheet-scale)); background: #fffdf9; color: var(--block-color); font-size: calc(var(--block-font-size) * var(--worksheet-scale)); line-height: 1.45; overflow-wrap: anywhere; }
+.teacher-worksheet-preview-block:first-child { margin-top: 0; }
+.teacher-worksheet-preview-block-content { min-width: 0; padding-top: calc(0.35rem * var(--worksheet-scale)); }
+.teacher-worksheet-preview-block-actions { position: absolute; top: calc(0.25rem * var(--worksheet-scale)); right: calc(0.35rem * var(--worksheet-scale)); left: calc(0.35rem * var(--worksheet-scale)); z-index: 1; display: flex; align-items: center; justify-content: flex-end; gap: 0.35rem; pointer-events: none; }
+.teacher-worksheet-preview-block-actions > div { display: flex; justify-content: flex-end; }
+.teacher-worksheet-preview-kind { display: none; }
+.teacher-worksheet-preview-edit { min-height: calc(1.35rem * var(--worksheet-scale)); padding: 0.12rem 0.42rem; border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--border)); border-radius: var(--r-pill); background: color-mix(in srgb, var(--paper-0) 88%, var(--accent-soft)); color: var(--accent); font-size: max(0.46rem, calc(0.64rem * var(--worksheet-scale))); font-weight: 850; pointer-events: auto; }
+.teacher-worksheet-preview-edit:hover { background: var(--paper-2); }
+.teacher-worksheet-preview-block h1 { margin: 0; color: var(--brand-ink); font-size: 1em; line-height: 1.25; }
+.teacher-worksheet-preview-block h2 { margin: 0 0 0.35em; color: var(--accent); font-size: 1.08em; line-height: 1.3; }
+.teacher-worksheet-preview-block p { margin: 0 0 0.55em; line-height: 1.5; }
+.teacher-worksheet-preview-block-heading { padding-inline: 0; border-width: 0 0 1px; border-radius: 0; }
+.teacher-worksheet-preview-block-text { border: 0; border-radius: 0.45rem; background: var(--paper-1); }
+.teacher-worksheet-preview-text { padding: 0.15em 0.2em; }
+.teacher-worksheet-preview-reference { width: min(38%, 10rem); margin: 0.15rem auto 0.55rem; }
+.teacher-worksheet-preview-reference img { display: block; width: 100%; max-height: calc(5rem * var(--worksheet-scale)); object-fit: cover; border: 1px solid var(--editorial-line); border-radius: 0.4rem; }
+.teacher-worksheet-preview-reference figcaption { margin-top: 0.18rem; color: var(--muted); font-size: 0.62em; line-height: 1.25; text-align: center; }
+.teacher-worksheet-preview-answer-lines { display: grid; grid-auto-rows: calc(1.15rem * var(--worksheet-scale)); gap: calc(0.58rem * var(--worksheet-scale)); margin-top: calc(0.48rem * var(--worksheet-scale)); }
+.teacher-worksheet-preview-answer-lines i { display: block; border-bottom: 1px solid color-mix(in srgb, var(--block-color) 55%, var(--border)); }
+.teacher-worksheet-preview-options { display: grid; gap: calc(0.3rem * var(--worksheet-scale)); }
+.teacher-worksheet-preview-options span { padding: 0.35em 0.45em; border: 1px solid var(--editorial-line); border-radius: 0.35rem; line-height: 1.35; }
+.teacher-worksheet-preview-trace { display: block; margin-top: 0.25rem; padding: 0.35em; border-bottom: 2px dashed color-mix(in srgb, var(--block-color) 45%, var(--border)); color: color-mix(in srgb, var(--block-color) 43%, #fff); font-size: 1.25em; font-weight: 850; letter-spacing: 0.035em; line-height: 1.4; }
+.teacher-worksheet-preview-paste-targets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: calc(0.3rem * var(--worksheet-scale)); margin: 0.4em 0; }
+.teacher-worksheet-preview-paste-targets span { display: grid; min-height: calc(1.75rem * var(--worksheet-scale)); place-items: center; border: 1px dashed #bcb4ab; border-radius: 0.35rem; color: var(--muted); font-size: 0.72em; }
+.teacher-worksheet-preview-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: calc(0.3rem * var(--worksheet-scale)); padding-top: 0.4em; border-top: 1px dashed #c9c1b9; }
+.teacher-worksheet-preview-cards span { display: inline-flex; min-width: 0; min-height: calc(1.55rem * var(--worksheet-scale)); align-items: center; justify-content: center; padding: 0.35em; border: 1px dashed var(--accent); border-radius: 0.35rem; background: #fff; font-size: 0.76em; font-weight: 750; text-align: center; overflow-wrap: anywhere; }
+.teacher-worksheet-preview-draw { display: grid; min-height: calc(5.1rem * var(--worksheet-scale)); margin-top: 0.45em; place-items: center; border: 2px dashed var(--accent); border-radius: 0.45rem; background: repeating-linear-gradient(0deg, #fffdf9, #fffdf9 1rem, var(--paper-1) 1.05rem, #fffdf9 1.1rem); color: var(--muted); font-size: 0.82em; }
+.teacher-worksheet-editor-dock { flex: 0 0 auto; max-height: min(35dvh, 390px); overflow-y: auto; padding: 0.7rem; border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border)); border-radius: var(--r-md); background: var(--paper-0); }
+.teacher-worksheet-editor-dock-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.55rem; }
+.teacher-worksheet-editor-dock-heading div { display: grid; gap: 0.16rem; min-width: 0; }
+.teacher-worksheet-editor-dock-heading strong { color: var(--brand-ink); font-size: 0.92rem; }
+.teacher-worksheet-editor-dock-heading span { color: var(--muted); font-size: 0.72rem; line-height: 1.35; }
+.teacher-worksheet-editor-dock-heading button { flex-shrink: 0; min-height: 2rem; padding: 0.25rem 0.55rem; border: 1px solid var(--border); border-radius: var(--r-pill); background: var(--paper-1); color: var(--ink-2); font-size: 0.72rem; font-weight: 800; }
+.teacher-worksheet-editor-dock .teacher-worksheet-canvas-block { border-color: color-mix(in srgb, var(--accent) 38%, var(--border)); box-shadow: 0 2px 8px rgba(48, 44, 54, 0.06); }
+.teacher-worksheet-editor-dock .teacher-worksheet-canvas-block-header { background: var(--paper-1); }
+.teacher-worksheet-editor-done { width: auto !important; min-width: 4.2rem; padding-inline: 0.38rem; color: var(--accent) !important; font-size: 0.68rem !important; font-weight: 850; }
+
+@media (max-width: 860px) {
+  .teacher-worksheet-editor-dock { max-height: 38dvh; }
+}
+
+@media print {
+  .teacher-worksheet-preview-block-actions, .teacher-worksheet-editor-dock { display: none !important; }
+  .teacher-worksheet-preview-block { margin-top: 5mm; padding: 4mm; border: 1.5px solid #dedbe3; border-radius: 3mm; font-size: inherit; }
+  .teacher-worksheet-preview-block:first-child { margin-top: 0; }
+}
+
 /* 교사 학습지 편집기 — 화면은 편집·미리보기를 나란히, 인쇄물은 A4 한 장으로 */
 .teacher-worksheet-backdrop {
   position: fixed;
@@ -511,7 +564,7 @@
 @media print {
   .teacher-worksheet-backdrop { position: static; display: block; padding: 0; background: #fff; }
   .teacher-worksheet-modal { display: block; width: auto; max-height: none; overflow: visible; border: 0; box-shadow: none; }
-  .teacher-worksheet-modal-header, .teacher-worksheet-level-tabs, .teacher-worksheet-actions, .teacher-worksheet-editor, .teacher-worksheet-preview-heading { display: none !important; }
+  .teacher-worksheet-modal-header, .teacher-worksheet-level-tabs, .teacher-worksheet-actions, .teacher-worksheet-page-controls, .teacher-worksheet-editor, .teacher-worksheet-preview-heading { display: none !important; }
   .teacher-worksheet-workspace, .teacher-worksheet-preview-panel, .teacher-worksheet-preview-viewport { display: block; padding: 0; overflow: visible; }
   .teacher-worksheet-sheet { width: 210mm; height: 297mm; min-height: 297mm; margin: 0; box-shadow: none; }
 }
@@ -2382,7 +2435,7 @@
     print-color-adjust: exact !important;
   }
   .printable-certificate,
-  .completion-award-printable {
+.completion-award-printable {
     width: 100% !important;
     box-sizing: border-box !important;
     margin: 0 !important;
@@ -2395,5 +2448,105 @@
     background-color: #fffdf9 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+}
+
+/* A4 미리보기도 좁은 화면에서 실제 페이지 비율을 유지한다. */
+@media screen and (max-width: 860px) {
+  .teacher-worksheet-sheet-meta {
+    gap: calc(0.5rem * var(--worksheet-scale));
+    padding-bottom: calc(0.7rem * var(--worksheet-scale));
+    margin-bottom: calc(0.8rem * var(--worksheet-scale));
+    border-bottom-width: calc(3px * var(--worksheet-scale));
+  }
+
+  .teacher-worksheet-sheet-meta span {
+    font-size: calc(1.3rem * var(--worksheet-scale));
+    line-height: 1.25;
+  }
+
+  .teacher-worksheet-sheet-meta strong {
+    font-size: calc(0.72rem * var(--worksheet-scale));
+  }
+
+  .teacher-worksheet-sheet-meta small {
+    font-size: calc(0.55rem * var(--worksheet-scale));
+  }
+
+  .teacher-worksheet-canvas-blocks {
+    gap: calc(0.5rem * var(--worksheet-scale));
+  }
+
+  .teacher-worksheet-page-guide,
+  .teacher-worksheet-sheet-footer {
+    font-size: calc(0.62rem * var(--worksheet-scale));
+  }
+}
+
+.teacher-worksheet-page-controls {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.teacher-worksheet-page-controls-label {
+  margin-right: 0.1rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.teacher-worksheet-page-controls button {
+  min-width: 2.05rem;
+  min-height: 2rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--paper-0);
+  color: var(--ink-2);
+  font-size: 0.74rem;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.teacher-worksheet-page-controls button.is-active {
+  border-color: var(--accent);
+  background: var(--paper-2);
+  color: var(--accent);
+}
+
+.teacher-worksheet-page-controls button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.teacher-worksheet-page-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.teacher-worksheet-page-controls .teacher-worksheet-page-add {
+  margin-left: 0.25rem;
+  border-style: dashed;
+  color: var(--accent);
+}
+
+.teacher-worksheet-page-controls .teacher-worksheet-page-remove {
+  color: var(--warn, #a95447);
+}
+
+@media screen and (max-width: 520px) {
+  .teacher-worksheet-page-controls {
+    padding-inline: 0.85rem;
+  }
+
+  .teacher-worksheet-page-controls button {
+    min-height: 1.9rem;
+    font-size: 0.7rem;
   }
 }

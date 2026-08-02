@@ -5,7 +5,7 @@ import { getModule } from '../../../data/modules';
 import type { LessonId } from '../../../types';
 import { themeFor } from '../../../utils/moduleThemes';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
-import type { LessonWorksheet, WorksheetBlock, WorksheetBlockKind, WorksheetIllustration, WorksheetLevel, WorksheetVariant } from './types';
+import { worksheetPagesForVariant, worksheetVariantWithPages, type LessonWorksheet, type WorksheetBlock, type WorksheetBlockKind, type WorksheetIllustration, type WorksheetLevel, type WorksheetVariant } from './types';
 
 const LEVELS: Record<WorksheetLevel, Omit<WorksheetVariant, 'blocks'>> = {
   high: { level: 'high', label: '상', subtitle: '직접 써요' },
@@ -127,6 +127,7 @@ function lessonStages(source: { objective: string; canonical?: CanonicalLessonDe
 function starterBlocksForLevel(level: WorksheetLevel, source: {
   title: string;
   objective: string;
+  illustration?: WorksheetIllustration;
   canonical?: CanonicalLessonDesign;
 }): WorksheetBlock[] {
   const frame = starterBlocks(source.title, source.objective);
@@ -160,6 +161,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         instruction: `배운 핵심 내용: ${writingTopic}`,
         lineCount: 2,
         fontSize: 15,
+        image: source.illustration,
       },
       {
         id: 'starter-high-reason',
@@ -189,7 +191,9 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         title: '1. 핵심 낱말 따라 쓰기',
         instruction: '연한 글자를 따라 천천히 써 보세요.',
         traceText: phrase,
+        lineCount: 1,
         fontSize: 19,
+        image: source.illustration,
       },
       {
         id: 'starter-middle-choice',
@@ -203,7 +207,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         id: 'starter-middle-cut',
         kind: 'cut-paste',
         title: '3. 카드 붙이기',
-        instruction: compactText(stagePrompt(secondOptionStage, `알맞은 카드를 ${phrase}와 연결해 보세요.`, 76), 84),
+        instruction: compactText(stagePrompt(secondOptionStage, `알맞은 카드를 ${phrase}와 연결해 보세요.`, 52), 56),
         cards,
         fontSize: 13,
       },
@@ -219,20 +223,23 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
       instruction: stagePrompt(optionStage, source.objective),
       options,
       fontSize: 14,
+      image: source.illustration,
+    },
+    {
+      id: 'starter-low-trace',
+      kind: 'trace',
+      title: '2. 핵심 낱말 따라 쓰기',
+      instruction: '연한 글자를 따라 천천히 써 보세요.',
+      traceText: phrase,
+      lineCount: 1,
+      fontSize: 18,
     },
     {
       id: 'starter-low-cut',
       kind: 'cut-paste',
-      title: '2. 같은 것끼리 붙이기',
-      instruction: `알맞은 곳에 카드를 붙여 보세요: ${phrase}`,
+      title: '3. 같은 것끼리 붙이기',
+      instruction: compactText(`알맞은 곳에 카드를 붙여 보세요: ${phrase}`, 56),
       cards,
-      fontSize: 13,
-    },
-    {
-      id: 'starter-low-draw',
-      kind: 'draw',
-      title: '3. 그림으로 보여 주기',
-      instruction: `배운 내용을 그림으로 보여 주세요: ${phrase}`,
       fontSize: 13,
     },
   ];
@@ -293,7 +300,11 @@ export function isWorksheetVariant(value: unknown): value is WorksheetVariant {
     && typeof variant.label === 'string'
     && typeof variant.subtitle === 'string'
     && Array.isArray(variant.blocks)
-    && variant.blocks.every(isWorksheetBlock);
+    && variant.blocks.every(isWorksheetBlock)
+    && (variant.pages === undefined || (
+      Array.isArray(variant.pages)
+      && variant.pages.every(page => Boolean(page) && typeof page.id === 'string' && Array.isArray(page.blocks) && page.blocks.every(isWorksheetBlock))
+    ));
 }
 
 export function mergeWorksheetDraft(base: LessonWorksheet, saved: unknown): LessonWorksheet {
@@ -304,21 +315,28 @@ export function mergeWorksheetDraft(base: LessonWorksheet, saved: unknown): Less
   (['high', 'middle', 'low'] as const).forEach(level => {
     const savedVariant = variants[level];
     if (isWorksheetVariant(savedVariant)) {
-      const isOldStarter = savedVariant.blocks.length <= 2
-        && savedVariant.blocks.every(block => block.kind === 'heading' || block.kind === 'text');
-      const blocks = isOldStarter
-        ? base.variants[level].blocks.map((block, index) => {
-          if (index > 1) return block;
-          const savedBlock = savedVariant.blocks.find(candidate => candidate.kind === block.kind)
-            ?? savedVariant.blocks[index];
-          return savedBlock ? { ...block, ...savedBlock, id: block.id, kind: block.kind } : block;
-        })
-        : savedVariant.blocks;
+      const savedPages = worksheetPagesForVariant(savedVariant);
+      const savedBlocks = savedPages.flatMap(page => page.blocks);
+      const isOldStarter = savedBlocks.length <= 2
+        && savedBlocks.every(block => block.kind === 'heading' || block.kind === 'text');
+      const basePages = worksheetPagesForVariant(base.variants[level]);
+      const pages = isOldStarter
+        ? basePages.map((page, pageIndex) => pageIndex === 0
+          ? {
+            ...page,
+            blocks: page.blocks.map((block, index) => {
+              if (index > 1) return block;
+              const savedBlock = savedBlocks.find(candidate => candidate.kind === block.kind)
+                ?? savedBlocks[index];
+              return savedBlock ? { ...block, ...savedBlock, id: block.id, kind: block.kind } : block;
+            }),
+          }
+          : page)
+        : savedPages;
       mergedVariants[level] = {
-        ...base.variants[level],
+        ...worksheetVariantWithPages(base.variants[level], pages),
         label: savedVariant.label,
         subtitle: savedVariant.subtitle,
-        blocks,
       };
     }
   });
@@ -332,9 +350,5 @@ export function mergeWorksheetDraft(base: LessonWorksheet, saved: unknown): Less
 }
 
 export function worksheetStorageKey(lessonId: LessonId): string {
-  return `ai-students-worksheets-v4:${lessonId}`;
-}
-
-export function worksheetLegacyStorageKey(lessonId: LessonId): string {
-  return `ai-students-worksheets-v3:${lessonId}`;
+  return `ai-students-worksheets-v5:${lessonId}`;
 }
