@@ -7,6 +7,7 @@ import Burst from '../../games/Burst';
 import { useSpeak } from '../../../hooks/useSpeak';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
+import { playSound } from '../../../utils/sound';
 
 interface ChoiceItem {
   id: string;
@@ -55,6 +56,8 @@ export default function ExpressionInput({
   }
 
   function selectChoice(id: string, label: string) {
+    // 소리를 먼저 낸다. speak가 시작되면 말소리 보호 규칙에 걸려 선택음이 생략된다.
+    playSound('select');
     speak(label);
     onChange({ mode: activeMode, choiceIds: [id] });
   }

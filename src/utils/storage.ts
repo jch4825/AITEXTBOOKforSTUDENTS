@@ -12,6 +12,7 @@ const DEFAULT_SETTINGS: SettingsState = {
   difficulty: 'normal', // 새 사용자는 보통 지원 수준으로 시작한다.
   fontSize: 'normal',
   ttsEnabled: true,
+  soundEnabled: true,
 };
 
 function safeGet(key: string): string | null {
@@ -52,7 +53,8 @@ export function loadSettings(): SettingsState {
       : parsed?.fontSize === 'large' ? 'large'
       : 'normal';
     const ttsEnabled = parsed?.ttsEnabled !== false;
-    return { difficulty, fontSize, ttsEnabled };
+    const soundEnabled = parsed?.soundEnabled !== false;
+    return { difficulty, fontSize, ttsEnabled, soundEnabled };
   } catch {
     return DEFAULT_SETTINGS;
   }

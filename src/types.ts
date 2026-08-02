@@ -28,6 +28,8 @@ export interface SettingsState {
   difficulty: Difficulty;
   fontSize: FontSize;
   ttsEnabled: boolean;
+  /** 스튜디오 효과음. 읽어 주기(ttsEnabled)와 별개 토글이다(05-ENGINE-SPEC §7). */
+  soundEnabled: boolean;
 }
 
 export type LessonKind = 'concept' | 'activity' | 'experience';

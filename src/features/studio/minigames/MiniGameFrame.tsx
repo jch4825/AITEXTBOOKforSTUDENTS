@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSpeak } from '../../../hooks/useSpeak';
+import { playSound } from '../../../utils/sound';
 import type { MiniGameStageTab, MiniGameStatus } from './types';
 
 interface Progress {
@@ -50,6 +51,17 @@ export default function MiniGameFrame({
 }: Props) {
   const { speakNow } = useSpeak();
   const tint = `color-mix(in srgb, ${accent} 12%, var(--paper-0))`;
+
+  // 한 칸 채울 때마다 같은 소리를 낸다. 여기 한 곳에 두면 62개 게임이 함께 따른다.
+  // 줄어들 때(되돌리기·다시 하기)는 울리지 않는다 — 되돌리는 것은 실패가 아니다.
+  const lastProgress = useRef<number | null>(null);
+  useEffect(() => {
+    const value = progress?.value ?? null;
+    if (value !== null && lastProgress.current !== null && value > lastProgress.current) {
+      playSound('fill');
+    }
+    lastProgress.current = value;
+  }, [progress?.value]);
 
   return (
     <div

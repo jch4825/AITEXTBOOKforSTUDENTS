@@ -5,12 +5,23 @@ import { useProgress } from '../../context/ProgressContext';
 import { useSettings } from '../../context/SettingsContext';
 import { getModule } from '../../data/modules';
 import { themeFor } from '../../utils/moduleThemes';
+import { playSound, type SoundName } from '../../utils/sound';
 import type { HardLessonContent, LessonContent, LessonId } from '../../types';
 import { DIFFICULTY_TO_SUPPORT } from './supportLevel';
 import StudioExperience from './components/StudioExperience';
 import { crossesStage, getFormatBehavior } from './formats';
 import { useStudioSession } from './useStudioSession';
-import type { StudioDefinition } from './types';
+import type { StudioDefinition, StudioStage } from './types';
+
+/**
+ * 기록 단계를 넘을 때 울릴 소리. 결과물을 마친 순간과 차시를 마친 순간은
+ * 다른 사건이므로 같은 전진음으로 뭉뚱그리지 않는다.
+ */
+function stageChangeSound(from: StudioStage, to: StudioStage | undefined): SoundName {
+  if (to === 'complete') return 'lesson-complete';
+  if (from === 'artifact') return 'artifact-done';
+  return 'stage-advance';
+}
 
 interface Props {
   key?: string;
@@ -66,15 +77,22 @@ export default function StudioLessonView({
       return;
     }
     setViewIndex(viewIndex + 1);
+    const nextView = views[viewIndex + 1];
     // 같은 기록 단계 안에서 화면만 넘어가는 경우에는 리듀서를 건드리지 않는다.
-    if (!crossesStage(view, views[viewIndex + 1])) return;
+    if (!crossesStage(view, nextView)) {
+      playSound('scene-next');
+      return;
+    }
+    playSound(stageChangeSound(view.stage, nextView?.stage));
     session.goNext();
   }
 
   function handlePrevious() {
     const previous = views[viewIndex - 1];
     if (!previous) return;
-    if (crossesStage(previous, view)) session.goPrevious();
+    const crosses = crossesStage(previous, view);
+    playSound(crosses ? 'stage-back' : 'scene-next');
+    if (crosses) session.goPrevious();
     setViewIndex(viewIndex - 1);
   }
 

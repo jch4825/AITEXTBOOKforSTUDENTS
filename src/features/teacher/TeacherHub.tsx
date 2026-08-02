@@ -9,6 +9,7 @@ import TeacherCurriculumGuide from './TeacherCurriculumGuide';
 import TeacherDataManagement from './TeacherDataManagement';
 import TeacherOnboarding from './TeacherOnboarding';
 import TeacherOperationGuide from './TeacherOperationGuide';
+import TeacherSoundSetting from './TeacherSoundSetting';
 import { loadTeacherRecordingSettings } from './recordingSettings';
 
 interface Props {
@@ -117,6 +118,7 @@ export default function TeacherHub({ onExit }: Props) {
                 <article className="studio-fact-card"><h3 className="font-bold">수업 전 1분 점검</h3><p className="mt-1 text-sm leading-relaxed">학생 별칭, 기록 상태, TTS·STT, AAC 카드, 오늘 사용할 지원 수준을 확인합니다.</p></article>
               </div>
             </section>
+            <TeacherSoundSetting />
             <TeacherOperationGuide />
           </>
         )}

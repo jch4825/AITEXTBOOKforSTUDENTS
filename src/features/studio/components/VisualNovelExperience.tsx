@@ -7,6 +7,7 @@ import SpeakerDialogue from './SpeakerDialogue';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
+import { playSound } from '../../../utils/sound';
 import { cleanStudioIllustrationAlt } from '../studioIllustrations';
 
 interface Props {
@@ -50,7 +51,9 @@ export default function VisualNovelExperience({
   ]);
 
   function selectScene(index: number) {
+    // 읽어 주기를 먼저 멈춰야 장면 넘김 소리가 말소리에 막히지 않는다.
     stop();
+    playSound('scene-next');
     onSceneIndexChange(index);
   }
 

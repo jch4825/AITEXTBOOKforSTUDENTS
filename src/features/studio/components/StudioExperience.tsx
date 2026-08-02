@@ -16,6 +16,7 @@ import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
 import VisualNovelExperience from './VisualNovelExperience';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
+import { playSound } from '../../../utils/sound';
 import { cleanStudioIllustrationAlt } from '../studioIllustrations';
 import type { FormatBehavior, StudioView } from '../formats';
 import LiveGeminiInteraction from '../../../components/LiveGeminiInteraction';
@@ -575,7 +576,10 @@ export default function StudioExperience({
               <button
                 key={choice.id}
                 type="button"
-                onClick={() => dispatch({ type: 'set-ai-decision', value: choice.id })}
+                onClick={() => {
+                  playSound('confirm');
+                  dispatch({ type: 'set-ai-decision', value: choice.id });
+                }}
                 aria-pressed={selected}
                 className="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-3 text-base font-extrabold transition-all hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                 style={{
@@ -675,7 +679,10 @@ export default function StudioExperience({
           {!state.artifactSummary?.trim() && suggestion && (
             <button
               type="button"
-              onClick={() => dispatch({ type: 'set-artifact', value: suggestion })}
+              onClick={() => {
+                playSound('stamp');
+                dispatch({ type: 'set-artifact', value: suggestion });
+              }}
               className="mt-3 cursor-pointer rounded-full border-2 px-4 py-2 text-sm font-bold transition-all hover:scale-105"
               style={{ borderColor: accent, color: accent }}
             >
