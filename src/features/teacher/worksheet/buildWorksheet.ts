@@ -30,12 +30,6 @@ function cleanText(value: string | undefined | null): string {
   return (value ?? '').replace(/\s+/g, ' ').trim();
 }
 
-function compactText(value: string | undefined | null, maxLength: number): string {
-  const text = cleanText(value);
-  if (text.length <= maxLength) return text;
-  return `${text.slice(0, Math.max(1, maxLength - 1)).trimEnd()}…`;
-}
-
 function illustrationFromAsset(asset: { src?: string; alt: string; purpose: string } | undefined): WorksheetIllustration | undefined {
   if (!asset?.src) return undefined;
   return {
@@ -68,8 +62,8 @@ function uniqueText(values: string[]): string[] {
   return [...new Set(values.map(value => cleanText(value)).filter(Boolean))];
 }
 
-function stagePrompt(stage: CanonicalStage | undefined, fallback: string, maxLength = 88): string {
-  return compactText(stage?.activity.prompt || stage?.instruction || stage?.title || fallback, maxLength);
+function stagePrompt(stage: CanonicalStage | undefined, fallback: string): string {
+  return cleanText(stage?.activity.prompt || stage?.instruction || stage?.title || fallback);
 }
 
 function stageChoices(stage: CanonicalStage | undefined): string[] {
@@ -106,18 +100,18 @@ function stageChoices(stage: CanonicalStage | undefined): string[] {
 }
 
 function lessonOptions(stage: CanonicalStage | undefined, fallback: string): string[] {
-  const options = uniqueText(stageChoices(stage).map(value => compactText(value, 42))).slice(0, 3);
+  const options = uniqueText(stageChoices(stage)).slice(0, 3);
   if (options.length >= 2) return options;
   return uniqueText([
     ...options,
-    compactText(fallback, 34),
+    fallback,
     '배운 내용',
     '내 생각',
   ]).slice(0, 3);
 }
 
 function lessonPhrase(source: { objective: string; canonical?: CanonicalLessonDesign }, stage: CanonicalStage | undefined): string {
-  return compactText(source.canonical?.coreConcepts?.[0] || stage?.title || source.objective, 38);
+  return cleanText(source.canonical?.coreConcepts?.[0] || stage?.title || source.objective);
 }
 
 function lessonStages(source: { objective: string; canonical?: CanonicalLessonDesign }): CanonicalStage[] {
@@ -142,13 +136,12 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
   const options = lessonOptions(optionStage, phrase);
   const cards = lessonOptions(secondOptionStage, phrase);
   const artifactField = source.canonical?.artifact.fields.find(field => field.input === 'text' || field.input === 'choice');
-  const writingTopic = compactText(artifactField?.label || stagePrompt(writingStage, source.objective, 76), 84);
-  const transferTopic = compactText(
+  const writingTopic = cleanText(artifactField?.label || stagePrompt(writingStage, source.objective));
+  const transferTopic = cleanText(
     source.canonical?.transfer.title
       || source.canonical?.transfer.scenario
       || source.canonical?.artifact.title
       || source.objective,
-    84,
   );
 
   if (level === 'high') {
@@ -175,7 +168,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         id: 'starter-high-transfer',
         kind: 'short-answer',
         title: '3. 생활에서 써요',
-        instruction: compactText(`${transferTopic}에 배운 내용을 어떻게 써 볼까요?`, 96),
+        instruction: `${transferTopic}에 배운 내용을 어떻게 써 볼까요?`,
         lineCount: 1,
         fontSize: 15,
       },
@@ -207,7 +200,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         id: 'starter-middle-cut',
         kind: 'cut-paste',
         title: '3. 카드 붙이기',
-        instruction: compactText(stagePrompt(secondOptionStage, `알맞은 카드를 ${phrase}와 연결해 보세요.`, 52), 56),
+        instruction: stagePrompt(secondOptionStage, `알맞은 카드를 ${phrase}와 연결해 보세요.`),
         cards,
         fontSize: 13,
       },
@@ -238,7 +231,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
       id: 'starter-low-cut',
       kind: 'cut-paste',
       title: '3. 같은 것끼리 붙이기',
-      instruction: compactText(`알맞은 곳에 카드를 붙여 보세요: ${phrase}`, 56),
+      instruction: `알맞은 곳에 카드를 붙여 보세요: ${phrase}`,
       cards,
       fontSize: 13,
     },
