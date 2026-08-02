@@ -25,7 +25,7 @@ interface Props {
 }
 
 const SIDEBAR_COLLAPSED_KEY = 'ai-students-sidebar-collapsed';
-const TABLET_QUERY = '(min-width: 768px) and (max-width: 1199px)';
+const TABLET_QUERY = '(min-width: 768px) and (max-width: 1279px)';
 
 function isTabletViewport() {
   return typeof window !== 'undefined' && window.matchMedia(TABLET_QUERY).matches;
