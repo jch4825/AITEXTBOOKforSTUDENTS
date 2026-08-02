@@ -9,6 +9,7 @@ import { moduleIdFromLessonId } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import { TEACHER_RESOURCES } from '../data/teacherResources';
 import type { LessonId } from '../types';
+import WorksheetPanel from '../features/teacher/worksheet/WorksheetPanel';
 
 type ToolId = 'draw' | 'timer' | 'pecs' | 'worksheet' | 'resources';
 type PanelId = Exclude<ToolId, 'draw'>;
@@ -104,7 +105,7 @@ export default function ClassroomDock({ lessonId }: Props) {
           fixed와 달리 프레임 기준이라 모바일 주소창 변화에도 점핑·사라짐이 없다.
           실제 푸터 높이는 MicroLessonFrame에서 측정한 CSS 변수로 맞춘다. */}
       <div className="classroom-dock absolute left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none">
-        {!collapsed && panelTool && (
+        {!collapsed && panelTool && panelTool !== 'worksheet' && (
           <div
             className="rounded-[var(--r-md)] overflow-hidden pointer-events-auto max-h-[60vh] overflow-y-auto"
             style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-2)', border: '1px solid var(--border)' }}
@@ -127,11 +128,6 @@ export default function ClassroomDock({ lessonId }: Props) {
                 />
               )}
               {panelTool === 'pecs' && <PecsBoard moduleId={moduleId} />}
-              {panelTool === 'worksheet' && (
-                <div className="p-4 w-64 text-center">
-                  <p className="text-[color:var(--muted)]">학습지는 준비 중입니다.</p>
-                </div>
-              )}
               {panelTool === 'resources' && (
                 <div className="p-4 w-64">
                   <h3 className="text-lg font-bold mb-2" style={{ color: theme.accent }}>교사 자료</h3>
@@ -205,6 +201,9 @@ export default function ClassroomDock({ lessonId }: Props) {
           )}
         </div>
       </div>
+      {open === 'worksheet' && !collapsed && (
+        <WorksheetPanel lessonId={lessonId} onClose={() => setOpen(null)} />
+      )}
       {open === 'draw' && <DrawBoard onClose={() => setOpen(null)} />}
     </>
   );

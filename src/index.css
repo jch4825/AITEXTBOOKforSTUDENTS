@@ -344,6 +344,170 @@
   }
 }
 
+/* 교사 학습지 편집기 — 화면은 편집·미리보기를 나란히, 인쇄물은 A4 한 장으로 */
+.teacher-worksheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(24, 30, 42, 0.62);
+}
+
+.teacher-worksheet-modal {
+  display: flex;
+  width: min(1180px, 100%);
+  max-height: min(94dvh, 940px);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--paper-0);
+  box-shadow: 0 18px 60px rgba(22, 31, 49, 0.28);
+}
+
+.teacher-worksheet-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.teacher-worksheet-modal-header h2 {
+  margin: 0.15rem 0 0.2rem;
+  color: var(--brand-ink);
+  font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+  line-height: 1.3;
+}
+
+.teacher-worksheet-modal-header p { margin: 0; color: var(--muted); font-size: 0.86rem; }
+.teacher-worksheet-modal-header .teacher-worksheet-kicker { color: var(--accent); font-size: 0.78rem; font-weight: 850; letter-spacing: 0.06em; }
+.teacher-worksheet-close { display: grid; width: 2.75rem; height: 2.75rem; place-items: center; flex-shrink: 0; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--ink-2); }
+.teacher-worksheet-close:hover { background: var(--paper-2); }
+
+.teacher-worksheet-level-tabs {
+  display: flex;
+  gap: 0.45rem;
+  padding: 0.75rem 1.25rem 0;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.teacher-worksheet-level-tabs button {
+  min-height: 2.8rem;
+  padding: 0.45rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-pill);
+  background: var(--paper-0);
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.teacher-worksheet-level-tabs button.is-active { border-color: var(--accent); background: var(--paper-2); color: var(--accent); }
+
+.teacher-worksheet-actions { display: flex; justify-content: flex-end; gap: 0.55rem; padding: 0.7rem 1.25rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.teacher-worksheet-action { display: inline-flex; min-height: 2.75rem; align-items: center; gap: 0.45rem; padding: 0.45rem 0.85rem; border: 1.5px solid var(--accent); border-radius: var(--r-pill); font-size: 0.86rem; font-weight: 800; }
+.teacher-worksheet-action-secondary { background: var(--paper-0); color: var(--accent); }
+.teacher-worksheet-action-primary { background: var(--accent); color: #fff; }
+.teacher-worksheet-action:hover { filter: brightness(0.96); }
+
+.teacher-worksheet-workspace { display: grid; min-height: 0; flex: 1; grid-template-columns: minmax(290px, 0.82fr) minmax(430px, 1.18fr); }
+.teacher-worksheet-editor { min-width: 0; overflow-y: auto; padding: 1rem 1.1rem 1.4rem 1.25rem; border-right: 1px solid var(--border); }
+.teacher-worksheet-preview-panel { display: flex; min-width: 0; min-height: 0; flex-direction: column; padding: 0.9rem 1.1rem 1.1rem; background: var(--paper-1); }
+.teacher-worksheet-editor-section { margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
+.teacher-worksheet-editor-section:last-child { border-bottom: 0; }
+.teacher-worksheet-editor-section h3 { margin: 0 0 0.6rem; color: var(--brand-ink); font-size: 0.98rem; }
+.teacher-worksheet-field { display: grid; gap: 0.25rem; margin-bottom: 0.6rem; color: var(--ink-2); font-size: 0.78rem; font-weight: 800; }
+.teacher-worksheet-field input, .teacher-worksheet-field textarea, .teacher-worksheet-list-editor input, .teacher-worksheet-pair-editor input { width: 100%; min-width: 0; border: 1.5px solid color-mix(in srgb, var(--accent) 42%, var(--border)); border-radius: var(--r-sm); background: var(--paper-0); color: var(--ink-1); font: inherit; font-size: 0.9rem; line-height: 1.45; }
+.teacher-worksheet-field input, .teacher-worksheet-list-editor input, .teacher-worksheet-pair-editor input { min-height: 2.45rem; padding: 0.45rem 0.6rem; }
+.teacher-worksheet-field textarea { min-height: 3.25rem; padding: 0.45rem 0.6rem; resize: vertical; }
+.teacher-worksheet-field input:focus, .teacher-worksheet-field textarea:focus, .teacher-worksheet-list-editor input:focus, .teacher-worksheet-pair-editor input:focus { border-color: var(--accent); outline: 3px solid color-mix(in srgb, var(--accent) 18%, transparent); }
+.teacher-worksheet-lines-field { grid-template-columns: 1fr 5rem; align-items: center; }
+.teacher-worksheet-lines-field input { width: 5rem; }
+.teacher-worksheet-editor-activity { margin-bottom: 0.8rem; padding: 0.75rem; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--paper-1); }
+.teacher-worksheet-list-editor, .teacher-worksheet-pairs-editor { display: grid; gap: 0.35rem; margin-top: 0.45rem; }
+.teacher-worksheet-list-label { color: var(--ink-2); font-size: 0.76rem; font-weight: 800; }
+.teacher-worksheet-pair-editor { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 0.3rem; }
+.teacher-worksheet-pair-editor > span { color: var(--accent); font-weight: 900; }
+
+.teacher-worksheet-preview-heading { display: flex; min-height: 2.5rem; align-items: flex-start; justify-content: space-between; gap: 0.6rem; }
+.teacher-worksheet-preview-heading > div { display: flex; align-items: baseline; gap: 0.55rem; }
+.teacher-worksheet-preview-heading strong { color: var(--brand-ink); font-size: 0.98rem; }
+.teacher-worksheet-preview-heading span { color: var(--muted); font-size: 0.75rem; }
+.teacher-worksheet-overflow-warning { display: inline-flex; align-items: center; gap: 0.25rem; color: var(--warn); font-size: 0.74rem !important; font-weight: 800; text-align: right; }
+.teacher-worksheet-preview-viewport { min-height: 0; flex: 1; overflow: auto; padding: 0.35rem; }
+.teacher-worksheet-sheet { position: relative; width: min(210mm, 100%); aspect-ratio: 210 / 297; min-height: 0; margin: 0 auto; overflow: hidden; background: var(--editorial-paper); color: var(--editorial-ink); box-shadow: 0 4px 18px rgba(48, 44, 54, 0.15); }
+.teacher-worksheet-sheet-content { height: 100%; overflow: hidden; padding: 7.5% 7.2% 10%; }
+.teacher-worksheet-sheet-header { padding-bottom: 3.3%; border-bottom: 3px solid var(--worksheet-accent); }
+.teacher-worksheet-sheet-module { margin: 0 0 0.35rem; color: var(--worksheet-accent); font-size: clamp(0.58rem, 1.1vw, 0.78rem); font-weight: 850; }
+.teacher-worksheet-sheet-header h2 { margin: 0; color: var(--brand-ink); font-size: clamp(1rem, 2.35vw, 1.55rem); line-height: 1.25; }
+.teacher-worksheet-sheet-level { display: inline-block; margin-top: 0.45rem; padding: 0.16rem 0.55rem; border-radius: var(--r-pill); background: var(--worksheet-soft); color: var(--worksheet-accent); font-size: clamp(0.58rem, 1vw, 0.75rem); font-weight: 850; }
+.teacher-worksheet-sheet-objective { margin: 0.65rem 0 0; padding: 0.5rem 0.6rem; border-radius: 0.6rem; background: var(--paper-1); font-size: clamp(0.62rem, 1.2vw, 0.82rem); line-height: 1.45; }
+.teacher-worksheet-sheet-objective strong { color: var(--worksheet-accent); }
+.teacher-worksheet-sheet-instruction { margin: 0.65rem 0; color: var(--ink-2); font-size: clamp(0.62rem, 1.12vw, 0.78rem); font-weight: 700; line-height: 1.45; }
+.teacher-worksheet-sheet-activities { display: grid; gap: 0.55rem; }
+.teacher-worksheet-sheet-activity { padding: 0.65rem 0.7rem; border: 1.5px solid var(--editorial-line); border-radius: 0.65rem; break-inside: avoid; }
+.teacher-worksheet-sheet-activity h3 { margin: 0 0 0.2rem; color: var(--worksheet-accent); font-size: clamp(0.76rem, 1.5vw, 1rem); line-height: 1.3; }
+.teacher-worksheet-sheet-activity > p { margin: 0 0 0.35rem; color: var(--ink-2); font-size: clamp(0.6rem, 1vw, 0.72rem); line-height: 1.35; }
+.teacher-worksheet-sheet-prompt { padding: 0.35rem 0.5rem; border-left: 3px solid var(--worksheet-accent); background: var(--paper-1); font-size: clamp(0.64rem, 1.15vw, 0.8rem); font-weight: 750; line-height: 1.4; }
+.teacher-worksheet-sheet-lines { display: grid; gap: 0.7rem; margin-top: 0.55rem; }
+.teacher-worksheet-sheet-lines i { display: block; height: 0; border-bottom: 1px solid #a7a099; }
+.teacher-worksheet-sheet-trace { margin-top: 0.35rem; padding: 0.45rem 0.35rem; border-bottom: 2px dashed #aaa39b; color: #aaa39b; font-size: clamp(0.92rem, 2vw, 1.28rem); font-weight: 850; letter-spacing: 0.035em; line-height: 1.35; }
+.teacher-worksheet-sheet-blanks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin: 0.55rem 0; }
+.teacher-worksheet-sheet-blanks span { display: grid; min-height: 2.2rem; place-items: center; border: 1.5px dashed #bcb4ab; border-radius: 0.4rem; color: #9c958d; font-size: clamp(0.52rem, 0.9vw, 0.66rem); }
+.teacher-worksheet-sheet-card-bank { display: flex; flex-wrap: wrap; gap: 0.35rem; padding-top: 0.45rem; border-top: 1px dashed #c9c1b9; }
+.teacher-worksheet-sheet-card-bank span { display: inline-flex; min-width: 3rem; min-height: 2rem; align-items: center; justify-content: center; padding: 0.3rem; border: 1.5px dashed var(--worksheet-accent); border-radius: 0.35rem; background: #fff; font-size: clamp(0.57rem, 1vw, 0.72rem); font-weight: 750; text-align: center; }
+.teacher-worksheet-sheet-match { display: grid; gap: 0.3rem; }
+.teacher-worksheet-sheet-match > div { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 0.35rem; min-height: 2rem; }
+.teacher-worksheet-sheet-match span { padding: 0.3rem; border: 1px solid var(--editorial-line); border-radius: 0.35rem; font-size: clamp(0.55rem, 0.95vw, 0.7rem); line-height: 1.3; }
+.teacher-worksheet-sheet-match b { color: var(--worksheet-accent); font-size: 0.9rem; }
+.teacher-worksheet-sheet-shapes { display: grid; gap: 0.35rem; }
+.teacher-worksheet-sheet-shapes > div { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr) 1.4rem; align-items: center; gap: 0.5rem; min-height: 1.95rem; }
+.teacher-worksheet-sheet-shapes > div > span:nth-child(2) { font-size: clamp(0.58rem, 1vw, 0.72rem); }
+.teacher-worksheet-shape { display: block; width: 1rem; height: 1rem; justify-self: center; border: 2px solid var(--worksheet-accent); }
+.teacher-worksheet-shape-0 { border-radius: 50%; }
+.teacher-worksheet-shape-1 { transform: rotate(45deg); border-radius: 0.12rem; }
+.teacher-worksheet-shape-2 { clip-path: polygon(50% 0, 100% 100%, 0 100%); border-radius: 0; }
+.teacher-worksheet-shape-3 { transform: rotate(45deg); border-radius: 0.3rem; }
+.teacher-worksheet-page-guide { position: absolute; right: 7.2%; bottom: 6.5%; left: 7.2%; border-top: 1px dashed #b86358; color: #b86358; font-size: clamp(0.48rem, 0.82vw, 0.62rem); line-height: 1.2; text-align: right; }
+.teacher-worksheet-sheet-footer { position: absolute; right: 7.2%; bottom: 2.8%; left: 7.2%; display: flex; justify-content: space-between; color: var(--ink-2); font-size: clamp(0.48rem, 0.82vw, 0.62rem); }
+
+@media (max-width: 860px) {
+  .teacher-worksheet-modal { max-height: 96dvh; }
+  .teacher-worksheet-workspace { grid-template-columns: 1fr; overflow-y: auto; }
+  .teacher-worksheet-editor { max-height: 44dvh; border-right: 0; border-bottom: 1px solid var(--border); }
+  .teacher-worksheet-preview-panel { min-height: 45dvh; }
+  .teacher-worksheet-preview-viewport { max-height: 52dvh; }
+}
+
+@media (max-width: 520px) {
+  .teacher-worksheet-backdrop { align-items: stretch; padding: 0; }
+  .teacher-worksheet-modal { max-height: none; border-radius: 0; }
+  .teacher-worksheet-modal-header { padding: 0.8rem 0.85rem 0.7rem; }
+  .teacher-worksheet-level-tabs, .teacher-worksheet-actions { padding-inline: 0.85rem; }
+  .teacher-worksheet-actions { justify-content: stretch; }
+  .teacher-worksheet-action { flex: 1; justify-content: center; padding-inline: 0.45rem; font-size: 0.78rem; }
+  .teacher-worksheet-editor { padding-inline: 0.85rem; }
+  .teacher-worksheet-preview-panel { padding-inline: 0.55rem; }
+  .teacher-worksheet-preview-heading { display: block; }
+  .teacher-worksheet-overflow-warning { margin-top: 0.25rem; }
+}
+
+@media print {
+  .teacher-worksheet-backdrop { position: static; display: block; padding: 0; background: #fff; }
+  .teacher-worksheet-modal { display: block; width: auto; max-height: none; overflow: visible; border: 0; box-shadow: none; }
+  .teacher-worksheet-modal-header, .teacher-worksheet-level-tabs, .teacher-worksheet-actions, .teacher-worksheet-editor, .teacher-worksheet-preview-heading { display: none !important; }
+  .teacher-worksheet-workspace, .teacher-worksheet-preview-panel, .teacher-worksheet-preview-viewport { display: block; padding: 0; overflow: visible; }
+  .teacher-worksheet-sheet { width: 210mm; height: 297mm; min-height: 297mm; margin: 0; box-shadow: none; }
+}
+
 /* AAC 카드 인쇄 — 화면엔 숨기고, 인쇄 시 A6(=A4의 1/4) 한 장에 카드 이미지만 (단어는 이미지에 인쇄됨) */
 .aac-print-card { display: none; }
 @media print {
