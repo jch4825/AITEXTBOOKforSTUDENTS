@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useProgress } from '../context/ProgressContext';
 import { MODULES, lessonIdsForModule } from '../data/modules';
 import Button from '../components/Button';
-import Icon from '../components/Icon';
 import ModuleIcon from '../components/ModuleIcon';
+import { getLesson } from '../data/lessons';
 
 import { pickResumeLesson } from '../utils/lessonResume';
 import type { LessonId } from '../types';
@@ -32,6 +32,8 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
   const doneCount = completedLessons.length;
   const isResume = doneCount > 0;
   const progressPercent = totalLessons > 0 ? Math.round((doneCount / totalLessons) * 100) : 0;
+  const resumeLessonId = pickResumeLesson(completedLessons);
+  const resumeLesson = getLesson(resumeLessonId);
 
   // 배지 획득 계산
   const doneSet = new Set(completedLessons);
@@ -395,8 +397,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                 size="lg"
                 onClick={() => {
                   if (onEnterLesson) {
-                    const resumeId = pickResumeLesson(completedLessons);
-                    onEnterLesson(resumeId);
+                    onEnterLesson(resumeLessonId);
                   } else {
                     onEnter();
                   }
@@ -423,7 +424,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                 <span className="bg-[#caef00] text-[#181e00] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                   기본 중학
                 </span>
-                <h3 className="text-2xl font-black">인공지능 활용(기본교육과정)</h3>
+                <p className="text-2xl font-black">인공지능 활용(기본교육과정)</p>
                 <p className="text-xs text-white/80">미래 사회와 동반성장하는 첫 단추</p>
               </div>
             </div>
@@ -442,11 +443,11 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
             <div className="md:col-span-2 glass-panel p-8 rounded-2xl border border-[#4f5b90]/10 flex flex-col justify-between min-h-[300px]">
               <div>
                 <span className="bg-[#4f5b90]/10 text-[#4f5b90] px-3 py-1 rounded-full text-xs font-bold mb-4 inline-block">
-                  수집 보상
+                  단원 기록
                 </span>
-                <h3 className="text-2xl font-bold text-[#4f5b90] mb-2">획득한 단원 완주 배지</h3>
+                <h3 className="text-2xl font-bold text-[#4f5b90] mb-2">단원 학습 기록</h3>
                 <p className="text-sm text-[#5C5B5A] max-w-md">
-                  각 단원의 모든 차시 공부를 완료하면 예쁜 AI 친구들 배지를 모을 수 있습니다.
+                  차시를 마칠 때마다 단원 기록이 채워집니다. 완료한 학습을 한눈에 확인할 수 있습니다.
                 </p>
               </div>
 
@@ -470,15 +471,18 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
               </div>
             </div>
 
-            {/* Small Card: Soft Design */}
-            <div className="bg-[#fdf8f6]/60 backdrop-blur-md p-8 rounded-2xl border border-[#4f5b90]/10 shadow-sm flex flex-col justify-center items-center text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-[#ccf200]/20 flex items-center justify-center text-[#546500] pulse-soft">
-                <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>celebration</span>
+            {/* Small Card: next learning */}
+            <div className="bg-[#fdf8f6]/60 backdrop-blur-md p-8 rounded-2xl border border-[#4f5b90]/10 shadow-sm flex flex-col justify-center items-start text-left space-y-4">
+              <div className="w-14 h-14 rounded-2xl bg-[#ccf200]/20 flex items-center justify-center text-[#546500]">
+                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>menu_book</span>
               </div>
-              <div>
-                <h4 className="text-lg font-bold text-[#1c1b1b]">생동감 있는 화면</h4>
-                <p className="text-xs text-[#5C5B5A] mt-1">
-                  밝은 색과 경쾌한 애니메이션으로 즐겁게 몰입하는 학습 경험
+              <div className="space-y-2">
+                <h3 className="text-lg font-bold text-[#1c1b1b]">{isResume ? '이어서 할 차시' : '오늘 배울 내용'}</h3>
+                <p className="text-base font-extrabold text-[#4f5b90]">
+                  {resumeLesson?.title ?? 'AI는 우리 곁에 있습니다'}
+                </p>
+                <p className="text-sm leading-relaxed text-[#5C5B5A]">
+                  {resumeLesson?.objective ?? '아이미와 함께 인공지능이 하는 일을 알아봅니다.'}
                 </p>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import Icon from '../../../components/Icon';
 import { useSpeak } from '../../../hooks/useSpeak';
 import { playSound } from '../../../utils/sound';
 import type { MiniGameStageTab, MiniGameStatus } from './types';
@@ -8,6 +9,12 @@ interface Progress {
   value: number;
   max: number;
 }
+
+const STAGE_LABELS: Record<string, string> = {
+  '기본': '연습',
+  '1단계': '기본',
+  '2단계': '도전',
+};
 
 interface Props {
   /** 게임 이름표. 예: "한 붓 그리기 퍼즐" */
@@ -80,7 +87,7 @@ export default function MiniGameFrame({
           className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[14px] font-black"
           style={{ background: tint, border: `1.5px solid ${accent}` }}
         >
-          <span aria-hidden="true">🎮</span>
+          <Icon name="cards" size={16} />
           {badge}
         </span>
         {progress && (
@@ -100,6 +107,7 @@ export default function MiniGameFrame({
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
           {stages.map((stage, index) => {
             const active = index === activeStageIndex;
+            const stageLabel = STAGE_LABELS[stage.label] ?? stage.label;
             return (
               <button
                 key={stage.id}
@@ -114,7 +122,7 @@ export default function MiniGameFrame({
                   border: `1.5px solid ${active ? accent : 'var(--line)'}`,
                 }}
               >
-                {stage.label}
+                {stageLabel}
               </button>
             );
           })}

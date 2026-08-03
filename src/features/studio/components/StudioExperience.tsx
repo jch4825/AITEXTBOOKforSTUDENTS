@@ -711,7 +711,7 @@ export default function StudioExperience({
                 onClick={() => setShowCertificateModal(true)}
                 className="w-full h-11 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md hover:scale-101 active:scale-98"
               >
-                <span>🏆</span> 탐구 증서로 인쇄하기
+                <Icon name="printer" size={18} /> 탐구 증서로 인쇄하기
               </button>
             </div>
           </div>
@@ -804,7 +804,7 @@ export default function StudioExperience({
             onClick={() => setShowAwardModal(true)}
             className="w-full h-12 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-base rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:scale-102 active:scale-98"
           >
-            <span>👑</span> 나의 차시 학습 완료 상장 보기 및 인쇄하기
+            <Icon name="printer" size={20} /> 나의 차시 학습 완료 상장 보기 및 인쇄하기
           </button>
         </div>
       </div>

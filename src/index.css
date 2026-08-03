@@ -1908,6 +1908,39 @@
   }
 }
 
+/* 데스크톱 차시 탐색: 진행 점은 유지하되 제목을 함께 표시한다. */
+@media (min-width: 768px) {
+  nav.sidebar-compact-text section > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.12rem;
+  }
+  nav.sidebar-compact-text section > ul > li {
+    width: 100%;
+  }
+  nav.sidebar-compact-text section > ul button {
+    width: 100%;
+    height: auto;
+    min-height: 2.75rem;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0.35rem 1.45rem 0.35rem 0.55rem;
+    border-radius: var(--r-sm);
+  }
+  nav.sidebar-compact-text section > ul button::after {
+    content: attr(title);
+    min-width: 0;
+    overflow: hidden;
+    color: var(--ink-1);
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  nav.sidebar-compact-text section > ul button[aria-current="page"] {
+    background: var(--paper-2);
+  }
+}
+
 /* Contents redesign: 단원 카드는 한 겹 종이로, 펼친 차시는 별도 박스가 아닌 열린 목록으로 표시한다. */
 .season-map {
   gap: 1rem;
@@ -2083,12 +2116,40 @@
   font-size: 0.7rem;
   font-weight: 900;
 }
+.comic-mobile-contents-toggle {
+  display: none;
+}
 @media (max-width: 1023px) {
   .season-lessons-drawer .comic-lesson-cuts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 767px) {
+  .comic-map-mobile-collapsed .season-map:has(.season-card-active) > .season-card:not(.season-card-active) {
+    display: none;
+  }
+  .comic-map-mobile-collapsed .comic-lesson-cuts > li:not(.is-next-lesson) {
+    display: none;
+  }
+  .comic-mobile-contents-toggle {
+    width: 100%;
+    min-height: 3rem;
+    margin-top: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 1.5px solid var(--brand-ink);
+    border-radius: 12px;
+    background: var(--paper-0);
+    color: var(--brand-ink);
+    font-size: 0.95rem;
+    font-weight: 900;
+  }
+  .comic-mobile-contents-toggle:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
   .season-map {
     grid-template-columns: 1fr;
     gap: 0.75rem;

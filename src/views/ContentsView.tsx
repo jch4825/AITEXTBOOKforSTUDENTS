@@ -19,6 +19,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
   const resume = pickResumeLesson(completedLessons);
   const resumeModule = moduleIdFromLessonId(resume) ?? 'm1';
   const [activeId, setActiveId] = useState<ModuleId | null>(resumeModule);
+  const [showAllMobileContents, setShowAllMobileContents] = useState(false);
   const activeTheme = themeFor(activeId ?? resumeModule);
   const resumeTitle = getLesson(resume)?.title ?? 'AI는 우리 곁에 있습니다';
   const episodes = useMemo(() => MODULES.map((module) => {
@@ -35,7 +36,7 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
   }), [completedLessons, isCompleted]);
 
   const handlePickModule = (moduleId: ModuleId) => {
-    setActiveId((current) => (current === moduleId ? null : moduleId));
+    setActiveId(moduleId);
   };
 
   return <main className="min-h-screen comic-contents">
@@ -48,21 +49,23 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
         <div><p className="comic-kicker">{completedLessons.length ? '다음 컷에서 이어서' : '첫 번째 이야기를 시작합니다'}</p><h1>{resumeTitle}</h1><p>한 장면씩 천천히, 아이미와 함께 배웁니다.</p></div>
         <Button size="lg" accent={activeTheme.accent} onClick={() => onPickLesson(resume)}><Icon name="book" size={22} /> {completedLessons.length ? '이어서 하기' : '첫 컷 보기'}</Button>
       </ComicPanel>
-      <section className="mt-9"><p className="comic-kicker mb-3">SEASON MAP</p><SeasonMap episodes={episodes} activeId={activeId} onPick={handlePickModule} renderLessons={(moduleId) => {
+      <section className={`mt-9 ${showAllMobileContents ? '' : 'comic-map-mobile-collapsed'}`}><p className="comic-kicker mb-3">단원 지도</p><SeasonMap episodes={episodes} activeId={activeId} onPick={handlePickModule} renderLessons={(moduleId) => {
   const module = MODULES.find((item) => item.id === moduleId)!;
   const moduleTheme = themeFor(moduleId);
+  const moduleLessons = lessonIdsForModule(moduleId);
+  const nextLessonId = moduleLessons.find((id) => !isCompleted(id)) ?? moduleLessons.at(-1);
   return <div className="comic-lesson-list" style={{ '--comic-accent': moduleTheme.accent } as CSSProperties}>
     <div className="comic-list-heading">
       <div>
-        <p className="comic-kicker">{String(module.number).padStart(2, '0')} MODULE</p>
+        <p className="comic-kicker">{module.number}단원</p>
         <h2>{module.title}</h2>
       </div>
-      <span className="comic-count">{lessonIdsForModule(moduleId).filter(isCompleted).length}/{lessonIdsForModule(moduleId).length}</span>
+      <span className="comic-count">{moduleLessons.filter(isCompleted).length}/{moduleLessons.length}</span>
     </div>
-    <ol className="comic-lesson-cuts">{lessonIdsForModule(moduleId).map((id, index) => {
+    <ol className="comic-lesson-cuts">{moduleLessons.map((id, index) => {
       const lesson = getLesson(id); const done = isCompleted(id);
       return (
-        <li key={id} className={`relative ${index < 3 ? 'is-top-row' : ''}`}>
+        <li key={id} className={`relative ${index < 3 ? 'is-top-row' : ''} ${id === nextLessonId ? 'is-next-lesson' : ''}`}>
           <button
             onClick={() => lesson && onPickLesson(id)}
             disabled={!lesson}
@@ -103,7 +106,17 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
       );
     })}</ol>
   </div>;
-}} /></section>
+}} />
+        <button
+          type="button"
+          className="comic-mobile-contents-toggle"
+          aria-expanded={showAllMobileContents}
+          onClick={() => setShowAllMobileContents((show) => !show)}
+        >
+          <Icon name={showAllMobileContents ? 'chevron-up' : 'chevron-down'} size={20} />
+          {showAllMobileContents ? '현재 단원만 보기' : '나머지 단원과 차시 보기'}
+        </button>
+      </section>
 
     </div>
   </main>;
