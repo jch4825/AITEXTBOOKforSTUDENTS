@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import MiniGameFrame from '../MiniGameFrame';
+import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import type { MiniGameProps } from '../types';
 
 /**
- * m1-l9 「AI 도구 선택 스튜디오」 — 미리 준비하기(스케줄링).
+ * m1-l9 「AI 도구 선택 스튜디오」 — 필요한 도구 깨우기.
  *
- * 어떤 일에 어떤 도구가 필요한지는 예고에 대놓고 적어 준다(판단은 공짜).
- * 난이도는 **한 번에 한 도구만 예열할 수 있다**는 제약에 있다. 지금 그림 도구를 데우면
- * 글 도구는 식는다. 그래서 "무엇을 준비할까"의 답이 혼자 정해지지 않고 다음에 올 일에 달린다.
- *
- * 같은 도구가 연달아 필요하면 다시 데울 필요가 없다 — 차시의 "일마다 맞는 도구를 나눠 쓴다"를
- * 손으로 겪게 하려는 구성이다.
+ * 복잡한 예열 스케줄 대신, 한 장면의 일을 보고 알맞은 도구 버튼을 고른 뒤
+ * 제한 시간 안에 여러 번 눌러 도구를 깨운다. 학생은
+ * "일 카드 → 도구 버튼 → 연속 탭 → 장면 변화"를 한 번에 볼 수 있다.
  */
 
 type ToolId = 'text' | 'image' | 'audio';
@@ -20,68 +17,60 @@ interface Tool {
   id: ToolId;
   emoji: string;
   name: string;
-}
-
-interface Task {
-  at: number; // 초
-  tool: ToolId;
-  label: string;
+  output: string;
 }
 
 interface Stage {
   id: string;
   tab: string;
   name: string;
-  warm: number; // 예열에 걸리는 시간(초)
+  taskEmoji: string;
+  task: string;
+  tool: ToolId;
+  taps: number;
   limit: number;
-  tasks: Task[];
+  scene: string;
 }
 
 const TOOLS: Tool[] = [
-  { id: 'text', emoji: '✍️', name: '글 도구' },
-  { id: 'image', emoji: '🎨', name: '그림 도구' },
-  { id: 'audio', emoji: '🎧', name: '소리 도구' },
+  { id: 'text', emoji: '✍️', name: '글 도구', output: '글·문장을 만들어요' },
+  { id: 'image', emoji: '🎨', name: '그림 도구', output: '사진·그림을 만들어요' },
+  { id: 'audio', emoji: '🎧', name: '소리 도구', output: '소리·자막을 만들어요' },
 ];
 
 const STAGES: Stage[] = [
   {
     id: 's1',
     tab: '기본',
-    name: '여유 있게 와요',
-    warm: 2,
-    limit: 11,
-    tasks: [
-      { at: 3.0, tool: 'text', label: '행사 안내 요약' },
-      { at: 6.0, tool: 'image', label: '포스터 그림' },
-      { at: 9.0, tool: 'audio', label: '영상 자막' },
-    ],
+    name: '천천히 찾아요',
+    taskEmoji: '🖼️',
+    task: '포스터에 넣을 그림을 만들어요',
+    tool: 'image',
+    taps: 5,
+    limit: 5,
+    scene: '포스터 그림이 화면에 차곡차곡 나타나요.',
   },
   {
     id: 's2',
     tab: '1단계',
-    name: '쉴 틈이 적어요',
-    warm: 2,
-    limit: 12,
-    tasks: [
-      { at: 2.5, tool: 'image', label: '포스터 그림' },
-      { at: 5.0, tool: 'text', label: '안내 문구' },
-      { at: 7.5, tool: 'audio', label: '영상 자막' },
-      { at: 10.0, tool: 'text', label: '초대 글' },
-    ],
+    name: '조금 빠르게 찾아요',
+    taskEmoji: '📝',
+    task: '친구에게 보낼 안내 글을 만들어요',
+    tool: 'text',
+    taps: 7,
+    limit: 4.5,
+    scene: '친구에게 보낼 안내 문장이 완성돼요.',
   },
   {
     id: 's3',
     tab: '2단계',
-    name: '같은 도구가 이어지기도 해요',
-    warm: 2,
-    limit: 13,
-    tasks: [
-      { at: 2.2, tool: 'audio', label: '영상 자막' },
-      { at: 4.4, tool: 'audio', label: '음성 안내' },
-      { at: 6.6, tool: 'image', label: '포스터 그림' },
-      { at: 8.8, tool: 'text', label: '안내 문구' },
-      { at: 11.0, tool: 'image', label: '사진 설명 그림' },
-    ],
+    name: '빠르게 찾아요',
+    taskEmoji: '🔊',
+    task: '영상에 넣을 소리와 자막을 만들어요',
+    tool: 'audio',
+    taps: 9,
+    limit: 4,
+    scene: '영상에 소리와 자막이 함께 켜져요.',
   },
 ];
 
@@ -89,6 +78,7 @@ export default function ToolWarmupSchedulingGame({ supportLevel }: MiniGameProps
   const {
     stageIndex,
     visibleStageCount,
+    hintAllowed,
     status,
     message,
     round,
@@ -97,76 +87,38 @@ export default function ToolWarmupSchedulingGame({ supportLevel }: MiniGameProps
     succeed,
     fail,
     retry,
-  } = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
+  } = useMiniGameStage({ supportLevel, stageCount: STAGES.length, autoResetOnFailMs: 0 });
 
   const stage = STAGES[stageIndex];
-
-  const [clock, setClock] = useState(0);
-  const [ready, setReady] = useState<ToolId | null>(null);
-  const [warming, setWarming] = useState<{ tool: ToolId; from: number } | null>(null);
-  const [results, setResults] = useState<Record<number, boolean>>({});
-
-  const clockRef = useRef(0);
-  const readyRef = useRef<ToolId | null>(null);
-  const warmingRef = useRef<{ tool: ToolId; from: number } | null>(null);
-  const handledRef = useRef<Set<number>>(new Set());
+  const [tapCount, setTapCount] = useState(0);
+  const [remaining, setRemaining] = useState(stage.limit);
+  const [feedback, setFeedback] = useState('필요한 도구 버튼을 골라요.');
+  const tapCountRef = useRef(0);
   const rafRef = useRef<number | null>(null);
-  // 결과를 ref로도 들고 있는다. 이 값을 아래 rAF 이펙트의 의존성에 넣으면 일이 하나
-  // 처리될 때마다 이펙트가 다시 붙어 게임 시계가 0으로 되돌아간다.
-  const resultsRef = useRef<Record<number, boolean>>({});
-
-  readyRef.current = ready;
-  warmingRef.current = warming;
-  resultsRef.current = results;
+  const startedAtRef = useRef<number | null>(null);
 
   useEffect(() => {
-    setClock(0);
-    setReady(null);
-    setWarming(null);
-    setResults({});
-    clockRef.current = 0;
-    handledRef.current = new Set();
-  }, [round, stageIndex]);
+    setTapCount(0);
+    tapCountRef.current = 0;
+    setRemaining(stage.limit);
+    setFeedback('필요한 도구 버튼을 골라요.');
+    startedAtRef.current = null;
+  }, [round, stage]);
 
   useEffect(() => {
     if (status !== 'running') return;
-    const startedAt = performance.now();
+
+    startedAtRef.current = performance.now();
     let stopped = false;
 
     const frame = (now: number) => {
-      if (stopped) return;
-      const t = (now - startedAt) / 1000;
-      clockRef.current = t;
-      setClock(t);
+      if (stopped || startedAtRef.current === null) return;
+      const elapsed = (now - startedAtRef.current) / 1000;
+      const nextRemaining = Math.max(0, stage.limit - elapsed);
+      setRemaining(nextRemaining);
 
-      // 예열 완료 처리
-      const w = warmingRef.current;
-      if (w && t - w.from >= stage.warm) {
-        readyRef.current = w.tool;
-        warmingRef.current = null;
-        setReady(w.tool);
-        setWarming(null);
-      }
-
-      // 도착한 일 처리
-      const arrived: Record<number, boolean> = {};
-      stage.tasks.forEach((task, i) => {
-        if (t >= task.at && !handledRef.current.has(i)) {
-          handledRef.current.add(i);
-          arrived[i] = readyRef.current === task.tool;
-        }
-      });
-      if (Object.keys(arrived).length > 0) setResults((prev) => ({ ...prev, ...arrived }));
-
-      if (t >= stage.limit) {
-        // 남은 일은 전부 놓친 것으로 본다
-        const finalResults = { ...resultsRef.current, ...arrived };
-        const okCount = stage.tasks.filter((_, i) => finalResults[i]).length;
-        if (okCount === stage.tasks.length) {
-          succeed(`일 ${stage.tasks.length}가지를 모두 알맞은 도구로 해냈어요!`);
-        } else {
-          fail(`${stage.tasks.length - okCount}가지를 놓쳤어요. 미리 데워 두면 돼요.`);
-        }
+      if (nextRemaining <= 0) {
+        fail(stage.limit + '초 안에 ' + stage.taps + '번을 누르지 못했어요. 필요한 도구를 다시 찾아요.');
         return;
       }
       rafRef.current = requestAnimationFrame(frame);
@@ -177,157 +129,140 @@ export default function ToolWarmupSchedulingGame({ supportLevel }: MiniGameProps
       stopped = true;
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
-  }, [status, stage, succeed, fail]);
+  }, [status, stage, fail]);
 
-  const startWarm = (tool: ToolId) => {
-    if (status === 'playing') {
-      run('일이 순서대로 들어옵니다. 미리 도구를 데워 두세요!');
-      warmingRef.current = { tool, from: 0 };
-      setWarming({ tool, from: 0 });
-      return;
-    }
-    if (status !== 'running') return;
-    if (readyRef.current === tool) return; // 이미 준비된 도구는 다시 데우지 않는다
-
-    // 한 번에 하나만 — 새로 데우면 준비돼 있던 도구는 식는다.
-    readyRef.current = null;
-    setReady(null);
-    warmingRef.current = { tool, from: clockRef.current };
-    setWarming({ tool, from: clockRef.current });
+  const startGame = () => {
+    if (status !== 'playing') return;
+    run(stage.limit + '초 안에 알맞은 도구 버튼을 ' + stage.taps + '번 눌러요.');
+    setFeedback('“' + stage.task + '”에 맞는 버튼을 찾아 연속으로 눌러요.');
   };
 
-  const doneCount = stage.tasks.filter((_, i) => results[i]).length;
-  const nextTask = stage.tasks.find((t, i) => !handledRef.current.has(i) && t.at >= clock);
+  const tapTool = (tool: Tool) => {
+    if (status !== 'running') return;
+
+    if (tool.id !== stage.tool) {
+      tapCountRef.current = 0;
+      setTapCount(0);
+      setFeedback(tool.name + ' 버튼은 지금 일과 달라요. 다른 버튼을 찾아요.');
+      return;
+    }
+
+    const nextCount = tapCountRef.current + 1;
+    tapCountRef.current = nextCount;
+    setTapCount(nextCount);
+    setFeedback(tool.name + ' 버튼을 누르는 중이에요. ' + nextCount + '번 눌렀어요.');
+
+    if (nextCount >= stage.taps) {
+      succeed(stage.scene + ' 필요한 도구를 알맞게 골랐어요.');
+    }
+  };
+
+  const progressPercent = Math.min(100, (tapCount / stage.taps) * 100);
+  const timePercent = status === 'running' ? Math.max(0, (remaining / stage.limit) * 100) : 100;
+  const targetTool = TOOLS.find((tool) => tool.id === stage.tool)!;
 
   return (
     <MiniGameFrame
-      badge="도구 미리 데우기"
-      instruction="일이 도착했을 때 알맞은 도구가 준비돼 있어야 해요. 데우는 데 시간이 걸리고, 한 번에 한 도구만 데울 수 있습니다. 예고를 보고 미리 준비하세요."
+      badge="AI 도구 고르기 — 연타 미션"
+      instruction="일 카드를 보고 알맞은 도구 버튼을 골라요. 제한 시간 안에 그 버튼을 여러 번 눌러 도구를 깨우면 장면이 완성돼요."
       accent="var(--brand-glow)"
-      progress={{ label: '해낸 일', value: doneCount, max: stage.tasks.length }}
+      progress={{ label: '연타 진행', value: tapCount, max: stage.taps }}
       stages={STAGES.slice(0, visibleStageCount).map((s) => ({ id: s.id, label: s.tab }))}
       activeStageIndex={stageIndex}
       onStageSelect={(index) => goToStage(index, STAGES[index].name)}
       status={status}
       message={message}
       actions={
-        status === 'success' || status === 'fail' ? (
-          <button
-            type="button"
-            onClick={retry}
-            className="h-11 w-full rounded-xl border-2 text-[14px] font-black"
-            style={{
-              background: 'var(--paper-1)',
-              borderColor: 'var(--line)',
-              color: 'var(--ink-1)',
-            }}
-          >
-            🔁 한 번 더
-          </button>
+        status === 'playing' ? (
+          <MiniGameButton onClick={startGame} emoji="▶️" label="연타 시작" variant="primary" />
+        ) : status === 'success' || status === 'fail' ? (
+          <MiniGameButton onClick={retry} emoji="🔁" label="한 번 더" variant="primary" />
         ) : (
-          <>
-            {TOOLS.map((tool) => {
-              const isReady = ready === tool.id;
-              const isWarming = warming?.tool === tool.id;
-              const pct = isWarming
-                ? Math.min(100, ((clock - warming!.from) / stage.warm) * 100)
-                : 0;
-              return (
-                <button
-                  key={tool.id}
-                  type="button"
-                  onClick={() => startWarm(tool.id)}
-                  aria-label={`${tool.name} 데우기${isReady ? ', 준비됨' : ''}`}
-                  className="relative flex h-14 flex-1 flex-col items-center justify-center overflow-hidden rounded-xl border-2 text-[14px] font-black transition"
-                  style={{
-                    background: isReady ? 'var(--ok-bg)' : 'var(--paper-1)',
-                    borderColor: isReady ? 'var(--ok)' : 'var(--line)',
-                    color: isReady ? '#14532d' : 'var(--ink-2)',
-                  }}
-                >
-                  {isWarming && (
-                    <span
-                      className="absolute inset-y-0 left-0 bg-sky-300/40"
-                      style={{ width: `${pct}%` }}
-                      aria-hidden="true"
-                    />
-                  )}
-                  <span className="relative text-lg leading-none">{tool.emoji}</span>
-                  <span className="relative">
-                    {isReady ? '준비됨' : isWarming ? '데우는 중' : tool.name}
-                  </span>
-                </button>
-              );
-            })}
-          </>
+          <MiniGameButton onClick={retry} emoji="↩️" label="처음부터" />
         )
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col gap-2">
-        {/* 앞으로 올 일 예고 */}
-        <div>
-          <p className="mb-1 text-[14px] font-black text-slate-400">들어올 일 예고</p>
-          <div className="flex flex-col gap-1">
-            {stage.tasks.map((task, i) => {
-              const handled = handledRef.current.has(i);
-              const ok = results[i];
-              const inSec = task.at - clock;
-              const tool = TOOLS.find((t) => t.id === task.tool)!;
-              return (
-                <div
-                  key={`${task.label}-${i}`}
-                  className="flex items-center gap-2 rounded-lg border-2 px-2 py-1.5 transition-colors"
-                  style={{
-                    background: handled
-                      ? ok
-                        ? 'rgba(22,163,74,0.28)'
-                        : 'rgba(234,88,12,0.28)'
-                      : 'rgba(30,41,59,0.9)',
-                    borderColor: handled
-                      ? ok
-                        ? '#4ade80'
-                        : '#fb923c'
-                      : nextTask === task
-                        ? '#fbbf24'
-                        : 'rgba(148,163,184,0.4)',
-                  }}
-                >
-                  <span className="text-base leading-none" aria-hidden="true">
-                    {tool.emoji}
-                  </span>
-                  <span className="flex-1 text-[14px] font-bold text-slate-100">{task.label}</span>
-                  <span className="text-[14px] font-black text-slate-300">
-                    {handled
-                      ? ok
-                        ? '✅ 해냄'
-                        : '⚠️ 놓침'
-                      : inSec > 0
-                        ? `${inSec.toFixed(1)}초 뒤`
-                        : '지금!'}
-                  </span>
-                </div>
-              );
-            })}
+      <div className="flex min-h-0 flex-1 flex-col gap-3">
+        <section className="rounded-xl border-2 border-amber-300/70 bg-amber-100/10 p-3 text-center">
+          <p className="text-[13px] font-black text-amber-200">지금 할 일</p>
+          <p className="mt-1 text-[19px] font-black leading-relaxed text-white">
+            <span aria-hidden="true">{stage.taskEmoji}</span> {stage.task}
+          </p>
+          <p className="mt-1 text-[13px] font-bold text-slate-300">
+            {status === 'running'
+              ? remaining.toFixed(1) + '초 안에 ' + stage.taps + '번 눌러요'
+              : status === 'playing'
+                ? '시작을 누른 뒤 버튼을 연속으로 눌러요'
+                : feedback}
+          </p>
+        </section>
+
+        <div className="space-y-1" aria-label="남은 시간">
+          <div className="flex items-center justify-between text-[12px] font-black text-slate-400">
+            <span>남은 시간</span>
+            <span>
+              {status === 'running' ? remaining.toFixed(1) + '초' : stage.limit.toFixed(1) + '초'}
+            </span>
+          </div>
+          <div className="h-3 overflow-hidden rounded-full bg-slate-700" aria-hidden="true">
+            <div
+              className="h-full rounded-full bg-amber-300 transition-[width] duration-75"
+              style={{ width: timePercent + '%' }}
+            />
           </div>
         </div>
 
-        {/* 지금 준비 상태 */}
-        <div className="mt-auto rounded-lg border-2 border-slate-600/50 bg-slate-900/70 px-2 py-2 text-center">
-          <p className="text-[14px] font-black text-slate-400">지금 준비된 도구</p>
-          <p className="text-[15px] font-black text-slate-100">
-            {ready
-              ? `${TOOLS.find((t) => t.id === ready)!.emoji} ${TOOLS.find((t) => t.id === ready)!.name}`
-              : warming
-                ? `${TOOLS.find((t) => t.id === warming.tool)!.emoji} 데우는 중…`
-                : '없음'}
-          </p>
-        </div>
+        <section className="grid grid-cols-1 gap-2 sm:grid-cols-3" aria-label="AI 도구 버튼">
+          {TOOLS.map((tool) => {
+            const isTarget = tool.id === stage.tool;
+            const isActive = status === 'running';
+            return (
+              <button
+                key={tool.id}
+                type="button"
+                onClick={() => tapTool(tool)}
+                disabled={!isActive}
+                aria-label={tool.name + ' 버튼' + (isTarget ? ', 현재 일에 필요한 도구' : '')}
+                className="flex min-h-[84px] flex-col items-center justify-center rounded-2xl border-2 px-2 py-2 text-center font-black transition active:scale-95 disabled:cursor-not-allowed disabled:opacity-55"
+                style={{
+                  background: isActive ? 'rgba(14,116,144,0.55)' : 'rgba(51,65,85,0.75)',
+                  borderColor: isActive ? '#67e8f9' : 'rgba(148,163,184,0.45)',
+                  color: '#f8fafc',
+                }}
+              >
+                <span className="text-3xl leading-none" aria-hidden="true">
+                  {tool.emoji}
+                </span>
+                <span className="mt-1 text-[15px]">{tool.name}</span>
+                <span className="text-[11px] font-bold text-cyan-100">{tool.output}</span>
+              </button>
+            );
+          })}
+        </section>
 
-        {status === 'playing' && (
-          <p className="text-center text-[14px] font-black text-amber-300">
-            아래에서 도구를 하나 눌러 시작해요
-          </p>
-        )}
+        <div className="rounded-xl border border-slate-600/70 bg-slate-900/70 p-3 text-center">
+          <div className="flex items-center justify-between gap-2 text-[13px] font-black text-slate-300">
+            <span>{feedback}</span>
+            <span className="shrink-0 text-cyan-200">
+              {tapCount} / {stage.taps}
+            </span>
+          </div>
+          <div className="mt-2 h-3 overflow-hidden rounded-full bg-slate-700" aria-label="연타 진행률">
+            <div
+              className="h-full rounded-full bg-cyan-300 transition-[width] duration-100"
+              style={{ width: progressPercent + '%' }}
+            />
+          </div>
+          {hintAllowed && status === 'running' && (
+            <button
+              type="button"
+              onClick={() => setFeedback('힌트: ' + targetTool.name + ' 버튼을 연속으로 눌러요.')}
+              className="mt-2 min-h-11 rounded-lg border border-amber-300/70 px-3 text-[13px] font-black text-amber-200"
+            >
+              💡 필요한 도구 보기
+            </button>
+          )}
+        </div>
       </div>
     </MiniGameFrame>
   );
