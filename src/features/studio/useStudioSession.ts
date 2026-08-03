@@ -61,6 +61,7 @@ export function useStudioSession(
         aiSource: definition.aiContribution.source,
         aiRole: definition.aiContribution.role,
         aiDecision: state.aiDecision,
+        aiDecisionText: state.aiDecisionText,
         finalExpression: state.finalExpression,
         artifactSummary: state.artifactSummary,
         transferExpression: state.transferExpression,

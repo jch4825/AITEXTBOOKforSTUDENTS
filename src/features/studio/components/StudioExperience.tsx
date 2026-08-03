@@ -55,8 +55,8 @@ interface Props {
 
 const AI_DECISION_SUMMARY: Record<AiDecision, string> = {
   accept: 'AI 의견을 받아들였습니다.',
-  modify: 'AI 의견을 내 생각에 맞게 고쳤습니다.',
-  reject: 'AI 의견을 사용하지 않고 내 방법을 선택했습니다.',
+  modify: "고쳐서 쓰기를 골랐습니다. 필요하면 '수정' 버튼에서 서술을 바꿔 보세요.",
+  reject: 'AI 의견을 쓰지 않기로 했습니다. 글자가 배경에 묻혀 보이지 않게 됩니다.',
 };
 
 // 5단계는 AI 의견을 그대로 쓸지 고칠지 쓰지 않을지 학생이 정하는 자리다.
@@ -146,8 +146,11 @@ export default function StudioExperience({
   const [coldOpenChoiceId, setColdOpenChoiceId] = useState<string | null>(null);
   // 지원 수준이 정보를 줄이더라도 영영 감추지는 않는다. 단계가 바뀌면 다시 접는다.
   const [showAllFacts, setShowAllFacts] = useState(false);
+  const [isEditingDecisionText, setIsEditingDecisionText] = useState(false);
+  const [decisionDraft, setDecisionDraft] = useState('');
   useEffect(() => {
     setShowAllFacts(false);
+    setIsEditingDecisionText(false);
   }, [state.stage, state.supportLevel]);
   const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
     entry.term,
@@ -552,6 +555,7 @@ export default function StudioExperience({
       </div>
     );
   } else if (state.stage === 'decision') {
+    const decisionText = state.aiDecisionText ?? definition.aiContribution.text;
     right = (
       <div className="space-y-5 p-5 md:p-7">
         <div>
@@ -564,9 +568,71 @@ export default function StudioExperience({
           <span className="studio-kicker" style={{ color: accent }}>
             {definition.aiContribution.role}
           </span>
-          <p className="mt-1 text-base font-semibold leading-relaxed">
-            {definition.aiContribution.text}
-          </p>
+          {isEditingDecisionText ? (
+            <div className="mt-2 space-y-2">
+              <label htmlFor="ai-decision-copy" className="sr-only">AI 의견 수정</label>
+              <textarea
+                id="ai-decision-copy"
+                value={decisionDraft}
+                onChange={(event) => setDecisionDraft(event.target.value)}
+                rows={5}
+                maxLength={600}
+                className="min-h-32 w-full resize-y rounded-xl border-2 p-3 text-base font-semibold leading-relaxed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                style={{
+                  borderColor: accent,
+                  background: 'var(--editorial-paper)',
+                  color: 'var(--editorial-ink)',
+                  outlineColor: accent,
+                }}
+              />
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    dispatch({ type: 'set-ai-decision-text', value: decisionDraft });
+                    setIsEditingDecisionText(false);
+                  }}
+                  className="min-h-11 rounded-lg px-4 text-sm font-extrabold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  style={{ background: accent, outlineColor: accent }}
+                >
+                  수정 저장
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDecisionDraft(decisionText);
+                    setIsEditingDecisionText(false);
+                  }}
+                  className="min-h-11 rounded-lg border-2 bg-white px-4 text-sm font-extrabold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  style={{ borderColor: 'var(--editorial-line)', color: 'var(--brand-ink)', outlineColor: accent }}
+                >
+                  취소
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <p
+                className={`studio-decision-copy mt-1 text-base font-semibold leading-relaxed${state.aiDecision === 'reject' ? ' is-discarded' : ''}`}
+                aria-label={state.aiDecision === 'reject' ? `쓰지 않기로 한 AI 의견: ${decisionText}` : undefined}
+              >
+                {decisionText}
+              </p>
+              {state.aiDecision === 'modify' ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDecisionDraft(decisionText);
+                    setIsEditingDecisionText(true);
+                  }}
+                  className="mt-3 min-h-11 rounded-lg border-2 bg-white px-4 text-sm font-extrabold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  style={{ borderColor: accent, color: accent, outlineColor: accent }}
+                >
+                  수정
+                </button>
+              ) : null}
+            </>
+          )}
         </section>
 
         <div role="group" aria-label="AI 의견 판단 고르기" className="grid gap-2 sm:grid-cols-3">
@@ -579,6 +645,13 @@ export default function StudioExperience({
                 onClick={() => {
                   playSound('confirm');
                   dispatch({ type: 'set-ai-decision', value: choice.id });
+                  if (choice.id === 'modify' && !state.aiDecisionText) {
+                    dispatch({ type: 'set-ai-decision-text', value: definition.aiContribution.text });
+                  }
+                  if (choice.id === 'accept') {
+                    dispatch({ type: 'set-ai-decision-text', value: definition.aiContribution.text });
+                  }
+                  setIsEditingDecisionText(false);
                 }}
                 aria-pressed={selected}
                 className="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-3 text-base font-extrabold transition-all hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"

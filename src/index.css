@@ -2234,6 +2234,20 @@
     color: var(--editorial-ink);
   }
 
+  .studio-decision-copy {
+    transition: color 900ms ease-out;
+  }
+
+  .studio-decision-copy.is-discarded {
+    color: var(--editorial-quiet);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .studio-decision-copy {
+      transition-duration: 0ms;
+    }
+  }
+
   .studio-artifact-sheet {
     padding: clamp(1rem, 3vw, 2rem);
     border: 1px solid var(--editorial-line);

@@ -25,6 +25,7 @@ export function studioReducer(state: StudioSessionState, action: StudioAction): 
       : { ...state, supportModesUsed: [...state.supportModesUsed, action.value] };
   }
   if (action.type === 'set-ai-decision') return { ...state, aiDecision: action.value };
+  if (action.type === 'set-ai-decision-text') return { ...state, aiDecisionText: action.value.slice(0, 600) };
   if (action.type === 'set-final-expression') return { ...state, finalExpression: action.value };
   if (action.type === 'set-artifact') return { ...state, artifactSummary: action.value.slice(0, 300) };
   if (action.type === 'set-transfer') return { ...state, transferExpression: action.value };

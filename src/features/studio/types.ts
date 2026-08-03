@@ -190,6 +190,7 @@ export interface StudioEvidenceV2 {
   aiSource: AiSource;
   aiRole: string;
   aiDecision?: AiDecision;
+  aiDecisionText?: string;
   finalExpression?: StudioExpression;
   artifactSummary?: string;
   transferExpression?: StudioExpression;
@@ -207,6 +208,7 @@ export interface StudioSessionState {
   firstAttempt?: StudioExpression;
   reason?: string;
   aiDecision?: AiDecision;
+  aiDecisionText?: string;
   finalExpression?: StudioExpression;
   artifactSummary?: string;
   transferExpression?: StudioExpression;
@@ -217,6 +219,7 @@ export type StudioAction =
   | { type: 'set-reason'; value: string }
   | { type: 'record-support-mode'; value: string }
   | { type: 'set-ai-decision'; value: AiDecision }
+  | { type: 'set-ai-decision-text'; value: string }
   | { type: 'set-final-expression'; value: StudioExpression }
   | { type: 'set-artifact'; value: string }
   | { type: 'set-transfer'; value: StudioExpression }
