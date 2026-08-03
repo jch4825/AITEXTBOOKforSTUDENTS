@@ -883,6 +883,418 @@
   max-width: calc(100% - 1rem);
 }
 
+/* 전체화면 판서 팔레트 — 데스크톱은 한 줄, 모바일은 기능별로 읽히는 도구판 */
+.draw-board-palette {
+  position: absolute;
+  z-index: 30;
+  bottom: 1rem;
+  left: 50%;
+  display: flex;
+  max-width: calc(100vw - 1rem);
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem;
+  transform: translateX(-50%);
+  border: 1px solid #10b981;
+  border-radius: var(--r-pill);
+  background: #047857;
+  color: #fff;
+  box-shadow: 0 18px 42px rgba(2, 44, 34, 0.38);
+}
+
+.draw-board-palette-section,
+.draw-board-color-list {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.draw-board-palette-label,
+.draw-board-color-name,
+.draw-board-tool-name {
+  display: none;
+}
+
+.draw-board-palette-divider {
+  width: 1px;
+  height: 2rem;
+  flex: 0 0 1px;
+  margin-inline: 0.25rem;
+  background: rgba(52, 211, 153, 0.55);
+}
+
+.draw-board-color-button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.draw-board-color-swatch {
+  position: relative;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  transition: transform 150ms ease;
+}
+
+.draw-board-color-button:hover .draw-board-color-swatch {
+  transform: scale(1.06);
+}
+
+.draw-board-color-button[aria-pressed='true'] .draw-board-color-swatch {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+.draw-board-color-check {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.draw-board-tool-button,
+.draw-board-close-button {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.draw-board-text-glyph {
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.draw-board-width-button {
+  display: inline-flex;
+  min-width: 46px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.6rem;
+  border: 0;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.draw-board-clear-button {
+  display: inline-flex;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding-inline: 0.75rem;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: #fff;
+  color: #e11d48;
+  font-size: 0.75rem;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.draw-board-close-button {
+  background: #065f46;
+}
+
+.draw-pad-palette {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background: #059669;
+  color: #fff;
+}
+
+.draw-pad-shell {
+  container-name: draw-pad;
+  container-type: inline-size;
+}
+
+/* 기존 h-64(16rem)의 정확히 1.3배. */
+.draw-pad-canvas {
+  height: 20.8rem;
+}
+
+@media (max-width: 760px) {
+  .draw-board-palette {
+    bottom: max(0.5rem, env(safe-area-inset-bottom));
+    display: grid;
+    width: calc(100% - 1rem);
+    max-width: none;
+    max-height: calc(100dvh - 1rem);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.45rem;
+    box-sizing: border-box;
+    padding: 0.55rem;
+    overflow-y: auto;
+    border-radius: 20px;
+  }
+
+  .draw-pad-palette {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.45rem;
+    box-sizing: border-box;
+    padding: 0.55rem;
+  }
+
+  .draw-pad-palette .draw-board-tool-section,
+  .draw-pad-palette .draw-board-width-section {
+    grid-column: 1 / -1;
+  }
+
+  .draw-pad-palette .draw-board-color-button {
+    grid-template-rows: 30px auto;
+  }
+
+  .draw-pad-palette .draw-board-color-swatch {
+    width: 30px;
+    height: 30px;
+  }
+
+  .draw-board-palette-section {
+    padding: 0.4rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .draw-board-palette-label {
+    display: block;
+    grid-column: 1 / -1;
+    font-size: 0.7rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .draw-board-color-section {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .draw-board-color-list {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.2rem;
+  }
+
+  .draw-board-color-button {
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    grid-template-rows: 34px auto;
+    gap: 0.15rem;
+  }
+
+  .draw-board-color-swatch {
+    width: 34px;
+    height: 34px;
+  }
+
+  .draw-board-color-name {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 750;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .draw-board-tool-section,
+  .draw-board-width-section {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem;
+  }
+
+  .draw-board-tool-button,
+  .draw-board-width-button {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .draw-board-tool-name {
+    display: inline;
+    font-size: 0.72rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .draw-board-palette-divider {
+    display: none;
+  }
+
+  .draw-board-action-section {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.45rem;
+    padding: 0;
+    background: transparent;
+  }
+
+  .draw-pad-action-section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .draw-board-clear-button,
+  .draw-board-close-button {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+  }
+}
+
+/* 표현 영역은 화면 폭이 아니라 실제 카드 폭이 좁아질 때 팔레트를 재배치한다. */
+@container draw-pad (max-width: 700px) {
+  .draw-pad-palette {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.45rem;
+    box-sizing: border-box;
+    padding: 0.55rem;
+  }
+
+  .draw-pad-palette .draw-board-palette-section {
+    padding: 0.4rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .draw-pad-palette .draw-board-palette-label,
+  .draw-pad-palette .draw-board-color-name,
+  .draw-pad-palette .draw-board-tool-name {
+    display: block;
+  }
+
+  .draw-pad-palette .draw-board-palette-label {
+    grid-column: 1 / -1;
+    font-size: 0.7rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .draw-pad-palette .draw-board-color-section {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .draw-pad-palette .draw-board-color-list {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.2rem;
+  }
+
+  .draw-pad-palette .draw-board-color-button {
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    grid-template-rows: 30px auto;
+    gap: 0.15rem;
+  }
+
+  .draw-pad-palette .draw-board-color-swatch {
+    width: 30px;
+    height: 30px;
+  }
+
+  .draw-pad-palette .draw-board-color-name {
+    max-width: 100%;
+    overflow: hidden;
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 750;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .draw-pad-palette .draw-board-tool-section,
+  .draw-pad-palette .draw-board-width-section {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem;
+  }
+
+  .draw-pad-palette .draw-board-tool-button,
+  .draw-pad-palette .draw-board-width-button {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .draw-pad-palette .draw-board-tool-name {
+    font-size: 0.72rem;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .draw-pad-palette .draw-board-palette-divider {
+    display: none;
+  }
+
+  .draw-pad-action-section {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.45rem;
+    padding: 0;
+    background: transparent;
+  }
+
+  .draw-pad-action-section .draw-board-clear-button {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+  }
+}
+
 .comic-frame-footer .btn {
   min-width: 9rem;
   height: 2.375rem;

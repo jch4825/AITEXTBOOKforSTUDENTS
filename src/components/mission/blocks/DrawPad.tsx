@@ -256,104 +256,112 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
       </div>
 
       {/* 통합 그림판 카드 (Unified Drawing Board Container) */}
-      <div className="rounded-[var(--r-md)] overflow-hidden border border-emerald-700 shadow-md">
+      <div className="draw-pad-shell rounded-[var(--r-md)] overflow-hidden border border-emerald-700 shadow-md">
         {/* 초록색 팔레트 패널 (Green Palette Header) */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-emerald-600 text-white border-b border-white/30">
-          {/* Colors Selection */}
-          <div className="flex items-center gap-2">
-            {COLORS.map((col, idx) => {
-              const isSelected = mode === 'pen' && color === col.value;
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => selectToolMode('pen', col.value)}
-                  className="w-9 h-9 rounded-full border-2 transition-transform hover:scale-105 cursor-pointer relative shadow-2xs"
-                  style={{
-                    backgroundColor: col.value,
-                    borderColor: isSelected ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
-                    boxShadow: isSelected ? '0 0 0 2px #047857' : undefined,
-                  }}
-                  title={col.name}
-                  aria-label={col.name}
-                >
-                  {isSelected && (
-                    <span className="absolute inset-0 flex items-center justify-center" style={{ color: col.value === '#FFFFFF' ? '#047857' : '#FFFFFF' }}>
-                      <Icon name="check" size={16} strokeWidth={3} />
+        <div className="draw-pad-palette">
+          <div className="draw-board-palette-section draw-board-color-section" role="group" aria-label="펜 색">
+            <span className="draw-board-palette-label">펜 색</span>
+            <div className="draw-board-color-list">
+              {COLORS.map((col) => {
+                const isSelected = mode === 'pen' && color === col.value;
+                return (
+                  <button
+                    key={col.value}
+                    type="button"
+                    onClick={() => selectToolMode('pen', col.value)}
+                    className="draw-board-color-button"
+                    aria-label={`펜 색 ${col.name}`}
+                    aria-pressed={isSelected}
+                  >
+                    <span className="draw-board-color-swatch" style={{ background: col.value }}>
+                      {isSelected && (
+                        <span className="draw-board-color-check" style={{ color: col.value === '#FFFFFF' ? '#047857' : '#FFFFFF' }}>
+                          <Icon name="check" size={16} strokeWidth={3} />
+                        </span>
+                      )}
                     </span>
-                  )}
-                </button>
-              );
-            })}
-            {/* Eraser */}
+                    <span className="draw-board-color-name">{col.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <span className="draw-board-palette-divider" aria-hidden="true" />
+
+          <div className="draw-board-palette-section draw-board-tool-section" role="group" aria-label="그림판 도구">
+            <span className="draw-board-palette-label">도구</span>
             <button
               type="button"
               onClick={() => selectToolMode('eraser')}
-              className="w-9 h-9 rounded-full border-2 flex items-center justify-center transition-all cursor-pointer shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white"
+              className="draw-board-tool-button"
               style={{
-                borderColor: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
-                boxShadow: mode === 'eraser' ? '0 0 0 2px #047857' : undefined,
+                background: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.15)',
+                borderColor: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
+                color: mode === 'eraser' ? '#047857' : '#FFFFFF',
               }}
-              title="지우개"
               aria-label="지우개"
+              aria-pressed={mode === 'eraser'}
             >
-              <Icon name="eraser" size={18} color="#FFFFFF" />
+              <Icon name="eraser" size={18} color="currentColor" />
+              <span className="draw-board-tool-name">지우개</span>
             </button>
 
-            {/* AutoDraw-style Text Tool ('T') */}
             <button
               type="button"
               onClick={() => {
-                if (mode === 'text') {
-                  selectToolMode('pen');
-                } else {
-                  selectToolMode('text');
-                }
+                if (mode === 'text') selectToolMode('pen');
+                else selectToolMode('text');
               }}
-              className="w-9 h-9 rounded-full border-2 flex items-center justify-center font-black text-base transition-all cursor-pointer shrink-0 bg-emerald-700 hover:bg-emerald-800 text-white"
+              className="draw-board-tool-button"
               style={{
-                borderColor: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.4)',
-                boxShadow: mode === 'text' ? '0 0 0 2px #047857' : undefined,
+                background: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.15)',
+                borderColor: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
+                color: mode === 'text' ? '#047857' : '#FFFFFF',
               }}
-              title="AutoDraw 텍스트 도구 (T)"
-              aria-label="AutoDraw 텍스트 도구"
+              aria-label="글자 도구"
+              aria-pressed={mode === 'text'}
             >
-              T
+              <span className="draw-board-text-glyph" aria-hidden="true">T</span>
+              <span className="draw-board-tool-name">글자</span>
             </button>
           </div>
 
-          {/* Thickness & Clear */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 border border-emerald-500 rounded-[var(--r-sm)] p-1 bg-emerald-700/60">
-              {WIDTHS.map((w, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setWidth(w)}
-                  className="px-2.5 h-8 rounded-[4px] font-bold text-xs flex items-center justify-center cursor-pointer transition"
-                  style={{
-                    background: width === w ? '#FFFFFF' : 'transparent',
-                    color: width === w ? '#047857' : '#FFFFFF',
-                  }}
-                >
-                  {w === WIDTHS[0] ? '얇게' : '굵게'}
-                </button>
-              ))}
-            </div>
+          <span className="draw-board-palette-divider" aria-hidden="true" />
 
-            <button
-              type="button"
-              onClick={clearAll}
-              className="px-3 h-9 rounded-[var(--r-sm)] border border-emerald-400 font-bold text-xs flex items-center gap-1 cursor-pointer bg-white text-rose-600 hover:bg-rose-50 transition shadow-2xs"
-            >
-              <Icon name="refresh" size={14} color="currentColor" /> 전체 지우기
+          <div className="draw-board-palette-section draw-board-width-section" role="group" aria-label="펜 굵기">
+            <span className="draw-board-palette-label">굵기</span>
+            {WIDTHS.map((w) => (
+              <button
+                key={w}
+                type="button"
+                onClick={() => setWidth(w)}
+                className="draw-board-width-button"
+                style={{
+                  background: width === w ? '#FFFFFF' : 'transparent',
+                  color: width === w ? '#047857' : '#FFFFFF',
+                }}
+                aria-label={w === WIDTHS[0] ? '굵기 얇게' : '굵기 굵게'}
+                aria-pressed={width === w}
+              >
+                {w === WIDTHS[0] ? '얇게' : '굵게'}
+              </button>
+            ))}
+          </div>
+
+          <span className="draw-board-palette-divider" aria-hidden="true" />
+
+          <div className="draw-board-palette-section draw-board-action-section draw-pad-action-section" aria-label="그림판 작업">
+            <button type="button" onClick={clearAll} className="draw-board-clear-button">
+              <Icon name="refresh" size={16} color="currentColor" />
+              전체 지우기
             </button>
           </div>
         </div>
 
         {/* Canvas Area (칠판 감성의 딥 그린 캔버스) */}
         <div
-          className="w-full h-64 relative overflow-hidden"
+          className="draw-pad-canvas w-full relative overflow-hidden"
           style={{ background: '#064E3B' }}
         >
           <canvas

@@ -254,104 +254,109 @@ export default function DrawBoard({ onClose }: Props) {
       )}
 
       {/* 칠판 팔레트 제어 바 */}
-      <div
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 p-2.5 rounded-[var(--r-pill)] flex-wrap justify-center max-w-[95vw] bg-emerald-700 text-white border border-emerald-500 shadow-2xl"
-      >
-        {PEN_COLORS.map((p) => {
-          const isSelected = mode === 'pen' && color === p.value;
-          return (
-            <button
-              key={p.value}
-              type="button"
-              onClick={() => selectToolMode('pen', p.value)}
-              aria-label={`펜 색 ${p.name}`}
-              className="h-9 w-9 rounded-full shrink-0 relative transition-transform hover:scale-105 cursor-pointer"
-              style={{
-                background: p.value,
-                outline: isSelected ? '3px solid #FFFFFF' : 'none',
-                outlineOffset: 2,
-              }}
-            >
-              {isSelected && (
-                <span className="absolute inset-0 flex items-center justify-center" style={{ color: p.value === '#FFFFFF' ? '#047857' : '#FFFFFF' }}>
-                  <Icon name="check" size={16} strokeWidth={3} />
-                </span>
-              )}
-            </button>
-          );
-        })}
-        <div className="w-px h-8 mx-1 bg-emerald-500/50" />
-        
-        {/* Eraser */}
-        <button
-          type="button"
-          onClick={() => selectToolMode('eraser')}
-          aria-label="지우개"
-          className="h-9 w-9 rounded-full flex items-center justify-center shrink-0 border transition-all cursor-pointer"
-          style={{
-            background: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.15)',
-            borderColor: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
-            color: mode === 'eraser' ? '#047857' : '#FFFFFF',
-          }}
-        >
-          <Icon name="eraser" size={18} color="currentColor" />
-        </button>
+      <div className="draw-board-palette">
+        <div className="draw-board-palette-section draw-board-color-section" role="group" aria-label="펜 색">
+          <span className="draw-board-palette-label">펜 색</span>
+          <div className="draw-board-color-list">
+            {PEN_COLORS.map((p) => {
+              const isSelected = mode === 'pen' && color === p.value;
+              return (
+                <button
+                  key={p.value}
+                  type="button"
+                  onClick={() => selectToolMode('pen', p.value)}
+                  aria-label={`펜 색 ${p.name}`}
+                  aria-pressed={isSelected}
+                  className="draw-board-color-button"
+                >
+                  <span className="draw-board-color-swatch" style={{ background: p.value }}>
+                    {isSelected && (
+                      <span className="draw-board-color-check" style={{ color: p.value === '#FFFFFF' ? '#047857' : '#FFFFFF' }}>
+                        <Icon name="check" size={16} strokeWidth={3} />
+                      </span>
+                    )}
+                  </span>
+                  <span className="draw-board-color-name">{p.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-        {/* Text Tool ('T') */}
-        <button
-          type="button"
-          onClick={() => {
-            if (mode === 'text') selectToolMode('pen');
-            else selectToolMode('text');
-          }}
-          aria-label="AutoDraw 텍스트 도구 (T)"
-          className="h-9 w-9 rounded-full flex items-center justify-center shrink-0 font-black text-base border transition-all cursor-pointer"
-          style={{
-            background: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.15)',
-            borderColor: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
-            color: mode === 'text' ? '#047857' : '#FFFFFF',
-          }}
-        >
-          T
-        </button>
+        <span className="draw-board-palette-divider" aria-hidden="true" />
 
-        <div className="w-px h-8 mx-1 bg-emerald-500/50" />
-        
-        {/* Widths */}
-        {STROKE_WIDTHS.map((w) => (
+        <div className="draw-board-palette-section draw-board-tool-section" role="group" aria-label="그림판 도구">
+          <span className="draw-board-palette-label">도구</span>
           <button
-            key={w}
             type="button"
-            onClick={() => setWidth(w)}
-            aria-label={w === STROKE_WIDTHS[0] ? '굵기 얇게' : '굵기 굵게'}
-            className="px-2.5 h-8 rounded-[4px] font-bold text-xs flex items-center justify-center cursor-pointer transition"
+            onClick={() => selectToolMode('eraser')}
+            aria-label="지우개"
+            aria-pressed={mode === 'eraser'}
+            className="draw-board-tool-button"
             style={{
-              background: width === w ? '#FFFFFF' : 'transparent',
-              color: width === w ? '#047857' : '#FFFFFF',
+              background: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.15)',
+              borderColor: mode === 'eraser' ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
+              color: mode === 'eraser' ? '#047857' : '#FFFFFF',
             }}
           >
-            {w === STROKE_WIDTHS[0] ? '얇게' : '굵게'}
+            <Icon name="eraser" size={18} color="currentColor" />
+            <span className="draw-board-tool-name">지우개</span>
           </button>
-        ))}
 
-        <div className="w-px h-8 mx-1 bg-emerald-500/50" />
-        
-        <button
-          type="button"
-          onClick={clearAll}
-          aria-label="전체 지우기"
-          className="h-9 px-3 rounded-[var(--r-pill)] shrink-0 text-xs font-bold bg-white text-rose-600 hover:bg-rose-50 cursor-pointer shadow-xs"
-        >
-          전체 지우기
-        </button>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="판서 닫기"
-          className="h-9 w-9 rounded-full flex items-center justify-center shrink-0 bg-emerald-800 hover:bg-emerald-900 text-white cursor-pointer"
-        >
-          <Icon name="close" size={18} color="#FFFFFF" />
-        </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (mode === 'text') selectToolMode('pen');
+              else selectToolMode('text');
+            }}
+            aria-label="글자 도구"
+            aria-pressed={mode === 'text'}
+            className="draw-board-tool-button"
+            style={{
+              background: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.15)',
+              borderColor: mode === 'text' ? '#FFFFFF' : 'rgba(255,255,255,0.3)',
+              color: mode === 'text' ? '#047857' : '#FFFFFF',
+            }}
+          >
+            <span className="draw-board-text-glyph" aria-hidden="true">T</span>
+            <span className="draw-board-tool-name">글자</span>
+          </button>
+        </div>
+
+        <span className="draw-board-palette-divider" aria-hidden="true" />
+
+        <div className="draw-board-palette-section draw-board-width-section" role="group" aria-label="펜 굵기">
+          <span className="draw-board-palette-label">굵기</span>
+          {STROKE_WIDTHS.map((w) => (
+            <button
+              key={w}
+              type="button"
+              onClick={() => setWidth(w)}
+              aria-label={w === STROKE_WIDTHS[0] ? '굵기 얇게' : '굵기 굵게'}
+              aria-pressed={width === w}
+              className="draw-board-width-button"
+              style={{
+                background: width === w ? '#FFFFFF' : 'transparent',
+                color: width === w ? '#047857' : '#FFFFFF',
+              }}
+            >
+              {w === STROKE_WIDTHS[0] ? '얇게' : '굵게'}
+            </button>
+          ))}
+        </div>
+
+        <span className="draw-board-palette-divider" aria-hidden="true" />
+
+        <div className="draw-board-palette-section draw-board-action-section" aria-label="그림판 작업">
+          <button type="button" onClick={clearAll} className="draw-board-clear-button">
+            <Icon name="refresh" size={16} color="currentColor" />
+            전체 지우기
+          </button>
+          <button type="button" onClick={onClose} aria-label="판서 닫기" className="draw-board-close-button">
+            <Icon name="close" size={18} color="#FFFFFF" />
+            <span className="draw-board-tool-name">닫기</span>
+          </button>
+        </div>
       </div>
     </div>
   );
