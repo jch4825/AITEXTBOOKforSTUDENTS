@@ -11,9 +11,9 @@ const STAGES = [
   { id: 'again', label: '2단계', message: '다시 쉽게 말해 주세요' },
 ];
 const MODES = [
-  { id: 'voice', label: '말', icon: '🗣️' },
-  { id: 'text', label: '글', icon: '⌨️' },
-  { id: 'card', label: '그림 카드', icon: '🖼️' },
+  { id: 'voice', label: '말', icon: '🗣️', reaction: '상대가 내 목소리를 듣고 고개를 끄덕여요.' },
+  { id: 'text', label: '글', icon: '⌨️', reaction: '상대가 문장을 천천히 읽고 기다려 줘요.' },
+  { id: 'card', label: '그림 카드', icon: '🖼️', reaction: '상대가 그림 뜻을 확인하고 바로 도와줘요.' },
 ];
 
 export default function ExpressionSwitchboardGame({ supportLevel }: MiniGameProps) {
@@ -27,17 +27,18 @@ export default function ExpressionSwitchboardGame({ supportLevel }: MiniGameProp
     setSent(false);
   }, [game.round, game.stageIndex]);
   const send = () => {
-    if (!mode) game.fail('나에게 편한 표현 방법 선을 먼저 연결해요.');
+    if (!mode) game.fail('나에게 편한 표현 방법 카드를 먼저 골라요.');
     else {
       setSent(true);
-      game.succeed('말·글·그림 카드 중 나에게 편한 방법으로 뜻을 분명히 전했어요!');
+      const selectedMode = MODES.find((item) => item.id === mode);
+      game.succeed(`메시지가 상대에게 도착했어요. ${selectedMode?.reaction ?? ''}`);
     }
   };
 
   return (
     <MiniGameFrame
       badge="내 방식 표현 교환기"
-      instruction="말·글·그림 카드 중 편한 선 하나를 연결하고 도움·거절·재설명 메시지를 보내세요. 어떤 방법도 괜찮아요."
+      instruction="말·글·그림 카드 중 편한 표현 카드를 골라 상대에게 전달하세요. 전달 방법이 바뀌면 상대의 반응 장면도 달라집니다."
       stages={STAGES.slice(0, game.visibleStageCount)}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].message)}
@@ -51,10 +52,14 @@ export default function ExpressionSwitchboardGame({ supportLevel }: MiniGameProp
         )
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-4">
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3">
+        <div className="w-full rounded-xl border-2 border-amber-300/60 bg-amber-950/45 px-3 py-2 text-center">
+          <p className="text-[14px] font-black text-amber-200">지금 전할 뜻</p>
+          <p className="text-[16px] font-black text-white">{stage.message}</p>
+        </div>
         <div className="flex w-full gap-2">
           {MODES.map((item) => (
-            <button key={item.id} type="button" onClick={() => setMode(item.id)} className={`min-h-20 flex-1 rounded-xl border-4 text-[15px] font-black text-white ${mode === item.id ? 'border-emerald-300 bg-emerald-900' : 'border-slate-500 bg-slate-800'}`}>
+            <button key={item.id} type="button" aria-pressed={mode === item.id} onClick={() => game.status === 'playing' && setMode(item.id)} className={`min-h-20 flex-1 rounded-xl border-4 text-[15px] font-black text-white ${mode === item.id ? 'border-emerald-300 bg-emerald-900' : 'border-slate-500 bg-slate-800'}`}>
               <span className="block text-[29px]" aria-hidden="true">{item.icon}</span>{item.label}
             </button>
           ))}
@@ -77,6 +82,10 @@ export default function ExpressionSwitchboardGame({ supportLevel }: MiniGameProp
               {sent ? `✅ ${stage.message}` : stage.message}
             </div>
           )}
+        </div>
+        <div className={`w-full rounded-xl border-2 px-3 py-2 text-center ${sent ? 'border-emerald-300 bg-emerald-950/70' : 'border-slate-600 bg-slate-900/60'}`} aria-live="polite">
+          <span className="block text-[13px] font-black text-slate-300">상대의 반응 장면</span>
+          <span className="block text-[15px] font-black text-white">{sent ? MODES.find((item) => item.id === mode)?.reaction : '표현 방법을 고르면 상대가 기다릴 준비를 해요.'}</span>
         </div>
       </div>
     </MiniGameFrame>

@@ -286,11 +286,12 @@ export default function StudioExperience({
     <MiniGameSlot
       lessonId={definition.lessonId}
       supportLevel={state.supportLevel}
+      phase="complete"
       fallback={completeSummaryPanel}
     />
   );
 
-  // 포맷 B는 같은 놀이를 도입에서 한 번 겪었다. 마무리에서는 '재도전'으로 부른다.
+  // 포맷 B는 도입에서 한 번 겪은 놀이를 마무리의 변형 세션으로 다시 적용한다.
   const hasLabIntro = behavior.views.some((item) => item.id === 'lab-intro');
 
   // 포맷 D는 첫 시도를 대화 한복판에서 하게 한다. 마지막 장면을 옆에 그대로 띄워

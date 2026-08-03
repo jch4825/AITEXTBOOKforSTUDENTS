@@ -9,6 +9,7 @@ const STAGES = [
   { id: 'speaker', label: '2단계', title: '스피커 설치', steps: ['자리', '선 연결', '소리 점검'] },
 ];
 const ICONS = ['🔌', '🧱', '🎀'];
+const REACTIONS = ['자리를 먼저 잡았어요. 다음 부품을 놓을 수 있어요.', '앞 부품이 받쳐 주어서 설치가 이어져요.', '현장 사람이 고개를 끄덕이며 완성된 장면을 확인해요.'];
 
 export default function DependencyBuildGame({ supportLevel }: MiniGameProps) {
   const game = useMiniGameStage({ supportLevel, stageCount: STAGES.length, autoResetOnFailMs: 0 });
@@ -39,7 +40,11 @@ export default function DependencyBuildGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={<MiniGameButton onClick={game.retry} emoji="🏗️" label="처음부터 설치" />}
     >
-      <div className="flex min-h-0 flex-1 flex-col justify-center gap-4">
+      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3">
+        <div className="rounded-xl border-2 border-sky-300/60 bg-sky-950/45 px-3 py-2 text-center" aria-live="polite">
+          <p className="text-[14px] font-black text-sky-200">설치 현장 반응</p>
+          <p className="text-[15px] font-black text-white">{built.length ? REACTIONS[Math.min(built.length - 1, REACTIONS.length - 1)] : '부품을 골라 설치 자리에 올려 보세요.'}</p>
+        </div>
         <div className="flex justify-center gap-2">
           {stage.steps.map((step, index) => (
             <button
@@ -56,6 +61,7 @@ export default function DependencyBuildGame({ supportLevel }: MiniGameProps) {
         </div>
         <div className="relative mx-auto min-h-[170px] w-[88%] overflow-hidden rounded-xl border-4 border-slate-500 bg-slate-900">
           <div className="absolute inset-x-0 bottom-0 h-7 bg-stone-600" />
+          <div className="absolute bottom-1 left-2 text-[12px] font-black text-stone-200">작업자 자리</div>
           {built.map((step, index) => (
             <div
               key={step}

@@ -25,7 +25,7 @@ interface Options {
   supportLevel: SupportLevel;
   /** 게임이 준비한 전체 스테이지 수 */
   stageCount: number;
-  /** 실패 후 자동으로 되돌리기까지의 시간. 0이면 자동 복구하지 않는다. */
+  /** 실패 후 자동으로 되돌리기까지의 시간. 0이면 학생이 직접 다시 한다. */
   autoResetOnFailMs?: number;
 }
 
@@ -36,7 +36,7 @@ interface Options {
  * `round`는 리셋 횟수 카운터로, 게임 내부 상태를 초기화할 때 `key={round}` 또는
  * useEffect 의존성으로 쓰면 된다.
  */
-export function useMiniGameStage({ supportLevel, stageCount, autoResetOnFailMs = 1800 }: Options) {
+export function useMiniGameStage({ supportLevel, stageCount, autoResetOnFailMs = 0 }: Options) {
   const { speakNow } = useSpeak();
   const [stageIndex, setStageIndex] = useState(0);
   const [status, setStatus] = useState<MiniGameStatus>('playing');
@@ -95,7 +95,7 @@ export function useMiniGameStage({ supportLevel, stageCount, autoResetOnFailMs =
     [speakNow],
   );
 
-  // 실패는 벌칙 없이 곧바로 되돌린다(5원칙 #5). 학생이 멈춰 있는 시간을 만들지 않는다.
+  // 실패 메시지는 읽기·음성 안내가 끝날 때까지 유지한다. 학생이 직접 다시 하기를 눌러야 한다.
   useEffect(() => {
     if (status !== 'fail' || autoResetOnFailMs <= 0) return;
     const timer = setTimeout(retry, autoResetOnFailMs);

@@ -100,6 +100,11 @@ export default function SilhouetteMatchGame({ supportLevel }: MiniGameProps) {
     setPos((p) => ({ ...p, [key]: p[key] + delta }));
   };
 
+  const nudgePosition = (dx: number, dy: number) => {
+    if (status !== 'playing') return;
+    setPos((p) => ({ ...p, x: Math.max(6, Math.min(94, p.x + dx)), y: Math.max(10, Math.min(90, p.y + dy)) }));
+  };
+
   const handleHint = () => setPos({ ...stage.goal });
 
   const check = () => {
@@ -119,7 +124,7 @@ export default function SilhouetteMatchGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="목표와 겹쳐 보기"
-      instruction="점선이 처음 정한 조건이에요. 결과물을 끌어 옮기고 기울기와 크기를 맞춰 점선 위에 겹치세요. 세 가지를 모두 맞춰야 합니다."
+      instruction="점선이 처음 정한 조건이에요. 결과물을 끌어 옮기거나 아래 방향 버튼으로 움직이고, 기울기와 크기를 맞춰 점선 위에 겹치세요."
       accent="var(--brand-ink)"
       stages={STAGES.slice(0, visibleStageCount).map((s) => ({ id: s.id, label: s.tab }))}
       activeStageIndex={stageIndex}
@@ -229,6 +234,18 @@ export default function SilhouetteMatchGame({ supportLevel }: MiniGameProps) {
               </button>
             </div>
           ))}
+        </div>
+
+        <div className="grid grid-cols-3 gap-1.5" aria-label="결과물 위치 대체 조작">
+          <span />
+          <button type="button" onClick={() => nudgePosition(0, -5)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[18px] font-black text-white disabled:opacity-45" aria-label="위로 이동">↑</button>
+          <span />
+          <button type="button" onClick={() => nudgePosition(-5, 0)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[18px] font-black text-white disabled:opacity-45" aria-label="왼쪽으로 이동">←</button>
+          <span className="grid place-items-center text-[12px] font-black text-sky-200">끌기 대신 누르기</span>
+          <button type="button" onClick={() => nudgePosition(5, 0)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[18px] font-black text-white disabled:opacity-45" aria-label="오른쪽으로 이동">→</button>
+          <span />
+          <button type="button" onClick={() => nudgePosition(0, 5)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[18px] font-black text-white disabled:opacity-45" aria-label="아래로 이동">↓</button>
+          <span />
         </div>
       </div>
     </MiniGameFrame>

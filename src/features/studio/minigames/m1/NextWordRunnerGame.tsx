@@ -436,6 +436,13 @@ export default function NextWordRunnerGame() {
     }
   };
 
+  // 캔버스를 조작하기 어려운 학생을 위한 탭·스위치·키보드 대체 경로.
+  const chooseWordByButton = (word: string) => {
+    if (gameState !== 'playing') return;
+    const balloon = balloonsRef.current.find((item) => item.word === word);
+    if (balloon) popBalloon(balloon);
+  };
+
   return (
     <div
       className="relative flex h-full flex-col justify-between rounded-2xl p-4 md:p-5 text-white shadow-xl overflow-hidden border-2 border-slate-700"
@@ -503,6 +510,7 @@ export default function NextWordRunnerGame() {
           width={540}
           height={270}
           onClick={handleCanvasClick}
+          aria-label="움직이는 말풍선 장면. 아래 낱말 버튼으로도 고를 수 있어요."
           className="w-full h-full object-cover cursor-pointer"
         />
 
@@ -581,6 +589,19 @@ export default function NextWordRunnerGame() {
           </div>
         )}
       </div>
+
+      {gameState === 'playing' && (
+        <div className="mt-2 rounded-xl border border-sky-400/50 bg-sky-950/50 p-2" aria-label="말풍선 선택 대체 버튼">
+          <p className="mb-1 text-[13px] font-black text-sky-200">캔버스를 누르기 어렵다면 낱말 버튼을 사용하세요.</p>
+          <div className="flex flex-wrap gap-1.5">
+            {stage.steps[currentStepIdx]?.balloons.map((balloon) => (
+              <button key={balloon.word} type="button" onClick={() => chooseWordByButton(balloon.word)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-slate-900 px-2.5 text-[14px] font-black text-white">
+                🎈 {balloon.word}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Stage Selector Buttons */}
       <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">

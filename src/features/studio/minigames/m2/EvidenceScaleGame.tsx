@@ -68,6 +68,7 @@ export default function EvidenceScaleGame({ supportLevel }: MiniGameProps) {
 
   const tipped = weight >= stage.claimWeight;
   const nextFeather = featherWeight(asked);
+  const rockCount = items.filter((item) => item === 'rock').length;
 
   const ask = () => {
     if (status !== 'playing' || left < ASK_COST) return;
@@ -108,7 +109,7 @@ export default function EvidenceScaleGame({ supportLevel }: MiniGameProps) {
       badge="증거 저울"
       instruction="주장은 무거운 돌이에요. 저울을 넘기려면 묵직한 근거가 필요합니다. 아이미에게 다시 묻기는 깃털이라 아무리 쌓아도 잘 안 넘어가요."
       accent="var(--brand-ink)"
-      progress={{ label: '남은 시간', value: left, max: stage.budget }}
+      progress={{ label: '묵직한 자료 카드', value: rockCount, max: Math.ceil(stage.claimWeight / SOURCE_WEIGHT) }}
       stages={STAGES.slice(0, visibleStageCount).map((s) => ({ id: s.id, label: s.tab }))}
       activeStageIndex={stageIndex}
       onStageSelect={(i) => goToStage(i, STAGES[i].claim)}
@@ -156,6 +157,11 @@ export default function EvidenceScaleGame({ supportLevel }: MiniGameProps) {
         <div className="rounded-lg border-2 border-amber-400/50 bg-amber-400/10 px-2 py-1.5">
           <p className="text-[14px] font-black text-amber-300">확인할 이야기</p>
           <p className="text-[15px] font-bold text-slate-100">“{stage.claim}”</p>
+        </div>
+
+        <div className={`rounded-xl border-2 px-3 py-2 text-center ${tipped ? 'border-emerald-300 bg-emerald-950/70' : 'border-slate-600 bg-slate-900/60'}`} aria-live="polite">
+          <p className="text-[14px] font-black text-slate-300">자료를 확인하는 장면</p>
+          <p className="text-[15px] font-black text-white">{tipped ? '✅ 독립된 자료가 주장을 받쳐 결론을 말할 수 있어요.' : rockCount ? '🪨 자료실에서 찾은 근거가 저울에 올라갔어요.' : '📚 자료실에서 확인할 곳을 골라 보세요.'}</p>
         </div>
 
         {/* 저울 */}

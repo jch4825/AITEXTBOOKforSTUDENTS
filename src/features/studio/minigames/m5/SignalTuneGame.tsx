@@ -45,6 +45,8 @@ export default function SignalTuneGame({ supportLevel }: MiniGameProps) {
     }
   };
 
+  const aligned = wheels[0] === stage.targets[0] && wheels[1] === stage.targets[1];
+
   return (
     <MiniGameFrame
       badge="뜻 자물쇠 열기"
@@ -65,6 +67,12 @@ export default function SignalTuneGame({ supportLevel }: MiniGameProps) {
       <div className="rounded-xl border-2 border-amber-300/50 bg-amber-950 px-3 py-2 text-center">
         <p className="text-[15px] font-black text-white">🗣️ “{stage.said}”</p>
         <p className="text-[14px] font-bold text-amber-200">어디와 언제가 빠져 자물쇠가 잠겼어요</p>
+      </div>
+
+      <div className={`rounded-xl border-2 px-3 py-2 text-center transition-colors ${open ? 'border-emerald-300 bg-emerald-950/70' : aligned ? 'border-sky-300 bg-sky-950/60' : 'border-slate-600 bg-slate-900/60'}`} aria-live="polite">
+        <p className="text-[14px] font-black text-slate-300">장면 미리 보기</p>
+        <p className="text-[16px] font-black text-white">{open ? `📍 ${stage.place}에서 ⏰ ${stage.time}에 만나요.` : `📍 ${stage.place} · ⏰ ${stage.time}`}</p>
+        <p className="text-[13px] font-bold text-slate-300">{open ? '상대가 장소와 시간을 알아듣고 움직여요.' : aligned ? '두 단서가 맞았어요. 잠금 장면을 열어 보세요.' : '바퀴를 돌리면 실제 약속 장면이 달라져요.'}</p>
       </div>
 
       <div className="flex min-h-0 flex-1 items-center justify-center gap-5">

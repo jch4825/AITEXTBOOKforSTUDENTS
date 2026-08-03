@@ -15,7 +15,7 @@ import type { LessonId } from '../../../types';
  *  2) 결과가 정답표 조회가 아니라 학생이 만든 상태에서 파생된다
  *  3) 성공 경로가 둘 이상이거나 점수가 연속값이다
  *  4) 성패가 움직임·색으로 먼저 보이고 글자는 보조다
- *  5) 실패해도 벌칙 없이 즉시 다시 할 수 있다
+ *  5) 실패 메시지는 읽을 때까지 유지하고, 학생이 직접 다시 시도할 수 있다
  */
 export const MINI_GAME_REGISTRY: Record<string, ReturnType<typeof lazy>> = {
   'm1-l1': lazy(() => import('./m1/AimiScanLensGame')),
@@ -81,6 +81,26 @@ export const MINI_GAME_REGISTRY: Record<string, ReturnType<typeof lazy>> = {
   'm6-l10': lazy(() => import('./m6/JobDayAllocationGame')),
   'm6-l11': lazy(() => import('./m6/AudienceCurtainGame')),
 };
+
+/**
+ * 미니게임을 학습 역할별로 구분한다. 같은 등록부를 쓰더라도 교사 도구와
+ * 품질 점검에서는 미니게임·AAC 표현 연습·판단 활동을 서로 다른 기준으로 본다.
+ */
+export type MiniGameCategory = 'minigame' | 'aac-practice' | 'judgment';
+
+const AAC_PRACTICE_IDS = new Set([
+  'm1-l3', 'm1-l5', 'm2-l5', 'm2-l6', 'm3-l4', 'm4-l7', 'm5-l6', 'm6-l8', 'm6-l9',
+]);
+const JUDGMENT_IDS = new Set([
+  'm1-l8', 'm1-l10', 'm2-l4', 'm2-l9', 'm4-l3', 'm4-l4', 'm4-l10', 'm5-l4', 'm5-l9', 'm6-l6', 'm6-l11',
+]);
+
+export function getMiniGameCategory(lessonId: LessonId | undefined): MiniGameCategory | null {
+  if (!lessonId || !hasMiniGame(lessonId)) return null;
+  if (AAC_PRACTICE_IDS.has(lessonId)) return 'aac-practice';
+  if (JUDGMENT_IDS.has(lessonId)) return 'judgment';
+  return 'minigame';
+}
 
 /** 해당 차시에 등록된 미니게임. 없으면 null. */
 export function getMiniGame(lessonId: LessonId | undefined) {

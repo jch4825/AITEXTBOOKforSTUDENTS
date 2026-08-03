@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import type { MiniGameProps } from '../types';
 
-/**
- * m2-l5 「누구에게 보여 줄 답인지 말해요」 — 두 다이얼 맞추기.
- *
- * 높임 정도와 자세함을 각각 다이얼로 조절해 상대에게 어울리는 자리에 맞춘다.
- * 어울리는 곳이 점이 아니라 넓은 구역이라 같은 상대에게도 여러 말투가 통한다.
- * 상대가 바뀌면 구역이 통째로 옮겨 가므로, 한 축의 정답이 혼자 정해지지 않는다.
- */
+type ToneId = 'friendly' | 'formal' | 'warm';
+type DetailId = 'short' | 'clear' | 'full';
 
 interface Audience {
   id: string;
@@ -17,11 +12,22 @@ interface Audience {
   emoji: string;
   name: string;
   ask: string;
-  /** 어울리는 구역 [최소, 최대] */
-  polite: [number, number];
-  detail: [number, number];
-  sample: (p: number, d: number) => string;
+  tone: ToneId[];
+  detail: DetailId[];
+  reaction: string;
 }
+
+const TONE_CARDS: Array<{ id: ToneId; emoji: string; label: string; text: string }> = [
+  { id: 'friendly', emoji: '🙂', label: '편한 말투', text: '친구에게 자연스럽게 말해요.' },
+  { id: 'formal', emoji: '🙇', label: '공손한 말투', text: '상대에게 예의를 갖춰 말해요.' },
+  { id: 'warm', emoji: '💛', label: '따뜻한 말투', text: '어린 동생이 알아듣게 말해요.' },
+];
+
+const DETAIL_CARDS: Array<{ id: DetailId; emoji: string; label: string; text: string }> = [
+  { id: 'short', emoji: '🧩', label: '짧은 안내 블록', text: '핵심 한 가지를 짧게 알려요.' },
+  { id: 'clear', emoji: '🗒️', label: '알맞은 안내 블록', text: '필요한 정보만 또렷하게 알려요.' },
+  { id: 'full', emoji: '📚', label: '자세한 안내 블록', text: '시간·장소·방법을 자세히 알려요.' },
+];
 
 const AUDIENCES: Audience[] = [
   {
@@ -30,10 +36,9 @@ const AUDIENCES: Audience[] = [
     emoji: '🧑‍🤝‍🧑',
     name: '같은 반 친구',
     ask: '내일 준비물을 알려 주는 쪽지',
-    polite: [10, 45],
-    detail: [30, 65],
-    sample: (p, d) =>
-      `${p < 45 ? '내일 준비물은' : '내일 준비물을 안내드립니다.'} 색연필${d > 55 ? '이랑 가위, 풀까지 챙겨 와' : ' 가져와'}${p < 45 ? '!' : '.'}`,
+    tone: ['friendly'],
+    detail: ['clear', 'full'],
+    reaction: '친구가 바로 이해하고 준비물을 챙겨요.',
   },
   {
     id: 'teacher',
@@ -41,10 +46,9 @@ const AUDIENCES: Audience[] = [
     emoji: '🧑‍🏫',
     name: '담임 선생님',
     ask: '체험회 준비를 여쭤보는 쪽지',
-    polite: [65, 100],
-    detail: [55, 95],
-    sample: (p, d) =>
-      `${p > 65 ? '선생님, 안녕하세요.' : '쌤'} 체험회 준비물${d > 55 ? '과 모이는 시간, 장소를' : '을'} ${p > 65 ? '여쭤봐도 될까요?' : '뭐야?'}`,
+    tone: ['formal'],
+    detail: ['clear', 'full'],
+    reaction: '선생님이 정중한 질문으로 받아들여요.',
   },
   {
     id: 'kid',
@@ -52,155 +56,138 @@ const AUDIENCES: Audience[] = [
     emoji: '🧒',
     name: '1학년 동생',
     ask: '체험회 오는 길을 알려 주는 쪽지',
-    polite: [25, 60],
-    detail: [5, 40],
-    sample: (p, d) =>
-      `${p > 30 ? '내일' : '야 내일'} 강당으로 와${d > 45 ? '. 2층 계단 오른쪽 복도 끝 문으로 들어오면 돼' : '!'}`,
+    tone: ['warm', 'friendly'],
+    detail: ['short', 'clear'],
+    reaction: '동생이 길을 쉽게 떠올리고 따라와요.',
   },
 ];
 
 export default function AudienceToneGame({ supportLevel }: MiniGameProps) {
-  const {
-    stageIndex,
-    visibleStageCount,
-    hintAllowed,
-    status,
-    message,
-    round,
-    isLocked,
-    goToStage,
-    succeed,
-    fail,
-    retry,
-  } = useMiniGameStage({ supportLevel, stageCount: AUDIENCES.length });
-
-  const person = AUDIENCES[stageIndex];
-  const [polite, setPolite] = useState(50);
-  const [detail, setDetail] = useState(50);
+  const game = useMiniGameStage({
+    supportLevel,
+    stageCount: AUDIENCES.length,
+    autoResetOnFailMs: 0,
+  });
+  const person = AUDIENCES[game.stageIndex];
+  const [toneId, setToneId] = useState<ToneId | null>(null);
+  const [detailId, setDetailId] = useState<DetailId | null>(null);
 
   useEffect(() => {
-    setPolite(50);
-    setDetail(50);
-  }, [round, stageIndex]);
+    setToneId(null);
+    setDetailId(null);
+  }, [game.round, game.stageIndex]);
 
-  const politeOk = polite >= person.polite[0] && polite <= person.polite[1];
-  const detailOk = detail >= person.detail[0] && detail <= person.detail[1];
-  const bothOk = politeOk && detailOk;
-
-  const handleHint = () => {
-    setPolite(Math.round((person.polite[0] + person.polite[1]) / 2));
-    setDetail(Math.round((person.detail[0] + person.detail[1]) / 2));
-  };
+  const tone = useMemo(() => TONE_CARDS.find((card) => card.id === toneId), [toneId]);
+  const detail = useMemo(() => DETAIL_CARDS.find((card) => card.id === detailId), [detailId]);
+  const toneOk = toneId !== null && person.tone.includes(toneId);
+  const detailOk = detailId !== null && person.detail.includes(detailId);
+  const ready = Boolean(tone && detail);
 
   const send = () => {
-    if (status !== 'playing') return;
-    if (bothOk) {
-      succeed(`${person.name}에게 딱 맞는 말투예요!`);
+    if (game.status !== 'playing') return;
+    if (!tone || !detail) {
+      game.fail('말투 카드와 안내 블록을 하나씩 골라 쪽지 판에 올려 보세요.');
       return;
     }
-    const parts: string[] = [];
-    if (!politeOk) parts.push(polite < person.polite[0] ? '너무 편한 말투' : '너무 딱딱한 말투');
-    if (!detailOk) parts.push(detail < person.detail[0] ? '설명이 너무 짧아요' : '설명이 너무 길어요');
-    fail(parts.join(' · '));
+    if (toneOk && detailOk) {
+      game.succeed(`${person.name}의 장면이 열렸어요. ${person.reaction}`);
+      return;
+    }
+    if (!toneOk) {
+      game.fail(`${person.name}에게는 ${TONE_CARDS.find((card) => person.tone.includes(card.id))?.label ?? '다른 말투'}가 더 잘 맞아요.`);
+      return;
+    }
+    game.fail(`${person.name}에게는 ${DETAIL_CARDS.find((card) => person.detail.includes(card.id))?.label ?? '다른 정보 블록'}이 더 알맞아요.`);
   };
 
-  const dial = (
-    label: string,
-    lowLabel: string,
-    highLabel: string,
-    value: number,
-    setValue: (v: number) => void,
-    band: [number, number],
-    ok: boolean,
-  ) => (
-    <div>
-      <div className="mb-1 flex items-center justify-between text-[14px] font-black">
-        <span className="text-slate-400">{label}</span>
-        <span className={ok ? 'text-emerald-300' : 'text-slate-400'}>{ok ? '알맞아요' : '조절해요'}</span>
-      </div>
-      <div className="relative">
-        {hintAllowed && (
-          <div
-            className="pointer-events-none absolute top-1/2 h-3 -translate-y-1/2 rounded-full bg-emerald-400/25"
-            style={{ left: `${band[0]}%`, width: `${band[1] - band[0]}%` }}
-            aria-hidden="true"
-          />
-        )}
-        <input
-          type="range"
-          min={0}
-          max={100}
-          step={1}
-          value={value}
-          disabled={status !== 'playing'}
-          onChange={(e: any) => setValue(Number(e.target.value))}
-          aria-label={label}
-          className="relative w-full"
-          style={{ accentColor: ok ? '#34d399' : '#4FC3E8' }}
-        />
-      </div>
-      <div className="flex justify-between text-[14px] font-bold text-slate-500">
-        <span>{lowLabel}</span>
-        <span>{highLabel}</span>
-      </div>
-    </div>
-  );
+  const handleHint = () => {
+    setToneId(person.tone[0]);
+    setDetailId(person.detail[0]);
+  };
 
   return (
     <MiniGameFrame
-      badge="상대에 맞춰 말하기"
-      instruction="같은 내용도 누구에게 보여 주느냐에 따라 말투가 달라져요. 두 다이얼을 움직여 상대에게 어울리는 자리를 찾아 보세요."
+      badge="상대에게 맞는 쪽지 만들기"
+      instruction="받는 사람 카드를 보고, 말투 카드와 안내 블록을 쪽지 판에 차례로 올려 보세요. 슬라이더 대신 실제 카드의 조합으로 장면이 달라집니다."
       accent="var(--brand-ink)"
-      progress={{ label: '맞은 다이얼', value: (politeOk ? 1 : 0) + (detailOk ? 1 : 0), max: 2 }}
-      stages={AUDIENCES.slice(0, visibleStageCount).map((a) => ({ id: a.id, label: a.tab }))}
-      activeStageIndex={stageIndex}
-      onStageSelect={(i) => goToStage(i, `${AUDIENCES[i].name}에게 쓰기`)}
-      status={status}
-      message={message}
+      progress={{ label: '쪽지에 놓은 카드', value: (tone ? 1 : 0) + (detail ? 1 : 0), max: 2 }}
+      stages={AUDIENCES.slice(0, game.visibleStageCount).map((a) => ({ id: a.id, label: a.tab }))}
+      activeStageIndex={game.stageIndex}
+      onStageSelect={(index) => game.goToStage(index, `${AUDIENCES[index].name}에게 쪽지 만들기`)}
+      status={game.status}
+      message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={retry} disabled={isLocked} emoji="🔄" label="다시" />
-          {hintAllowed && (
-            <MiniGameButton onClick={handleHint} disabled={isLocked} emoji="💡" label="힌트" />
-          )}
-          <MiniGameButton
-            onClick={send}
-            disabled={status !== 'playing'}
-            emoji="📨"
-            label="이렇게 보내기"
-            variant="primary"
-          />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="다시 만들기" />
+          {game.hintAllowed && <MiniGameButton onClick={handleHint} disabled={game.isLocked} emoji="💡" label="힌트" />}
+          <MiniGameButton onClick={send} disabled={game.status !== 'playing'} emoji="📨" label="쪽지 보내기" variant="primary" />
         </>
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3">
-        <div className="rounded-lg border-2 border-amber-400/50 bg-amber-400/10 px-2 py-1.5">
+      <div className="flex min-h-0 flex-1 flex-col gap-2.5">
+        <section className="rounded-xl border-2 border-amber-400/60 bg-amber-950/45 p-2.5" aria-label="받는 사람 장면">
           <p className="text-[14px] font-black text-amber-300">받는 사람</p>
-          <p className="text-[14px] font-bold text-slate-100">
-            {person.emoji} {person.name} · {person.ask}
-          </p>
+          <p className="text-[16px] font-black text-white">{person.emoji} {person.name}</p>
+          <p className="text-[14px] font-bold leading-relaxed text-amber-100">{person.ask}</p>
+        </section>
+
+        <div className="grid gap-2 sm:grid-cols-2">
+          <section className="rounded-xl border-2 border-sky-300/60 bg-sky-950/45 p-2" aria-label="말투 카드 고르기">
+            <h3 className="mb-1 text-[14px] font-black text-sky-200">말투 카드</h3>
+            <div className="grid gap-1.5">
+              {TONE_CARDS.map((card) => {
+                const selected = toneId === card.id;
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    aria-pressed={selected}
+                    disabled={game.status !== 'playing'}
+                    onClick={() => setToneId(card.id)}
+                    className="flex min-h-14 items-center gap-2 rounded-lg border-2 px-2 text-left text-white transition disabled:opacity-45"
+                    style={{ borderColor: selected ? '#7dd3fc' : 'rgba(148,163,184,0.45)', background: selected ? 'rgba(14,116,144,0.55)' : 'rgba(15,23,42,0.55)' }}
+                  >
+                    <span className="text-xl" aria-hidden="true">{card.emoji}</span>
+                    <span><strong className="block text-[14px] font-black">{card.label}</strong><span className="text-[12px] font-bold text-slate-300">{card.text}</span></span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="rounded-xl border-2 border-violet-300/60 bg-violet-950/45 p-2" aria-label="안내 블록 고르기">
+            <h3 className="mb-1 text-[14px] font-black text-violet-200">정보 블록</h3>
+            <div className="grid gap-1.5">
+              {DETAIL_CARDS.map((card) => {
+                const selected = detailId === card.id;
+                return (
+                  <button
+                    key={card.id}
+                    type="button"
+                    aria-pressed={selected}
+                    disabled={game.status !== 'playing'}
+                    onClick={() => setDetailId(card.id)}
+                    className="flex min-h-14 items-center gap-2 rounded-lg border-2 px-2 text-left text-white transition disabled:opacity-45"
+                    style={{ borderColor: selected ? '#c4b5fd' : 'rgba(148,163,184,0.45)', background: selected ? 'rgba(109,40,217,0.55)' : 'rgba(15,23,42,0.55)' }}
+                  >
+                    <span className="text-xl" aria-hidden="true">{card.emoji}</span>
+                    <span><strong className="block text-[14px] font-black">{card.label}</strong><span className="text-[12px] font-bold text-slate-300">{card.text}</span></span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
         </div>
 
-        {/* 지금 말투로 쓰면 이렇게 나온다 */}
-        <div
-          className="rounded-xl border-2 px-3 py-2 transition-colors"
-          style={{
-            borderColor: bothOk ? '#4ade80' : 'rgba(148,163,184,0.45)',
-            background: bothOk ? 'rgba(22,163,74,0.2)' : 'rgba(30,41,59,0.9)',
-          }}
-        >
-          <p className="text-[14px] font-black text-slate-400">내 쪽지</p>
-          <p className="text-[14px] font-bold leading-relaxed text-slate-50">
-            {person.sample(polite, detail)}
-          </p>
-        </div>
-
-        {dial('높임 정도', '편하게', '공손하게', polite, setPolite, person.polite, politeOk)}
-        {dial('자세함', '짧게', '자세하게', detail, setDetail, person.detail, detailOk)}
-
-        <p className="text-center text-2xl leading-none" aria-hidden="true">
-          {bothOk ? '😊' : politeOk || detailOk ? '🙂' : '😐'}
-        </p>
+        <section className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/45 p-2.5" aria-live="polite">
+          <p className="text-[14px] font-black text-emerald-200">쪽지 판 · 보내기 전 장면</p>
+          <div className="mt-1 flex min-h-16 flex-wrap items-center gap-1.5 rounded-lg border-2 border-dashed border-emerald-200/60 bg-slate-950/45 p-2">
+            {tone ? <span className="rounded-lg border border-sky-300 bg-sky-900/70 px-2 py-1 text-[14px] font-black text-white">{tone.emoji} {tone.label}</span> : <span className="text-[13px] font-bold text-slate-400">말투 카드를 올려요</span>}
+            <span className="text-lg text-emerald-300" aria-hidden="true">＋</span>
+            {detail ? <span className="rounded-lg border border-violet-300 bg-violet-900/70 px-2 py-1 text-[14px] font-black text-white">{detail.emoji} {detail.label}</span> : <span className="text-[13px] font-bold text-slate-400">정보 블록을 올려요</span>}
+          </div>
+          <p className="mt-1 text-center text-[14px] font-black text-emerald-100">{ready ? (toneOk && detailOk ? person.reaction : '카드 조합을 바꾸어 상대의 표정을 살펴보세요.') : '두 카드를 올리면 상대의 반응이 나타나요.'}</p>
+        </section>
       </div>
     </MiniGameFrame>
   );

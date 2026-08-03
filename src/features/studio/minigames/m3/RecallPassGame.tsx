@@ -225,7 +225,9 @@ export default function RecallPassGame({ supportLevel }: MiniGameProps) {
               color: '#7c2d12',
             }}
           >
-            📖 열람권 쓰기 (남은 {passesLeft}장)
+            📖 열람 카드 쓰기 {Array.from({ length: stage.passes }).map((_, index) => (
+              <span key={index} className={index < passesLeft ? 'text-amber-700' : 'text-slate-400'} aria-label={index < passesLeft ? '남은 열람 카드' : '쓴 열람 카드'}>📖</span>
+            ))}
           </button>
         ) : (
           <button
@@ -247,10 +249,8 @@ export default function RecallPassGame({ supportLevel }: MiniGameProps) {
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div>
           <div className="mb-1 flex items-center justify-between text-[14px] font-black text-slate-400">
-            <span>남은 시간</span>
-            <span className={left < 1.5 ? 'text-rose-300' : 'text-slate-300'}>
-              {left.toFixed(1)}초
-            </span>
+            <span>복습 흐름</span>
+            <span className={left < 1.5 ? 'text-rose-300' : 'text-slate-300'}>{left > 0 ? '생각할 시간이 남아 있어요' : '다음 장면으로 넘어가요'}</span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-slate-800">
             <div
@@ -269,9 +269,7 @@ export default function RecallPassGame({ supportLevel }: MiniGameProps) {
               {point.emoji}
             </span>
             <p className="mt-1 text-[15px] font-black text-slate-100">{point.label}</p>
-            <p className="text-[14px] font-bold text-slate-400">
-              떠올리는 데 {point.think.toFixed(1)}초
-            </p>
+            <p className="text-[14px] font-bold text-slate-400">먼저 머릿속에서 떠올리고, 막히면 자료 카드를 열어요.</p>
             <div className="mt-2 h-4 overflow-hidden rounded-full bg-slate-950">
               <div
                 className="h-full rounded-full"
@@ -310,6 +308,10 @@ export default function RecallPassGame({ supportLevel }: MiniGameProps) {
               );
             })}
           </div>
+        </div>
+        <div className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/60 px-3 py-2 text-center" aria-live="polite">
+          <p className="text-[14px] font-black text-emerald-200">복습 장면</p>
+          <p className="text-[15px] font-black text-white">{recalled.length >= stage.needRecall ? '🧠 내가 떠올린 내용이 복습 노트에 남았어요.' : opened.length ? '📖 자료 카드를 열어 다음 장면의 단서를 얻었어요.' : '🧠 카드를 보고 먼저 내 기억을 꺼내 봐요.'}</p>
         </div>
       </div>
     </MiniGameFrame>

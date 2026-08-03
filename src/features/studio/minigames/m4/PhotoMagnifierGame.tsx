@@ -23,11 +23,12 @@ export default function PhotoMagnifierGame({ supportLevel }: MiniGameProps) {
 
   const visible = (spot: (typeof HOTSPOTS)[number]) =>
     Math.hypot(spot.x - lens.x, spot.y - lens.y) < 24;
+  const focusSpot = (spot: (typeof HOTSPOTS)[number]) => setLens({ x: spot.x, y: spot.y });
 
   return (
     <MiniGameFrame
       badge="사진 돋보기 검사"
-      instruction="사진 위에서 돋보기를 움직여 숨은 단서를 찾고, 보이는 단서를 눌러 가리세요."
+      instruction="사진 위에서 돋보기를 움직여 숨은 단서를 찾고, 보이는 단서를 눌러 가리세요. 끌기 어렵다면 아래 단서 버튼으로 돋보기를 옮길 수 있어요."
       stages={STAGES.slice(0, game.visibleStageCount)}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].audience)}
@@ -92,6 +93,9 @@ export default function PhotoMagnifierGame({ supportLevel }: MiniGameProps) {
           style={{ left: `${lens.x}%`, top: `${lens.y}%` }}
           aria-hidden="true"
         />
+      </div>
+      <div className="mt-2 flex flex-wrap gap-1.5" aria-label="돋보기 위치 대체 버튼">
+        {HOTSPOTS.map((spot) => <button key={spot.label} type="button" onClick={() => focusSpot(spot)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 px-2 text-[13px] font-black text-white">🔎 {spot.label}로 이동</button>)}
       </div>
     </MiniGameFrame>
   );

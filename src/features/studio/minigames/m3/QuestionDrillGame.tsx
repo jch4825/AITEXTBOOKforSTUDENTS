@@ -73,6 +73,17 @@ export default function QuestionDrillGame({ supportLevel }: MiniGameProps) {
               onPointerDown={() => start(index)}
               onPointerUp={() => stop(index)}
               onPointerCancel={() => stop(index)}
+              onKeyDown={(event) => {
+                if ((event.key === ' ' || event.key === 'Enter') && active === null) {
+                  event.preventDefault();
+                  start(index);
+                }
+              }}
+              onKeyUp={(event) => {
+                if (event.key === ' ' || event.key === 'Enter') stop(index);
+              }}
+              onBlur={() => stop(index)}
+              aria-label={`${label} 질문 깊이. 스페이스나 엔터를 누르고 떼어 보세요.`}
               disabled={game.status !== 'playing'}
               className="relative min-h-[210px] flex-1 touch-none overflow-hidden rounded-xl border-2 border-amber-300/60 bg-gradient-to-b from-amber-800 to-stone-950 text-[14px] font-black text-white"
             >

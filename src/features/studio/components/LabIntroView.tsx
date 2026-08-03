@@ -18,8 +18,8 @@ const INTRO_GUIDE =
  * 포맷 B의 도입 실험 (05-ENGINE-SPEC §1-B).
  *
  * 말보다 조작을 먼저 겪게 하려고, 마무리 보상이던 미니게임을 이야기 앞으로 당겨 온다.
- * 게임 컴포넌트는 손대지 않고 같은 `MiniGameSlot`을 supportLevel 그대로 다시 쓴다.
- * 마무리 단계의 게임은 '재도전'으로 남아 같은 놀이를 두 번 만나게 된다.
+ * 도입은 관찰용 `intro` 세션으로, 마무리는 `complete` 세션으로 전달한다.
+ * 마무리 슬롯은 변형 조건·목표·역할을 안내해 처음 본 판을 그대로 반복하지 않게 한다.
  */
 export default function LabIntroView({ definition, supportLevel, accent, secondary }: Props) {
   const { speakNow } = useSpeak();
@@ -36,7 +36,7 @@ export default function LabIntroView({ definition, supportLevel, accent, seconda
   );
 
   const left = (
-    <MiniGameSlot lessonId={definition.lessonId} supportLevel={supportLevel} fallback={fallback} />
+    <MiniGameSlot lessonId={definition.lessonId} supportLevel={supportLevel} phase="intro" fallback={fallback} />
   );
 
   const right = (

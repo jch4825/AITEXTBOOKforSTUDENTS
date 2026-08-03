@@ -20,4 +20,6 @@ export interface MiniGameStageTab {
 /** registry가 모든 미니게임에 넘겨주는 props. 게임은 이 외의 외부 상태에 의존하지 않는다. */
 export interface MiniGameProps {
   supportLevel: SupportLevel;
+  /** 같은 게임이 도입·마무리에 반복될 때의 학습 맥락. */
+  session?: 'intro' | 'complete';
 }

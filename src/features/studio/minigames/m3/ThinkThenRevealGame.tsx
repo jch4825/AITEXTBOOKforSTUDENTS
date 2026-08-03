@@ -54,6 +54,17 @@ export default function ThinkThenRevealGame({ supportLevel }: MiniGameProps) {
               onPointerDown={start}
               onPointerUp={stop}
               onPointerCancel={stop}
+              onKeyDown={(event) => {
+                if ((event.key === ' ' || event.key === 'Enter') && timer.current === null) {
+                  event.preventDefault();
+                  start();
+                }
+              }}
+              onKeyUp={(event) => {
+                if (event.key === ' ' || event.key === 'Enter') stop();
+              }}
+              onBlur={stop}
+              aria-label="생각하기. 스페이스나 엔터를 누르고 떼어 보세요."
               className="min-h-14 flex-1 touch-none rounded-xl border-2 border-sky-300 bg-sky-900 text-[15px] font-black text-white"
             >
               💭 생각하기

@@ -14,6 +14,7 @@ const STAGE_LABELS: Record<string, string> = {
   '기본': '연습',
   '1단계': '기본',
   '2단계': '도전',
+  '3단계': '확장',
 };
 
 interface Props {

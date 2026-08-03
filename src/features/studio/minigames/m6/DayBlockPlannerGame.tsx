@@ -68,6 +68,10 @@ export default function DayBlockPlannerGame({ supportLevel }: MiniGameProps) {
         ))}
       </div>
       <p className="mt-2 text-center text-[15px] font-black text-slate-200">{used >= stage.slots ? '막대가 꽉 찼어요' : '블록을 더 끼울 자리가 보여요'}</p>
+      <div className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/60 px-3 py-2 text-center" aria-live="polite">
+        <p className="text-[14px] font-black text-emerald-200">하루 장면</p>
+        <p className="text-[15px] font-black text-white">{used >= stage.slots && ['task', 'rest', 'help'].every((type) => blocks.some((block) => block.type === type)) ? '🙂 일하고 쉬고 도움받는 하루가 안정적으로 이어져요.' : '블록을 놓을 때마다 오늘의 리듬이 바뀌어요.'}</p>
+      </div>
     </MiniGameFrame>
   );
 }

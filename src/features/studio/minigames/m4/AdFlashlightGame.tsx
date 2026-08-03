@@ -21,6 +21,7 @@ export default function AdFlashlightGame({ supportLevel }: MiniGameProps) {
   const [found, setFound] = useState<number[]>([]);
   useEffect(() => setFound([]), [game.round, game.stageIndex]);
   const lit = (sign: (typeof SIGNS)[number]) => Math.hypot(sign.x - light.x, sign.y - light.y) < 27;
+  const focusSign = (sign: (typeof SIGNS)[number]) => setLight({ x: sign.x, y: sign.y });
 
   const move = (event: React.PointerEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -33,7 +34,7 @@ export default function AdFlashlightGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="광고 단서 손전등"
-      instruction="어두운 추천 화면에 손전등을 움직여 협찬·구매 링크·과장·빠진 정보를 찾아 누르세요."
+      instruction="어두운 추천 화면에 손전등을 움직여 협찬·구매 링크·과장·빠진 정보를 찾아 누르세요. 끌기 어렵다면 아래 단서 버튼으로 손전등을 옮길 수 있어요."
       stages={STAGES.slice(0, game.visibleStageCount)}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].product)}
@@ -86,6 +87,9 @@ export default function AdFlashlightGame({ supportLevel }: MiniGameProps) {
           style={{ left: `${light.x}%`, top: `${light.y}%` }}
           aria-hidden="true"
         />
+      </div>
+      <div className="mt-2 flex flex-wrap gap-1.5" aria-label="손전등 위치 대체 버튼">
+        {SIGNS.map((sign) => <button key={sign.label} type="button" onClick={() => focusSign(sign)} className="min-h-11 rounded-lg border-2 border-amber-200 bg-amber-950 px-2 text-[13px] font-black text-white">🔦 {sign.label} 비추기</button>)}
       </div>
     </MiniGameFrame>
   );

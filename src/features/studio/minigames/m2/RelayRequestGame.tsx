@@ -1,25 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import type { MiniGameProps } from '../types';
 
-/**
- * m2-l6 「요청 공동 제작소」 — 이어 달리기.
- *
- * 큰 과제를 정해진 횟수의 요청으로 나눠 끝낸다. 한 번에 너무 많이 담으면 아이미가 헷갈려
- * 그 요청은 통째로 실패하고, 너무 잘게 나누면 횟수가 모자란다. 그래서 한 요청의 크기가
- * 혼자 정해지지 않고 나머지 요청의 크기와 함께 정해진다.
- */
+interface Part {
+  id: string;
+  label: string;
+  emoji: string;
+}
 
 interface Stage {
   id: string;
   tab: string;
   task: string;
-  requests: number;
-  needed: number;
-  /** 한 요청이 소화할 수 있는 최대 크기. 넘으면 헷갈려서 결과가 0이 된다. */
-  cap: number;
-  parts: string[];
+  parts: Part[];
+  order: string[];
 }
 
 const STAGES: Stage[] = [
@@ -27,208 +22,152 @@ const STAGES: Stage[] = [
     id: 'poster',
     tab: '기본',
     task: '체험회 포스터 만들기',
-    requests: 3,
-    needed: 8,
-    cap: 3,
-    parts: ['제목 짓기', '문구 쓰기', '그림 넣기', '색 고르기'],
+    parts: [
+      { id: 'title', label: '제목 짓기', emoji: '🏷️' },
+      { id: 'message', label: '문구 쓰기', emoji: '✍️' },
+      { id: 'picture', label: '그림 넣기', emoji: '🖼️' },
+      { id: 'color', label: '색 고르기', emoji: '🎨' },
+    ],
+    order: ['title', 'message', 'picture', 'color'],
   },
   {
     id: 'show',
     tab: '1단계',
     task: '학급 발표 준비하기',
-    requests: 4,
-    needed: 11,
-    cap: 3,
-    parts: ['주제 정하기', '자료 모으기', '대본 쓰기', '그림 준비', '순서 짜기'],
+    parts: [
+      { id: 'topic', label: '주제 정하기', emoji: '🎯' },
+      { id: 'source', label: '자료 모으기', emoji: '📚' },
+      { id: 'script', label: '대본 쓰기', emoji: '📝' },
+      { id: 'picture', label: '그림 준비', emoji: '🖼️' },
+      { id: 'order', label: '순서 짜기', emoji: '🧭' },
+    ],
+    order: ['topic', 'source', 'script', 'picture', 'order'],
   },
   {
     id: 'trip',
     tab: '2단계',
     task: '현장 체험 안내문 만들기',
-    requests: 4,
-    needed: 12,
-    cap: 3,
-    parts: ['일정 정리', '준비물 정리', '안내 문구', '지도 넣기', '연락 방법'],
+    parts: [
+      { id: 'schedule', label: '일정 정리', emoji: '🗓️' },
+      { id: 'supplies', label: '준비물 정리', emoji: '🎒' },
+      { id: 'notice', label: '안내 문구', emoji: '💬' },
+      { id: 'map', label: '지도 넣기', emoji: '🗺️' },
+      { id: 'contact', label: '연락 방법', emoji: '☎️' },
+    ],
+    order: ['schedule', 'supplies', 'notice', 'map', 'contact'],
   },
 ];
 
 export default function RelayRequestGame({ supportLevel }: MiniGameProps) {
-  const {
-    stageIndex,
-    visibleStageCount,
-    hintAllowed,
-    status,
-    message,
-    round,
-    isLocked,
-    goToStage,
-    run,
-    succeed,
-    fail,
-    retry,
-  } = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
-
-  const stage = STAGES[stageIndex];
-  const [sizes, setSizes] = useState<number[]>([]);
-  const [ranTo, setRanTo] = useState(-1);
+  const game = useMiniGameStage({ supportLevel, stageCount: STAGES.length, autoResetOnFailMs: 0 });
+  const stage = STAGES[game.stageIndex];
+  const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
+  const [placedIds, setPlacedIds] = useState<string[]>([]);
 
   useEffect(() => {
-    setSizes(Array.from({ length: STAGES[stageIndex].requests }, () => 0));
-    setRanTo(-1);
-  }, [round, stageIndex]);
+    setSelectedPartId(null);
+    setPlacedIds([]);
+  }, [game.round, game.stageIndex]);
 
-  const usefulOf = (size: number) => (size > stage.cap ? 0 : size);
-  const total = sizes.reduce((sum, s) => sum + usefulOf(s), 0);
+  const availableParts = useMemo(() => stage.parts.filter((part) => !placedIds.includes(part.id)), [stage.parts, placedIds]);
+  const selectedPart = stage.parts.find((part) => part.id === selectedPartId);
 
-  const change = (i: number, delta: number) => {
-    if (status !== 'playing') return;
-    setSizes((prev) => {
-      const next = [...prev];
-      next[i] = Math.max(0, Math.min(5, next[i] + delta));
-      return next;
-    });
-  };
-
-  const handleHint = () => {
-    // 한 요청이 감당할 수 있는 만큼씩 채워 필요한 양을 넘긴다.
-    const next = Array.from({ length: stage.requests }, () => 0);
-    let remain = stage.needed;
-    for (let i = 0; i < next.length && remain > 0; i += 1) {
-      next[i] = Math.min(stage.cap, remain);
-      remain -= next[i];
+  const placeSelected = () => {
+    if (game.status !== 'playing' || !selectedPart) return;
+    const expectedId = stage.order[placedIds.length];
+    if (selectedPart.id !== expectedId) {
+      const expected = stage.parts.find((part) => part.id === expectedId);
+      game.fail(`${expected?.label ?? '다음 단계'}를 먼저 놓아야 요청이 이어져요. 작은 단계부터 한 칸씩 연결해 보세요.`);
+      return;
     }
-    setSizes(next);
-  };
-
-  const handleRun = () => {
-    if (status !== 'playing') return;
-    setRanTo(0);
-    run('요청을 차례대로 보냅니다!');
-  };
-
-  // 요청을 하나씩 순서대로 실행한다. 앞 결과가 쌓여야 다음이 이어진다.
-  useEffect(() => {
-    if (status !== 'running' || ranTo < 0) return;
-    if (ranTo < sizes.length) {
-      const timer = setTimeout(() => setRanTo((n) => n + 1), 520);
-      return () => clearTimeout(timer);
+    const next = [...placedIds, selectedPart.id];
+    setPlacedIds(next);
+    setSelectedPartId(null);
+    if (next.length === stage.order.length) {
+      game.succeed(`${stage.task}의 작은 요청 ${next.length}칸이 한 줄로 이어졌어요!`);
     }
-    const timer = setTimeout(() => {
-      const confused = sizes.filter((s) => s > stage.cap).length;
-      if (confused > 0) {
-        fail('한 번에 너무 많이 담은 요청이 있어 아이미가 헷갈렸어요.');
-      } else if (total < stage.needed) {
-        fail('완성 그림에 빈 부분이 남았어요. 남은 요청에 일을 더 나눠 담아요.');
-      } else {
-        succeed(`이어진 요청으로 ${stage.task} 완성 그림을 만들었어요!`);
-      }
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [status, ranTo, sizes, total, stage, succeed, fail]);
+  };
+
+  const handleHint = () => setSelectedPartId(stage.order[placedIds.length] ?? null);
 
   return (
     <MiniGameFrame
-      badge="요청 이어 달리기"
-      instruction={`요청 ${stage.requests}번으로 과제를 끝내야 해요. 한 요청에 ${stage.cap}칸까지만 담깁니다. 그보다 많이 담으면 아이미가 헷갈려서 그 요청은 통째로 날아가요.`}
+      badge="요청 카드 이어 붙이기"
+      instruction="작은 과제 카드를 하나 눌러 잡고 요청 레일에 놓으세요. 앞 단계가 끝나야 다음 요청이 자연스럽게 이어집니다."
       accent="var(--brand-ink)"
-      stages={STAGES.slice(0, visibleStageCount).map((s) => ({ id: s.id, label: s.tab }))}
-      activeStageIndex={stageIndex}
-      onStageSelect={(index) => goToStage(index, STAGES[index].task)}
-      status={status}
-      message={message}
+      progress={{ label: '레일에 놓은 카드', value: placedIds.length, max: stage.order.length }}
+      stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.tab }))}
+      activeStageIndex={game.stageIndex}
+      onStageSelect={(index) => game.goToStage(index, STAGES[index].task)}
+      status={game.status}
+      message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={retry} disabled={isLocked} emoji="🔄" label="다시" />
-          {hintAllowed && (
-            <MiniGameButton onClick={handleHint} disabled={isLocked} emoji="💡" label="힌트" />
-          )}
-          <MiniGameButton
-            onClick={handleRun}
-            disabled={status !== 'playing'}
-            emoji="🚀"
-            label={status === 'running' ? '보내는 중…' : '요청 보내기'}
-            variant="primary"
-          />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="다시 만들기" />
+          {game.hintAllowed && <MiniGameButton onClick={handleHint} disabled={game.isLocked} emoji="💡" label="다음 카드 힌트" />}
+          <MiniGameButton onClick={placeSelected} disabled={!selectedPart || game.status !== 'playing'} emoji="📨" label="레일에 놓기" variant="primary" />
         </>
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col gap-2">
-        <div className="rounded-lg border-2 border-amber-400/50 bg-amber-400/10 px-2 py-1.5">
-          <p className="text-[14px] font-black text-amber-300">큰 과제</p>
-          <p className="text-[14px] font-bold text-slate-100">📋 {stage.task}</p>
-          <p className="mt-0.5 text-[14px] font-bold text-slate-400">
-            {stage.parts.join(' · ')}
-          </p>
-        </div>
+      <div className="flex min-h-0 flex-1 flex-col gap-2.5">
+        <section className="rounded-xl border-2 border-amber-300/60 bg-amber-950/45 p-2.5" aria-label="큰 과제 장면">
+          <p className="text-[14px] font-black text-amber-300">큰 과제 장면</p>
+          <p className="text-[16px] font-black text-white">📋 {stage.task}</p>
+          <p className="mt-1 text-[13px] font-bold text-amber-100">작업자가 한 번에 한 카드씩 전달할 수 있어요.</p>
+        </section>
 
-        <div className="flex flex-1 flex-col justify-center gap-1.5">
-          {sizes.map((size, i) => {
-            const confused = size > stage.cap;
-            const ran = ranTo > i;
-            return (
-              <div
-                key={i}
-                className="rounded-lg border-2 px-2 py-1.5 transition-colors"
-                style={{
-                  background: ran
-                    ? confused
-                      ? 'rgba(234,88,12,0.28)'
-                      : 'rgba(22,163,74,0.24)'
-                    : 'rgba(30,41,59,0.9)',
-                  borderColor: confused
-                    ? '#fb923c'
-                    : ran
-                      ? '#4ade80'
-                      : 'rgba(148,163,184,0.45)',
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  <span className="text-[14px] font-black text-slate-400">{i + 1}번째</span>
-                  <span className="flex flex-1 items-center gap-0.5">
-                    {Array.from({ length: 5 }).map((_, k) => (
-                      <span
-                        key={k}
-                        className="h-3 flex-1 rounded-sm"
-                        style={{
-                          background:
-                            k < size
-                              ? confused
-                                ? '#fb923c'
-                                : '#4FC3E8'
-                              : 'rgba(148,163,184,0.25)',
-                        }}
-                        aria-hidden="true"
-                      />
-                    ))}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => change(i, -1)}
-                    disabled={status !== 'playing'}
-                    aria-label={`${i + 1}번째 요청 줄이기`}
-                    className="h-11 w-11 rounded-lg border-2 border-slate-500/60 bg-slate-800 text-base font-black text-slate-100 disabled:opacity-40"
-                  >
-                    −
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => change(i, 1)}
-                    disabled={status !== 'playing'}
-                    aria-label={`${i + 1}번째 요청 늘리기`}
-                    className="h-11 w-11 rounded-lg border-2 border-slate-500/60 bg-slate-800 text-base font-black text-slate-100 disabled:opacity-40"
-                  >
-                    ＋
-                  </button>
-                </div>
-                {confused && (
-                  <p className="mt-0.5 text-[14px] font-black text-orange-300">
-                    너무 많아요 — 아이미가 헷갈려요
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <section className="rounded-xl border-2 border-sky-300/60 bg-sky-950/40 p-2.5" aria-label="요청 카드 더미">
+          <div className="mb-1 flex items-center justify-between">
+            <h3 className="text-[14px] font-black text-sky-100">요청 카드 더미</h3>
+            <span className="text-[13px] font-bold text-sky-200">{availableParts.length}장 남음</span>
+          </div>
+          <div className="grid gap-1.5 sm:grid-cols-2">
+            {availableParts.map((part) => {
+              const selected = part.id === selectedPartId;
+              return (
+                <button
+                  key={part.id}
+                  type="button"
+                  aria-pressed={selected}
+                  disabled={game.status !== 'playing'}
+                  onClick={() => setSelectedPartId(part.id)}
+                  className="flex min-h-14 items-center gap-2 rounded-lg border-2 px-2 text-left text-white transition disabled:opacity-45"
+                  style={{ borderColor: selected ? '#fbbf24' : 'rgba(148,163,184,0.5)', background: selected ? 'rgba(146,64,14,0.78)' : 'rgba(15,23,42,0.6)' }}
+                >
+                  <span className="text-xl" aria-hidden="true">{part.emoji}</span>
+                  <span className="flex-1 text-[14px] font-black">{part.label}</span>
+                  <span className="text-[12px] font-black text-amber-200">{selected ? '잡았어요' : '잡기'}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/45 p-2.5" aria-label="요청 레일">
+          <div className="mb-1 flex items-center justify-between gap-2">
+            <h3 className="text-[14px] font-black text-emerald-100">요청 레일</h3>
+            <span className="text-[13px] font-bold text-emerald-200">{placedIds.length} / {stage.order.length}</span>
+          </div>
+          <div className="flex min-h-20 items-center gap-1.5 overflow-x-auto rounded-lg border-2 border-dashed border-emerald-200/60 bg-slate-950/45 p-2">
+            <span className="shrink-0 rounded-lg border-2 border-rose-300 bg-rose-950 px-2 py-2 text-[13px] font-black text-white">🙋 요청하는 사람</span>
+            {placedIds.map((id, index) => {
+              const part = stage.parts.find((item) => item.id === id)!;
+              return (
+                <React.Fragment key={id}>
+                  <span className="text-lg text-emerald-300" aria-hidden="true">→</span>
+                  <div className="min-w-24 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900/70 px-2 py-2 text-center text-[13px] font-black text-white">
+                    <span className="block text-lg" aria-hidden="true">{part.emoji}</span>
+                    {index + 1}. {part.label}
+                  </div>
+                </React.Fragment>
+              );
+            })}
+            <span className="text-xl text-slate-400" aria-hidden="true">{placedIds.length === stage.order.length ? '✅' : '…'}</span>
+          </div>
+          <p className="mt-1 text-center text-[13px] font-bold text-emerald-100">
+            {selectedPart ? `${selectedPart.emoji} ${selectedPart.label} 카드를 레일에 놓아 보세요.` : '카드 하나를 눌러 다음 요청을 준비하세요.'}
+          </p>
+        </section>
       </div>
     </MiniGameFrame>
   );

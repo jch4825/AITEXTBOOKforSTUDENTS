@@ -89,6 +89,15 @@ export default function SculptRefineGame({ supportLevel }: MiniGameProps) {
     });
   };
 
+  const shaveColumn = (index: number) => {
+    if (status !== 'playing') return;
+    setHeights((prev) => {
+      const next = [...prev];
+      next[index] = Math.max(0, next[index] - SHAVE);
+      return next;
+    });
+  };
+
   const cut = heights.filter((h, i) => h < stage.target[i] - stage.tolerance).length;
   const fit = heights.filter((h, i) => Math.abs(h - stage.target[i]) <= stage.tolerance).length;
   const rough = heights.filter((h, i) => h > stage.target[i] + stage.tolerance).length;
@@ -111,7 +120,7 @@ export default function SculptRefineGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="다듬어 고치기"
-      instruction="아이미의 첫 결과가 울퉁불퉁해요. 문질러서 깎아 점선(목표)에 맞춰요. 깎은 것은 되붙일 수 없으니 조금씩 다듬으세요."
+      instruction="아이미의 첫 결과가 울퉁불퉁해요. 문질러서 깎거나 아래 기둥 버튼을 눌러 점선(목표)에 맞춰요. 깎은 것은 되붙일 수 없으니 조금씩 다듬으세요."
       accent="var(--brand-ink)"
       progress={{ label: '맞은 곳', value: fit, max: heights.length }}
       stages={STAGES.slice(0, visibleStageCount).map((s) => ({ id: s.id, label: s.tab }))}
@@ -180,6 +189,14 @@ export default function SculptRefineGame({ supportLevel }: MiniGameProps) {
               </div>
             );
           })}
+        </div>
+
+        <div className="grid grid-cols-3 gap-1.5" aria-label="기둥별 두드려 다듬기 대체 조작">
+          {heights.map((_, index) => (
+            <button key={index} type="button" onClick={() => shaveColumn(index)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[13px] font-black text-white disabled:opacity-45">
+              {index + 1}번 기둥 한 번 다듬기
+            </button>
+          ))}
         </div>
 
         <p className="text-center text-[14px] font-black text-slate-300">

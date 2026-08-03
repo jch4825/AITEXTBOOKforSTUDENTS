@@ -17,6 +17,8 @@ const LANES: Array<{
   id: JudgmentLane;
   label: '사실 확인' | 'AI의 1차 판단' | '사람의 최종 판단';
   shortLabel: string;
+  owner: string;
+  scene: string;
   emoji: string;
   color: string;
   background: string;
@@ -24,7 +26,9 @@ const LANES: Array<{
   {
     id: 'fact',
     label: '사실 확인',
-    shortLabel: '근거로 확인',
+    shortLabel: '공식 근거로 다시 보기',
+    owner: '공식 기록과 자료',
+    scene: '게시판·문서를 열어 표시를 맞춰 봐요.',
     emoji: '📌',
     color: '#7dd3fc',
     background: '#082f49',
@@ -33,6 +37,8 @@ const LANES: Array<{
     id: 'ai-judgment',
     label: 'AI의 1차 판단',
     shortLabel: 'AI가 먼저, 사람이 검토',
+    owner: 'AI가 먼저 고르고 사람 검토',
+    scene: 'AI 카드가 놓인 뒤 원문과 비교해요.',
     emoji: '🤖',
     color: '#fcd34d',
     background: '#451a03',
@@ -41,6 +47,8 @@ const LANES: Array<{
     id: 'human-decision',
     label: '사람의 최종 판단',
     shortLabel: '사람이 결정하고 책임',
+    owner: '보호자·교사·담당자',
+    scene: '사람이 상황을 살펴 최종 결정을 해요.',
     emoji: '🧑',
     color: '#86efac',
     background: '#052e16',
@@ -151,40 +159,52 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
     succeed,
     fail,
     retry,
-  } = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
+  } = useMiniGameStage({
+    supportLevel,
+    stageCount: STAGES.length,
+    // 틀린 카드를 어디에 놓았는지 읽고 다시 분류할 시간을 보장한다.
+    autoResetOnFailMs: 0,
+  });
   const stage = STAGES[stageIndex];
-  const [cardIndex, setCardIndex] = useState(0);
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
   const [sortedCards, setSortedCards] = useState<JudgmentCard[]>([]);
 
   useEffect(() => {
-    setCardIndex(0);
+    setSelectedCardId(null);
     setSortedCards([]);
   }, [round, stageIndex]);
 
-  const card = stage.cards[cardIndex];
+  const availableCards = stage.cards.filter((card) => !sortedCards.some((sorted) => sorted.id === card.id));
+  const selectedCard = stage.cards.find((card) => card.id === selectedCardId);
 
-  const chooseLane = (lane: JudgmentLane) => {
-    if (status !== 'playing' || !card) return;
-    if (card.lane !== lane) {
-      const correctLane = LANES.find((item) => item.id === card.lane);
-      fail(`${correctLane?.label ?? '알맞은 범주'}예요. ${card.reason}`);
-      return;
-    }
-
-    const nextSorted = [...sortedCards, card];
-    setSortedCards(nextSorted);
-    if (cardIndex === stage.cards.length - 1) {
-      succeed('사실은 확인하고, AI 판단은 검토하고, 중요한 결정은 사람이 책임지도록 모두 구분했어요!');
-      return;
-    }
-    setCardIndex((index) => index + 1);
+  const chooseCard = (card: JudgmentCard) => {
+    if (status !== 'playing') return;
+    setSelectedCardId(card.id);
   };
+
+  const placeCard = (lane: JudgmentLane) => {
+    if (status !== 'playing' || !selectedCard) return;
+    if (selectedCard.lane !== lane) {
+      const correctLane = LANES.find((item) => item.id === selectedCard.lane);
+      fail(`${correctLane?.label ?? '알맞은 범주'} 칸이에요. ${selectedCard.reason}`);
+      return;
+    }
+
+    const nextSorted = [...sortedCards, selectedCard];
+    setSortedCards(nextSorted);
+    setSelectedCardId(null);
+    if (nextSorted.length === stage.cards.length) {
+      succeed('카드를 세 갈래 칸에 모두 놓았어요. 사실은 확인하고, AI 판단은 검토하고, 중요한 결정은 사람이 책임져요!');
+    }
+  };
+
+  const cardsForLane = (lane: JudgmentLane) => sortedCards.filter((card) => card.lane === lane);
 
   return (
     <MiniGameFrame
-      badge="세 갈래 판단 분류대"
-      instruction="카드를 읽고 사실 확인, AI의 1차 판단, 사람의 최종 판단 중 알맞은 통로를 누르세요."
-      progress={{ label: '구분한 카드', value: sortedCards.length, max: stage.cards.length }}
+      badge="세 갈래 책임 레일"
+      instruction="카드 하나를 눌러 잡은 뒤, 알맞은 칸을 눌러 놓으세요. 카드가 놓인 자리가 판단의 책임을 보여 줍니다."
+      progress={{ label: '분류한 카드', value: sortedCards.length, max: stage.cards.length }}
       stages={STAGES.slice(0, visibleStageCount)}
       activeStageIndex={stageIndex}
       onStageSelect={(index) => goToStage(index, STAGES[index].name)}
@@ -192,68 +212,108 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
       message={message}
       actions={
         status === 'success' || status === 'fail' ? (
-          <MiniGameButton onClick={retry} emoji="🔁" label="다시 구분하기" />
+          <MiniGameButton onClick={retry} emoji="🔁" label="다시 분류하기" />
         ) : undefined
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3">
-        {card && status !== 'success' ? (
-          <article
-            className="mx-auto flex min-h-24 w-full max-w-xl items-center gap-3 rounded-2xl border-2 border-slate-400 bg-slate-800 px-4 py-3 text-white"
-            aria-live="polite"
-          >
-            <span className="text-[34px]" aria-hidden="true">
-              {card.emoji}
-            </span>
-            <div className="min-w-0">
-              <p className="text-[16px] font-black leading-relaxed sm:text-[18px]">{card.text}</p>
-              {hintAllowed && (
-                <p className="mt-1 text-[14px] font-bold leading-relaxed text-slate-300">
-                  힌트: 근거 확인, 바로 수정, 사람에게 미치는 영향을 살펴봐요.
-                </p>
-              )}
-            </div>
-          </article>
-        ) : (
-          <div className="mx-auto grid min-h-24 w-full max-w-xl place-items-center rounded-2xl border-2 border-emerald-400 bg-emerald-950 px-4 text-center text-[18px] font-black text-emerald-100">
-            세 가지 역할을 모두 바르게 구분했어요!
+      <div className="flex min-h-0 flex-1 flex-col gap-2.5">
+        <section className="rounded-xl border-2 border-amber-300/60 bg-amber-950/45 p-2.5" aria-label="분류할 카드 더미">
+          <div className="mb-1 flex items-center justify-between gap-2">
+            <h3 className="text-[15px] font-black text-amber-100">카드 더미</h3>
+            <span className="text-[13px] font-bold text-amber-200">{availableCards.length}장 남음</span>
           </div>
-        )}
+          <div className="grid gap-1.5">
+            {availableCards.length > 0 ? availableCards.map((card) => {
+              const selected = selectedCardId === card.id;
+              return (
+                <button
+                  key={card.id}
+                  type="button"
+                  onClick={() => chooseCard(card)}
+                  disabled={status !== 'playing'}
+                  aria-pressed={selected}
+                  className="flex min-h-16 items-center gap-2 rounded-xl border-2 px-3 py-2 text-left text-white transition disabled:opacity-50"
+                  style={{
+                    borderColor: selected ? '#fbbf24' : 'rgba(148,163,184,0.55)',
+                    background: selected ? 'rgba(146,64,14,0.85)' : 'rgba(30,41,59,0.9)',
+                    boxShadow: selected ? '0 0 0 2px rgba(251,191,36,0.35)' : 'none',
+                  }}
+                >
+                  <span className="text-[28px]" aria-hidden="true">{card.emoji}</span>
+                  <span className="flex-1 text-[15px] font-black leading-relaxed">{card.text}</span>
+                  <span className="text-[13px] font-black text-amber-200">{selected ? '잡았어요' : '잡기'}</span>
+                </button>
+              );
+            }) : (
+              <p className="rounded-lg border border-emerald-300/50 bg-emerald-950/60 px-2 py-2 text-center text-[15px] font-black text-emerald-100">
+                카드 더미를 모두 비웠어요.
+              </p>
+            )}
+          </div>
+          {selectedCard && hintAllowed && (
+            <p className="mt-1.5 text-[13px] font-bold leading-relaxed text-amber-200">
+              힌트: 근거로 다시 볼까요, AI가 먼저 골라도 될까요, 사람이 책임져야 할까요?
+            </p>
+          )}
+        </section>
 
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3" role="group" aria-label="판단 범주 선택">
-          {LANES.map((lane) => (
-            <button
-              key={lane.id}
-              type="button"
-              onClick={() => chooseLane(lane.id)}
-              disabled={status !== 'playing'}
-              className="flex min-h-16 items-center gap-2 rounded-xl border-2 px-3 py-2 text-left transition disabled:opacity-50 sm:min-h-24 sm:flex-col sm:justify-center sm:text-center"
-              style={{ borderColor: lane.color, background: lane.background, color: lane.color }}
-            >
-              <span className="text-[27px]" aria-hidden="true">
-                {lane.emoji}
-              </span>
-              <span>
-                <strong className="block text-[15px] font-black leading-tight">{lane.label}</strong>
-                <span className="mt-1 block text-[14px] font-bold leading-tight">{lane.shortLabel}</span>
-              </span>
-            </button>
-          ))}
-        </div>
-
-        <div className="flex min-h-10 flex-wrap justify-center gap-2" aria-label="구분을 마친 카드">
-          {sortedCards.map((sortedCard) => {
-            const lane = LANES.find((item) => item.id === sortedCard.lane);
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-3" role="group" aria-label="카드를 놓을 세 가지 판단 칸">
+          {LANES.map((lane) => {
+            const laneCards = cardsForLane(lane.id);
+            const canPlace = Boolean(selectedCard) && status === 'playing';
             return (
-              <span
-                key={sortedCard.id}
-                className="inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[14px] font-black"
-                style={{ borderColor: lane?.color, color: lane?.color }}
+              <section
+                key={lane.id}
+                className="flex min-h-28 flex-col gap-1.5 rounded-xl border-2 p-2 transition-colors"
+                style={{ borderColor: lane.color, background: lane.background }}
+                aria-label={`${lane.label} 칸`}
               >
-                {sortedCard.emoji} {lane?.label}
-              </span>
+                <div className="flex items-center gap-1.5" style={{ color: lane.color }}>
+                  <span className="text-[23px]" aria-hidden="true">{lane.emoji}</span>
+                  <div>
+                    <h3 className="text-[14px] font-black leading-tight">{lane.label}</h3>
+                    <p className="text-[12px] font-bold leading-tight">{lane.shortLabel}</p>
+                  </div>
+                </div>
+                <div className="rounded-md border border-white/15 bg-slate-950/35 px-1.5 py-1 text-[11px] font-bold leading-tight text-slate-200">
+                  <span className="block">담당: {lane.owner}</span>
+                  <span className="block text-slate-300">장면: {lane.scene}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => placeCard(lane.id)}
+                  disabled={!canPlace}
+                  aria-label={selectedCard ? `${lane.label}에 ${selectedCard.text} 놓기` : `${lane.label} 칸`}
+                  className="min-h-14 rounded-lg border-2 border-dashed px-2 py-1 text-[13px] font-black text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+                  style={{ borderColor: canPlace ? lane.color : 'rgba(148,163,184,0.45)' }}
+                >
+                  {canPlace ? `${lane.emoji} 여기에 놓기` : '카드를 먼저 눌러 잡기'}
+                </button>
+                <div className="relative flex flex-1 flex-col gap-1 border-l-2 border-dashed border-white/20 pl-1.5" aria-live="polite">
+                  {laneCards.map((card) => (
+                    <div
+                      key={card.id}
+                      className="rounded-lg border px-2 py-1 text-[13px] font-black leading-tight text-white"
+                      style={{ borderColor: lane.color, background: 'rgba(15,23,42,0.6)' }}
+                    >
+                      {card.emoji} {card.text}
+                    </div>
+                  ))}
+                </div>
+              </section>
             );
           })}
+        </div>
+
+        <div className="rounded-xl border-2 border-slate-500/60 bg-slate-900/70 px-3 py-2 text-center">
+          <p className="text-[13px] font-black text-slate-400">지금 하는 일</p>
+          <p className="text-[15px] font-black text-white">
+            {status === 'success'
+              ? '세 갈래 책임 지도를 완성했어요.'
+              : selectedCard
+                ? '잡은 카드를 알맞은 판단 칸에 놓아 보세요.'
+                : '카드 하나를 눌러 잡아 보세요.'}
+          </p>
         </div>
       </div>
     </MiniGameFrame>

@@ -7,6 +7,7 @@ import type { SupportLevel } from '../types';
 interface Props {
   lessonId: LessonId | undefined;
   supportLevel: SupportLevel;
+  phase?: 'intro' | 'complete';
   /** 미니게임이 아직 없는 차시에 보여줄 기존 정리 패널 */
   fallback: React.ReactNode;
 }
@@ -31,15 +32,24 @@ function MiniGameLoading() {
  * 게임은 lazy 청크라서 해당 차시를 실제로 열 때만 내려받는다.
  * 게임 하나가 깨져도 StepErrorBoundary가 막아 차시 전체가 백지가 되지 않는다.
  */
-export default function MiniGameSlot({ lessonId, supportLevel, fallback }: Props) {
+export default function MiniGameSlot({ lessonId, supportLevel, phase = 'complete', fallback }: Props) {
   const Game = getMiniGame(lessonId);
   if (!Game) return <>{fallback}</>;
 
   return (
     <StepErrorBoundary>
-      <Suspense fallback={<MiniGameLoading />}>
-        <Game supportLevel={supportLevel} />
-      </Suspense>
+      <div data-minigame-phase={phase} className="flex h-full min-h-0 flex-col gap-2">
+        {phase === 'complete' && (
+          <div className="rounded-xl border border-amber-300/70 bg-amber-50 px-3 py-2 text-[13px] font-black leading-relaxed text-amber-950" role="note">
+            마무리 변형 도전 · 처음과 다른 조건·목표·역할로 다시 적용해 보세요.
+          </div>
+        )}
+        <div className="min-h-0 flex-1">
+          <Suspense fallback={<MiniGameLoading />}>
+            <Game supportLevel={supportLevel} session={phase} />
+          </Suspense>
+        </div>
+      </div>
     </StepErrorBoundary>
   );
 }

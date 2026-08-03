@@ -39,7 +39,7 @@ export default function FogWordRevealGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="낱말 안개 닦기"
-      instruction="손가락이나 마우스로 안개 낀 창을 문질러 문맥과 사전 뜻을 확인하세요."
+      instruction="손가락이나 마우스로 안개 낀 창을 문질러 문맥과 사전 뜻을 확인하세요. 문지르기 어렵다면 안개 칸을 하나씩 눌러도 됩니다."
       stages={STAGES.slice(0, game.visibleStageCount)}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].word)}

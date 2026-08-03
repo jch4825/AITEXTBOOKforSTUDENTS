@@ -1,15 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import type { MiniGameProps } from '../types';
-
-/**
- * m3-l4 「낱말을 문장에서 써 보기」 — 낱말 강도 다이얼.
- *
- * 낱말을 빈칸에 넣는 문제가 아니라 **얼마나 센 말인지**를 맞추는 문제로 바꿨다.
- * 다이얼은 반대말에서 낱말로 이어지는 연속된 눈금이고, 장면마다 어울리는 구간이 있다.
- * 정답이 한 점이 아니라 구간이라 같은 장면에도 여러 표현이 어울린다.
- */
 
 interface Scene {
   id: string;
@@ -21,7 +13,6 @@ interface Scene {
 interface Stage {
   id: string;
   tab: string;
-  /** 반대말 → 낱말로 이어지는 눈금. 각 구간의 이름 */
   words: string[];
   lowLabel: string;
   highLabel: string;
@@ -31,7 +22,7 @@ interface Stage {
 const STAGES: Stage[] = [
   {
     id: 'temp',
-    tab: '온도',
+    tab: '기본',
     lowLabel: '차갑다',
     highLabel: '뜨겁다',
     words: ['아주 차가운', '차가운', '미지근한', '따뜻한', '뜨거운'],
@@ -43,7 +34,7 @@ const STAGES: Stage[] = [
   },
   {
     id: 'sound',
-    tab: '소리',
+    tab: '1단계',
     lowLabel: '조용하다',
     highLabel: '시끄럽다',
     words: ['아주 조용한', '조용한', '보통인', '시끄러운', '아주 시끄러운'],
@@ -55,7 +46,7 @@ const STAGES: Stage[] = [
   },
   {
     id: 'pain',
-    tab: '아픔',
+    tab: '2단계',
     lowLabel: '조금 아프다',
     highLabel: '많이 아프다',
     words: ['거의 안 아픈', '조금 아픈', '아픈', '많이 아픈', '너무 아픈'],
@@ -67,154 +58,111 @@ const STAGES: Stage[] = [
   },
 ];
 
-function wordAt(stage: Stage, value: number): string {
-  const i = Math.min(stage.words.length - 1, Math.floor((value / 100) * stage.words.length));
-  return stage.words[i];
+function wordValue(index: number): number {
+  return index * 25;
 }
 
 export default function WordIntensityDialGame({ supportLevel }: MiniGameProps) {
-  const {
-    stageIndex,
-    visibleStageCount,
-    hintAllowed,
-    status,
-    message,
-    round,
-    isLocked,
-    goToStage,
-    succeed,
-    fail,
-    retry,
-  } = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
-
-  const stage = STAGES[stageIndex];
+  const game = useMiniGameStage({ supportLevel, stageCount: STAGES.length, autoResetOnFailMs: 0 });
+  const stage = STAGES[game.stageIndex];
   const [sceneIdx, setSceneIdx] = useState(0);
-  const [value, setValue] = useState(50);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   useEffect(() => {
     setSceneIdx(0);
-    setValue(50);
-  }, [round, stageIndex]);
+    setSelectedIndex(null);
+  }, [game.round, game.stageIndex]);
 
   const scene = stage.scenes[sceneIdx];
-  const inBand = value >= scene.band[0] && value <= scene.band[1];
-  const center = (scene.band[0] + scene.band[1]) / 2;
-  const closeness = 1 - Math.min(1, Math.abs(value - center) / 50);
+  const allowedIndexes = useMemo(
+    () => stage.words.map((_, index) => index).filter((index) => wordValue(index) >= scene.band[0] && wordValue(index) <= scene.band[1]),
+    [scene, stage.words],
+  );
+  const selectedWord = selectedIndex === null ? null : stage.words[selectedIndex];
+  const inBand = selectedIndex !== null && allowedIndexes.includes(selectedIndex);
 
-  const handleHint = () => setValue(Math.round(center));
+  const chooseWord = (index: number) => {
+    if (game.status !== 'playing') return;
+    setSelectedIndex(index);
+  };
+
+  const handleHint = () => setSelectedIndex(allowedIndexes[0] ?? 0);
 
   const handleConfirm = () => {
-    if (status !== 'playing') return;
+    if (game.status !== 'playing') return;
+    if (selectedIndex === null) {
+      game.fail('장면을 보고 낱말 카드를 하나 골라 문장 칸에 붙여 보세요.');
+      return;
+    }
     if (!inBand) {
-      fail(
-        value < scene.band[0]
-          ? '너무 약한 말이라 장면과 안 어울려요.'
-          : '너무 센 말이라 장면과 안 어울려요.',
-      );
+      game.fail(selectedIndex < allowedIndexes[0] ? '장면보다 약한 낱말이에요. 조금 더 선명한 카드를 골라 보세요.' : '장면보다 센 낱말이에요. 조금 부드러운 카드를 골라 보세요.');
       return;
     }
     if (sceneIdx + 1 >= stage.scenes.length) {
-      succeed('세 장면 모두 어울리는 말로 표현했어요!');
+      game.succeed('세 장면에 알맞은 낱말 카드를 모두 붙였어요!');
       return;
     }
-    setSceneIdx((i) => i + 1);
-    setValue(50);
+    setSceneIdx((index) => index + 1);
+    setSelectedIndex(null);
   };
 
   return (
     <MiniGameFrame
-      badge="낱말 강도 맞추기"
-      instruction="같은 뜻이라도 센 말과 약한 말이 있어요. 다이얼을 움직여 장면에 어울리는 세기를 찾아 보세요. 어울리는 구간은 넓어서 딱 한 점만 정답은 아니에요."
+      badge="장면에 낱말 카드 붙이기"
+      instruction="장면을 살펴보고 낱말 카드를 하나 골라 문장 칸에 붙이세요. 다이얼 대신 카드의 세기가 장면의 표정을 바꿉니다."
       accent="var(--brand-ink)"
-      progress={{ label: '맞춘 장면', value: sceneIdx, max: stage.scenes.length }}
-      stages={STAGES.slice(0, visibleStageCount).map((s) => ({ id: s.id, label: s.tab }))}
-      activeStageIndex={stageIndex}
-      onStageSelect={(index) => goToStage(index, `${STAGES[index].lowLabel} 다이얼`)}
-      status={status}
-      message={message}
+      progress={{ label: '완성한 장면', value: sceneIdx, max: stage.scenes.length }}
+      stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.tab }))}
+      activeStageIndex={game.stageIndex}
+      onStageSelect={(index) => game.goToStage(index, `${STAGES[index].lowLabel}부터 낱말 카드 붙이기`)}
+      status={game.status}
+      message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={retry} disabled={isLocked} emoji="🔄" label="다시" />
-          {hintAllowed && (
-            <MiniGameButton onClick={handleHint} disabled={isLocked} emoji="💡" label="힌트" />
-          )}
-          <MiniGameButton
-            onClick={handleConfirm}
-            disabled={status !== 'playing'}
-            emoji="✅"
-            label="이 말로 하기"
-            variant="primary"
-          />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="다시 붙이기" />
+          {game.hintAllowed && <MiniGameButton onClick={handleHint} disabled={game.isLocked} emoji="💡" label="알맞은 카드" />}
+          <MiniGameButton onClick={handleConfirm} disabled={game.status !== 'playing'} emoji="📌" label="문장에 붙이기" variant="primary" />
         </>
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col justify-center gap-3">
-        {/* 장면 */}
-        <div className="rounded-xl border-2 border-slate-600/50 bg-slate-900/60 px-3 py-3 text-center">
-          <span className="text-4xl leading-none" aria-hidden="true">
-            {scene.emoji}
-          </span>
-          <p className="mt-1 text-[14px] font-bold text-slate-100">{scene.text}</p>
-        </div>
+      <div className="flex min-h-0 flex-1 flex-col gap-2.5">
+        <section className="rounded-xl border-2 border-amber-300/60 bg-amber-950/45 p-2.5 text-center" aria-label="장면 카드">
+          <span className="text-4xl" aria-hidden="true">{scene.emoji}</span>
+          <p className="mt-1 text-[15px] font-black text-white">{scene.text}</p>
+          <p className="text-[13px] font-bold text-amber-100">{stage.lowLabel} ← 장면의 세기 → {stage.highLabel}</p>
+        </section>
 
-        {/* 만들어지는 문장 */}
-        <div
-          className="rounded-xl border-2 px-3 py-2 text-center transition-colors"
-          style={{
-            borderColor: inBand ? '#4ade80' : 'rgba(148,163,184,0.45)',
-            background: inBand ? 'rgba(22,163,74,0.22)' : 'rgba(30,41,59,0.9)',
-          }}
-        >
-          <p className="text-[14px] font-black text-slate-400">내 문장</p>
-          <p className="text-[15px] font-black text-slate-50">
-            {scene.text} — <span className="text-amber-300">{wordAt(stage, value)}</span> 느낌
-          </p>
-        </div>
+        <section className="rounded-xl border-2 border-sky-300/60 bg-sky-950/45 p-2.5" aria-label="낱말 카드 더미">
+          <h3 className="mb-1 text-[14px] font-black text-sky-100">낱말 카드 더미</h3>
+          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-5">
+            {stage.words.map((word, index) => {
+              const selected = selectedIndex === index;
+              return (
+                <button
+                  key={word}
+                  type="button"
+                  aria-pressed={selected}
+                  disabled={game.status !== 'playing'}
+                  onClick={() => chooseWord(index)}
+                  className="min-h-16 rounded-lg border-2 px-2 py-1 text-[14px] font-black text-white transition disabled:opacity-45"
+                  style={{ borderColor: selected ? '#fbbf24' : 'rgba(148,163,184,0.5)', background: selected ? 'rgba(146,64,14,0.8)' : 'rgba(15,23,42,0.62)' }}
+                >
+                  <span className="block text-lg" aria-hidden="true">{['🧊', '🌿', '🌤️', '🔥', '🌋'][index]}</span>
+                  {word}
+                </button>
+              );
+            })}
+          </div>
+        </section>
 
-        {/* 다이얼 */}
-        <div>
-          <div className="mb-1 flex justify-between text-[14px] font-black text-slate-400">
-            <span>← {stage.lowLabel}</span>
-            <span>{stage.highLabel} →</span>
+        <section className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/45 p-2.5" aria-live="polite">
+          <p className="text-[14px] font-black text-emerald-200">문장 카드</p>
+          <div className="mt-1 flex min-h-16 items-center justify-center gap-2 rounded-lg border-2 border-dashed border-emerald-200/60 bg-slate-950/45 px-2 text-center">
+            <span className="text-[15px] font-bold text-white">{scene.text} —</span>
+            {selectedWord ? <span className={`rounded-lg border-2 px-2 py-1 text-[15px] font-black ${inBand ? 'border-emerald-300 bg-emerald-900 text-emerald-100' : 'border-orange-300 bg-orange-950 text-orange-100'}`}>{selectedWord}</span> : <span className="text-[13px] font-bold text-slate-400">낱말 카드를 붙여요</span>}
           </div>
-          <div className="relative">
-            {/* 어울리는 구간 표시는 힌트를 쓸 수 있을 때만 보여 준다 */}
-            {hintAllowed && (
-              <div
-                className="pointer-events-none absolute top-1/2 h-3 -translate-y-1/2 rounded-full bg-emerald-400/25"
-                style={{
-                  left: `${scene.band[0]}%`,
-                  width: `${scene.band[1] - scene.band[0]}%`,
-                }}
-                aria-hidden="true"
-              />
-            )}
-            <input
-              type="range"
-              min={0}
-              max={100}
-              step={1}
-              value={value}
-              disabled={status !== 'playing'}
-              onChange={(e: any) => setValue(Number(e.target.value))}
-              aria-label="낱말 강도"
-              className="relative w-full"
-              style={{ accentColor: inBand ? '#34d399' : '#4FC3E8' }}
-            />
-          </div>
-          <div className="mt-1 flex justify-between">
-            {stage.words.map((w) => (
-              <span key={w} className="flex-1 text-center text-[14px] font-bold text-slate-500">
-                {w}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* 어울림 반응 */}
-        <p className="text-center text-2xl leading-none" aria-hidden="true">
-          {inBand ? '😊' : closeness > 0.6 ? '🙂' : '😐'}
-        </p>
+          <p className="mt-1 text-center text-[13px] font-bold text-emerald-100">{selectedWord ? (inBand ? '장면과 잘 어울리는 카드예요.' : '장면을 다시 보고 카드를 바꿔 보세요.') : '카드를 누르면 장면의 말이 바뀌어요.'}</p>
+        </section>
       </div>
     </MiniGameFrame>
   );

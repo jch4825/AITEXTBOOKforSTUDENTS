@@ -32,6 +32,7 @@ export default function LunchboxSafetyGame({ supportLevel }: MiniGameProps) {
     else if (box.some((name) => stage.blocked.includes(name))) game.fail('알레르기나 도구 조건에 맞지 않는 재료가 들어 있어요.');
     else game.succeed('알레르기·도구·사람 도움 조건에 맞는 안전한 도시락을 완성했어요!');
   };
+  const hasBlockedFood = box.some((name) => stage.blocked.includes(name));
 
   return (
     <MiniGameFrame
@@ -68,6 +69,10 @@ export default function LunchboxSafetyGame({ supportLevel }: MiniGameProps) {
             {food.icon} {food.name}
           </button>
         ))}
+      </div>
+      <div className={`mt-2 rounded-xl border-2 px-3 py-2 text-center ${hasBlockedFood ? 'border-orange-300 bg-orange-950/70' : box.length === 4 ? 'border-emerald-300 bg-emerald-950/70' : 'border-slate-600 bg-slate-900/60'}`} aria-live="polite">
+        <p className="text-[14px] font-black text-slate-300">도시락을 보는 사람의 반응</p>
+        <p className="text-[15px] font-black text-white">{hasBlockedFood ? '⚠️ 먹기 전에 조건을 다시 확인해요.' : box.length === 4 ? '🙂 친구가 안심하고 도시락을 열어요.' : '🍱 음식을 고르면 도시락 장면이 채워져요.'}</p>
       </div>
     </MiniGameFrame>
   );

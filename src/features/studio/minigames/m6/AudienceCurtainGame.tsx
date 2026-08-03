@@ -73,6 +73,10 @@ export default function AudienceCurtainGame({ supportLevel }: MiniGameProps) {
           </button>
         ))}
       </div>
+      <div className="mt-2 rounded-xl border-2 border-emerald-300/60 bg-emerald-950/60 px-3 py-2 text-center" aria-live="polite">
+        <p className="text-[14px] font-black text-emerald-200">공개 장면 미리 보기</p>
+        <p className="text-[15px] font-black text-white">{selected ? `${CARDS.find((card) => card.id === selected)?.icon} ${CARDS.find((card) => card.id === selected)?.label}의 커튼을 고르는 중이에요.` : '정보 카드를 고르면 교실·온라인 사람들의 표정이 나타나요.'}</p>
+      </div>
     </MiniGameFrame>
   );
 }

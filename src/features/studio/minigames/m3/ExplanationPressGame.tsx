@@ -51,6 +51,18 @@ export default function ExplanationPressGame({ supportLevel }: MiniGameProps) {
             onPointerDown={start}
             onPointerUp={stop}
             onPointerCancel={stop}
+            onKeyDown={(event) => {
+              if ((event.key === ' ' || event.key === 'Enter') && timer.current === null) {
+                event.preventDefault();
+                start();
+              }
+            }}
+            onKeyUp={(event) => {
+              if (event.key === ' ' || event.key === 'Enter') stop();
+            }}
+            onBlur={stop}
+            aria-keyshortcuts="Space Enter"
+            aria-label="누르고 있다가 떼기. 키보드 스페이스와 엔터도 사용할 수 있어요."
             className="min-h-14 w-full touch-none rounded-xl border-2 border-amber-300 bg-amber-500 text-[15px] font-black text-slate-950"
           >
             🗜️ 누르고 있다가 떼기

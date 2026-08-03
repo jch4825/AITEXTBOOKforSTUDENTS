@@ -118,6 +118,7 @@ export default function TargetRangeGame({ supportLevel }: MiniGameProps) {
     const nearest = Math.min(...others.map((p) => Math.hypot(p.x - target.x, p.y - target.y)));
     setRadius(Math.max(MIN_R, Math.min(MAX_R, nearest / 2)));
   };
+  const focusPerson = (person: Person) => setCenter({ x: person.x, y: person.y });
 
   const send = () => {
     if (status !== 'playing') return;
@@ -135,7 +136,7 @@ export default function TargetRangeGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="범위 좁혀 말하기"
-      instruction="원을 끌어 옮기고 크기를 줄여, 찾는 친구만 원 안에 들어오게 하세요. 넓으면 엉뚱한 친구까지 들어오고, 너무 좁히면 놓쳐요."
+      instruction="원을 끌어 옮기고 크기를 줄여, 찾는 친구만 원 안에 들어오게 하세요. 끌기 어렵다면 아래 친구 버튼으로 원을 옮길 수 있어요."
       accent="var(--brand-ink)"
       progress={{ label: '원 안', value: (targetIn ? 1 : 0) + wrongIn, max: 1 }}
       stages={STAGES.slice(0, visibleStageCount).map((s) => ({ id: s.id, label: s.tab }))}
@@ -219,6 +220,10 @@ export default function TargetRangeGame({ supportLevel }: MiniGameProps) {
           })}
         </div>
 
+        <div className="flex flex-wrap gap-1.5" aria-label="범위 중심 대체 조작">
+          {stage.people.map((person) => <button key={person.id} type="button" onClick={() => focusPerson(person)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 px-2 text-[13px] font-black text-white">🎯 {person.label}로 이동</button>)}
+        </div>
+
         {/* 범위 크기 */}
         <div className="flex items-center gap-2">
           <span className="text-[14px] font-black text-slate-400">범위 크기</span>
@@ -229,7 +234,7 @@ export default function TargetRangeGame({ supportLevel }: MiniGameProps) {
             aria-label="범위 좁히기"
             className="h-11 w-11 rounded-lg border-2 border-slate-500/60 bg-slate-800 text-base font-black text-slate-100 disabled:opacity-40"
           >
-            −
+            좁게
           </button>
           <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-800">
             <div
@@ -244,7 +249,7 @@ export default function TargetRangeGame({ supportLevel }: MiniGameProps) {
             aria-label="범위 넓히기"
             className="h-11 w-11 rounded-lg border-2 border-slate-500/60 bg-slate-800 text-base font-black text-slate-100 disabled:opacity-40"
           >
-            ＋
+            넓게
           </button>
         </div>
       </div>
