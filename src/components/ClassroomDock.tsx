@@ -26,6 +26,9 @@ const DOCK_COLLAPSED_KEY = 'ai-students-dock-collapsed';
 
 interface Props {
   lessonId: LessonId;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+  onTimerLabelChange?: (label: string | null) => void;
 }
 
 /**
@@ -33,7 +36,12 @@ interface Props {
  * 이전/다음 푸터 바의 중앙 위에 사각으로 붙는다(호버링 X → 본문 버튼과 겹치지 않음).
  * 접기/펼치기 토글(선택은 기기에 기억). §2~3 설계 참고.
  */
-export default function ClassroomDock({ lessonId }: Props) {
+export default function ClassroomDock({
+  lessonId,
+  mobileOpen = false,
+  onMobileClose,
+  onTimerLabelChange,
+}: Props) {
   const [open, setOpen] = useState<ToolId | null>(null);
   const [collapsed, setCollapsed] = useState<boolean>(
     () => { try { return localStorage.getItem(DOCK_COLLAPSED_KEY) === '1'; } catch { return false; } },
@@ -62,6 +70,10 @@ export default function ClassroomDock({ lessonId }: Props) {
     };
   }, [timerRunning]);
 
+  useEffect(() => {
+    onTimerLabelChange?.(timerRemaining === null ? null : formatTime(timerRemaining));
+  }, [onTimerLabelChange, timerRemaining]);
+
   function startTimer(minutes: number) {
     setTimerRemaining(minutes * 60);
     setTimerRunning(true);
@@ -77,6 +89,11 @@ export default function ClassroomDock({ lessonId }: Props) {
 
   function toggle(id: ToolId) {
     setOpen((cur) => (cur === id ? null : id));
+  }
+
+  function openFromMobile(id: ToolId) {
+    setOpen((cur) => (cur === id ? null : id));
+    if (id === 'draw' || id === 'worksheet') onMobileClose?.();
   }
 
   function toggleCollapsed() {
@@ -98,13 +115,50 @@ export default function ClassroomDock({ lessonId }: Props) {
     >{formatTime(timerRemaining)}</span>
   );
 
+  const panelContent = panelTool && (
+    <>
+      {panelTool === 'timer' && (
+        <ClassTimer
+          remainingSec={timerRemaining}
+          running={timerRunning}
+          onStart={startTimer}
+          onToggle={toggleTimer}
+          onReset={resetTimer}
+        />
+      )}
+      {panelTool === 'pecs' && <PecsBoard moduleId={moduleId} />}
+      {panelTool === 'resources' && (
+        <div className="p-4 w-64 max-w-full">
+          <h3 className="text-lg font-bold mb-2" style={{ color: theme.accent }}>교사 자료</h3>
+          {resources.length === 0 ? (
+            <p className="text-[color:var(--muted)]">자료 준비 중입니다.</p>
+          ) : (
+            <ul className="space-y-2">
+              {resources.map((resource) => (
+                <li key={resource.url}>
+                  <a
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener"
+                    className="underline"
+                    style={{ color: theme.accent }}
+                  >{resource.label}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </>
+  );
+
   return (
     <>
       {/* 이전/다음 바(footer) 중앙 위에 붙는 도구 바.
           absolute + 프레임(relative, h-dvh)에 앵커 — 흐름에서 빠져 사이드바가 푸터까지 이어지고,
           fixed와 달리 프레임 기준이라 모바일 주소창 변화에도 점핑·사라짐이 없다.
           실제 푸터 높이는 MicroLessonFrame에서 측정한 CSS 변수로 맞춘다. */}
-      <div className="classroom-dock absolute left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none">
+      <div className="classroom-dock absolute left-1/2 -translate-x-1/2 z-30 hidden md:flex flex-col items-center gap-2 pointer-events-none">
         {!collapsed && panelTool && panelTool !== 'worksheet' && (
           <div
             className="rounded-[var(--r-md)] overflow-hidden pointer-events-auto max-h-[60vh] overflow-y-auto"
@@ -117,40 +171,7 @@ export default function ClassroomDock({ lessonId }: Props) {
                 className="h-8 w-8 rounded-[var(--r-sm)] hover:bg-[color:var(--paper-2)] flex items-center justify-center"
               ><Icon name="close" size={16} /></button>
             </div>
-            <div className="px-1 pb-2">
-              {panelTool === 'timer' && (
-                <ClassTimer
-                  remainingSec={timerRemaining}
-                  running={timerRunning}
-                  onStart={startTimer}
-                  onToggle={toggleTimer}
-                  onReset={resetTimer}
-                />
-              )}
-              {panelTool === 'pecs' && <PecsBoard moduleId={moduleId} />}
-              {panelTool === 'resources' && (
-                <div className="p-4 w-64">
-                  <h3 className="text-lg font-bold mb-2" style={{ color: theme.accent }}>교사 자료</h3>
-                  {resources.length === 0 ? (
-                    <p className="text-[color:var(--muted)]">자료 준비 중입니다.</p>
-                  ) : (
-                    <ul className="space-y-2">
-                      {resources.map((r) => (
-                        <li key={r.url}>
-                          <a
-                            href={r.url}
-                            target="_blank"
-                            rel="noopener"
-                            className="underline"
-                            style={{ color: theme.accent }}
-                          >{r.label}</a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
-            </div>
+            <div className="px-1 pb-2">{panelContent}</div>
           </div>
         )}
 
@@ -201,7 +222,50 @@ export default function ClassroomDock({ lessonId }: Props) {
           )}
         </div>
       </div>
-      {open === 'worksheet' && !collapsed && (
+      {mobileOpen && (
+        <div
+          className="mobile-teacher-tools-backdrop fixed inset-0 z-[60] flex items-end md:hidden"
+          onClick={onMobileClose}
+        >
+          <section
+            className="mobile-teacher-tools-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label="교사 도구"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mobile-teacher-tools-heading">
+              <div>
+                <strong>교사 도구</strong>
+                {timerChip}
+              </div>
+              <button type="button" onClick={onMobileClose} aria-label="교사 도구 닫기">
+                <Icon name="close" size={22} />
+              </button>
+            </div>
+            <div className="mobile-teacher-tools-grid">
+              {TOOLS.map((tool) => (
+                <button
+                  key={tool.id}
+                  type="button"
+                  data-tool-id={tool.id}
+                  aria-pressed={open === tool.id}
+                  onClick={() => openFromMobile(tool.id)}
+                  style={{
+                    background: open === tool.id ? theme.accentSoft : 'var(--paper-1)',
+                    color: open === tool.id ? theme.accent : 'var(--ink-1)',
+                    borderColor: open === tool.id ? theme.accent : 'var(--border)',
+                  }}
+                ><Icon name={tool.icon} size={22} /><span>{tool.label}</span></button>
+              ))}
+            </div>
+            {panelTool && panelTool !== 'worksheet' && (
+              <div className="mobile-teacher-tools-panel">{panelContent}</div>
+            )}
+          </section>
+        </div>
+      )}
+      {open === 'worksheet' && (
         <WorksheetPanel lessonId={lessonId} onClose={() => setOpen(null)} />
       )}
       {open === 'draw' && <DrawBoard onClose={() => setOpen(null)} />}

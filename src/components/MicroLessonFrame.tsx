@@ -6,6 +6,8 @@ import ProgressDots from './ProgressDots';
 import Button from './Button';
 import Icon from './Icon';
 import ClassroomDock from './ClassroomDock';
+import FontSizeToggle from './controls/FontSizeToggle';
+import DifficultyToggle from './controls/DifficultyToggle';
 import type { LessonId } from '../types';
 import { formatDebugPageId, isDebugMode, type DebugSubPage } from '../utils/debugMode';
 import { stopSpeaking } from '../utils/tts';
@@ -38,6 +40,8 @@ export default function MicroLessonFrame({
   const [dictOpen, setDictOpen] = useState(false);
   const [dictQuery, setDictQuery] = useState<string | null>(null);
   const [navOpen, setNavOpen] = useState(false);
+  const [mobileTeacherOpen, setMobileTeacherOpen] = useState(false);
+  const [mobileTimerLabel, setMobileTimerLabel] = useState<string | null>(null);
   const footerRef = useRef<HTMLElement | null>(null);
   // 데스크톱 사이드바 접기(집중 모드) — 선택을 기기에 기억한다.
   // 태블릿은 본문 폭을 먼저 확보하도록 새로 열 때 기본 접힘으로 시작한다.
@@ -120,6 +124,8 @@ export default function MicroLessonFrame({
         onOpenDictionary={() => { setDictQuery(null); setDictOpen(true); }}
         onGoHome={onGoHome}
         onOpenNav={() => setNavOpen(true)}
+        mobileTimerLabel={mobileTimerLabel}
+        onOpenTeacherTools={() => setMobileTeacherOpen(true)}
       />
       <div className="flex flex-1 min-h-0">
         {/* PC: 접을 수 있는 사이드바 (localStorage: ai-students-sidebar-collapsed) / 모바일: ☰ 드로어 */}
@@ -158,19 +164,38 @@ export default function MicroLessonFrame({
             onClick={() => setNavOpen(false)}
           >
             <div
-              className="absolute inset-y-0 left-0 w-72 max-w-[85vw] overflow-y-auto"
+              className="mobile-lesson-menu absolute inset-y-0 left-0 w-80 max-w-[88vw] overflow-y-auto"
               style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-2)' }}
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-label="차례"
             >
-              <div className="flex justify-end p-2">
+              <div className="flex items-center justify-between p-3 border-b border-[color:var(--border)]">
+                <strong className="text-lg" style={{ color: 'var(--brand-ink)' }}>학습 메뉴</strong>
                 <button
                   onClick={() => setNavOpen(false)}
                   aria-label="차례 닫기"
                   className="h-10 w-10 rounded-[var(--r-sm)] hover:bg-[color:var(--paper-2)] flex items-center justify-center"
                 ><Icon name="close" size={22} /></button>
               </div>
+              <div className="grid gap-2 p-3 border-b border-[color:var(--border)]">
+                <button
+                  type="button"
+                  onClick={() => { setNavOpen(false); onGoHome(); }}
+                  className="mobile-lesson-menu-action"
+                ><Icon name="home" size={20} /> 처음 화면</button>
+                <button
+                  type="button"
+                  data-mobile-teacher-tools
+                  onClick={() => { setNavOpen(false); setMobileTeacherOpen(true); }}
+                  className="mobile-lesson-menu-action"
+                ><Icon name="pen" size={20} /> 교사 도구</button>
+                <div className="mobile-lesson-settings" aria-label="학습 설정">
+                  <FontSizeToggle />
+                  <DifficultyToggle />
+                </div>
+              </div>
+              <p className="px-4 pt-4 pb-1 text-sm font-bold text-[color:var(--muted)]">차례</p>
               <SidebarTree
                 currentLessonId={lessonId}
                 onPickLesson={(id) => { setNavOpen(false); onPickLesson(id); }}
@@ -178,9 +203,9 @@ export default function MicroLessonFrame({
             </div>
           </div>
         )}
-        {/* pb-16: 교사 도구 도크(약 53px, absolute·footer 위 부상)가 스크롤 최하단 콘텐츠·버튼을
-            가리지 않도록 확보한 하단 여백. 도크는 프레임에 absolute라 흐름 밖 → main 여백으로만 비켜준다. */}
-        <main className="flex-1 min-w-0 p-4 pb-16 md:px-8 md:py-8 md:pb-16 overflow-y-auto" data-open-term={undefined}>
+        {/* 모바일에서는 교사 도구를 메뉴 시트로 옮겨 본문 위에 상시 떠 있는 여백을 없앤다.
+            데스크톱 도크는 흐름 밖에 있으므로 md:pb-16으로 마지막 콘텐츠를 보호한다. */}
+        <main className="flex-1 min-w-0 p-4 md:px-8 md:py-8 md:pb-16 overflow-y-auto" data-open-term={undefined}>
           {/* expose openTerm to children via a custom event */}
           <div onClickCapture={(e) => {
             const target = e.target as HTMLElement;
@@ -200,7 +225,12 @@ export default function MicroLessonFrame({
           onSearch={setDictQuery}
         />
       </div>
-      <ClassroomDock lessonId={lessonId} />
+      <ClassroomDock
+        lessonId={lessonId}
+        mobileOpen={mobileTeacherOpen}
+        onMobileClose={() => setMobileTeacherOpen(false)}
+        onTimerLabelChange={setMobileTimerLabel}
+      />
       <footer ref={footerRef} className="comic-frame-footer h-14 shrink-0 px-3 md:px-6 flex items-center justify-between gap-2">
         <Button
           variant="secondary"

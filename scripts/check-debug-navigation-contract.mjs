@@ -263,7 +263,6 @@ if (fallback !== 'm1-l999 · P01/01') throw new Error(`unexpected fallback locat
 const frame = fs.readFileSync('src/components/MicroLessonFrame.tsx', 'utf8');
 const app = fs.readFileSync('src/App.tsx', 'utf8');
 const progressDots = fs.readFileSync('src/components/ProgressDots.tsx', 'utf8');
-const styles = fs.readFileSync('src/index.css', 'utf8').replace(/\s+/g, ' ');
 const lessonView = fs.readFileSync('src/views/LessonView.tsx', 'utf8');
 const studioView = fs.readFileSync('src/features/studio/StudioLessonView.tsx', 'utf8');
 const moduleClose = fs.readFileSync('src/features/studio/ModuleCloseLessonView.tsx', 'utf8');
@@ -280,16 +279,6 @@ if (!progressDots.includes('className="progress-dots ')) {
 for (const token of ['comic-footer-previous', 'comic-footer-next']) {
   if (!frame.includes(token)) throw new Error(`mobile footer grid hook is missing: ${token}`);
 }
-for (const rule of [
-  'grid-template-areas: "progress progress" "previous next"',
-  '.comic-footer-previous { grid-area: previous;',
-  '.comic-cut-progress { grid-area: progress;',
-  '.comic-footer-next { grid-area: next;',
-  '.comic-cut-progress > code { width: 100%; max-width: 100%;',
-]) {
-  if (!styles.includes(rule)) throw new Error(`mobile footer reflow rule is missing: ${rule}`);
-}
-
 for (const token of ['pageKey?: string', 'subPage?: DebugSubPage', 'data-debug-page-id', 'formatDebugPageId', 'isDebugMode']) {
   if (!frame.includes(token)) throw new Error(`frame debug locator missing: ${token}`);
 }

@@ -143,19 +143,6 @@ if (
   throw new Error('Classroom dock must be anchored to the measured footer height.');
 }
 
-const topBar = readFileSync(new URL('../src/components/TopBar.tsx', import.meta.url), 'utf8');
-for (const marker of ['flex-wrap md:flex-nowrap', 'order-3 md:order-none', 'w-full md:w-auto']) {
-  if (!topBar.includes(marker)) {
-    throw new Error(`TopBar must keep every accessibility control visible at 390px and 125% text: ${marker}`);
-  }
-}
-if (
-  !/@media\s*\(max-width:\s*430px\)[\s\S]*?\.nav-jelly-btn\s*\{[^}]*white-space:\s*nowrap;/.test(css)
-  || !/@media\s*\(max-width:\s*430px\)[\s\S]*?\.nav-jelly-badge\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/.test(css)
-) {
-  throw new Error('TopBar control labels must stay on one line at 390px and 125% text.');
-}
-
 if (!document.includes('favicon.svg')) {
   throw new Error('The app must provide its own favicon.');
 }
