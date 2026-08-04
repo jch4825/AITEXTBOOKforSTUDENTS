@@ -69,7 +69,14 @@ assert(
   lessonM1L2Resources[0]?.description?.includes('도입 또는 정리'),
   'm1-l2 교사 영상에는 수업에서 언제 활용할지 알려 주는 짧은 설명이 필요하다',
 );
-assertEqual((teacherResourcesModule.getTeacherResources?.('m1-l3') ?? []).length, 0, 'm1-l2 전용 영상이 다른 차시에 노출되면 안 된다');
+const lessonM1L3Resources = teacherResourcesModule.getTeacherResources?.('m1-l3') ?? [];
+assertEqual(lessonM1L3Resources.length, 1, 'm1-l3 교사 자료에는 요청한 영상 1개가 표시되어야 한다');
+assertEqual(lessonM1L3Resources[0]?.url, 'https://youtu.be/whi2UuA9-0k', 'm1-l3 교사 영상은 요청한 URL을 사용해야 한다');
+assert(
+  lessonM1L3Resources[0]?.description?.includes('도입 또는 정리'),
+  'm1-l3 교사 영상에는 수업에서 언제 활용할지 알려 주는 짧은 설명이 필요하다',
+);
+assertEqual((teacherResourcesModule.getTeacherResources?.('m1-l4') ?? []).length, 0, 'm1-l3 전용 영상이 다른 차시에 노출되면 안 된다');
 
 const worksheetM1L3 = worksheetModule.buildLessonWorksheet('m1-l3');
 assertEqual(worksheetM1L3.lessonTitle, 'AI는 어떻게 답을 만들까?', 'm1-l3 활동지는 현재 스튜디오 제목을 사용해야 한다');
