@@ -2,7 +2,8 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import Button from '../../components/Button';
 import GeneralizationRecordsPanel from '../../components/mission/GeneralizationRecordsPanel';
 import type { TeacherRecordingSettings } from '../studio/types';
-import { ApiKeyPanel, ObjectivesPanel, ProgressPanel } from './LegacyTeacherPanels';
+import GeminiConnectionPanel from './GeminiConnectionPanel';
+import { ObjectivesPanel, ProgressPanel } from './LegacyTeacherPanels';
 import StudioEvidencePanel from './StudioEvidencePanel';
 import LinkedStandardsGuide from './LinkedStandardsGuide';
 import TeacherCurriculumGuide from './TeacherCurriculumGuide';
@@ -110,8 +111,8 @@ export default function TeacherHub({ onExit }: Props) {
             <section className="studio-editorial p-6 md:p-8">
               <h2 className="text-2xl font-extrabold">경험 중심 교과서 운영 원리</h2>
               <div className="mt-5 grid gap-4 md:grid-cols-2">
-                <article className="studio-fact-card"><h3 className="font-bold">68차시 · 현재 62개 스튜디오</h3><p className="mt-1 text-sm leading-relaxed">행정적 차시 수는 유지합니다. 1~6단원의 모듈 마무리 전 차시는 모두 같은 8단계 경험이며, 여섯 마무리 차시는 성장 포트폴리오입니다.</p></article>
-                <article className="studio-fact-card"><h3 className="font-bold">1~6단원 · 전면 전환 완료</h3><p className="mt-1 text-sm leading-relaxed">현재 1~6단원 전면 리모델링이 완성되어 있습니다. 이미지 슬롯, 소리, AI 응답은 준비된 AI 예시이며 카메라·마이크 권한 없이 활동할 수 있습니다.</p></article>
+                <article className="studio-fact-card"><h3 className="font-bold">68차시 · 현재 62개 스튜디오</h3><p className="mt-1 text-sm leading-relaxed">모듈 마무리 전 차시는 상황→첫 생각→조건 변화→AI 비교→내 판단→산출물→새 상황의 공통 흐름을 따릅니다. 차시에 따라 도구 연습·개념 정리 화면이 더해지며, 여섯 마무리 차시는 성장 포트폴리오입니다.</p></article>
+                <article className="studio-fact-card"><h3 className="font-bold">1~6단원 · 전면 전환 완료</h3><p className="mt-1 text-sm leading-relaxed">현재 1~6단원 전면 리모델링이 완성되어 있습니다. 기본 AI 의견은 검수된 준비 예시라 카메라·마이크 권한 없이 활동할 수 있고, 교사가 Gemini를 연결한 경우에만 ‘나의 판단’ 화면에 실시간 AI 영역이 더해집니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">평가 흐름</h3><p className="mt-1 text-sm leading-relaxed">첫 생각 → 조건 변화 → AI 비교 → 내 판단 → 새 상황에 써 보기를 살펴봅니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">지원 수준</h3><p className="mt-1 text-sm leading-relaxed">충분한 지원, 보통, 도전적 수준은 정보 수·선택지·힌트·AI 역할의 깊이를 바꿉니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">저장 원칙</h3><p className="mt-1 text-sm leading-relaxed">교사가 켠 경우에만 정제된 과정증거를 저장하며 음성·사진·그림 원본과 전체 AI 대화는 남기지 않습니다.</p></article>
@@ -137,13 +138,19 @@ export default function TeacherHub({ onExit }: Props) {
 
         {activeTab === '포트폴리오' && <StudioEvidencePanel mode="portfolio" />}
 
-        {activeTab === 'AI 연결' && <ApiKeyPanel />}
+        {activeTab === 'AI 연결' && <GeminiConnectionPanel />}
         {activeTab === '교육과정·성취기준' && (
           <div className="space-y-8">
-            <TeacherCurriculumGuide />
-            <div className="border-t-2 border-slate-200 pt-6">
-              <ObjectivesPanel />
-            </div>
+            <ObjectivesPanel />
+            <details className="overflow-hidden rounded-2xl border-2 border-slate-200 bg-white">
+              <summary className="cursor-pointer p-5 font-extrabold text-slate-900 hover:bg-slate-50">
+                학교 자체 교육과정 설계 문서 전체 보기
+                <span className="mt-1 block text-xs font-medium leading-relaxed text-slate-600">
+                  이 문서의 교수·학습 사례는 확장 수업 예시이며 현재 앱의 실제 장면 목록이 아닙니다. 현재 차시는 위 일치표를 기준으로 운영합니다.
+                </span>
+              </summary>
+              <div className="border-t border-slate-200"><TeacherCurriculumGuide /></div>
+            </details>
           </div>
         )}
         {activeTab === '연계 성취기준' && <LinkedStandardsGuide />}

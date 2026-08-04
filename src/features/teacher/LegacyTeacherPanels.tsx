@@ -1,12 +1,8 @@
 import { useState } from 'react';
-import Button from '../../components/Button';
-import ErrorMessage from '../../components/ErrorMessage';
-import { ALL_LESSONS } from '../../data/lessons';
 import { MODULES, lessonIdsForModule } from '../../data/modules';
 import { AI_ACHIEVEMENT_STANDARDS } from '../../data/aiAchievementStandards';
-import { clearApiKey, getApiKey, maskApiKey, setApiKey } from '../../utils/apiKey';
-import { askGemini, GeminiError, MODEL_FALLBACK } from '../../utils/gemini';
 import { loadProgress } from '../../utils/storage';
+import { countAlignedStudioObjectives, getTeacherLessonAlignmentRows } from './lessonAlignment';
 
 export function ProgressPanel() {
   const [progress] = useState(() => loadProgress());
@@ -40,18 +36,26 @@ export function ProgressPanel() {
   );
 }
 export function ObjectivesPanel() {
+  const alignmentRows = getTeacherLessonAlignmentRows();
+
   return (
     <section className="studio-editorial p-6 md:p-8 space-y-5">
       <div>
-        <p className="studio-kicker text-[color:var(--accent)] font-bold">거제애광학교 제작 2022 개정 특수교육 기본교육과정 학교 자율 교과</p>
-        <h2 className="text-2xl font-extrabold text-[color:var(--brand-ink)]">차시별 학습목표 · '인공지능 활용' 성취기준</h2>
-        <p className="mt-1 text-sm text-[color:var(--muted)]">
-          거제애광학교 '인공지능 활용' 선택 교과의 68차시 공통 학습 목표 및 연계 성취기준 명세입니다.
+        <p className="studio-kicker font-bold text-[color:var(--accent)]">거제애광학교 학교 자율 교과</p>
+        <h2 className="text-2xl font-extrabold text-[color:var(--brand-ink)]">실제 수업과 맞춘 차시별 지도·평가 기준</h2>
+        <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">
+          아래 인공지능 성취기준은 2022 국가 교육과정에 실린 기준이 아니라 거제애광학교가 만든 학교 자체 기준입니다.
+          {` `}학생 화면과 같은 데이터에서 현재 시나리오·AI 역할·산출물·전이 활동을 불러오므로 수업 설명이 따로 어긋나지 않습니다.
         </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-slate-200 bg-white p-3"><strong className="text-lg">68</strong><p className="text-xs text-slate-600">전체 차시</p></div>
+          <div className="rounded-xl border border-slate-200 bg-white p-3"><strong className="text-lg">{countAlignedStudioObjectives()}</strong><p className="text-xs text-slate-600">실제 스튜디오·목표 일치</p></div>
+          <div className="rounded-xl border border-slate-200 bg-white p-3"><strong className="text-lg">6</strong><p className="text-xs text-slate-600">성장 포트폴리오</p></div>
+        </div>
       </div>
 
       {MODULES.map((module) => {
-        const lessons = ALL_LESSONS.filter((lesson) => lesson.moduleId === module.id);
+        const lessons = alignmentRows.filter((lesson) => lesson.moduleId === module.id);
         const aiMeta = AI_ACHIEVEMENT_STANDARDS[module.id];
 
         return (
@@ -68,12 +72,12 @@ export function ObjectivesPanel() {
                 <div className="p-3.5 rounded-xl bg-indigo-950 text-white space-y-2 mb-2">
                   <div className="border-b border-indigo-800 pb-2">
                     <p className="font-extrabold text-amber-300 text-sm">
-                      🤖 영역 {aiMeta.domainNumber}. {aiMeta.domainName} 정식 AI 성취기준
+                      영역 {aiMeta.domainNumber}. {aiMeta.domainName} · 학교 자체 인공지능 성취기준
                     </p>
                   </div>
                   <div className="grid gap-2 sm:grid-cols-2 text-xs">
                     <div className="bg-indigo-900/60 p-2.5 rounded-lg border border-indigo-700/60">
-                      <p className="font-bold text-sky-300 mb-1">🏫 중학교 성취기준 (9학년군)</p>
+                      <p className="font-bold text-sky-300 mb-1">중학교 단계 학교 자체 기준</p>
                       <ul className="space-y-1 text-slate-200 leading-snug">
                         {aiMeta.middleSchool.map((s) => (
                           <li key={s.code}>
@@ -83,7 +87,7 @@ export function ObjectivesPanel() {
                       </ul>
                     </div>
                     <div className="bg-indigo-900/60 p-2.5 rounded-lg border border-indigo-700/60">
-                      <p className="font-bold text-emerald-300 mb-1">🏫 고등학교 성취기준 (12학년군)</p>
+                      <p className="font-bold text-emerald-300 mb-1">고등학교 단계 학교 자체 기준</p>
                       <ul className="space-y-1 text-slate-200 leading-snug">
                         {aiMeta.highSchool.map((s) => (
                           <li key={s.code}>
@@ -96,133 +100,56 @@ export function ObjectivesPanel() {
                 </div>
               )}
 
-              {/* Lesson Detail Cards */}
               {lessons.map((lesson) => (
-                <div key={lesson.id} className="pt-4 first:pt-0">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="text-xs font-black px-2.5 py-0.5 rounded bg-slate-800 text-white">
-                      {lesson.number}차시
+                <details key={lesson.lessonId} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+                  <summary className="flex cursor-pointer list-none items-center gap-2 p-3 hover:bg-slate-50">
+                    <span className="rounded bg-slate-800 px-2.5 py-0.5 text-xs font-black text-white">{lesson.lessonNumber}차시</span>
+                    <strong className="min-w-0 flex-1 text-sm text-[color:var(--brand-ink)] sm:text-base">{lesson.lessonTitle}</strong>
+                    <span className={`rounded-full px-2 py-1 text-[11px] font-bold ${lesson.kind === 'studio' ? 'bg-emerald-100 text-emerald-800' : 'bg-purple-100 text-purple-800'}`}>
+                      {lesson.kind === 'studio' ? '수업 일치' : '성장 포트폴리오'}
                     </span>
-                    <strong className="text-base font-extrabold text-[color:var(--brand-ink)]">
-                      {lesson.title}
-                    </strong>
-                  </div>
-
-                  <div className="bg-amber-500/10 border border-amber-400/50 rounded-xl p-3 my-2 text-sm text-slate-800 space-y-1">
-                    <p className="font-extrabold text-amber-900 flex items-center gap-1.5">
-                      <span>🎯</span> <span>공통 학습 목표:</span>
-                    </p>
-                    <p className="font-bold text-slate-900 leading-relaxed pl-5">
-                      {lesson.objective}
-                    </p>
-                  </div>
-
-                  {(lesson.wrapUpNormal || lesson.wrapUpEasy) && (
-                    <div className="text-xs text-slate-700 font-semibold pl-1 mb-2">
-                      💡 <strong>차시 핵심 정리 (보통 지원):</strong> {lesson.wrapUpNormal || lesson.wrapUpEasy}
+                  </summary>
+                  <div className="space-y-3 border-t border-slate-200 p-4 text-sm leading-relaxed">
+                    <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
+                      <p className="text-xs font-extrabold text-amber-900">학생에게 보이는 오늘의 목표</p>
+                      <p className="mt-1 font-semibold text-slate-900">{lesson.studentMission}</p>
                     </div>
-                  )}
-
-                  {lesson.standards && lesson.standards.length > 0 && (
-                    <div className="mt-2 bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs">
-                      <p className="font-extrabold text-slate-700 mb-1">📋 연계 성취기준:</p>
-                      <ul className="list-inside list-disc space-y-1 text-slate-800 font-medium">
-                        {lesson.standards.map((standard) => (
-                          <li key={standard}>{standard}</li>
-                        ))}
-                      </ul>
+                    <div className="grid gap-3 lg:grid-cols-2">
+                      <div className="rounded-xl bg-slate-50 p-3">
+                        <p className="text-xs font-extrabold text-slate-700">교사가 관찰할 수행</p>
+                        <p className="mt-1">{lesson.teacherObjective}</p>
+                      </div>
+                      <div className="rounded-xl bg-slate-50 p-3">
+                        <p className="text-xs font-extrabold text-slate-700">실제 시작 시나리오</p>
+                        <p className="mt-1 font-bold">{lesson.scenarioTitle}</p>
+                        <p className="mt-1 text-xs text-slate-600">{lesson.scenarioDescription}</p>
+                      </div>
+                      <div className="rounded-xl bg-indigo-50 p-3">
+                        <p className="text-xs font-extrabold text-indigo-900">이 차시의 AI 역할</p>
+                        <p className="mt-1">{lesson.aiRole}</p>
+                        <p className="mt-2 text-xs text-indigo-800">화면의 AI 의견: {lesson.aiContribution}</p>
+                      </div>
+                      <div className="rounded-xl bg-emerald-50 p-3">
+                        <p className="text-xs font-extrabold text-emerald-900">학생 산출물 · 새 상황 전이</p>
+                        <p className="mt-1 font-bold">{lesson.artifactTitle}</p>
+                        <p className="text-xs text-slate-700">{lesson.artifactPrompt}</p>
+                        <p className="mt-2 font-bold">{lesson.transferTitle}</p>
+                        <p className="text-xs text-slate-700">{lesson.transferDescription}</p>
+                      </div>
                     </div>
-                  )}
-                </div>
+                    <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+                      <span className="text-xs font-extrabold text-slate-700">학교 자체 인공지능 성취기준</span>
+                      {lesson.standards.map((standard) => (
+                        <code key={standard} className="rounded bg-slate-100 px-2 py-1 text-xs text-slate-800">{standard}</code>
+                      ))}
+                    </div>
+                  </div>
+                </details>
               ))}
             </div>
           </details>
         );
       })}
-    </section>
-  );
-}
-
-export function ApiKeyPanel() {
-  const [saved, setSaved] = useState<string | null>(getApiKey());
-  const [draft, setDraft] = useState('');
-  const [testing, setTesting] = useState(false);
-  const [testResult, setTestResult] = useState<{ text: string; modelUsed: string; safe: boolean; attemptLog: string[] } | null>(null);
-  const [testError, setTestError] = useState<{ studentMessage: string; technicalDetail: string } | null>(null);
-
-  function handleSave() {
-    setApiKey(draft);
-    setSaved(getApiKey());
-    setDraft('');
-    setTestResult(null);
-    setTestError(null);
-  }
-
-  function handleClear() {
-    clearApiKey();
-    setSaved(null);
-    setDraft('');
-    setTestResult(null);
-    setTestError(null);
-  }
-
-  async function handleTest() {
-    setTesting(true);
-    setTestResult(null);
-    setTestError(null);
-    try {
-      setTestResult(await askGemini('안녕! 오늘 날씨 어때?'));
-    } catch (error) {
-      if (error instanceof GeminiError) {
-        setTestError({ studentMessage: error.studentMessage, technicalDetail: error.technicalDetail });
-      } else {
-        setTestError({ studentMessage: '무언가 잘못됐어요.', technicalDetail: String(error) });
-      }
-    } finally {
-      setTesting(false);
-    }
-  }
-
-  return (
-    <section className="card mb-6 border border-[color:var(--border)] p-6">
-      <h2 className="mb-2 text-xl font-bold">Gemini API 키</h2>
-      <p className="mb-4 text-sm text-[color:var(--muted)]">
-        키는 이 브라우저의 localStorage에만 저장돼요. 다른 사람 컴퓨터에서는 사용되지 않아요.
-        <br />폴백 순서: {MODEL_FALLBACK.join(' → ')}
-      </p>
-      {saved ? (
-        <div className="mb-4 rounded border-2 border-green-300 bg-green-50 p-3">
-          <p className="font-semibold text-green-800">저장된 키: <code>{maskApiKey(saved)}</code></p>
-        </div>
-      ) : (
-        <div className="mb-4 rounded border-2 border-orange-300 bg-orange-50 p-3">
-          <p className="font-semibold text-orange-800">아직 저장된 키가 없어요. AI 차시는 준비된 답변으로만 동작합니다.</p>
-        </div>
-      )}
-      <label className="mb-2 block font-semibold" htmlFor="teacher-api-key">새 키 입력 (또는 교체)</label>
-      <input
-        id="teacher-api-key"
-        type="password"
-        value={draft}
-        onChange={(event) => setDraft(event.target.value)}
-        placeholder="Gemini API 키 붙여넣기"
-        className="mb-3 w-full rounded-[var(--r-sm)] border-2 border-[color:var(--border)] p-3 font-mono text-sm"
-      />
-      <div className="mb-4 flex gap-2">
-        <Button onClick={handleSave} disabled={draft.trim().length === 0}>저장</Button>
-        <button onClick={handleClear} disabled={!saved} className="btn bg-[color:var(--paper-0)] px-4 text-red-700 border-red-300">지우기</button>
-        <Button variant="secondary" onClick={handleTest} disabled={!saved || testing} className="ml-auto">
-          {testing ? '호출 중…' : '테스트 호출'}
-        </Button>
-      </div>
-      {testResult && (
-        <div className="rounded border-2 border-green-300 bg-green-50 p-3">
-          <p className="mb-1 text-sm text-green-800"><strong>모델:</strong> {testResult.modelUsed}{!testResult.safe && ' (안전필터 대체 답변)'}</p>
-          <p className="mb-2 text-base">{testResult.text}</p>
-          <details className="text-xs text-green-800"><summary className="cursor-pointer">폴백 시도 로그</summary><pre className="mt-1 whitespace-pre-wrap">{testResult.attemptLog.join('\n')}</pre></details>
-        </div>
-      )}
-      {testError && <ErrorMessage studentMessage={testError.studentMessage} technicalDetail={testError.technicalDetail} />}
     </section>
   );
 }

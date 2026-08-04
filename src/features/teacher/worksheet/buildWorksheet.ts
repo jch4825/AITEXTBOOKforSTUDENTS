@@ -1,7 +1,12 @@
 import { getCanonicalLesson } from '../../../data/canonicalLessons';
 import type { CanonicalLessonDesign, CanonicalStage } from '../../../data/canonicalLessons/types';
+import { getLessonObjective } from '../../../data/lessonObjectives';
 import { getLesson } from '../../../data/lessons';
+import { getModulePortfolioDefinition } from '../../../data/modulePortfolios';
+import type { ModulePortfolioDefinition } from '../../../data/modulePortfolios/types';
 import { getModule } from '../../../data/modules';
+import { getStudioDefinition } from '../../../data/studios';
+import type { StudioDefinition } from '../../studio/types';
 import type { LessonId } from '../../../types';
 import { themeFor } from '../../../utils/moduleThemes';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
@@ -36,6 +41,26 @@ function illustrationFromAsset(asset: { src?: string; alt: string; purpose: stri
     src: publicAssetUrl(asset.src),
     alt: cleanText(asset.alt),
     caption: cleanText(asset.purpose),
+  };
+}
+
+function illustrationFromStudio(studio: StudioDefinition | undefined): WorksheetIllustration | undefined {
+  const scene = studio?.visualNovel?.scenes.find((item) => item.imageSrc);
+  if (!scene) return undefined;
+  return {
+    src: publicAssetUrl(scene.imageSrc),
+    alt: cleanText(scene.alt),
+    caption: cleanText(scene.label),
+  };
+}
+
+function illustrationFromPortfolio(portfolio: ModulePortfolioDefinition | undefined): WorksheetIllustration | undefined {
+  const scene = portfolio?.closingStory?.find((item) => item.imageSrc);
+  if (!scene) return undefined;
+  return {
+    src: publicAssetUrl(scene.imageSrc),
+    alt: cleanText(scene.alt),
+    caption: cleanText(scene.label),
   };
 }
 
@@ -110,20 +135,30 @@ function lessonOptions(stage: CanonicalStage | undefined, fallback: string): str
   ]).slice(0, 3);
 }
 
-function lessonPhrase(source: { objective: string; canonical?: CanonicalLessonDesign }, stage: CanonicalStage | undefined): string {
-  return cleanText(source.canonical?.coreConcepts?.[0] || stage?.title || source.objective);
-}
-
-function lessonStages(source: { objective: string; canonical?: CanonicalLessonDesign }): CanonicalStage[] {
-  return source.canonical?.stages ?? [];
-}
-
-function starterBlocksForLevel(level: WorksheetLevel, source: {
+interface WorksheetLessonSource {
   title: string;
   objective: string;
   illustration?: WorksheetIllustration;
+  studio?: StudioDefinition;
+  portfolio?: ModulePortfolioDefinition;
   canonical?: CanonicalLessonDesign;
-}): WorksheetBlock[] {
+}
+
+function lessonPhrase(source: WorksheetLessonSource, stage: CanonicalStage | undefined): string {
+  return cleanText(
+    source.studio?.visualNovel?.knowledge[0]?.core
+      || source.portfolio?.guideSections?.[0]?.title
+      || source.canonical?.coreConcepts?.[0]
+      || stage?.title
+      || source.objective,
+  );
+}
+
+function lessonStages(source: WorksheetLessonSource): CanonicalStage[] {
+  return source.canonical?.stages ?? [];
+}
+
+function starterBlocksForLevel(level: WorksheetLevel, source: WorksheetLessonSource): WorksheetBlock[] {
   const frame = starterBlocks(source.title, source.objective);
   const stages = lessonStages(source);
   const optionStage = stages.find(stage => stageChoices(stage).length >= 2) ?? stages[0];
@@ -133,15 +168,53 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
   const writingStage = stages.find(stage => stage.phase === 'artifact' || stage.phase === 'transfer' || stage.phase === 'decision')
     ?? stages[0];
   const phrase = lessonPhrase(source, writingStage);
-  const options = lessonOptions(optionStage, phrase);
-  const cards = lessonOptions(secondOptionStage, phrase);
+  const studioOptions = uniqueText(source.studio?.firstAttempt.choices.map((choice) => choice.label) ?? []);
+  const studioTransferCards = uniqueText(source.studio?.transfer.choices.map((choice) => choice.label) ?? []);
+  const portfolioCards = uniqueText(source.portfolio?.nextChoices.map((choice) => choice.label) ?? []);
+  const options = (studioOptions.length >= 2 ? studioOptions : lessonOptions(optionStage, phrase)).slice(0, 3);
+  const cards = (
+    studioTransferCards.length >= 2
+      ? studioTransferCards
+      : portfolioCards.length >= 2
+        ? portfolioCards
+        : lessonOptions(secondOptionStage, phrase)
+  ).slice(0, 3);
   const artifactField = source.canonical?.artifact.fields.find(field => field.input === 'text' || field.input === 'choice');
-  const writingTopic = cleanText(artifactField?.label || stagePrompt(writingStage, source.objective));
+  const writingTopic = cleanText(
+    source.studio?.artifact.prompt
+      || source.portfolio?.artifactDescription
+      || source.portfolio?.guideSections?.[0]?.prompt
+      || artifactField?.label
+      || stagePrompt(writingStage, source.objective),
+  );
   const transferTopic = cleanText(
-    source.canonical?.transfer.title
+    source.studio?.transfer.description
+      || source.portfolio?.transferPrompt
+      || source.canonical?.transfer.title
       || source.canonical?.transfer.scenario
       || source.canonical?.artifact.title
       || source.objective,
+  );
+  const choicePrompt = cleanText(
+    source.studio?.firstAttempt.prompt
+      || source.portfolio?.completionRequirement
+      || stagePrompt(optionStage, source.objective),
+  );
+  const reasonPrompt = cleanText(
+    source.studio?.firstAttempt.reasonPrompt
+      || source.portfolio?.guideSections?.[0]?.prompt
+      || stagePrompt(optionStage, source.objective),
+  );
+  const cardPrompt = cleanText(
+    source.studio?.transfer.prompt
+      || source.studio?.transfer.description
+      || source.portfolio?.transferPrompt
+      || stagePrompt(secondOptionStage, `알맞은 카드를 ${phrase}와 연결해 보세요.`),
+  );
+  const transferInstruction = cleanText(
+    source.studio?.transfer.prompt
+      || source.portfolio?.transferPrompt
+      || `${transferTopic}에 배운 내용을 어떻게 써 볼까요?`,
   );
 
   if (level === 'high') {
@@ -160,7 +233,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         id: 'starter-high-reason',
         kind: 'sentence',
         title: '2. 이유를 써요',
-        instruction: stagePrompt(optionStage, source.objective),
+        instruction: reasonPrompt,
         lineCount: 2,
         fontSize: 15,
       },
@@ -168,7 +241,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         id: 'starter-high-transfer',
         kind: 'short-answer',
         title: '3. 생활에서 써요',
-        instruction: `${transferTopic}에 배운 내용을 어떻게 써 볼까요?`,
+        instruction: transferInstruction,
         lineCount: 1,
         fontSize: 15,
       },
@@ -192,7 +265,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         id: 'starter-middle-choice',
         kind: 'multiple-choice',
         title: '2. 알맞은 답 고르기',
-        instruction: stagePrompt(optionStage, source.objective),
+        instruction: choicePrompt,
         options,
         fontSize: 14,
       },
@@ -200,7 +273,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
         id: 'starter-middle-cut',
         kind: 'cut-paste',
         title: '3. 카드 붙이기',
-        instruction: stagePrompt(secondOptionStage, `알맞은 카드를 ${phrase}와 연결해 보세요.`),
+        instruction: cardPrompt,
         cards,
         fontSize: 13,
       },
@@ -213,7 +286,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
       id: 'starter-low-choice',
       kind: 'multiple-choice',
       title: '1. 알맞은 답 찾기',
-      instruction: stagePrompt(optionStage, source.objective),
+      instruction: choicePrompt,
       options,
       fontSize: 14,
       image: source.illustration,
@@ -238,27 +311,40 @@ function starterBlocksForLevel(level: WorksheetLevel, source: {
   ];
 }
 
-function collectLessonSource(lessonId: LessonId): {
-  title: string;
-  objective: string;
-  illustration?: WorksheetIllustration;
-  canonical?: CanonicalLessonDesign;
-} {
+function collectLessonSource(lessonId: LessonId): WorksheetLessonSource {
   const canonical = getCanonicalLesson(lessonId);
   const lesson = getLesson(lessonId);
-  const title = cleanText(canonical?.title || lesson?.title || '오늘의 학습지');
-  const objective = cleanText(canonical?.masterObjective || lesson?.objective || '오늘 배운 내용을 정리해요.');
-  const illustration = illustrationFromAsset(
-    (canonical?.assets ?? []).find(asset => asset.kind === 'story' && asset.renderAs === 'image' && asset.src)
-      ?? (canonical?.assets ?? []).find(asset => asset.renderAs === 'image' && asset.src),
+  const studio = getStudioDefinition(lessonId);
+  const portfolio = getModulePortfolioDefinition(lessonId);
+  const objectiveMeta = getLessonObjective(lessonId);
+  const title = cleanText(studio?.title || portfolio?.title || lesson?.title || canonical?.title || '오늘의 학습지');
+  const objective = cleanText(
+    objectiveMeta?.studentMission
+      || lesson?.objective
+      || portfolio?.description
+      || canonical?.masterObjective
+      || '오늘 배운 내용을 정리해요.',
   );
-  return { title, objective, illustration, canonical };
+  const illustration = illustrationFromStudio(studio)
+    ?? illustrationFromPortfolio(portfolio)
+    ?? illustrationFromAsset(
+      (canonical?.assets ?? []).find(asset => asset.kind === 'story' && asset.renderAs === 'image' && asset.src)
+        ?? (canonical?.assets ?? []).find(asset => asset.renderAs === 'image' && asset.src),
+    );
+  return {
+    title,
+    objective,
+    illustration,
+    studio,
+    portfolio,
+    canonical: studio || portfolio ? undefined : canonical,
+  };
 }
 
 export function buildLessonWorksheet(lessonId: LessonId): LessonWorksheet {
   const source = collectLessonSource(lessonId);
   const canonical = getCanonicalLesson(lessonId);
-  const moduleId = canonical?.moduleId ?? getLesson(lessonId)?.moduleId ?? 'm1';
+  const moduleId = getLesson(lessonId)?.moduleId ?? canonical?.moduleId ?? 'm1';
   const module = getModule(moduleId);
   const theme = themeFor(moduleId);
   return {
