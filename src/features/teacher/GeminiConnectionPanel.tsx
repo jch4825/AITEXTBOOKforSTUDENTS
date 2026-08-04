@@ -51,6 +51,57 @@ export default function GeminiConnectionPanel() {
 
   return (
     <div className="space-y-6">
+      <section className="card border border-[color:var(--border)] p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-bold">이 브라우저에 API 키 연결</h2>
+            <p className="mt-1 text-sm text-[color:var(--muted)]">키는 이 브라우저의 localStorage에만 저장되며 앱 소스나 학생 기록에는 들어가지 않습니다.</p>
+          </div>
+          <span className={`rounded-full px-3 py-1 text-xs font-extrabold ${saved ? 'bg-emerald-100 text-emerald-900' : 'bg-orange-100 text-orange-900'}`}>
+            {saved ? '연결 설정됨' : '준비 답변 모드'}
+          </span>
+        </div>
+
+        {saved ? (
+          <div className="mt-4 rounded-xl border-2 border-green-300 bg-green-50 p-3">
+            <p className="font-semibold text-green-800">저장된 키: <code>{maskApiKey(saved)}</code></p>
+          </div>
+        ) : (
+          <div className="mt-4 rounded-xl border-2 border-orange-300 bg-orange-50 p-3">
+            <p className="font-semibold text-orange-900">아직 키가 없습니다. 학생 수업은 검수된 준비 답변으로 안전하게 동작합니다.</p>
+          </div>
+        )}
+
+        <label className="mb-2 mt-5 block font-semibold" htmlFor="teacher-api-key">새 키 입력 또는 교체</label>
+        <input
+          id="teacher-api-key"
+          type="password"
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+          autoComplete="off"
+          spellCheck={false}
+          placeholder="Gemini API 키 붙여넣기"
+          className="mb-3 w-full rounded-[var(--r-sm)] border-2 border-[color:var(--border)] p-3 font-mono text-sm"
+        />
+        <div className="mb-4 flex flex-wrap gap-2">
+          <Button onClick={handleSave} disabled={draft.trim().length === 0}>저장</Button>
+          <button onClick={handleClear} disabled={!saved} className="btn border-red-300 bg-[color:var(--paper-0)] px-4 text-red-700">지우기</button>
+          <Button variant="secondary" onClick={handleTest} disabled={!saved || testing} className="sm:ml-auto">
+            {testing ? '호출 중…' : '테스트 호출'}
+          </Button>
+        </div>
+        <p className="text-xs text-slate-500">현재 앱의 모델 폴백 순서: {MODEL_FALLBACK.join(' → ')}</p>
+
+        {testResult && (
+          <div className="mt-4 rounded-xl border-2 border-green-300 bg-green-50 p-3">
+            <p className="mb-1 text-sm text-green-800"><strong>연결 성공 · 모델:</strong> {testResult.modelUsed}{!testResult.safe && ' (안전필터 대체 답변)'}</p>
+            <p className="mb-2 text-base">{testResult.text}</p>
+            <details className="text-xs text-green-800"><summary className="cursor-pointer">폴백 시도 로그</summary><pre className="mt-1 whitespace-pre-wrap">{testResult.attemptLog.join('\n')}</pre></details>
+          </div>
+        )}
+        {testError && <div className="mt-4"><ErrorMessage studentMessage={testError.studentMessage} technicalDetail={testError.technicalDetail} /></div>}
+      </section>
+
       <section className="overflow-hidden rounded-2xl border border-indigo-200 bg-white shadow-sm">
         <div className="bg-gradient-to-r from-indigo-950 to-violet-900 p-6 text-white md:p-8">
           <p className="text-xs font-extrabold text-amber-300">선택 연결 · 교사만 설정</p>
@@ -104,61 +155,10 @@ export default function GeminiConnectionPanel() {
           </article>
           <article className="rounded-xl border border-slate-200 bg-white p-4">
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-950 font-black text-white">3</span>
-            <h3 className="mt-3 font-extrabold">아래에 붙여넣고 확인하기</h3>
-            <p className="mt-1 text-xs leading-relaxed text-slate-600">저장한 뒤 ‘테스트 호출’을 눌러 실제 응답이 오는지 확인합니다.</p>
+            <h3 className="mt-3 font-extrabold">맨 위 연결 박스에 붙여넣기</h3>
+            <p className="mt-1 text-xs leading-relaxed text-slate-600">맨 위 입력란에 키를 붙여넣고 저장한 뒤 ‘테스트 호출’을 눌러 실제 응답이 오는지 확인합니다.</p>
           </article>
         </div>
-      </section>
-
-      <section className="card border border-[color:var(--border)] p-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <h2 className="text-xl font-bold">이 브라우저에 API 키 연결</h2>
-            <p className="mt-1 text-sm text-[color:var(--muted)]">키는 이 브라우저의 localStorage에만 저장되며 앱 소스나 학생 기록에는 들어가지 않습니다.</p>
-          </div>
-          <span className={`rounded-full px-3 py-1 text-xs font-extrabold ${saved ? 'bg-emerald-100 text-emerald-900' : 'bg-orange-100 text-orange-900'}`}>
-            {saved ? '연결 설정됨' : '준비 답변 모드'}
-          </span>
-        </div>
-
-        {saved ? (
-          <div className="mt-4 rounded-xl border-2 border-green-300 bg-green-50 p-3">
-            <p className="font-semibold text-green-800">저장된 키: <code>{maskApiKey(saved)}</code></p>
-          </div>
-        ) : (
-          <div className="mt-4 rounded-xl border-2 border-orange-300 bg-orange-50 p-3">
-            <p className="font-semibold text-orange-900">아직 키가 없습니다. 학생 수업은 검수된 준비 답변으로 안전하게 동작합니다.</p>
-          </div>
-        )}
-
-        <label className="mb-2 mt-5 block font-semibold" htmlFor="teacher-api-key">새 키 입력 또는 교체</label>
-        <input
-          id="teacher-api-key"
-          type="password"
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          autoComplete="off"
-          spellCheck={false}
-          placeholder="Gemini API 키 붙여넣기"
-          className="mb-3 w-full rounded-[var(--r-sm)] border-2 border-[color:var(--border)] p-3 font-mono text-sm"
-        />
-        <div className="mb-4 flex flex-wrap gap-2">
-          <Button onClick={handleSave} disabled={draft.trim().length === 0}>저장</Button>
-          <button onClick={handleClear} disabled={!saved} className="btn border-red-300 bg-[color:var(--paper-0)] px-4 text-red-700">지우기</button>
-          <Button variant="secondary" onClick={handleTest} disabled={!saved || testing} className="sm:ml-auto">
-            {testing ? '호출 중…' : '테스트 호출'}
-          </Button>
-        </div>
-        <p className="text-xs text-slate-500">현재 앱의 모델 폴백 순서: {MODEL_FALLBACK.join(' → ')}</p>
-
-        {testResult && (
-          <div className="mt-4 rounded-xl border-2 border-green-300 bg-green-50 p-3">
-            <p className="mb-1 text-sm text-green-800"><strong>연결 성공 · 모델:</strong> {testResult.modelUsed}{!testResult.safe && ' (안전필터 대체 답변)'}</p>
-            <p className="mb-2 text-base">{testResult.text}</p>
-            <details className="text-xs text-green-800"><summary className="cursor-pointer">폴백 시도 로그</summary><pre className="mt-1 whitespace-pre-wrap">{testResult.attemptLog.join('\n')}</pre></details>
-          </div>
-        )}
-        {testError && <div className="mt-4"><ErrorMessage studentMessage={testError.studentMessage} technicalDetail={testError.technicalDetail} /></div>}
       </section>
 
       <section className="rounded-2xl border-2 border-rose-300 bg-rose-50 p-5 text-rose-950">
