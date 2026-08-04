@@ -33,7 +33,7 @@ export default function CompletionAwardModal({
 
   const modalContent = (
     <div className="award-print-wrapper fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/85 backdrop-blur-md overflow-y-auto print:static print:p-0 print:bg-white print:overflow-visible">
-      <div className="relative w-full max-w-4xl rounded-3xl bg-slate-900 p-6 text-white shadow-2xl border border-amber-500/40 my-auto print:m-0 print:p-0 print:bg-white print:border-none print:shadow-none print:max-w-none print:w-[210mm] print:h-[297mm]">
+      <div className="completion-award-sheet relative w-full max-w-4xl rounded-3xl bg-slate-900 p-6 text-white shadow-2xl border border-amber-500/40 my-auto print:m-0 print:p-0 print:bg-white print:border-none print:shadow-none print:max-w-none">
         {/* Modal Top Bar (hidden in print) */}
         <div className="print-hide no-print flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
           <div className="flex items-center gap-2">
@@ -100,7 +100,7 @@ export default function CompletionAwardModal({
         </div>
 
         {/* Printable Award Diploma Container (Visible on screen preview & media print) */}
-        <div className="overflow-auto max-h-[70vh] rounded-2xl bg-slate-950/80 p-2 border border-slate-800 print:overflow-visible print:max-h-none print:p-0 print:border-none print:bg-white">
+        <div className="completion-award-preview overflow-auto max-h-[70vh] rounded-2xl bg-slate-950/80 p-2 border border-slate-800 print:overflow-visible print:max-h-none print:p-0 print:border-none print:bg-white">
           <div
             id="completion-award-printable"
             className="completion-award-printable mx-auto my-0 bg-amber-50/90 text-slate-900 p-8 md:p-12 rounded-xl shadow-2xl relative border-8 border-double border-amber-600 font-serif leading-relaxed print:shadow-none print:border-8 print:w-full print:m-0"

@@ -121,7 +121,7 @@ export const M3_L1_STUDIO: StudioDefinition = {
     },
     supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
-      description: '세 질문의 수업용 답을 같은 기준으로 비교합니다.',
+      description: '그런데 아이미에게 한 질문은 달랐습니다. 세 질문의 수업용 답을 같은 기준으로 비교해 봅시다.',
       facts: [
         '예·아니오 답은 새라는 분류만 알려 줍니다.',
         '열린 답은 깃털과 알을 낳는 특징을 설명합니다.',

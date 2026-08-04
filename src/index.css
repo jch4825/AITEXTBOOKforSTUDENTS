@@ -3123,6 +3123,10 @@
     size: A4 portrait;
     margin: 12mm 15mm;
   }
+  /* 화면의 접근성 글자 확대가 A4 상장의 물리 크기를 밀어내지 않게 인쇄에만 분리한다. */
+  html:has(.completion-award-sheet) {
+    font-size: 100% !important;
+  }
   html, body {
     width: 100% !important;
     height: 100% !important;
@@ -3169,6 +3173,29 @@
     background-color: #fffdf9 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  /* @page 여백(좌우 15mm, 위아래 12mm)을 뺀 실제 A4 인쇄 가능 영역 안에 고정한다. */
+  .completion-award-sheet {
+    width: 180mm !important;
+    height: 273mm !important;
+    max-width: 180mm !important;
+    max-height: 273mm !important;
+    overflow: hidden !important;
+  }
+
+  .completion-award-preview {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .completion-award-printable {
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
   }
 }
 
