@@ -7,7 +7,7 @@ import { formatTime } from '../utils/time';
 import PecsBoard from './PecsBoard';
 import { moduleIdFromLessonId } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
-import { TEACHER_RESOURCES } from '../data/teacherResources';
+import { getTeacherResources } from '../data/teacherResources';
 import type { LessonId } from '../types';
 import WorksheetPanel from '../features/teacher/worksheet/WorksheetPanel';
 
@@ -52,7 +52,7 @@ export default function ClassroomDock({
 
   const moduleId = moduleIdFromLessonId(lessonId) ?? 'm1';
   const theme = themeFor(moduleId);
-  const resources = TEACHER_RESOURCES[moduleId];
+  const resources = getTeacherResources(lessonId);
 
   useEffect(() => {
     if (!timerRunning) return;
@@ -135,14 +135,15 @@ export default function ClassroomDock({
           ) : (
             <ul className="space-y-2">
               {resources.map((resource) => (
-                <li key={resource.url}>
+                <li key={resource.url} className="rounded-[var(--r-sm)] border border-[color:var(--border)] bg-[color:var(--paper-1)] p-3">
                   <a
                     href={resource.url}
                     target="_blank"
-                    rel="noopener"
-                    className="underline"
+                    rel="noopener noreferrer"
+                    className="font-bold underline underline-offset-4"
                     style={{ color: theme.accent }}
                   >{resource.label}</a>
+                  <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">{resource.description}</p>
                 </li>
               ))}
             </ul>

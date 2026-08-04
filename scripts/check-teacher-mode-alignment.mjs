@@ -31,6 +31,7 @@ async function loadBundled(entryPoint) {
 const alignmentModule = await loadBundled('src/features/teacher/lessonAlignment.ts');
 const worksheetModule = await loadBundled('src/features/teacher/worksheet/buildWorksheet.ts');
 const standardsModule = await loadBundled('src/data/linkedStandards.ts');
+const teacherResourcesModule = await loadBundled('src/data/teacherResources.ts');
 
 const rows = alignmentModule.getTeacherLessonAlignmentRows();
 assertEqual(rows.length, 68, '교사용 차시 검토표는 실제 68차시를 빠짐없이 반환해야 한다');
@@ -53,6 +54,19 @@ assertEqual(lessonM6L10?.artifactTitle, '나의 직업 탐색 카드', 'm6-l10 �
 const closeM1 = rows.find((row) => row.lessonId === 'm1-l11');
 assertEqual(closeM1?.kind, 'portfolio', 'm1-l11은 일반 스튜디오가 아니라 성장 포트폴리오로 안내해야 한다');
 assertEqual(closeM1?.scenarioTitle, '아이미 사용 설명서', 'm1-l11 교사용 설명은 현재 성장 포트폴리오 제목을 사용해야 한다');
+
+const lessonM1L1Resources = teacherResourcesModule.getTeacherResources?.('m1-l1') ?? [];
+assertEqual(lessonM1L1Resources.length, 1, 'm1-l1 교사 자료에는 요청한 영상 1개가 표시되어야 한다');
+assertEqual(lessonM1L1Resources[0]?.url, 'https://youtu.be/iQ8A8ruR26g', 'm1-l1 교사 영상은 요청한 URL을 사용해야 한다');
+assert(
+  lessonM1L1Resources[0]?.description?.includes('도입 또는 정리'),
+  'm1-l1 교사 영상에는 수업에서 언제 활용할지 알려 주는 짧은 설명이 필요하다',
+);
+assertEqual(
+  (teacherResourcesModule.getTeacherResources?.('m1-l2') ?? []).length,
+  0,
+  'm1-l1 전용 영상이 다른 차시의 교사 자료에 노출되면 안 된다',
+);
 
 const worksheetM1L3 = worksheetModule.buildLessonWorksheet('m1-l3');
 assertEqual(worksheetM1L3.lessonTitle, 'AI는 어떻게 답을 만들까?', 'm1-l3 활동지는 현재 스튜디오 제목을 사용해야 한다');

@@ -1,8 +1,21 @@
-import type { ModuleId } from '../types';
+import type { LessonId } from '../types';
 
-export interface TeacherLink { label: string; url: string }
+export interface TeacherLink {
+  label: string;
+  url: string;
+  description: string;
+}
 
-// 나중에 동영상 링크 등을 채우면 ClassroomDock의 "교사 자료" 패널에 자동 노출된다.
-export const TEACHER_RESOURCES: Record<ModuleId, TeacherLink[]> = {
-  m1: [], m2: [], m3: [], m4: [], m5: [], m6: [],
+const TEACHER_RESOURCES: Partial<Record<LessonId, TeacherLink[]>> = {
+  'm1-l1': [
+    {
+      label: '수업과 함께 보는 영상',
+      url: 'https://youtu.be/iQ8A8ruR26g',
+      description: '우리 생활 속 AI를 떠올리는 m1-l1 도입 또는 정리 활동에 활용하세요.',
+    },
+  ],
 };
+
+export function getTeacherResources(lessonId: LessonId): TeacherLink[] {
+  return TEACHER_RESOURCES[lessonId] ?? [];
+}
