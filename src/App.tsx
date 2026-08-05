@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import Home from './views/Home';
 import type { LessonId, ViewName } from './types';
+import useExitGuard, { pushAppHistory } from './hooks/useExitGuard';
 import { isTeacherUrlRequested, isLogoutRequested, logout } from './utils/teacherMode';
 
 // 홈은 첫 화면이라 그대로 둔다. 나머지 셋은 들어갈 때 받아 온다.
@@ -44,11 +45,26 @@ function updateUrl(view: ViewName, lessonId: LessonId | null) {
   if (view === 'lesson' && lessonId) url.searchParams.set('lesson', lessonId);
   if (view === 'teacher') url.searchParams.set('teacher', '1');
   if (view === 'contents') url.searchParams.set('contents', '1');
-  window.history.pushState({}, '', url.toString());
+  pushAppHistory(url.toString());
+}
+
+function ExitGuardNotice() {
+  return (
+    <div
+      role="status"
+      aria-live="assertive"
+      className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex justify-center px-4"
+    >
+      <p className="max-w-[22rem] rounded-2xl bg-[color:var(--ink-1,#26324a)] px-5 py-4 text-center text-base font-extrabold leading-relaxed text-white shadow-xl">
+        한 번 더 누르면 나가요.
+      </p>
+    </div>
+  );
 }
 
 export default function App() {
   const [state, setState] = useState(() => readViewFromUrl());
+  const showExitNotice = useExitGuard();
 
   useEffect(() => {
     const handler = () => setState(readViewFromUrl());
@@ -71,32 +87,42 @@ export default function App() {
     updateUrl('lesson', id);
   }, []);
 
-  if (state.view === 'teacher') {
-    return (
-      <Suspense fallback={<ViewLoading />}>
-        <TeacherView onExit={goHome} />
-      </Suspense>
-    );
+  // 뒤로 가기 안내는 어느 화면에서 눌러도 보여야 해서 화면 선택 결과를 감싼다.
+  function renderView() {
+    if (state.view === 'teacher') {
+      return (
+        <Suspense fallback={<ViewLoading />}>
+          <TeacherView onExit={goHome} />
+        </Suspense>
+      );
+    }
+    if (state.view === 'lesson' && state.lessonId) {
+      // 차시의 "홈"은 학습 허브인 목차로 — 완료 후에도 목차로 돌아온다.
+      return (
+        <Suspense fallback={<ViewLoading />}>
+          <LessonView
+            key={state.lessonId}
+            lessonId={state.lessonId}
+            onGoHome={goContents}
+            onPickLesson={goLesson}
+          />
+        </Suspense>
+      );
+    }
+    if (state.view === 'contents') {
+      return (
+        <Suspense fallback={<ViewLoading />}>
+          <ContentsView onPickLesson={goLesson} onGoHome={goHome} />
+        </Suspense>
+      );
+    }
+    return <Home onEnter={goContents} onEnterLesson={goLesson} />;
   }
-  if (state.view === 'lesson' && state.lessonId) {
-    // 차시의 "홈"은 학습 허브인 목차로 — 완료 후에도 목차로 돌아온다.
-    return (
-      <Suspense fallback={<ViewLoading />}>
-        <LessonView
-          key={state.lessonId}
-          lessonId={state.lessonId}
-          onGoHome={goContents}
-          onPickLesson={goLesson}
-        />
-      </Suspense>
-    );
-  }
-  if (state.view === 'contents') {
-    return (
-      <Suspense fallback={<ViewLoading />}>
-        <ContentsView onPickLesson={goLesson} onGoHome={goHome} />
-      </Suspense>
-    );
-  }
-  return <Home onEnter={goContents} onEnterLesson={goLesson} />;
+
+  return (
+    <>
+      {renderView()}
+      {showExitNotice && <ExitGuardNotice />}
+    </>
+  );
 }
