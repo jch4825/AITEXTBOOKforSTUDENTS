@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Button from '../../components/Button';
-import { clearStudioEvidence } from '../studio/evidenceStorage';
 import type { TeacherRecordingSettings } from '../studio/types';
 import { applyBackup, createEncryptedBackup, decryptBackup } from './backup';
 import { loadTeacherRecordingSettings, saveTeacherRecordingSettings } from './recordingSettings';
@@ -12,7 +11,7 @@ interface Props {
 }
 
 export default function TeacherDataManagement({ settings, onSettingsChanged, onRequestEnable }: Props) {
-  const [deletePhrase, setDeletePhrase] = useState('');
+  const [resetPhrase, setResetPhrase] = useState('');
   const [backupPassphrase, setBackupPassphrase] = useState('');
   const [backupConfirm, setBackupConfirm] = useState('');
   const [restoreFile, setRestoreFile] = useState<File | null>(null);
@@ -26,11 +25,12 @@ export default function TeacherDataManagement({ settings, onSettingsChanged, onR
     setMessage({ kind: 'ok', text: '새 과정기록을 끕니다. 기존 기록은 그대로 남아 있습니다.' });
   }
 
-  function clearAllEvidence() {
-    if (deletePhrase !== '전체 삭제') return;
-    clearStudioEvidence();
-    setDeletePhrase('');
-    setMessage({ kind: 'ok', text: '저장된 새 과정기록을 모두 삭제했습니다.' });
+  // 되돌릴 수 없는 전체 삭제라 문구 입력에 더해 한 번 더 확인한다.
+  function resetAll() {
+    if (resetPhrase !== '초기화') return;
+    if (!window.confirm('이 브라우저의 API 키·진도·설정·과정기록을 모두 지웁니다. 되돌릴 수 없습니다. 계속할까요?')) return;
+    localStorage.clear();
+    window.location.href = window.location.origin + window.location.pathname;
   }
 
   async function exportBackup() {
@@ -95,23 +95,23 @@ export default function TeacherDataManagement({ settings, onSettingsChanged, onR
       </section>
 
       <section className="studio-editorial p-6">
-        <h2 className="text-xl font-extrabold">모든 과정기록 삭제</h2>
-        <p className="mt-2 text-sm text-[color:var(--muted)]">이 작업은 v2 핵심 경험 기록만 삭제합니다. 진도와 이전 일반화 기록은 삭제하지 않습니다.</p>
-        <label className="mt-4 block font-bold" htmlFor="delete-confirmation">확인을 위해 ‘전체 삭제’를 입력하세요.</label>
+        <h2 className="text-xl font-extrabold">초기화</h2>
+        <p className="mt-2 text-sm text-[color:var(--muted)]">이 브라우저에 저장된 AI 연결 키, 진도, 설정, 과정기록, 이전 일반화 기록을 모두 지우고 처음 상태로 되돌립니다. 되돌릴 수 없으니 필요한 기록은 먼저 암호화 백업으로 내려받으세요. 과정기록만 지우려면 화면 위 ‘과정기록 삭제’ 버튼을 사용하세요.</p>
+        <label className="mt-4 block font-bold" htmlFor="reset-confirmation">확인을 위해 ‘초기화’를 입력하세요.</label>
         <div className="mt-2 flex flex-wrap gap-3">
           <input
-            id="delete-confirmation"
-            value={deletePhrase}
-            onChange={(event) => setDeletePhrase(event.target.value)}
+            id="reset-confirmation"
+            value={resetPhrase}
+            onChange={(event) => setResetPhrase(event.target.value)}
             className="min-h-12 flex-1 rounded-xl border-2 px-4"
           />
           <button
             type="button"
-            disabled={deletePhrase !== '전체 삭제'}
-            onClick={clearAllEvidence}
+            disabled={resetPhrase !== '초기화'}
+            onClick={resetAll}
             className="btn border-red-300 bg-red-50 px-4 font-bold text-red-800 disabled:opacity-50"
           >
-            모든 과정기록 삭제
+            초기화
           </button>
         </div>
       </section>

@@ -1,6 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
 import Button from '../../components/Button';
 import GeneralizationRecordsPanel from '../../components/mission/GeneralizationRecordsPanel';
+import { clearStudioEvidence } from '../studio/evidenceStorage';
 import type { TeacherRecordingSettings } from '../studio/types';
 import GeminiConnectionPanel from './GeminiConnectionPanel';
 import { ObjectivesPanel, ProgressPanel } from './LegacyTeacherPanels';
@@ -30,11 +31,12 @@ const TEACHER_TABS = [
 type TeacherTab = typeof TEACHER_TABS[number];
 
 export default function TeacherHub({ onExit }: Props) {
-  function handleReset() {
-    const yes = window.confirm('기존에 브라우저에 저장되었던 API 키 및 진행 상황이 모두 초기화됩니다. 계속하시겠습니까?');
+  // 상단은 가벼운 쪽(과정기록만)을 두고, 전체 초기화는 데이터 관리 탭에서 문구 입력으로 보호한다.
+  function handleClearEvidence() {
+    const yes = window.confirm('이 브라우저에 저장된 과정기록을 모두 삭제합니다. 진도·설정·AI 연결은 그대로 남습니다. 계속하시겠습니까?');
     if (yes) {
-      localStorage.clear();
-      window.location.href = window.location.origin + window.location.pathname;
+      clearStudioEvidence();
+      window.alert('저장된 과정기록을 모두 삭제했습니다.');
     }
   }
   const initialSettings = loadTeacherRecordingSettings();
@@ -66,7 +68,7 @@ export default function TeacherHub({ onExit }: Props) {
         </div>
         <div className="flex gap-2">
           <Button variant="secondary" onClick={onExit}>학생 화면으로</Button>
-          <button onClick={handleReset} className="btn border-red-300 bg-[color:var(--paper-0)] px-4 text-red-700">초기화</button>
+          <button onClick={handleClearEvidence} className="btn border-red-300 bg-[color:var(--paper-0)] px-4 text-red-700">과정기록 삭제</button>
         </div>
       </header>
 
