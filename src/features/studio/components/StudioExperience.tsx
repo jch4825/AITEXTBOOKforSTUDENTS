@@ -86,7 +86,7 @@ function renderExpressionDetail(
         <img
           src={expression.drawing}
           alt="학생이 그린 그림"
-          className="max-h-36 max-w-full rounded-xl border-2 border-emerald-400 bg-[#064E3B] object-contain p-1.5 shadow-sm"
+          className="max-h-36 max-w-full rounded-xl border-2 border-emerald-400 bg-[#064E3B] object-contain p-1.5 depth-paper"
         />
       </div>
     );
@@ -240,41 +240,39 @@ export default function StudioExperience({
   // 마무리 단계 왼쪽은 차시별 미니게임. 아직 등록되지 않은 차시는 정리 패널을 그대로 쓴다.
   const completeSummaryPanel = (
     <div
-        className="relative flex h-full flex-col justify-between rounded-2xl p-6 md:p-8 space-y-5 overflow-hidden shadow-xl"
-        style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('${definition.transfer.stimuli?.[0] && 'src' in definition.transfer.stimuli[0] ? definition.transfer.stimuli[0].src : '/images/smart_light_real.webp'}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
+        className="surface-paper relative flex h-full flex-col justify-between space-y-5 overflow-hidden rounded-2xl p-6 md:p-8"
       >
-        <div className="space-y-5 text-white relative z-10">
+        <div className="relative z-10 space-y-5 text-[color:var(--brand-ink)]">
           <div>
-            <span className="inline-block px-3 py-1 bg-amber-400/20 border border-amber-400/40 text-amber-300 rounded-full text-xs font-black tracking-wide uppercase">
+            <span
+              className="inline-block rounded-full border-2 bg-[color:var(--paper-1)] px-3 py-1 text-xs font-black uppercase tracking-wide"
+              style={{ borderColor: accent, color: 'var(--brand-ink)' }}
+            >
               차시 탐구 종합 정리
             </span>
-            <h2 className="mt-2 text-2xl font-black text-white tracking-tight drop-shadow-sm">
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-[color:var(--brand-ink)]">
               오늘 배운 핵심 이야기
             </h2>
           </div>
 
           {/* Story 1: 조건 변화 탐구 (로봇청소기) */}
-          <div className="space-y-2 p-4 rounded-2xl border border-slate-700/60 bg-slate-900/60 backdrop-blur-md shadow-inner">
-            <div className="flex items-center gap-2 font-extrabold text-sm text-amber-300">
+          <div className="space-y-2 rounded-2xl border-2 bg-[color:var(--paper-1)] p-4" style={{ borderColor: accent }}>
+            <div className="flex items-center gap-2 text-sm font-extrabold text-[color:var(--brand-ink)]">
               <span className="text-lg">🤖</span>
               <span>1. 로봇청소기와 센서·AI 기능 탐구</span>
             </div>
-            <p className="text-xs font-medium text-slate-200 leading-relaxed">
+            <p className="text-xs font-medium leading-relaxed text-[color:var(--ink-2)]">
               {definition.conditionChange.description}
             </p>
           </div>
 
           {/* Story 2: 새로운 상황 적용 (스마트 조명) */}
-          <div className="space-y-2 p-4 rounded-2xl border border-slate-700/60 bg-slate-900/60 backdrop-blur-md shadow-inner">
-            <div className="flex items-center gap-2 font-extrabold text-sm text-amber-300">
+          <div className="space-y-2 rounded-2xl border-2 bg-[color:var(--paper-1)] p-4" style={{ borderColor: accent }}>
+            <div className="flex items-center gap-2 text-sm font-extrabold text-[color:var(--brand-ink)]">
               <span className="text-lg">💡</span>
               <span>2. {definition.transfer.title} (새 상황 적용)</span>
             </div>
-            <p className="text-xs font-medium text-slate-200 leading-relaxed">
+            <p className="text-xs font-medium leading-relaxed text-[color:var(--ink-2)]">
               {definition.transfer.description}
             </p>
           </div>
@@ -349,7 +347,7 @@ export default function StudioExperience({
             <button
               type="button"
               onClick={() => speakNow(`${contextTitle}. ${contextDescription}`)}
-              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border shadow-xs transition-all hover:scale-110"
+              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border depth-paper transition-all hover:scale-110"
               style={{ borderColor: accent, color: accent, background: 'rgba(255, 255, 255, 0.9)' }}
               title="설명 듣기"
             >
@@ -392,7 +390,7 @@ export default function StudioExperience({
                 <button
                   type="button"
                   onClick={() => speakNow(fact)}
-                  className="mt-0.5 ml-2 flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-white shadow-xs transition-all hover:scale-110"
+                  className="mt-0.5 ml-2 flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-white depth-paper transition-all hover:scale-110"
                   style={{ borderColor: accent, color: accent }}
                   title="내용 듣기"
                 >
@@ -435,7 +433,7 @@ export default function StudioExperience({
 
         {state.stage === 'artifact' && definition.teacherGuidance && (
           (!definition.teacherGuidance.supportLevelOnly || state.supportLevel === definition.teacherGuidance.supportLevelOnly) && (
-            <div className="mt-5 p-4 rounded-2xl border-2 border-amber-300 bg-amber-50/90 text-amber-950 space-y-2 shadow-xs">
+            <div className="mt-5 p-4 rounded-2xl border-2 border-amber-300 bg-amber-50/90 text-amber-950 space-y-2 depth-paper">
               <div className="flex items-center justify-between gap-2">
                 <span className="font-extrabold text-sm text-amber-950 flex items-center gap-1.5">
                   <span>👩‍🏫</span> {definition.teacherGuidance.title || '선생님과 함께해요'}
@@ -443,7 +441,7 @@ export default function StudioExperience({
                 <button
                   type="button"
                   onClick={() => speakNow(`${definition.teacherGuidance?.title || '선생님과 함께해요'}. ${definition.teacherGuidance?.text}`)}
-                  className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-amber-400 bg-white shadow-xs transition-all hover:scale-110"
+                  className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full border border-amber-400 bg-white depth-paper transition-all hover:scale-110"
                   style={{ color: accent }}
                   title="선생님 설명 듣기"
                 >
@@ -747,7 +745,7 @@ export default function StudioExperience({
             placeholder="탐구 기록으로 남길 내용을 자유롭게 적어 보세요."
             maxLength={600}
             rows={8}
-            className="w-full min-h-[14rem] resize-y rounded-2xl border-2 p-4 text-base font-semibold leading-relaxed shadow-2xs"
+            className="w-full min-h-[14rem] resize-y rounded-2xl border-2 p-4 text-base font-semibold leading-relaxed depth-paper"
             style={{ borderColor: accent, background: 'var(--editorial-paper)' }}
           />
           {!state.artifactSummary?.trim() && suggestion && (
@@ -766,7 +764,7 @@ export default function StudioExperience({
 
           {/* 탐구 증서 인쇄 영역 */}
           <div className="pt-3">
-            <div className="flex flex-col gap-3 p-4 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/70 shadow-2xs">
+            <div className="flex flex-col gap-3 p-4 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/70 depth-paper">
               <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                 <label htmlFor="student-certificate-name" className="text-sm font-extrabold text-amber-900 shrink-0">
                   👤 학생 이름 (선택):
@@ -783,7 +781,7 @@ export default function StudioExperience({
               <button
                 type="button"
                 onClick={() => setShowCertificateModal(true)}
-                className="w-full h-11 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer shadow-md hover:scale-101 active:scale-98"
+                className="w-full h-11 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer depth-paper hover:scale-101 active:scale-98"
               >
                 <Icon name="printer" size={18} /> 탐구 증서로 인쇄하기
               </button>
@@ -847,15 +845,15 @@ export default function StudioExperience({
           <h2 className="mt-1 text-xl font-extrabold">오늘 차시에서 내가 한 생각과 탐구 기록을 한눈에 돌아봐요</h2>
         </div>
         <dl className="grid gap-3">
-          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
+          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
             <dt className="font-extrabold text-sm" style={{ color: accent }}>1. 처음 내 생각 (P02)</dt>
             <dd>{renderExpressionDetail(state.firstAttempt, definition.firstAttempt.choices, accent)}</dd>
           </div>
-          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
+          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
             <dt className="font-extrabold text-sm" style={{ color: accent }}>2. 실시간 AI 아이미와 대화 & 내 판단 (P04-P05)</dt>
             <dd>{renderExpressionDetail(state.finalExpression, definition.firstAttempt.choices, accent)}</dd>
           </div>
-          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
+          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
             <dt className="font-extrabold text-sm" style={{ color: accent }}>3. 나의 탐구 성찰 기록 (P06)</dt>
             <dd>
               {state.artifactSummary && state.artifactSummary.trim() ? (
@@ -867,7 +865,7 @@ export default function StudioExperience({
               )}
             </dd>
           </div>
-          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white shadow-2xs space-y-1">
+          <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
             <dt className="font-extrabold text-sm" style={{ color: accent }}>4. {definition.transfer.title} (P07)</dt>
             <dd>{renderExpressionDetail(state.transferExpression, definition.transfer.choices, accent)}</dd>
           </div>
@@ -876,7 +874,7 @@ export default function StudioExperience({
           <button
             type="button"
             onClick={() => setShowAwardModal(true)}
-            className="w-full h-12 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-base rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:scale-102 active:scale-98"
+            className="w-full h-12 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-base rounded-xl transition flex items-center justify-center gap-2 cursor-pointer depth-overlay hover:scale-102 active:scale-98"
           >
             <Icon name="printer" size={20} /> 나의 차시 학습 완료 상장 보기 및 인쇄하기
           </button>

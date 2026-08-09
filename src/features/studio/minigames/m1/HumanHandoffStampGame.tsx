@@ -220,7 +220,7 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
         <section className="rounded-xl border-2 border-amber-300/60 bg-amber-950/45 p-2.5" aria-label="분류할 카드 더미">
           <div className="mb-1 flex items-center justify-between gap-2">
             <h3 className="text-[15px] font-black text-amber-100">카드 더미</h3>
-            <span className="text-[13px] font-bold text-amber-200">{availableCards.length}장 남음</span>
+            <span className="text-[14px] font-bold text-amber-200">{availableCards.length}장 남음</span>
           </div>
           <div className="grid gap-1.5">
             {availableCards.length > 0 ? availableCards.map((card) => {
@@ -241,7 +241,7 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
                 >
                   <span className="text-[28px]" aria-hidden="true">{card.emoji}</span>
                   <span className="flex-1 text-[15px] font-black leading-relaxed">{card.text}</span>
-                  <span className="text-[13px] font-black text-amber-200">{selected ? '잡았어요' : '잡기'}</span>
+                  <span className="text-[14px] font-black text-amber-200">{selected ? '잡았어요' : '잡기'}</span>
                 </button>
               );
             }) : (
@@ -251,7 +251,7 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
             )}
           </div>
           {selectedCard && hintAllowed && (
-            <p className="mt-1.5 text-[13px] font-bold leading-relaxed text-amber-200">
+            <p className="mt-1.5 text-[14px] font-bold leading-relaxed text-amber-200">
               힌트: 근거로 다시 볼까요, AI가 먼저 골라도 될까요, 사람이 책임져야 할까요?
             </p>
           )}
@@ -272,10 +272,10 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
                   <span className="text-[23px]" aria-hidden="true">{lane.emoji}</span>
                   <div>
                     <h3 className="text-[14px] font-black leading-tight">{lane.label}</h3>
-                    <p className="text-[12px] font-bold leading-tight">{lane.shortLabel}</p>
+                    <p className="text-[14px] font-bold leading-tight">{lane.shortLabel}</p>
                   </div>
                 </div>
-                <div className="rounded-md border border-white/15 bg-slate-950/35 px-1.5 py-1 text-[11px] font-bold leading-tight text-slate-200">
+                <div className="rounded-md border border-white/15 bg-slate-950/35 px-1.5 py-1 text-[14px] font-bold leading-tight text-slate-200">
                   <span className="block">담당: {lane.owner}</span>
                   <span className="block text-slate-300">장면: {lane.scene}</span>
                 </div>
@@ -284,7 +284,7 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
                   onClick={() => placeCard(lane.id)}
                   disabled={!canPlace}
                   aria-label={selectedCard ? `${lane.label}에 ${selectedCard.text} 놓기` : `${lane.label} 칸`}
-                  className="min-h-14 rounded-lg border-2 border-dashed px-2 py-1 text-[13px] font-black text-white transition disabled:cursor-not-allowed disabled:opacity-50"
+                  className="min-h-14 rounded-lg border-2 border-dashed px-2 py-1 text-[14px] font-black text-white transition disabled:cursor-not-allowed disabled:opacity-50"
                   style={{ borderColor: canPlace ? lane.color : 'rgba(148,163,184,0.45)' }}
                 >
                   {canPlace ? `${lane.emoji} 여기에 놓기` : '카드를 먼저 눌러 잡기'}
@@ -293,7 +293,7 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
                   {laneCards.map((card) => (
                     <div
                       key={card.id}
-                      className="rounded-lg border px-2 py-1 text-[13px] font-black leading-tight text-white"
+                      className="rounded-lg border px-2 py-1 text-[14px] font-black leading-tight text-white"
                       style={{ borderColor: lane.color, background: 'rgba(15,23,42,0.6)' }}
                     >
                       {card.emoji} {card.text}
@@ -306,7 +306,7 @@ export default function HumanHandoffStampGame({ supportLevel }: MiniGameProps) {
         </div>
 
         <div className="rounded-xl border-2 border-slate-500/60 bg-slate-900/70 px-3 py-2 text-center">
-          <p className="text-[13px] font-black text-slate-400">지금 하는 일</p>
+          <p className="text-[14px] font-black text-slate-400">지금 하는 일</p>
           <p className="text-[15px] font-black text-white">
             {status === 'success'
               ? '세 갈래 책임 지도를 완성했어요.'

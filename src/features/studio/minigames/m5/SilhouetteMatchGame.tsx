@@ -241,7 +241,7 @@ export default function SilhouetteMatchGame({ supportLevel }: MiniGameProps) {
           <button type="button" onClick={() => nudgePosition(0, -5)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[18px] font-black text-white disabled:opacity-45" aria-label="위로 이동">↑</button>
           <span />
           <button type="button" onClick={() => nudgePosition(-5, 0)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[18px] font-black text-white disabled:opacity-45" aria-label="왼쪽으로 이동">←</button>
-          <span className="grid place-items-center text-[12px] font-black text-sky-200">끌기 대신 누르기</span>
+          <span className="grid place-items-center text-[14px] font-black text-sky-200">끌기 대신 누르기</span>
           <button type="button" onClick={() => nudgePosition(5, 0)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[18px] font-black text-white disabled:opacity-45" aria-label="오른쪽으로 이동">→</button>
           <span />
           <button type="button" onClick={() => nudgePosition(0, 5)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[18px] font-black text-white disabled:opacity-45" aria-label="아래로 이동">↓</button>

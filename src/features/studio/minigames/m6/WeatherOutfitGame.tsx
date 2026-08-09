@@ -73,7 +73,7 @@ export default function WeatherOutfitGame({ supportLevel }: MiniGameProps) {
           {tested && game.status === 'success' ? '😊' : tested && game.status === 'fail' ? (stage.weather.includes('비') ? '🥶' : '😓') : '🧍'}
         </span>
         <span className="text-center text-[15px] font-black text-white">{worn.join(' · ') || '아직 준비하지 않았어요'}</span>
-        <span className="text-center text-[13px] font-bold text-emerald-100">{tested ? (game.status === 'success' ? '밖에 나가도 편안해요. 예보와 준비물이 잘 맞았어요.' : '밖에 나가 보니 불편해요. 준비물을 다시 골라요.') : '준비물을 고르면 밖의 장면이 바뀌어요.'}</span>
+        <span className="text-center text-[14px] font-bold text-emerald-100">{tested ? (game.status === 'success' ? '밖에 나가도 편안해요. 예보와 준비물이 잘 맞았어요.' : '밖에 나가 보니 불편해요. 준비물을 다시 골라요.') : '준비물을 고르면 밖의 장면이 바뀌어요.'}</span>
       </div>
     </MiniGameFrame>
   );

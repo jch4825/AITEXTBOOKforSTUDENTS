@@ -102,7 +102,7 @@ export default function GeminiConnectionPanel() {
         {testError && <div className="mt-4"><ErrorMessage studentMessage={testError.studentMessage} technicalDetail={testError.technicalDetail} /></div>}
       </section>
 
-      <section className="overflow-hidden rounded-2xl border border-indigo-200 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-2xl border border-indigo-200 bg-white depth-paper">
         <div className="bg-gradient-to-r from-indigo-950 to-violet-900 p-6 text-white md:p-8">
           <p className="text-xs font-extrabold text-amber-300">선택 연결 · 교사만 설정</p>
           <h2 className="mt-1 text-2xl font-black">Gemini를 연결하면 실시간 AI 활동이 열립니다</h2>

@@ -40,7 +40,7 @@ export default function MiniGameSlot({ lessonId, supportLevel, phase = 'complete
     <StepErrorBoundary>
       <div data-minigame-phase={phase} className="flex h-full min-h-0 flex-col gap-2">
         {phase === 'complete' && (
-          <div className="rounded-xl border border-amber-300/70 bg-amber-50 px-3 py-2 text-[13px] font-black leading-relaxed text-amber-950" role="note">
+          <div className="rounded-xl border border-amber-300/70 bg-amber-50 px-3 py-2 text-[14px] font-black leading-relaxed text-amber-950" role="note">
             마무리 변형 도전 · 처음과 다른 조건·목표·역할로 다시 적용해 보세요.
           </div>
         )}

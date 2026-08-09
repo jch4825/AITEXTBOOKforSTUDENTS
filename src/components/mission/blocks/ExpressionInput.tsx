@@ -125,7 +125,7 @@ export default function ExpressionInput({
                 key={choice.id}
                 onClick={() => selectChoice(choice.id, choice.label)}
                 aria-pressed={selected}
-                className={`relative card3d flex items-center gap-3 p-4 rounded-[var(--r-md)] min-h-20 text-left font-bold cursor-pointer transition-all ${animClass}`}
+                className={`relative surface-choice flex items-center gap-3 p-4 rounded-[var(--r-md)] min-h-20 text-left font-bold cursor-pointer transition-all ${animClass}`}
                 style={{
                   border: borderStyle,
                   background: bgStyle,
@@ -136,7 +136,7 @@ export default function ExpressionInput({
                 <span className="text-3xl shrink-0 z-10" aria-hidden>{choice.emoji}</span>
                 <span className="leading-tight flex-1 z-10">{choice.label}</span>
                 {selected && (
-                  <span className="ml-auto shrink-0 z-10 text-xs font-extrabold px-2 py-1 rounded-full bg-white/80 shadow-xs">
+                  <span className="ml-auto shrink-0 z-10 text-xs font-extrabold px-2 py-1 rounded-full bg-white/80 depth-paper">
                     {isCorrect === true ? '🎉 정답!' : isCorrect === false ? '❌ 다시 생각해 보아요' : '✓ 선택됨'}
                   </span>
                 )}

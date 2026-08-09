@@ -89,13 +89,13 @@ export default function PhotoMagnifierGame({ supportLevel }: MiniGameProps) {
           </button>
         ))}
         <div
-          className="pointer-events-none absolute h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white bg-white/10 shadow-[0_0_0_999px_rgba(2,6,23,0.65)]"
+          className="board-spotlight-mask is-soft pointer-events-none absolute h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white bg-white/10"
           style={{ left: `${lens.x}%`, top: `${lens.y}%` }}
           aria-hidden="true"
         />
       </div>
       <div className="mt-2 flex flex-wrap gap-1.5" aria-label="돋보기 위치 대체 버튼">
-        {HOTSPOTS.map((spot) => <button key={spot.label} type="button" onClick={() => focusSpot(spot)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 px-2 text-[13px] font-black text-white">🔎 {spot.label}로 이동</button>)}
+        {HOTSPOTS.map((spot) => <button key={spot.label} type="button" onClick={() => focusSpot(spot)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 px-2 text-[14px] font-black text-white">🔎 {spot.label}로 이동</button>)}
       </div>
     </MiniGameFrame>
   );

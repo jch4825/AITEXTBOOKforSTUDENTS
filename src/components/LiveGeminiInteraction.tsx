@@ -148,7 +148,7 @@ export default function LiveGeminiInteraction({
 
   if (!isConnected) {
     return (
-      <div className="p-5 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 text-amber-900 shadow-xs space-y-3">
+      <div className="p-5 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 text-amber-900 depth-paper space-y-3">
         <div className="flex items-center gap-3 font-bold text-base">
           <Icon name="warning" size={24} className="text-amber-600 shrink-0" />
           <span>실시간 인공지능(Gemini) 대화 안내</span>
@@ -161,7 +161,7 @@ export default function LiveGeminiInteraction({
   }
 
   return (
-    <div className="space-y-4 p-4 rounded-2xl border-2 bg-white shadow-xs" style={{ borderColor: 'var(--editorial-line)' }}>
+    <div className="space-y-4 p-4 rounded-2xl border-2 bg-white depth-paper" style={{ borderColor: 'var(--editorial-line)' }}>
       <div className="flex flex-col items-stretch gap-3 border-b pb-3">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🤖</span>
@@ -184,7 +184,7 @@ export default function LiveGeminiInteraction({
             >
               {msg.role === 'ai' && <span className="text-xl shrink-0">🤖</span>}
               <div
-                className={`max-w-[80%] p-3 rounded-2xl text-sm font-semibold leading-relaxed shadow-2xs space-y-2 ${
+                className={`max-w-[80%] p-3 rounded-2xl text-sm font-semibold leading-relaxed depth-paper space-y-2 ${
                   msg.role === 'user'
                     ? 'bg-indigo-600 text-white rounded-br-none'
                     : 'bg-white text-slate-800 border border-slate-200 rounded-bl-none'
@@ -267,7 +267,7 @@ export default function LiveGeminiInteraction({
           <label
             title="사진/이미지 파일 첨부하기"
             aria-disabled={loading}
-            className={`col-start-1 row-start-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 text-slate-600 transition shadow-2xs ${
+            className={`col-start-1 row-start-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-slate-100 text-slate-600 transition depth-paper ${
               loading ? 'cursor-wait opacity-50' : 'cursor-pointer hover:bg-slate-200'
             }`}
           >
@@ -299,7 +299,7 @@ export default function LiveGeminiInteraction({
             type="button"
             onClick={() => handleSend()}
             disabled={loading || (!inputText.trim() && !attachedImage)}
-            className="col-start-3 row-start-2 flex h-11 w-full min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl px-1 text-sm font-bold text-white shadow-2xs transition cursor-pointer disabled:opacity-50 sm:px-4"
+            className="col-start-3 row-start-2 flex h-11 w-full min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl px-1 text-sm font-bold text-white depth-paper transition cursor-pointer disabled:opacity-50 sm:px-4"
             style={{ background: accent }}
           >
             {loading ? '인식 중...' : '보내기'}

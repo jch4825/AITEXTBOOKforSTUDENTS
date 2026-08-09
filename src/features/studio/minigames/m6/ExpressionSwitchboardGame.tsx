@@ -84,7 +84,7 @@ export default function ExpressionSwitchboardGame({ supportLevel }: MiniGameProp
           )}
         </div>
         <div className={`w-full rounded-xl border-2 px-3 py-2 text-center ${sent ? 'border-emerald-300 bg-emerald-950/70' : 'border-slate-600 bg-slate-900/60'}`} aria-live="polite">
-          <span className="block text-[13px] font-black text-slate-300">상대의 반응 장면</span>
+          <span className="block text-[14px] font-black text-slate-300">상대의 반응 장면</span>
           <span className="block text-[15px] font-black text-white">{sent ? MODES.find((item) => item.id === mode)?.reaction : '표현 방법을 고르면 상대가 기다릴 준비를 해요.'}</span>
         </div>
       </div>

@@ -57,7 +57,7 @@ export default function OXGame({ questions, onComplete }: Props) {
       <button
         type="button"
         onClick={() => speakNow(q.question)}
-        className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+        className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white"
         style={{ borderColor: 'var(--accent)', color: 'var(--accent)' }}
         title="질문 듣기"
       >
@@ -92,7 +92,7 @@ export default function OXGame({ questions, onComplete }: Props) {
           <img
             src={q.image}
             alt="문제 그림"
-            className="max-h-56 sm:max-h-64 w-auto rounded-2xl border object-contain shadow-md bg-white p-2.5"
+            className="max-h-56 sm:max-h-64 w-auto rounded-2xl border object-contain depth-paper bg-white p-2.5"
             style={{ borderColor: 'var(--editorial-line)' }}
           />
         </div>
@@ -185,7 +185,7 @@ export default function OXGame({ questions, onComplete }: Props) {
                       <>
                         <Burst />
                         <span
-                          className="answer-pop absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"
+                          className="answer-pop absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white depth-paper z-10"
                           style={{ background: 'var(--ok)' }}
                         >
                           <Icon name="check" size={20} strokeWidth={3} />
@@ -193,7 +193,7 @@ export default function OXGame({ questions, onComplete }: Props) {
                       </>
                     ) : (
                       <span
-                        className="absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"
+                        className="absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white depth-paper z-10"
                         style={{ background: 'var(--warn)' }}
                       >
                         <Icon name="close" size={18} strokeWidth={3} />

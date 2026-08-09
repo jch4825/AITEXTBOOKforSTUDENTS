@@ -45,12 +45,12 @@ export default function SinglePick({ block, value = '', onChange, accent }: Prop
                role="radio"
                aria-checked={isSelected}
                onClick={() => handlePick(item.label)}
-               className="card3d relative flex flex-col items-center justify-center gap-2 p-4 rounded-[var(--r-md)] min-h-[180px] sm:min-h-[220px] text-center select-none font-bold transition-all hover:scale-[1.02] cursor-pointer"
+               className="surface-choice relative flex flex-col items-center justify-center gap-2 p-4 rounded-[var(--r-md)] min-h-[180px] sm:min-h-[220px] text-center select-none font-bold transition-all hover:scale-[1.02] cursor-pointer"
                style={{
                  border: isSelected ? `4px solid ${palette.accent}` : `2.5px solid ${palette.accent}`,
                  background: isSelected ? palette.tint : 'var(--paper-0)',
                  color: 'var(--brand-ink)',
-                 ['--edge' as string]: palette.accent,
+                 ['--choice-edge' as string]: palette.accent,
                }}
             >
               {item.image ? (
@@ -67,7 +67,7 @@ export default function SinglePick({ block, value = '', onChange, accent }: Prop
               <span className="text-base sm:text-lg leading-tight mt-1">{item.label}</span>
               {isSelected && (
                 <span
-                  className="answer-pop absolute -top-2.5 -right-2.5 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"
+                  className="answer-pop absolute -top-2.5 -right-2.5 rounded-full w-8 h-8 flex items-center justify-center text-white depth-paper z-10"
                   style={{ background: palette.accent }}
                 >
                   <Icon name="check" size={18} strokeWidth={3} />

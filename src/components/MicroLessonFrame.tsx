@@ -165,7 +165,7 @@ export default function MicroLessonFrame({
           >
             <div
               className="mobile-lesson-menu absolute inset-y-0 left-0 w-80 max-w-[88vw] overflow-y-auto"
-              style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-2)' }}
+              style={{ background: 'var(--paper-0)', boxShadow: 'var(--surface-a4-elevation)' }}
               onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-label="차례"

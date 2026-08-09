@@ -185,7 +185,7 @@ export default function MissionStep({
       <div className="flex flex-col items-center justify-center text-center p-4">
         <span
           className="inline-flex items-center justify-center rounded-full h-[100px] w-[100px] mb-4"
-          style={{ background: accentSoft, boxShadow: 'var(--e-1)' }}
+          style={{ background: accentSoft, boxShadow: 'var(--surface-paper-elevation)' }}
           aria-hidden
         >
           <CharacterAvatar character="aimi" expression="curious" size={76} idle={false} />
@@ -248,17 +248,17 @@ export default function MissionStep({
   // 2. 보상 화면 — 앱 공통 보상 문법(D4 도장 메달리온 + 1회성 모션)으로.
   if (showReward) {
     const rewardLeft = (
-      <div className="flex flex-col items-center justify-center text-center p-6 bg-gradient-to-b from-white to-[color:var(--paper-1)] rounded-2xl border shadow-sm relative overflow-hidden space-y-4">
+      <div className="flex flex-col items-center justify-center text-center p-6 bg-gradient-to-b from-white to-[color:var(--paper-1)] rounded-2xl border depth-paper relative overflow-hidden space-y-4">
         {/* 반짝이는 배경 오라 링 */}
         <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_center,var(--accent)_0%,transparent_70%)]" />
         
         <div className="relative mb-2" aria-hidden>
           {/* 황금빛 테두리 회전 효과링 */}
           <span
-            className="stamp-in inline-flex items-center justify-center rounded-full h-[140px] w-[140px] border-4 border-[#ffd700] animate-[spin_20s_linear_infinite]"
+            className="surface-stamp stamp-in inline-flex h-[140px] w-[140px] items-center justify-center rounded-full border-4 border-[#ffd700] animate-[spin_20s_linear_infinite]"
             style={{
               background: 'radial-gradient(circle, #fffbeb 0%, #fef3c7 100%)',
-              boxShadow: '0 0 25px rgba(255, 215, 0, 0.4), inset 0 2px 10px rgba(255,255,255,0.8)'
+              boxShadow: 'none'
             }}
           >
             {/* 내부 회전 링 장식 */}
@@ -270,7 +270,7 @@ export default function MissionStep({
           </span>
           {/* 정답 별표 뱃지 */}
           <span
-            className="answer-pop absolute -top-1 -right-1 rounded-full h-11 w-11 flex items-center justify-center text-white shadow-lg border-2 border-white"
+            className="answer-pop absolute -top-1 -right-1 rounded-full h-11 w-11 flex items-center justify-center text-white depth-overlay border-2 border-white"
             style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}
           >
             <Icon name="star" size={24} filled strokeWidth={3} />
@@ -290,12 +290,12 @@ export default function MissionStep({
 
         {/* 오른쪽에서 왼쪽으로 이사 온 리본 장식 완료 배지 */}
         <span
-          className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-black border-2 shadow-xs transition-transform hover:scale-105"
+          className="surface-stamp inline-flex items-center gap-2 rounded-full border-2 px-5 py-2 text-sm font-black transition-transform hover:scale-105"
           style={{
             background: 'linear-gradient(135deg, #fff 0%, var(--paper-1) 100%)',
             borderColor: accent,
             color: 'var(--brand-ink)',
-            boxShadow: `0 4px 12px color-mix(in srgb, ${accent} 25%, transparent)`
+            boxShadow: 'none'
           }}
         >
           <span className="text-lg">✨</span> {mission.reward.badgeLabel}
@@ -375,7 +375,7 @@ export default function MissionStep({
             </div>
 
             <div
-              className="rounded-[var(--r-md)] p-5 border border-l-4 leading-relaxed text-base font-bold shadow-xs"
+              className="rounded-[var(--r-md)] p-5 border border-l-4 leading-relaxed text-base font-bold depth-paper"
               style={{
                 borderColor: `color-mix(in srgb, ${accent} 15%, var(--line))`,
                 borderLeftColor: accent,
@@ -388,7 +388,7 @@ export default function MissionStep({
           </div>
         ) : (
           /* 대형 축하 3D 스타일 트로피 카드 장식 */
-          <div className="flex flex-col items-center gap-4 bg-white/50 border border-dashed rounded-3xl p-6 shadow-xs max-w-xs w-full text-center">
+          <div className="flex flex-col items-center gap-4 bg-white/50 border border-dashed rounded-3xl p-6 depth-paper max-w-xs w-full text-center">
             <span className="text-7xl animate-[bounce_2s_infinite]" role="img" aria-label="트로피">🏆</span>
             <div className="space-y-1">
               <span className="text-lg font-black" style={{ color: accent }}>참 멋집니다!</span>

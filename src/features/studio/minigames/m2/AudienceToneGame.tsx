@@ -148,7 +148,7 @@ export default function AudienceToneGame({ supportLevel }: MiniGameProps) {
                     style={{ borderColor: selected ? '#7dd3fc' : 'rgba(148,163,184,0.45)', background: selected ? 'rgba(14,116,144,0.55)' : 'rgba(15,23,42,0.55)' }}
                   >
                     <span className="text-xl" aria-hidden="true">{card.emoji}</span>
-                    <span><strong className="block text-[14px] font-black">{card.label}</strong><span className="text-[12px] font-bold text-slate-300">{card.text}</span></span>
+                    <span><strong className="block text-[14px] font-black">{card.label}</strong><span className="text-[14px] font-bold text-slate-300">{card.text}</span></span>
                   </button>
                 );
               })}
@@ -171,7 +171,7 @@ export default function AudienceToneGame({ supportLevel }: MiniGameProps) {
                     style={{ borderColor: selected ? '#c4b5fd' : 'rgba(148,163,184,0.45)', background: selected ? 'rgba(109,40,217,0.55)' : 'rgba(15,23,42,0.55)' }}
                   >
                     <span className="text-xl" aria-hidden="true">{card.emoji}</span>
-                    <span><strong className="block text-[14px] font-black">{card.label}</strong><span className="text-[12px] font-bold text-slate-300">{card.text}</span></span>
+                    <span><strong className="block text-[14px] font-black">{card.label}</strong><span className="text-[14px] font-bold text-slate-300">{card.text}</span></span>
                   </button>
                 );
               })}
@@ -182,9 +182,9 @@ export default function AudienceToneGame({ supportLevel }: MiniGameProps) {
         <section className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/45 p-2.5" aria-live="polite">
           <p className="text-[14px] font-black text-emerald-200">쪽지 판 · 보내기 전 장면</p>
           <div className="mt-1 flex min-h-16 flex-wrap items-center gap-1.5 rounded-lg border-2 border-dashed border-emerald-200/60 bg-slate-950/45 p-2">
-            {tone ? <span className="rounded-lg border border-sky-300 bg-sky-900/70 px-2 py-1 text-[14px] font-black text-white">{tone.emoji} {tone.label}</span> : <span className="text-[13px] font-bold text-slate-400">말투 카드를 올려요</span>}
+            {tone ? <span className="rounded-lg border border-sky-300 bg-sky-900/70 px-2 py-1 text-[14px] font-black text-white">{tone.emoji} {tone.label}</span> : <span className="text-[14px] font-bold text-slate-400">말투 카드를 올려요</span>}
             <span className="text-lg text-emerald-300" aria-hidden="true">＋</span>
-            {detail ? <span className="rounded-lg border border-violet-300 bg-violet-900/70 px-2 py-1 text-[14px] font-black text-white">{detail.emoji} {detail.label}</span> : <span className="text-[13px] font-bold text-slate-400">정보 블록을 올려요</span>}
+            {detail ? <span className="rounded-lg border border-violet-300 bg-violet-900/70 px-2 py-1 text-[14px] font-black text-white">{detail.emoji} {detail.label}</span> : <span className="text-[14px] font-bold text-slate-400">정보 블록을 올려요</span>}
           </div>
           <p className="mt-1 text-center text-[14px] font-black text-emerald-100">{ready ? (toneOk && detailOk ? person.reaction : '카드 조합을 바꾸어 상대의 표정을 살펴보세요.') : '두 카드를 올리면 상대의 반응이 나타나요.'}</p>
         </section>

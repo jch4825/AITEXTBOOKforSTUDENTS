@@ -89,7 +89,7 @@ const ROOM_LAYOUTS: RoomLayout[] = [
 
 function CircularRobotVacuumIcon({ isRunning = false }: { isRunning?: boolean }) {
   return (
-    <div className="relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-cyan-400 bg-gradient-to-tr from-slate-900 via-cyan-950 to-slate-800 shadow-md sm:h-8 sm:w-8">
+    <div className="relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-cyan-400 bg-gradient-to-tr from-slate-900 via-cyan-950 to-slate-800 depth-paper sm:h-8 sm:w-8">
       <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full border border-white bg-cyan-400">
         <div className="h-1 w-1 rounded-full bg-white" />
       </div>
@@ -260,7 +260,7 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
           onPointerCancel={stopDrawing}
           onPointerLeave={stopDrawing}
           style={{ touchAction: 'none' }}
-          className="grid aspect-square w-full max-w-[268px] grid-cols-4 grid-rows-4 gap-2 rounded-2xl border-4 border-slate-600/50 bg-slate-800/90 p-2.5 shadow-2xl sm:max-w-[300px]"
+          className="grid aspect-square w-full max-w-[268px] grid-cols-4 grid-rows-4 gap-2 rounded-2xl border-4 border-slate-600/50 bg-slate-800/90 p-2.5 depth-overlay sm:max-w-[300px]"
         >
           {Array.from({ length: GRID_SIZE }).map((_, r) =>
             Array.from({ length: GRID_SIZE }).map((_, c) => {
@@ -278,7 +278,7 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
                     data-r={r}
                     data-c={c}
                     title={obstacle.label}
-                    className="flex aspect-square h-full w-full select-none flex-col items-center justify-center rounded-xl border-2 border-slate-800 bg-slate-950/90 opacity-90 shadow-inner"
+                    className="flex aspect-square h-full w-full select-none flex-col items-center justify-center rounded-xl border-2 border-slate-800 bg-slate-950/90 opacity-90 depth-overlay"
                   >
                     <span className="pointer-events-none text-xl sm:text-2xl">{obstacle.emoji}</span>
                     <span className="pointer-events-none mt-0.5 text-[14px] font-bold text-slate-400">

@@ -119,19 +119,19 @@ export default function JobDayAllocationGame({ supportLevel }: MiniGameProps) {
           <div className="grid gap-1.5 sm:grid-cols-2">
             {availableWorks.map((work) => {
               const selected = selectedWorkId === work.id;
-              return <button key={work.id} type="button" aria-pressed={selected} disabled={game.status !== 'playing'} onClick={() => setSelectedWorkId(work.id)} className="flex min-h-16 items-center gap-2 rounded-lg border-2 px-2 text-left text-white transition disabled:opacity-45" style={{ borderColor: selected ? '#fbbf24' : 'rgba(148,163,184,0.5)', background: selected ? 'rgba(146,64,14,0.8)' : 'rgba(15,23,42,0.62)' }}><span className="text-2xl" aria-hidden="true">{work.emoji}</span><span className="flex-1"><strong className="block text-[14px] font-black">{work.name}{work.aiGuess && <span className="ml-1 text-[12px] text-slate-400">AI 예상</span>}</strong><span className="text-[12px] font-bold text-slate-300">{work.scene}</span></span><span className="text-[12px] font-black text-amber-200">{selected ? '잡았어요' : '고르기'}</span></button>;
+              return <button key={work.id} type="button" aria-pressed={selected} disabled={game.status !== 'playing'} onClick={() => setSelectedWorkId(work.id)} className="flex min-h-16 items-center gap-2 rounded-lg border-2 px-2 text-left text-white transition disabled:opacity-45" style={{ borderColor: selected ? '#fbbf24' : 'rgba(148,163,184,0.5)', background: selected ? 'rgba(146,64,14,0.8)' : 'rgba(15,23,42,0.62)' }}><span className="text-2xl" aria-hidden="true">{work.emoji}</span><span className="flex-1"><strong className="block text-[14px] font-black">{work.name}{work.aiGuess && <span className="ml-1 text-[14px] text-slate-400">AI 예상</span>}</strong><span className="text-[14px] font-bold text-slate-300">{work.scene}</span></span><span className="text-[14px] font-black text-amber-200">{selected ? '잡았어요' : '고르기'}</span></button>;
             })}
           </div>
         </section>
 
         <section className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/45 p-2.5" aria-label="하루 일정판">
-          <div className="mb-1 flex items-center justify-between"><h3 className="text-[14px] font-black text-emerald-100">{job.emoji} {job.name} 하루 일정판</h3><span className="text-[13px] font-bold text-emerald-200">{placedWorkIds.length} / {job.works.length}</span></div>
+          <div className="mb-1 flex items-center justify-between"><h3 className="text-[14px] font-black text-emerald-100">{job.emoji} {job.name} 하루 일정판</h3><span className="text-[14px] font-bold text-emerald-200">{placedWorkIds.length} / {job.works.length}</span></div>
           <div className="flex min-h-20 items-center gap-1.5 overflow-x-auto rounded-lg border-2 border-dashed border-emerald-200/60 bg-slate-950/45 p-2">
-            <span className="shrink-0 rounded-lg border-2 border-rose-300 bg-rose-950 px-2 py-2 text-[13px] font-black text-white">🌅 시작</span>
-            {placedWorkIds.map((id, index) => { const work = job.works.find((item) => item.id === id)!; return <React.Fragment key={id}><span className="text-lg text-emerald-300" aria-hidden="true">→</span><div className="min-w-28 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900/70 px-2 py-2 text-center text-[13px] font-black text-white"><span className="block text-lg" aria-hidden="true">{work.emoji}</span>{index + 1}. {work.name}</div></React.Fragment>; })}
+            <span className="shrink-0 rounded-lg border-2 border-rose-300 bg-rose-950 px-2 py-2 text-[14px] font-black text-white">🌅 시작</span>
+            {placedWorkIds.map((id, index) => { const work = job.works.find((item) => item.id === id)!; return <React.Fragment key={id}><span className="text-lg text-emerald-300" aria-hidden="true">→</span><div className="min-w-28 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900/70 px-2 py-2 text-center text-[14px] font-black text-white"><span className="block text-lg" aria-hidden="true">{work.emoji}</span>{index + 1}. {work.name}</div></React.Fragment>; })}
             <span className="text-xl text-slate-400" aria-hidden="true">{placedWorkIds.length === job.works.length ? '✅' : '…'}</span>
           </div>
-          <p className="mt-1 text-center text-[13px] font-bold text-emerald-100">{selectedWork ? `${selectedWork.emoji} ${selectedWork.scene}` : strongestFit > 0 ? '다음 일 카드를 골라 다른 장면도 열어 보세요.' : '일 카드를 골라 하루 일정판에 놓아 보세요.'}</p>
+          <p className="mt-1 text-center text-[14px] font-bold text-emerald-100">{selectedWork ? `${selectedWork.emoji} ${selectedWork.scene}` : strongestFit > 0 ? '다음 일 카드를 골라 다른 장면도 열어 보세요.' : '일 카드를 골라 하루 일정판에 놓아 보세요.'}</p>
         </section>
       </div>
     </MiniGameFrame>

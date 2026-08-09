@@ -110,7 +110,7 @@ export default function BranchChat({ block, value = [], onChange, accent, accent
           key={idx}
           onClick={() => handleChoice(idx)}
           className="w-full text-left p-3 min-h-12 bg-[color:var(--paper-0)] border-2 rounded-[14px] text-base font-bold active:scale-[0.98] transition-all cursor-pointer leading-normal"
-          style={{ borderColor: accent, color: 'var(--brand-ink)', boxShadow: 'var(--e-1)' }}
+          style={{ borderColor: accent, color: 'var(--brand-ink)', boxShadow: 'var(--surface-paper-elevation)' }}
         >
           {choice.label}
         </button>

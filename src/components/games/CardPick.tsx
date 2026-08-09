@@ -126,7 +126,7 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
                       <>
                         <Burst />
                         <span
-                          className="answer-pop absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"
+                          className="answer-pop absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white depth-paper z-10"
                           style={{ background: 'var(--ok)' }}
                         >
                           <Icon name="check" size={20} strokeWidth={3} />
@@ -134,7 +134,7 @@ export default function CardPick({ question, choices, difficulty, onComplete }: 
                       </>
                     ) : (
                       <span
-                        className="absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"
+                        className="absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center text-white depth-paper z-10"
                         style={{ background: 'var(--warn)' }}
                       >
                         <Icon name="close" size={18} strokeWidth={3} />

@@ -35,24 +35,24 @@ export default function InquiryCertificateModal({
   };
 
   const modalContent = (
-    <div className="certificate-print-wrapper fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/85 backdrop-blur-md overflow-y-auto print:static print:p-0 print:bg-white print:overflow-visible">
+    <div className="certificate-print-wrapper fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[color:var(--board-overlay)] p-4 sm:p-6 print:static print:bg-white print:p-0 print:overflow-visible">
       {/* Container Box for Screen & Print */}
       <div className="w-full max-w-4xl space-y-4 my-auto print:m-0 print:p-0 print:max-w-none print:w-[210mm] print:h-[297mm]">
         
         {/* Screen Header Actions (hidden in print) */}
-        <div className="print-hide flex items-center justify-between gap-3 p-4 bg-slate-900/90 border border-slate-700 text-white rounded-2xl shadow-2xl backdrop-blur-sm">
+        <div className="surface-paper print-hide flex items-center justify-between gap-3 rounded-2xl p-4 text-[color:var(--brand-ink)]">
           <div className="flex items-center gap-2.5 font-extrabold text-sm sm:text-base">
             <span className="text-2xl">🏆</span>
             <div>
               <h3 className="leading-tight">A4 탐구 증서 미리보기 (상장 양식)</h3>
-              <p className="text-xs text-amber-300/80 font-medium">실제 프린터의 안전 여백(상하 12mm, 좌우 15mm)이 자동 적용되어 테마가 잘리지 않고 출력됩니다.</p>
+              <p className="text-xs font-medium text-[color:var(--ink-2)]">실제 프린터의 안전 여백(상하 12mm, 좌우 15mm)이 자동 적용되어 테마가 잘리지 않고 출력됩니다.</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handlePrint}
-              className="px-4 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-sm rounded-xl transition flex items-center gap-2 cursor-pointer shadow-lg hover:scale-105 active:scale-95"
+              className="surface-choice is-primary flex cursor-pointer items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black transition hover:bg-[color:var(--ink-1)]"
             >
               <span className="text-base">🖨️</span>
               <span>탐구 증서 인쇄 / PDF 저장</span>
@@ -60,7 +60,7 @@ export default function InquiryCertificateModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm rounded-xl transition cursor-pointer"
+              className="surface-choice cursor-pointer rounded-xl px-3.5 py-2.5 text-sm font-bold transition hover:bg-[color:var(--paper-2)]"
             >
               닫기
             </button>
@@ -70,7 +70,7 @@ export default function InquiryCertificateModal({
         {/* Printable Award-Style Certificate Sheet (A4 Portrait with Safe Printer Margins) */}
         <div
           ref={certificateRef}
-          className="printable-certificate mx-auto bg-[#FFFDF9] text-slate-900 border-[12px] border-double border-amber-600 rounded-2xl p-8 sm:p-12 shadow-2xl relative flex flex-col justify-between w-full max-w-[210mm] min-h-[297mm] box-border print:w-full print:h-full print:p-[8mm_10mm] print:m-0 print:border-[10px] print:shadow-none print:rounded-none"
+          className="surface-a4 printable-certificate relative mx-auto flex min-h-[297mm] w-full max-w-[210mm] flex-col justify-between rounded-2xl border-[12px] border-double border-amber-600 p-8 text-slate-900 print:m-0 print:h-full print:w-full print:rounded-none print:border-[10px] print:p-[8mm_10mm] print:shadow-none sm:p-12"
         >
           {/* Decorative Corner Ornaments */}
           <div className="absolute top-4 left-4 text-amber-600 text-2xl font-serif select-none pointer-events-none">
@@ -116,7 +116,7 @@ export default function InquiryCertificateModal({
             </div>
 
             {/* Inquiry Record Content Box */}
-            <div className="space-y-3 bg-amber-50/60 border-2 border-amber-300/80 p-6 rounded-2xl shadow-2xs">
+            <div className="space-y-3 bg-amber-50/60 border-2 border-amber-300/80 p-6 rounded-2xl depth-paper">
               <div className="flex items-center gap-2 text-amber-950 font-extrabold text-sm border-b border-amber-200 pb-2">
                 <span className="text-lg">📝</span>
                 <span>나의 탐구 성찰 기록</span>
@@ -130,7 +130,7 @@ export default function InquiryCertificateModal({
                   <img
                     src={drawingUrl}
                     alt="학생 필기 및 그림"
-                    className="max-h-40 mx-auto rounded-xl border border-amber-300 bg-[#064E3B] object-contain shadow-xs"
+                    className="max-h-40 mx-auto rounded-xl border border-amber-300 bg-[#064E3B] object-contain depth-paper"
                   />
                 </div>
               )}
@@ -154,7 +154,7 @@ export default function InquiryCertificateModal({
 
             {/* Decorative Flower Ornament */}
             <div className="relative shrink-0 flex items-center justify-center">
-              <div className="w-22 h-22 sm:w-26 sm:h-26 rounded-full bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border-4 border-amber-200 shadow-xl flex items-center justify-center rotate-[-6deg]">
+              <div className="surface-stamp flex h-22 w-22 rotate-[-6deg] items-center justify-center rounded-full border-4 border-amber-700 bg-amber-200 text-amber-900 sm:h-26 sm:w-26">
                 <span className="text-3xl sm:text-4xl select-none">🌸</span>
               </div>
             </div>

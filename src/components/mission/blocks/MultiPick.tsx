@@ -46,19 +46,19 @@ export default function MultiPick({ block, value = [], onChange, accent }: Props
               key={idx}
               onClick={() => handleToggle(item.label)}
               aria-pressed={isSelected}
-              className="card3d relative flex flex-col items-center justify-center gap-2 p-4 rounded-[var(--r-md)] min-h-[120px] text-center select-none font-bold"
+              className="surface-choice relative flex flex-col items-center justify-center gap-2 p-4 rounded-[var(--r-md)] min-h-[120px] text-center select-none font-bold"
               style={{
                 border: isSelected ? `4px solid ${palette.accent}` : `2.5px solid ${palette.accent}`,
                 background: isSelected ? palette.tint : 'var(--paper-0)',
                 color: 'var(--brand-ink)',
-                ['--edge' as string]: palette.accent,
+                ['--choice-edge' as string]: palette.accent,
               }}
             >
               <span className="text-4xl" aria-hidden>{item.emoji}</span>
               <span className="text-base leading-tight">{item.label}</span>
               {isSelected && (
                 <span
-                  className="answer-pop absolute -top-2.5 -right-2.5 rounded-full w-8 h-8 flex items-center justify-center text-white shadow-md z-10"
+                  className="answer-pop absolute -top-2.5 -right-2.5 rounded-full w-8 h-8 flex items-center justify-center text-white depth-paper z-10"
                   style={{ background: palette.accent }}
                 >
                   <Icon name="check" size={18} strokeWidth={3} />

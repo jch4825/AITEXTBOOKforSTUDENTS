@@ -27,7 +27,7 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
           <button
             type="button"
             onClick={() => speakNow(conceptAll)}
-            className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white mt-1"
+            className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white mt-1"
             style={{ borderColor: accent, color: accent }}
             title="개념 듣기"
           >
@@ -44,7 +44,7 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
             <li
               key={t.term}
               className="rounded-[var(--r-md)] p-4"
-              style={{ background: 'var(--paper-0)', border: '1px solid var(--line)', boxShadow: 'var(--e-1)' }}
+              style={{ background: 'var(--paper-0)', border: '2px solid var(--line)', boxShadow: 'var(--surface-paper-elevation)' }}
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="text-lg font-bold" style={{ color: accent }}>{t.term}</span>
@@ -52,7 +52,7 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
                   type="button"
                   onClick={() => speakNow(`${t.term}. ${t.definition}${t.example ? ` 예를 들면, ${t.example}` : ''}`)}
                   aria-label={`${t.term} 읽어주기`}
-                  className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+                  className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white"
                   style={{ borderColor: accent, color: accent }}
                   title="용어 뜻 듣기"
                 >
@@ -85,7 +85,7 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
                 <button
                   type="button"
                   onClick={() => speakNow(step)}
-                  className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-0.5 ml-2 shadow-xs bg-white"
+                  className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-0.5 ml-2 depth-paper bg-white"
                   style={{ borderColor: accent, color: accent }}
                   title="내용 듣기"
                 >
@@ -112,7 +112,7 @@ export default function HardLessonBody({ content, accent, dictionaryTerms = [] }
         <button
           type="button"
           onClick={() => speakNow(`꼭 기억합니다. ${content.limits}`)}
-          className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-0.5 shadow-xs bg-white"
+          className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-0.5 depth-paper bg-white"
           style={{ borderColor: 'var(--warn)', color: 'var(--warn)' }}
           title="기억할 내용 듣기"
         >

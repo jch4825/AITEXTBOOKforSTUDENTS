@@ -36,7 +36,7 @@ export default function SummaryTable({ block, allBlocks, answers, accent }: Prop
         <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>{block.title}</h3>
       </div>
 
-      <div className="border-2 rounded-[var(--r-md)] overflow-hidden bg-[color:var(--paper-0)]" style={{ borderColor: accent, boxShadow: 'var(--e-1)' }}>
+      <div className="overflow-hidden rounded-[var(--r-md)] border-2 bg-[color:var(--paper-0)]" style={{ borderColor: accent, boxShadow: 'var(--surface-paper-elevation)' }}>
         <table className="w-full border-collapse text-base">
           <tbody>
             {block.rows.map((row, idx) => {

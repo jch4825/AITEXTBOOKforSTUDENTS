@@ -129,7 +129,7 @@ export default function WordIntensityDialGame({ supportLevel }: MiniGameProps) {
         <section className="rounded-xl border-2 border-amber-300/60 bg-amber-950/45 p-2.5 text-center" aria-label="장면 카드">
           <span className="text-4xl" aria-hidden="true">{scene.emoji}</span>
           <p className="mt-1 text-[15px] font-black text-white">{scene.text}</p>
-          <p className="text-[13px] font-bold text-amber-100">{stage.lowLabel} ← 장면의 세기 → {stage.highLabel}</p>
+          <p className="text-[14px] font-bold text-amber-100">{stage.lowLabel} ← 장면의 세기 → {stage.highLabel}</p>
         </section>
 
         <section className="rounded-xl border-2 border-sky-300/60 bg-sky-950/45 p-2.5" aria-label="낱말 카드 더미">
@@ -159,9 +159,9 @@ export default function WordIntensityDialGame({ supportLevel }: MiniGameProps) {
           <p className="text-[14px] font-black text-emerald-200">문장 카드</p>
           <div className="mt-1 flex min-h-16 items-center justify-center gap-2 rounded-lg border-2 border-dashed border-emerald-200/60 bg-slate-950/45 px-2 text-center">
             <span className="text-[15px] font-bold text-white">{scene.text} —</span>
-            {selectedWord ? <span className={`rounded-lg border-2 px-2 py-1 text-[15px] font-black ${inBand ? 'border-emerald-300 bg-emerald-900 text-emerald-100' : 'border-orange-300 bg-orange-950 text-orange-100'}`}>{selectedWord}</span> : <span className="text-[13px] font-bold text-slate-400">낱말 카드를 붙여요</span>}
+            {selectedWord ? <span className={`rounded-lg border-2 px-2 py-1 text-[15px] font-black ${inBand ? 'border-emerald-300 bg-emerald-900 text-emerald-100' : 'border-orange-300 bg-orange-950 text-orange-100'}`}>{selectedWord}</span> : <span className="text-[14px] font-bold text-slate-400">낱말 카드를 붙여요</span>}
           </div>
-          <p className="mt-1 text-center text-[13px] font-bold text-emerald-100">{selectedWord ? (inBand ? '장면과 잘 어울리는 카드예요.' : '장면을 다시 보고 카드를 바꿔 보세요.') : '카드를 누르면 장면의 말이 바뀌어요.'}</p>
+          <p className="mt-1 text-center text-[14px] font-bold text-emerald-100">{selectedWord ? (inBand ? '장면과 잘 어울리는 카드예요.' : '장면을 다시 보고 카드를 바꿔 보세요.') : '카드를 누르면 장면의 말이 바뀌어요.'}</p>
         </section>
       </div>
     </MiniGameFrame>

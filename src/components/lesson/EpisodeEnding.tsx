@@ -31,8 +31,8 @@ export default function EpisodeEnding({
       {/* 배움 도장 메달리온 (1회성 스탬프 모션) */}
       <div className="flex justify-center" aria-hidden>
         <span
-          className="stamp-in inline-flex items-center justify-center rounded-full h-[120px] w-[120px] relative"
-          style={{ background: theme.accentSoft, boxShadow: '0 4px 14px rgba(43,58,85,0.06)' }}
+          className="surface-stamp stamp-in relative inline-flex h-[120px] w-[120px] items-center justify-center rounded-full"
+          style={{ background: theme.accentSoft, color: theme.accent }}
         >
           <Icon name="star" size={54} filled color={theme.accent} />
           <span

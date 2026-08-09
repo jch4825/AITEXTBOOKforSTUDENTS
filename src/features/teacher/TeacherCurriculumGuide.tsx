@@ -71,7 +71,7 @@ export default function TeacherCurriculumGuide() {
   return (
     <div className="space-y-6 text-slate-800">
       {/* Subject Header Banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-8 text-white shadow-xl border border-indigo-900/50">
+      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-8 text-white depth-overlay border border-indigo-900/50">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -118,7 +118,7 @@ export default function TeacherCurriculumGuide() {
       </div>
 
       {/* 1. 교육과정 제작 배경 및 개요 */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-4">
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">📘</span>
           <h2 className="text-xl font-extrabold text-slate-900">교육과정 제작 배경 및 개요</h2>
@@ -142,7 +142,7 @@ export default function TeacherCurriculumGuide() {
       </section>
 
       {/* 2. 성격 및 목표 */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-4">
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">🎯</span>
           <h2 className="text-xl font-extrabold text-slate-900">1. 성격 및 목표</h2>
@@ -186,7 +186,7 @@ export default function TeacherCurriculumGuide() {
       </section>
 
       {/* 3. 영역별 6개 내용 체계 (정통 해설서 6개 영역별 구분 표준 양식) */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-6">
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-6">
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-xl">📊</span>
@@ -498,7 +498,7 @@ export default function TeacherCurriculumGuide() {
       </section>
 
       {/* 4. 영역별 24개 성취기준 해설 및 적용 시 고려 사항 (국가 교육과정 정식 해설 서술 구조) */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-5">
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-5">
         <div className="flex flex-wrap items-center justify-between border-b border-slate-200 pb-3 gap-2">
           <div className="flex items-center gap-2">
             <span className="text-xl">📜</span>
@@ -542,7 +542,7 @@ export default function TeacherCurriculumGuide() {
                     const narrativeExplanation = DETAILED_STANDARD_EXPLANATIONS[s.code] || '이 성취기준은 인공지능 활용 능력을 기르고 실생활 문제를 주도적으로 해결하도록 돕기 위해 설정하였다.';
 
                     return (
-                      <div key={s.code} className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                      <div key={s.code} className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 depth-paper space-y-3">
                         {/* Standard Code & Title */}
                         <div className="flex items-start gap-2 border-b border-slate-100 pb-2.5">
                           <span className="shrink-0 px-2.5 py-1 rounded bg-slate-900 text-amber-300 font-mono text-xs font-black">
@@ -591,7 +591,7 @@ export default function TeacherCurriculumGuide() {
       </section>
 
       {/* 5. 교수·학습 및 평가 */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-4">
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">👩‍🏫</span>
           <h2 className="text-xl font-extrabold text-slate-900">3. 교수·학습 및 평가</h2>

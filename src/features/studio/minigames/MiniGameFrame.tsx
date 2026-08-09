@@ -74,13 +74,10 @@ export default function MiniGameFrame({
   return (
     <div
       data-minigame-frame
-      className="flex h-full min-h-0 flex-col gap-2.5 overflow-hidden rounded-2xl p-3.5 sm:p-4"
+      className="surface-sticker flex h-full min-h-0 flex-col gap-2.5 overflow-hidden rounded-2xl p-3.5 sm:p-4"
       style={{
-        background: 'var(--paper-0)',
-        border: `2.5px solid ${accent}`,
-        boxShadow: `0 5px 0 ${accent}`,
-        color: 'var(--brand-ink)',
-      }}
+        '--surface-edge': accent,
+      } as React.CSSProperties}
     >
       {/* 이름표 + 진행 수치 */}
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -151,11 +148,7 @@ export default function MiniGameFrame({
 
       {/* 플레이 보드 — 유일한 다크 영역 */}
       <div
-        className="relative flex min-h-0 flex-1 flex-col overflow-auto rounded-xl p-2.5 sm:p-3"
-        style={{
-          background: 'linear-gradient(to bottom, #1e293b, #0f172a)',
-          border: '2px solid rgba(148, 163, 184, 0.25)',
-        }}
+        className="mini-game-board relative flex min-h-0 flex-1 flex-col overflow-auto rounded-xl p-2.5 sm:p-3"
       >
         {children}
       </div>

@@ -256,7 +256,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
       </div>
 
       {/* 통합 그림판 카드 (Unified Drawing Board Container) */}
-      <div className="draw-pad-shell rounded-[var(--r-md)] overflow-hidden border border-emerald-700 shadow-md">
+      <div className="draw-pad-shell rounded-[var(--r-md)] overflow-hidden border border-emerald-700 depth-paper">
         {/* 초록색 팔레트 패널 (Green Palette Header) */}
         <div className="draw-pad-palette">
           <div className="draw-board-palette-section draw-board-color-section" role="group" aria-label="펜 색">
@@ -406,7 +406,7 @@ export default function DrawPad({ block, value = '', onChange, accent }: Props) 
                 type="button"
                 onClick={commitActiveText}
                 title="칠판에 고정 (Enter)"
-                className="px-2 py-0.5 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-xs rounded cursor-pointer shadow-xs transition shrink-0"
+                className="px-2 py-0.5 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-xs rounded cursor-pointer depth-paper transition shrink-0"
               >
                 확인
               </button>

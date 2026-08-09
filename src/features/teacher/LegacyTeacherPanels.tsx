@@ -59,7 +59,7 @@ export function ObjectivesPanel() {
         const aiMeta = AI_ACHIEVEMENT_STANDARDS[module.id];
 
         return (
-          <details key={module.id} className="group border-2 border-[color:var(--line)] rounded-2xl bg-[color:var(--paper-0)] overflow-hidden shadow-xs mb-3">
+          <details key={module.id} className="group border-2 border-[color:var(--line)] rounded-2xl bg-[color:var(--paper-0)] overflow-hidden depth-paper mb-3">
             <summary className="cursor-pointer bg-[color:var(--paper-1)] p-4 font-extrabold text-base flex items-center justify-between hover:bg-slate-100 transition">
               <span className="text-[color:var(--brand-ink)]">단원 {module.number}. {module.title} ({aiMeta.domainName})</span>
               <span className="text-xs px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 font-extrabold">

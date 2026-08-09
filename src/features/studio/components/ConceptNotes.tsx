@@ -64,7 +64,7 @@ export default function ConceptNotes({
               }
               speakNow(text);
             }}
-            className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-1 shadow-xs bg-white"
+            className="h-7 w-7 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 mt-1 depth-paper bg-white"
             style={{ borderColor: accent, color: accent }}
             title="개념 카드 듣기"
           >

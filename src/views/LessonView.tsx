@@ -156,7 +156,7 @@ function ImplementedLesson({ lesson, onGoHome, onPickLesson }: ImplementedProps)
         <button
           type="button"
           onClick={() => speakNow(body)}
-          className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white mt-1"
+          className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white mt-1"
           style={{ borderColor: theme.accent, color: theme.accent }}
           title="본문 듣기"
         >

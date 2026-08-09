@@ -184,11 +184,11 @@ export default function ToolWarmupSchedulingGame({ supportLevel }: MiniGameProps
     >
       <div className="flex min-h-0 flex-1 flex-col gap-3">
         <section className="rounded-xl border-2 border-amber-300/70 bg-amber-100/10 p-3 text-center">
-          <p className="text-[13px] font-black text-amber-200">지금 할 일</p>
+          <p className="text-[14px] font-black text-amber-200">지금 할 일</p>
           <p className="mt-1 text-[19px] font-black leading-relaxed text-white">
             <span aria-hidden="true">{stage.taskEmoji}</span> {stage.task}
           </p>
-          <p className="mt-1 text-[13px] font-bold text-slate-300">
+          <p className="mt-1 text-[14px] font-bold text-slate-300">
             {status === 'running'
               ? remaining.toFixed(1) + '초 안에 ' + stage.taps + '번 눌러요'
               : status === 'playing'
@@ -198,7 +198,7 @@ export default function ToolWarmupSchedulingGame({ supportLevel }: MiniGameProps
         </section>
 
         <div className="space-y-1" aria-label="남은 시간">
-          <div className="flex items-center justify-between text-[12px] font-black text-slate-400">
+          <div className="flex items-center justify-between text-[14px] font-black text-slate-400">
             <span>남은 시간</span>
             <span>
               {status === 'running' ? remaining.toFixed(1) + '초' : stage.limit.toFixed(1) + '초'}
@@ -234,14 +234,14 @@ export default function ToolWarmupSchedulingGame({ supportLevel }: MiniGameProps
                   {tool.emoji}
                 </span>
                 <span className="mt-1 text-[15px]">{tool.name}</span>
-                <span className="text-[11px] font-bold text-cyan-100">{tool.output}</span>
+                <span className="text-[14px] font-bold text-cyan-100">{tool.output}</span>
               </button>
             );
           })}
         </section>
 
         <div className="rounded-xl border border-slate-600/70 bg-slate-900/70 p-3 text-center">
-          <div className="flex items-center justify-between gap-2 text-[13px] font-black text-slate-300">
+          <div className="flex items-center justify-between gap-2 text-[14px] font-black text-slate-300">
             <span>{feedback}</span>
             <span className="shrink-0 text-cyan-200">
               {tapCount} / {stage.taps}
@@ -257,7 +257,7 @@ export default function ToolWarmupSchedulingGame({ supportLevel }: MiniGameProps
             <button
               type="button"
               onClick={() => setFeedback('힌트: ' + targetTool.name + ' 버튼을 연속으로 눌러요.')}
-              className="mt-2 min-h-11 rounded-lg border border-amber-300/70 px-3 text-[13px] font-black text-amber-200"
+              className="mt-2 min-h-11 rounded-lg border border-amber-300/70 px-3 text-[14px] font-black text-amber-200"
             >
               💡 필요한 도구 보기
             </button>

@@ -246,7 +246,7 @@ export default function DrawBoard({ onClose }: Props) {
             type="button"
             onClick={commitActiveText}
             title="칠판에 고정 (Enter)"
-            className="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-xs rounded cursor-pointer shadow-xs transition shrink-0"
+            className="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-xs rounded cursor-pointer depth-paper transition shrink-0"
           >
             확인
           </button>

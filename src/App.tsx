@@ -55,7 +55,7 @@ function ExitGuardNotice() {
       aria-live="assertive"
       className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex justify-center px-4"
     >
-      <p className="max-w-[22rem] rounded-2xl bg-[color:var(--ink-1,#26324a)] px-5 py-4 text-center text-base font-extrabold leading-relaxed text-white shadow-xl">
+      <p className="max-w-[22rem] rounded-2xl bg-[color:var(--ink-1,#26324a)] px-5 py-4 text-center text-base font-extrabold leading-relaxed text-white depth-overlay">
         한 번 더 누르면 나가요.
       </p>
     </div>

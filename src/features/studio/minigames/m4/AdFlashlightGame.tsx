@@ -83,13 +83,13 @@ export default function AdFlashlightGame({ supportLevel }: MiniGameProps) {
           </button>
         ))}
         <div
-          className="pointer-events-none absolute h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-amber-100 bg-amber-100/10 shadow-[0_0_0_999px_rgba(2,6,23,0.84)]"
+          className="board-spotlight-mask pointer-events-none absolute h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-amber-100 bg-amber-100/10"
           style={{ left: `${light.x}%`, top: `${light.y}%` }}
           aria-hidden="true"
         />
       </div>
       <div className="mt-2 flex flex-wrap gap-1.5" aria-label="손전등 위치 대체 버튼">
-        {SIGNS.map((sign) => <button key={sign.label} type="button" onClick={() => focusSign(sign)} className="min-h-11 rounded-lg border-2 border-amber-200 bg-amber-950 px-2 text-[13px] font-black text-white">🔦 {sign.label} 비추기</button>)}
+        {SIGNS.map((sign) => <button key={sign.label} type="button" onClick={() => focusSign(sign)} className="min-h-11 rounded-lg border-2 border-amber-200 bg-amber-950 px-2 text-[14px] font-black text-white">🔦 {sign.label} 비추기</button>)}
       </div>
     </MiniGameFrame>
   );

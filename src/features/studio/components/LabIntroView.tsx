@@ -50,7 +50,7 @@ export default function LabIntroView({ definition, supportLevel, accent, seconda
           <button
             type="button"
             onClick={() => speakNow(`먼저 겪어 보기. ${INTRO_GUIDE}`)}
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-white shadow-xs transition-all hover:scale-110"
+            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border bg-white depth-paper transition-all hover:scale-110"
             style={{ borderColor: accent, color: accent }}
             title="안내 듣기"
           >

@@ -60,7 +60,7 @@ export default function EpisodeHeroSpread({
     return (
       <div className={`story-fade-in ${className}`}>
         <section
-          className="w-full max-w-[min(96vw,110rem)] 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)] mx-auto rounded-[var(--r-lg)] bg-[color:var(--paper-0)] shadow-[0_8px_32px_rgba(43,58,85,0.12)] border border-[color:var(--line)] p-6 md:p-8 lg:p-10 overflow-hidden relative"
+          className="surface-paper relative mx-auto w-full max-w-[min(96vw,110rem)] overflow-hidden rounded-[var(--r-lg)] p-6 md:p-8 lg:p-10 2xl:max-w-[min(94vw,148rem)] 3xl:max-w-[min(92vw,175rem)]"
           style={{ borderColor: `color-mix(in srgb, ${accent} 20%, var(--line))` }}
           aria-label={`차시 도입 (어려움): ${title}`}
         >
@@ -102,7 +102,7 @@ export default function EpisodeHeroSpread({
               <button
                 type="button"
                 onClick={() => speakNow(title)}
-                className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+                className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white"
                 style={{ borderColor: accent, color: accent }}
                 title="제목 듣기"
               >
@@ -116,7 +116,7 @@ export default function EpisodeHeroSpread({
             <div className="flex justify-center py-2">
               {!imagePending && !imgMissing ? (
                 <div
-                  className="spread-hero-image relative w-full max-w-[480px] aspect-[4/3] md:aspect-[16/9] rounded-[var(--r-lg)] overflow-hidden shadow-md"
+                  className="spread-hero-image relative w-full max-w-[480px] aspect-[4/3] md:aspect-[16/9] rounded-[var(--r-lg)] overflow-hidden depth-paper"
                 >
                   <img
                     src={candidates[srcIdx]}
@@ -164,7 +164,7 @@ export default function EpisodeHeroSpread({
                   <button
                     type="button"
                     onClick={() => speakNow(text)}
-                    className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white mt-1"
+                    className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white mt-1"
                     style={{ borderColor: accent, color: accent }}
                     title="도입 지문 듣기"
                   >
@@ -246,7 +246,7 @@ export default function EpisodeHeroSpread({
         <button
           type="button"
           onClick={() => speakNow(title)}
-          className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+          className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white"
           style={{ borderColor: accent, color: accent }}
           title="제목 듣기"
         >
@@ -265,7 +265,7 @@ export default function EpisodeHeroSpread({
             <button
               type="button"
               onClick={() => speakNow(text)}
-              className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white mt-1"
+              className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white mt-1"
               style={{ borderColor: accent, color: accent }}
               title="도입 지문 듣기"
             >

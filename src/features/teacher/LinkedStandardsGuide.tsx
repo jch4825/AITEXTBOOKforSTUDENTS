@@ -57,7 +57,7 @@ export default function LinkedStandardsGuide() {
 
   return (
     <div className="space-y-6 text-slate-800">
-      <section className="rounded-2xl border border-indigo-800/60 bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 p-6 text-white shadow-xl md:p-8">
+      <section className="rounded-2xl border border-indigo-800/60 bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 p-6 text-white depth-overlay md:p-8">
         <span className="inline-block rounded-full bg-sky-400 px-3 py-1 text-xs font-black text-slate-950">
           2022 개정 특수교육 기본 교육과정 타 교과
         </span>
@@ -82,7 +82,7 @@ export default function LinkedStandardsGuide() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <section className="rounded-2xl border border-slate-200 bg-white p-4 depth-paper">
         <div className="grid gap-4 lg:grid-cols-[1fr_1fr_auto]">
           <label className="text-xs font-extrabold text-slate-700">
             교과
@@ -116,7 +116,7 @@ export default function LinkedStandardsGuide() {
       ) : groupedStandards.map((group) => {
         const first = group.standards[0];
         return (
-          <section key={group.subject} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-7">
+          <section key={group.subject} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 depth-paper md:p-7">
             <div className="border-b border-slate-200 pb-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className={`rounded-md border px-2.5 py-1 text-xs font-black ${first.badgeColor}`}>{group.subject}</span>
@@ -129,7 +129,7 @@ export default function LinkedStandardsGuide() {
               {group.standards.map((standard) => {
                 const alignment = ALIGNMENT_LABELS[standard.alignment];
                 return (
-                  <article key={standard.code} className="flex flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-xs">
+                  <article key={standard.code} className="flex flex-col rounded-xl border border-slate-200 bg-white p-4 depth-paper">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <code className="rounded bg-slate-900 px-2.5 py-1 text-xs font-black text-amber-300">{standard.code}</code>
                       <span className={`rounded-full border px-2.5 py-1 text-[11px] font-extrabold ${alignment.className}`}>{alignment.label}</span>

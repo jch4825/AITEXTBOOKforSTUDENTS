@@ -193,7 +193,7 @@ export default function SculptRefineGame({ supportLevel }: MiniGameProps) {
 
         <div className="grid grid-cols-3 gap-1.5" aria-label="기둥별 두드려 다듬기 대체 조작">
           {heights.map((_, index) => (
-            <button key={index} type="button" onClick={() => shaveColumn(index)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[13px] font-black text-white disabled:opacity-45">
+            <button key={index} type="button" onClick={() => shaveColumn(index)} disabled={status !== 'playing'} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 text-[14px] font-black text-white disabled:opacity-45">
               {index + 1}번 기둥 한 번 다듬기
             </button>
           ))}

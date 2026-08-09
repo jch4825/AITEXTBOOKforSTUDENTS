@@ -117,7 +117,7 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                         )}
                         {lessonHasAI && (
                           <span
-                            className="absolute -top-0.5 -right-0.5 h-3.5 w-3.5 rounded-full flex items-center justify-center bg-[color:var(--paper-0)] shadow-[0_1px_2px_rgba(0,0,0,0.15)] border border-[color:var(--line)]"
+                            className="absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-[color:var(--line)] bg-[color:var(--paper-0)]"
                             style={{ zIndex: 10 }}
                           >
                             <Icon name="sparkles" size={9} color={theme.accent} filled />

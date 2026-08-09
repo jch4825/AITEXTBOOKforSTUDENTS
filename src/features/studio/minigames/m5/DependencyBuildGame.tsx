@@ -61,7 +61,7 @@ export default function DependencyBuildGame({ supportLevel }: MiniGameProps) {
         </div>
         <div className="relative mx-auto min-h-[170px] w-[88%] overflow-hidden rounded-xl border-4 border-slate-500 bg-slate-900">
           <div className="absolute inset-x-0 bottom-0 h-7 bg-stone-600" />
-          <div className="absolute bottom-1 left-2 text-[12px] font-black text-stone-200">작업자 자리</div>
+          <div className="absolute bottom-1 left-2 text-[14px] font-black text-stone-200">작업자 자리</div>
           {built.map((step, index) => (
             <div
               key={step}

@@ -39,7 +39,7 @@ export default function ConceptNoteView({
           <button
             type="button"
             onClick={() => speakNow(`오늘의 개념 정리. 학습 목표: ${story.objective}`)}
-            className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 shadow-xs bg-white"
+            className="h-8 w-8 rounded-full border flex items-center justify-center cursor-pointer transition-all hover:scale-110 shrink-0 depth-paper bg-white"
             style={{ borderColor: accent, color: accent }}
             title="학습목표 듣기"
           >

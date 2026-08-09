@@ -173,7 +173,7 @@ export default function SttAudioCleanerGame({ supportLevel }: MiniGameProps) {
               type="button"
               onClick={() => setQuiet(true)}
               disabled={quiet || game.status !== 'playing'}
-              className="min-h-11 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900 px-2 text-[13px] font-black text-white disabled:opacity-50"
+              className="min-h-11 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900 px-2 text-[14px] font-black text-white disabled:opacity-50"
             >
               {quiet ? '조건 바꿈' : '조용한 곳으로 옮기기'}
             </button>
@@ -190,7 +190,7 @@ export default function SttAudioCleanerGame({ supportLevel }: MiniGameProps) {
               />
             ))}
           </div>
-          <div className="flex items-center justify-between gap-2 text-[13px] font-black text-slate-300">
+          <div className="flex items-center justify-between gap-2 text-[14px] font-black text-slate-300">
             <span>{quiet ? '소리가 선명해졌어요' : '소음이 섞인 입력'}</span>
             <span>{inputMode === 'speech' ? '말' : inputMode === 'text' ? '글자' : '그림 카드'} 경로</span>
           </div>
@@ -227,7 +227,7 @@ export default function SttAudioCleanerGame({ supportLevel }: MiniGameProps) {
               />
               <div>
                 <p className="text-[15px] font-black text-sky-100">말로 입력하기</p>
-                <p className="text-[13px] font-bold text-slate-300">마이크는 선택 사항이에요. 안 되면 글자나 그림 카드를 써요.</p>
+                <p className="text-[14px] font-bold text-slate-300">마이크는 선택 사항이에요. 안 되면 글자나 그림 카드를 써요.</p>
               </div>
             </div>
             <div role="status" className="rounded-lg border border-slate-500/60 bg-slate-900/80 px-2 py-1.5 text-[15px] font-black text-white">
@@ -282,7 +282,7 @@ export default function SttAudioCleanerGame({ supportLevel }: MiniGameProps) {
         )}
 
         <div className={`rounded-xl border-2 px-3 py-2 text-center transition-colors ${game.status === 'success' ? 'border-emerald-300 bg-emerald-950' : 'border-slate-500/60 bg-slate-900/70'}`}>
-          <p className="text-[13px] font-black text-slate-400">입력 결과 확인</p>
+          <p className="text-[14px] font-black text-slate-400">입력 결과 확인</p>
           <p className="text-[15px] font-black text-white">
             {game.status === 'success' ? `✅ “${stage.target}”로 전달됨` : '원래 안내와 같은 뜻인지 확인한 뒤 보내세요.'}
           </p>

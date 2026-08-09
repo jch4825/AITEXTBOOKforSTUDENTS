@@ -163,7 +163,7 @@ export default function ClassroomDock({
         {!collapsed && panelTool && panelTool !== 'worksheet' && (
           <div
             className="rounded-[var(--r-md)] overflow-hidden pointer-events-auto max-h-[60vh] overflow-y-auto"
-            style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-2)', border: '1px solid var(--border)' }}
+            style={{ background: 'var(--paper-0)', boxShadow: 'var(--surface-a4-elevation)', border: '2px solid var(--border)' }}
           >
             <div className="flex justify-end p-1">
               <button
@@ -179,7 +179,7 @@ export default function ClassroomDock({
         {/* 사각 도구 바 — 위 모서리만 둥글게, 아래는 footer에 붙는 느낌 */}
         <div
           className="pointer-events-auto flex items-center gap-1 px-1.5 py-1 rounded-t-[var(--r-md)] border border-b-0"
-          style={{ background: 'var(--paper-0)', boxShadow: 'var(--e-2)', borderColor: 'var(--border)' }}
+          style={{ background: 'var(--paper-0)', boxShadow: 'var(--surface-a4-elevation)', borderColor: 'var(--border)' }}
         >
           {collapsed ? (
             <button

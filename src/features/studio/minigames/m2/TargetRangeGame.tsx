@@ -221,7 +221,7 @@ export default function TargetRangeGame({ supportLevel }: MiniGameProps) {
         </div>
 
         <div className="flex flex-wrap gap-1.5" aria-label="범위 중심 대체 조작">
-          {stage.people.map((person) => <button key={person.id} type="button" onClick={() => focusPerson(person)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 px-2 text-[13px] font-black text-white">🎯 {person.label}로 이동</button>)}
+          {stage.people.map((person) => <button key={person.id} type="button" onClick={() => focusPerson(person)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-sky-950 px-2 text-[14px] font-black text-white">🎯 {person.label}로 이동</button>)}
         </div>
 
         {/* 범위 크기 */}

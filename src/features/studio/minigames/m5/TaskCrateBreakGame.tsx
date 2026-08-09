@@ -113,7 +113,7 @@ export default function TaskCrateBreakGame({ supportLevel }: MiniGameProps) {
             <span className="text-4xl" aria-hidden="true">{availablePieces.length ? '📦' : '✅'}</span>
             <div><p className="text-[14px] font-black text-amber-300">큰 일 상자</p><p className="text-[16px] font-black text-white">{stage.task}</p></div>
           </div>
-          <p className="mt-1 text-[13px] font-bold text-amber-100">상자 안에 해야 할 일이 {availablePieces.length}개 남아 있어요.</p>
+          <p className="mt-1 text-[14px] font-bold text-amber-100">상자 안에 해야 할 일이 {availablePieces.length}개 남아 있어요.</p>
         </section>
 
         <section className="rounded-xl border-2 border-sky-300/60 bg-sky-950/45 p-2.5" aria-label="작은 과제 조각">
@@ -121,19 +121,19 @@ export default function TaskCrateBreakGame({ supportLevel }: MiniGameProps) {
           <div className="grid gap-1.5 sm:grid-cols-2">
             {availablePieces.map((piece) => {
               const selected = selectedId === piece.id;
-              return <button key={piece.id} type="button" aria-pressed={selected} disabled={game.status !== 'playing'} onClick={() => setSelectedId(piece.id)} className="flex min-h-14 items-center gap-2 rounded-lg border-2 px-2 text-left text-white transition disabled:opacity-45" style={{ borderColor: selected ? '#fbbf24' : 'rgba(148,163,184,0.5)', background: selected ? 'rgba(146,64,14,0.8)' : 'rgba(15,23,42,0.62)' }}><span className="text-xl" aria-hidden="true">{piece.emoji}</span><span className="flex-1 text-[14px] font-black">{piece.label}</span><span className="text-[12px] font-black text-amber-200">{selected ? '잡았어요' : '고르기'}</span></button>;
+              return <button key={piece.id} type="button" aria-pressed={selected} disabled={game.status !== 'playing'} onClick={() => setSelectedId(piece.id)} className="flex min-h-14 items-center gap-2 rounded-lg border-2 px-2 text-left text-white transition disabled:opacity-45" style={{ borderColor: selected ? '#fbbf24' : 'rgba(148,163,184,0.5)', background: selected ? 'rgba(146,64,14,0.8)' : 'rgba(15,23,42,0.62)' }}><span className="text-xl" aria-hidden="true">{piece.emoji}</span><span className="flex-1 text-[14px] font-black">{piece.label}</span><span className="text-[14px] font-black text-amber-200">{selected ? '잡았어요' : '고르기'}</span></button>;
             })}
           </div>
         </section>
 
         <section className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/45 p-2.5" aria-label="과제 순서판">
-          <div className="mb-1 flex items-center justify-between"><h3 className="text-[14px] font-black text-emerald-100">과제 순서판</h3><span className="text-[13px] font-bold text-emerald-200">{placedIds.length} / {stage.order.length}</span></div>
+          <div className="mb-1 flex items-center justify-between"><h3 className="text-[14px] font-black text-emerald-100">과제 순서판</h3><span className="text-[14px] font-bold text-emerald-200">{placedIds.length} / {stage.order.length}</span></div>
           <div className="flex min-h-20 items-center gap-1.5 overflow-x-auto rounded-lg border-2 border-dashed border-emerald-200/60 bg-slate-950/45 p-2">
-            <span className="shrink-0 rounded-lg border-2 border-rose-300 bg-rose-950 px-2 py-2 text-[13px] font-black text-white">🚩 시작</span>
-            {placedIds.map((id, index) => { const piece = stage.pieces.find((item) => item.id === id)!; return <React.Fragment key={id}><span className="text-lg text-emerald-300" aria-hidden="true">→</span><div className="min-w-24 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900/70 px-2 py-2 text-center text-[13px] font-black text-white"><span className="block text-lg" aria-hidden="true">{piece.emoji}</span>{index + 1}. {piece.label}</div></React.Fragment>; })}
+            <span className="shrink-0 rounded-lg border-2 border-rose-300 bg-rose-950 px-2 py-2 text-[14px] font-black text-white">🚩 시작</span>
+            {placedIds.map((id, index) => { const piece = stage.pieces.find((item) => item.id === id)!; return <React.Fragment key={id}><span className="text-lg text-emerald-300" aria-hidden="true">→</span><div className="min-w-24 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900/70 px-2 py-2 text-center text-[14px] font-black text-white"><span className="block text-lg" aria-hidden="true">{piece.emoji}</span>{index + 1}. {piece.label}</div></React.Fragment>; })}
             <span className="text-xl text-slate-400" aria-hidden="true">{placedIds.length === stage.order.length ? '🏁' : '…'}</span>
           </div>
-          <p className="mt-1 text-center text-[13px] font-bold text-emerald-100">{selectedPiece ? `${selectedPiece.emoji} ${selectedPiece.label}을(를) 다음 칸에 놓아 보세요.` : '조각 하나를 골라 순서판으로 옮겨요.'}</p>
+          <p className="mt-1 text-center text-[14px] font-bold text-emerald-100">{selectedPiece ? `${selectedPiece.emoji} ${selectedPiece.label}을(를) 다음 칸에 놓아 보세요.` : '조각 하나를 골라 순서판으로 옮겨요.'}</p>
         </section>
       </div>
     </MiniGameFrame>

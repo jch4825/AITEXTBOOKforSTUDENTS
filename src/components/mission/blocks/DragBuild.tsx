@@ -186,7 +186,7 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
                   className="w-full sm:w-48 h-16 rounded-[var(--r-sm)] border-2 border-dashed flex items-center justify-center bg-[color:var(--paper-0)] cursor-pointer transition-all relative overflow-hidden"
                   style={{
                     borderColor: isTargetGlow ? accent : 'var(--border)',
-                    boxShadow: isTargetGlow ? 'var(--e-2)' : 'none',
+                    boxShadow: isTargetGlow ? 'var(--feedback-ok-halo)' : 'none',
                   }}
                 >
                   {piece ? (
@@ -238,14 +238,14 @@ export default function DragBuild({ block, value, onChange, accent, accentSoft }
                 onPointerMove={handlePointerMove}
                 onPointerUp={(e) => handlePointerUp(e, idx)}
                 onClick={() => handlePieceClick(idx)}
-                className={`card3d flex items-center gap-1.5 px-5 py-3 rounded-[var(--r-md)] font-bold text-base select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
+                className={`surface-sticker flex items-center gap-1.5 px-5 py-3 rounded-[var(--r-md)] font-bold text-base select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
                   ${isDragging ? 'z-50 scale-105' : ''}
                 `}
                 style={{
                   border: isSelected ? `4px solid ${accent}` : `2.5px solid ${accent}`,
                   background: isSelected ? accentSoft : 'var(--paper-0)',
                   color: 'var(--brand-ink)',
-                  ['--edge' as string]: accent,
+                  ['--surface-edge' as string]: accent,
                   transform: isDragging
                     ? `translate(${dragOffset.x}px, ${dragOffset.y}px)`
                     : 'none',

@@ -2,7 +2,7 @@ import React from 'react';
 
 const N = 16;
 // 축하 색 팔레트 — 저채도 파스텔 대신 밝고 경쾌하게
-const FESTIVE = ['#ccf200', '#4fc3e8', '#ffb703', '#ff6b9d', '#8ed081', '#b388ff'];
+const FESTIVE = ['#f59e0b', '#4fc3e8', '#e07a65', '#ff6b9d', '#8ed081', '#b388ff'];
 
 export default function Burst({ color }: { color?: string }) {
   if (

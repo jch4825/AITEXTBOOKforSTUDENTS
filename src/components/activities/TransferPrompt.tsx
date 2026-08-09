@@ -18,7 +18,7 @@ export const TransferPrompt: React.FC<TransferPromptProps> = ({ transfer, onComp
       <div className="pt-2">
         <button
           onClick={() => onCompleteTransfer?.({ mode: 'choice', text: '새 상황에 써 보기 완료' })}
-          className="min-h-[44px] px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs flex items-center space-x-2"
+          className="min-h-[44px] px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition depth-paper flex items-center space-x-2"
         >
           <span>새 생활 장상에 적용 완료</span>
           <span>✓</span>

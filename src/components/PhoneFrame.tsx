@@ -46,7 +46,7 @@ export default function PhoneFrame({
         className="relative mx-auto flex flex-col transition-all overflow-hidden
           w-full rounded-[var(--r-md)] border border-[color:var(--line)] bg-[color:var(--paper-1)]
           md:w-[380px] md:h-[600px] md:border md:border-[color:var(--line)] md:rounded-[24px]"
-        style={{ boxShadow: '0 4px 20px rgba(43,58,85,0.08)' }}
+        style={{ boxShadow: 'var(--surface-paper-elevation)' }}
       >
 
         {/* Status Bar (PC Only) */}
@@ -91,7 +91,7 @@ export default function PhoneFrame({
                     <span className="text-[13px] md:text-sm font-semibold ml-1" style={{ color: 'var(--muted)' }}>아이미</span>
                   )}
                   <div 
-                    className={`rounded-[20px] px-4 py-2.5 text-base md:text-lg leading-relaxed shadow-sm relative break-words ${msg.aiGlow ? 'ai-glow' : ''}`}
+                    className={`rounded-[20px] px-4 py-2.5 text-base md:text-lg leading-relaxed depth-paper relative break-words ${msg.aiGlow ? 'ai-glow' : ''}`}
                     style={{
                       backgroundColor: isUser ? accent : 'var(--paper-0)',
                       color: isUser ? '#ffffff' : 'var(--ink-1)',
@@ -128,7 +128,7 @@ export default function PhoneFrame({
               <div className="flex flex-col gap-0.5">
                 <span className="text-[13px] md:text-sm font-semibold ml-1" style={{ color: 'var(--muted)' }}>아이미</span>
                 <div
-                  className="rounded-[18px] rounded-tl-[4px] px-4 py-3 bg-[color:var(--paper-0)] border border-[color:var(--line)] shadow-sm flex items-center gap-1 h-[34px]"
+                  className="rounded-[18px] rounded-tl-[4px] px-4 py-3 bg-[color:var(--paper-0)] border border-[color:var(--line)] depth-paper flex items-center gap-1 h-[34px]"
                 >
                   <span className="w-1.5 h-1.5 rounded-full motion-safe:animate-bounce" style={{ background: 'var(--muted)', animationDelay: '0ms' }}></span>
                   <span className="w-1.5 h-1.5 rounded-full motion-safe:animate-bounce" style={{ background: 'var(--muted)', animationDelay: '150ms' }}></span>

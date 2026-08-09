@@ -93,7 +93,7 @@ export default function ResultCheckBudgetGame({ supportLevel }: MiniGameProps) {
         <section className="rounded-xl border-2 border-amber-300/60 bg-amber-950/45 p-2.5" aria-label="검토실 장면">
           <p className="text-[14px] font-black text-amber-200">🔍 검토실</p>
           <p className="text-[15px] font-black text-white">{selected ? selected.scene : '결과 카드를 고르면 확인할 자료 장면이 열려요.'}</p>
-          <p className="mt-1 text-[13px] font-bold text-amber-100">빨간 표시가 있는 카드는 사람에게 꼭 다시 물어봐요.</p>
+          <p className="mt-1 text-[14px] font-bold text-amber-100">빨간 표시가 있는 카드는 사람에게 꼭 다시 물어봐요.</p>
         </section>
 
         <section className="grid flex-1 gap-1.5 sm:grid-cols-2" aria-label="확인할 결과 카드">
@@ -101,7 +101,7 @@ export default function ResultCheckBudgetGame({ supportLevel }: MiniGameProps) {
             const selectedCard = selectedId === card.id;
             const checked = checkedIds.includes(card.id);
             const opened = openedIds.includes(card.id);
-            return <button key={card.id} type="button" aria-pressed={selectedCard} disabled={checked || game.status !== 'playing'} onClick={() => setSelectedId(card.id)} className="flex min-h-16 items-center gap-2 rounded-xl border-2 px-2 text-left text-white transition disabled:opacity-50" style={{ borderColor: selectedCard ? '#fbbf24' : checked ? '#86efac' : card.risk === 'high' ? '#fb7185' : 'rgba(148,163,184,0.5)', background: checked ? 'rgba(22,101,52,0.6)' : selectedCard ? 'rgba(146,64,14,0.78)' : 'rgba(15,23,42,0.65)' }}><span className="text-2xl" aria-hidden="true">{card.emoji}</span><span className="flex-1"><strong className="block text-[14px] font-black">{card.label}</strong><span className="text-[12px] font-bold text-slate-300">{checked ? '사람 확인 완료' : opened ? card.note : '자료를 열어 보기'}</span></span><span className="text-[13px] font-black text-amber-200">{checked ? '✅' : selectedCard ? '선택됨' : '고르기'}</span></button>;
+            return <button key={card.id} type="button" aria-pressed={selectedCard} disabled={checked || game.status !== 'playing'} onClick={() => setSelectedId(card.id)} className="flex min-h-16 items-center gap-2 rounded-xl border-2 px-2 text-left text-white transition disabled:opacity-50" style={{ borderColor: selectedCard ? '#fbbf24' : checked ? '#86efac' : card.risk === 'high' ? '#fb7185' : 'rgba(148,163,184,0.5)', background: checked ? 'rgba(22,101,52,0.6)' : selectedCard ? 'rgba(146,64,14,0.78)' : 'rgba(15,23,42,0.65)' }}><span className="text-2xl" aria-hidden="true">{card.emoji}</span><span className="flex-1"><strong className="block text-[14px] font-black">{card.label}</strong><span className="text-[14px] font-bold text-slate-300">{checked ? '사람 확인 완료' : opened ? card.note : '자료를 열어 보기'}</span></span><span className="text-[14px] font-black text-amber-200">{checked ? '✅' : selectedCard ? '선택됨' : '고르기'}</span></button>;
           })}
         </section>
 

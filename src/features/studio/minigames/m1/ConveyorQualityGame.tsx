@@ -156,7 +156,7 @@ export default function ConveyorQualityGame({ supportLevel }: MiniGameProps) {
             <button
               type="button"
               onClick={catchBad}
-              className={`absolute bottom-14 left-1/2 grid h-20 w-20 -translate-x-1/2 place-items-center rounded-xl border-4 text-[30px] shadow-lg ${
+              className={`absolute bottom-14 left-1/2 grid h-20 w-20 -translate-x-1/2 place-items-center rounded-xl border-4 text-[30px] depth-overlay ${
                 current.bad
                   ? 'border-red-400 bg-red-900 text-red-100'
                   : 'border-emerald-400 bg-emerald-900 text-emerald-100'

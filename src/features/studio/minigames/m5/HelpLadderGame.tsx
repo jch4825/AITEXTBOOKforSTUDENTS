@@ -98,7 +98,7 @@ export default function HelpLadderGame({ supportLevel }: MiniGameProps) {
           {game.hintAllowed && <div className="absolute inset-x-0 bg-emerald-400/15" style={{ bottom: `${bandLow}%`, height: `${Math.max(0, bandHigh - bandLow)}%` }} aria-hidden="true" />}
           {selectedHelp && <div className="absolute bottom-0 left-1/2 w-12 -translate-x-1/2 rounded-t-sm border-x-4 border-t-2 border-cyan-400/80 bg-cyan-500/15 transition-[height] duration-300" style={{ height: `${height}%` }} aria-label={`${selectedHelp.label}로 만든 사다리`} />}
           <div className="absolute left-1/2 -translate-x-1/2 text-2xl leading-none transition-all duration-700" style={{ bottom: `${climbed ? Math.min(stage.goal, height + stage.jump) : 0}%` }} aria-hidden="true">🧑</div>
-          <div className="absolute bottom-2 left-2 rounded-lg border border-cyan-200/60 bg-slate-900/80 px-2 py-1 text-[13px] font-black text-cyan-100">
+          <div className="absolute bottom-2 left-2 rounded-lg border border-cyan-200/60 bg-slate-900/80 px-2 py-1 text-[14px] font-black text-cyan-100">
             {selectedHelp ? `${selectedHelp.emoji} ${selectedHelp.label}` : '도움 카드를 아래에 놓아요'}
           </div>
         </div>
@@ -111,13 +111,13 @@ export default function HelpLadderGame({ supportLevel }: MiniGameProps) {
               return (
                 <button key={card.id} type="button" aria-pressed={selected} disabled={game.status !== 'playing'} onClick={() => setSelectedHelpId(card.id)} className="min-h-16 rounded-lg border-2 px-2 py-1 text-center text-white transition disabled:opacity-45" style={{ borderColor: selected ? '#fbbf24' : 'rgba(148,163,184,0.5)', background: selected ? 'rgba(146,64,14,0.8)' : 'rgba(15,23,42,0.6)' }}>
                   <span className="block text-xl" aria-hidden="true">{card.emoji}</span>
-                  <strong className="block text-[13px] font-black">{card.label}</strong>
-                  <span className="text-[11px] font-bold text-slate-300">{card.text}</span>
+                  <strong className="block text-[14px] font-black">{card.label}</strong>
+                  <span className="text-[14px] font-bold text-slate-300">{card.text}</span>
                 </button>
               );
             })}
           </div>
-          <p className="mt-1 text-center text-[13px] font-bold text-sky-100">{good ? '이 카드면 도착하고 내 몫도 남아요.' : '카드를 바꿔 학생의 도착 장면을 비교해 보세요.'}</p>
+          <p className="mt-1 text-center text-[14px] font-bold text-sky-100">{good ? '이 카드면 도착하고 내 몫도 남아요.' : '카드를 바꿔 학생의 도착 장면을 비교해 보세요.'}</p>
         </section>
       </div>
     </MiniGameFrame>

@@ -445,7 +445,7 @@ export default function NextWordRunnerGame() {
 
   return (
     <div
-      className="relative flex h-full flex-col justify-between rounded-2xl p-4 md:p-5 text-white shadow-xl overflow-hidden border-2 border-slate-700"
+      className="relative flex h-full flex-col justify-between rounded-2xl p-4 md:p-5 text-white depth-overlay overflow-hidden border-2 border-slate-700"
       style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)' }}
     >
       {/* Top Header */}
@@ -478,7 +478,7 @@ export default function NextWordRunnerGame() {
       </div>
 
       {/* Built Sentence Bar above Character */}
-      <div className="my-2 p-3 rounded-xl bg-slate-900/90 border-2 border-amber-400/70 shadow-inner flex items-center justify-between gap-2">
+      <div className="my-2 p-3 rounded-xl bg-slate-900/90 border-2 border-amber-400/70 depth-overlay flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-lg shrink-0">🤖</span>
           <p className="text-[15px] sm:text-base font-extrabold text-amber-300 truncate">
@@ -504,7 +504,7 @@ export default function NextWordRunnerGame() {
       )}
 
       {/* Game Canvas Viewport */}
-      <div className="relative flex-1 min-h-[240px] w-full rounded-xl overflow-hidden border border-slate-700 bg-slate-950 shadow-inner">
+      <div className="relative flex-1 min-h-[240px] w-full rounded-xl overflow-hidden border border-slate-700 bg-slate-950 depth-overlay">
         <canvas
           ref={canvasRef}
           width={540}
@@ -516,7 +516,7 @@ export default function NextWordRunnerGame() {
 
         {/* Start Overlay */}
         {gameState === 'idle' && (
-          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs flex flex-col items-center justify-center p-4 text-center space-y-3">
+          <div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 bg-[color:var(--board-overlay)] p-4 text-center">
             <span className="text-4xl animate-bounce">🎈</span>
             <h4 className="text-lg font-black text-white">다음 단어를 잇는 횡스크롤 런너 미니 게임</h4>
             <p className="text-[14px] text-slate-300 max-w-xs font-medium leading-relaxed">
@@ -525,7 +525,7 @@ export default function NextWordRunnerGame() {
             <button
               type="button"
               onClick={() => startStage(0)}
-              className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-[15px] rounded-xl shadow-lg cursor-pointer transform transition hover:scale-105 active:scale-95"
+              className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-[15px] rounded-xl depth-overlay cursor-pointer transform transition hover:scale-105 active:scale-95"
             >
               🚀 게임 시작하기
             </button>
@@ -534,7 +534,7 @@ export default function NextWordRunnerGame() {
 
         {/* Completion & Fact Check Overlay */}
         {gameState === 'completed' && (
-          <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center space-y-3 z-20">
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center space-y-3 bg-[color:var(--board-overlay)] p-4 text-center">
             <span className="text-4xl animate-bounce">✨🎉</span>
             <h4 className="text-base sm:text-lg font-black text-amber-300">
               아이미의 완성된 당당한 문장!
@@ -549,7 +549,7 @@ export default function NextWordRunnerGame() {
             <button
               type="button"
               onClick={() => setGameState('fact_check')}
-              className="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-black text-[14px] sm:text-[15px] rounded-xl shadow-md cursor-pointer transform transition hover:scale-105"
+              className="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-black text-[14px] sm:text-[15px] rounded-xl depth-paper cursor-pointer transform transition hover:scale-105"
             >
               🔍 {stage.factCheckSource} 대조해보기!
             </button>
@@ -558,7 +558,7 @@ export default function NextWordRunnerGame() {
 
         {/* Fact Check Celebration Overlay */}
         {gameState === 'fact_check' && (
-          <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-4 text-center space-y-3 z-30">
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center space-y-3 bg-[color:var(--board-overlay)] p-4 text-center">
             <span className="text-4xl">🌟🎯</span>
             <h4 className="text-lg font-black text-emerald-400">팩트 체크 완료!</h4>
             <div className="p-3 rounded-xl bg-slate-900 border border-slate-700 text-[14px] text-left space-y-1.5 max-w-xs">
@@ -592,7 +592,7 @@ export default function NextWordRunnerGame() {
 
       {gameState === 'playing' && (
         <div className="mt-2 rounded-xl border border-sky-400/50 bg-sky-950/50 p-2" aria-label="말풍선 선택 대체 버튼">
-          <p className="mb-1 text-[13px] font-black text-sky-200">캔버스를 누르기 어렵다면 낱말 버튼을 사용하세요.</p>
+          <p className="mb-1 text-[14px] font-black text-sky-200">캔버스를 누르기 어렵다면 낱말 버튼을 사용하세요.</p>
           <div className="flex flex-wrap gap-1.5">
             {stage.steps[currentStepIdx]?.balloons.map((balloon) => (
               <button key={balloon.word} type="button" onClick={() => chooseWordByButton(balloon.word)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-slate-900 px-2.5 text-[14px] font-black text-white">

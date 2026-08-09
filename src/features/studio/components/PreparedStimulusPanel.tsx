@@ -51,7 +51,7 @@ export default function PreparedStimulusPanel({ stimuli, accent, compact = false
           return (
             <figure
               key={stimulus.id}
-              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 ${compact ? 'p-2.5' : 'p-3'} shadow-xs transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 shadow-md ring-1 ring-amber-300/50' : ''} ${widthClass}`}
+              className={`flex flex-col justify-between overflow-hidden rounded-2xl border-2 ${compact ? 'p-2.5' : 'p-3'} depth-paper transition-transform hover:scale-102 ${isPecs ? 'bg-white border-amber-400 depth-paper ring-1 ring-amber-300/50' : ''} ${widthClass}`}
               style={!isPecs ? { borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' } : undefined}
             >
               {failed ? (
@@ -66,7 +66,7 @@ export default function PreparedStimulusPanel({ stimuli, accent, compact = false
               ) : (
                 <div className={`relative w-full ${aspectClass} overflow-hidden rounded-xl ${isPecs ? 'bg-amber-50/50' : 'bg-slate-100'}`}>
                   {isPecs && (
-                    <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[10px] shadow-xs uppercase tracking-wider z-10 select-none">
+                    <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-[10px] depth-paper uppercase tracking-wider z-10 select-none">
                       PECS
                     </span>
                   )}

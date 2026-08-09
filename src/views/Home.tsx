@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { useProgress } from '../context/ProgressContext';
-import { MODULES, lessonIdsForModule } from '../data/modules';
+import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import ModuleIcon from '../components/ModuleIcon';
+import { useProgress } from '../context/ProgressContext';
 import { getLesson } from '../data/lessons';
-
-import { pickResumeLesson } from '../utils/lessonResume';
+import { lessonIdsForModule, MODULES } from '../data/modules';
 import type { LessonId } from '../types';
+import { pickResumeLesson } from '../utils/lessonResume';
 
 interface Props {
   onEnter: () => void;
@@ -14,7 +13,9 @@ interface Props {
 }
 
 function useReducedMotion() {
-  const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [reduced, setReduced] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -25,523 +26,217 @@ function useReducedMotion() {
 
   return reduced;
 }
+
 export default function Home({ onEnter, onEnterLesson }: Props) {
   const { completedLessons } = useProgress();
   const reducedMotion = useReducedMotion();
-  const totalLessons = MODULES.reduce((sum, m) => sum + m.lessonCount, 0);
+  const totalLessons = MODULES.reduce((sum, module) => sum + module.lessonCount, 0);
   const doneCount = completedLessons.length;
   const isResume = doneCount > 0;
   const progressPercent = totalLessons > 0 ? Math.round((doneCount / totalLessons) * 100) : 0;
   const resumeLessonId = pickResumeLesson(completedLessons);
   const resumeLesson = getLesson(resumeLessonId);
-
-  // 배지 획득 계산
   const doneSet = new Set(completedLessons);
-  const badges = MODULES.map(m => {
-    const lessons = lessonIdsForModule(m.id);
+  const badges = MODULES.map((module) => {
+    const lessons = lessonIdsForModule(module.id);
     return {
-      module: m,
-      earned: lessons.length > 0 && lessons.every(lid => doneSet.has(lid))
+      module,
+      earned: lessons.length > 0 && lessons.every((lessonId) => doneSet.has(lessonId)),
     };
   });
-  const earnedCount = badges.filter(b => b.earned).length;
+  const earnedCount = badges.filter((badge) => badge.earned).length;
 
-  // DOM Refs
-  const shaderCanvasRef = useRef<HTMLCanvasElement>(null);
-  const threejsContainerRef = useRef<HTMLDivElement>(null);
-
-  // 1. WebGL Background Shader Effect
-  useEffect(() => {
-    if (reducedMotion) return;
-    const canvas = shaderCanvasRef.current;
-    if (!canvas) return;
-
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) return;
-
-    let animationFrameId: number;
-    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-
-    const vs = `
-      attribute vec2 a_position;
-      varying vec2 v_texCoord;
-      void main() {
-        v_texCoord = a_position * 0.5 + 0.5;
-        gl_Position = vec4(a_position, 0.0, 1.0);
-      }
-    `;
-
-    const fs = `
-      precision highp float;
-      uniform float u_time;
-      uniform vec2 u_resolution;
-      uniform vec2 u_mouse;
-      varying vec2 v_texCoord;
-
-      float random(vec2 st) {
-          return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
-      }
-
-      float noise(vec2 st) {
-          vec2 i = floor(st);
-          vec2 f = fract(st);
-          float a = random(i);
-          float b = random(i + vec2(1.0, 0.0));
-          float c = random(i + vec2(0.0, 1.0));
-          float d = random(i + vec2(1.0, 1.0));
-          vec2 u = f * f * (3.0 - 2.0 * f);
-          return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-      }
-
-      void main() {
-          vec2 uv = v_texCoord;
-          vec2 mouse = u_mouse / u_resolution;
-
-          vec3 colorBg = vec3(0.97, 0.93, 0.88); // #F8EEE1 기반
-          vec3 colorPastelBlue = vec3(0.52, 0.56, 0.78); // primary soft
-          vec3 colorNeon = vec3(0.84, 0.99, 0.0); // Neon Accent #D6FD00
-
-          float n = noise(uv * 3.0 + u_time * 0.15);
-          vec3 finalColor = mix(colorBg, colorPastelBlue, n * 0.12);
-
-          float dist = distance(uv, mouse);
-          float trail = smoothstep(0.2, 0.0, dist);
-
-          float glow = pow(0.015 / dist, 1.1);
-          finalColor += colorNeon * glow * 0.35;
-          finalColor = mix(finalColor, colorNeon, trail * 0.08);
-
-          gl_FragColor = vec4(finalColor, 1.0);
-      }
-    `;
-
-    const createShader = (type: number, src: string) => {
-      const s = gl.createShader(type);
-      if (!s) return null;
-      gl.shaderSource(s, src);
-      gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-        console.error(gl.getShaderInfoLog(s));
-        return null;
-      }
-      return s;
-    };
-
-    const vertexShader = createShader(gl.VERTEX_SHADER, vs);
-    const fragmentShader = createShader(gl.FRAGMENT_SHADER, fs);
-    if (!vertexShader || !fragmentShader) return;
-
-    const prog = gl.createProgram();
-    if (!prog) return;
-    gl.attachShader(prog, vertexShader);
-    gl.attachShader(prog, fragmentShader);
-    gl.linkProgram(prog);
-    gl.useProgram(prog);
-
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-
-    const pos = gl.getAttribLocation(prog, 'a_position');
-    gl.enableVertexAttribArray(pos);
-    gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
-
-    const uTime = gl.getUniformLocation(prog, 'u_time');
-    const uRes = gl.getUniformLocation(prog, 'u_resolution');
-    const uMouse = gl.getUniformLocation(prog, 'u_mouse');
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      if (rect.width && rect.height) {
-        const nx = (e.clientX - rect.left) / rect.width;
-        const ny = 1.0 - (e.clientY - rect.top) / rect.height;
-        mouse.x = nx * canvas.width;
-        mouse.y = ny * canvas.height;
-      }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-
-    const syncSize = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
-      }
-    };
-    window.addEventListener('resize', syncSize);
-    syncSize();
-
-    const render = (t: number) => {
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      if (uTime) gl.uniform1f(uTime, t * 0.001);
-      if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
-      if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      animationFrameId = requestAnimationFrame(render);
-    };
-    render(0);
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('resize', syncSize);
-    };
-  }, [reducedMotion]);
-
-  // 2. Three.js Holographic Globe Effect
-  //
-  // three는 이 홈 장식 하나에만 쓰이는데 정적으로 불러오면 라이브러리 전체가 첫 화면 번들에
-  // 실린다. 학교 네트워크에서 목차까지 가는 시간을 그만큼 늦추므로 동적으로 받아 온다.
-  // 모션 축소를 켠 학생은 이 효과 자체를 쓰지 않으므로 아예 내려받지 않는다.
-  useEffect(() => {
-    if (reducedMotion) return;
-    const container = threejsContainerRef.current;
-    if (!container) return;
-
-    let cancelled = false;
-    let disposeScene: (() => void) | undefined;
-
-    void import('three').then((THREE) => {
-      if (cancelled || !container.isConnected) return;
-
-      let width = container.clientWidth || window.innerWidth;
-      let height = container.clientHeight || window.innerHeight;
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setSize(width, height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      container.appendChild(renderer.domElement);
-
-      const geometry = new THREE.IcosahedronGeometry(4.8, 12);
-      const material = new THREE.MeshPhongMaterial({
-        color: 0x4f5b90,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.22,
-        emissive: 0x4f5b90,
-        emissiveIntensity: 0.45
-      });
-      const sphere = new THREE.Mesh(geometry, material);
-      scene.add(sphere);
-
-      const innerGeo = new THREE.SphereGeometry(4.5, 24, 24);
-      const innerMat = new THREE.MeshPhongMaterial({
-        color: 0xF8EEE1,
-        transparent: true,
-        opacity: 0.08,
-        shininess: 80
-      });
-      const innerSphere = new THREE.Mesh(innerGeo, innerMat);
-      scene.add(innerSphere);
-
-      const light = new THREE.PointLight(0xffffff, 1, 100);
-      light.position.set(10, 10, 10);
-      scene.add(light);
-      scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-
-      // 우측 하단 코너에 배치하기 위한 위치 조정
-      const updatePosition = () => {
-        const isMobile = window.innerWidth < 768;
-        if (isMobile) {
-          sphere.position.set(2, -4.5, 0);
-        } else {
-          sphere.position.set(4.5, -3.2, 0);
-        }
-        innerSphere.position.copy(sphere.position);
-      };
-      updatePosition();
-
-      camera.position.z = 8;
-
-      let mouseX = 0;
-      let mouseY = 0;
-      const handleMouseMove = (e: MouseEvent) => {
-        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-      };
-      window.addEventListener('mousemove', handleMouseMove);
-
-      const handleResize = () => {
-        const w = container.clientWidth || window.innerWidth;
-        const h = container.clientHeight || window.innerHeight;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h);
-        updatePosition();
-      };
-      window.addEventListener('resize', handleResize);
-
-      let frameId: number;
-      const animate = () => {
-        frameId = requestAnimationFrame(animate);
-        sphere.rotation.y += 0.0002;
-        sphere.rotation.x += 0.0001;
-        sphere.rotation.y += mouseX * 0.001;
-        sphere.rotation.x += mouseY * 0.001;
-
-        const scale = 1 + Math.sin(Date.now() * 0.0006) * 0.025;
-        sphere.scale.set(scale, scale, scale);
-        innerSphere.scale.set(scale, scale, scale);
-
-        renderer.render(scene, camera);
-      };
-      animate();
-
-      disposeScene = () => {
-        cancelAnimationFrame(frameId);
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('resize', handleResize);
-        renderer.dispose();
-        if (container.contains(renderer.domElement)) {
-          container.removeChild(renderer.domElement);
-        }
-      };
-    });
-
-    // 모듈이 도착하기 전에 화면을 떠나면 cancelled가 장면 생성을 막고,
-    // 이미 만들어졌다면 disposeScene이 렌더러와 리스너를 정리한다.
-    return () => {
-      cancelled = true;
-      disposeScene?.();
-    };
-  }, [reducedMotion]);
-
-  // 3. Click Ripple Effect
-  useEffect(() => {
-    if (reducedMotion) return;
-    const handleClick = (e: MouseEvent) => {
-      const ripple = document.createElement('div');
-      ripple.className = 'fixed rounded-full pointer-events-none z-[9998]';
-      ripple.style.width = '2px';
-      ripple.style.height = '2px';
-      ripple.style.backgroundColor = '#D6FD00';
-      ripple.style.left = e.clientX + 'px';
-      ripple.style.top = e.clientY + 'px';
-      ripple.style.boxShadow = '0 0 10px #D6FD00';
-      document.body.appendChild(ripple);
-
-      ripple.animate([
-        { transform: 'scale(1)', opacity: 0.5 },
-        { transform: 'scale(50)', opacity: 0 }
-      ], {
-        duration: 700,
-        easing: 'ease-out'
-      }).onfinish = () => ripple.remove();
-    };
-    document.addEventListener('click', handleClick);
-
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, [reducedMotion]);
+  function startLearning() {
+    if (onEnterLesson) onEnterLesson(resumeLessonId);
+    else onEnter();
+  }
 
   return (
-    <div className="min-h-screen text-on-surface select-none relative overflow-hidden bg-[#F8EEE1]">
-
-      {/* WebGL Background Canvas */}
-      {!reducedMotion && <div className="fixed inset-0 w-full h-full opacity-40 pointer-events-none">
-        <canvas ref={shaderCanvasRef} className="w-full h-full block" />
-      </div>}
-
-      {/* Three.js Hologram Planet */}
-      {!reducedMotion && <div
-        ref={threejsContainerRef}
-        className="fixed inset-0 w-full h-full pointer-events-none bg-transparent z-0"
-      />}
-
-      {/* Top Navigation Bar */}
-      <nav className="relative z-10 w-full bg-[#fdf8f6]/70 backdrop-blur-xl border-b border-[#4f5b90]/10 shadow-sm h-auto min-h-20 py-3">
-        <div className="flex flex-wrap justify-between items-center gap-3 w-full px-4 sm:px-6 max-w-[1200px] mx-auto">
-          <div className="font-extrabold text-[#4f5b90] tracking-tight text-lg sm:text-2xl flex items-center gap-2">
-            <span className="material-symbols-outlined text-3xl">auto_awesome</span>
+    <div
+      className="min-h-screen select-none bg-[color:var(--paper-1)] text-[color:var(--ink-1)]"
+      data-reduced-motion={reducedMotion ? 'true' : 'false'}
+    >
+      <nav className="surface-paper relative z-10 min-h-20 rounded-none border-x-0 border-t-0 py-3">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
+          <div className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-[color:var(--brand-ink)] sm:text-2xl">
+            <span className="material-symbols-outlined text-3xl" aria-hidden="true">auto_awesome</span>
             기본교육과정 중학 선택 교과
           </div>
-          <div className="hidden md:flex items-center gap-2">
-            <span className="px-4 py-2 text-sm font-bold text-[#546500]">학생 학습 화면</span>
-            <a className="px-4 py-2 text-sm font-semibold text-[#45464f] hover:text-[#4f5b90] transition-colors" href="?teacher=1">교사용 페이지</a>
+          <div className="hidden items-center gap-2 md:flex">
+            <span className="px-4 py-2 text-sm font-bold text-[color:var(--brand-ink)]">학생 학습 화면</span>
+            <a
+              className="rounded-[var(--r-sm)] border-2 border-[color:var(--brand-ink)] px-4 py-2 text-sm font-semibold text-[color:var(--brand-ink)] transition-colors hover:bg-[color:var(--paper-2)]"
+              href="?teacher=1"
+            >
+              교사용 페이지
+            </a>
           </div>
           <button
+            type="button"
             onClick={onEnter}
-            className="bg-[#4f5b90] text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-[#8490c8] transition-all active:scale-95 shadow-sm"
+            className="surface-choice is-primary min-h-11 rounded-[var(--r-pill)] px-6 py-2.5 text-sm font-bold transition-colors hover:bg-[color:var(--ink-1)]"
           >
             목차 페이지
           </button>
         </div>
       </nav>
 
-      {/* Main Container */}
-      <main className="relative z-10 max-w-[1200px] mx-auto px-6 pt-10 pb-20 space-y-16">
-        {/* Hero split-layout section */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center min-h-[500px]">
-          {/* Left Column (Content) */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#dde1ff] text-[#081749] text-xs font-bold uppercase tracking-wider">
-              <span className="material-symbols-outlined text-sm">school</span>
+      <main className="relative mx-auto max-w-[1200px] space-y-16 px-6 pb-20 pt-10">
+        <section className="grid min-h-[500px] grid-cols-1 items-center gap-10 lg:grid-cols-12">
+          <div className="space-y-6 text-left lg:col-span-7">
+            <div className="inline-flex items-center gap-2 rounded-[var(--r-pill)] border-2 border-[color:var(--brand-ink)] bg-[color:var(--paper-0)] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[color:var(--brand-ink)]">
+              <span className="material-symbols-outlined text-sm" aria-hidden="true">school</span>
               기본교육과정 중학 선택
             </div>
-            <h1 className="text-5xl md:text-6xl font-black text-[#4f5b90] leading-[1.1] tracking-tight">
-              아이미와 배우는<br />
-              <span className="text-[#546500]">인공지능 활용</span>
+            <h1 className="text-[clamp(1.85rem,9vw,3rem)] font-black leading-[1.1] tracking-tight text-[color:var(--brand-ink)] md:text-6xl">
+              <span className="block whitespace-nowrap">아이미와 배우는</span>
+              <span className="block whitespace-nowrap">인공지능 활용</span>
             </h1>
-            <p className="text-xl text-[#5C5B5A] leading-relaxed max-w-lg">
+            <p className="max-w-lg text-xl leading-relaxed text-[color:var(--ink-2)]">
               {isResume
                 ? '아이미와 친구들이 다시 공부할 준비를 마쳤습니다! 이어서 모험을 떠나 보겠습니까?'
                 : '진우, 윤아랑 같이 AI 친구 아이미를 만나 여러 가지 신기한 도구와 인공지능의 지식을 배웁니다.'}
             </p>
 
-            <div className="pt-4 flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 pt-4">
               <Button
                 size="lg"
-                onClick={() => {
-                  if (onEnterLesson) {
-                    onEnterLesson(resumeLessonId);
-                  } else {
-                    onEnter();
-                  }
-                }}
-                className="btn-glow text-xl px-10 py-5 rounded-full shadow-lg flex items-center gap-3 group bg-[#caef00] text-[#181e00] hover:bg-[#ccf200]"
+                onClick={startLearning}
+                className="surface-choice is-primary group gap-3 px-10 py-5 text-xl"
               >
                 이어서 학습하기
-                <span className="material-symbols-outlined text-2xl group-hover:translate-x-1.5 transition-transform">arrow_forward</span>
+                <span
+                  className={`material-symbols-outlined text-2xl ${reducedMotion ? '' : 'transition-transform group-hover:translate-x-1'}`}
+                  aria-hidden="true"
+                >
+                  arrow_forward
+                </span>
               </Button>
             </div>
           </div>
 
-          {/* Right Column (Hero Card with cover image) */}
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="relative w-full max-w-[420px] aspect-[7/10] rounded-3xl overflow-hidden shadow-2xl border-4 border-white/60 transform rotate-1 hover:rotate-0 transition-transform duration-300 group">
-              {/* Cover Image from public/cover.webp */}
-              <div
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: `url('${import.meta.env.BASE_URL}cover.png')` }}
-                aria-label="Aimi, Jinwoo, and Yoona together in a happy future AI society"
+          <div className="flex justify-center lg:col-span-5">
+            <figure className="surface-a4 relative aspect-[7/10] w-full max-w-[420px] overflow-hidden rounded-[var(--r-md)] border-[color:var(--brand-ink)]">
+              <img
+                src={`${import.meta.env.BASE_URL}cover.png`}
+                alt="아이미, 진우, 윤아가 함께 있는 인공지능 활용 교과서 표지"
+                className="h-full w-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#2B3A55]/85 via-transparent to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 text-white space-y-2">
-                <span className="bg-[#caef00] text-[#181e00] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+              <figcaption className="absolute inset-x-0 bottom-0 bg-[color:var(--brand-ink)] p-6 text-[color:var(--paper-0)]">
+                <span className="inline-flex rounded-[var(--r-pill)] border-2 border-[color:var(--paper-0)] px-3 py-1 text-xs font-bold uppercase tracking-wider">
                   기본 중학
                 </span>
-                <p className="text-2xl font-black">인공지능 활용(기본교육과정)</p>
-                <p className="text-xs text-white/80">미래 사회와 동반성장하는 첫 단추</p>
-              </div>
-            </div>
+                <p className="mt-2 text-2xl font-black">인공지능 활용(기본교육과정)</p>
+                <p className="mt-1 text-xs">미래 사회와 동반성장하는 첫 단추</p>
+              </figcaption>
+            </figure>
           </div>
         </section>
 
-        {/* Bento Grid Feature Section */}
         <section id="features" className="space-y-8">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <h2 className="text-3xl font-extrabold text-[#4f5b90]">내 속도로 배우는 인공지능 학습서</h2>
-            <p className="text-sm text-[#5C5B5A]">발달장애학생들을 위한 첫 인공지능 수업 자료</p>
+          <div className="mx-auto max-w-xl space-y-2 text-center">
+            <h2 className="text-3xl font-extrabold text-[color:var(--brand-ink)]">내 속도로 배우는 인공지능 학습서</h2>
+            <p className="text-sm text-[color:var(--ink-2)]">발달장애학생들을 위한 첫 인공지능 수업 자료</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Large Card: Progress & Badge shelf */}
-            <div className="md:col-span-2 glass-panel p-8 rounded-2xl border border-[#4f5b90]/10 flex flex-col justify-between min-h-[300px]">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <article className="surface-paper flex min-h-[300px] flex-col justify-between rounded-[var(--r-md)] p-8 md:col-span-2">
               <div>
-                <span className="bg-[#4f5b90]/10 text-[#4f5b90] px-3 py-1 rounded-full text-xs font-bold mb-4 inline-block">
+                <span className="mb-4 inline-block rounded-[var(--r-pill)] border-2 border-[color:var(--brand-ink)] bg-[color:var(--paper-1)] px-3 py-1 text-xs font-bold text-[color:var(--brand-ink)]">
                   단원 기록
                 </span>
-                <h3 className="text-2xl font-bold text-[#4f5b90] mb-2">단원 학습 기록</h3>
-                <p className="text-sm text-[#5C5B5A] max-w-md">
+                <h3 className="mb-2 text-2xl font-bold text-[color:var(--brand-ink)]">단원 학습 기록</h3>
+                <p className="max-w-md text-sm text-[color:var(--ink-2)]">
                   차시를 마칠 때마다 단원 기록이 채워집니다. 완료한 학습을 한눈에 확인할 수 있습니다.
                 </p>
               </div>
 
-              {/* Badge shelf area */}
-              <div className="mt-6 p-4 rounded-xl bg-white/40 border border-white/50 shadow-inner flex flex-wrap items-center gap-4">
-                {badges.map(({ module: m, earned }) => (
+              <div className="mt-6 flex flex-wrap items-center gap-4 rounded-[var(--r-sm)] border-2 border-dashed border-[color:var(--line)] bg-[color:var(--paper-1)] p-4">
+                {badges.map(({ module, earned }) => (
                   <div
-                    key={m.id}
-                    className="h-14 w-14 rounded-full flex items-center justify-center transition-transform hover:scale-105"
-                    style={earned
-                      ? { background: 'white', boxShadow: '0 4px 10px rgba(0,0,0,0.06)', border: '2px solid #546500' }
-                      : { background: 'rgba(255,255,255,0.3)', border: '2px dashed rgba(0,0,0,0.1)', opacity: 0.65 }}
-                    title={earned ? `${m.title} 완주!` : `${m.title} 진행 중`}
+                    key={module.id}
+                    className={`grid h-14 w-14 place-items-center rounded-full ${earned ? 'surface-stamp text-[color:var(--brand-ink)]' : 'border-2 border-dashed border-[color:var(--line)] bg-[color:var(--paper-0)] opacity-60'}`}
+                    title={earned ? `${module.title} 완주!` : `${module.title} 진행 중`}
+                    aria-label={earned ? `${module.title} 완주 도장` : `${module.title} 진행 중`}
                   >
-                    <ModuleIcon moduleId={m.id} size={28} muted={!earned} />
+                    <ModuleIcon moduleId={module.id} size={28} muted={!earned} />
                   </div>
                 ))}
-                <span className="text-xs text-[#5C5B5A] font-bold ml-2">
+                <span className="ml-2 text-xs font-bold text-[color:var(--ink-2)]">
                   {earnedCount} / 6개 획득
                 </span>
               </div>
-            </div>
+            </article>
 
-            {/* Small Card: next learning */}
-            <div className="bg-[#fdf8f6]/60 backdrop-blur-md p-8 rounded-2xl border border-[#4f5b90]/10 shadow-sm flex flex-col justify-center items-start text-left space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#ccf200]/20 flex items-center justify-center text-[#546500]">
-                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>menu_book</span>
+            <article className="surface-paper flex flex-col items-start justify-center space-y-4 rounded-[var(--r-md)] p-8 text-left">
+              <div className="surface-stamp grid h-14 w-14 place-items-center rounded-[var(--r-sm)] text-[color:var(--brand-ink)]">
+                <span className="material-symbols-outlined text-3xl" aria-hidden="true">menu_book</span>
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-bold text-[#1c1b1b]">{isResume ? '이어서 할 차시' : '오늘 배울 내용'}</h3>
-                <p className="text-base font-extrabold text-[#4f5b90]">
+                <h3 className="text-lg font-bold text-[color:var(--ink-1)]">{isResume ? '이어서 할 차시' : '오늘 배울 내용'}</h3>
+                <p className="text-base font-extrabold text-[color:var(--brand-ink)]">
                   {resumeLesson?.title ?? 'AI는 우리 곁에 있습니다'}
                 </p>
-                <p className="text-sm leading-relaxed text-[#5C5B5A]">
+                <p className="text-sm leading-relaxed text-[color:var(--ink-2)]">
                   {resumeLesson?.objective ?? '아이미와 함께 인공지능이 하는 일을 알아봅니다.'}
                 </p>
               </div>
-            </div>
+            </article>
           </div>
         </section>
 
-        {/* Progress Tracker Section */}
         <section id="progress" className="space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-3xl font-extrabold text-[#4f5b90]">나의 학습 성장 기록</h2>
-            <p className="text-sm text-[#5C5B5A]">그동안 진우와 윤아랑 함께 쌓아온 아름다운 배움의 길입니다.</p>
+          <div className="space-y-2 text-center">
+            <h2 className="text-3xl font-extrabold text-[color:var(--brand-ink)]">나의 학습 성장 기록</h2>
+            <p className="text-sm text-[color:var(--ink-2)]">그동안 진우와 윤아랑 함께 쌓아온 아름다운 배움의 길입니다.</p>
           </div>
 
-          <div className="bg-[#fdf8f6]/80 backdrop-blur-md border border-[#4f5b90]/10 rounded-3xl p-8 md:p-10 shadow-sm max-w-3xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center">
-              {/* Math Mastery (Progress Bar) */}
+          <div className="surface-paper mx-auto max-w-3xl rounded-[var(--r-md)] p-8 md:p-10">
+            <div className="grid grid-cols-1 items-center gap-8 text-center md:grid-cols-3">
               <div className="space-y-3">
-                <div className="text-3xl font-black text-[#546500]">{progressPercent}%</div>
-                <div className="text-xs font-bold text-[#45464f] uppercase tracking-wider">전체 차시 완수율</div>
-                <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div className="text-3xl font-black text-[color:var(--brand-ink)]">{progressPercent}%</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[color:var(--ink-1)]">전체 차시 완수율</div>
+                <div
+                  className="h-3 w-full overflow-hidden rounded-[var(--r-pill)] border-2 border-[color:var(--brand-ink)] bg-[color:var(--paper-2)]"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={progressPercent}
+                  aria-label="전체 차시 완수율"
+                >
                   <div
-                    className="h-full bg-[#546500] rounded-full transition-all duration-500"
-                    style={{
-                      width: `${progressPercent}%`,
-                      boxShadow: '0 0 10px rgba(214,253,0,0.5)'
-                    }}
+                    className="h-full bg-[color:var(--brand-ink)] transition-[width] duration-500 motion-reduce:transition-none"
+                    style={{ width: `${progressPercent}%` }}
                   />
                 </div>
               </div>
 
-              {/* Continuous days */}
-              <div className="space-y-2 md:border-x md:border-[#4f5b90]/10 py-2">
-                <div className="text-3xl font-black text-[#4f5b90]">{isResume ? '학습 중' : '시작 단계'}</div>
-                <div className="text-xs font-bold text-[#45464f] uppercase tracking-wider">나의 학습 상태</div>
-                <p className="text-xs text-[#5C5B5A]">아이미가 대기하고 있습니다</p>
+              <div className="space-y-2 py-2 md:border-x-2 md:border-[color:var(--line)]">
+                <div className="text-3xl font-black text-[color:var(--brand-ink)]">{isResume ? '학습 중' : '시작 단계'}</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[color:var(--ink-1)]">나의 학습 상태</div>
+                <p className="text-xs text-[color:var(--ink-2)]">아이미가 대기하고 있습니다</p>
               </div>
 
-              {/* Completed Task Count */}
               <div className="space-y-2">
-                <div className="text-3xl font-black text-[#9f402f]">{doneCount} 개</div>
-                <div className="text-xs font-bold text-[#45464f] uppercase tracking-wider">완료한 학습 개수</div>
-                <p className="text-xs text-[#5C5B5A]">총 {totalLessons}개 학습 차시</p>
+                <div className="text-3xl font-black text-[color:var(--brand-ink)]">{doneCount}개</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-[color:var(--ink-1)]">완료한 학습 개수</div>
+                <p className="text-xs text-[color:var(--ink-2)]">총 {totalLessons}개 학습 차시</p>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="w-full py-10 bg-[#f1edeb] border-t border-[#4f5b90]/10 relative z-10">
-        <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left space-y-1">
-            <div className="font-black text-lg text-[#1c1b1b] flex items-center justify-center md:justify-start gap-1">
-              <span className="material-symbols-outlined text-xl">auto_awesome</span>
+      <footer className="relative w-full border-t-2 border-[color:var(--brand-ink)] bg-[color:var(--paper-2)] py-10">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-center justify-between gap-6 px-6 md:flex-row">
+          <div className="space-y-1 text-center md:text-left">
+            <div className="flex items-center justify-center gap-1 text-lg font-black text-[color:var(--brand-ink)] md:justify-start">
+              <span className="material-symbols-outlined text-xl" aria-hidden="true">auto_awesome</span>
               인공지능 활용
             </div>
-            <p className="text-xs text-[#5C5B5A]">발달장애 학생을 위한 인공지능 학습 온라인 교과서입니다.</p>
+            <p className="text-xs text-[color:var(--ink-2)]">발달장애 학생을 위한 인공지능 학습 온라인 교과서입니다.</p>
           </div>
-          <div className="flex flex-wrap justify-center gap-4 text-xs text-[#5C5B5A]">
+          <div className="flex flex-wrap justify-center gap-4 text-xs text-[color:var(--ink-2)]">
             <span>접근성 기능 제공</span>
             <span>학습 기록은 이 기기에 저장됩니다</span>
             <span>도움이 필요하면 선생님께 알려 주십시오</span>

@@ -133,7 +133,7 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
                 else if (!multi) updateValue({ ...local, [key]: [item.id] });
                 else toggle(item.id, key);
               }}
-              className="card3d flex items-center gap-3 p-4 rounded-[var(--r-md)] min-h-20 text-left font-bold cursor-pointer"
+              className="surface-choice flex items-center gap-3 p-4 rounded-[var(--r-md)] min-h-20 text-left font-bold cursor-pointer"
               style={{
                 border: isSelected ? `4px solid ${accent}` : '2.5px solid var(--line)',
                 background: isSelected ? 'var(--paper-1)' : 'var(--paper-0)',
@@ -242,7 +242,7 @@ export default function JudgmentMain({ block, value = EMPTY_VALUE, studentName, 
         <h3 className="text-xl font-bold" style={{ color: 'var(--brand-ink)' }}>아이미의 생각을 보고 내가 판단합니다</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {decisions.map((decision) => (
-            <button type="button" key={decision.id} onClick={() => chooseDecision(decision.id)} className="card3d p-4 rounded-[var(--r-md)] min-h-28 flex flex-col items-center justify-center gap-2 font-bold cursor-pointer" style={{ border: `2.5px solid ${accent}`, background: 'var(--paper-0)', color: 'var(--brand-ink)' }}>
+            <button type="button" key={decision.id} onClick={() => chooseDecision(decision.id)} className="surface-choice p-4 rounded-[var(--r-md)] min-h-28 flex flex-col items-center justify-center gap-2 font-bold cursor-pointer" style={{ border: `2.5px solid ${accent}`, background: 'var(--paper-0)', color: 'var(--brand-ink)' }}>
               <span className="text-3xl" aria-hidden>{decision.emoji}</span>
               <span>{decision.label}</span>
             </button>

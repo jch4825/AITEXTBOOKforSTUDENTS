@@ -328,7 +328,7 @@ export default function ShoppingConditionCartGame({ supportLevel }: MiniGameProp
       {/* 끌고 있는 물건이 손가락을 따라온다 */}
       {dragged && ghost && (
         <div
-          className="pointer-events-none fixed z-50 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-lg border-2 border-emerald-300 bg-slate-900 px-2 py-1 shadow-xl"
+          className="pointer-events-none fixed z-50 flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-lg border-2 border-emerald-300 bg-slate-900 px-2 py-1 depth-overlay"
           style={{ left: ghost.x, top: ghost.y }}
         >
           <span className="text-base leading-none">{dragged.emoji}</span>

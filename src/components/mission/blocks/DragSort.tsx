@@ -216,7 +216,7 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
                   onPointerMove={handlePointerMove}
                   onPointerUp={(e) => handlePointerUp(e, card.originalIdx)}
                   onClick={() => handleCardClick(card.originalIdx)}
-                  className={`card3d flex items-center gap-2 px-5 py-3 rounded-[var(--r-md)] font-bold text-base select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
+                  className={`surface-sticker flex items-center gap-2 px-5 py-3 rounded-[var(--r-md)] font-bold text-base select-none transition-all cursor-grab active:cursor-grabbing shrink-0 touch-none
                     ${isDragging ? 'z-50 scale-105' : ''}
                     ${isError ? 'answer-shake' : ''}
                   `}
@@ -224,7 +224,7 @@ export default function DragSort({ block, value = {}, onChange, accent }: Props)
                     border: isSelected ? `4px solid ${palette.accent}` : `2.5px solid ${palette.accent}`,
                     background: isError ? 'var(--bad-bg)' : isSelected ? palette.tint : 'var(--paper-0)',
                     color: 'var(--brand-ink)',
-                    ['--edge' as string]: palette.accent,
+                    ['--surface-edge' as string]: palette.accent,
                     transform: isDragging
                       ? `translate(${dragOffset.x}px, ${dragOffset.y}px)`
                       : 'none',

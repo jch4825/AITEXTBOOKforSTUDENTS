@@ -55,7 +55,7 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
       {/* Target image with hotspot buttons */}
       <div
         className="relative w-full max-w-[500px] mx-auto aspect-square rounded-[var(--r-lg)] overflow-hidden border-2 border-[color:var(--line)]"
-        style={{ background: 'var(--paper-2)', boxShadow: 'var(--e-2)' }}
+        style={{ background: 'var(--paper-2)', boxShadow: 'var(--surface-paper-elevation)' }}
       >
         <img
           src={candidates[srcIdx]}
@@ -92,7 +92,7 @@ export default function SceneHunt({ block, value = [], onChange, accent }: Props
               aria-label={isFound ? `${target.label} (찾음)` : '여기를 찾아보십시오'}
             >
               {isFound && (
-                <span className="answer-pop w-6 h-6 rounded-full bg-[color:var(--paper-0)] flex items-center justify-center shadow-md" style={{ border: '2px solid var(--ok)' }}>
+                <span className="answer-pop w-6 h-6 rounded-full bg-[color:var(--paper-0)] flex items-center justify-center depth-paper" style={{ border: '2px solid var(--ok)' }}>
                   <Icon name="star" size={14} filled color="var(--ok)" />
                 </span>
               )}

@@ -113,13 +113,13 @@ export default function RelayRequestGame({ supportLevel }: MiniGameProps) {
         <section className="rounded-xl border-2 border-amber-300/60 bg-amber-950/45 p-2.5" aria-label="큰 과제 장면">
           <p className="text-[14px] font-black text-amber-300">큰 과제 장면</p>
           <p className="text-[16px] font-black text-white">📋 {stage.task}</p>
-          <p className="mt-1 text-[13px] font-bold text-amber-100">작업자가 한 번에 한 카드씩 전달할 수 있어요.</p>
+          <p className="mt-1 text-[14px] font-bold text-amber-100">작업자가 한 번에 한 카드씩 전달할 수 있어요.</p>
         </section>
 
         <section className="rounded-xl border-2 border-sky-300/60 bg-sky-950/40 p-2.5" aria-label="요청 카드 더미">
           <div className="mb-1 flex items-center justify-between">
             <h3 className="text-[14px] font-black text-sky-100">요청 카드 더미</h3>
-            <span className="text-[13px] font-bold text-sky-200">{availableParts.length}장 남음</span>
+            <span className="text-[14px] font-bold text-sky-200">{availableParts.length}장 남음</span>
           </div>
           <div className="grid gap-1.5 sm:grid-cols-2">
             {availableParts.map((part) => {
@@ -136,7 +136,7 @@ export default function RelayRequestGame({ supportLevel }: MiniGameProps) {
                 >
                   <span className="text-xl" aria-hidden="true">{part.emoji}</span>
                   <span className="flex-1 text-[14px] font-black">{part.label}</span>
-                  <span className="text-[12px] font-black text-amber-200">{selected ? '잡았어요' : '잡기'}</span>
+                  <span className="text-[14px] font-black text-amber-200">{selected ? '잡았어요' : '잡기'}</span>
                 </button>
               );
             })}
@@ -146,16 +146,16 @@ export default function RelayRequestGame({ supportLevel }: MiniGameProps) {
         <section className="rounded-xl border-2 border-emerald-300/60 bg-emerald-950/45 p-2.5" aria-label="요청 레일">
           <div className="mb-1 flex items-center justify-between gap-2">
             <h3 className="text-[14px] font-black text-emerald-100">요청 레일</h3>
-            <span className="text-[13px] font-bold text-emerald-200">{placedIds.length} / {stage.order.length}</span>
+            <span className="text-[14px] font-bold text-emerald-200">{placedIds.length} / {stage.order.length}</span>
           </div>
           <div className="flex min-h-20 items-center gap-1.5 overflow-x-auto rounded-lg border-2 border-dashed border-emerald-200/60 bg-slate-950/45 p-2">
-            <span className="shrink-0 rounded-lg border-2 border-rose-300 bg-rose-950 px-2 py-2 text-[13px] font-black text-white">🙋 요청하는 사람</span>
+            <span className="shrink-0 rounded-lg border-2 border-rose-300 bg-rose-950 px-2 py-2 text-[14px] font-black text-white">🙋 요청하는 사람</span>
             {placedIds.map((id, index) => {
               const part = stage.parts.find((item) => item.id === id)!;
               return (
                 <React.Fragment key={id}>
                   <span className="text-lg text-emerald-300" aria-hidden="true">→</span>
-                  <div className="min-w-24 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900/70 px-2 py-2 text-center text-[13px] font-black text-white">
+                  <div className="min-w-24 shrink-0 rounded-lg border-2 border-emerald-300 bg-emerald-900/70 px-2 py-2 text-center text-[14px] font-black text-white">
                     <span className="block text-lg" aria-hidden="true">{part.emoji}</span>
                     {index + 1}. {part.label}
                   </div>
@@ -164,7 +164,7 @@ export default function RelayRequestGame({ supportLevel }: MiniGameProps) {
             })}
             <span className="text-xl text-slate-400" aria-hidden="true">{placedIds.length === stage.order.length ? '✅' : '…'}</span>
           </div>
-          <p className="mt-1 text-center text-[13px] font-bold text-emerald-100">
+          <p className="mt-1 text-center text-[14px] font-bold text-emerald-100">
             {selectedPart ? `${selectedPart.emoji} ${selectedPart.label} 카드를 레일에 놓아 보세요.` : '카드 하나를 눌러 다음 요청을 준비하세요.'}
           </p>
         </section>
