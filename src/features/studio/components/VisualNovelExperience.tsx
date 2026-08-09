@@ -9,7 +9,7 @@ import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
 import { playSound } from '../../../utils/sound';
 import { cleanStudioIllustrationAlt } from '../studioIllustrations';
-import FinalSceneSparkles from './FinalSceneSparkles';
+import FinalSceneCelebration from './FinalSceneCelebration';
 
 interface Props {
   definition: StudioDefinition;
@@ -38,7 +38,9 @@ export default function VisualNovelExperience({
   const { speakNow, stop } = useSpeak();
   const scene = story.scenes[sceneIndex];
   const isFinalScene = sceneIndex === story.scenes.length - 1;
-  const showFinalSceneSparkles = story.celebrateFinalScene === true && isFinalScene;
+  // 모든 차시의 이야기 마지막에서 완료 연출을 재생한다. 연출 종류는 차시마다 다르고,
+  // 어떤 차시에서 빼야 할 사정이 생기면 데이터에서 false로 끌 수 있다.
+  const showFinalSceneCelebration = story.celebrateFinalScene !== false && isFinalScene;
   const copy = scene.copy[supportLevel];
   const activeKnowledge = story.knowledge[scene.knowledgeStep];
   const spokenText = [
@@ -193,9 +195,9 @@ export default function VisualNovelExperience({
 
   return (
     <>
-      {showFinalSceneSparkles ? (
+      {showFinalSceneCelebration ? (
         <>
-          <FinalSceneSparkles />
+          <FinalSceneCelebration lessonId={definition.lessonId} />
           <span className="sr-only" role="status">이야기를 모두 보았습니다.</span>
         </>
       ) : null}

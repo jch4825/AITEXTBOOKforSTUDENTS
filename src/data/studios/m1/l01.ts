@@ -17,7 +17,6 @@ export const M1_L1_STUDIO: StudioDefinition = {
     visualNovel: {
       title: '아이미의 어려운 자기소개',
       objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 내 말로 소개해요.',
-      celebrateFinalScene: true,
       seasonTag: '[아이미가 왔다 · 1화] 어려운 자기소개',
       nextEpisodeHook: '다음 시간 — 아이미도 선풍기 같은 기계일까요?',
       scenes: [

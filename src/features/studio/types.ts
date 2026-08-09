@@ -84,7 +84,11 @@ export interface VisualNovelStory {
   objective: string;
   scenes: VisualNovelScene[];
   knowledge: [VisualNovelKnowledge, VisualNovelKnowledge, VisualNovelKnowledge];
-  /** 마지막 장면 진입 때 화면 전체에 완료 반짝이를 한 번 보여 줄지 여부. */
+  /**
+   * 마지막 장면 진입 때 완료 연출을 재생할지 여부. 기본값은 켜짐이고, 연출 종류는
+   * 차시 아이디에 따라 다섯 가지 풀에서 결정된다(FinalSceneCelebration.tsx).
+   * 특정 차시에서 빼야 할 사정이 있을 때만 false로 끈다.
+   */
   celebrateFinalScene?: boolean;
   /** 시즌 오프닝 자막 1줄. 예: '[체험회 D-7 · 1화] 오늘의 사건 — 물품이 안 왔다' */
   seasonTag?: string;
