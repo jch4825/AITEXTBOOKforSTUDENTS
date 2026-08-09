@@ -101,16 +101,20 @@ export default function SidebarTree({ currentLessonId, onPickLesson }: Props) {
                         aria-label={label}
                         aria-current={current ? 'page' : undefined}
                         className="relative h-11 w-11 rounded-full flex items-center justify-center hover:bg-[color:var(--paper-2)]"
-                        style={current ? { outline: `2px solid ${theme.accent}`, outlineOffset: '-2px' } : undefined}
+                        /* 지금 보는 차시는 도장판에서 한눈에 찾을 수 있어야 한다.
+                           같은 크기의 빈 원들 사이에서 3px 링 + 면색으로 자리를 알린다. */
+                        style={current
+                          ? { outline: `3px solid ${theme.accent}`, outlineOffset: '-3px', background: theme.accentSoft }
+                          : undefined}
                       >
                         {done ? (
                           <Icon name="star" size={18} filled color={theme.accent} />
                         ) : (
                           <span
                             aria-hidden
-                            className="h-4 w-4 rounded-full border-2 block"
+                            className={`rounded-full border-2 block ${current ? 'h-5 w-5' : 'h-4 w-4'}`}
                             style={{
-                              background: current ? theme.accentSoft : 'var(--paper-0)',
+                              background: current ? theme.accent : 'var(--paper-0)',
                               borderColor: theme.accent,
                             }}
                           />

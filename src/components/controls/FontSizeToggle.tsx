@@ -31,15 +31,12 @@ export default function FontSizeToggle() {
     <button
       type="button"
       onClick={() => setFontSize(nextSize)}
-      className="nav-jelly-btn"
-      style={{
-        '--border-color': '#74c0fc',
-        '--shadow-color': '#a5d8ff',
-      } as React.CSSProperties}
+      className="chrome-sticker"
+      style={{ '--chrome-tint': 'var(--chrome-fontsize)' } as React.CSSProperties}
       title="글자 크기 변경 (작게 - 보통 - 크게)"
       aria-label={`글자 크기 (지금: ${label})`}
     >
-      <span className="nav-jelly-badge" style={{ background: '#339af0' }}>
+      <span className="chrome-sticker-badge" aria-hidden>
         {badge}
       </span>
       <span className="font-extrabold text-[color:var(--brand-ink)]">

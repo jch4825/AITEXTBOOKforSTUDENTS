@@ -59,18 +59,34 @@ for (const marker of [
   '.surface-choice',
   '.surface-a4',
   '.mini-game-board',
+  '--surface-comic-lip:',
 ]) {
   if (!css.includes(marker)) errors.push(`src/index.css: missing design-system marker ${marker}`);
 }
 
-if (!css.includes('border: var(--interactive-border-width) solid currentColor')) {
-  errors.push('src/index.css: interactive controls must inherit the 2px border floor token');
-}
 if (!css.includes('.interactive-border-floor')) {
-  errors.push('src/index.css: the 2px border floor must cover buttons, inputs, selects, textareas, and ARIA controls');
+  errors.push('src/index.css: the 2px border floor must stay available as an opt-in utility');
 }
-if (!css.includes('border-style: solid !important')) {
-  errors.push('src/index.css: the interactive border floor must remain visible even when a legacy control used border: 0');
+
+/* 경계 하한은 "면"에만 옵트인으로 적용한다. 요소 선택자에 일괄로 걸면 둥근 색 스와치·
+   목록 행·아이콘 토글처럼 테두리가 어포던스가 아닌 컨트롤 위에 사각 상자가 겹친다.
+   2026-08-09에 실제로 목차·그림판·중첩 카드를 한꺼번에 망가뜨린 회귀라 계약으로 막는다. */
+const floorSelectors = css
+  .slice(css.indexOf('.interactive-border-floor'))
+  .split('{')[0]
+  .split(',')
+  .map((selector) => selector.trim())
+  .filter(Boolean);
+if (floorSelectors.length !== 1 || floorSelectors[0] !== '.interactive-border-floor') {
+  errors.push(
+    `src/index.css: the border floor must stay opt-in; it currently also targets ${floorSelectors.slice(1).join(', ')}`,
+  );
+}
+if (/\bbutton\s*\{[^}]*border\s*:[^;}]*currentColor/.test(css)) {
+  errors.push('src/index.css: bare button elements must not inherit a currentColor border');
+}
+if (/\[aria-pressed='true'\]\s*\{[^}]*border-width[^}]*!important/.test(css)) {
+  errors.push('src/index.css: a pressed state must not be expressed by forcing a border width on every button');
 }
 
 for (const [label, source, forbidden] of [

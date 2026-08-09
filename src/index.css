@@ -42,6 +42,15 @@
     --warn-bg: #fed7aa;
     --done-bg: #e5e7eb;
 
+    /* 상단 도구 스티커 색 — 모듈 강조색과 같은 채도 대역에서 고른다.
+       학생이 다섯 개를 색으로 구분하되 종이 위에서 튀지 않아야 한다.
+       채도가 높은 캔디 팔레트를 여기에 직접 적지 않는다. */
+    --chrome-dictionary: #A44943;   /* 사전 — 따뜻한 벽돌 */
+    --chrome-fontsize: #76516F;     /* 글자 크기 — 자두 */
+    --chrome-support-full: #2F7773; /* 충분한 지원 — 청록 */
+    --chrome-support-normal: #416AA8; /* 보통 — 기본 파랑 */
+    --chrome-support-challenge: #93601E; /* 도전적 — 황토 */
+
     /* 타이포그래피 (Pretendard Variable) — 요청하신 1포인트 축소 (+2pt / 18px 기준) */
     --fs-display: 2.375rem;   /* 38px — Home 타이틀 */
     --fs-h1: 1.75rem;         /* 28px — 차시 제목 */
@@ -67,9 +76,16 @@
     --surface-paper-elevation: var(--e-1);
     --surface-a4-elevation: var(--e-2);
     --surface-sticker-lip: 0 5px 0 var(--surface-edge, var(--line));
+    /* 만화 컷 립 — 스티커 립과 같은 계열의 단일 깊이 신호를 대각선으로 준다.
+       블러 없는 오프셋이므로 "깊이 신호는 하나" 규칙을 그대로 지킨다.
+       모듈 색을 태우려면 면 쪽에서 이 토큰을 자기 강조색으로 다시 선언한다. */
+    --surface-comic-lip: 7px 7px 0 color-mix(in srgb, var(--accent) 24%, var(--paper-2));
     --surface-sticker-lip-hover: 0 6px 0 var(--surface-edge, var(--line));
     --surface-sticker-lip-active: 0 1px 0 var(--surface-edge, var(--line));
     --surface-sticker-lip-disabled: 0 4px 0 var(--surface-edge, var(--line));
+    /* 높이가 빠듯한 바(모바일 하단 이동 바) 안에서 쓰는 얕은 립 */
+    --surface-sticker-lip-compact: 0 3px 0 var(--surface-edge, var(--line));
+    --surface-sticker-lip-compact-active: 0 1px 0 var(--surface-edge, var(--line));
     --interactive-border-width: 2px;
     --feedback-ai-glow-off: 0 0 0 0 rgba(79, 195, 232, 0);
     --feedback-ai-glow-on: 0 0 0 4px rgba(79, 195, 232, 0.45);
@@ -156,7 +172,6 @@
   button {
     font: inherit;
     cursor: pointer;
-    border: var(--interactive-border-width) solid currentColor;
   }
 
   /* 마우스 클릭 시에만 기본 아웃라인 해제 — 키보드·스위치 사용자의 포커스는 남긴다 */
@@ -785,11 +800,14 @@
 /* 웹툰 에디토리얼 — 한 장면은 한 컷. 넓은 화면에서는 나란히, 모바일에서는 자연스럽게 세로로 읽힌다. */
 .comic-panel {
   --comic-accent: var(--accent);
+  /* 립을 이 면에서 다시 선언해야 인라인으로 주입된 --comic-accent가 반영된다.
+     :root 선언은 그 자리에서 값이 굳으므로 모듈 색을 태울 수 없다. */
+  --surface-comic-lip: 7px 7px 0 color-mix(in srgb, var(--comic-accent) 24%, var(--paper-2));
   position: relative;
   border: 2px solid var(--brand-ink);
   border-radius: 6px 18px 6px 18px;
   background: var(--paper-0);
-  box-shadow: var(--surface-paper-elevation);
+  box-shadow: var(--surface-comic-lip);
 }
 .comic-panel::before {
   content: '';
@@ -1004,10 +1022,39 @@
   gap: 8px;
 }
 
-.mobile-lesson-settings .nav-jelly-btn {
+.mobile-lesson-menu-section {
+  margin: 0;
+  padding: 1rem 1rem 0.5rem;
+  color: var(--brand-ink);
+  font-size: var(--fs-h2);
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+/* 모바일 학습 메뉴 안에서 설정은 보조 조작이다. 이 시트의 목적은 차례와 현재 차시이므로
+   설정이 그보다 먼저 보이면 위계가 뒤집힌다. 립과 색 테두리를 걷어 위의 '처음 화면·교사
+   도구' 행과 같은 조용한 종이 면으로 맞추고, 색 구분은 배지에만 남긴다. */
+.mobile-lesson-settings .chrome-sticker {
   width: 100%;
   min-width: 0;
   justify-content: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper-1);
+  box-shadow: none;
+}
+
+.mobile-lesson-settings .chrome-sticker:hover,
+.mobile-lesson-settings .chrome-sticker:active {
+  transform: none;
+  box-shadow: none;
+  background: var(--paper-2);
+}
+
+.mobile-lesson-settings .chrome-sticker-badge {
+  width: 24px;
+  height: 24px;
+  font-size: 0.74rem;
 }
 
 .mobile-teacher-tools-backdrop {
@@ -1515,11 +1562,43 @@
   }
 }
 
+/* 이전·다음은 차시 안에서 가장 자주 누르는 조작이다. 상단 도구 스티커와 같은 립을 줘서
+   "누르는 것"이라는 어포던스를 화면 전체에서 한 어휘로 맞춘다. */
 .comic-frame-footer .btn {
+  --surface-edge: color-mix(in srgb, var(--btn-accent, var(--accent)) 55%, var(--paper-2));
   min-width: 9rem;
   height: 2.375rem;
   font-size: 0.9375rem;
   padding-inline: 1.25rem;
+  box-shadow: var(--surface-sticker-lip);
+  transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease;
+}
+
+.comic-frame-footer .btn-primary {
+  --surface-edge: color-mix(in srgb, var(--btn-accent, var(--accent)) 62%, var(--ink-1));
+}
+
+.comic-frame-footer .btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--surface-sticker-lip-hover);
+}
+
+.comic-frame-footer .btn:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: var(--surface-sticker-lip-active);
+}
+
+.comic-frame-footer .btn:disabled {
+  box-shadow: var(--surface-sticker-lip-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comic-frame-footer .btn,
+  .comic-frame-footer .btn:hover,
+  .comic-frame-footer .btn:active {
+    transform: none;
+    transition: none;
+  }
 }
 
 .comic-cut-progress {
@@ -1559,6 +1638,12 @@
     gap: 4px;
     padding-inline: 8px;
     font-size: 0.78rem;
+    /* 64px 바 안에 44px 터치 영역과 립이 함께 들어가야 한다. 립을 3px로 줄인다. */
+    box-shadow: var(--surface-sticker-lip-compact);
+  }
+  .comic-frame-footer .btn:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: var(--surface-sticker-lip-compact-active);
   }
   .comic-footer-previous { grid-area: previous; }
   .comic-footer-next { grid-area: next; }
@@ -2178,12 +2263,14 @@
   background: color-mix(in srgb, var(--episode-accent) 8%, var(--paper-0));
   box-shadow: none;
 }
+/* 3열 카드는 1280px에서 한 장이 360px 남짓이다. 번호·아이콘·진도가 폭을 다 먹으면
+   제목이 "AI가 / 뭐야?"처럼 어절 중간에서 끊긴다. 곁다리 요소를 조여 제목에 폭을 준다. */
 .season-episode {
   min-height: 7.25rem;
-  padding: 1rem;
+  padding: 1rem 0.85rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.55rem;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -2196,13 +2283,13 @@
   box-shadow: none;
 }
 .season-number {
-  width: 2.25rem;
+  width: 1.7rem;
   color: var(--episode-accent);
   font-size: 1rem;
   letter-spacing: -0.03em;
 }
 .season-icon {
-  width: 2.4rem;
+  width: 1.9rem;
 }
 .season-copy strong {
   font-size: 1.04rem;
@@ -2213,11 +2300,12 @@
   font-size: 0.86rem;
 }
 .season-episode-meta {
-  min-width: 5.75rem;
+  min-width: 0;
+  gap: 0.35rem;
   align-items: center;
 }
 .season-progress {
-  width: 4.9rem;
+  width: 3.6rem;
   display: flex;
   flex-direction: column;
   gap: 0.28rem;
@@ -2385,10 +2473,11 @@
     display: none;
   }
   .season-episode-meta {
-    min-width: 4.9rem;
+    min-width: 0;
   }
+  /* 375px·125%에서도 제목이 어절 중간에서 끊기지 않도록 진도 표시를 좁게 유지한다. */
   .season-progress {
-    width: 4.2rem;
+    width: 3.4rem;
     font-size: 0.74rem;
   }
   .season-drawer-row,
@@ -3103,51 +3192,79 @@
   box-shadow: var(--focus-halo);
 }
 
-/* 3D Jelly Navigation Buttons */
-.nav-jelly-btn {
-  --surface-edge: var(--shadow-color, var(--line));
+/* 스티커 립 토큰은 반드시 "면" 위에서 계산되어야 한다.
+   :root에서만 선언하면 var(--surface-edge)가 그 자리에서 회색(--line)으로 굳어,
+   컴포넌트가 인라인으로 넣은 모듈 색이 무시되고 모든 립이 같은 회색이 된다.
+   :root 선언은 토큰 목록과 기본값 역할만 하고, 실제 색은 여기서 결정된다. */
+.surface-sticker,
+.chrome-sticker,
+.comic-frame-footer .btn {
+  --surface-sticker-lip: 0 5px 0 var(--surface-edge, var(--line));
+  --surface-sticker-lip-hover: 0 6px 0 var(--surface-edge, var(--line));
+  --surface-sticker-lip-active: 0 1px 0 var(--surface-edge, var(--line));
+  --surface-sticker-lip-disabled: 0 4px 0 var(--surface-edge, var(--line));
+  --surface-sticker-lip-compact: 0 3px 0 var(--surface-edge, var(--line));
+  --surface-sticker-lip-compact-active: 0 1px 0 var(--surface-edge, var(--line));
+}
+
+/* 상단 도구 스티커 — 사전·글자 크기·지원 수준.
+   종이 면(흰 카드) + 도구색 2px 테두리 + 같은 색 립 하나. 깊이 신호는 립뿐이다.
+   컴포넌트는 --chrome-tint 하나만 주입한다. 테두리·립·배지가 모두 거기서 파생된다. */
+.chrome-sticker {
+  --chrome-tint: var(--accent);
+  --surface-edge: color-mix(in srgb, var(--chrome-tint) 45%, var(--paper-2));
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-height: 2.75rem;
   padding: 0.35rem 0.75rem;
+  border: 2px solid var(--chrome-tint);
   border-radius: 999px;
+  background: var(--paper-0);
+  color: var(--brand-ink);
   font-weight: 800;
   font-size: 0.88rem;
-  border: 2px solid var(--border-color, #cbd5e1);
-  background: white;
-  color: #1e293b;
   box-shadow: var(--surface-sticker-lip);
-  transition: all 0.1s ease;
+  transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease;
   cursor: pointer;
   user-select: none;
 }
 
-.nav-jelly-btn:hover {
+.chrome-sticker:hover {
   transform: translateY(-1px);
   box-shadow: var(--surface-sticker-lip-hover);
 }
 
-.nav-jelly-btn:active {
-  transform: translateY(2px);
+.chrome-sticker:active {
+  transform: translateY(4px);
   box-shadow: var(--surface-sticker-lip-active);
 }
 
-.nav-jelly-badge {
+.chrome-sticker-badge {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 28px;
   height: 28px;
   border-radius: 999px;
-  color: white;
+  background: var(--chrome-tint);
+  color: var(--paper-0);
   font-weight: 900;
   font-size: 0.82rem;
+  line-height: 1;
   flex-shrink: 0;
   box-shadow: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .chrome-sticker, .chrome-sticker:hover, .chrome-sticker:active {
+    transform: none;
+    transition: none;
+  }
+}
+
 @media (max-width: 430px) {
-  .nav-jelly-btn {
+  .chrome-sticker {
     min-width: 0;
     flex-shrink: 0;
     gap: 0.3rem;
@@ -3156,11 +3273,11 @@
     white-space: nowrap;
   }
 
-  .nav-jelly-btn > span:last-child {
+  .chrome-sticker > span:last-child {
     white-space: nowrap;
   }
 
-  .nav-jelly-badge {
+  .chrome-sticker-badge {
     width: 24px;
     height: 24px;
     font-size: 0.72rem;
@@ -3349,26 +3466,12 @@
   }
 }
 
-/* 상호작용 면의 브루탈 경계 하한. Tailwind/레거시 1px 선언도 2px 아래로 내려가지 않는다. */
-.interactive-border-floor,
-button,
-input:not([type='range']):not([type='color']),
-textarea,
-select,
-[role='button'],
-[role='option'],
-[role='tab'] {
-  border-width: var(--interactive-border-width) !important;
-  border-style: solid !important;
-}
-
-button.btn-choice { border-width: 3px !important; }
-button.border-4,
-button[aria-pressed='true'] { border-width: 4px !important; }
-button[class*='border-[2.5px]'] { border-width: 2.5px !important; }
-
-/* 본문 안의 사전 용어는 별도의 '면'이 아닌 인라인 주석이므로 밑줄 어휘를 유지한다. */
-button.dict-term {
-  border-width: 0 0 var(--interactive-border-width) !important;
-  border-style: none none dotted !important;
+/* 상호작용 "면"의 경계 하한 — 옵트인 유틸리티.
+   요소 선택자(button, input, [role=...])에 일괄로 걸면 안 된다. 모든 버튼이 면인 것은
+   아니다. 둥근 색 스와치, 목록 행, 아이콘 토글은 테두리가 아니라 배경·밑줄·아웃라인으로
+   경계를 만든다. 거기에 사각 테두리를 강제하면 이미 둥근 면 위에 사각 상자가 겹친다.
+   경계가 필요한 면은 .surface-* / .btn 어휘가 스스로 2px를 선언한다. */
+.interactive-border-floor {
+  border-width: var(--interactive-border-width);
+  border-style: solid;
 }

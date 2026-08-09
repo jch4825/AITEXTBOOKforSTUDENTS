@@ -195,7 +195,8 @@ export default function MicroLessonFrame({
                   <DifficultyToggle />
                 </div>
               </div>
-              <p className="px-4 pt-4 pb-1 text-sm font-bold text-[color:var(--muted)]">차례</p>
+              {/* 이 시트의 본문은 차례다. 위의 보조 조작보다 확실히 무겁게 놓는다. */}
+              <p className="mobile-lesson-menu-section">차례</p>
               <SidebarTree
                 currentLessonId={lessonId}
                 onPickLesson={(id) => { setNavOpen(false); onPickLesson(id); }}

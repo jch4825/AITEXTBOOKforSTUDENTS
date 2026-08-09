@@ -305,13 +305,8 @@ export default function MissionStep({
         <div className="w-full pt-2 space-y-3 max-w-xs z-10">
           <button
             onClick={handlePrint}
-            className="w-full nav-jelly-btn py-3.5 justify-center text-lg font-black flex items-center"
-            style={{
-              '--border-color': accent,
-              '--shadow-color': accentSoft,
-              background: `linear-gradient(135deg, #fff 0%, ${accentSoft} 100%)`,
-              color: 'var(--brand-ink)',
-            } as React.CSSProperties}
+            className="w-full chrome-sticker py-3.5 justify-center text-lg font-black flex items-center"
+            style={{ '--chrome-tint': accent } as React.CSSProperties}
           >
             <Icon name="printer" size={22} className="mr-1.5 shrink-0" />
             {mission.reward.printable === 'certificate' ? '수료증 인쇄하기' : '활동 결과 인쇄하기'}
