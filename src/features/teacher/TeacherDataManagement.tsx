@@ -3,6 +3,8 @@ import Button from '../../components/Button';
 import type { TeacherRecordingSettings } from '../studio/types';
 import { applyBackup, createEncryptedBackup, decryptBackup } from './backup';
 import { loadTeacherRecordingSettings, saveTeacherRecordingSettings } from './recordingSettings';
+import { clearStudioEvidence } from '../studio/evidenceStorage';
+import { clearGeneralizationRecords } from '../../utils/generalizationStorage';
 
 interface Props {
   settings: TeacherRecordingSettings;
@@ -23,6 +25,15 @@ export default function TeacherDataManagement({ settings, onSettingsChanged, onR
     saveTeacherRecordingSettings(next);
     onSettingsChanged(next);
     setMessage({ kind: 'ok', text: '새 과정기록을 끕니다. 기존 기록은 그대로 남아 있습니다.' });
+  }
+
+  // 학생 수행 기록은 저장소가 둘이다(스튜디오 과정기록·일반화 기록).
+  // 한쪽만 지우면 교사 화면에 지운 줄 알았던 기록이 남는다.
+  function clearAllRecords() {
+    if (!window.confirm('저장된 과정기록과 일반화 기록을 모두 지웁니다. 진도·설정·AI 연결은 그대로 남습니다. 계속할까요?')) return;
+    clearStudioEvidence();
+    clearGeneralizationRecords();
+    setMessage({ kind: 'ok', text: '과정기록과 일반화 기록을 모두 삭제했습니다. 진도 표시는 아래 초기화로 지웁니다.' });
   }
 
   // 되돌릴 수 없는 전체 삭제라 문구 입력에 더해 한 번 더 확인한다.
@@ -91,6 +102,20 @@ export default function TeacherDataManagement({ settings, onSettingsChanged, onR
           {settings.processRecording
             ? <Button variant="secondary" onClick={disableRecording}>새 과정기록 끄기</Button>
             : <Button onClick={onRequestEnable}>과정기록 켜기 안내</Button>}
+        </div>
+      </section>
+
+      <section className="studio-editorial p-6">
+        <h2 className="text-xl font-extrabold">기록 삭제</h2>
+        <p className="mt-2 text-sm text-[color:var(--muted)]">학생의 수행 기록은 스튜디오 과정기록과 일반화 기록 두 곳에 나뉘어 저장됩니다. 아래 버튼은 두 곳을 함께 지웁니다. 진도 표시와 설정, AI 연결은 남으므로 그것까지 지우려면 아래 초기화를 사용하세요.</p>
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={clearAllRecords}
+            className="btn border-red-300 bg-[color:var(--paper-0)] px-4 font-bold text-red-700"
+          >
+            모든 과정기록 삭제
+          </button>
         </div>
       </section>
 

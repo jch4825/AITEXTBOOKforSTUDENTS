@@ -2,6 +2,7 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import Button from '../../components/Button';
 import GeneralizationRecordsPanel from '../../components/mission/GeneralizationRecordsPanel';
 import { clearStudioEvidence } from '../studio/evidenceStorage';
+import { clearGeneralizationRecords } from '../../utils/generalizationStorage';
 import type { TeacherRecordingSettings } from '../studio/types';
 import GeminiConnectionPanel from './GeminiConnectionPanel';
 import { ObjectivesPanel, ProgressPanel } from './LegacyTeacherPanels';
@@ -31,12 +32,15 @@ const TEACHER_TABS = [
 type TeacherTab = typeof TEACHER_TABS[number];
 
 export default function TeacherHub({ onExit }: Props) {
-  // 상단은 가벼운 쪽(과정기록만)을 두고, 전체 초기화는 데이터 관리 탭에서 문구 입력으로 보호한다.
+  // 상단은 가벼운 쪽(학생 수행 기록만)을 두고, 전체 초기화는 데이터 관리 탭에서 문구 입력으로 보호한다.
+  // 수행 기록은 저장소가 둘이다. 스튜디오 과정기록과 일반화 기록을 함께 지우지 않으면
+  // 교사 화면 「이전 일반화 기록」에 지운 줄 알았던 기록이 그대로 남는다.
   function handleClearEvidence() {
-    const yes = window.confirm('이 브라우저에 저장된 과정기록을 모두 삭제합니다. 진도·설정·AI 연결은 그대로 남습니다. 계속하시겠습니까?');
+    const yes = window.confirm('이 브라우저에 저장된 과정기록과 일반화 기록을 모두 삭제합니다. 진도·설정·AI 연결은 그대로 남습니다. 계속하시겠습니까?');
     if (yes) {
       clearStudioEvidence();
-      window.alert('저장된 과정기록을 모두 삭제했습니다.');
+      clearGeneralizationRecords();
+      window.alert('저장된 과정기록과 일반화 기록을 모두 삭제했습니다. 진도 표시를 지우려면 데이터 관리 탭의 초기화를 사용하세요.');
     }
   }
   const initialSettings = loadTeacherRecordingSettings();
