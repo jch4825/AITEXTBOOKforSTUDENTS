@@ -11,6 +11,8 @@ import ConceptNoteView from './ConceptNoteView';
 import EditorialStudioFrame from './EditorialStudioFrame';
 import LabIntroView from './LabIntroView';
 import PreparedStimulusPanel from './PreparedStimulusPanel';
+import HighSchoolTaskPanel from './HighSchoolTaskPanel';
+import { getHighSchoolTask } from '../../../data/highSchoolTasks';
 import SpeakerDialogue from './SpeakerDialogue';
 import StudioExplanationPanel from './StudioExplanationPanel';
 import StudioExpressionInput from './StudioExpressionInput';
@@ -175,6 +177,7 @@ export default function StudioExperience({
     ? allContextFacts
     : allContextFacts.slice(0, profile.visibleFactCount);
   const hiddenFactCount = allContextFacts.length - contextFacts.length;
+  const highSchoolTask = getHighSchoolTask(definition.lessonId);
   const contextMedia = getStudioContextMedia(definition, state.stage);
   const contextStimuli = contextMedia.stimuli;
 
@@ -835,6 +838,10 @@ export default function StudioExperience({
           accent={accent}
           dictionaryTerms={allDictTerms}
         />
+        {/* 고등 학년군만 한 단계 더. 중학과 고등의 차이를 텍스트 밀도가 아니라 수행으로 만든다. */}
+        {state.supportLevel === 'challenge' && highSchoolTask ? (
+          <HighSchoolTaskPanel task={highSchoolTask} accent={accent} secondary={secondary} />
+        ) : null}
       </div>
     );
   } else {

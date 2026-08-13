@@ -54,7 +54,8 @@
     "check:canonical-copy": "node scripts/check-canonical-copy.mjs",
     "check:canonical-safety": "node scripts/check-canonical-safety.mjs",
     "check:canonical-evidence": "node scripts/check-canonical-evidence.mjs",
-    "check:standards-integrity": "node scripts/check-standards-integrity.mjs"
+    "check:standards-integrity": "node scripts/check-standards-integrity.mjs",
+    "check:highschool-tasks": "node scripts/check-highschool-tasks.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",

@@ -218,7 +218,7 @@ export default function TeacherCurriculumGuide() {
                 <td className="p-3 border-r border-slate-300 text-center font-black text-emerald-900">고등</td>
                 <td className="p-3 border-r border-slate-300 text-slate-800">고등학교 1~3학년</td>
                 <td className="p-3 border-r border-slate-300 text-slate-800"><strong>[12인지]</strong> 성취기준과 그 성취수준으로 평가합니다.</td>
-                <td className="p-3 text-slate-800">단원마다 최소 1차시는 실시간 AI로 수행하고, 지역사회 전이 과제를 함께 운영합니다.</td>
+                <td className="p-3 text-slate-800">전이 단계에 <strong>고등 심화 과제</strong>가 추가로 나타납니다. 같은 이야기를 상황 복잡도·자료 수·독립성·전이 범위 중 하나 이상을 올려 다시 수행합니다.</td>
               </tr>
             </tbody>
           </table>
@@ -229,7 +229,7 @@ export default function TeacherCurriculumGuide() {
           <ul className="list-inside list-disc space-y-1 font-medium leading-relaxed">
             <li>주당 배당 시간과 이수 학년 — 68차시를 몇 개 학년에 나누어 편성할지 학교교육과정위원회에서 정합니다.</li>
             <li>대체하거나 연계할 교과(군) — 선택 교과 시수 안에서 운영할지 학교자율시간으로 운영할지 정합니다.</li>
-            <li>중학교에서 이수한 학생이 고등학교에서 재이수할 경우의 심화 운영 계획 — 위 표의 고등 운영 조건을 근거로 작성합니다.</li>
+            <li>고등 심화 과제 중 교실 밖 수행이 지정된 차시의 인솔·안전 계획 — 단원마다 1~2차시에 지역사회 수행이 포함됩니다.</li>
           </ul>
           <p className="pt-1 text-slate-600">이 항목들은 학교 편성 권한에 속하므로 본 명세에서 값을 지정하지 않습니다.</p>
         </div>

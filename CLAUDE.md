@@ -34,8 +34,14 @@
 - 차시 역할: `src/data/lessonRoles.ts`
 - 스튜디오 62개: `src/data/studios/m1/` ~ `m6/` (차시당 1파일 + `index.ts` 배럴)
 - 단원 마무리 6개: `src/data/modulePortfolios/m1.ts` ~ `m6.ts`
+- 고등 심화 과제: `src/data/highSchoolTasks.ts` — 62차시 각각의 고등 학년군 전용 수행.
+  지원 수준이 `고등`일 때 전이 단계에 나타나며, 중학과 고등의 차이를 텍스트 밀도가
+  아니라 수행 요구 수준으로 만든다. 실시간 AI나 새 이미지를 요구하지 않는다.
+- 성취수준: `src/data/aiAchievementLevels.ts` — 24개 성취기준 × 상·중·하.
 - 차시 학습목표: `src/data/lessonObjectives.ts` — studios·lessons의 objective가 여기를
-  따라야 하며 `npm run check:objectives`가 강제합니다.
+  따라야 하며 `npm run check:objectives
+npm run check:standards-integrity
+npm run check:highschool-tasks`가 강제합니다.
 - 정식 콘텐츠와 성취기준: `src/data/canonicalLessons/`, `src/data/aiAchievementStandards.ts`
 - 학생 사전: `src/data/studentDictionary.ts`
 - 교사용 실제 운영 설명: `src/features/teacher/TeacherOperationGuide.tsx`
