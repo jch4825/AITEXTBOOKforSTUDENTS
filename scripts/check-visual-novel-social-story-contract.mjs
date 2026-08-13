@@ -108,7 +108,9 @@ for (const token of [
   "imageSrc: '/lessons/story/m1/m1-l1-scene-01.webp'",
   '아이미의 설명에는 어려운 말이 많았어요.',
   'AI(인공지능)는 사람처럼 학습하고 판단하여 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
-  'AI는 번역, 음악 추천, 사진 찾기 등 사람이 정한 다양한 목적을 도와줍니다.',
+  // 3번 카드는 2번 카드와 내용이 겹쳐 있었다. AI를 사회적 존재로 오인하지 않도록
+  // 「아이미는 마음이 없어요」로 교체했다(m4-l9의 낯선 계정 경계 학습과 충돌 방지).
+  '아이미는 도와주는 도구입니다. 사람처럼 기뻐하거나 서운해하지 않습니다.',
  ]) {
   if (!m1Studio.includes(token)) throw new Error(`missing m1-l1 social story data: ${token}`);
 }
