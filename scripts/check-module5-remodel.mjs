@@ -153,9 +153,26 @@ assert(
   lessonView.includes('key={lessonId}') || lessonView.includes('key={definition.lessonId}'),
   'module-close and studio route state must reset when the lesson changes',
 );
+/**
+ * 모바일 푸터 버튼의 글자 크기.
+ *
+ * 예전 계약은 `font-size: 0.875rem` 리터럴을 요구했는데, 앞선 `@media (max-width: 767px)`
+ * 뒤에 오는 첫 `.comic-frame-footer .btn` 블록은 모바일 override가 아니라 기본 규칙이라
+ * 애초에 엉뚱한 곳을 보고 있었다. 모바일 블록은 44px 터치 영역을 지정한 쪽이므로
+ * 그것으로 특정한다. 값을 고정하지 않고 상한만 두어, 64px 바에 맞춘 정당한 조정은 허용한다.
+ */
+function mobileFooterButtonFontRem() {
+  const blocks = [...styles.matchAll(/\.comic-frame-footer \.btn\s*\{([^}]*)\}/g)].map((m) => m[1]);
+  const mobile = blocks.find((body) => /min-height:\s*44px/.test(body));
+  if (!mobile) return null;
+  const size = mobile.match(/font-size:\s*(\d*\.?\d+)rem;/);
+  return size ? Number(size[1]) : null;
+}
+const footerFontRem = mobileFooterButtonFontRem();
 assert(
-  /@media \(max-width: 767px\)[\s\S]*?\.comic-frame-footer \.btn\s*\{[^}]*font-size:\s*0\.875rem;/.test(styles),
-  'mobile 125% footer buttons must use a fitting explicit font size',
+  // 125%(20px) 기준 0.9rem이면 18px이라 44px 버튼 안에서 두 글자와 아이콘이 넘치지 않는다.
+  footerFontRem !== null && footerFontRem <= 0.9,
+  `mobile 125% footer buttons must use a fitting explicit font size (현재 ${footerFontRem ?? '선언 없음'})`,
 );
 
 for (const retiredCopy of [
