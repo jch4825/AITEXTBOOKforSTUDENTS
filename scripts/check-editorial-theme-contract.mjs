@@ -16,7 +16,7 @@ const support = fs.readFileSync(required[1], 'utf8');
 const themes = fs.readFileSync(required[2], 'utf8');
 const storage = fs.readFileSync(required[3], 'utf8');
 const css = fs.readFileSync(required[4], 'utf8');
-for (const label of ['충분한 지원', '보통', '도전적']) {
+for (const label of ['충분한 지원', '중학', '고등']) {
   if (!toggle.includes(label) && !support.includes(label)) throw new Error(`missing support label: ${label}`);
 }
 for (const oldLabel of ['도움 충분히', '기본 도움', '도전하기', '약한 지원']) {

@@ -116,7 +116,7 @@ export default function TeacherHub({ onExit }: Props) {
                 <article className="studio-fact-card"><h3 className="font-bold">68차시 · 현재 62개 스튜디오</h3><p className="mt-1 text-sm leading-relaxed">모듈 마무리 전 차시는 상황→첫 생각→조건 변화→AI 비교→내 판단→산출물→새 상황의 공통 흐름을 따릅니다. 차시에 따라 도구 연습·개념 정리 화면이 더해지며, 여섯 마무리 차시는 성장 포트폴리오입니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">1~6단원 · 전면 전환 완료</h3><p className="mt-1 text-sm leading-relaxed">현재 1~6단원 전면 리모델링이 완성되어 있습니다. 기본 AI 의견은 검수된 준비 예시라 카메라·마이크 권한 없이 활동할 수 있고, 교사가 Gemini를 연결한 경우에만 ‘나의 판단’ 화면에 실시간 AI 영역이 더해집니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">평가 흐름</h3><p className="mt-1 text-sm leading-relaxed">첫 생각 → 조건 변화 → AI 비교 → 내 판단 → 새 상황에 써 보기를 살펴봅니다.</p></article>
-                <article className="studio-fact-card"><h3 className="font-bold">지원 수준</h3><p className="mt-1 text-sm leading-relaxed">충분한 지원, 보통, 도전적 수준은 정보 수·선택지·힌트·AI 역할의 깊이를 바꿉니다.</p></article>
+                <article className="studio-fact-card"><h3 className="font-bold">지원 수준</h3><p className="mt-1 text-sm leading-relaxed">충분한 지원, 중학, 고등 수준은 정보 수·선택지·힌트·AI 역할의 깊이를 바꿉니다. 중학과 고등은 같은 차시를 각각 9학년군·12학년군 성취기준으로 평가하는 운영 축입니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">저장 원칙</h3><p className="mt-1 text-sm leading-relaxed">교사가 켠 경우에만 정제된 과정증거를 저장하며 음성·사진·그림 원본과 전체 AI 대화는 남기지 않습니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">수업 전 1분 점검</h3><p className="mt-1 text-sm leading-relaxed">학생 별칭, 기록 상태, TTS·STT, AAC 카드, 오늘 사용할 지원 수준을 확인합니다.</p></article>
               </div>

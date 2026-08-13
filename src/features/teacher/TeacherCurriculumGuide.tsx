@@ -72,7 +72,7 @@ export const DETAILED_STANDARD_EXPLANATIONS: Record<string, string> = {
   '[9인지06-01]':
     '이 성취기준은 날씨, 이동, 금액처럼 오늘마다 달라지는 생활 정보를 인공지능의 한마디로 정하지 않고, 지역과 날짜가 적힌 공식 자료와 대조하여 확인하는 실생활 정보 활용 능력을 기르기 위해 설정하였다. 교사는 6단원 5차시(m6-l5)에서 지역과 날짜가 빠진 「따뜻해요」라는 답과 낮 14도·오후 비·강한 바람이 적힌 공식 예보 카드를 나란히 제시하여 준비물을 고르게 하고, 4차시(m6-l4)에서는 12번과 21번의 방향 표지·정류장·오늘 우회 공지를 한 줄씩 대조하게 하며, 3차시(m6-l3)에서는 고정 연습 지도의 횡단보도·공원 입구·파란 도서관 표지 순서로 경로를 확인하게 한다. 1차시(m6-l1)의 장보기 목록은 재고·가격·예산·알레르기와 항목별로 대조하고, 2차시(m6-l2)에서는 1,200×2+3,200 식을 계산기에 입력해 합계 5,600원과 거스름돈 4,400원을 검산하도록 지도하며, 화면의 가격·지도·교통·날씨 자료는 실제 서비스가 아닌 수업용 연습 예시임을 함께 안내한다.',
   '[9인지06-02]':
-    '이 성취기준은 인공지능이 만들어 준 초안을 그대로 따르지 않고 자신의 몸 상태와 생활 조건에 맞게 고쳐 쓰려는 자주적인 태도를 기르기 위해 설정하였다. 교사는 6단원 7차시(m6-l7)에서 체험 여덟 개만 채운 아이미의 일정에 점심·휴식·도움 시간을 넣게 하고 비로 출발이 30분 늦어진 조건을 제시하여 학생이 스스로 계획을 다시 맞추게 하며, 6차시(m6-l6)에서는 학생이 칼을 쓰는 단계와 확인되지 않은 알레르기 재료를 직접 찾아 빼도록 지도한다. 9차시(m6-l9)의 도움 요청·거절·재설명 표현 만들기와 11차시(m6-l11)의 「내가 먼저 쓴 초안」 활동으로 마지막 결정이 학생 자신에게 있음을 반복 경험하게 하고, 지원 수준을 충분한 지원에서 보통, 도전적으로 옮겨 가며 독립 수행의 비중을 점차 늘린다.',
+    '이 성취기준은 인공지능이 만들어 준 초안을 그대로 따르지 않고 자신의 몸 상태와 생활 조건에 맞게 고쳐 쓰려는 자주적인 태도를 기르기 위해 설정하였다. 교사는 6단원 7차시(m6-l7)에서 체험 여덟 개만 채운 아이미의 일정에 점심·휴식·도움 시간을 넣게 하고 비로 출발이 30분 늦어진 조건을 제시하여 학생이 스스로 계획을 다시 맞추게 하며, 6차시(m6-l6)에서는 학생이 칼을 쓰는 단계와 확인되지 않은 알레르기 재료를 직접 찾아 빼도록 지도한다. 9차시(m6-l9)의 도움 요청·거절·재설명 표현 만들기와 11차시(m6-l11)의 「내가 먼저 쓴 초안」 활동으로 마지막 결정이 학생 자신에게 있음을 반복 경험하게 하고, 지원 수준을 충분한 지원에서 중학, 고등으로 옮겨 가며 독립 수행의 비중을 점차 늘린다.',
   '[12인지06-01]':
     '이 성취기준은 금액, 이동, 일정, 음식 계획을 인공지능의 초안으로 시작하되 실제 조건과 대조하여 관리하고, 조건이 바뀌거나 오류가 드러났을 때 계획을 다시 세우는 대안 적용 역량을 기르기 위해 설정하였다. 교사는 6단원 2차시(m6-l2)에서 아이미가 말한 6,500원을 계산기 검산으로 5,600원과 거스름돈 4,400원으로 바로잡게 하고, 4차시(m6-l4)에서는 오늘 우회 공지를 근거로 12번 대신 21번을 고르되 헷갈리면 타기 전에 현장 직원 역할을 맡은 교사에게 확인하도록 지도한다. 대안 적용은 5차시(m6-l5)의 오후 비 시작 시간 변경, 7차시(m6-l7)의 출발 30분 지연과 도움 가능 시간 변경, 6차시(m6-l6)의 대체 과일마저 없는 상황에서 반복 연습하며, 학생이 무엇을 왜 고쳤는지 판단 기록에 남기게 한다.',
   '[12인지06-02]':
@@ -135,7 +135,7 @@ export default function TeacherCurriculumGuide() {
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">📘</span>
-          <h2 className="text-xl font-extrabold text-slate-900">교육과정 제작 배경 및 개요</h2>
+          <h2 className="text-xl font-extrabold text-slate-900">1. 교육과정 제작 배경 및 개요</h2>
         </div>
         <div className="text-sm text-slate-700 leading-relaxed space-y-3 font-medium">
           <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-slate-900 leading-relaxed space-y-2">
@@ -152,6 +152,86 @@ export default function TeacherCurriculumGuide() {
           <p>
             본 교육과정 명세는 국가 기본 교육과정의 삼차원 내용 체계(지식·이해, 과정·기능, 가치·태도)를 준용하여 <strong>'성격 및 목표'</strong>, <strong>'내용 체계'</strong>, <strong>'성취기준'</strong>, <strong>'교수·학습 및 평가'</strong>의 4개 핵심 구조로 정교하게 설계되었습니다.
           </p>
+          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-slate-900 leading-relaxed space-y-1.5">
+            <p className="font-extrabold text-rose-950 flex items-center gap-1.5 text-sm">
+              <span>⚠️</span> <span>성취기준 코드의 지위</span>
+            </p>
+            <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
+              본 과목의 <strong>[9인지00-00]·[12인지00-00]</strong> 코드는 거제애광학교가 자체 부여한 학교 자율 교과의 코드이며 <strong>국가 수준 성취기준이 아닙니다</strong>. 생활기록부·개별화교육계획에 기재할 때에는 학교 자율 교과의 성취기준임을 함께 밝히고, 국가 교육과정 코드와 혼동되지 않도록 표기합니다. 국가 기본 교육과정 교과와의 연계는 교사 모드의 <strong>연계 성취기준</strong> 탭에서 확인합니다.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. 편제와 학년군 운영 */}
+      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
+        <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+          <span className="text-xl">🗂️</span>
+          <h2 className="text-xl font-extrabold text-slate-900">2. 편제와 학년군 운영</h2>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-3 text-xs sm:text-sm">
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-xs font-black text-indigo-800 bg-indigo-100 px-2 py-0.5 rounded">총 차시</span>
+            <p className="pt-2 font-bold text-slate-800 leading-relaxed">
+              68차시 — 6개 영역 × 경험 중심 스튜디오 62차시 + 단원 마무리 포트폴리오 6차시
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-xs font-black text-sky-800 bg-sky-100 px-2 py-0.5 rounded">편성 방식</span>
+            <p className="pt-2 font-bold text-slate-800 leading-relaxed">
+              중학교와 고등학교가 같은 68차시를 공통으로 이수하되, 학년군별 성취기준으로 각각 평가합니다.
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">운영 축</span>
+            <p className="pt-2 font-bold text-slate-800 leading-relaxed">
+              학생 화면의 지원 수준이 학년군 운영 축을 겸합니다. 중학은 9학년군, 고등은 12학년군 기준입니다.
+            </p>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-xs text-left border-collapse border border-slate-300">
+            <thead>
+              <tr className="bg-slate-100 text-slate-900 font-extrabold border-b border-slate-300">
+                <th className="p-3 border-r border-slate-300 w-28 text-center">지원 수준</th>
+                <th className="p-3 border-r border-slate-300 w-32">적용 학년군</th>
+                <th className="p-3 border-r border-slate-300">평가 기준</th>
+                <th className="p-3">운영 조건</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-300 font-medium">
+              <tr className="bg-amber-50/40">
+                <td className="p-3 border-r border-slate-300 text-center font-black text-amber-900">충분한 지원</td>
+                <td className="p-3 border-r border-slate-300 text-slate-800">중·고 공통</td>
+                <td className="p-3 border-r border-slate-300 text-slate-800">해당 학년군 성취수준의 <strong>하</strong>를 기준으로 봅니다.</td>
+                <td className="p-3 text-slate-800">정보와 선택지를 줄이고 시각 단서와 직접 지원을 제공합니다.</td>
+              </tr>
+              <tr className="bg-sky-50/40">
+                <td className="p-3 border-r border-slate-300 text-center font-black text-sky-900">중학</td>
+                <td className="p-3 border-r border-slate-300 text-slate-800">중학교 1~3학년</td>
+                <td className="p-3 border-r border-slate-300 text-slate-800"><strong>[9인지]</strong> 성취기준과 그 성취수준으로 평가합니다.</td>
+                <td className="p-3 text-slate-800">준비된 AI 예시로 수업을 완결합니다. 실시간 AI 연결은 선택입니다.</td>
+              </tr>
+              <tr className="bg-emerald-50/40">
+                <td className="p-3 border-r border-slate-300 text-center font-black text-emerald-900">고등</td>
+                <td className="p-3 border-r border-slate-300 text-slate-800">고등학교 1~3학년</td>
+                <td className="p-3 border-r border-slate-300 text-slate-800"><strong>[12인지]</strong> 성취기준과 그 성취수준으로 평가합니다.</td>
+                <td className="p-3 text-slate-800">단원마다 최소 1차시는 실시간 AI로 수행하고, 지역사회 전이 과제를 함께 운영합니다.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800 space-y-1.5">
+          <p className="font-extrabold text-slate-900">학교에서 확정할 사항</p>
+          <ul className="list-inside list-disc space-y-1 font-medium leading-relaxed">
+            <li>주당 배당 시간과 이수 학년 — 68차시를 몇 개 학년에 나누어 편성할지 학교교육과정위원회에서 정합니다.</li>
+            <li>대체하거나 연계할 교과(군) — 선택 교과 시수 안에서 운영할지 학교자율시간으로 운영할지 정합니다.</li>
+            <li>중학교에서 이수한 학생이 고등학교에서 재이수할 경우의 심화 운영 계획 — 위 표의 고등 운영 조건을 근거로 작성합니다.</li>
+          </ul>
+          <p className="pt-1 text-slate-600">이 항목들은 학교 편성 권한에 속하므로 본 명세에서 값을 지정하지 않습니다.</p>
         </div>
       </section>
 
@@ -159,7 +239,7 @@ export default function TeacherCurriculumGuide() {
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">🎯</span>
-          <h2 className="text-xl font-extrabold text-slate-900">1. 성격 및 목표</h2>
+          <h2 className="text-xl font-extrabold text-slate-900">3. 성격 및 목표</h2>
         </div>
 
         <div className="space-y-4 text-sm">
@@ -204,7 +284,7 @@ export default function TeacherCurriculumGuide() {
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-xl">📊</span>
-            <h2 className="text-xl font-extrabold text-slate-900">2. 영역별 내용 체계</h2>
+            <h2 className="text-xl font-extrabold text-slate-900">4. 영역별 내용 체계</h2>
           </div>
           <span className="text-xs font-bold text-slate-500">6개 영역별 핵심 아이디어 & 범주별 내용 요소</span>
         </div>
@@ -517,7 +597,7 @@ export default function TeacherCurriculumGuide() {
           <div className="flex items-center gap-2">
             <span className="text-xl">📜</span>
             <h2 className="text-xl font-extrabold text-slate-900">
-              3. 성취기준 해설 및 적용 시 고려 사항 ('인공지능 활용')
+              5. 성취기준 해설·성취수준 및 적용 시 고려 사항 ('인공지능 활용')
             </h2>
           </div>
           <div className="flex items-center gap-2">
@@ -648,7 +728,7 @@ export default function TeacherCurriculumGuide() {
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">👩‍🏫</span>
-          <h2 className="text-xl font-extrabold text-slate-900">3. 교수·학습 및 평가</h2>
+          <h2 className="text-xl font-extrabold text-slate-900">6. 교수·학습 및 평가</h2>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 text-xs sm:text-sm">
@@ -657,7 +737,7 @@ export default function TeacherCurriculumGuide() {
             <ul className="list-inside list-disc space-y-1.5 text-slate-700 font-medium leading-relaxed">
               <li>'인공지능 활용' 과목의 특성을 살려 실생활 문제 중심 체험 학습으로 구성하여 흥미와 몰입도를 제고한다.</li>
               <li>직접 교수 및 시각적 모델링 기법을 통해 힌트를 단계적으로 제공한다.</li>
-              <li>쉬운 지원, 보통 지원, 도전적 지원 수준을 고려한 맞춤형 과제를 제공한다.</li>
+              <li>충분한 지원, 중학, 고등 수준을 고려한 맞춤형 과제를 제공하며, 중학과 고등은 각각 9학년군과 12학년군 성취기준으로 평가한다.</li>
             </ul>
           </div>
 
