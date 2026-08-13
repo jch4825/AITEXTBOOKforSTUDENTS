@@ -89,7 +89,7 @@ export const LESSON_OBJECTIVES: LessonObjective[] = [
     teacherObjective:
       '학습 자료의 치우침이 AI 결과의 치우침을 만든다는 것을 실험으로 확인하고, 자료를 보완한 뒤 같은 시험으로 전후를 비교할 수 있다.',
     aiRole:
-      '세모 위주로 배운 탓에 세모 과자를 "찌그러진 동그라미"라고 자신 있게 부른다.',
+      '세모 위주로 배운 탓에 낯선 동그라미 과자도 "찌그러진 세모"라고 자신 있게 부른다.',
     standards: ['9인지01-01', '12인지01-01'],
     status: 'applied',
   },

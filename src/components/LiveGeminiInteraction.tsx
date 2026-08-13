@@ -27,6 +27,17 @@ interface ChatMessage {
   imagePreview?: string;
 }
 
+/**
+ * 사진을 실제 외부 AI 서비스로 보내기 전에 학생이 직접 확인하는 항목.
+ * m4-l5 「사진을 보내기 전 살펴보기」에서 가르치는 확인 절차와 같은 항목을 사용한다.
+ * 교과서가 가르치는 절차를 도구가 실제로 요구하게 만드는 것이 목적이다.
+ */
+const PHOTO_SAFETY_CHECKS = [
+  { id: 'face', label: '얼굴이 나오지 않았습니다.' },
+  { id: 'identity', label: '이름표, 주소, 전화번호가 보이지 않습니다.' },
+  { id: 'place', label: '어디인지 알 수 있는 배경이 없습니다.' },
+] as const;
+
 export default function LiveGeminiInteraction({
   lessonId,
   promptHint = '실시간 AI 아이미에게 질문하거나 함께 탐구해 보세요!',
@@ -40,10 +51,12 @@ export default function LiveGeminiInteraction({
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [attachedImage, setAttachedImage] = useState<AttachedImage | null>(null);
+  const [photoChecked, setPhotoChecked] = useState<string[]>([]);
   const requestSequenceRef = useRef(0);
   const activeRequestRef = useRef<{ id: number; controller: AbortController } | null>(null);
 
   const isConnected = hasApiKey();
+  const photoSafetyCleared = PHOTO_SAFETY_CHECKS.every((item) => photoChecked.includes(item.id));
   const systemInstruction = getLessonSystemPrompt(lessonId, lessonContext);
 
   useEffect(() => () => {
@@ -59,6 +72,12 @@ export default function LiveGeminiInteraction({
 
     if (!isConnected) {
       setErrorMessage('인공지능이 연결되지 않아 이 페이지 활동은 지금 하기 어려워요. 다음에 다시 활용해 보세요.');
+      return;
+    }
+
+    // 사진은 학교 밖 서버로 나간다. 교과서가 가르친 확인 절차를 마치기 전에는 보내지 않는다.
+    if (attachedImage && !photoSafetyCleared) {
+      setErrorMessage('사진을 보내기 전에 확인 항목 세 가지를 모두 확인해 주세요.');
       return;
     }
 
@@ -83,6 +102,7 @@ export default function LiveGeminiInteraction({
 
     setInputText('');
     setAttachedImage(null);
+    setPhotoChecked([]);
 
     try {
       const res = await askGemini(
@@ -139,6 +159,7 @@ export default function LiveGeminiInteraction({
           data: base64Data,
           previewUrl: result,
         });
+        setPhotoChecked([]);
         setErrorMessage(null);
       }
     };
@@ -171,7 +192,7 @@ export default function LiveGeminiInteraction({
           </div>
         </div>
         <span className="self-start rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold text-emerald-800">
-          ● AI 연결됨 (사진 인식 지원)
+          ● AI 연결됨 · 보낸 글과 사진은 학교 밖 서버로 전송됩니다
         </span>
       </div>
 
@@ -254,13 +275,61 @@ export default function LiveGeminiInteraction({
             </div>
             <button
               type="button"
-              onClick={() => setAttachedImage(null)}
+              onClick={() => {
+                setAttachedImage(null);
+                setPhotoChecked([]);
+              }}
               disabled={loading}
               className="text-indigo-600 hover:text-rose-600 font-extrabold text-sm px-2 py-1 cursor-pointer shrink-0 disabled:cursor-wait disabled:opacity-50"
             >
               ✕ 삭제
             </button>
           </div>
+        )}
+
+        {attachedImage && (
+          <fieldset className="rounded-xl border-2 border-amber-300 bg-amber-50 p-3 text-amber-950">
+            <legend className="px-1 text-xs font-extrabold">
+              사진을 보내기 전에 확인합니다
+            </legend>
+            <p className="mb-2 text-xs font-semibold leading-relaxed">
+              이 사진은 학교 밖 인공지능 서버로 전송됩니다. 세 가지를 확인한 뒤에 보낼 수 있습니다.
+            </p>
+            <div className="space-y-1.5">
+              {PHOTO_SAFETY_CHECKS.map((item) => {
+                const checked = photoChecked.includes(item.id);
+                return (
+                  <label
+                    key={item.id}
+                    className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-bold ${
+                      loading ? 'cursor-wait opacity-60' : 'cursor-pointer hover:bg-amber-100'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      disabled={loading}
+                      onChange={() => {
+                        setPhotoChecked((prev) =>
+                          prev.includes(item.id)
+                            ? prev.filter((id) => id !== item.id)
+                            : [...prev, item.id],
+                        );
+                        setErrorMessage(null);
+                      }}
+                      className="h-4 w-4 shrink-0 accent-amber-700"
+                    />
+                    <span>{item.label}</span>
+                  </label>
+                );
+              })}
+            </div>
+            <p role="status" className="mt-2 text-xs font-extrabold">
+              {photoSafetyCleared
+                ? '확인을 마쳤습니다. 이제 보낼 수 있습니다.'
+                : '아직 확인하지 않은 항목이 있어 보내기가 잠겨 있습니다.'}
+            </p>
+          </fieldset>
         )}
 
         <div className="grid grid-cols-[auto_auto_minmax(0,1fr)] items-center gap-2">
@@ -298,7 +367,7 @@ export default function LiveGeminiInteraction({
           <button
             type="button"
             onClick={() => handleSend()}
-            disabled={loading || (!inputText.trim() && !attachedImage)}
+            disabled={loading || (!inputText.trim() && !attachedImage) || (!!attachedImage && !photoSafetyCleared)}
             className="col-start-3 row-start-2 flex h-11 w-full min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl px-1 text-sm font-bold text-white depth-paper transition cursor-pointer disabled:opacity-50 sm:px-4"
             style={{ background: accent }}
           >

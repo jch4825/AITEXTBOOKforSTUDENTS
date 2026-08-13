@@ -166,7 +166,7 @@ export function printMission(
             <div class="cert-footer">
               <div class="date">${today}</div>
               <div class="signature">
-                인공지능 친구 아이미 & 박민준 선생님
+                인공지능 도우미 아이미 & 박민준 선생님
               </div>
             </div>
           </div>

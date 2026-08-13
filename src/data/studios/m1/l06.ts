@@ -105,21 +105,21 @@ export const M1_L6_STUDIO: StudioDefinition = {
       ],
     },
     encounter: {
-      title: '세모 과자를 찌그러진 동그라미라고 불렀어요',
-      description: '동그라미와 네모 카드만 가득 배운 AI 앞에 진우가 뾰족한 세모 과자를 보여주자, AI가 "찌그러진 동그라미입니다!"라고 엉뚱하게 답했습니다!',
+      title: '동그라미 과자를 찌그러진 세모라고 불렀어요',
+      description: '세모 카드만 가득 배운 AI 앞에 진우가 동그란 과자를 보여주자, AI가 "찌그러진 세모입니다!"라고 엉뚱하게 답했습니다!',
       facts: [
-        'AI는 동그라미와 네모 카드만 가득 학습했습니다.',
-        '새로 보여준 뾰족한 세모 과자는 배운 적이 없는 모양입니다.',
-        'AI는 세모 자료를 배운 적이 없어서 가장 가까운 동그라미로 오판했습니다.',
+        'AI는 세모 카드만 가득 학습했습니다.',
+        '새로 보여준 동그란 과자는 배운 적이 거의 없는 모양입니다.',
+        'AI는 세모 자료만 배워서 낯선 모양도 가장 익숙한 세모로 오판했습니다.',
       ],
     },
     firstAttempt: {
-      prompt: 'AI가 세모 과자를 찌그러진 동그라미라고 틀리게 부른 까닭을 어떻게 알아보겠습니까?',
+      prompt: 'AI가 동그라미 과자를 찌그러진 세모라고 틀리게 부른 까닭을 어떻게 알아보겠습니까?',
       choices: [
         { id: 'inspect-data', emoji: '📦', label: 'AI가 이전에 어떤 모양 자료를 배워 왔는지 학습 데이터를 조사합니다.', isCorrect: true, reaction: '아이미: "상자를 열어 볼까요? 배운 카드가 여기 다 있어요."' },
         { id: 'balance-various-shapes', emoji: '📊', label: '세모, 동그라미, 네모 등 배움 재료의 비율과 다양성을 확인합니다.', isCorrect: true, reaction: '윤아가 카드 수를 세어 보니 치우침이 뚜렷했습니다.' },
         { id: 'blame-random', emoji: '🎲', label: '자료 조사 없이 AI의 기분이 나빠서 틀렸다고 생각합니다.', isCorrect: false, reaction: '아이미: "저는 기분이 없어요. 배운 자료가 전부예요."' },
-        { id: 'change-test-only', emoji: '🧪', label: '자료 보완 없이 세모 과자를 치우고 쉬운 카드만 보여줍니다.', isCorrect: false, reaction: '문제는 그대로 남아 다음에도 같은 실수가 반복됐습니다.' },
+        { id: 'change-test-only', emoji: '🧪', label: '자료 보완 없이 동그라미 과자를 치우고 세모 카드만 보여줍니다.', isCorrect: false, reaction: '문제는 그대로 남아 다음에도 같은 실수가 반복됐습니다.' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '그 방법으로 무엇을 확인할 수 있을까요?',
