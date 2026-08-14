@@ -148,7 +148,7 @@ export const M1_L6_STUDIO: StudioDefinition = {
     transfer: {
       title: '분리배출 모양을 배우는 AI라면',
       description: '원형 표시만 많이 배운 AI가 네모난 재활용 표지를 일반 쓰레기로 분류했습니다.',
-      prompt: '나만의 표현으로 부족한 학습 자료를 바르게 보완하는 방법을 설명해보자.',
+      prompt: '나만의 표현으로 부족한 학습 자료를 바르게 보완하는 방법을 설명해 봐요.',
       choices: [
         { id: 'balance-recycle-data', emoji: '📚', label: '동그라미, 네모 등 다양한 모양과 재질의 표지 자료를 고르게 추가합니다.', isCorrect: true, reaction: '자료를 보완하자 네모 표지도 잘 구별했습니다.' },
         { id: 'compare-recycle-test', emoji: '🔍', label: '자료를 보완한 뒤 같은 시험용 자료로 판정 결과를 전후 비교합니다.', isCorrect: true, reaction: '같은 시험으로 비교하니 나아진 점이 분명히 보였습니다.' },

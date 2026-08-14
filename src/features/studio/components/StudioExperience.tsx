@@ -828,7 +828,7 @@ export default function StudioExperience({
           value={state.transferExpression}
           choices={transferChoices}
           modes={definition.firstAttempt.modes}
-          prompt={definition.transfer.prompt || `나만의 표현으로 ${definition.transfer.title} 상황을 친구에게 설명해보자.`}
+          prompt={definition.transfer.prompt || `나만의 표현으로 ${definition.transfer.title} 상황을 친구에게 설명해 봐요.`}
           accent={accent}
           onChange={(value) => dispatch({ type: 'set-transfer', value })}
         />

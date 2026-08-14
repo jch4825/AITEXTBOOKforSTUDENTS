@@ -149,7 +149,7 @@ export const M1_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '여행 사진을 설명한다면',
       description: '친구가 볼 수 있도록 여행 사진의 장면 설명과 짧은 음성 안내를 만들려고 합니다.',
-      prompt: '나만의 표현으로 목적에 맞는 AI 도구를 선택하는 방법을 설명해보자.',
+      prompt: '나만의 표현으로 목적에 맞는 AI 도구를 선택하는 방법을 설명해 봐요.',
       choices: [
         { id: 'plan-photo-tools', emoji: '🗺️', label: '사진 묘사 도구와 음성 변환 도구 각각의 입력과 결과를 구분해 선택합니다.', isCorrect: true, reaction: '두 도구를 나누어 쓰니 결과가 훨씬 정확했습니다.' },
         { id: 'verify-photo-description', emoji: '👁️', label: '얼굴 사진을 함부로 넣지 않고 생성된 설명이 실제 사진과 맞는지 확인합니다.', isCorrect: true, reaction: '설명과 사진을 비교하니 안심하고 쓸 수 있었습니다.' },

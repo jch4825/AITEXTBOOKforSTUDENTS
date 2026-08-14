@@ -168,7 +168,7 @@ export const M1_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '체육관 안내가 잘 들리지 않는다면',
       description: '넓은 체육관에서 다음 활동 장소를 알려 주는 음성 안내가 화면에 다르게 적혔습니다.',
-      prompt: '나만의 표현으로 주변이 시끄러울 때 음성 인식 결과를 어떻게 확인할지 설명해보자.',
+      prompt: '나만의 표현으로 주변이 시끄러울 때 음성 인식 결과를 어떻게 확인할지 설명해 봐요.',
       stimuli: [
         {
           id: 'm1-l5-gym-announcement',

@@ -105,7 +105,7 @@ export default function OXGame({ questions, onComplete }: Props) {
     expression: selected === null ? 'curious' as const : (isCorrect ? 'cheer' as const : 'thinking' as const),
     text: selected === null
       ? '어느 쪽이 정답일까? 잘 고민해봐!'
-      : (isCorrect ? '정답이야! 참 잘했어!' : '아쉽네, 다시 생각해보자!')
+      : (isCorrect ? '정답이에요! 참 잘했어요!' : '아쉬워요. 다시 생각해 봐요!')
   };
 
   return (

@@ -149,7 +149,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
     transfer: {
       title: '도서관에 새로운 인공지능 추천 기계가 생겼어요.',
       description: '도서관에 새로 설치된 인공지능 추천 기계는 나의 질문을 받아서 책을 추천해준다고 합니다.',
-      prompt: '나만의 표현으로 도서관의 인공지능 추천 기계를 친구에게 설명해보자.',
+      prompt: '나만의 표현으로 도서관의 인공지능 추천 기계를 친구에게 설명해 봐요.',
       stimuli: [
         {
           id: 'library-ai-kiosk-image',

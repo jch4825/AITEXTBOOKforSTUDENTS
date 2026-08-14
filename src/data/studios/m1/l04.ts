@@ -148,7 +148,7 @@ export const M1_L4_STUDIO: StudioDefinition = {
     transfer: {
       title: '흐린 분리배출 표지판',
       description: '빛이 반사되어 흐릿한 분리배출 표지판을 AI가 “일반 쓰레기”라고 읽었습니다. 어떻게 확인하겠습니까?',
-      prompt: '나만의 표현으로 흐릿한 표지판 사진을 AI가 잘못 읽었을 때 어떻게 할지 설명해보자.',
+      prompt: '나만의 표현으로 흐릿한 표지판 사진을 AI가 잘못 읽었을 때 어떻게 할지 설명해 봐요.',
       choices: [
         { id: 'change-sign-angle', emoji: '📐', label: '빛 반사를 줄이도록 표지판 사진의 각도와 밝기를 바꾸어 다시 인식해 봅니다.', isCorrect: true, reaction: '각도를 바꾸자 표지판 글자가 선명하게 다시 보였습니다.' },
         { id: 'ask-staff', emoji: '👤', label: '실제 표지판을 눈으로 보거나 담당자 안내와 비교합니다.', isCorrect: true, reaction: '실제 표지판을 보니 답이 분명해졌습니다.' },

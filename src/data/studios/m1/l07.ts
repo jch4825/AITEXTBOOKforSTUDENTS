@@ -147,7 +147,7 @@ export const M1_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '준비물 안내를 짧게 보낸다면',
       description: 'AI가 학급 준비물 안내를 한 문장으로 줄였는데 가져오는 날짜가 빠졌습니다.',
-      prompt: '나만의 표현으로 AI 요약문에서 중요한 내용이 빠졌을 때 어떻게 할지 설명해보자.',
+      prompt: '나만의 표현으로 AI 요약문에서 중요한 내용이 빠졌을 때 어떻게 할지 설명해 봐요.',
       choices: [
         { id: 'check-supply-source', emoji: '📰', label: '원문 안내판과 비교해 날짜와 준비물이 남았는지 확인합니다.', isCorrect: true, reaction: '비교해 보니 날짜가 빠진 것을 바로 찾을 수 있었습니다.' },
         { id: 'repair-supply-summary', emoji: '✏️', label: '빠진 날짜를 직접 넣어 맞는 완성본을 만듭니다.', isCorrect: true, reaction: '날짜를 채워 넣자 완성된 안내문이 되었습니다.' },

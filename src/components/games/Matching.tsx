@@ -122,7 +122,7 @@ export default function Matching({ pairs, difficulty, onComplete }: Props) {
     expression: allDone ? 'cheer' as const : (picked.leftIdx !== null || picked.rightIdx !== null ? 'wink' as const : 'curious' as const),
     text: allDone
       ? '대단해! 모든 짝을 찾았어!'
-      : (wrongPair ? '어라? 그 둘은 짝이 아닌가 봐. 다시 해보자!' : '서로 어울리는 짝을 찾아봐!')
+      : (wrongPair ? '어라? 그 둘은 짝이 아니에요. 다시 해 봐요!' : '서로 어울리는 짝을 찾아봐요!')
   };
 
   return (
