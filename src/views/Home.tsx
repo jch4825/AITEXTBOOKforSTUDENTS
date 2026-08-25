@@ -104,7 +104,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                 onClick={startLearning}
                 className="surface-choice is-primary group gap-3 px-10 py-5 text-xl"
               >
-                이어서 학습하기
+                {isResume ? '이어서 학습하기' : '학습 시작하기'}
                 <span
                   className={`material-symbols-outlined text-2xl ${reducedMotion ? '' : 'transition-transform group-hover:translate-x-1'}`}
                   aria-hidden="true"

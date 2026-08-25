@@ -3,6 +3,7 @@ import Button from '../../components/Button';
 import GeneralizationRecordsPanel from '../../components/mission/GeneralizationRecordsPanel';
 import { clearStudioEvidence } from '../studio/evidenceStorage';
 import { clearGeneralizationRecords } from '../../utils/generalizationStorage';
+import { useProgress } from '../../context/ProgressContext';
 import type { TeacherRecordingSettings } from '../studio/types';
 import GeminiConnectionPanel from './GeminiConnectionPanel';
 import { ObjectivesPanel, ProgressPanel } from './LegacyTeacherPanels';
@@ -32,15 +33,23 @@ const TEACHER_TABS = [
 type TeacherTab = typeof TEACHER_TABS[number];
 
 export default function TeacherHub({ onExit }: Props) {
-  // 상단은 가벼운 쪽(학생 수행 기록만)을 두고, 전체 초기화는 데이터 관리 탭에서 문구 입력으로 보호한다.
-  // 수행 기록은 저장소가 둘이다. 스튜디오 과정기록과 일반화 기록을 함께 지우지 않으면
-  // 교사 화면 「이전 일반화 기록」에 지운 줄 알았던 기록이 그대로 남는다.
+  const { reset: resetProgress } = useProgress();
+  // 상단은 학생의 수행 흔적을 지우는 쪽이고, 전체 초기화(API 키·설정까지)는 데이터 관리 탭에서
+  // 문구 입력으로 보호한다.
+  //
+  // 학생의 흔적은 저장소가 셋이다. 스튜디오 과정기록, 일반화 기록, 그리고 진도(완료한 차시)다.
+  // 셋을 함께 지우지 않으면 지운 줄 알았던 기록이 남는다. 특히 진도가 남으면 다음 학생이
+  // 첫 화면에서 「이어서 학습하기」와 남의 완료 표시를 보게 된다.
+  //
+  // 진도는 반드시 ProgressContext의 reset으로 지운다. 공급자가 상태를 저장소에 되쓰므로
+  // localStorage만 지우면 곧바로 되살아난다.
   function handleClearEvidence() {
-    const yes = window.confirm('이 브라우저에 저장된 과정기록과 일반화 기록을 모두 삭제합니다. 진도·설정·AI 연결은 그대로 남습니다. 계속하시겠습니까?');
+    const yes = window.confirm('이 브라우저에 저장된 학생의 수행 기록을 모두 삭제합니다. 과정기록, 일반화 기록, 진도(완료한 차시)가 지워집니다. 설정과 AI 연결은 그대로 남습니다. 계속하시겠습니까?');
     if (yes) {
       clearStudioEvidence();
       clearGeneralizationRecords();
-      window.alert('저장된 과정기록과 일반화 기록을 모두 삭제했습니다. 진도 표시를 지우려면 데이터 관리 탭의 초기화를 사용하세요.');
+      resetProgress();
+      window.alert('과정기록과 일반화 기록, 진도를 모두 삭제했습니다.');
     }
   }
   const initialSettings = loadTeacherRecordingSettings();
