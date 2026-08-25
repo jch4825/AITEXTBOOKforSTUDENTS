@@ -382,6 +382,24 @@ function WorksheetSheet({ worksheet, variant, page, pageIndex, pageCount, sheetR
 
 export default function WorksheetPanel({ lessonId, onClose }: Props) {
   const [worksheet, setWorksheet] = useState<LessonWorksheet>(() => loadWorksheet(lessonId));
+
+  /**
+   * 저장한 편집본을 버리고 현재 수업 데이터로 다시 만든다.
+   * 학습지는 스튜디오·포트폴리오에서 자동으로 조립되지만, 교사가 한 번 편집해 저장하면
+   * 그 편집본이 고정된다. 이후 차시 내용이 바뀌면 학습지만 옛 내용에 머무르게 되므로
+   * 되돌릴 길을 남겨 둔다.
+   */
+  function rebuildFromLesson() {
+    if (!window.confirm('이 차시에 저장한 학습지 편집 내용을 버리고 현재 수업 내용으로 다시 만듭니다. 계속할까요?')) return;
+    try {
+      localStorage.removeItem(worksheetStorageKey(lessonId));
+    } catch {
+      // 저장소를 못 쓰는 환경에서도 화면은 다시 만든다.
+    }
+    setWorksheet(buildLessonWorksheet(lessonId));
+    setActivePageId(null);
+    setEditingBlockId(null);
+  }
   const [level, setLevel] = useState<WorksheetLevel>('high');
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [showPalette, setShowPalette] = useState(false);
@@ -513,6 +531,7 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
 
         <div className="teacher-worksheet-actions">
           <button className="teacher-worksheet-action teacher-worksheet-action-secondary" aria-expanded={showPalette} onClick={() => setShowPalette(current => !current)}><Icon name="pen" size={18} /> {showPalette ? '포맷 닫기' : '포맷 추가'}</button>
+          <button className="teacher-worksheet-action teacher-worksheet-action-secondary" onClick={rebuildFromLesson}><Icon name="refresh" size={18} /> 수업 내용으로 다시 만들기</button>
           <button className="teacher-worksheet-action teacher-worksheet-action-secondary" onClick={() => downloadWorksheetHtml(worksheet, variant)}><Icon name="link" size={18} /> HTML 저장</button>
           <button className="teacher-worksheet-action teacher-worksheet-action-primary" onClick={() => printWorksheet(worksheet, variant)}><Icon name="printer" size={18} /> 인쇄 미리보기 / 인쇄</button>
         </div>

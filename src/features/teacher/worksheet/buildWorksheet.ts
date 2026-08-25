@@ -71,7 +71,7 @@ function starterBlocks(title: string, objective: string): WorksheetBlock[] {
       kind: 'heading',
       title: '제목 상자',
       text: title,
-      fontSize: 26,
+      fontSize: 21,
     },
     {
       id: 'starter-objective',
