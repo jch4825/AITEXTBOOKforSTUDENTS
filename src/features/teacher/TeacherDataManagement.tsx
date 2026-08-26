@@ -3,6 +3,9 @@ import Button from '../../components/Button';
 import type { TeacherRecordingSettings } from '../studio/types';
 import { applyBackup, createEncryptedBackup, decryptBackup } from './backup';
 import { loadTeacherRecordingSettings, saveTeacherRecordingSettings } from './recordingSettings';
+import { clearStudioEvidence } from '../studio/evidenceStorage';
+import { clearGeneralizationRecords } from '../../utils/generalizationStorage';
+import { useProgress } from '../../context/ProgressContext';
 
 interface Props {
   settings: TeacherRecordingSettings;
@@ -11,6 +14,7 @@ interface Props {
 }
 
 export default function TeacherDataManagement({ settings, onSettingsChanged, onRequestEnable }: Props) {
+  const { reset: resetProgress } = useProgress();
   const [resetPhrase, setResetPhrase] = useState('');
   const [backupPassphrase, setBackupPassphrase] = useState('');
   const [backupConfirm, setBackupConfirm] = useState('');
@@ -23,6 +27,17 @@ export default function TeacherDataManagement({ settings, onSettingsChanged, onR
     saveTeacherRecordingSettings(next);
     onSettingsChanged(next);
     setMessage({ kind: 'ok', text: '새 과정기록을 끕니다. 기존 기록은 그대로 남아 있습니다.' });
+  }
+
+  // 학생 수행 기록은 저장소가 셋이다(스튜디오 과정기록·일반화 기록·진도).
+  // 하나라도 남기면 지운 줄 알았던 기록이 화면에 다시 보인다.
+  function clearAllRecords() {
+    if (!window.confirm('저장된 학생의 수행 기록을 모두 지웁니다. 과정기록, 일반화 기록, 진도(완료한 차시)가 지워집니다. 설정과 AI 연결은 그대로 남습니다. 계속할까요?')) return;
+    clearStudioEvidence();
+    clearGeneralizationRecords();
+    // 진도는 공급자가 저장소에 되쓰므로 반드시 reset으로 지운다.
+    resetProgress();
+    setMessage({ kind: 'ok', text: '과정기록과 일반화 기록, 진도를 모두 삭제했습니다.' });
   }
 
   // 되돌릴 수 없는 전체 삭제라 문구 입력에 더해 한 번 더 확인한다.
@@ -95,8 +110,22 @@ export default function TeacherDataManagement({ settings, onSettingsChanged, onR
       </section>
 
       <section className="studio-editorial p-6">
+        <h2 className="text-xl font-extrabold">기록 삭제</h2>
+        <p className="mt-2 text-sm text-[color:var(--muted)]">학생의 수행 기록은 스튜디오 과정기록, 일반화 기록, 진도(완료한 차시) 세 곳에 나뉘어 저장됩니다. 아래 버튼은 세 곳을 함께 지워 다음 학생이 남의 완료 표시나 「이어서 학습하기」를 보지 않게 합니다. 설정과 AI 연결 키까지 지우려면 아래 초기화를 사용하세요.</p>
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={clearAllRecords}
+            className="btn border-red-300 bg-[color:var(--paper-0)] px-4 font-bold text-red-700"
+          >
+            모든 과정기록 삭제
+          </button>
+        </div>
+      </section>
+
+      <section className="studio-editorial p-6">
         <h2 className="text-xl font-extrabold">초기화</h2>
-        <p className="mt-2 text-sm text-[color:var(--muted)]">이 브라우저에 저장된 AI 연결 키, 진도, 설정, 과정기록, 이전 일반화 기록을 모두 지우고 처음 상태로 되돌립니다. 되돌릴 수 없으니 필요한 기록은 먼저 암호화 백업으로 내려받으세요. 과정기록만 지우려면 화면 위 ‘과정기록 삭제’ 버튼을 사용하세요.</p>
+        <p className="mt-2 text-sm text-[color:var(--muted)]">이 브라우저에 저장된 AI 연결 키, 진도, 설정, 과정기록, 이전 일반화 기록을 모두 지우고 처음 상태로 되돌립니다. 되돌릴 수 없으니 필요한 기록은 먼저 암호화 백업으로 내려받으세요. 학생 기록만 지우고 설정과 AI 연결은 남기려면 위의 ‘모든 과정기록 삭제’나 화면 위 ‘과정기록 삭제’ 버튼을 사용하세요.</p>
         <label className="mt-4 block font-bold" htmlFor="reset-confirmation">확인을 위해 ‘초기화’를 입력하세요.</label>
         <div className="mt-2 flex flex-wrap gap-3">
           <input

@@ -8,6 +8,7 @@ import PecsBoard from './PecsBoard';
 import { moduleIdFromLessonId } from '../data/modules';
 import { themeFor } from '../utils/moduleThemes';
 import { getTeacherResources } from '../data/teacherResources';
+import { isTeacherSessionActive } from '../utils/teacherMode';
 import type { LessonId } from '../types';
 import WorksheetPanel from '../features/teacher/worksheet/WorksheetPanel';
 
@@ -21,6 +22,12 @@ const TOOLS: { id: ToolId; label: string; icon: IconName }[] = [
   { id: 'worksheet', label: '학습지', icon: 'book' },
   { id: 'resources', label: '교사 자료', icon: 'link' },
 ];
+
+/**
+ * 교사 자료는 외부 사이트로 나가는 링크라 교사 모드에서만 연다.
+ * 학생이 수업 도중 통제할 수 없는 광고나 관련 영상 추천을 만나지 않게 하기 위해서다.
+ */
+const TEACHER_ONLY_TOOLS = new Set<ToolId>(['resources']);
 
 const DOCK_COLLAPSED_KEY = 'ai-students-dock-collapsed';
 
@@ -52,7 +59,9 @@ export default function ClassroomDock({
 
   const moduleId = moduleIdFromLessonId(lessonId) ?? 'm1';
   const theme = themeFor(moduleId);
-  const resources = getTeacherResources(lessonId);
+  const teacherMode = isTeacherSessionActive();
+  const visibleTools = TOOLS.filter((tool) => !TEACHER_ONLY_TOOLS.has(tool.id) || teacherMode);
+  const resources = teacherMode ? getTeacherResources(lessonId) : [];
 
   useEffect(() => {
     if (!timerRunning) return;
@@ -136,14 +145,24 @@ export default function ClassroomDock({
             <ul className="space-y-2">
               {resources.map((resource) => (
                 <li key={resource.url} className="rounded-[var(--r-sm)] border border-[color:var(--border)] bg-[color:var(--paper-1)] p-3">
+                  <span className="mb-1 inline-block rounded-[var(--r-pill)] bg-[color:var(--paper-2)] px-2 py-0.5 text-xs font-bold text-[color:var(--muted)]">
+                    {resource.kind === 'video' ? '영상' : '도구'}
+                  </span>
                   <a
                     href={resource.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-bold underline underline-offset-4"
+                    className="block font-bold underline underline-offset-4"
                     style={{ color: theme.accent }}
                   >{resource.label}</a>
+                  {/* m4가 출처와 날짜 확인을 가르치므로 교재 자신의 링크도 그것을 밝힌다. */}
+                  <p className="mt-1 text-xs text-[color:var(--muted)]">
+                    {resource.source} · {resource.checkedAt} 확인 · 외부 사이트로 이동합니다
+                  </p>
                   <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">{resource.description}</p>
+                  <p className="mt-2 border-t border-dashed border-[color:var(--border)] pt-2 text-xs leading-relaxed text-[color:var(--muted)]">
+                    안 열릴 때 · {resource.fallback}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -195,7 +214,7 @@ export default function ClassroomDock({
             </button>
           ) : (
             <>
-              {TOOLS.map((tool) => (
+              {visibleTools.map((tool) => (
                 <button
                   key={tool.id}
                   onClick={() => toggle(tool.id)}
@@ -245,7 +264,7 @@ export default function ClassroomDock({
               </button>
             </div>
             <div className="mobile-teacher-tools-grid">
-              {TOOLS.map((tool) => (
+              {visibleTools.map((tool) => (
                 <button
                   key={tool.id}
                   type="button"

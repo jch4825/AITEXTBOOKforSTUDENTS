@@ -131,8 +131,8 @@ export const M1_L2_STUDIO: StudioDefinition = {
           id: 'pecs-music-app',
           kind: 'image',
           src: '/images/pecs_music_app.webp',
-          alt: '음악 추천 앱 PECS 카드 (AI 추천)',
-          caption: '음악 추천 앱 (AI)',
+          alt: '음악 추천 앱 PECS 카드 (사용 기록 입력)',
+          caption: '음악 추천 앱 (사용 기록)',
         },
       ],
     },
@@ -180,7 +180,7 @@ export const M1_L2_STUDIO: StudioDefinition = {
     transfer: {
       title: '스마트 조명을 살펴본다면',
       description: '스마트 조명이 움직임을 감지해 켜지고, 내가 자주 끄는 시간을 배워 밝기를 추천합니다.',
-      prompt: '나만의 표현으로 스마트 조명 속에 들어있는 여러 기능을 친구에게 설명해보자.',
+      prompt: '나만의 표현으로 스마트 조명 속에 들어있는 여러 기능을 친구에게 설명해 봐요.',
       stimuli: [
         {
           id: 'smart-light-real',

@@ -70,7 +70,7 @@ export function buildWorksheetHtml(worksheet: LessonWorksheet, variant: Workshee
   const pageHtml = pages.map((page, pageIndex) => {
     const blocks = page.blocks.map(blockHtml).join('');
     const pageLabel = escapeHtml(`${variantLabel} · ${pageIndex + 1}/${pages.length}`);
-    return `<main class="worksheet-page" data-page="${pageIndex + 1}"><header class="worksheet-meta"><strong>${moduleTitle}</strong><span>${title}</span><small>${pageLabel}</small></header>${blocks}<div class="worksheet-page-guide">A4 한 장 기준선 · 다음 장으로 넘어가면 다음 페이지로 나누세요.</div><footer class="worksheet-footer"><span>이름: ____________________</span><span>${escapeHtml(worksheet.lessonId)} · ${pageIndex + 1}/${pages.length}</span></footer></main>`;
+    return `<main class="worksheet-page" data-page="${pageIndex + 1}"><header class="worksheet-meta"><strong>${moduleTitle}</strong><span>${title}</span><small>${pageLabel}</small></header>${blocks}<div class="worksheet-page-guide">A4 한 장 기준선</div><footer class="worksheet-footer"><span>이름: ____________________</span><span>${escapeHtml(worksheet.lessonId)} · ${pageIndex + 1}/${pages.length}</span></footer></main>`;
   }).join('');
   return `<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · ${variantLabel}</title>
@@ -79,41 +79,79 @@ export function buildWorksheetHtml(worksheet: LessonWorksheet, variant: Workshee
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; background: #eee; color: #2d2a26; font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
 body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-.worksheet-page { position: relative; width: 210mm; min-height: 297mm; margin: 12mm auto; padding: 12mm 15mm 24mm; background: #fffdf9; border: 1px solid #dedbe3; overflow: visible; }
+.worksheet-page { position: relative; width: 210mm; min-height: 297mm; margin: 12mm auto; padding: 11mm 15mm 16mm; background: #fffdf9; border: 1px solid #dedbe3; overflow: visible; }
 .worksheet-page + .worksheet-page { break-before: page; }
-.worksheet-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 5mm; padding-bottom: 4mm; margin-bottom: 5mm; border-bottom: 3px solid #66509a; color: #66509a; }
+.worksheet-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 5mm; padding-bottom: 3mm; margin-bottom: 4mm; border-bottom: 3px solid #66509a; color: #66509a; }
 .worksheet-meta strong { font-size: 11pt; }
-.worksheet-meta span { min-width: 0; color: #2d2a26; font-size: 20pt; font-weight: 800; overflow-wrap: anywhere; }
+.worksheet-meta span { min-width: 0; color: #2d2a26; font-size: 16pt; font-weight: 800; overflow-wrap: anywhere; }
 .worksheet-meta small { color: #777; font-size: 8pt; white-space: nowrap; }
-.worksheet-block { break-inside: avoid; margin: 0 0 5mm; padding: 4mm; border: 1.5px solid #dedbe3; border-radius: 3mm; overflow-wrap: anywhere; }
+.worksheet-block { break-inside: avoid; margin: 0 0 3mm; padding: 3mm; border: 1.5px solid #dedbe3; border-radius: 3mm; overflow-wrap: anywhere; }
 .worksheet-block-heading { padding: 0 0 3mm; border-width: 0 0 1.5px; border-radius: 0; }
 .worksheet-block-heading h1 { margin: 0; font-size: inherit; line-height: 1.25; }
-.worksheet-block-text { padding: 3mm; background: #f7f4ee; }
-.worksheet-block-text p, .worksheet-block-form p { margin: 0 0 3mm; font-size: inherit; line-height: 1.5; }
-.worksheet-block-form h2 { margin: 0 0 2mm; color: #66509a; font-size: 1.12em; line-height: 1.3; }
-.worksheet-answer-lines { display: grid; grid-auto-rows: 7mm; gap: 4mm; margin-top: 3mm; }
+.worksheet-block-text { padding: 2.5mm; background: #f7f4ee; }
+.worksheet-block-text p, .worksheet-block-form p { margin: 0 0 2mm; font-size: inherit; line-height: 1.5; }
+.worksheet-block-form h2 { margin: 0 0 1.5mm; color: #66509a; font-size: 1.12em; line-height: 1.3; }
+.worksheet-answer-lines { display: grid; grid-auto-rows: 7mm; gap: 3mm; margin-top: 3mm; }
 .worksheet-answer-lines i { display: block; border-bottom: 1px solid #96908a; }
-.worksheet-options { display: grid; gap: 3mm; padding: 0; margin: 0; list-style: none; }
-.worksheet-options li { padding: 2.5mm 3mm; border: 1px solid #dedbe3; border-radius: 2mm; line-height: 1.4; }
-.worksheet-trace-text { padding: 3mm; margin: 2mm 0 0; border-bottom: 2px dashed #9d9690; color: #aaa; font-size: 1.35em; font-weight: 800; line-height: 1.4; }
+.worksheet-options { display: grid; gap: 2mm; padding: 0; margin: 0; list-style: none; }
+.worksheet-options li { padding: 2mm 3mm; border: 1px solid #dedbe3; border-radius: 2mm; line-height: 1.4; }
+.worksheet-trace-text { padding: 2mm; margin: 1.5mm 0 0; border-bottom: 2px dashed #9d9690; color: #aaa; font-size: 1.2em; font-weight: 800; line-height: 1.4; }
 .worksheet-paste-targets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin: 3mm 0; }
-.worksheet-paste-targets span { display: grid; min-height: 17mm; place-items: center; border: 2px dashed #c7c0b8; border-radius: 2mm; color: #9b948b; font-size: 9pt; }
+.worksheet-paste-targets span { display: grid; min-height: 13mm; place-items: center; border: 2px dashed #c7c0b8; border-radius: 2mm; color: #9b948b; font-size: 9pt; }
 .worksheet-cut-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3mm; padding-top: 3mm; border-top: 1px dashed #bdb5ad; }
-.worksheet-cut-cards span { display: inline-flex; min-width: 0; min-height: 14mm; max-width: 100%; align-items: center; justify-content: center; padding: 2mm; border: 1.5px dashed #66509a; border-radius: 2mm; text-align: center; overflow-wrap: anywhere; }
-.worksheet-draw-area { display: grid; min-height: 65mm; place-items: center; border: 2px dashed #66509a; border-radius: 3mm; background: repeating-linear-gradient(0deg, #fffdf9, #fffdf9 8mm, #f0ece7 8.2mm, #fffdf9 8.4mm); color: #8d857d; }
+.worksheet-cut-cards span { display: inline-flex; min-width: 0; min-height: 11mm; max-width: 100%; align-items: center; justify-content: center; padding: 2mm; border: 1.5px dashed #66509a; border-radius: 2mm; text-align: center; overflow-wrap: anywhere; }
+.worksheet-draw-area { display: grid; min-height: 52mm; place-items: center; border: 2px dashed #66509a; border-radius: 3mm; background: repeating-linear-gradient(0deg, #fffdf9, #fffdf9 8mm, #f0ece7 8.2mm, #fffdf9 8.4mm); color: #8d857d; }
 .worksheet-block-image { padding: 0; border: 0; }
 .worksheet-image { margin: 0; }
-.worksheet-image img { display: block; width: 100%; max-height: 62mm; object-fit: contain; border: 1px solid #dedbe3; border-radius: 3mm; }
+.worksheet-image img { display: block; width: 100%; max-height: 52mm; object-fit: contain; border: 1px solid #dedbe3; border-radius: 3mm; }
 .worksheet-image figcaption { margin-top: 1.5mm; color: #777; font-size: 8pt; text-align: center; }
-.worksheet-reference-image { width: min(55mm, 100%); margin: 0 auto 3mm; }
-.worksheet-reference-image img { display: block; width: 100%; max-height: 30mm; object-fit: cover; border: 1px solid #dedbe3; border-radius: 3mm; }
+.worksheet-reference-image { width: min(46mm, 100%); margin: 0 auto 2mm; }
+.worksheet-reference-image img { display: block; width: 100%; max-height: 20mm; object-fit: cover; border: 1px solid #dedbe3; border-radius: 3mm; }
 .worksheet-reference-image figcaption { margin-top: 1.5mm; color: #777; font-size: 7pt; text-align: center; }
 .worksheet-block-divider { padding: 0; border: 0; }
 .worksheet-block-divider hr { border: 0; border-top: 1px dashed #aaa39b; }
-.worksheet-page-guide { position: absolute; right: 15mm; bottom: 14mm; left: 15mm; border-top: 1px dashed #b86358; color: #b86358; padding-top: 1mm; font-size: 8pt; text-align: right; }
-.worksheet-footer { position: absolute; right: 15mm; bottom: 7mm; left: 15mm; display: flex; justify-content: space-between; color: #777; font-size: 8pt; }
+.worksheet-page-guide { position: absolute; right: 15mm; bottom: 11mm; left: 15mm; border-top: 1px dashed #b86358; color: #b86358; padding-top: 1mm; font-size: 8pt; text-align: right; }
+.worksheet-footer { position: absolute; right: 15mm; bottom: 5mm; left: 15mm; display: flex; justify-content: space-between; color: #777; font-size: 8pt; }
+.worksheet-page.is-compact .worksheet-block { margin-bottom: 2mm; padding: 2.5mm; }
+.worksheet-page.is-compact .worksheet-answer-lines { gap: 2mm; }
+.worksheet-page.is-compact .worksheet-options li { padding: 1.5mm 2.5mm; }
+.worksheet-page.is-compact .worksheet-reference-image img { max-height: 16mm; }
+.worksheet-page.is-compact-2 .worksheet-block { margin-bottom: 1.5mm; padding: 2mm; }
+.worksheet-page.is-compact-2 .worksheet-meta span { font-size: 14pt; }
+.worksheet-page.is-compact-2 .worksheet-paste-targets span { min-height: 11mm; }
+.worksheet-page.is-compact-2 .worksheet-cut-cards span { min-height: 9.5mm; }
+.worksheet-page.is-compact-2 .worksheet-draw-area { min-height: 44mm; }
 @media print { html, body { background: #fff; } .worksheet-page { width: 210mm; min-height: 297mm; margin: 0; border: 0; } .worksheet-page + .worksheet-page { break-before: page; } }
-</style></head><body>${pageHtml}</body></html>`;
+</style></head><body>${pageHtml}
+<script>
+(function () {
+  // A4 한 장 높이를 실제 픽셀로 잰다. 기기와 글꼴에 따라 달라지므로 상수로 두지 않는다.
+  var probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;visibility:hidden;height:297mm';
+  document.body.appendChild(probe);
+  var pageHeight = probe.getBoundingClientRect().height;
+  probe.remove();
+  // 안내선과 바닥글이 쓰는 아래 공간은 내용이 침범하면 안 된다.
+  var reserve = pageHeight * 0.035;
+  function used(page) {
+    var style = getComputedStyle(page);
+    var total = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+    Array.prototype.forEach.call(page.children, function (child) {
+      if (/page-guide|worksheet-footer/.test(child.className)) return;
+      total += child.getBoundingClientRect().height + parseFloat(getComputedStyle(child).marginBottom || 0);
+    });
+    return total;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.worksheet-page'), function (page) {
+    if (used(page) <= pageHeight - reserve) return;
+    page.classList.add('is-compact');
+    if (used(page) <= pageHeight - reserve) return;
+    page.classList.add('is-compact-2');
+    // 두 단계로도 못 담으면 그대로 둔다. 조용히 잘라 내용을 잃는 것보다 넘치는 편이 낫다.
+    if (used(page) > pageHeight - reserve) page.setAttribute('data-overflow', 'true');
+  });
+})();
+</script></body></html>`;
 }
 
 export function downloadWorksheetHtml(worksheet: LessonWorksheet, variant: WorksheetVariant): void {

@@ -148,7 +148,7 @@ export const M1_L10_STUDIO: StudioDefinition = {
     transfer: {
       title: '체험회 안내 문구를 만든다면',
       description: 'AI가 만든 안내 문구에 확인되지 않은 행사 시간이 들어 있습니다. 어떻게 처리하겠습니까?',
-      prompt: '나만의 표현으로 AI 결과를 검토하여 사용, 수정, 거절을 판단하는 방법을 설명해보자.',
+      prompt: '나만의 표현으로 AI 결과를 검토하여 사용, 수정, 거절을 판단하는 방법을 설명해 봐요.',
       choices: [
         { id: 'modify-time', emoji: '✏️', label: '학교 공식 공지표를 확인해 잘못된 행사 시간을 바르게 수정하여 사용합니다.', isCorrect: true, reaction: '공지표와 비교해 정확한 시간으로 고쳤습니다.' },
         { id: 'reject-unsafe', emoji: '🚫', label: '확인되지 않은 오정보가 너무 많거나 개인정보를 요구하면 사용을 거절합니다.', isCorrect: true, reaction: '위험한 요청은 거절하는 것이 안전했습니다.' },

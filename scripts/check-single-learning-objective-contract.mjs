@@ -255,8 +255,16 @@ for (const [label, source] of [['LessonView', lessonView], ['StudioExplanationPa
     throw new Error(`${label} still branches the learning objective by support level`);
   }
 }
-if (!teacherPanel.includes('lesson.objective')) {
-  throw new Error('teacher objective panel must use lesson.objective');
+// 교사 화면은 옛 canonicalLessons 설명을 복사하지 않고 학생 런타임과 같은 레지스트리에서
+// 목표를 조합한다(src/features/teacher/lessonAlignment.ts의 설계 주석). 그래서 패널 안에
+// `lesson.objective` 리터럴이 더 이상 없다. 계약의 취지는 "교사와 학생이 같은 목표 하나를
+// 본다"이므로, 리터럴 대신 그 경로가 실제로 SSOT를 거치는지 확인한다.
+const alignment = read('src/features/teacher/lessonAlignment.ts');
+if (!teacherPanel.includes('lesson.studentMission')) {
+  throw new Error('teacher objective panel must render the shared studentMission');
+}
+if (!alignment.includes('objective?.studentMission ?? lesson.objective')) {
+  throw new Error('lessonAlignment must derive studentMission from the objective SSOT with lesson.objective fallback');
 }
 
 console.log('single learning objective contract: 68 canonical objectives, 0 support-level variants');

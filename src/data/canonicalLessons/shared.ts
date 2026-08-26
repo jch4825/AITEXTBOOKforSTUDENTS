@@ -6,24 +6,24 @@ export const SUPPORT_PROFILES: Record<SupportLevel, { label: string; description
     description: '짧은 문장, 시각 힌트, AAC 및 단계별 안내를 제공합니다.',
   },
   light: {
-    label: '보통',
-    description: '기준 글과 고유 증거 활동을 합니다.',
+    label: '중학',
+    description: '중학교 학년군 기준으로 운영합니다. 기준 글과 고유 증거 활동을 합니다.',
   },
   challenge: {
-    label: '도전적',
-    description: '더 많은 증거와 예외 조건, 심도 있는 이유 표현을 다룹니다.',
+    label: '고등',
+    description: '고등학교 학년군 기준으로 운영합니다. 더 많은 증거와 예외 조건, 심도 있는 이유 표현을 다룹니다.',
   },
   easy: {
     label: '충분한 지원',
     description: '짧은 문장, 시각 힌트, AAC 및 단계별 안내를 제공합니다.',
   },
   normal: {
-    label: '보통',
-    description: '기준 글과 고유 증거 활동을 합니다.',
+    label: '중학',
+    description: '중학교 학년군 기준으로 운영합니다. 기준 글과 고유 증거 활동을 합니다.',
   },
   hard: {
-    label: '도전적',
-    description: '더 많은 증거와 예외 조건, 심도 있는 이유 표현을 다룹니다.',
+    label: '고등',
+    description: '고등학교 학년군 기준으로 운영합니다. 더 많은 증거와 예외 조건, 심도 있는 이유 표현을 다룹니다.',
   },
 };
 

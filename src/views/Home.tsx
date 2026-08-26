@@ -95,7 +95,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
             <p className="max-w-lg text-xl leading-relaxed text-[color:var(--ink-2)]">
               {isResume
                 ? '아이미와 친구들이 다시 공부할 준비를 마쳤습니다! 이어서 모험을 떠나 보겠습니까?'
-                : '진우, 윤아랑 같이 AI 친구 아이미를 만나 여러 가지 신기한 도구와 인공지능의 지식을 배웁니다.'}
+                : '진우, 윤아랑 같이 AI 도우미 아이미를 만나 여러 가지 신기한 도구와 인공지능의 지식을 배웁니다.'}
             </p>
 
             <div className="flex flex-wrap gap-4 pt-4">
@@ -104,7 +104,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                 onClick={startLearning}
                 className="surface-choice is-primary group gap-3 px-10 py-5 text-xl"
               >
-                이어서 학습하기
+                {isResume ? '이어서 학습하기' : '학습 시작하기'}
                 <span
                   className={`material-symbols-outlined text-2xl ${reducedMotion ? '' : 'transition-transform group-hover:translate-x-1'}`}
                   aria-hidden="true"

@@ -3,6 +3,7 @@ import type { GeneralizationAiDecision, GeneralizationCycleRecord, Generalizatio
 import { MODULES } from '../../data/modules';
 import { GENERALIZATION_CYCLES } from '../../data/generalizationCycles';
 import {
+  GENERALIZATION_CHANGED,
   readGeneralizationRecords,
   updateGeneralizationRecord,
 } from '../../utils/generalizationStorage';
@@ -34,8 +35,13 @@ export default function GeneralizationRecordsPanel() {
 
   useEffect(() => {
     const refresh = () => setRecords(readGeneralizationRecords());
+    // storage 이벤트는 다른 탭의 변경만 잡는다. 같은 탭의 삭제는 커스텀 이벤트로 받는다.
     window.addEventListener('storage', refresh);
-    return () => window.removeEventListener('storage', refresh);
+    window.addEventListener(GENERALIZATION_CHANGED, refresh);
+    return () => {
+      window.removeEventListener('storage', refresh);
+      window.removeEventListener(GENERALIZATION_CHANGED, refresh);
+    };
   }, []);
 
   function saveObservation(record: GeneralizationCycleRecord, observation: NonNullable<GeneralizationCycleRecord['observation']>) {

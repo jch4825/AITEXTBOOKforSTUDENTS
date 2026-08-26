@@ -2,6 +2,8 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import Button from '../../components/Button';
 import GeneralizationRecordsPanel from '../../components/mission/GeneralizationRecordsPanel';
 import { clearStudioEvidence } from '../studio/evidenceStorage';
+import { clearGeneralizationRecords } from '../../utils/generalizationStorage';
+import { useProgress } from '../../context/ProgressContext';
 import type { TeacherRecordingSettings } from '../studio/types';
 import GeminiConnectionPanel from './GeminiConnectionPanel';
 import { ObjectivesPanel, ProgressPanel } from './LegacyTeacherPanels';
@@ -31,12 +33,23 @@ const TEACHER_TABS = [
 type TeacherTab = typeof TEACHER_TABS[number];
 
 export default function TeacherHub({ onExit }: Props) {
-  // 상단은 가벼운 쪽(과정기록만)을 두고, 전체 초기화는 데이터 관리 탭에서 문구 입력으로 보호한다.
+  const { reset: resetProgress } = useProgress();
+  // 상단은 학생의 수행 흔적을 지우는 쪽이고, 전체 초기화(API 키·설정까지)는 데이터 관리 탭에서
+  // 문구 입력으로 보호한다.
+  //
+  // 학생의 흔적은 저장소가 셋이다. 스튜디오 과정기록, 일반화 기록, 그리고 진도(완료한 차시)다.
+  // 셋을 함께 지우지 않으면 지운 줄 알았던 기록이 남는다. 특히 진도가 남으면 다음 학생이
+  // 첫 화면에서 「이어서 학습하기」와 남의 완료 표시를 보게 된다.
+  //
+  // 진도는 반드시 ProgressContext의 reset으로 지운다. 공급자가 상태를 저장소에 되쓰므로
+  // localStorage만 지우면 곧바로 되살아난다.
   function handleClearEvidence() {
-    const yes = window.confirm('이 브라우저에 저장된 과정기록을 모두 삭제합니다. 진도·설정·AI 연결은 그대로 남습니다. 계속하시겠습니까?');
+    const yes = window.confirm('이 브라우저에 저장된 학생의 수행 기록을 모두 삭제합니다. 과정기록, 일반화 기록, 진도(완료한 차시)가 지워집니다. 설정과 AI 연결은 그대로 남습니다. 계속하시겠습니까?');
     if (yes) {
       clearStudioEvidence();
-      window.alert('저장된 과정기록을 모두 삭제했습니다.');
+      clearGeneralizationRecords();
+      resetProgress();
+      window.alert('과정기록과 일반화 기록, 진도를 모두 삭제했습니다.');
     }
   }
   const initialSettings = loadTeacherRecordingSettings();
@@ -116,7 +129,7 @@ export default function TeacherHub({ onExit }: Props) {
                 <article className="studio-fact-card"><h3 className="font-bold">68차시 · 현재 62개 스튜디오</h3><p className="mt-1 text-sm leading-relaxed">모듈 마무리 전 차시는 상황→첫 생각→조건 변화→AI 비교→내 판단→산출물→새 상황의 공통 흐름을 따릅니다. 차시에 따라 도구 연습·개념 정리 화면이 더해지며, 여섯 마무리 차시는 성장 포트폴리오입니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">1~6단원 · 전면 전환 완료</h3><p className="mt-1 text-sm leading-relaxed">현재 1~6단원 전면 리모델링이 완성되어 있습니다. 기본 AI 의견은 검수된 준비 예시라 카메라·마이크 권한 없이 활동할 수 있고, 교사가 Gemini를 연결한 경우에만 ‘나의 판단’ 화면에 실시간 AI 영역이 더해집니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">평가 흐름</h3><p className="mt-1 text-sm leading-relaxed">첫 생각 → 조건 변화 → AI 비교 → 내 판단 → 새 상황에 써 보기를 살펴봅니다.</p></article>
-                <article className="studio-fact-card"><h3 className="font-bold">지원 수준</h3><p className="mt-1 text-sm leading-relaxed">충분한 지원, 보통, 도전적 수준은 정보 수·선택지·힌트·AI 역할의 깊이를 바꿉니다.</p></article>
+                <article className="studio-fact-card"><h3 className="font-bold">지원 수준</h3><p className="mt-1 text-sm leading-relaxed">충분한 지원, 중학, 고등 수준은 정보 수·선택지·힌트·AI 역할의 깊이를 바꿉니다. 중학과 고등은 같은 차시를 각각 9학년군·12학년군 성취기준으로 평가하는 운영 축입니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">저장 원칙</h3><p className="mt-1 text-sm leading-relaxed">교사가 켠 경우에만 정제된 과정증거를 저장하며 음성·사진·그림 원본과 전체 AI 대화는 남기지 않습니다.</p></article>
                 <article className="studio-fact-card"><h3 className="font-bold">수업 전 1분 점검</h3><p className="mt-1 text-sm leading-relaxed">학생 별칭, 기록 상태, TTS·STT, AAC 카드, 오늘 사용할 지원 수준을 확인합니다.</p></article>
               </div>

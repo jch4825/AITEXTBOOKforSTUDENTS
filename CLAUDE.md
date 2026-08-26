@@ -18,11 +18,21 @@
 - API 연결과 키 관리는 교사 영역입니다. 학생 화면에 API 키, 모델명, 기술 오류를 노출하지 않습니다.
 - 현재 스튜디오의 AI 비교 자료는 `source: 'prepared'`인 준비된 예시입니다. 카메라나 마이크
   권한이 없어도 핵심 학습이 완료되어야 합니다.
-- 지원 수준의 내부 값은 `full | light | challenge`, 화면 표시는 `충분한 지원 | 보통 | 도전적`입니다.
-- 난이도의 내부 `normal`과 화면의 `보통`을 그대로 유지합니다.
+- 지원 수준의 내부 값은 `full | light | challenge`, 화면 표시는 `충분한 지원 | 중학 | 고등`입니다.
+  `중학`과 `고등`은 지원 강도이자 학년군 운영 축입니다. 같은 68차시를 중·고가 공통으로
+  쓰되 중학교는 9학년군, 고등학교는 12학년군 성취기준으로 평가합니다.
+- 난이도의 내부 값 `easy | normal | hard`는 그대로 두고 화면 표시만 위 라벨을 따릅니다.
+  글자 크기의 `보통`은 별개이므로 바꾸지 않습니다.
 - PC 1280px 이상을 우선하되, 모바일 390px와 글자 크기 125%에서도 주요 조작이 가려지지 않아야 합니다.
 - 차시 전환 시 상태가 섞이지 않도록 라우트 단위 상태는 `lessonId`로 격리합니다.
 - `tests/e2e`가 생기더라도 테스트를 맞추기 위해 수정하지 말고 애플리케이션 코드를 고칩니다.
+- 학생 노출 문체는 화자로 나뉩니다. 서술은 합니다체, 또래 인물끼리는 반말, 아이미와
+  학생에게 건네는 말은 해요체입니다. 해요체도 존댓말이므로 금지 대상이 아닙니다.
+  다만 앱이 학생에게 직접 건네는 말(UI·게임 피드백·지시문)에는 반말을 쓰지 않습니다.
+  학생이 아이미에게 하는 질문은 반말이어도 됩니다. `npm run check:student-formal-style`이
+  이를 검사합니다.
+- PECS·AAC 라벨은 카드 이미지에 인쇄된 글자와 어체까지 일치시킵니다. 인쇄된 낱말과
+  화면 낱말을 짝지어 읽는 것이 이 도구의 사용법이므로 한쪽만 바꾸지 않습니다.
 - 한국어 파일은 UTF-8, TypeScript는 strict 설정을 유지합니다.
 
 ## 현재 단일 진실 원천
@@ -31,8 +41,14 @@
 - 차시 역할: `src/data/lessonRoles.ts`
 - 스튜디오 62개: `src/data/studios/m1/` ~ `m6/` (차시당 1파일 + `index.ts` 배럴)
 - 단원 마무리 6개: `src/data/modulePortfolios/m1.ts` ~ `m6.ts`
+- 고등 심화 과제: `src/data/highSchoolTasks.ts` — 62차시 각각의 고등 학년군 전용 수행.
+  지원 수준이 `고등`일 때 전이 단계에 나타나며, 중학과 고등의 차이를 텍스트 밀도가
+  아니라 수행 요구 수준으로 만든다. 실시간 AI나 새 이미지를 요구하지 않는다.
+- 성취수준: `src/data/aiAchievementLevels.ts` — 24개 성취기준 × 상·중·하.
 - 차시 학습목표: `src/data/lessonObjectives.ts` — studios·lessons의 objective가 여기를
-  따라야 하며 `npm run check:objectives`가 강제합니다.
+  따라야 하며 `npm run check:objectives
+npm run check:standards-integrity
+npm run check:highschool-tasks`가 강제합니다.
 - 정식 콘텐츠와 성취기준: `src/data/canonicalLessons/`, `src/data/aiAchievementStandards.ts`
 - 학생 사전: `src/data/studentDictionary.ts`
 - 교사용 실제 운영 설명: `src/features/teacher/TeacherOperationGuide.tsx`

@@ -94,12 +94,12 @@ export const M1_L1_STUDIO: StudioDefinition = {
           flow: { input: '말·글·사진', process: '자료에서 규칙 찾기', output: '번역·추천·분류' },
         },
         {
-          title: 'AI가 할 수 있는 여러 가지 일',
-          core: 'AI는 번역, 음악 추천, 사진 찾기 등 사람이 정한 다양한 목적을 도와줍니다.',
+          title: '아이미는 마음이 없어요',
+          core: '아이미는 도와주는 도구입니다. 사람처럼 기뻐하거나 서운해하지 않습니다.',
           detail: {
-            full: '번역하기, 음악 추천, 사진 찾기처럼 다양한 일을 도와줘요.',
-            light: '어떤 입력을 주느냐에 따라 AI가 도와줄 수 있는 기능과 결과가 달라집니다.',
-            challenge: '넣는 정보의 종류와 모양에 따라 AI 도구가 할 수 있는 일이 달라집니다.',
+            full: '아이미는 마음이 없어요. 도와주는 도구예요.',
+            light: '아이미가 다정하게 말해도 진짜 기분이 있는 것은 아닙니다. 사람이 쓴 말투를 따라 하는 것입니다.',
+            challenge: '아이미는 배운 글에서 사람의 말투를 따라 만들 뿐이므로 다정한 말투를 우정이나 감정으로 받아들이지 않습니다. 속상한 마음은 곁에 있는 사람에게 이야기합니다.',
           },
         },
       ],
@@ -110,6 +110,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
       facts: [
         'AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하여 문제 해결을 돕는 기술입니다.',
         'AI는 말, 글, 사진 같은 입력을 받아 일을 처리할 수 있습니다.',
+        'AI는 사람처럼 말해도 마음이나 기분은 없습니다.',
         'AI는 번역, 추천, 분류 같은 다양한 결과를 만들어 도와줍니다.',
       ],
     },
@@ -117,7 +118,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
       prompt: '어려운 인사를 한 아이미를 만났습니다. 친구에게 AI(인공지능)의 뜻과 할 수 있는 일을 어떻게 소개해 볼까요?',
       choices: [
         { id: 'tool-with-input', emoji: '🛠️', label: '많은 자료에서 비슷한 점을 찾아 번역, 추천, 분류를 돕는 기술이라고 소개합니다.', isCorrect: true, reaction: '아이미: "네! 저는 자료에서 비슷한 점을 찾아 돕는 도구예요. 정확해요!"' },
-        { id: 'magic-friend', emoji: '🪄', label: '모든 것을 알고 스스로 결정하는 마법 친구라고 소개합니다.', isCorrect: false, reaction: '아이미: "음… 저는 마법사가 아니라서 모르는 것도 많아요."' },
+        { id: 'magic-friend', emoji: '🪄', label: '모든 것을 알고 마음도 나누는 마법 친구라고 소개합니다.', isCorrect: false, reaction: '아이미: "음… 저는 모르는 것도 많고 마음도 없어요. 친구가 아니라 도우미랍니다."' },
         { id: 'just-machine', emoji: '⚙️', label: '전기로 움직이는 기계는 모두 AI라고 소개합니다.', isCorrect: false, reaction: '윤아가 선풍기를 가리키며 고개를 갸웃했습니다. "이것도 전기로 움직이는데… AI인가?"' },
         { id: 'human-like-helper', emoji: '🤖', label: '대화를 통해 깊이 있는 생각을 이끌어내어 어려운 문제 해결을 도와주는 유용한 프로그램이라고 덧붙입니다.', isCorrect: true, reaction: '아이미: "맞아요! 저는 함께 생각을 다듬는 도구예요!"' },
       ],
@@ -148,7 +149,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
     transfer: {
       title: '도서관에 새로운 인공지능 추천 기계가 생겼어요.',
       description: '도서관에 새로 설치된 인공지능 추천 기계는 나의 질문을 받아서 책을 추천해준다고 합니다.',
-      prompt: '나만의 표현으로 도서관의 인공지능 추천 기계를 친구에게 설명해보자.',
+      prompt: '나만의 표현으로 도서관의 인공지능 추천 기계를 친구에게 설명해 봐요.',
       stimuli: [
         {
           id: 'library-ai-kiosk-image',

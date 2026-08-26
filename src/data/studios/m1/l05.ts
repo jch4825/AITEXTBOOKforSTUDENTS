@@ -85,12 +85,12 @@ export const M1_L5_STUDIO: StudioDefinition = {
           flow: { input: '마이크로 들어온 소리', process: '소리 특징 비교', output: '변환된 글자' },
         },
         {
-          title: '듣는 조건이 결과를 바꾸어요',
-          core: '소음, 거리, 말하는 속도가 달라지면 변환 결과도 달라질 수 있습니다.',
+          title: '듣는 조건과 배운 목소리가 결과를 바꾸어요',
+          core: '소음과 거리뿐 아니라, AI가 어떤 목소리를 배웠는지에 따라 결과가 달라집니다.',
           detail: {
-            full: '주변이 시끄러우면 다르게 들을 수 있어요.',
-            light: '여러 소리가 겹치거나 마이크가 멀면 말소리 특징을 찾기 어려워집니다.',
-            challenge: '입력 신호의 선명도와 학습 자료의 범위는 음성 인식 결과의 정확성에 영향을 줍니다.',
+            full: '잘 못 알아들어도 내 잘못이 아니에요.',
+            light: 'AI는 배운 목소리와 다른 말투나 빠르기를 만나면 더 자주 틀립니다. 말하는 사람의 잘못이 아닙니다.',
+            challenge: 'AI가 배운 말소리 자료가 한쪽으로 치우치면, 그 자료에 적게 담긴 목소리와 말투에서 오류가 더 자주 생깁니다. 원인은 말하는 사람이 아니라 학습 자료의 범위에 있습니다.',
           },
         },
         {
@@ -136,11 +136,13 @@ export const M1_L5_STUDIO: StudioDefinition = {
     supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
       description: '조용한 교실에서 마이크를 가까이 대고 말하거나 텍스트 및 그림 카드로 입력하자 정확한 글자가 나왔습니다.',
+      // 앞의 세 개는 지원 수준과 무관하게 보인다(slice(0, visibleFactCount)).
+      // 「내 잘못이 아니다」는 이 차시에서 가장 먼저 닿아야 하는 문장이므로 두 번째에 둔다.
       facts: [
-        '복도 소음이 사라지면 소리 특징을 더 선명하게 찾을 수 있습니다.',
-        '마이크와의 거리가 가까워지면 소음의 영향이 줄어듭니다.',
+        '복도 소음이 사라지거나 마이크가 가까워지면 소리 특징을 더 선명하게 찾을 수 있습니다.',
+        'AI가 배운 목소리와 다르면 조용한 곳에서도 틀릴 수 있습니다. 말하는 사람의 잘못이 아닙니다.',
         '글자나 그림 카드 보조공학 입력은 소음 환경에서도 정확하게 뜻을 전달합니다.',
-        '나에게 편하고 정확한 입력 방법을 상황에 맞게 고를 수 있습니다.',
+        '다른 입력 방법을 고르는 것은 못해서가 아니라 나에게 맞는 방법을 아는 것입니다.',
       ],
       stimuli: [
         {
@@ -155,7 +157,7 @@ export const M1_L5_STUDIO: StudioDefinition = {
     aiContribution: {
       source: 'prepared',
       role: '아이미의 입력 방법 제안',
-      text: '조용한 곳에서 다시 말하면 음성 인식이 더 잘될 수 있어요. 하지만 꼭 말로 입력하지 않아도 돼요. 글자나 그림으로 뜻을 전한 뒤 원래 방송과 비교해도 좋아요.',
+      text: '제가 못 알아들은 것은 말한 분의 잘못이 아니에요. 제가 여러 목소리를 고르게 배우지 못해서 생기는 일이에요. 조용한 곳에서 다시 말해도 좋고, 글자나 그림으로 뜻을 전한 뒤 원래 방송과 비교해도 좋아요.',
       question: '아이미의 제안 중 진우에게 맞는 방법은 무엇일까요?',
     },
     artifact: {
@@ -166,7 +168,7 @@ export const M1_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '체육관 안내가 잘 들리지 않는다면',
       description: '넓은 체육관에서 다음 활동 장소를 알려 주는 음성 안내가 화면에 다르게 적혔습니다.',
-      prompt: '나만의 표현으로 주변이 시끄러울 때 음성 인식 결과를 어떻게 확인할지 설명해보자.',
+      prompt: '나만의 표현으로 주변이 시끄러울 때 음성 인식 결과를 어떻게 확인할지 설명해 봐요.',
       stimuli: [
         {
           id: 'm1-l5-gym-announcement',
@@ -180,7 +182,7 @@ export const M1_L5_STUDIO: StudioDefinition = {
         { id: 'replay-gym-audio', emoji: '🎧', label: '안내 방송을 조용한 곳에서 다시 듣고 장소 표지와 비교합니다.', isCorrect: true, reaction: '다시 들으니 정확한 장소를 확인할 수 있었습니다.' },
         { id: 'use-accessible-option', emoji: '♿', label: '타자 입력, 그림 안내판, 또는 선생님의 도움을 요청합니다.', isCorrect: true, reaction: '그림 안내판으로도 장소를 정확히 알 수 있었습니다.' },
         { id: 'follow-gym-text', emoji: '🚶', label: '시끄러운 소음 속에서 잘못 인식된 글자만 믿고 바로 이동합니다.', isCorrect: false, reaction: '엉뚱한 장소로 갔다가 되돌아와야 했습니다.' },
-        { id: 'ignore-noise-condition', emoji: '📢', label: '소음 조건이 바뀌어도 음성 인식 결과는 무조건 정확하다고 봅니다.', isCorrect: false, reaction: '시끄러운 체육관에서도 똑같이 잘못 적히는 일이 생겼습니다.' },
+        { id: 'blame-my-voice', emoji: '🙍', label: '조용한 곳에서도 틀리니 내 목소리가 잘못된 것이라고 생각합니다.', isCorrect: false, reaction: '아이미: "아니에요. 제가 여러 목소리를 고르게 배우지 못한 탓이에요."' },
       ],
     },
     safetyNote: '실제 학생의 목소리를 저장하지 않고 수업용 음성만 사용합니다.',

@@ -36,6 +36,6 @@ export const CHARACTERS: Record<CharacterId, CharacterMeta> = {
     id: 'aimi',
     name: '아이미',
     shortName: '아이미',
-    role: 'AI 로봇 친구',
+    role: 'AI 로봇 도우미',
   },
 };
