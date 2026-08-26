@@ -316,7 +316,10 @@ try {
   await evaluate(cdp, `document.querySelector('[data-mobile-teacher-tools]')?.click()`);
   await waitForSelector(cdp, '.mobile-teacher-tools-sheet');
   const toolLabels = await evaluate(cdp, `[...document.querySelectorAll('.mobile-teacher-tools-sheet [data-tool-id]')].map((element) => element.textContent.trim())`);
-  assert.deepEqual(toolLabels, ['판서', '타이머', '그림 카드', '학습지', '교사 자료'], '모바일 교사 도구 시트는 다섯 도구를 제공해야 합니다.');
+  // 교사 자료는 외부 사이트로 나가는 링크라 교사 모드에서만 열린다. 이 검사는 학생 모드로
+  // 도니 네 도구만 보여야 하며, 교사 자료가 보이면 학생이 수업 도중 밖으로 나갈 수 있다.
+  assert.deepEqual(toolLabels, ['판서', '타이머', '그림 카드', '학습지'], '모바일 교사 도구 시트는 학생 모드에서 네 도구를 제공해야 합니다.');
+  assert.ok(!toolLabels.includes('교사 자료'), '학생 모드에서 교사 자료가 노출되면 안 됩니다.');
   await captureScreenshot(cdp, 'mobile-teacher-tools');
 
   await evaluate(cdp, `document.querySelector('[data-tool-id="timer"]')?.click()`);

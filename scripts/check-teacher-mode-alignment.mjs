@@ -55,28 +55,44 @@ const closeM1 = rows.find((row) => row.lessonId === 'm1-l11');
 assertEqual(closeM1?.kind, 'portfolio', 'm1-l11은 일반 스튜디오가 아니라 성장 포트폴리오로 안내해야 한다');
 assertEqual(closeM1?.scenarioTitle, '아이미 사용 설명서', 'm1-l11 교사용 설명은 현재 성장 포트폴리오 제목을 사용해야 한다');
 
-const lessonM1L1Resources = teacherResourcesModule.getTeacherResources?.('m1-l1') ?? [];
-assertEqual(lessonM1L1Resources.length, 1, 'm1-l1 교사 자료에는 요청한 영상 1개가 표시되어야 한다');
-assertEqual(lessonM1L1Resources[0]?.url, 'https://youtu.be/iQ8A8ruR26g', 'm1-l1 교사 영상은 요청한 URL을 사용해야 한다');
-assert(
-  lessonM1L1Resources[0]?.description?.includes('도입 또는 정리'),
-  'm1-l1 교사 영상에는 수업에서 언제 활용할지 알려 주는 짧은 설명이 필요하다',
+// 교사 자료는 차시마다 영상 하나와 도구 여러 개가 함께 나올 수 있다.
+// 예전 계약은 차시당 링크 1개와 youtu.be 단축 주소를 고정하고 있었는데,
+// 단축 주소는 무엇을 여는지 교사가 알 수 없어 check:teacher-resources 가 금지한다.
+// 여기서는 계약의 원래 취지만 지킨다 — 차시마다 자기 영상이 하나 있고,
+// 한 차시의 영상이 다른 차시로 새지 않는다.
+const LESSON_VIDEO_IDS = {
+  'm1-l1': 'iQ8A8ruR26g',
+  'm1-l2': '4Xh7K4irvck',
+  'm1-l3': 'whi2UuA9-0k',
+};
+
+for (const [lessonId, videoId] of Object.entries(LESSON_VIDEO_IDS)) {
+  const links = teacherResourcesModule.getTeacherResources?.(lessonId) ?? [];
+  const videos = links.filter((link) => link.kind === 'video');
+  assertEqual(videos.length, 1, `${lessonId} 교사 자료에는 이 차시의 영상 1개가 있어야 한다`);
+  assert(
+    videos[0]?.url?.includes(videoId),
+    `${lessonId} 교사 영상은 이 차시의 영상을 가리켜야 한다 (${videoId})`,
+  );
+  assert(
+    !/youtu\.be/.test(videos[0]?.url ?? ''),
+    `${lessonId} 교사 영상은 단축 주소가 아니라 전체 주소를 써야 한다`,
+  );
+  assert(
+    Boolean(videos[0]?.description?.trim()),
+    `${lessonId} 교사 영상에는 수업에서 언제 활용할지 알려 주는 짧은 설명이 필요하다`,
+  );
+  assert(
+    Boolean(videos[0]?.source?.trim()) && /^\d{4}-\d{2}-\d{2}$/.test(videos[0]?.checkedAt ?? ''),
+    `${lessonId} 교사 영상에는 제공자와 확인 날짜가 있어야 한다`,
+  );
+}
+
+assertEqual(
+  (teacherResourcesModule.getTeacherResources?.('m1-l4') ?? []).filter((link) => link.kind === 'video').length,
+  0,
+  'm1-l3 전용 영상이 다른 차시에 노출되면 안 된다',
 );
-const lessonM1L2Resources = teacherResourcesModule.getTeacherResources?.('m1-l2') ?? [];
-assertEqual(lessonM1L2Resources.length, 1, 'm1-l2 교사 자료에는 요청한 영상 1개가 표시되어야 한다');
-assertEqual(lessonM1L2Resources[0]?.url, 'https://youtu.be/4Xh7K4irvck', 'm1-l2 교사 영상은 요청한 URL을 사용해야 한다');
-assert(
-  lessonM1L2Resources[0]?.description?.includes('도입 또는 정리'),
-  'm1-l2 교사 영상에는 수업에서 언제 활용할지 알려 주는 짧은 설명이 필요하다',
-);
-const lessonM1L3Resources = teacherResourcesModule.getTeacherResources?.('m1-l3') ?? [];
-assertEqual(lessonM1L3Resources.length, 1, 'm1-l3 교사 자료에는 요청한 영상 1개가 표시되어야 한다');
-assertEqual(lessonM1L3Resources[0]?.url, 'https://youtu.be/whi2UuA9-0k', 'm1-l3 교사 영상은 요청한 URL을 사용해야 한다');
-assert(
-  lessonM1L3Resources[0]?.description?.includes('도입 또는 정리'),
-  'm1-l3 교사 영상에는 수업에서 언제 활용할지 알려 주는 짧은 설명이 필요하다',
-);
-assertEqual((teacherResourcesModule.getTeacherResources?.('m1-l4') ?? []).length, 0, 'm1-l3 전용 영상이 다른 차시에 노출되면 안 된다');
 
 const worksheetM1L3 = worksheetModule.buildLessonWorksheet('m1-l3');
 assertEqual(worksheetM1L3.lessonTitle, 'AI는 어떻게 답을 만들까?', 'm1-l3 활동지는 현재 스튜디오 제목을 사용해야 한다');
