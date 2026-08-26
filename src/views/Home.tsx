@@ -81,10 +81,16 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
             <span className="material-symbols-outlined text-3xl" aria-hidden="true">auto_awesome</span>
             기본교육과정 중·고 선택 교과
           </div>
-          <div className="hidden items-center gap-2 md:flex">
-            <span className="px-4 py-2 text-sm font-bold text-[color:var(--brand-ink)]">학생 학습 화면</span>
+          {/*
+            교사용 페이지는 화면 크기와 상관없이 보여야 한다. 예전에는 md 미만에서 이 묶음을
+            통째로 숨겨서, 태블릿과 휴대전화로 수업할 때 교사 모드로 들어갈 길이 없었다.
+            교사 모드에 못 들어가면 교실 도크의 교사 자료도 계속 잠긴 채로 남는다.
+            좁은 화면에서는 안내 문구만 접고 링크는 남긴다.
+          */}
+          <div className="flex items-center gap-2">
+            <span className="hidden px-4 py-2 text-sm font-bold text-[color:var(--brand-ink)] md:inline">학생 학습 화면</span>
             <a
-              className="rounded-[var(--r-sm)] border-2 border-[color:var(--brand-ink)] px-4 py-2 text-sm font-semibold text-[color:var(--brand-ink)] transition-colors hover:bg-[color:var(--paper-2)]"
+              className="min-h-11 rounded-[var(--r-sm)] border-2 border-[color:var(--brand-ink)] px-4 py-2 text-sm font-semibold whitespace-nowrap text-[color:var(--brand-ink)] transition-colors hover:bg-[color:var(--paper-2)]"
               href="?teacher=1"
             >
               교사용 페이지

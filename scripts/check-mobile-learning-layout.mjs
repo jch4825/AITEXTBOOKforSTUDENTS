@@ -161,7 +161,7 @@ async function reloadAndWait(cdp) {
   throw new Error('학습 화면을 다시 불러오는 시간이 초과되었습니다.');
 }
 
-async function navigateAndWait(cdp, url) {
+async function navigateAndWait(cdp, url, readySelector = '.micro-lesson-frame') {
   const marker = `layout-navigation-${Date.now()}-${Math.random()}`;
   await evaluate(cdp, `window.__layoutAuditBeforeNavigation = ${JSON.stringify(marker)}`);
   await cdp.send('Page.navigate', { url });
@@ -170,7 +170,7 @@ async function navigateAndWait(cdp, url) {
       const ready = await evaluate(cdp, `document.readyState === 'complete'
         && window.__layoutAuditBeforeNavigation !== ${JSON.stringify(marker)}
         && location.href === ${JSON.stringify(url)}
-        && Boolean(document.querySelector('.micro-lesson-frame'))`);
+        && Boolean(document.querySelector(${JSON.stringify(readySelector)}))`);
       if (ready) {
         await sleep(250);
         return;
@@ -180,7 +180,7 @@ async function navigateAndWait(cdp, url) {
     }
     await sleep(100);
   }
-  throw new Error(`학습 화면 이동 시간이 초과되었습니다: ${url}`);
+  throw new Error(`화면 이동 시간이 초과되었습니다: ${url} (${readySelector})`);
 }
 
 async function setViewport(cdp, width, height) {
@@ -258,6 +258,7 @@ if (!chromePath) throw new Error('Chrome을 찾지 못했습니다. CHROME_PATH�
 
 const vitePort = await getFreePort();
 const lessonUrl = `http://127.0.0.1:${vitePort}/AITEXTBOOKforSTUDENTS/?lesson=m1-l1`;
+const homeUrl = `http://127.0.0.1:${vitePort}/AITEXTBOOKforSTUDENTS/`;
 let viteOutput = '';
 const vite = spawn(process.execPath, [
   'node_modules/vite/bin/vite.js',
@@ -332,6 +333,28 @@ try {
   assert.match(timerLabel ?? '', /^(1:00|0:59|0:58)$/, '실행 중인 타이머는 모바일 상단에 남아야 합니다.');
   await evaluate(cdp, `document.querySelector('.mobile-timer-chip')?.click()`);
   await waitForSelector(cdp, '.mobile-teacher-tools-sheet');
+
+  // 표지의 교사용 페이지 링크는 좁은 화면에서도 보여야 한다. 예전에 이 묶음이 md 미만에서
+  // 통째로 숨어 있어서, 휴대전화로 수업할 때 교사 모드로 들어갈 길이 아예 없었다.
+  // 교사 모드에 못 들어가면 교실 도크의 교사 자료도 계속 잠긴 채로 남는다.
+  await navigateAndWait(cdp, homeUrl, '[aria-label="학년군 고르기"]');
+  const homeTeacherLink = await evaluate(cdp, `(() => {
+    const link = [...document.querySelectorAll('a')].find((element) => element.textContent.trim() === '교사용 페이지');
+    if (!link) return { found: false };
+    const rect = link.getBoundingClientRect();
+    return {
+      found: true,
+      href: link.getAttribute('href'),
+      visible: getComputedStyle(link).display !== 'none' && rect.width > 0 && rect.height > 0,
+      insideViewport: rect.right <= window.innerWidth + 1,
+      tapHeight: Math.round(rect.height),
+    };
+  })()`);
+  assert.ok(homeTeacherLink.found, '표지에 교사용 페이지 링크가 있어야 합니다.');
+  assert.equal(homeTeacherLink.href, '?teacher=1', '교사용 페이지 링크는 ?teacher=1로 가야 합니다.');
+  assert.ok(homeTeacherLink.visible, '390px에서 교사용 페이지 링크가 숨겨지면 교사 모드로 들어갈 길이 없습니다.');
+  assert.ok(homeTeacherLink.insideViewport, '교사용 페이지 링크가 390px 화면 밖으로 나가면 안 됩니다.');
+  assert.ok(homeTeacherLink.tapHeight >= 44, `교사용 페이지 링크 높이가 ${homeTeacherLink.tapHeight}px입니다. 손가락 조작에는 44px 이상이 필요합니다.`);
 
   const debugUrl = `${lessonUrl}&debug=1`;
   await navigateAndWait(cdp, debugUrl);
