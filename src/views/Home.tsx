@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import ModuleIcon from '../components/ModuleIcon';
 import { useProgress } from '../context/ProgressContext';
+import { useSettings } from '../context/SettingsContext';
+import { SUPPORT_LABELS, SUPPORT_TO_DIFFICULTY } from '../features/studio/supportLevel';
+import type { SupportLevel } from '../features/studio/types';
 import { getLesson } from '../data/lessons';
 import { lessonIdsForModule, MODULES } from '../data/modules';
 import type { LessonId } from '../types';
@@ -11,6 +14,21 @@ interface Props {
   onEnter: () => void;
   onEnterLesson?: (id: LessonId) => void;
 }
+
+/**
+ * 표지에서 고르는 학년군.
+ * 같은 68차시를 중·고가 공통으로 쓰되 중학은 9학년군, 고등은 12학년군 성취기준으로
+ * 평가한다(src/data/aiAchievementLevels.ts). 충분한 지원은 두 학년군 모두에서
+ * 더 많은 도움이 필요한 학생에게 쓰는 단계다.
+ * 라벨은 supportLevel.ts 한 곳에서 가져온다.
+ */
+const LEVEL_ORDER: SupportLevel[] = ['full', 'light', 'challenge'];
+
+const LEVEL_NOTE: Record<SupportLevel, string> = {
+  full: '도움이 더 필요할 때',
+  light: '중학교 학년군',
+  challenge: '고등학교 학년군',
+};
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(
@@ -29,6 +47,7 @@ function useReducedMotion() {
 
 export default function Home({ onEnter, onEnterLesson }: Props) {
   const { completedLessons } = useProgress();
+  const { difficulty, setDifficulty } = useSettings();
   const reducedMotion = useReducedMotion();
   const totalLessons = MODULES.reduce((sum, module) => sum + module.lessonCount, 0);
   const doneCount = completedLessons.length;
@@ -60,7 +79,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
         <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4 sm:px-6">
           <div className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-[color:var(--brand-ink)] sm:text-2xl">
             <span className="material-symbols-outlined text-3xl" aria-hidden="true">auto_awesome</span>
-            기본교육과정 중학 선택 교과
+            기본교육과정 중·고 선택 교과
           </div>
           <div className="hidden items-center gap-2 md:flex">
             <span className="px-4 py-2 text-sm font-bold text-[color:var(--brand-ink)]">학생 학습 화면</span>
@@ -86,7 +105,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
           <div className="space-y-6 text-left lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-[var(--r-pill)] border-2 border-[color:var(--brand-ink)] bg-[color:var(--paper-0)] px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-[color:var(--brand-ink)]">
               <span className="material-symbols-outlined text-sm" aria-hidden="true">school</span>
-              기본교육과정 중학 선택
+              기본교육과정 중·고 선택
             </div>
             <h1 className="text-[clamp(1.85rem,9vw,3rem)] font-black leading-[1.1] tracking-tight text-[color:var(--brand-ink)] md:text-6xl">
               <span className="block whitespace-nowrap">아이미와 배우는</span>
@@ -97,6 +116,28 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                 ? '아이미와 친구들이 다시 공부할 준비를 마쳤습니다! 이어서 모험을 떠나 보겠습니까?'
                 : '진우, 윤아랑 같이 AI 도우미 아이미를 만나 여러 가지 신기한 도구와 인공지능의 지식을 배웁니다.'}
             </p>
+
+            <div className="pt-2" role="group" aria-label="학년군 고르기">
+              <p className="mb-2 text-sm font-bold text-[color:var(--ink-2)]">누가 공부할까요?</p>
+              <div className="flex flex-wrap gap-2">
+                {LEVEL_ORDER.map((level) => {
+                  const value = SUPPORT_TO_DIFFICULTY[level];
+                  const active = difficulty === value;
+                  return (
+                    <button
+                      key={level}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => setDifficulty(value)}
+                      className={`surface-choice min-h-14 rounded-[var(--r-sm)] px-5 py-2.5 text-left transition-colors${active ? ' is-primary' : ''}`}
+                    >
+                      <span className="block text-base font-extrabold">{SUPPORT_LABELS[level]}</span>
+                      <span className="block text-xs font-semibold opacity-80">{LEVEL_NOTE[level]}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             <div className="flex flex-wrap gap-4 pt-4">
               <Button
@@ -124,7 +165,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
               />
               <figcaption className="absolute inset-x-0 bottom-0 bg-[color:var(--brand-ink)] p-6 text-[color:var(--paper-0)]">
                 <span className="inline-flex rounded-[var(--r-pill)] border-2 border-[color:var(--paper-0)] px-3 py-1 text-xs font-bold uppercase tracking-wider">
-                  기본 중학
+                  기본 중·고
                 </span>
                 <p className="mt-2 text-2xl font-black">인공지능 활용(기본교육과정)</p>
                 <p className="mt-1 text-xs">미래 사회와 동반성장하는 첫 단추</p>
