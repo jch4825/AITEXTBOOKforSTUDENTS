@@ -74,6 +74,28 @@ for (const entry of entries) {
   }
 }
 
+/* 놀이는 태블릿·PC 크기에서만 연다.
+   미니게임의 조작은 드래그·조준·타이밍이라 390px 휴대전화에서는 판과 손가락이 겹쳐
+   조작 자체가 성립하지 않는다. 슬롯이 다시 무조건 게임을 그리면 이 계약이 깨지므로
+   화면 크기 게이트가 슬롯 안에 남아 있는지 확인한다. */
+const viewportGatePath = path.join(minigameRoot, 'useMiniGameViewport.ts');
+const slotPath = path.join(minigameRoot, 'MiniGameSlot.tsx');
+if (!fs.existsSync(viewportGatePath)) {
+  errors.push('화면 크기 게이트가 없습니다: src/features/studio/minigames/useMiniGameViewport.ts');
+} else {
+  const gateSource = fs.readFileSync(viewportGatePath, 'utf8');
+  if (!gateSource.includes('(max-width: 767px)')) {
+    errors.push('화면 크기 게이트가 태블릿 하한(768px)을 잃었습니다.');
+  }
+}
+const slotSource = fs.readFileSync(slotPath, 'utf8');
+if (!slotSource.includes('useMiniGamePlayable')) {
+  errors.push('MiniGameSlot이 화면 크기 게이트를 쓰지 않습니다.');
+}
+if (!slotSource.includes('if (!playable)')) {
+  errors.push('MiniGameSlot이 좁은 화면에서 게임을 그리기 전에 빠져나오지 않습니다.');
+}
+
 if (errors.length > 0) {
   console.error('Mini-game contract failed:');
   for (const error of errors) console.error(`- ${error}`);
@@ -81,5 +103,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `Mini-game contract passed: ${registeredIds.length}/${studioIds.length} studios, all lazy-loaded, no abstract threshold labels, minimum declared text size 14px.`,
+  `Mini-game contract passed: ${registeredIds.length}/${studioIds.length} studios, all lazy-loaded, no abstract threshold labels, minimum declared text size 14px, tablet/PC-only viewport gate.`,
 );

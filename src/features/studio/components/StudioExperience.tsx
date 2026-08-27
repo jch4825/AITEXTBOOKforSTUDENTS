@@ -26,6 +26,7 @@ import { hasApiKey } from '../../../utils/apiKey';
 import InquiryCertificateModal from './InquiryCertificateModal';
 import CompletionAwardModal from './CompletionAwardModal';
 import MiniGameSlot from '../minigames/MiniGameSlot';
+import { useMiniGamePlayable } from '../minigames/useMiniGameViewport';
 import { getScopedChoices } from '../studioChoiceUtils';
 import { isMeaningfulStudioExpression } from '../studioCompletion';
 import { getStudioContextMedia } from '../studioIllustrations';
@@ -141,6 +142,8 @@ export default function StudioExperience({
   behavior,
 }: Props) {
   const { speakNow } = useSpeak();
+  // 놀이는 태블릿·PC 크기에서만 연다. 휴대전화에서는 놀이 자리에 안내가 대신 들어간다.
+  const miniGamePlayable = useMiniGamePlayable();
   const [studentName, setStudentName] = useState('');
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [showAwardModal, setShowAwardModal] = useState(false);
@@ -302,7 +305,7 @@ export default function StudioExperience({
     behavior.dialogueFrame && view.id === 'first-attempt' && Boolean(lastScene);
 
   const left = isCompleteStage ? (
-    hasLabIntro ? (
+    hasLabIntro && miniGamePlayable ? (
       <div className="flex h-full flex-col gap-2 p-2">
         <p className="studio-kicker px-2" style={{ color: secondary }}>
           재도전 · 처음 해 봤을 때와 무엇이 달라졌나요
