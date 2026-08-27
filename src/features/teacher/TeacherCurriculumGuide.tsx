@@ -7,6 +7,14 @@ import {
   type AchievementLevelKey,
 } from '../../data/aiAchievementLevels';
 import { MODULES } from '../../data/modules';
+import { MODULE_CORE_CONTENTS } from '../../data/moduleCoreContents';
+import {
+  ASSESSMENT_DIRECTIONS,
+  ASSESSMENT_METHODS,
+  KOREAN_ITEM_MARKERS,
+  TEACHING_DIRECTIONS,
+  TEACHING_METHODS,
+} from '../../data/curriculumTeachingAssessment';
 
 const LEVEL_ORDER: AchievementLevelKey[] = ['high', 'middle', 'low'];
 
@@ -15,6 +23,25 @@ const LEVEL_ROW_STYLE: Record<AchievementLevelKey, string> = {
   middle: 'bg-sky-50/60',
   low: 'bg-amber-50/60',
 };
+
+/**
+ * 기본 교육과정의 교수·학습·평가 항목 표기를 그대로 따른다. (가)(나)(다)… 로
+ * 번호를 붙이고 한 항목을 한 문장으로 서술한다.
+ */
+function NumberedItems({ items }: { items: string[] }) {
+  return (
+    <ol className="space-y-2">
+      {items.map((text, index) => (
+        <li key={text} className="flex gap-2 text-xs sm:text-sm leading-relaxed text-slate-800 font-medium">
+          <span className="shrink-0 font-black text-indigo-900">
+            ({KOREAN_ITEM_MARKERS[index] ?? index + 1})
+          </span>
+          <span>{text}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 // Single, unified official narrative explanation for each of the 24 achievement standards
 export const DETAILED_STANDARD_EXPLANATIONS: Record<string, string> = {
@@ -131,6 +158,27 @@ export default function TeacherCurriculumGuide() {
         </div>
       </div>
 
+      {/* 문서 차례 — 기본 교육과정 교과 문서가 갖추는 항목이 이 문서 어디에 있는지 먼저 밝힌다. */}
+      <nav aria-label="교육과정 문서 차례" className="bg-white rounded-2xl p-5 md:p-6 border border-slate-200 depth-paper">
+        <p className="text-sm font-extrabold text-slate-900">이 문서의 차례</p>
+        <ol className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 text-xs font-bold text-slate-800">
+          {[
+            { label: '1. 교육과정 제작 배경 및 개요', note: '학교 자율 교과로 만든 까닭' },
+            { label: '2. 편제와 학년군 운영', note: '68차시 · 중학 9학년군 / 고등 12학년군' },
+            { label: '3. 성격 및 목표', note: '가. 성격 · 나. 과목 목표' },
+            { label: '4. 교육 내용', note: '가. 내용 체계 · 나. 단원별 핵심 내용' },
+            { label: '5. 성취기준', note: '해설 · 성취수준 · 적용 시 고려 사항' },
+            { label: '6. 교수·학습', note: '가. 방향 · 나. 방법' },
+            { label: '7. 평가', note: '가. 방향 · 나. 방법' },
+          ].map((entry) => (
+            <li key={entry.label} className="rounded-xl bg-slate-50 border border-slate-200 p-3">
+              <span className="block text-slate-900">{entry.label}</span>
+              <span className="mt-0.5 block text-[11px] font-medium text-slate-600">{entry.note}</span>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
       {/* 1. 교육과정 제작 배경 및 개요 */}
       <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
@@ -235,8 +283,8 @@ export default function TeacherCurriculumGuide() {
         </div>
       </section>
 
-      {/* 2. 성격 및 목표 */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
+      {/* 3. 성격 및 목표 */}
+      <section id="curriculum-goals" className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
         <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
           <span className="text-xl">🎯</span>
           <h2 className="text-xl font-extrabold text-slate-900">3. 성격 및 목표</h2>
@@ -251,7 +299,7 @@ export default function TeacherCurriculumGuide() {
           </div>
 
           <div>
-            <h3 className="font-extrabold text-indigo-900 text-base mb-2">나. 목표</h3>
+            <h3 className="font-extrabold text-indigo-900 text-base mb-2">나. 과목 목표</h3>
             <p className="text-slate-900 font-extrabold mb-3 leading-relaxed bg-amber-50/80 p-3.5 rounded-xl border border-amber-200/90 text-sm sm:text-base">
               인공지능의 기초 지식과 기본 기능을 익혀 올바르게 활용하고, 컴퓨팅 사고력 함양을 통해 생활 속 문제를 해결하며, 정보 보안과 윤리적 활용을 실천하여 디지털 사회에 필요한 인공지능 활용 능력을 기른다.
             </p>
@@ -279,14 +327,21 @@ export default function TeacherCurriculumGuide() {
         </div>
       </section>
 
-      {/* 3. 영역별 6개 내용 체계 (정통 해설서 6개 영역별 구분 표준 양식) */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-6">
+      {/* 4. 교육 내용 — 가. 내용 체계(영역별 핵심 아이디어와 내용 요소), 나. 단원별 핵심 내용 */}
+      <section id="curriculum-contents" className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-6">
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-2">
             <span className="text-xl">📊</span>
-            <h2 className="text-xl font-extrabold text-slate-900">4. 영역별 내용 체계</h2>
+            <h2 className="text-xl font-extrabold text-slate-900">4. 교육 내용</h2>
           </div>
-          <span className="text-xs font-bold text-slate-500">6개 영역별 핵심 아이디어 & 범주별 내용 요소</span>
+          <span className="text-xs font-bold text-slate-500">가. 내용 체계 · 나. 단원별 핵심 내용</span>
+        </div>
+
+        <div>
+          <h3 className="font-extrabold text-indigo-900 text-base">가. 내용 체계</h3>
+          <p className="mt-1 text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+            여섯 영역마다 핵심 아이디어를 두고, 지식·이해와 과정·기능, 가치·태도의 세 범주로 학년군별 내용 요소를 제시합니다.
+          </p>
         </div>
 
         {/* 6개 영역별 내용 체계 표 반복 */}
@@ -589,15 +644,71 @@ export default function TeacherCurriculumGuide() {
           </div>
 
         </div>
+
+        {/* 나. 단원별 핵심 내용 — 한 단원이 어떤 내용을 어떤 차시 묶음으로 다루는지 밝힌다. */}
+        <div className="space-y-4 border-t border-slate-200 pt-6">
+          <div>
+            <h3 className="font-extrabold text-indigo-900 text-base">나. 단원별 핵심 내용</h3>
+            <p className="mt-1 text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+              내용 체계의 요소가 실제로 어떤 차시 묶음에서 어떤 내용으로 다루어지는지 단원별로 밝힙니다. 차시 번호는 학생 화면의 차시와 같습니다.
+            </p>
+          </div>
+
+          {MODULES.map((module) => {
+            const core = MODULE_CORE_CONTENTS[module.id];
+            const meta = AI_ACHIEVEMENT_STANDARDS[module.id];
+
+            return (
+              <div key={module.id} className="border-2 border-slate-200 rounded-2xl bg-slate-50/50 p-5 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
+                  <h4 className="text-base font-black text-indigo-950 flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-lg bg-indigo-900 text-amber-300 text-xs font-black">
+                      단원 {module.number}
+                    </span>
+                    <span>{module.title}</span>
+                  </h4>
+                  <span className="text-xs font-bold text-slate-500">
+                    영역 {meta.domainNumber}. {meta.domainName} · 전체 {module.lessonCount}차시
+                  </span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+                  {core.overview}
+                </p>
+
+                <ul className="divide-y divide-slate-200 border-t border-slate-200">
+                  {core.items.map((item) => (
+                    <li key={item.title} className="py-3">
+                      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                        <span className="rounded bg-slate-200 px-2 py-0.5 text-[11px] font-black text-slate-900">
+                          {item.lessonRange}
+                        </span>
+                        <span className="text-xs sm:text-sm font-extrabold text-indigo-900">{item.title}</span>
+                      </div>
+                      <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-slate-800 font-medium">
+                        {item.description}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-slate-800 font-medium leading-relaxed">
+                  <strong className="text-amber-950">단원 마무리 {module.lessonCount}차시 · </strong>
+                  {core.closing}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
-      {/* 4. 영역별 24개 성취기준 해설 및 적용 시 고려 사항 (국가 교육과정 정식 해설 서술 구조) */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-5">
+      {/* 5. 성취기준 — 해설·성취수준·적용 시 고려 사항 (국가 교육과정 정식 해설 서술 구조) */}
+      <section id="curriculum-standards" className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-5">
         <div className="flex flex-wrap items-center justify-between border-b border-slate-200 pb-3 gap-2">
           <div className="flex items-center gap-2">
             <span className="text-xl">📜</span>
             <h2 className="text-xl font-extrabold text-slate-900">
-              5. 성취기준 해설·성취수준 및 적용 시 고려 사항 ('인공지능 활용')
+              5. 성취기준 (해설 · 성취수준 · 적용 시 고려 사항)
             </h2>
           </div>
           <div className="flex items-center gap-2">
@@ -724,33 +835,56 @@ export default function TeacherCurriculumGuide() {
         </div>
       </section>
 
-      {/* 5. 교수·학습 및 평가 */}
-      <section className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
-          <span className="text-xl">👩‍🏫</span>
-          <h2 className="text-xl font-extrabold text-slate-900">6. 교수·학습 및 평가</h2>
+      {/* 6. 교수·학습 — 방향과 방법을 (가)(나)(다)… 항목으로 나누어 서술한다. */}
+      <section id="curriculum-teaching" className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-5">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3 gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">👩‍🏫</span>
+            <h2 className="text-xl font-extrabold text-slate-900">6. 교수·학습</h2>
+          </div>
+          <span className="text-xs font-bold text-slate-500">가. 방향 · 나. 방법</span>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 text-xs sm:text-sm">
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-            <h3 className="font-extrabold text-indigo-900 text-sm">가. 교수·학습의 방향 및 방법</h3>
-            <ul className="list-inside list-disc space-y-1.5 text-slate-700 font-medium leading-relaxed">
-              <li>'인공지능 활용' 과목의 특성을 살려 실생활 문제 중심 체험 학습으로 구성하여 흥미와 몰입도를 제고한다.</li>
-              <li>직접 교수 및 시각적 모델링 기법을 통해 힌트를 단계적으로 제공한다.</li>
-              <li>충분한 지원, 중학, 고등 수준을 고려한 맞춤형 과제를 제공하며, 중학과 고등은 각각 9학년군과 12학년군 성취기준으로 평가한다.</li>
-            </ul>
+        <div className="space-y-3">
+          <h3 className="font-extrabold text-indigo-900 text-base">가. 교수·학습의 방향</h3>
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <NumberedItems items={TEACHING_DIRECTIONS} />
           </div>
+        </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-            <h3 className="font-extrabold text-indigo-900 text-sm">나. 평가의 방향 및 방법</h3>
-            <ul className="list-inside list-disc space-y-1.5 text-slate-700 font-medium leading-relaxed">
-              <li>단순 지식 암기보다 실제 대조·수정·선택 과정을 관찰하는 과정 중심 평가를 실시한다.</li>
-              <li>학생의 수행 결과물을 포트폴리오 형태로 누적 기록하여 성장을 평가한다.</li>
-              <li>음성, 사진, 그림 원본을 남기지 않고 정제된 과정 증거만을 안전하게 기록한다.</li>
-            </ul>
+        <div className="space-y-3">
+          <h3 className="font-extrabold text-indigo-900 text-base">나. 교수·학습 방법</h3>
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <NumberedItems items={TEACHING_METHODS} />
           </div>
         </div>
       </section>
+
+      {/* 7. 평가 */}
+      <section id="curriculum-assessment" className="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 depth-paper space-y-5">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3 gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">📋</span>
+            <h2 className="text-xl font-extrabold text-slate-900">7. 평가</h2>
+          </div>
+          <span className="text-xs font-bold text-slate-500">가. 방향 · 나. 방법</span>
+        </div>
+
+        <div className="space-y-3">
+          <h3 className="font-extrabold text-indigo-900 text-base">가. 평가의 방향</h3>
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <NumberedItems items={ASSESSMENT_DIRECTIONS} />
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <h3 className="font-extrabold text-indigo-900 text-base">나. 평가 방법</h3>
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <NumberedItems items={ASSESSMENT_METHODS} />
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
