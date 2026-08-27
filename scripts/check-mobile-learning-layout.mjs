@@ -8,6 +8,7 @@ import { join } from 'node:path';
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function findChrome() {
+  const playwrightRoot = process.env.PLAYWRIGHT_BROWSERS_PATH;
   const candidates = [
     process.env.CHROME_PATH,
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
@@ -16,8 +17,38 @@ function findChrome() {
     '/usr/bin/google-chrome',
     '/usr/bin/chromium',
     '/usr/bin/chromium-browser',
+    // 컨테이너 개발 환경에는 Playwright가 받아 둔 Chromium만 있는 경우가 많다.
+    playwrightRoot ? join(playwrightRoot, 'chromium') : null,
   ].filter(Boolean);
   return candidates.find((candidate) => existsSync(candidate));
+}
+
+/**
+ * Chrome 실행 인자.
+ *
+ * --no-sandbox: Chrome은 root로 돌 때 샌드박스를 켜면 시작하자마자 죽는다
+ * (「Running as root without --no-sandbox is not supported」). 컨테이너에서
+ * 이 검사를 돌리면 여기에 걸린다. 권한을 낮출 수 없는 root 환경에서만 붙이고,
+ * 일반 사용자 계정에서는 샌드박스를 그대로 둔다.
+ *
+ * --no-proxy-server: 이 검사는 127.0.0.1의 개발 서버만 연다. 그런데 환경 변수로
+ * HTTP 프록시가 잡혀 있으면 Chrome이 그 주소까지 프록시로 보내 모듈 스크립트가
+ * ERR_TUNNEL_CONNECTION_FAILED로 죽고, 화면이 빈 채로 남아 선택자를 기다리다
+ * 시간이 초과된다. 프록시가 없는 곳에서는 아무 일도 하지 않는 인자다.
+ */
+function chromeLaunchArgs(userDataDir, url) {
+  const runningAsRoot = typeof process.getuid === 'function' && process.getuid() === 0;
+  return [
+    '--headless=new',
+    '--disable-gpu',
+    ...(runningAsRoot ? ['--no-sandbox'] : []),
+    '--no-proxy-server',
+    '--remote-debugging-port=0',
+    `--user-data-dir=${userDataDir}`,
+    '--no-first-run',
+    '--no-default-browser-check',
+    url,
+  ];
 }
 
 async function getFreePort() {
@@ -275,20 +306,21 @@ let cdp;
 
 try {
   await waitForHttp(lessonUrl, vite, () => viteOutput);
-  chrome = spawn(chromePath, [
-    '--headless=new',
-    '--disable-gpu',
-    '--remote-debugging-port=0',
-    `--user-data-dir=${userDataDir}`,
-    '--no-first-run',
-    '--no-default-browser-check',
-    lessonUrl,
-  ], { stdio: 'ignore', windowsHide: true });
+  chrome = spawn(chromePath, chromeLaunchArgs(userDataDir, lessonUrl), { stdio: 'ignore', windowsHide: true });
 
   const devToolsPort = await waitForDevToolsPort(userDataDir, chrome);
   const target = await waitForTarget(devToolsPort);
   cdp = connectCdp(target.webSocketDebuggerUrl);
   await cdp.opened;
+
+  // Page 도메인을 켜고, 앱이 한 번 그려질 때까지 기다린 다음에 화면을 조작한다.
+  //
+  // 이 두 줄이 없으면 첫 setViewport의 새로고침이 최초 탐색과 겹친다. 그러면 최초 탐색이
+  // 끝나면서 표식이 지워지는 것을 새로고침이 끝난 것으로 잘못 읽고 넘어가고, 그때 흘려보낸
+  // 새로고침 때문에 이후의 Page.reload는 아무 일도 하지 않는다. 실제로 두 번째 새로고침이
+  // 조용히 무시되어 선택자를 기다리다 시간이 초과됐다.
+  await cdp.send('Page.enable');
+  await waitForSelector(cdp, '.micro-lesson-frame');
 
   await setViewport(cdp, 390, 844);
   const normal = await measure(cdp);
