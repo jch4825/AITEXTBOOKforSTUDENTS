@@ -45,7 +45,7 @@ export function ObjectivesPanel() {
         <h2 className="text-2xl font-extrabold text-[color:var(--brand-ink)]">실제 수업과 맞춘 차시별 지도·평가 기준</h2>
         <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">
           아래 인공지능 성취기준은 2022 국가 교육과정에 실린 기준이 아니라 거제애광학교가 만든 학교 자체 기준입니다.
-          {` `}학생 화면과 같은 데이터에서 현재 시나리오·AI 역할·산출물·전이 활동을 불러오므로 수업 설명이 따로 어긋나지 않습니다.
+          {` `}학생 화면과 같은 데이터에서 시나리오와 AI 역할, 산출물, 전이 활동을 불러오므로 수업 설명이 서로 어긋나지 않습니다.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-slate-200 bg-white p-3"><strong className="text-lg">68</strong><p className="text-xs text-slate-600">전체 차시</p></div>
