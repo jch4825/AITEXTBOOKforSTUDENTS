@@ -56,7 +56,8 @@
     "check:canonical-evidence": "node scripts/check-canonical-evidence.mjs",
     "check:standards-integrity": "node scripts/check-standards-integrity.mjs",
     "check:highschool-tasks": "node scripts/check-highschool-tasks.mjs",
-    "check:teacher-resources": "node scripts/check-teacher-resources.mjs"
+    "check:teacher-resources": "node scripts/check-teacher-resources.mjs",
+    "check:curriculum-document": "node scripts/check-curriculum-document.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",

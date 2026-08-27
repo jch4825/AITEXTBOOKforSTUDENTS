@@ -156,16 +156,8 @@ export default function TeacherHub({ onExit }: Props) {
         {activeTab === 'AI 연결' && <GeminiConnectionPanel />}
         {activeTab === '교육과정·성취기준' && (
           <div className="space-y-8">
+            <TeacherCurriculumGuide />
             <ObjectivesPanel />
-            <details className="overflow-hidden rounded-2xl border-2 border-slate-200 bg-white">
-              <summary className="cursor-pointer p-5 font-extrabold text-slate-900 hover:bg-slate-50">
-                학교 자체 교육과정 설계 문서 전체 보기
-                <span className="mt-1 block text-xs font-medium leading-relaxed text-slate-600">
-                  이 문서의 교수·학습 사례는 확장 수업 예시이며 현재 앱의 실제 장면 목록이 아닙니다. 현재 차시는 위 일치표를 기준으로 운영합니다.
-                </span>
-              </summary>
-              <div className="border-t border-slate-200"><TeacherCurriculumGuide /></div>
-            </details>
           </div>
         )}
         {activeTab === '연계 성취기준' && <LinkedStandardsGuide />}

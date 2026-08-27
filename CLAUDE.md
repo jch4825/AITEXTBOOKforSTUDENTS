@@ -51,6 +51,11 @@ npm run check:standards-integrity
 npm run check:highschool-tasks`가 강제합니다.
 - 정식 콘텐츠와 성취기준: `src/data/canonicalLessons/`, `src/data/aiAchievementStandards.ts`
 - 학생 사전: `src/data/studentDictionary.ts`
+- 단원별 핵심 내용: `src/data/moduleCoreContents.ts` — 한 단원이 어떤 내용을 어떤 차시 묶음으로
+  다루는지 밝힌다. 차시 범위는 실제 차시와 맞아야 하며 `npm run check:curriculum-document`가
+  강제한다.
+- 교수·학습 및 평가의 방향과 방법: `src/data/curriculumTeachingAssessment.ts` — 기본 교육과정의
+  (가)(나)(다)… 항목 서술 형식을 따르되 내용은 이 저장소의 제품 계약에서 가져온다.
 - 교사용 실제 운영 설명: `src/features/teacher/TeacherOperationGuide.tsx`
 - 교육과정 원문 참고자료: `docs/reference/2022-special-education-curriculum.pdf`
 
@@ -143,6 +148,7 @@ npm run check:portfolio-images
 npm run check:studio-rollout
 npm run check:modules-remodel
 npm run check:objectives
+npm run check:curriculum-document
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.
