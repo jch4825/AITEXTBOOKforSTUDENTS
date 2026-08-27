@@ -20,6 +20,7 @@
     "check:support-gradient": "node scripts/check-support-gradient.mjs",
     "check:css-tokens": "node scripts/check-css-tokens.mjs",
     "check:design-system": "node scripts/check-design-system-contract.mjs",
+    "check:grade-band-guard": "node scripts/check-grade-band-guard-contract.mjs",
     "check:studio-pilot": "node scripts/check-studio-pilot-contract.mjs",
     "check:editorial-theme": "node scripts/check-editorial-theme-contract.mjs",
     "check:teacher-recording": "node scripts/check-teacher-recording-contract.mjs",

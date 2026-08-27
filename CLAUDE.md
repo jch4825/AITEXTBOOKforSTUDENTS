@@ -23,6 +23,13 @@
   쓰되 중학교는 9학년군, 고등학교는 12학년군 성취기준으로 평가합니다.
 - 난이도의 내부 값 `easy | normal | hard`는 그대로 두고 화면 표시만 위 라벨을 따릅니다.
   글자 크기의 `보통`은 별개이므로 바꾸지 않습니다.
+- 학년군은 표지에서 고르는 운영 결정입니다. 차시 화면의 지원 수준 스티커는 `중학`과 `고등`을
+  직접 잇지 않습니다. 누르면 언제나 `충분한 지원`으로 내려가고, 거기서 한 번 더 눌러 확인 창에
+  답해야 반대쪽 학년군으로 건너갑니다. 확인 창은 뼈대가 같고 성취기준과 표현의 난이도가
+  달라진다는 점을 알립니다. `npm run check:grade-band-guard`가 이를 강제합니다.
+- 학년군은 `SettingsState.gradeBand`에 difficulty와 따로 저장합니다. `충분한 지원`은 두 학년군
+  모두에서 쓰는 하위 단계라 그 자체로 학년군이 될 수 없고, 그 상태에서도 어느 학년군으로
+  평가할지 알아야 하기 때문입니다.
 - PC 1280px 이상을 우선하되, 모바일 390px와 글자 크기 125%에서도 주요 조작이 가려지지 않아야 합니다.
 - 차시 전환 시 상태가 섞이지 않도록 라우트 단위 상태는 `lessonId`로 격리합니다.
 - `tests/e2e`가 생기더라도 테스트를 맞추기 위해 수정하지 말고 애플리케이션 코드를 고칩니다.
@@ -143,6 +150,7 @@ npm run check:portfolio-images
 npm run check:studio-rollout
 npm run check:modules-remodel
 npm run check:objectives
+npm run check:grade-band-guard
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.

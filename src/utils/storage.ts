@@ -1,4 +1,4 @@
-import type { ProgressState, SettingsState, Difficulty, FontSize } from '../types';
+import type { ProgressState, SettingsState, Difficulty, FontSize, GradeBand } from '../types';
 
 export const STORAGE_KEYS = {
   progress: 'ai-students-progress',
@@ -9,7 +9,8 @@ export const STORAGE_KEYS = {
 const DEFAULT_PROGRESS: ProgressState = { completedLessons: [] };
 
 const DEFAULT_SETTINGS: SettingsState = {
-  difficulty: 'normal', // 새 사용자는 보통 지원 수준으로 시작한다.
+  difficulty: 'normal', // 새 사용자는 중학 학년군으로 시작한다.
+  gradeBand: 'normal',
   fontSize: 'normal',
   ttsEnabled: true,
   soundEnabled: true,
@@ -48,13 +49,18 @@ export function loadSettings(): SettingsState {
       parsed?.difficulty === 'easy' ? 'easy'
       : parsed?.difficulty === 'hard' ? 'hard'
       : 'normal';
+    // 학년군은 difficulty와 어긋날 수 없다. 중학·고등을 쓰는 중이면 그것이 곧 학년군이고,
+    // 충분한 지원에 머무는 중이면 저장된 학년군을 그대로 잇는다. gradeBand가 없던
+    // 옛 설정은 difficulty에서 유도한다.
+    const storedBand: GradeBand = parsed?.gradeBand === 'hard' ? 'hard' : 'normal';
+    const gradeBand: GradeBand = difficulty === 'easy' ? storedBand : difficulty;
     const fontSize: FontSize =
       parsed?.fontSize === 'small' ? 'small'
       : parsed?.fontSize === 'large' ? 'large'
       : 'normal';
     const ttsEnabled = parsed?.ttsEnabled !== false;
     const soundEnabled = parsed?.soundEnabled !== false;
-    return { difficulty, fontSize, ttsEnabled, soundEnabled };
+    return { difficulty, gradeBand, fontSize, ttsEnabled, soundEnabled };
   } catch {
     return DEFAULT_SETTINGS;
   }
