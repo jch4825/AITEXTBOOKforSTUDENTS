@@ -1,4 +1,11 @@
 export type Difficulty = 'easy' | 'normal' | 'hard';
+
+/**
+ * 학년군 운영 축. `충분한 지원`(easy)은 두 학년군 모두에서 쓰는 하위 단계이므로
+ * 학년군이 될 수 없다. 학생이 충분한 지원에 머무는 동안에도 어느 학년군으로
+ * 돌아갈지 알아야 해서 difficulty와 따로 기억한다.
+ */
+export type GradeBand = Extract<Difficulty, 'normal' | 'hard'>;
 export type FontSize = 'small' | 'normal' | 'large';
 
 export type ModuleId = 'm1' | 'm2' | 'm3' | 'm4' | 'm5' | 'm6';
@@ -26,6 +33,8 @@ export interface ProgressState {
 
 export interface SettingsState {
   difficulty: Difficulty;
+  /** 표지에서 고른 학년군. difficulty가 easy일 때도 유지된다. */
+  gradeBand: GradeBand;
   fontSize: FontSize;
   ttsEnabled: boolean;
   /** 스튜디오 효과음. 읽어 주기(ttsEnabled)와 별개 토글이다(05-ENGINE-SPEC §7). */

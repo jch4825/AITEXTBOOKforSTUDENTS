@@ -32,7 +32,13 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('pointerdown', prime);
   }, [state.soundEnabled]);
 
-  const setDifficulty = useCallback((d: Difficulty) => setState(s => ({ ...s, difficulty: d })), []);
+  // 학년군은 difficulty를 따라 자동으로 갱신된다. 중학·고등을 고르면 그것이 학년군이 되고,
+  // 충분한 지원으로 내려갈 때는 직전 학년군을 그대로 기억한다. 그래야 충분한 지원에서
+  // 한 번 더 눌렀을 때 어느 학년군으로 건너갈지 판단할 수 있다.
+  const setDifficulty = useCallback(
+    (d: Difficulty) => setState(s => ({ ...s, difficulty: d, gradeBand: d === 'easy' ? s.gradeBand : d })),
+    [],
+  );
   const setFontSize = useCallback((f: FontSize) => setState(s => ({ ...s, fontSize: f })), []);
   const setTTSEnabled = useCallback((v: boolean) => setState(s => ({ ...s, ttsEnabled: v })), []);
   const setSoundEnabled = useCallback((v: boolean) => {

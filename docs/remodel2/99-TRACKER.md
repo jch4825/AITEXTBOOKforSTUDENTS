@@ -111,6 +111,11 @@
 
 검사: lint✓ build✓ + 계약 32종 전부 통과(`check:objectives` 신설 포함).
 사전 실패 2건(`canonical-evidence` 파일 부재, `student-formal-style`)은 Wave 2 이전과 동일.
+→ 둘 다 이후 해소됐다. `student-formal-style`은 반말 검사로 다시 써서 통과했고(그 과정에서
+PECS 라벨 훼손을 찾아 고쳤다), `canonical-evidence`는 대상 코드가 3736c15에서 삭제된 죽은
+검사여서 제거했다. 그것이 지키던 `data:image/` 제거는 `check:teacher-recording`이 이어받는다.
+같은 흐름에서 `css-tokens`(예외 표에 남은 옛 이름)와 `public-images`(`output/` 잔존)도
+정리해, 지금은 계약 47종이 전부 통과한다.
 
 ### Wave 2에서 명세와 다르게 간 곳 (사람 확인 필요)
 

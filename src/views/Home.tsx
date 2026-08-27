@@ -3,7 +3,7 @@ import Button from '../components/Button';
 import ModuleIcon from '../components/ModuleIcon';
 import { useProgress } from '../context/ProgressContext';
 import { useSettings } from '../context/SettingsContext';
-import { SUPPORT_LABELS, SUPPORT_TO_DIFFICULTY } from '../features/studio/supportLevel';
+import { DIFFICULTY_TO_SUPPORT, SUPPORT_LABELS, SUPPORT_TO_DIFFICULTY } from '../features/studio/supportLevel';
 import type { SupportLevel } from '../features/studio/types';
 import { getLesson } from '../data/lessons';
 import { lessonIdsForModule, MODULES } from '../data/modules';
@@ -47,7 +47,7 @@ function useReducedMotion() {
 
 export default function Home({ onEnter, onEnterLesson }: Props) {
   const { completedLessons } = useProgress();
-  const { difficulty, setDifficulty } = useSettings();
+  const { difficulty, gradeBand, setDifficulty } = useSettings();
   const reducedMotion = useReducedMotion();
   const totalLessons = MODULES.reduce((sum, module) => sum + module.lessonCount, 0);
   const doneCount = completedLessons.length;
@@ -143,6 +143,15 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                   );
                 })}
               </div>
+              {/* 충분한 지원은 두 학년군 모두에서 쓰는 하위 단계라 그 자체로는 평가 기준이 되지
+                  않는다. 어느 학년군 성취기준으로 평가하는지 여기서 밝혀 두어야 교사가
+                  차시 화면의 지원 수준 스티커 동작도 예측할 수 있다. */}
+              {difficulty === 'easy' ? (
+                <p className="mt-2 text-xs font-bold text-[color:var(--muted)]">
+                  평가는 {SUPPORT_LABELS[DIFFICULTY_TO_SUPPORT[gradeBand]]} 학년군 성취기준을 따릅니다.
+                  학년군을 바꾸려면 위에서 {SUPPORT_LABELS[DIFFICULTY_TO_SUPPORT[gradeBand === 'normal' ? 'hard' : 'normal']]}을 고르세요.
+                </p>
+              ) : null}
             </div>
 
             <div className="flex flex-wrap gap-4 pt-4">
