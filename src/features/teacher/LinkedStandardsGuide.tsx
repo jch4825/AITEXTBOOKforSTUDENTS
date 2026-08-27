@@ -13,17 +13,17 @@ const ALIGNMENT_LABELS: Record<LinkedStandardAlignment, { label: string; classNa
   direct: {
     label: '직접 연계',
     className: 'bg-emerald-100 text-emerald-900 border-emerald-300',
-    explanation: '현재 차시에서 성취기준의 핵심 수행을 직접 관찰할 수 있습니다.',
+    explanation: '이 차시에서 성취기준의 핵심 수행을 직접 볼 수 있습니다.',
   },
   supporting: {
     label: '보조 연계',
     className: 'bg-sky-100 text-sky-900 border-sky-300',
-    explanation: '관련 기능을 연습하지만 이 앱 활동만으로 기준 달성을 판단하지 않습니다.',
+    explanation: '관련 기능을 연습하기는 하지만, 이 앱 활동만으로 도달 여부를 판단하지는 않습니다.',
   },
   deferred: {
     label: '연계 보류',
     className: 'bg-slate-100 text-slate-700 border-slate-300',
-    explanation: '현재 수업에 필요한 수행이 없어 연계 실적으로 기록하지 않습니다.',
+    explanation: '이 수업에는 해당 수행이 없어 연계 실적으로 적지 않습니다.',
   },
 };
 

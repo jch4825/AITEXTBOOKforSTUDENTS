@@ -42,16 +42,16 @@ export default function TeacherOperationGuide() {
             <li>AI 의견을 수용·수정·거절하고 최종 판단을 남깁니다.</li>
             <li>행동 카드·수정 카드·시각 계획을 만들고 새 장면에 한 번 더 적용합니다.</li>
           </ol>
-          <p className="studio-margin-note mt-3">선택을 바꾸지 않아도 중요한 정보를 살피고 타당한 이유를 표현했다면 성공적인 학습 과정으로 봅니다.</p>
+          <p className="studio-margin-note mt-3">선택을 바꾸지 않았더라도 중요한 정보를 살피고 그럴 만한 이유를 밝혔다면 잘 배운 것으로 봅니다.</p>
         </section>
 
         <section>
           <h3 className="text-lg font-extrabold">설명 차시의 구성</h3>
           <div className="mt-3 grid gap-3 md:grid-cols-2">
-            <article className="studio-fact-card"><strong>1. 개념 만나기</strong><p className="mt-1">기존 쉬운 설명과 예시로 오늘 사용할 개념을 짧게 확인합니다.</p></article>
+            <article className="studio-fact-card"><strong>1. 개념 만나기</strong><p className="mt-1">쉬운 설명과 예시로 오늘 쓸 개념을 짧게 확인합니다.</p></article>
             <article className="studio-fact-card"><strong>2. 도구 연습하기</strong><p className="mt-1">게임과 선택 활동으로 한 가지 기능을 반복합니다.</p></article>
           </div>
-          <p className="studio-margin-note mt-3">지원 차시는 학습목표 뒤에 개념 설명과 활동을 바로 제시합니다.</p>
+          <p className="studio-margin-note mt-3">지원 차시는 학습목표 뒤에 개념 설명과 활동을 바로 잇습니다.</p>
         </section>
 
         <section>
@@ -62,7 +62,7 @@ export default function TeacherOperationGuide() {
             <li>AI 의견과 자기 생각을 비교했는가</li>
             <li>조건이 달라졌을 때 방법을 조정했는가</li>
           </ul>
-          <p className="mt-2">각 항목은 관찰 안 됨·지원하여 수행·독립 수행으로 기록하고, 정답률보다 시도와 도움 수준을 함께 봅니다.</p>
+          <p className="mt-2">항목마다 관찰 안 됨·지원하여 수행·독립 수행으로 적고, 정답률보다 얼마나 시도했고 어느 만큼 도왔는지를 함께 봅니다.</p>
         </section>
 
         <section>

@@ -109,7 +109,7 @@ export default function StudioEvidencePanel({ mode }: Props) {
     return (
       <section className="studio-editorial p-6">
         <h2 className="text-xl font-extrabold">{mode === 'teacher' ? '학생 과정기록' : '핵심 경험 포트폴리오'}</h2>
-        <p className="studio-margin-note mt-4">이 브라우저에는 저장된 과정기록이 없습니다. 기록 기능을 사용하지 않아도 학습 활동은 정상적으로 진행됩니다.</p>
+        <p className="studio-margin-note mt-4">이 브라우저에는 저장된 과정기록이 없습니다. 기록 기능을 켜지 않아도 학습 활동은 그대로 진행됩니다.</p>
       </section>
     );
   }
