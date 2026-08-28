@@ -51,9 +51,6 @@ export default function ConceptNoteView({
         <strong>학습목표</strong>
         <p>{wrapDictionaryTerms(story.objective, dictionaryTerms)}</p>
       </div>
-      <p className="mt-4 text-sm font-semibold leading-relaxed text-[color:var(--muted)]">
-        방금 남긴 내 생각과 아래 개념을 견주어 봅니다. 생각이 달랐다면 무엇이 달랐는지 살펴봅니다.
-      </p>
     </section>
   );
 

@@ -43,10 +43,6 @@ export default function HighSchoolTaskPanel({ task, accent, secondary }: Props) 
           교실 밖에서 해요 · {task.community}
         </p>
       ) : null}
-
-      <p className="mt-3 text-sm font-bold leading-relaxed" style={{ color: secondary }}>
-        남길 것 · {task.evidence}
-      </p>
     </section>
   );
 }
