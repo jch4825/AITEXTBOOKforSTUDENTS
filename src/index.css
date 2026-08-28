@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+/* 본문 글자 3pt 확대 — 학생이 읽는 글이 작다는 요청.
+   버튼·입력 같은 조작 요소는 아래 base 레이어에서 원래 크기로 되돌린다. */
+@theme {
+  --text-xs: calc(0.75rem + var(--font-bump));
+  --text-sm: calc(0.875rem + var(--font-bump));
+  --text-base: calc(1rem + var(--font-bump));
+  --text-lg: calc(1.125rem + var(--font-bump));
+  --text-xl: calc(1.25rem + var(--font-bump));
+  --text-2xl: calc(1.5rem + var(--font-bump));
+  --text-3xl: calc(1.875rem + var(--font-bump));
+  --text-4xl: calc(2.25rem + var(--font-bump));
+  --text-5xl: calc(3rem + var(--font-bump));
+}
+
 @layer base {
   :root {
     /* ============================================================
@@ -52,14 +66,16 @@
     --chrome-support-challenge: #93601E; /* 도전적 — 황토 */
 
     /* 타이포그래피 (Pretendard Variable) — 요청하신 1포인트 축소 (+2pt / 18px 기준) */
-    --fs-display: 2.375rem;   /* 38px — Home 타이틀 */
-    --fs-h1: 1.75rem;         /* 28px — 차시 제목 */
-    --fs-h2: 1.375rem;        /* 22px — 영역 헤더 */
-    --fs-body-lg: 1.1875rem;  /* 19px — 주요 본문 */
-    --fs-body: 1.0625rem;     /* 17px — 일반 본문 */
-    --fs-label: 0.9375rem;    /* 15px — 이름표·버튼 */
-    --font-base: 1.0625rem;
-    --font-large: 1.25rem;
+    /* 읽는 글은 --font-bump 만큼 키운다. 조작 요소(버튼·입력)는 원래 크기를 지킨다. */
+    --font-bump: 3px;
+    --fs-display: calc(2.375rem + var(--font-bump));   /* 38px — Home 타이틀 */
+    --fs-h1: calc(1.75rem + var(--font-bump));         /* 28px — 차시 제목 */
+    --fs-h2: calc(1.375rem + var(--font-bump));        /* 22px — 영역 헤더 */
+    --fs-body-lg: calc(1.1875rem + var(--font-bump));  /* 19px — 주요 본문 */
+    --fs-body: calc(1.0625rem + var(--font-bump));     /* 17px — 일반 본문 */
+    --fs-label: 0.9375rem;    /* 15px — 이름표·버튼: 조작 요소라 키우지 않는다 */
+    --font-base: calc(1.0625rem + var(--font-bump));
+    --font-large: calc(1.25rem + var(--font-bump));
     --leading: 1.6;
 
     /* 형태 — 중첩 시 안쪽 radius = 바깥 radius − gap */
@@ -172,6 +188,33 @@
   button {
     font: inherit;
     cursor: pointer;
+  }
+
+  /* 글자 확대 제외 구역 — 버튼과 입력 요소.
+     :root에서 계산된 --text-*는 이미 확대된 값이라 여기서 원래 값을 다시 선언한다.
+     사용자 정의 속성은 상속되므로 버튼 안의 span·strong까지 함께 되돌아간다. */
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    --font-bump: 0px;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    --fs-display: 2.375rem;
+    --fs-h1: 1.75rem;
+    --fs-h2: 1.375rem;
+    --fs-body-lg: 1.1875rem;
+    --fs-body: 1.0625rem;
+    --font-base: 1.0625rem;
+    --font-large: 1.25rem;
   }
 
   /* 마우스 클릭 시에만 기본 아웃라인 해제 — 키보드·스위치 사용자의 포커스는 남긴다 */
@@ -834,19 +877,19 @@
 .season-episode-active { background:var(--episode-soft); transform:none; box-shadow:none; }
 .season-episode-main { display:flex; align-items:center; gap:.65rem; min-width:0; flex:1; }
 .season-episode-meta { display:flex; align-items:center; gap:.5rem; shrink:0; margin-left:auto; }
-.season-number { font-weight:900; font-size:1.05rem; color:var(--episode-accent); flex-shrink:0; }
+.season-number { font-weight:900; font-size: calc(1.05rem + var(--font-bump)); color:var(--episode-accent); flex-shrink:0; }
 .season-icon { display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .season-copy { min-width:0; flex:1; }
-.season-copy strong { display:block; font-size:1rem; font-weight:800; color:var(--brand-ink); line-height:1.3; white-space:normal; word-break:keep-all; }
-.season-copy small { display:block; font-size:.84rem; color:var(--ink-2); margin-top:.15rem; line-height:1.4; white-space:normal; word-break:keep-all; overflow:visible; }
-.season-progress { font-size:.84rem; font-weight:800; color:var(--ink-2); flex-shrink:0; white-space:nowrap; }
+.season-copy strong { display:block; font-size: calc(1rem + var(--font-bump)); font-weight:800; color:var(--brand-ink); line-height:1.3; white-space:normal; word-break:keep-all; }
+.season-copy small { display:block; font-size: calc(.84rem + var(--font-bump)); color:var(--ink-2); margin-top:.15rem; line-height:1.4; white-space:normal; word-break:keep-all; overflow:visible; }
+.season-progress { font-size: calc(.84rem + var(--font-bump)); font-weight:800; color:var(--ink-2); flex-shrink:0; white-space:nowrap; }
 .season-toggle { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--brand-ink); }
 
 .comic-lesson-cut { position:relative; width:100%; min-height:3.6rem; padding:.55rem .75rem; display:flex; align-items:center; justify-content:space-between; gap:.65rem; border:1.5px solid var(--brand-ink); border-radius:6px; background:var(--paper-0); text-align:left; box-sizing:border-box; }
 .comic-cut-number { width:2rem; height:2rem; display:grid; place-items:center; border:2px solid var(--brand-ink); border-radius:4px; font-weight:900; flex-shrink:0; }
 .comic-cut-body { min-width:0; flex:1; }
-.comic-lesson-cut strong { display:block; font-size:.92rem; font-weight:800; color:var(--brand-ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.comic-lesson-cut small { display:block; font-size:.82rem; color:var(--ink-2); margin-top:.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.comic-lesson-cut strong { display:block; font-size: calc(.92rem + var(--font-bump)); font-weight:800; color:var(--brand-ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.comic-lesson-cut small { display:block; font-size: calc(.82rem + var(--font-bump)); color:var(--ink-2); margin-top:.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .comic-cut-arrow { flex-shrink:0; color:var(--brand-ink); margin-left:auto; }
 
 .comic-lesson-cut-tooltip {
@@ -883,7 +926,7 @@
 .comic-lesson-cut-tooltip .tooltip-title {
   display: block !important;
   color: #FDE047 !important; /* Vivid Gold Amber */
-  font-size: 0.88rem !important;
+  font-size: calc(0.88rem + var(--font-bump)) !important;
   font-weight: 900 !important;
   letter-spacing: -0.01em;
   margin-bottom: 0.25rem;
@@ -891,14 +934,14 @@
 .comic-lesson-cut-tooltip .tooltip-objective {
   display: block !important;
   color: #FFFFFF !important; /* Crisp Pure White */
-  font-size: 0.82rem !important;
+  font-size: calc(0.82rem + var(--font-bump)) !important;
   font-weight: 700 !important;
   line-height: 1.45;
 }
 .comic-lesson-cut-tooltip .tooltip-summary {
   display: block !important;
   color: #CBD5E1 !important; /* High contrast bright slate */
-  font-size: 0.78rem !important;
+  font-size: calc(0.78rem + var(--font-bump)) !important;
   font-weight: 500 !important;
   border-top: 1px solid #334155;
   padding-top: 0.35rem;
@@ -977,7 +1020,7 @@
   flex: 1;
   overflow: hidden;
   color: var(--brand-ink);
-  font-size: 0.82rem;
+  font-size: calc(0.82rem + var(--font-bump));
   font-weight: 850;
   line-height: 1.25;
   text-align: center;
@@ -997,7 +1040,7 @@
   border-radius: var(--r-pill);
   background: var(--paper-1);
   color: var(--brand-ink);
-  font-size: 0.72rem;
+  font-size: calc(0.72rem + var(--font-bump));
   font-weight: 850;
   font-variant-numeric: tabular-nums;
 }
@@ -1054,7 +1097,7 @@
 .mobile-lesson-settings .chrome-sticker-badge {
   width: 24px;
   height: 24px;
-  font-size: 0.74rem;
+  font-size: calc(0.74rem + var(--font-bump));
 }
 
 .mobile-teacher-tools-backdrop {
@@ -1092,7 +1135,7 @@
 
 .mobile-teacher-tools-heading strong {
   color: var(--brand-ink);
-  font-size: 1.05rem;
+  font-size: calc(1.05rem + var(--font-bump));
 }
 
 .mobile-teacher-tools-heading button {
@@ -1248,7 +1291,7 @@
 }
 
 .draw-board-text-glyph {
-  font-size: 1rem;
+  font-size: calc(1rem + var(--font-bump));
   font-weight: 900;
   line-height: 1;
 }
@@ -1262,7 +1305,7 @@
   padding-inline: 0.6rem;
   border: 0;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem + var(--font-bump));
   font-weight: 800;
   cursor: pointer;
 }
@@ -1278,7 +1321,7 @@
   border-radius: var(--r-pill);
   background: #fff;
   color: #e11d48;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem + var(--font-bump));
   font-weight: 800;
   white-space: nowrap;
   cursor: pointer;
@@ -1357,7 +1400,7 @@
   .draw-board-palette-label {
     display: block;
     grid-column: 1 / -1;
-    font-size: 0.7rem;
+    font-size: calc(0.7rem + var(--font-bump));
     font-weight: 900;
     line-height: 1.2;
   }
@@ -1393,7 +1436,7 @@
     max-width: 100%;
     overflow: hidden;
     color: #fff;
-    font-size: 0.62rem;
+    font-size: calc(0.62rem + var(--font-bump));
     font-weight: 750;
     line-height: 1.15;
     text-overflow: ellipsis;
@@ -1413,13 +1456,13 @@
     min-width: 0;
     height: 44px;
     border-radius: 10px;
-    font-size: 0.72rem;
+    font-size: calc(0.72rem + var(--font-bump));
     white-space: nowrap;
   }
 
   .draw-board-tool-name {
     display: inline;
-    font-size: 0.72rem;
+    font-size: calc(0.72rem + var(--font-bump));
     font-weight: 800;
     white-space: nowrap;
   }
@@ -1446,7 +1489,7 @@
     width: 100%;
     height: 44px;
     border-radius: 12px;
-    font-size: 0.72rem;
+    font-size: calc(0.72rem + var(--font-bump));
   }
 }
 
@@ -1475,7 +1518,7 @@
 
   .draw-pad-palette .draw-board-palette-label {
     grid-column: 1 / -1;
-    font-size: 0.7rem;
+    font-size: calc(0.7rem + var(--font-bump));
     font-weight: 900;
     line-height: 1.2;
   }
@@ -1510,7 +1553,7 @@
     max-width: 100%;
     overflow: hidden;
     color: #fff;
-    font-size: 0.62rem;
+    font-size: calc(0.62rem + var(--font-bump));
     font-weight: 750;
     line-height: 1.15;
     text-overflow: ellipsis;
@@ -1531,12 +1574,12 @@
     min-width: 0;
     height: 44px;
     border-radius: 10px;
-    font-size: 0.72rem;
+    font-size: calc(0.72rem + var(--font-bump));
     white-space: nowrap;
   }
 
   .draw-pad-palette .draw-board-tool-name {
-    font-size: 0.72rem;
+    font-size: calc(0.72rem + var(--font-bump));
     font-weight: 800;
     white-space: nowrap;
   }
@@ -1558,7 +1601,7 @@
     width: 100%;
     height: 44px;
     border-radius: 12px;
-    font-size: 0.72rem;
+    font-size: calc(0.72rem + var(--font-bump));
   }
 }
 
@@ -1568,7 +1611,7 @@
   --surface-edge: color-mix(in srgb, var(--btn-accent, var(--accent)) 55%, var(--paper-2));
   min-width: 9rem;
   height: 2.375rem;
-  font-size: 0.9375rem;
+  font-size: calc(0.9375rem + var(--font-bump));
   padding-inline: 1.25rem;
   box-shadow: var(--surface-sticker-lip);
   transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease;
@@ -1607,7 +1650,7 @@
   align-items: center;
   gap: .15rem;
   font-weight: 900;
-  font-size: .78rem;
+  font-size: calc(.78rem + var(--font-bump));
   color: var(--brand-ink);
   letter-spacing: .04em;
 }
@@ -1637,7 +1680,7 @@
     justify-content: center;
     gap: 4px;
     padding-inline: 8px;
-    font-size: 0.78rem;
+    font-size: calc(0.78rem + var(--font-bump));
     /* 64px 바 안에 44px 터치 영역과 립이 함께 들어가야 한다. 립을 3px로 줄인다. */
     box-shadow: var(--surface-sticker-lip-compact);
   }
@@ -1987,7 +2030,7 @@
   align-items: center;
   border-radius: var(--r-sm);
   padding: 0.15rem 0.55rem;
-  font-size: 0.78rem;
+  font-size: calc(0.78rem + var(--font-bump));
   font-weight: 900;
 }
 .spread-copy-title {
@@ -2119,10 +2162,10 @@
     padding: 0.2rem 0.1rem 0.4rem;
   }
   .spread-copy-title {
-    font-size: clamp(1.45rem, 8vw, 2rem);
+    font-size: calc(clamp(1.45rem, 8vw, 2rem) + var(--font-bump));
   }
   .spread-story-intro {
-    font-size: 1.05rem;
+    font-size: calc(1.05rem + var(--font-bump));
   }
 }
 @media (min-width: 1024px) {
@@ -2135,7 +2178,7 @@
   }
   .season-lessons-drawer .comic-list-heading h2 {
     margin: 0.1rem 0 0;
-    font-size: 1.25rem;
+    font-size: calc(1.25rem + var(--font-bump));
     line-height: 1.25;
   }
   .season-lessons-drawer .comic-count {
@@ -2168,7 +2211,7 @@
   }
   .season-lessons-drawer .comic-list-heading h2 {
     margin: 0.1rem 0 0;
-    font-size: 1.25rem;
+    font-size: calc(1.25rem + var(--font-bump));
     line-height: 1.25;
   }
   .season-lessons-drawer .comic-lesson-cuts {
@@ -2285,19 +2328,19 @@
 .season-number {
   width: 1.7rem;
   color: var(--episode-accent);
-  font-size: 1rem;
+  font-size: calc(1rem + var(--font-bump));
   letter-spacing: -0.03em;
 }
 .season-icon {
   width: 1.9rem;
 }
 .season-copy strong {
-  font-size: 1.04rem;
+  font-size: calc(1.04rem + var(--font-bump));
   line-height: 1.28;
 }
 .season-copy small {
   margin-top: 0.28rem;
-  font-size: 0.86rem;
+  font-size: calc(0.86rem + var(--font-bump));
 }
 .season-episode-meta {
   min-width: 0;
@@ -2310,7 +2353,7 @@
   flex-direction: column;
   gap: 0.28rem;
   color: var(--ink-2);
-  font-size: 0.78rem;
+  font-size: calc(0.78rem + var(--font-bump));
   font-weight: 800;
   line-height: 1.1;
   text-align: right;
@@ -2365,7 +2408,7 @@
 }
 .comic-list-heading h2 {
   margin: 0.12rem 0 0;
-  font-size: 1.2rem;
+  font-size: calc(1.2rem + var(--font-bump));
   line-height: 1.25;
 }
 .comic-count {
@@ -2374,7 +2417,7 @@
   padding: 0.25rem 0.7rem;
   background: color-mix(in srgb, var(--comic-accent) 11%, var(--paper-0));
   color: var(--brand-ink);
-  font-size: 0.9rem;
+  font-size: calc(0.9rem + var(--font-bump));
   font-weight: 900;
 }
 .comic-lesson-cuts {
@@ -2406,7 +2449,7 @@
   border: 0;
   border-radius: 0;
   color: var(--comic-accent);
-  font-size: 0.92rem;
+  font-size: calc(0.92rem + var(--font-bump));
   line-height: 1;
 }
 .comic-lesson-cut strong {
@@ -2421,7 +2464,7 @@
   padding: 0.08rem 0.45rem;
   background: color-mix(in srgb, var(--comic-accent) 13%, var(--paper-0));
   color: var(--ink-2);
-  font-size: 0.7rem;
+  font-size: calc(0.7rem + var(--font-bump));
   font-weight: 900;
 }
 .comic-mobile-contents-toggle {
@@ -2451,7 +2494,7 @@
     border-radius: 12px;
     background: var(--paper-0);
     color: var(--brand-ink);
-    font-size: 0.95rem;
+    font-size: calc(0.95rem + var(--font-bump));
     font-weight: 900;
   }
   .comic-mobile-contents-toggle:focus-visible {
@@ -2478,7 +2521,7 @@
   /* 375px·125%에서도 제목이 어절 중간에서 끊기지 않도록 진도 표시를 좁게 유지한다. */
   .season-progress {
     width: 3.4rem;
-    font-size: 0.74rem;
+    font-size: calc(0.74rem + var(--font-bump));
   }
   .season-drawer-row,
   .season-lessons-drawer {
@@ -2521,7 +2564,7 @@
   }
 
   .studio-kicker {
-    font-size: 0.8125rem;
+    font-size: calc(0.8125rem + var(--font-bump));
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -2579,7 +2622,7 @@
   .visual-novel-page-heading h2 {
     margin-top: 0.2rem;
     color: var(--editorial-ink);
-    font-size: clamp(1.2rem, 2vw, 1.55rem);
+    font-size: calc(clamp(1.2rem, 2vw, 1.55rem) + var(--font-bump));
     font-weight: 900;
     line-height: 1.3;
   }
@@ -2719,7 +2762,7 @@
     border-radius: 10px;
     background: rgba(255, 253, 247, 0.94);
     color: var(--editorial-ink);
-    font-size: 0.85rem;
+    font-size: calc(0.85rem + var(--font-bump));
     font-weight: 850;
   }
 
@@ -2737,7 +2780,7 @@
     border-radius: 10px;
     background: rgba(31, 57, 68, 0.88);
     color: #fff;
-    font-size: 0.85rem;
+    font-size: calc(0.85rem + var(--font-bump));
     font-weight: 850;
   }
 
@@ -2753,7 +2796,7 @@
 
   .visual-novel-dialogue > p {
     margin: 0;
-    font-size: clamp(1rem, 1.5vw, 1.12rem);
+    font-size: calc(clamp(1rem, 1.5vw, 1.12rem) + var(--font-bump));
     font-weight: 720;
     line-height: 1.58;
   }
@@ -2761,7 +2804,7 @@
   .visual-novel-dialogue .visual-novel-perspective {
     margin-top: 0.4rem;
     color: #d8e7e5;
-    font-size: 0.9rem;
+    font-size: calc(0.9rem + var(--font-bump));
     font-weight: 580;
   }
 
@@ -2772,7 +2815,7 @@
     border-left: 3px solid currentColor;
     border-radius: 0 8px 8px 0;
     background: color-mix(in srgb, currentColor 9%, transparent);
-    font-size: 0.86rem;
+    font-size: calc(0.86rem + var(--font-bump));
     font-weight: 850;
   }
 
@@ -2786,7 +2829,7 @@
 
   .speaker-dialogue p {
     margin: 0;
-    font-size: clamp(1rem, 1.5vw, 1.12rem);
+    font-size: calc(clamp(1rem, 1.5vw, 1.12rem) + var(--font-bump));
     line-height: 1.58;
   }
 
@@ -2802,7 +2845,7 @@
     padding: 0.1rem 0.5rem;
     border: 1.5px solid currentColor;
     border-radius: 999px;
-    font-size: 0.78rem;
+    font-size: calc(0.78rem + var(--font-bump));
     font-weight: 900;
     white-space: nowrap;
   }
@@ -2826,7 +2869,7 @@
   }
 
   .speaker-dialogue--light p {
-    font-size: 0.95rem;
+    font-size: calc(0.95rem + var(--font-bump));
   }
 
   /* 시나리오 지면은 그림 옆에서 대사를 읽으므로, PC·태블릿에서는 본문을 한
@@ -2835,16 +2878,16 @@
      마지막 줄이 화면 밖으로 밀린다. 모바일은 기존 크기와 쌓임 방식을 유지한다. */
   @media (min-width: 768px) {
     .studio-editorial-scenario.lesson-spread--full .visual-novel-dialogue .speaker-dialogue p {
-      font-size: clamp(1.15rem, 2.4cqw, 1.6rem);
+      font-size: calc(clamp(1.15rem, 2.4cqw, 1.6rem) + var(--font-bump));
       line-height: 1.55;
     }
 
     .studio-editorial-scenario.lesson-spread--full .visual-novel-dialogue .speaker-name {
-      font-size: 0.92rem;
+      font-size: calc(0.92rem + var(--font-bump));
     }
 
     .studio-editorial-scenario.lesson-spread--full .visual-novel-dialogue > .visual-novel-perspective {
-      font-size: clamp(1.05rem, 1.15vw, 1.2rem);
+      font-size: calc(clamp(1.05rem, 1.15vw, 1.2rem) + var(--font-bump));
       line-height: 1.55;
     }
   }
@@ -2886,7 +2929,7 @@
     margin-top: auto;
     padding-top: 0.75rem;
     color: var(--muted);
-    font-size: 0.88rem;
+    font-size: calc(0.88rem + var(--font-bump));
     font-weight: 800;
   }
 
@@ -3046,19 +3089,19 @@
     display: block;
     margin-bottom: 0.25rem;
     color: var(--accent);
-    font-size: 0.82rem;
+    font-size: calc(0.82rem + var(--font-bump));
   }
 
   .visual-novel-goal p {
     margin: 0;
-    font-size: 1rem;
+    font-size: calc(1rem + var(--font-bump));
     font-weight: 760;
     line-height: 1.48;
   }
 
   .visual-novel-knowledge-page > h3 {
     margin-bottom: 0.65rem;
-    font-size: 1.08rem;
+    font-size: calc(1.08rem + var(--font-bump));
     font-weight: 900;
   }
 
@@ -3101,14 +3144,14 @@
   .visual-novel-knowledge h4 {
     margin: 0 0 0.2rem;
     color: var(--accent);
-    font-size: 0.98rem;
+    font-size: calc(0.98rem + var(--font-bump));
     font-weight: 900;
   }
 
   .visual-novel-knowledge p {
     margin: 0.12rem 0 0;
     color: var(--editorial-ink);
-    font-size: 0.86rem;
+    font-size: calc(0.86rem + var(--font-bump));
     line-height: 1.43;
   }
 
@@ -3124,7 +3167,7 @@
     padding: 0.35rem 0.3rem;
     border-radius: 8px;
     background: color-mix(in srgb, var(--accent) 8%, var(--paper-1));
-    font-size: 0.76rem;
+    font-size: calc(0.76rem + var(--font-bump));
     text-align: center;
   }
 
@@ -3276,7 +3319,7 @@
   background: var(--paper-0);
   color: var(--brand-ink);
   font-weight: 800;
-  font-size: 0.88rem;
+  font-size: calc(0.88rem + var(--font-bump));
   box-shadow: var(--surface-sticker-lip);
   transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease;
   cursor: pointer;
@@ -3303,7 +3346,7 @@
   background: var(--chrome-tint);
   color: var(--paper-0);
   font-weight: 900;
-  font-size: 0.82rem;
+  font-size: calc(0.82rem + var(--font-bump));
   line-height: 1;
   flex-shrink: 0;
   box-shadow: none;
@@ -3322,7 +3365,7 @@
     flex-shrink: 0;
     gap: 0.3rem;
     padding: 0.3rem 0.45rem;
-    font-size: 0.78rem;
+    font-size: calc(0.78rem + var(--font-bump));
     white-space: nowrap;
   }
 
@@ -3333,7 +3376,7 @@
   .chrome-sticker-badge {
     width: 24px;
     height: 24px;
-    font-size: 0.72rem;
+    font-size: calc(0.72rem + var(--font-bump));
   }
 }
 
