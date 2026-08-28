@@ -44,6 +44,8 @@ export default function StudioLessonView({
   const theme = themeFor(definition.moduleId);
   const module = getModule(definition.moduleId);
   const [sceneIndex, setSceneIndex] = useState(0);
+  // 장면 안에서 읽는 대사 칸. 장면과 함께 초기화되어야 새 장면이 첫 칸부터 열린다.
+  const [beatIndex, setBeatIndex] = useState(0);
   const markStudioComplete = useCallback(() => {
     markCompleted(definition.lessonId);
   }, [definition.lessonId, markCompleted]);
@@ -64,6 +66,7 @@ export default function StudioLessonView({
 
   useEffect(() => {
     setSceneIndex(0);
+    setBeatIndex(0);
   }, [definition.id, session.state.stage]);
 
   const debugSubPage = view.id === 'story' && definition.visualNovel
@@ -120,6 +123,8 @@ export default function StudioLessonView({
           secondary={theme.secondary}
           sceneIndex={sceneIndex}
           onSceneIndexChange={setSceneIndex}
+          beatIndex={beatIndex}
+          onBeatIndexChange={setBeatIndex}
           view={view}
           behavior={behavior}
         />

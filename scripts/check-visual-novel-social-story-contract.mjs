@@ -92,6 +92,61 @@ for (const moduleId of selectedModules) {
   }
 }
 
+/**
+ * 대사 칸으로 쓴 차시 (docs/remodel2/02-CHARACTERS.md §2). 지금은 62차시 전부다.
+ *
+ * 한 장면을 한 칸으로만 쓰면 그림 옆 대사창에 들어가는 분량이 곧 이야기 전체 분량이 되어
+ * 한 차시가 200~300자로 끝난다. 배경과 이유가 들어갈 자리가 없어 "무슨 말인지 알기 어려운
+ * 이야기"가 되었던 원인이다. 어떤 차시도 옛 한 칸 각본으로 되돌아가지 않게 막는다.
+ */
+const BEAT_REWRITTEN_LESSONS = Object.values(CORE_EXPERIENCES).flat();
+const MIN_BEATS_PER_SCENE = 3;
+
+for (const lessonId of BEAT_REWRITTEN_LESSONS) {
+  const moduleId = lessonId.split('-')[0];
+  const lessonNumber = lessonId.split('-l')[1].padStart(2, '0');
+  const lessonPath = `src/data/studios/${moduleId}/l${lessonNumber}.ts`;
+  const lessonSource = fs.readFileSync(lessonPath, 'utf8');
+
+  if (lessonSource.includes('sceneCopy(')) {
+    throw new Error(`${lessonId} must not fall back to the single-beat script helper`);
+  }
+  const sceneScripts = lessonSource.match(/copy: sceneBeats\(/g) ?? [];
+  if (sceneScripts.length !== 4) {
+    throw new Error(`${lessonId} must script all four scenes with beats, found ${sceneScripts.length}`);
+  }
+  // sceneBeats 인자 구간 안에서만 세 짝 배열을 센다. 파일 안의 다른 문자열 배열을
+  // 각본으로 오인하지 않기 위해서다.
+  let cursor = 0;
+  let sceneIndex = 0;
+  while (true) {
+    const marker = lessonSource.indexOf('copy: sceneBeats(', cursor);
+    if (marker < 0) break;
+    const openIndex = lessonSource.indexOf('(', marker);
+    let depth = 0;
+    let endIndex = openIndex;
+    for (let index = openIndex; index < lessonSource.length; index += 1) {
+      if (lessonSource[index] === '(') depth += 1;
+      if (lessonSource[index] === ')') {
+        depth -= 1;
+        if (depth === 0) {
+          endIndex = index;
+          break;
+        }
+      }
+    }
+    const window = lessonSource.slice(openIndex, endIndex + 1);
+    const beats = window.match(/\[\s*'(?:[^'\\]|\\.)*'\s*,\s*'(?:[^'\\]|\\.)*'\s*,\s*'(?:[^'\\]|\\.)*'\s*,?\s*\]/g) ?? [];
+    if (beats.length < MIN_BEATS_PER_SCENE) {
+      throw new Error(
+        `${lessonId} scene ${sceneIndex + 1} needs at least ${MIN_BEATS_PER_SCENE} beats, found ${beats.length}`,
+      );
+    }
+    sceneIndex += 1;
+    cursor = endIndex + 1;
+  }
+}
+
 const types = fs.readFileSync('src/features/studio/types.ts', 'utf8');
 const m1Studio = readStudioSource('src/data/studios/m1.ts');
 const m1Lesson = fs.readFileSync('src/data/lessons/m1.ts', 'utf8');
@@ -106,7 +161,7 @@ for (const token of [
   "title: '아이미의 어려운 자기소개'",
   "objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 내 말로 소개해요.'",
   "imageSrc: '/lessons/story/m1/m1-l1-scene-01.webp'",
-  '아이미의 설명에는 어려운 말이 많았어요.',
+  '아이미의 설명에는 어려운 말이 많았습니다.',
   'AI(인공지능)는 사람처럼 학습하고 판단하여 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
   // 3번 카드는 2번 카드와 내용이 겹쳐 있었다. AI를 사회적 존재로 오인하지 않도록
   // 「아이미는 마음이 없어요」로 교체했다(m4-l9의 낯선 계정 경계 학습과 충돌 방지).
@@ -132,8 +187,18 @@ for (const token of [
   '오늘 배울 개념',
   '대사 듣기',
   'aria-pressed',
+  // 장면 안에서 대사 칸을 넘겨 읽는 장치. 이야기 분량이 여기에 달려 있다.
+  'beatIndex: number',
+  'onBeatIndexChange: (index: number) => void',
+  'visual-novel-beat-dots',
 ]) {
   if (!visualNovel.includes(token)) throw new Error(`missing visual novel UI token: ${token}`);
+}
+for (const label of ["'다음'", "'다음 장면'", "'처음부터'"]) {
+  if (!visualNovel.includes(label)) throw new Error(`missing scene advance label: ${label}`);
+}
+if (!/\.visual-novel-beat-dots i\s*\{[^}]*background:/s.test(fs.readFileSync('src/index.css', 'utf8'))) {
+  throw new Error('beat progress dots must be styled as a display, not a bordered control');
 }
 if (!/className="visual-novel-dialogue"[\s\S]*?<\/div>\s*<\/div>\s*<div className="visual-novel-controls"[\s\S]*?className="visual-novel-next"/.test(visualNovel)) {
   throw new Error('next scene action must live in the navigation rail after the dialogue');
@@ -214,8 +279,14 @@ if (!/@media \(max-width: 430px\)[\s\S]*?\.visual-novel-listen\s*\{[^}]*bottom:\
 if (!/\.visual-novel-image-frame\s*\{[\s\S]*?aspect-ratio:\s*16\s*\/\s*9;[\s\S]*?overflow:\s*hidden;[\s\S]*?\}/.test(styles)) {
   throw new Error('visual story image must have its own 16:9 frame');
 }
-if (/\.visual-novel-stage\s*\{[^}]*min-height:/s.test(styles)) {
+// 바탕 규칙(모바일·구형 레이아웃)은 그림과 대사 중 큰 쪽이 높이를 정해야 한다.
+if (/(^|\n)\s*\.visual-novel-stage\s*\{[^}]*min-height:/s.test(styles)) {
   throw new Error('visual story stage must grow from its content instead of a fixed minimum height');
+}
+// 다만 그림 옆에 대사를 두는 넓은 화면에서는 무대가 자리를 미리 잡아야 한다. 그러지 않으면
+// 대사 칸을 넘길 때마다 대사창이 자라 장면 버튼과 「다음」이 손가락 밑에서 내려간다.
+if (!/\.studio-editorial-scenario-frame[^{]*\.visual-novel-stage\s*\{[^}]*min-height:\s*var\(--scenario-stage-max\);/s.test(styles)) {
+  throw new Error('wide-screen story stage must reserve its height so the scene controls stay put between beats');
 }
 if (!/\.visual-novel-dialogue\s*\{[\s\S]*?position:\s*relative;[\s\S]*?\}/.test(styles)) {
   throw new Error('visual story dialogue must participate in document flow below the image');
