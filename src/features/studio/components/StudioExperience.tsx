@@ -51,6 +51,8 @@ interface Props {
   secondary: string;
   sceneIndex: number;
   onSceneIndexChange: (index: number) => void;
+  beatIndex: number;
+  onBeatIndexChange: (index: number) => void;
   /** 지금 보여 줄 화면. 한 기록 단계에 화면이 여럿일 수 있다. */
   view: StudioView;
   behavior: FormatBehavior;
@@ -138,6 +140,8 @@ export default function StudioExperience({
   secondary = 'var(--brand-secondary)',
   sceneIndex,
   onSceneIndexChange,
+  beatIndex,
+  onBeatIndexChange,
   view,
   behavior,
 }: Props) {
@@ -220,6 +224,8 @@ export default function StudioExperience({
         onSupportMode={(value) => dispatch({ type: 'record-support-mode', value })}
         sceneIndex={sceneIndex}
         onSceneIndexChange={onSceneIndexChange}
+        beatIndex={beatIndex}
+        onBeatIndexChange={onBeatIndexChange}
         showKnowledge={behavior.knowledgeInStory}
       />
     );
@@ -301,6 +307,7 @@ export default function StudioExperience({
   // 포맷 D는 첫 시도를 대화 한복판에서 하게 한다. 마지막 장면을 옆에 그대로 띄워
   // 인물이 건넨 질문을 보면서 고르도록 만든다.
   const lastScene = definition.visualNovel?.scenes[definition.visualNovel.scenes.length - 1];
+  const lastSceneBeats = lastScene?.copy[state.supportLevel] ?? [];
   const showDialogueAside =
     behavior.dialogueFrame && view.id === 'first-attempt' && Boolean(lastScene);
 
@@ -332,8 +339,9 @@ export default function StudioExperience({
           <span className="visual-novel-scene-label">{lastScene.label}</span>
         </div>
         <div className="visual-novel-dialogue">
+          {/* 마지막 장면의 마지막 칸이 인물이 학생에게 건넨 질문이다. 그 칸을 띄워 둔다. */}
           <SpeakerDialogue
-            text={lastScene.copy[state.supportLevel].text}
+            text={lastSceneBeats[lastSceneBeats.length - 1]?.text ?? ''}
             dictionaryTerms={allDictTerms}
           />
         </div>

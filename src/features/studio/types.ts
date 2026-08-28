@@ -65,7 +65,16 @@ export interface VisualNovelScene {
   imageSrc: string;
   alt: string;
   knowledgeStep: 0 | 1 | 2;
-  copy: Record<SupportLevel, VisualNovelCopy>;
+  /**
+   * 장면 각본. 배열의 한 칸이 화면에 한 번에 뜨는 대사 묶음이다.
+   *
+   * 한 장면을 한 칸으로만 쓰면 그림 옆 대사창(높이가 그림에 묶여 있다)에 들어가는
+   * 분량이 곧 이야기 전체 분량이 되어, 한 차시 이야기가 200~300자로 끝났다.
+   * 배경도 인물의 이유도 들어갈 자리가 없어 무슨 말인지 알기 어려웠다.
+   * 칸을 나눠 넘겨 읽으면 「한 화면에 한 가지 정보」를 지키면서도 이야기 분량을
+   * 그림 추가 없이 늘릴 수 있다. 칸이 하나인 옛 각본도 그대로 동작한다.
+   */
+  copy: Record<SupportLevel, VisualNovelCopy[]>;
 }
 
 export interface VisualNovelKnowledge {

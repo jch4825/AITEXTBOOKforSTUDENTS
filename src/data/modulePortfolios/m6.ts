@@ -21,7 +21,7 @@ export const M6_PORTFOLIO: ModulePortfolioDefinition = {
       label: '마을 행사 하루 계획',
       imageSrc: '/lessons/story/module-close/m6/m6-close-scene-01.webp',
       alt: '진우와 윤아가 예산 이동 날씨 소통 카드를 하루 타임라인에 놓는 장면',
-      copy: '[나 혼자 일주일 · 수료식] 진우: "장보기부터 자기소개까지… 우리가 일주일을 해냈어."',
+      copy: '[나 혼자 일주일 · 수료식] 자립 챌린지 마지막 날입니다. 진우: "장보기부터 자기소개까지… 우리가 일주일을 해냈어." 열한 개의 과제 기록이 책상 위에 쌓여 있었습니다.',
     },
     {
       id: 'm6-close-condition-change',
@@ -35,7 +35,7 @@ export const M6_PORTFOLIO: ModulePortfolioDefinition = {
       label: '생활 원칙 졸업 발표',
       imageSrc: '/lessons/story/module-close/m6/m6-close-scene-03.webp',
       alt: '학생들이 완성한 하루 계획과 AI 생활 원칙을 발표하고 여섯 단원 졸업 책을 드는 장면',
-      copy: '윤아: "이제 아이미 없이도, 아이미와 함께도 할 수 있어. 너의 다음 목표는 뭐야? 포트폴리오의 첫 장을 골라 줘."',
+      copy: '이제 마지막 발표만 남았습니다. 포트폴리오에는 여섯 시즌에서 고른 기록이 들어갑니다. 윤아: "이제 아이미 없이도, 아이미와 함께도 할 수 있어. 너의 다음 목표는 뭐야? 포트폴리오의 첫 장을 골라 줘."',
     },
   ],
   studioLessonIds: [
