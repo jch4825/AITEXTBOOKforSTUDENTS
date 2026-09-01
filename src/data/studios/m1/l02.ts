@@ -6,7 +6,7 @@ export const M1_L2_STUDIO: StudioDefinition = {
     lessonId: 'm1-l2',
     moduleId: 'm1',
     title: '기계와 AI는 어떻게 다를까?',
-    subtitle: '기계가 결과를 바꾸는 데 어떤 정보를 쓰는지 살펴보고 AI가 쓰인 기능을 찾아봐요.',
+    subtitle: '기계가 어떤 정보를 입력받아 동작하는지 살펴보고, 인공지능(AI) 기술이 쓰인 기능을 찾아봐요.',
     format: 'D',
     decisionTitle: '아이미에게 쉽게 물어봐요.',
     suggestedQuestions: [
@@ -162,7 +162,7 @@ export const M1_L2_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '세 도구의 다른 작동 방식',
-      description: '선풍기, 자동문, 음악 추천 앱이 모두 움직이거나 결과를 바꿉니다. 어떤 기능에 AI가 쓰였는지는 아직 확인하지 않았습니다.',
+      description: '선풍기, 자동문, 음악 추천 앱은 모두 저마다 다른 방식으로 움직이고 동작합니다. 이 세 가지 도구 중 어떤 기능에 인공지능(AI)이 쓰였는지 함께 알아봅시다.',
       facts: [
         '선풍기는 사람이 누른 버튼 신호를 받습니다.',
         '자동문은 앞에 선 사람을 센서로 감지합니다.',
@@ -193,10 +193,10 @@ export const M1_L2_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '세 도구 중 AI가 쓰인 기능을 지금 어떻게 판단하겠습니까?',
+      prompt: '세 가지 도구 중 어떤 것에 인공지능(AI)이 쓰였는지 어떻게 구별할 수 있을까요?',
       choices: [
         { id: 'inspect-input-output', emoji: '🔎', label: '각 기능이 무엇을 받고 어떤 결과를 내는지 살펴봅니다.', isCorrect: true, reaction: '윤아: "그거야. 받는 정보부터 보면 헷갈리지 않아."' },
-        { id: 'separate-input-modes', emoji: '⚡', label: '버튼, 센서, 타자/음성 입력에 따라 처리 방법이 달라짐을 봅니다.', isCorrect: true, reaction: '아이미: "제 입력은 글과 말이에요!"' },
+        { id: 'separate-input-modes', emoji: '⚡', label: '버튼, 센서, 글자나 음성처럼 어떤 정보를 입력받느냐에 따라 처리하는 방식이 다르다는 점을 살펴봅니다.', isCorrect: true, reaction: '아이미: "제 입력은 글과 말이에요!"' },
         { id: 'automatic-means-ai', emoji: '⚙️', label: '자동으로 움직이면 모두 AI라고 생각합니다.', isCorrect: false, reaction: '윤아가 자동문을 가리켰습니다. "이건 그냥 센서로 열리는 건데?"' },
         { id: 'app-only-by-name', emoji: '📱', label: '기기 모양이나 앱 이름만 보고 정합니다.', isCorrect: false, reaction: '진우: "이름만 보고 샀다가 후회한 적 있잖아…"' },
       ],
@@ -235,8 +235,8 @@ export const M1_L2_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '스마트 조명을 살펴본다면',
-      description: '스마트 조명이 움직임을 감지해 켜지고, 내가 자주 끄는 시간을 배워 밝기를 추천합니다.',
-      prompt: '나만의 표현으로 스마트 조명 속에 들어있는 여러 기능을 친구에게 설명해 봐요.',
+      description: '스마트 조명은 사람의 움직임을 감지해 불을 켜고, 평소 조명을 끄고 켜는 시간을 스스로 학습하여 알맞은 밝기를 추천해 줍니다.',
+      prompt: '스마트 조명 속에 들어 있는 여러 가지 기능을 친구에게 알기 쉽게 설명해 봐요.',
       stimuli: [
         {
           id: 'smart-light-real',

@@ -8,11 +8,11 @@ export const M1_L6_STUDIO: StudioDefinition = {
     title: 'AI의 배움 재료 실험실',
     subtitle: '학습 자료가 달라지면 AI의 결과가 어떻게 달라지는지 비교해 봐요.',
     format: 'B',
-    decisionTitle: '아이미에게 직접 물어봐요.',
+    decisionTitle: '아이미와 함께 학습 자료를 직접 조사해 봐요.',
     suggestedQuestions: [
       '인공지능이 학습한 자료가 한 쪽으로 치우치면?',
       '학습 데이터에 오류가 많으면 AI 대답은 어떻게 돼?',
-      'AI 편향성이 왜 위험한지 쉽게 설명해줘',
+      'AI가 한쪽으로 치우쳐 배우면 왜 위험해?',
     ],
     visualNovel: {
       title: '세모만 많이 본 분류기',
@@ -146,7 +146,7 @@ export const M1_L6_STUDIO: StudioDefinition = {
           detail: {
             full: '여러 가지 예시가 필요해요.',
             light: '모양별 수와 색, 크기, 방향이 다양해야 여러 조건을 경험할 수 있습니다.',
-            challenge: '대표성이 부족하거나 불균형한 학습 자료는 특정 조건에서 반복되는 오류와 편향을 만들 수 있습니다.',
+            challenge: '특정 종류에 치우치거나 불균형한 학습 자료는 AI가 특정 조건에서 같은 실수를 반복하는 편향을 일으킬 수 있습니다.',
           },
         },
         {
@@ -155,22 +155,22 @@ export const M1_L6_STUDIO: StudioDefinition = {
           detail: {
             full: '같은 카드로 다시 시험해요.',
             light: '맞은 수만 보지 않고 어떤 조건에서 틀렸는지도 기록합니다.',
-            challenge: '동일한 평가 기준과 시험 자료를 사용해야 학습 자료 변화가 결과에 미친 영향을 비교할 수 있습니다.',
+            challenge: '학습 자료를 바꾸기 전과 후에 같은 문제와 기준으로 평가해야, 자료 개선이 AI의 성능에 미친 영향을 정확히 비교할 수 있습니다.',
           },
         },
       ],
     },
     encounter: {
       title: '동그라미 과자를 찌그러진 세모라고 불렀어요',
-      description: '세모 카드만 가득 배운 AI 앞에 진우가 동그란 과자를 보여주자, AI가 "찌그러진 세모입니다!"라고 엉뚱하게 답했습니다!',
+      description: '세모 카드만 주로 배운 AI 앞에 진우가 동그란 과자를 보여주자, AI가 “찌그러진 세모입니다!”라고 엉뚱하게 대답했습니다.',
       facts: [
         'AI는 세모 카드만 가득 학습했습니다.',
         '새로 보여준 동그란 과자는 배운 적이 거의 없는 모양입니다.',
-        'AI는 세모 자료만 배워서 낯선 모양도 가장 익숙한 세모로 오판했습니다.',
+        'AI는 세모 자료만 주로 배웠기 때문에, 처음 보는 모양도 가장 익숙한 세모로 잘못 판단했습니다.',
       ],
     },
     firstAttempt: {
-      prompt: 'AI가 동그라미 과자를 찌그러진 세모라고 틀리게 부른 까닭을 어떻게 알아보겠습니까?',
+      prompt: 'AI가 동그라미 과자를 보고 찌그러진 세모라고 잘못 판단한 까닭을 어떻게 알아볼 수 있을까요?',
       choices: [
         { id: 'inspect-data', emoji: '📦', label: 'AI가 이전에 어떤 모양 자료를 배워 왔는지 학습 데이터를 조사합니다.', isCorrect: true, reaction: '아이미: "상자를 열어 볼까요? 배운 카드가 여기 다 있어요."' },
         { id: 'balance-various-shapes', emoji: '📊', label: '세모, 동그라미, 네모 등 배움 재료의 비율과 다양성을 확인합니다.', isCorrect: true, reaction: '윤아가 카드 수를 세어 보니 치우침이 뚜렷했습니다.' },
@@ -204,7 +204,7 @@ export const M1_L6_STUDIO: StudioDefinition = {
     transfer: {
       title: '분리배출 모양을 배우는 AI라면',
       description: '원형 표시만 많이 배운 AI가 네모난 재활용 표지를 일반 쓰레기로 분류했습니다.',
-      prompt: '나만의 표현으로 부족한 학습 자료를 바르게 보완하는 방법을 설명해 봐요.',
+      prompt: 'AI의 부족한 학습 자료를 골고루 보완하는 방법을 친구에게 알기 쉽게 설명해 봐요.',
       choices: [
         { id: 'balance-recycle-data', emoji: '📚', label: '동그라미, 네모 등 다양한 모양과 재질의 표지 자료를 고르게 추가합니다.', isCorrect: true, reaction: '자료를 보완하자 네모 표지도 잘 구별했습니다.' },
         { id: 'compare-recycle-test', emoji: '🔍', label: '자료를 보완한 뒤 같은 시험용 자료로 판정 결과를 전후 비교합니다.', isCorrect: true, reaction: '같은 시험으로 비교하니 나아진 점이 분명히 보였습니다.' },

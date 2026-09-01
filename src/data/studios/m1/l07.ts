@@ -8,7 +8,7 @@ export const M1_L7_STUDIO: StudioDefinition = {
     title: '빠른 도움 검토실',
     subtitle: 'AI의 요약과 번역을 원문과 비교하여 빠르면서도 안전하게 사용해 봐요.',
     format: 'C',
-    decisionTitle: '아이미에게 직접 자료를 주고 요약을 시켜봐요.',
+    decisionTitle: '아이미와 함께 요약과 번역 결과를 직접 검토해 봐요.',
     suggestedQuestions: [
       '긴 안내문을 짧게 핵심만 요약해줄래?',
       '급식표나 소식지 내용을 세 줄로 요약해줘',
@@ -146,7 +146,7 @@ export const M1_L7_STUDIO: StudioDefinition = {
           detail: {
             full: '중요한 말이 남았는지 봐요.',
             light: '날짜, 장소, 대상, 마감처럼 행동을 바꾸는 정보를 먼저 확인합니다.',
-            challenge: '요약의 누락과 번역의 의미 변화는 사용자의 행동에 영향을 줄 수 있으므로 핵심 항목별 검토가 필요합니다.',
+            challenge: '요약할 때 중요한 내용이 빠지거나 번역 과정에서 뜻이 왜곡되면 오해가 생길 수 있으므로, 날짜·장소·준비물 등 핵심 항목을 꼼꼼하게 검토해야 합니다.',
           },
         },
         {
@@ -162,7 +162,7 @@ export const M1_L7_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '1초 요약에서 준비물 실로폰이 빠졌어요',
-      description: '아이미가 10페이지짜리 안내문을 1초 만에 멋지게 요약해 주었지만, 가장 중요한 "준비물: 실로폰" 내용이 싹 날아갔습니다!',
+      description: '아이미가 10쪽에 달하는 긴 안내문을 순식간에 요약해 주었지만, 꼭 필요한 “준비물: 실로폰” 내용이 빠져 있었습니다.',
       facts: [
         '아이미의 요약 및 번역 속도는 1초 만에 완성되어 매우 빠릅니다.',
         '원문 문서에는 필수 항목인 "준비물: 실로폰"이 명확히 적혀 있습니다.',
@@ -170,7 +170,7 @@ export const M1_L7_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '1초 만에 빠르게 만들어졌지만 준비물 실로폰이 빠진 요약글을 보고 어떻게 하겠습니까?',
+      prompt: '빠르게 요약되었지만 중요한 준비물 내용이 빠져 있을 때, 우리는 어떻게 해야 할까요?',
       choices: [
         { id: 'compare-key-facts', emoji: '📋', label: '중요한 내용을 원문과 나란히 놓고 빠진 점을 찾습니다.', isCorrect: true, reaction: '윤아: "항목을 하나씩 짚어 보자. 날짜, 장소, 준비물, 마감…"' },
         { id: 'add-missing-items', emoji: '✏️', label: '빠진 준비물 실로폰 내용을 사람이 직접 고쳐 보완합니다.', isCorrect: true, reaction: '아이미: "고쳐 주셔서 고마워요. 저는 빠뜨린 걸 몰랐어요."' },
@@ -203,7 +203,7 @@ export const M1_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '준비물 안내를 짧게 보낸다면',
       description: 'AI가 학급 준비물 안내를 한 문장으로 줄였는데 가져오는 날짜가 빠졌습니다.',
-      prompt: '나만의 표현으로 AI 요약문에서 중요한 내용이 빠졌을 때 어떻게 할지 설명해 봐요.',
+      prompt: 'AI가 요약한 글에서 중요한 내용이 빠졌을 때 어떻게 바로잡아야 할지 알기 쉽게 설명해 봐요.',
       choices: [
         { id: 'check-supply-source', emoji: '📰', label: '원문 안내판과 비교해 날짜와 준비물이 남았는지 확인합니다.', isCorrect: true, reaction: '비교해 보니 날짜가 빠진 것을 바로 찾을 수 있었습니다.' },
         { id: 'repair-supply-summary', emoji: '✏️', label: '빠진 날짜를 직접 넣어 맞는 완성본을 만듭니다.', isCorrect: true, reaction: '날짜를 채워 넣자 완성된 안내문이 되었습니다.' },

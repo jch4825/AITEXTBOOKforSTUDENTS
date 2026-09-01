@@ -12,7 +12,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
     suggestedQuestions: [
       'AI는 어떤 일들을 할 수 있니?',
       'AI와 일반 프로그램은 어떻게 달라?',
-      '번역기 앱도 AI 기능이야?',
+      '번역 앱도 인공지능(AI)이야?',
     ],
     visualNovel: {
       title: '아이미의 어려운 자기소개',
@@ -144,8 +144,8 @@ export const M1_L1_STUDIO: StudioDefinition = {
           core: 'AI는 말, 글, 사진 같은 입력을 받아 여러 가지 일을 할 수 있습니다.',
           detail: {
             full: '번역하기, 음악 추천하기, 사진 속 물건 찾기 등을 도와줘요.',
-            light: '어떤 입력을 받았는지에 따라 AI가 도와줄 수 있는 결과가 달라집니다.',
-            challenge: '입력의 종류와 상태는 AI가 참고할 수 있는 정보의 범위를 결정합니다.',
+            light: '어떤 정보를 입력하느냐에 따라 AI가 만들어 내는 결과와 도와줄 수 있는 내용이 달라집니다.',
+            challenge: '입력하는 정보의 종류와 상태에 따라 AI가 파악할 수 있는 정보의 범위와 처리 결과가 달라집니다.',
           },
           flow: { input: '말·글·사진', process: '자료에서 규칙 찾기', output: '번역·추천·분류' },
         },
@@ -162,9 +162,9 @@ export const M1_L1_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '아이미의 어려운 자기소개',
-      description: '로봇 아이미가 어려운 기술 용어로 인사했습니다. 윤아와 함께 AI(인공지능)가 컴퓨터가 사람처럼 학습하고 판단하여 문제 해결을 돕는 기술임을 알고, 번역·추천·분류처럼 AI가 할 수 있는 일을 찾아봅시다.',
+      description: '로봇 아이미가 어려운 기술 용어로 인사했습니다. 윤아와 함께 인공지능(AI)이란 무엇인지 알아보고, 번역하기·음악 추천받기·사진 찾기처럼 우리 생활 속에서 AI가 해 주는 일들을 찾아봅시다.',
       facts: [
-        'AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하여 문제 해결을 돕는 기술입니다.',
+        '인공지능(AI)은 컴퓨터가 사람처럼 스스로 배우고 생각하여 여러 가지 문제를 해결하도록 돕는 기술입니다.',
         'AI는 말, 글, 사진 같은 입력을 받아 일을 처리할 수 있습니다.',
         'AI는 사람처럼 말해도 마음이나 기분은 없습니다.',
         'AI는 번역, 추천, 분류 같은 다양한 결과를 만들어 도와줍니다.',
@@ -176,7 +176,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
         { id: 'tool-with-input', emoji: '🛠️', label: '많은 자료에서 비슷한 점을 찾아 번역, 추천, 분류를 돕는 기술이라고 소개합니다.', isCorrect: true, reaction: '아이미: "네! 저는 자료에서 비슷한 점을 찾아 돕는 도구예요. 정확해요!"' },
         { id: 'magic-friend', emoji: '🪄', label: '모든 것을 알고 마음도 나누는 마법 친구라고 소개합니다.', isCorrect: false, reaction: '아이미: "음… 저는 모르는 것도 많고 마음도 없어요. 친구가 아니라 도우미랍니다."' },
         { id: 'just-machine', emoji: '⚙️', label: '전기로 움직이는 기계는 모두 AI라고 소개합니다.', isCorrect: false, reaction: '윤아가 선풍기를 가리키며 고개를 갸웃했습니다. "이것도 전기로 움직이는데… AI인가?"' },
-        { id: 'human-like-helper', emoji: '🤖', label: '대화를 통해 깊이 있는 생각을 이끌어내어 어려운 문제 해결을 도와주는 유용한 프로그램이라고 덧붙입니다.', isCorrect: true, reaction: '아이미: "맞아요! 저는 함께 생각을 다듬는 도구예요!"' },
+        { id: 'human-like-helper', emoji: '🤖', label: '대화를 나누며 어려운 문제를 함께 해결하도록 돕는 유용한 도우미라고 덧붙입니다.', isCorrect: true, reaction: '아이미: "맞아요! 저는 함께 생각을 다듬는 도구예요!"' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: 'AI(인공지능)의 뜻과 할 수 있는 일 중 꼭 말하고 싶은 내용은 무엇인가요?',
@@ -188,7 +188,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
         'AI(인공지능)는 입력받은 정보에 따라 할 수 있는 일이 달라집니다.',
         '번역, 음악 추천, 사진 속 동물 찾기는 모두 AI가 할 수 있는 일입니다.',
         '같은 AI라도 입력이 달라지면 결과가 달라질 수 있습니다.',
-        'AI가 한 일의 결과는 사람이 다시 확인합니다.',
+        'AI가 처리한 결과는 사람이 다시 확인하고 검토해야 합니다.',
       ],
     },
     aiContribution: {
@@ -204,8 +204,8 @@ export const M1_L1_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '도서관에 새로운 인공지능 추천 기계가 생겼어요.',
-      description: '도서관에 새로 설치된 인공지능 추천 기계는 나의 질문을 받아서 책을 추천해준다고 합니다.',
-      prompt: '나만의 표현으로 도서관의 인공지능 추천 기계를 친구에게 설명해 봐요.',
+      description: '도서관에 새로 들어온 인공지능 추천 기계는 우리가 질문을 입력하면 알맞은 책을 찾아 추천해 줍니다.',
+      prompt: '도서관의 인공지능 추천 기계가 어떤 일을 하는지 친구에게 알기 쉽게 설명해 봐요.',
       stimuli: [
         {
           id: 'library-ai-kiosk-image',
@@ -218,7 +218,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
       choices: [
         { id: 'describe-input-output', emoji: '🗺️', label: '질문을 입력받아 관련 책을 찾아 추천하는 인공지능(AI) 기능이라고 소개합니다.', isCorrect: true, reaction: '사서 선생님이 고개를 끄덕이셨습니다. "정확한 설명이네요."' },
         { id: 'call-all-knowing', emoji: '⭐', label: '도서관의 모든 일을 완벽하게 아는 친구라고 소개합니다.', isCorrect: false, reaction: '기계가 스스로 말했습니다. "저도 모르는 책이 많아요."' },
-        { id: 'check-recommendation', emoji: '✅', label: '추천한 책이 내 목적에 맞는지는 사람이 확인한다고 덧붙입니다.', isCorrect: true, reaction: '윤아가 반겼습니다. "맞아, 확인은 사람 몫이지."' },
+        { id: 'check-recommendation', emoji: '✅', label: '추천받은 책이 내가 찾던 책이 맞는지 사람이 직접 확인해야 한다고 덧붙입니다.', isCorrect: true, reaction: '윤아가 반겼습니다. "맞아, 확인은 사람 몫이지."' },
         { id: 'unrelated-machine', emoji: '🔌', label: '전기 스위치만 누르면 무조건 동작하는 일반 도서관 조명 기계라고 소개합니다.', isCorrect: false, reaction: '진우가 갸웃했습니다. "조명 스위치엔 질문을 못 넣잖아."' },
       ],
     },

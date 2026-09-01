@@ -8,7 +8,7 @@ export const M1_L4_STUDIO: StudioDefinition = {
     title: 'AI의 눈 실험실',
     subtitle: '사진 조건을 바꾸어 AI의 답이 달라지는지 살펴보고 원본과 다시 비교해 봐요.',
     format: 'B',
-    decisionTitle: '아이미와 직접 실험해봐요.',
+    decisionTitle: '아이미와 함께 직접 실험해 봐요.',
     suggestedQuestions: [
       '이 사진은 뭘 찍은 거지?',
       '사진 속 물체를 인공지능이 어떻게 알아봐?',
@@ -145,13 +145,13 @@ export const M1_L4_STUDIO: StudioDefinition = {
           detail: {
             full: '사진을 바꾸면 답도 바뀔 수 있어요.',
             light: '같은 대상도 사진 조건이 달라지면 AI가 볼 수 있는 특징이 달라집니다.',
-            challenge: '입력 조건은 AI가 사용할 수 있는 특징의 양과 선명도에 영향을 줍니다.',
+            challenge: '사진의 촬영 조건(밝기, 각도, 가림 등)은 AI가 분석할 수 있는 시각 정보의 양과 선명도에 큰 영향을 줍니다.',
           },
           flow: { input: '조건이 다른 사진', process: '보이는 특징 비교', output: '달라진 분류 결과' },
         },
         {
           title: '원본과 다시 비교해요',
-          core: 'AI 답은 원본과 사람이 확인한 근거를 함께 살펴봅니다.',
+          core: 'AI가 내놓은 답은 원본 사진과 대조하고 사람이 직접 확인한 근거를 바탕으로 판단해야 합니다.',
           detail: {
             full: '처음 답만 믿지 않고 다시 봐요.',
             light: '조건을 바꾸어 다시 시험하고 마지막에는 원본을 확인합니다.',
@@ -162,7 +162,7 @@ export const M1_L4_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '가려진 여우 사진',
-      description: '일부가 가려진 여우 사진을 본 아이미가 고양이라고 답했습니다. 아직 원본은 공개되지 않았습니다.',
+      description: '얼굴 일부가 가려진 여우 사진을 본 아이미가 고양이라고 잘못 대답했습니다. 과연 원래 사진은 어떤 모습일까요?',
       facts: [
         '사진에서 귀와 얼굴 일부만 보입니다.',
         '아이미의 첫 답은 고양이입니다.',
@@ -170,11 +170,11 @@ export const M1_L4_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '아이미의 첫 답을 본 지금, 무엇을 먼저 하겠습니까?',
+      prompt: '아이미의 첫 번째 대답을 보고 나서, 우리는 무엇을 먼저 확인해야 할까요?',
       choices: [
         { id: 'change-one-condition', emoji: '🔬', label: '사진의 가림, 밝기, 각도 등 조건을 하나씩 바꾸어 다시 시험합니다.', isCorrect: true, reaction: '아이미: "좋아요! 밝은 사진이면 저도 더 잘 볼 수 있어요."' },
         { id: 'check-original', emoji: '🖼️', label: 'AI 판정 결과와 실물 원본 사진을 꼼꼼하게 비교합니다.', isCorrect: true, reaction: '윤아가 원본 사진을 꺼내며 반겼습니다. "이걸로 비교해 보자!"' },
-        { id: 'accept-first', emoji: '📄', label: 'AI의 첫 답이 어두운 사진이라도 바로 정답으로 사용합니다.', isCorrect: false, reaction: '고양이라고 적었다가 원본이 여우로 밝혀져 진우가 머쓱해졌습니다.' },
+        { id: 'accept-first', emoji: '📄', label: '사진이 어둡고 가려져 있더라도 AI가 처음 말한 답을 그대로 믿습니다.', isCorrect: false, reaction: '고양이라고 적었다가 원본이 여우로 밝혀져 진우가 머쓱해졌습니다.' },
         { id: 'ignore-conditions', emoji: '❌', label: '사진이 얼마나 잘렸든 AI는 무조건 알아본다고 생각합니다.', isCorrect: false, reaction: '아이미: "가려진 사진은 저도 헷갈려요…"' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
@@ -203,8 +203,8 @@ export const M1_L4_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '흐린 분리배출 표지판',
-      description: '빛이 반사되어 흐릿한 분리배출 표지판을 AI가 “일반 쓰레기”라고 읽었습니다. 어떻게 확인하겠습니까?',
-      prompt: '나만의 표현으로 흐릿한 표지판 사진을 AI가 잘못 읽었을 때 어떻게 할지 설명해 봐요.',
+      description: '빛이 반사되어 글자가 흐릿하게 찍힌 분리배출 표지판을 AI가 “일반 쓰레기”라고 잘못 인식했습니다. 이럴 때는 어떻게 확인해야 할까요?',
+      prompt: '흐릿한 표지판 사진을 AI가 잘못 읽었을 때 어떻게 대처해야 할지 알기 쉽게 설명해 봐요.',
       choices: [
         { id: 'change-sign-angle', emoji: '📐', label: '빛 반사를 줄이도록 표지판 사진의 각도와 밝기를 바꾸어 다시 인식해 봅니다.', isCorrect: true, reaction: '각도를 바꾸자 표지판 글자가 선명하게 다시 보였습니다.' },
         { id: 'ask-staff', emoji: '👤', label: '실제 표지판을 눈으로 보거나 담당자 안내와 비교합니다.', isCorrect: true, reaction: '실제 표지판을 보니 답이 분명해졌습니다.' },

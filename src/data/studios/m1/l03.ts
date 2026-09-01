@@ -13,7 +13,7 @@ export const M1_L3_STUDIO: StudioDefinition = {
       '우리 학교에서 아이돌이 콘서트를 한다며?',
       'AI가 모르는 소식에 대해 왜 자신 있게 말하니?',
     ],
-    decisionTitle: '직접 아이미가 하는 말이 진짜인지 거짓인지 알아봐요.',
+    decisionTitle: '아이미가 한 말이 사실인지 직접 알아봐요.',
     visualNovel: {
       title: '아이미의 엉뚱 당당 급식 메뉴 발표!',
       objective: '다음 낱말 잇기 놀이로 아이미가 답을 만드는 방법을 겪어 보고, 아이미의 답에서 꼭 확인할 문장을 골라요.',
@@ -136,15 +136,15 @@ export const M1_L3_STUDIO: StudioDefinition = {
           detail: {
             full: '아는 것이 없어도 다음 단어를 하나씩 이어요.',
             light: '‘오늘 급식은’ 뒤에 어울릴 맛있는 단어를 하나씩 이어 붙여 문장을 만듭니다.',
-            challenge: '배운 언어 데이터의 연관 가능성을 계산해 다음 단어를 연결하지만, 내용이 진짜 사실인지는 자동으로 확인하지 못합니다.',
+            challenge: '학습한 언어 자료에서 함께 쓰일 확률이 높은 단어를 차례대로 연결하지만, 그 내용이 실제 사실인지는 스스로 검증하지 못합니다.',
           },
         },
         {
           title: '자신감 넘치는 엉뚱함(환각)',
-          core: '매끄럽고 당당하게 말해도 거짓말(환각)일 수 있습니다.',
+          core: '문장을 매끄럽고 자신 있게 말하더라도 사실이 아닌 잘못된 정보(환각)일 수 있습니다.',
           detail: {
             full: '자신 있게 말해도 꼭 다시 확인해요.',
-            light: '“무지개 아이스크림 떡볶이”처럼 엉뚱한 대답도 엄청나게 그럴듯하고 자신감 있게 말할 수 있습니다.',
+            light: '“무지개 아이스크림 떡볶이”처럼 엉뚱한 내용도 얼마든지 그럴듯하고 자신 있게 말할 수 있습니다.',
             challenge: 'AI가 문장을 자연스럽게 써도 내용이 사실이라는 뜻은 아닙니다. 식단표나 공지 같은 원래 자료와 꼭 비교해야 합니다.',
           },
           flow: { input: '윤아의 질문', process: '다음 단어 연결', output: '당당한 엉뚱 대답' },
@@ -155,14 +155,14 @@ export const M1_L3_STUDIO: StudioDefinition = {
           detail: {
             full: '진짜 식단표에서 찾아봐요.',
             light: '영양사 선생님의 식단표나 학교 공지에서 실제 메뉴를 대조해 바르게 수정합니다.',
-            challenge: '자연스러운 말과 확인한 사실을 나누어 보고, 진짜 자료를 보고 마지막으로 고칠지 정합니다.',
+            challenge: '문장의 자연스러움과 실제 사실 여부를 구분하고, 공식 자료를 확인하여 수정할 내용을 최종 결정합니다.',
           },
         },
       ],
     },
     encounter: {
       title: '아이미의 당당한 엉뚱 급식 발표!',
-      description: '윤아가 오늘 급식 메뉴를 묻자, 아이미가 모르는 정보인데도 엄청 당당하게 “무지개 아이스크림 떡볶이!”라고 대답해 윤아가 황당해했습니다!',
+      description: '윤아가 오늘 급식 메뉴를 묻자, 아이미는 식단표를 알지 못하면서도 자신 있게 “무지개 아이스크림 떡볶이!”라고 대답했습니다.',
       facts: [
         '윤아가 급식 메뉴를 묻자 아이미는 다음 단어를 하나씩 이어 붙였습니다.',
         '아이미의 대답은 “무지개 아이스크림 떡볶이”처럼 엉뚱하지만 아주 당당하고 그럴듯하게 들립니다.',
@@ -179,11 +179,11 @@ export const M1_L3_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '아이미가 모르는 것도 자신감 넘치게 엉뚱한 대답(무지개 아이스크림 떡볶이)으로 만들어냈을 때, 어떻게 해야 할까요?',
+      prompt: '아이미가 모르는 내용인데도 그럴듯하게 엉뚱한 대답을 만들어 냈을 때, 우리는 어떻게 해야 할까요?',
       choices: [
         { id: 'mark-checkable-claims', emoji: '🔍', label: '진짜 주간 식단표나 학교 공지와 직접 비교합니다.', isCorrect: true, reaction: '윤아: "좋아, 게시판 식단표부터 보자. 진짜 메뉴가 여기 있어."' },
         { id: 'verify-facts-and-fix', emoji: '✍️', label: '아이미의 엉뚱한 대답을 진짜 급식표 내용(제육볶음)으로 바르게 고칩니다.', isCorrect: true, reaction: '아이미: "제육볶음이군요! 다음엔 저도 식단표부터 볼게요."' },
-        { id: 'publish-smooth-copy', emoji: '🍧', label: '문장이 당당하고 맛있어 보이니 무지개 떡볶이가 나온다고 그대로 전합니다.', isCorrect: false, reaction: '무지개 떡볶이를 기대하고 급식실에 간 진우가 머쓱해졌습니다.' },
+        { id: 'publish-smooth-copy', emoji: '🍧', label: '문장이 매끄럽고 맛있어 보이므로 무지개 떡볶이가 나온다고 그대로 믿고 전합니다.', isCorrect: false, reaction: '무지개 떡볶이를 기대하고 급식실에 간 진우가 머쓱해졌습니다.' },
         { id: 'reject-everything', emoji: '🗑️', label: 'AI 대답은 엉뚱하니 식단표를 찾아보지도 않고 무조건 버립니다.', isCorrect: false, reaction: '윤아: "확인도 안 하고 버리면 맞는 답도 같이 잃어버려."' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
@@ -191,7 +191,7 @@ export const M1_L3_STUDIO: StudioDefinition = {
     },
     supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
-      description: '학교 게시판의 진짜 주간 식단표를 확인해보니 오늘 메뉴는 “제육볶음과 미역국”이었습니다!',
+      description: '학교 게시판에 있는 주간 식단표를 확인해 보니 오늘 메뉴는 “제육볶음과 미역국”이었습니다.',
       facts: [
         '주간 식단표는 학교 영양사 선생님이 작성하신 진짜 공식 자료입니다.',
         '아이미가 자랑스럽게 발표한 무지개 아이스크림 떡볶이는 사실이 아니었습니다.',
@@ -217,8 +217,8 @@ export const M1_L3_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '실시간 검색 기능을 가진 AI라면',
-      description: '요즘 인공지능은 인터넷 검색 도구를 연결해 실제 날씨 정보를 직접 찾아보고, 훨씬 더 사실에 가까운 정확한 답변을 냅니다!',
-      prompt: '인터넷 검색 도구를 사용하는 AI의 답변을 접했을 때 어떻게 생각해야 할까요?',
+      description: '최근 인공지능은 인터넷 검색 기능을 연결하여 실시간 날씨 정보를 직접 찾아보고, 사실에 가까운 정확한 답변을 만들기도 합니다.',
+      prompt: '인터넷 검색 기능이 있는 AI가 알려준 정보를 대할 때 어떤 점을 생각해야 할까요?',
       stimuli: [
         {
           id: 'aimi-web-search-real',
@@ -229,7 +229,7 @@ export const M1_L3_STUDIO: StudioDefinition = {
         },
       ],
       choices: [
-        { id: 'check-official-forecast', emoji: '🔍', label: 'AI가 인터넷 검색을 연결하면 최신 자료를 찾아 사실에 더 가까운 답을 냅니다.', isCorrect: true, reaction: '아이미: "검색을 연결하니 저도 최신 정보를 찾을 수 있어요!"' },
+        { id: 'check-official-forecast', emoji: '🔍', label: 'AI에 인터넷 검색 기능을 연결하면 최신 정보를 검색하여 사실에 더 가까운 답을 제공할 수 있습니다.', isCorrect: true, reaction: '아이미: "검색을 연결하니 저도 최신 정보를 찾을 수 있어요!"' },
         { id: 'rewrite-with-source', emoji: '📌', label: '검색 기능이 있더라도 기상청 같은 공식 출처를 함께 확인하면 가장 안전하고 바른 정보를 얻습니다.', isCorrect: true, reaction: '윤아: "검색을 해도 공식 출처는 한 번 더 보는 게 좋아."' },
         { id: 'trust-weather-tone', emoji: '❌', label: '검색하는 AI는 절대로 실수하지 않으므로 사람이 직접 확인할 필요가 전혀 없다고 믿습니다.', isCorrect: false, reaction: '아이미: "검색을 해도 저도 가끔 실수해요. 확인은 여전히 필요해요."' },
         { id: 'ignore-verification', emoji: '🗑️', label: 'AI가 검색을 통해 알려준 최신 정보도 무조건 다 거짓말이라고 전부 무시합니다.', isCorrect: false, reaction: '진우: "검색까지 했는데 다 무시하면… 쓸모 있는 정보도 놓치겠는데?"' },

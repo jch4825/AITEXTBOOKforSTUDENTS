@@ -8,7 +8,7 @@ export const M1_L8_STUDIO: StudioDefinition = {
     title: '사실과 판단, 누가 결정할까?',
     subtitle: '사실은 근거로 확인하고, AI의 1차 판단과 사람의 최종 판단을 구분해 봐요.',
     format: 'A',
-    decisionTitle: '아이미의 분류를 검토해요.',
+    decisionTitle: '아이미가 나눈 기준을 함께 검토해 봐요.',
     suggestedQuestions: [
       '사실과 판단은 어떻게 달라?',
       'AI에게 맡길 수 있는 1차 판단은 뭐야?',
@@ -155,7 +155,7 @@ export const M1_L8_STUDIO: StudioDefinition = {
           detail: {
             full: '중요한 결정은 사람이 해요.',
             light: '약, 친구 마음, 안전처럼 사람에게 영향을 주는 일은 믿을 수 있는 사람과 결정합니다.',
-            challenge: '가치와 맥락, 책임이 필요한 최종 결정은 AI 제안만 따르지 않고 당사자, 보호자, 교사나 전문가가 맡습니다.',
+            challenge: '가치관이나 상황 판단, 책임이 따르는 중요한 결정은 AI의 제안에만 의존하지 않고 당사자, 보호자, 교사 등 사람이 직접 내려야 합니다.',
           },
         },
       ],
@@ -170,7 +170,7 @@ export const M1_L8_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '다음 내용을 사실 확인, AI의 1차 판단, 사람의 최종 판단으로 어떻게 나누겠습니까?',
+      prompt: '다음 네 가지 내용을 사실 확인, AI의 1차 판단, 사람의 최종 판단으로 어떻게 구분할 수 있을까요?',
       choices: [
         { id: 'fact-from-record', emoji: '📌', label: '공식 공지의 행사 시간과 상자에 표시된 무게는 근거로 확인하는 사실입니다.', isCorrect: true, reaction: '윤아가 공식 게시판을 확인했습니다. "시간이랑 무게, 여기 그대로 적혀 있네."' },
         { id: 'ai-first-pass', emoji: '🤖', label: '안내문의 핵심 고르기와 자료 분류는 AI가 먼저 판단하고 사람이 검토할 수 있습니다.', isCorrect: true, reaction: '아이미: "먼저 골라 두면 사람이 검토하기 쉬워요!"' },
@@ -203,7 +203,7 @@ export const M1_L8_STUDIO: StudioDefinition = {
     transfer: {
       title: '비가 올 때 체험회를 열까?',
       description: '공식 일기예보에는 비 올 확률이 70%라고 적혀 있고, AI는 우산과 실내 활동을 추천했습니다. 체험회를 실제로 열지는 담당 선생님이 안전과 장소 상황을 보고 정합니다.',
-      prompt: '날씨 정보, AI 추천, 행사 진행 결정을 세 범주로 구분해보자.',
+      prompt: '날씨 정보, AI 추천, 행사 진행 결정을 알맞은 세 가지 기준으로 나누어 봐요.',
       choices: [
         { id: 'forecast-fact', emoji: '📌', label: '공식 일기예보의 비 올 확률은 근거로 확인하는 사실입니다.', isCorrect: true, reaction: '기상청 확률 표시를 그대로 근거로 남겼습니다.' },
         { id: 'ai-weather-suggestion', emoji: '🤖', label: '준비물과 대체 활동 추천은 AI의 1차 판단으로 받고 사람이 검토합니다.', isCorrect: true, reaction: '아이미의 추천을 사람이 다시 살펴본 뒤 사용했습니다.' },

@@ -8,7 +8,7 @@ export const M1_L9_STUDIO: StudioDefinition = {
     title: 'AI 도구 선택 스튜디오',
     subtitle: '하려는 일의 입력과 결과를 먼저 정하고 알맞은 AI 도구를 골라봐요.',
     format: 'D',
-    decisionTitle: '아이미에게 직접 물어봐요.',
+    decisionTitle: '아이미와 함께 알맞은 AI 도구를 골라봐요.',
     suggestedQuestions: [
       '글쓰기를 잘 하는 인공지능은?',
       '노래를 잘 만드는 인공지능은?',
@@ -137,7 +137,7 @@ export const M1_L9_STUDIO: StudioDefinition = {
           detail: {
             full: '먼저 할 일을 정해요.',
             light: '요약, 이미지, 자막처럼 필요한 결과의 형태를 구체적으로 말합니다.',
-            challenge: '과제 목적, 쓸 사람, 결과 모양, 성공 기준을 먼저 정해야 어떤 도구가 알맞은지 비교할 수 있습니다.',
+            challenge: '하려는 일의 목적, 결과물의 형태, 사용하는 사람을 먼저 정해야 어떤 AI 도구가 가장 적합한지 올바르게 선택할 수 있습니다.',
           },
         },
         {
@@ -171,7 +171,7 @@ export const M1_L9_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '세 가지 일에 사용할 AI 도구를 어떻게 고르겠습니까?',
+      prompt: '세 가지 일에 알맞은 AI 도구를 어떻게 선택할 수 있을까요?',
       choices: [
         { id: 'match-input-output', emoji: '🎯', label: '일마다 필요한 입력 자료와 결과를 먼저 비교하여 도구를 고릅니다.', isCorrect: true, reaction: '아이미: "좋은 순서예요! 일부터 정하면 도구는 따라와요."' },
         { id: 'check-privacy-fit', emoji: '🔒', label: '개인정보를 지킬 수 있는지, 사람이 확인할 수 있는지 살펴봅니다.', isCorrect: true, reaction: '윤아: "얼굴 사진은 함부로 안 올려."' },
@@ -205,7 +205,7 @@ export const M1_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '여행 사진을 설명한다면',
       description: '친구가 볼 수 있도록 여행 사진의 장면 설명과 짧은 음성 안내를 만들려고 합니다.',
-      prompt: '나만의 표현으로 목적에 맞는 AI 도구를 선택하는 방법을 설명해 봐요.',
+      prompt: '목적에 꼭 맞는 AI 도구를 선택하는 방법을 친구에게 알기 쉽게 설명해 봐요.',
       choices: [
         { id: 'plan-photo-tools', emoji: '🗺️', label: '사진 묘사 도구와 음성 변환 도구 각각의 입력과 결과를 구분해 선택합니다.', isCorrect: true, reaction: '두 도구를 나누어 쓰니 결과가 훨씬 정확했습니다.' },
         { id: 'verify-photo-description', emoji: '👁️', label: '얼굴 사진을 함부로 넣지 않고 생성된 설명이 실제 사진과 맞는지 확인합니다.', isCorrect: true, reaction: '설명과 사진을 비교하니 안심하고 쓸 수 있었습니다.' },

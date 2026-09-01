@@ -8,7 +8,7 @@ export const M1_L10_STUDIO: StudioDefinition = {
     title: 'AI 결과를 사용할까?',
     subtitle: '안전한 요청을 한 뒤 결과를 확인하고 사용·수정·거절을 골라봐요.',
     format: 'E',
-    decisionTitle: '아이미에게 직접 상황에 맞는 노래를 추천해달라고 해봐요.',
+    decisionTitle: '아이미에게 상황에 어울리는 노래를 함께 요청해 봐요.',
     suggestedQuestions: [
       '비 오는 날 어울리는 신나는 노래 추천해줘',
       '공부할 때 집중 잘 되는 잔잔한 음악 알려줘',
@@ -145,7 +145,7 @@ export const M1_L10_STUDIO: StudioDefinition = {
           detail: {
             full: '처음 결과를 바로 쓰지 않아요.',
             light: '행사 조건표와 공식 곡 목록을 기준으로 결과를 살펴봅니다.',
-            challenge: '결과가 알맞은지, 사실이 맞는지 다른 확인 자료를 보고 살펴봅니다.',
+            challenge: 'AI가 제시한 결과가 본래 목적에 맞는지, 실제 사실과 일치하는지 공식적인 근거 자료와 비교하여 꼼꼼히 검토합니다.',
           },
           flow: { input: '안전한 요청', process: '조건·근거와 비교', output: '사용·수정·거절' },
         },
@@ -162,7 +162,7 @@ export const M1_L10_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '신나는 댄스 타임에 아기 자장가가 나왔어요',
-      description: '신나는 체험회 댄스 타임 음악을 요청했더니 아이미가 쿨쿨 잠이 오는 <조용한 아기 자장가>를 음악으로 추천했습니다!',
+      description: '신나는 댄스 타임에 틀 배경음악을 추천해 달라고 했더니, 아이미가 엉뚱하게도 조용한 자장가를 추천했습니다.',
       facts: [
         '댄스 타임에는 신나고 빠른 템포의 음악이 필요합니다.',
         '아이미가 추천한 음악은 쿨쿨 잠이 오는 조용한 자장가입니다.',
@@ -170,12 +170,12 @@ export const M1_L10_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '댄스 타임에 쿨쿨 잠이 오는 자장가가 추천되었을 때 어떻게 하겠습니까?',
+      prompt: '신나는 댄스 타임에 조용한 자장가가 추천되었을 때, 우리는 어떻게 해야 할까요?',
       choices: [
         { id: 'review-items', emoji: '🔍', label: '자장가는 거절하고 신나는 댄스곡 조건으로 다시 요청해 결정합니다.', isCorrect: true, reaction: '아이미: "신나는 곡이 필요했군요! 조건을 알려 주시면 다시 골라 올게요."' },
         { id: 'modify-prompt-conditions', emoji: '⚙️', label: '댄스 타임 분위기와 공식 곡 목록에 맞춰 조건을 수정합니다.', isCorrect: true, reaction: '윤아가 조건표를 꺼내며 하나씩 표시했습니다.' },
         { id: 'use-all', emoji: '🎵', label: '아이미가 골랐으니 댄스 타임에 자장가를 그대로 틀어 줍니다.', isCorrect: false, reaction: '댄스 타임이 조용한 낮잠 시간이 될 뻔했습니다.' },
-        { id: 'reject-all', emoji: '🛑', label: '확인해보지도 않고 무작정 모든 결과를 배척합니다.', isCorrect: false, reaction: '윤아: "쓸 만한 곡까지 다 잃어버리는 건데?"' },
+        { id: 'reject-all', emoji: '🛑', label: '결과를 자세히 살펴보지도 않고 무조건 전부 버립니다.', isCorrect: false, reaction: '윤아: "쓸 만한 곡까지 다 잃어버리는 건데?"' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '결과를 판단할 때 사용할 근거는 무엇인가요?',
@@ -203,11 +203,11 @@ export const M1_L10_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '체험회 안내 문구를 만든다면',
-      description: 'AI가 만든 안내 문구에 확인되지 않은 행사 시간이 들어 있습니다. 어떻게 처리하겠습니까?',
-      prompt: '나만의 표현으로 AI 결과를 검토하여 사용, 수정, 거절을 판단하는 방법을 설명해 봐요.',
+      description: 'AI가 만든 안내 문구에 사실과 다른 행사 시간이 적혀 있습니다. 이럴 때는 어떻게 해야 할까요?',
+      prompt: 'AI의 추천 결과를 검토하여 그대로 쓸지, 고쳐서 쓸지, 쓰지 않을지 결정하는 방법을 친구에게 알기 쉽게 설명해 봐요.',
       choices: [
         { id: 'modify-time', emoji: '✏️', label: '학교 공식 공지표를 확인해 잘못된 행사 시간을 바르게 수정하여 사용합니다.', isCorrect: true, reaction: '공지표와 비교해 정확한 시간으로 고쳤습니다.' },
-        { id: 'reject-unsafe', emoji: '🚫', label: '확인되지 않은 오정보가 너무 많거나 개인정보를 요구하면 사용을 거절합니다.', isCorrect: true, reaction: '위험한 요청은 거절하는 것이 안전했습니다.' },
+        { id: 'reject-unsafe', emoji: '🚫', label: '잘못된 정보가 너무 많거나 위험한 내용을 담고 있다면 사용하지 않고 거절합니다.', isCorrect: true, reaction: '위험한 요청은 거절하는 것이 안전했습니다.' },
         { id: 'publish-now', emoji: '📢', label: '문장이 매끄러우므로 잘못된 시간 정보를 확인하지 않고 즉시 게시합니다.', isCorrect: false, reaction: '잘못된 시간을 보고 헛걸음한 친구가 있었습니다.' },
         { id: 'auto-accept-ai', emoji: '🤖', label: 'AI가 작성해 준 결과물은 사람이 수정할 필요 없이 무조건 받아들입니다.', isCorrect: false, reaction: '틀린 정보가 그대로 퍼질 뻔했습니다.' },
       ],

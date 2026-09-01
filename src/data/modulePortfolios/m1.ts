@@ -6,7 +6,7 @@ export const M1_PORTFOLIO: ModulePortfolioDefinition = {
   crumb: '1단원 · 아이미를 알아가는 탐구 기록',
   kicker: 'AI 동아리 첫 주 프로젝트',
   title: '아이미 사용 설명서',
-  description: '새 친구가 아이미를 안전하게 사용할 수 있도록 열 번의 탐구 기록에서 근거를 고르고, 입력·결과·사람에게 직접 물어보기를 한 장에 정리해요.',
+  description: '새로 온 친구가 아이미를 안전하게 활용할 수 있도록, 열 번의 탐구 기록을 바탕으로 입력, 결과, 사람이 확인할 점을 한 장의 설명서로 정리해 봐요.',
   closingStory: [
     {
       id: 'new-member-question',
