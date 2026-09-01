@@ -400,7 +400,7 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="말투 도로 운전"
-      instruction={`${stage.topic}. 위쪽 띠에서 답을 읽을 사람을 확인하고 방향키나 마우스로 차를 움직여 길 가운데로 달리세요. 길에 놓인 시간·장소·준비물 카드를 모두 주워야 도착으로 칩니다.`}
+      instruction="현장체험학습 설명문을 만들어야 해요. 도로에서 벗어나지 말고, 필요한 정보 상자를 모아 보세요. 방향키나 마우스로 차를 움직일 수 있습니다."
       progress={{ label: '주운 사실', value: hud.taken, max: FACT_KINDS.length }}
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

@@ -219,6 +219,11 @@ export default function VoiceRhythmGame({ supportLevel }: MiniGameProps) {
         world.phase = 'falling';
         world.armed = false;
       }
+      input.lane[0] = false;
+      input.lane[1] = false;
+      input.lane[2] = false;
+      input.sw[0] = false;
+      input.sw[1] = false;
     } else if (dt > 0 && !world.finished) {
       world.clock += dt;
       for (let i = 0; i < 2; i += 1) {
@@ -290,6 +295,14 @@ export default function VoiceRhythmGame({ supportLevel }: MiniGameProps) {
       }
 
       for (let lane = 0; lane < 3; lane += 1) world.flash[lane] = Math.max(0, world.flash[lane] - dt);
+
+      /* 이번 프레임에 쓴 누름을 반드시 비운다. 비우지 않으면 한 번 누른 레인이 계속
+         눌린 것으로 남아 매 프레임 판정이 터지고, 손을 떼도 풀리지 않는다. */
+      input.lane[0] = false;
+      input.lane[1] = false;
+      input.lane[2] = false;
+      input.sw[0] = false;
+      input.sw[1] = false;
 
       const done = world.slots.filter((slot) => slot.state === 'ok').length;
       if (world.dirty) {

@@ -43,6 +43,14 @@ const FLIP_REST = 0.5;
 const FLIP_UP = -0.42;
 const FLIP_SWING = 13;
 
+/**
+ * 발사 통로를 닫는 대각선 문.
+ *
+ * 공이 통로를 빠져나가면 이 대각선이 내려와 입구를 막는다. 없으면 범퍼를 맞고
+ * 내려온 공이 통로로 다시 들어가 판 위로 돌아오지 못한다.
+ */
+const LANE_DOOR = [DIV, DIV_TOP, RIGHT, DIV_TOP - 52];
+
 /** 정적인 벽. 각 원소는 선분 [x1, y1, x2, y2]다. */
 const WALLS: number[][] = [
   [LEFT, TOP, DEFLECT_X, TOP],
@@ -83,8 +91,8 @@ const STAGES: StageConfig[] = [
       '왜 그렇게 바꿨는지 물어봐요',
       '이대로 쓸지 마지막으로 정해요',
     ],
-    bumpers: [[578, 150], [392, 158], [582, 312], [386, 320]],
-    gate: [482, 240],
+    bumpers: [[465, 326], [340, 262], [590, 262], [465, 240]],
+    gate: [465, 150],
     tiltGravity: 1,
     tiltDrift: 0,
   },
@@ -98,8 +106,8 @@ const STAGES: StageConfig[] = [
       '어디서 온 내용인지 확인해요',
       '고칠 곳을 고른 뒤에 정해요',
     ],
-    bumpers: [[594, 182], [378, 146], [396, 330], [580, 336]],
-    gate: [486, 244],
+    bumpers: [[420, 332], [572, 268], [330, 258], [478, 224]],
+    gate: [465, 150],
     tiltGravity: 1.08,
     tiltDrift: -26,
   },
@@ -113,8 +121,8 @@ const STAGES: StageConfig[] = [
       '날짜가 맞는지 근거를 물어봐요',
       '보낼지 말지 마지막으로 정해요',
     ],
-    bumpers: [[566, 178], [348, 220], [590, 296], [372, 352]],
-    gate: [462, 248],
+    bumpers: [[500, 334], [326, 300], [596, 250], [430, 214]],
+    gate: [465, 146],
     tiltGravity: 1.16,
     tiltDrift: 30,
   },
@@ -137,6 +145,8 @@ interface World {
   flipR: number;
   wobble: number;
   still: number;
+  /** 공이 발사 통로를 한 번이라도 빠져나갔는지. 그 뒤로는 통로 입구가 닫힌다. */
+  launched: boolean;
   finished: boolean;
 }
 
@@ -156,6 +166,7 @@ function buildWorld(lives: number, ballR: number): World {
     flipR: FLIP_REST,
     wobble: 0,
     still: 0,
+    launched: false,
     finished: false,
   };
 }
@@ -273,7 +284,11 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
           w.x += w.vx * h;
           w.y += w.vy * h;
 
-          for (const seg of WALLS) {
+          /* 통로를 완전히 빠져나온 순간 입구를 닫는다. 이 뒤로는 대각선 문이 벽이 되어
+             내려온 공이 발사 통로로 되돌아가지 못한다. */
+          if (!w.launched && w.x < DIV - ballR && w.y < DIV_TOP) w.launched = true;
+
+          for (const seg of (w.launched ? [...WALLS, LANE_DOOR] : WALLS)) {
             const p = closestOnSeg(w.x, w.y, seg);
             bounceOff(w, p[0], p[1], ballR, 0.62);
           }
@@ -358,6 +373,7 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
           w.lives -= 1;
           w.x = LANE_X;
           w.y = LANE_FLOOR - ballR;
+          w.launched = false;
           w.vx = 0;
           w.vy = 0;
           w.phase = 'ready';
@@ -405,7 +421,7 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
     ctx.strokeStyle = BOARD.line;
     ctx.lineWidth = 7;
     ctx.lineCap = 'round';
-    for (const seg of WALLS) {
+    for (const seg of (w.launched ? [...WALLS, LANE_DOOR] : WALLS)) {
       ctx.beginPath();
       ctx.moveTo(seg[0], seg[1]);
       ctx.lineTo(seg[2], seg[3]);

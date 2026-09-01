@@ -60,15 +60,15 @@ interface StageConfig {
 const STAGES: StageConfig[] = [
   {
     id: 'cup', label: '기본', kind: 'cup', name: '컵', mark: '컵을', sure: '컵이에요!',
-    startAngle: 62, startLight: 0.62, clothX: 398, clothY: 186, target: 0.6, seconds: 50,
+    startAngle: 62, startLight: 0.62, clothX: 398, clothY: 186, target: 0.58, seconds: 50,
   },
   {
     id: 'scissors', label: '1단계', kind: 'scissors', name: '가위', mark: '가위를', sure: '가위예요!',
-    startAngle: 105, startLight: 0.24, clothX: 452, clothY: 250, target: 0.68, seconds: 55,
+    startAngle: 105, startLight: 0.24, clothX: 452, clothY: 250, target: 0.64, seconds: 60,
   },
   {
     id: 'book', label: '2단계', kind: 'book', name: '책', mark: '책을', sure: '책이에요!',
-    startAngle: 143, startLight: 0.86, clothX: 350, clothY: 349, target: 0.74, seconds: 60,
+    startAngle: 143, startLight: 0.86, clothX: 350, clothY: 349, target: 0.70, seconds: 70,
   },
 ];
 
@@ -204,10 +204,10 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
   /* 허용 오차를 그대로 곱하면 충분한 지원에서는 아무 데나 두어도 넘어가 버려 "왜 달라졌나"가
      사라진다. 절반만 반영해서, 쉬워지되 두 곳을 고쳐야 하는 성질은 남긴다. */
   const easedTol = 1 + (tuning.tolerance - 1) * 0.5;
-  const frontWindow = 95 * easedTol;
-  const lightHalf = 0.18 * easedTol;
+  const frontWindow = 120 * easedTol;
+  const lightHalf = 0.24 * easedTol;
   const target = clamp(stage.target + (1 - easedTol) * 0.12, 0.3, 0.92);
-  const holdNeed = 1.5 / Math.max(0.7, tuning.tolerance);
+  const holdNeed = 1.2 / Math.max(0.75, tuning.tolerance);
   const totalSeconds = Math.round(stage.seconds * tuning.time);
 
   const clothW = 200 * tuning.size;
@@ -261,7 +261,7 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
     const frontness = clamp(1 - Math.abs(norm) / frontWindow, 0, 1);
     const lightScore = clamp(1 - Math.abs(world.light - 0.5) / lightHalf, 0, 1);
     const cover = coverOf(world.clothX, world.clothY, clothW, clothH);
-    const value = clamp(0.5 * frontness + 0.5 * lightScore - 0.7 * cover, 0, 1);
+    const value = clamp(0.5 * frontness + 0.5 * lightScore - 0.6 * cover, 0, 1);
     const lines = bubbleLines(value, target, stage);
     const fixed = (frontness >= 0.62 ? 1 : 0) + (lightScore >= 0.62 ? 1 : 0) + (cover <= 0.12 ? 1 : 0);
     const tier = value >= target ? 3 : value < target * 0.35 ? 0 : value < target * 0.7 ? 1 : 2;

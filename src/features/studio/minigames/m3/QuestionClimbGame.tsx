@@ -2,102 +2,106 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, pick, randRange,
-  useGameKeys,
+  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, pick, useGameKeys,
 } from '../engine';
+import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
 /**
- * m3-l1 · 질문 발판 오르기 (장르 2 · 수직 상승 플랫포머)
+ * m3-l1 · 질문 계단 오르기 (무한 계단)
  *
- * "같은 주제를 더 나은 질문으로 바꿔 묻는다"를 발판의 단단함으로 만든다.
- * 얕은 질문은 밟는 순간 바스러져 아래로 떨어지고, 깊은 질문만 몸을 위로 올려 준다.
+ * 앞선 판은 발판 사이가 멀어 올라가지 못하는 칸이 많았다. 여기서는 계단이 이미 놓여
+ * 있고, 다음 칸이 왼쪽인지 오른쪽인지만 보고 그 버튼을 누른다. 조작이 두 개뿐이라
+ * 실패의 까닭이 언제나 분명하다.
  *
- * 학생은 좌우로만 움직이고 점프는 자동이다. 조작이 하나라 규칙이 아니라
- * "어느 발판을 밟을까"에만 집중하게 된다.
+ * 시간은 계속 줄어들고, 한 칸 오를 때마다 조금 채워진다. 그래서 멈춰 있으면 진다.
+ * 계단마다 질문이 적혀 있어 오르는 동안 좋은 질문을 읽게 된다.
  */
 
 const WORLD_W = 960;
 const WORLD_H = 540;
-const HERO_R = 22;
-
-interface Plank {
-  x: number;
-  y: number;
-  w: number;
-  deep: boolean;
-  text: string;
-  broken: boolean;
-}
+const HERO_Y = WORLD_H - 190;
+const STEP_H = 62;
+const STEP_W = 132;
+const CENTER = WORLD_W / 2;
 
 interface StageConfig {
   id: string;
   label: string;
-  topic: string;
   spoken: string;
+  topic: string;
+  /** 목적격 조사까지 붙인 말. 받침에 따라 을·를이 달라 스테이지마다 적어 둔다. */
+  topicMark: string;
+  goal: number;
   deep: string[];
-  shallow: string[];
-  goalHeight: number;
+  seconds: number;
+  drain: number;
 }
 
 const STAGES: StageConfig[] = [
   {
     id: 'plant',
     label: '기본',
+    spoken: '식물 기르기를 깊게 묻는 계단을 올라요.',
     topic: '식물 기르기',
-    spoken: '식물 기르기를 더 깊게 물어 봐요.',
-    goalHeight: 1500,
-    deep: ['왜 잎이 노래질까요', '물은 며칠에 한 번', '햇빛은 얼마나'],
-    shallow: ['응?', '그거 뭐예요', '아무거나'],
+    topicMark: '식물 기르기를',
+    goal: 18,
+    seconds: 12,
+    drain: 1,
+    deep: ['왜 잎이 노래질까요', '물은 며칠에 한 번', '햇빛은 얼마나', '흙은 무엇이 좋을까요'],
   },
   {
     id: 'recycle',
     label: '1단계',
+    spoken: '분리배출을 깊게 묻는 계단을 올라요.',
     topic: '분리배출',
-    spoken: '분리배출을 더 깊게 물어 봐요.',
-    goalHeight: 2000,
-    deep: ['왜 씻어서 버릴까요', '어디에 넣어야 하나요', '뚜껑은 따로 버리나요'],
-    shallow: ['몰라요', '그냥요', '대충 알려 줘요'],
+    topicMark: '분리배출을',
+    goal: 24,
+    seconds: 11,
+    drain: 1.15,
+    deep: ['왜 씻어서 버릴까요', '어디에 넣나요', '뚜껑은 따로 버리나요', '언제 내놓나요'],
   },
   {
     id: 'safety',
     label: '2단계',
+    spoken: '자전거 안전을 깊게 묻는 계단을 올라요.',
     topic: '자전거 안전',
-    spoken: '자전거 안전을 더 깊게 물어 봐요.',
-    goalHeight: 2500,
-    deep: ['왜 안전모를 쓰나요', '밤에는 무엇이 필요한가요', '어디로 다녀야 하나요'],
-    shallow: ['그거요', '아무 데나', '빨리요'],
+    topicMark: '자전거 안전을',
+    goal: 30,
+    seconds: 10,
+    drain: 1.3,
+    deep: ['왜 안전모를 쓰나요', '밤에는 무엇이 필요한가요', '어디로 다녀야 하나요', '무엇을 먼저 볼까요'],
   },
 ];
 
-interface World {
-  x: number;
-  y: number;
-  vy: number;
-  height: number;
-  planks: Plank[];
-  lives: number;
-  phase: 'ready' | 'climb';
-  armed: boolean;
-  finished: boolean;
-  current: string;
+interface Step {
+  /** -1 왼쪽, 1 오른쪽 */
+  side: number;
+  text: string;
 }
 
-function makePlanks(stage: StageConfig, seed: number, width: number, shallowRate: number): Plank[] {
+interface World {
+  steps: Step[];
+  height: number;
+  offset: number;
+  time: number;
+  lives: number;
+  phase: 'ready' | 'climb';
+  finished: boolean;
+  shake: number;
+}
+
+function makeSteps(stage: StageConfig, seed: number): Step[] {
   const random = createRandom(seed);
-  const planks: Plank[] = [];
-  for (let i = 0; i < 90; i += 1) {
-    const deep = i < 2 ? true : random() > shallowRate;
-    planks.push({
-      x: randRange(random, 60, WORLD_W - 60 - width),
-      y: WORLD_H - 80 - i * 95,
-      w: width,
-      deep,
-      text: deep ? pick(random, stage.deep) : pick(random, stage.shallow),
-      broken: false,
-    });
+  const steps: Step[] = [];
+  let side = 1;
+  for (let i = 0; i < stage.goal + 30; i += 1) {
+    // 같은 쪽이 세 번 넘게 이어지지 않게 한다. 무작정 한쪽만 누르면 통하지 않아야 한다.
+    const streak = steps.slice(-2).every((s) => s.side === side);
+    if (streak || random() < 0.45) side = -side;
+    steps.push({ side, text: pick(random, stage.deep) });
   }
-  return planks;
+  return steps;
 }
 
 export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
@@ -105,150 +109,153 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
   const stage = STAGES[game.stageIndex];
   const tuning = game.tuning;
 
-  /* 지원 수준은 발판 폭·얕은 질문의 비율·중력으로 나타난다. 오르는 방법은 같다. */
-  const plankW = 190 * clamp(tuning.size, 0.78, 1.3);
-  const shallowRate = clamp(0.34 * tuning.density, 0.16, 0.55);
-  const gravity = 900 * clamp(tuning.speed, 0.7, 1.3);
-  const jumpV = -520 * clamp(tuning.speed, 0.78, 1.2);
+  /* 지원 수준은 시간 여유와 줄어드는 속도, 기회로 나타난다. 계단과 질문은 같다. */
+  const maxTime = stage.seconds * clamp(tuning.time, 0.9, 1.7);
+  const drain = stage.drain / clamp(tuning.time, 0.9, 1.6);
+  const gain = 0.42 * clamp(tuning.tolerance, 0.8, 1.5);
   const maxLives = tuning.lives;
 
   const worldRef = useRef<World>({
-    x: WORLD_W / 2, y: WORLD_H - 120, vy: 0, height: 0,
-    planks: makePlanks(stage, game.seed, plankW, shallowRate),
-    lives: maxLives, phase: 'ready', armed: true, finished: false, current: '',
+    steps: makeSteps(stage, game.seed), height: 0, offset: 0, time: maxTime,
+    lives: maxLives, phase: 'ready', finished: false, shake: 0,
   });
-  const [hud, setHud] = useState({ height: 0, lives: maxLives, current: '' });
+  const [hud, setHud] = useState({ height: 0, lives: maxLives, time: maxTime, text: '' });
   const keys = useGameKeys(game.playing);
-  const moveRef = useRef(0);
+  const nudgeRef = useRef<number>(0);
 
   useEffect(() => {
     worldRef.current = {
-      x: WORLD_W / 2, y: WORLD_H - 120, vy: 0, height: 0,
-      planks: makePlanks(stage, game.seed, plankW, shallowRate),
-      lives: maxLives, phase: 'ready', armed: true, finished: false, current: '',
+      steps: makeSteps(stage, game.seed), height: 0, offset: 0, time: maxTime,
+      lives: maxLives, phase: 'ready', finished: false, shake: 0,
     };
-    setHud({ height: 0, lives: maxLives, current: '' });
-    moveRef.current = 0;
-  }, [game.round, game.stageIndex, stage, game.seed, plankW, shallowRate, maxLives]);
+    setHud({ height: 0, lives: maxLives, time: maxTime, text: '' });
+    nudgeRef.current = 0;
+  }, [game.round, game.stageIndex, stage, game.seed, maxTime, maxLives]);
+
+  const climb = (side: number) => {
+    const w = worldRef.current;
+    if (!game.playing || w.finished) return;
+    if (w.phase === 'ready') { w.phase = 'climb'; }
+
+    const next = w.steps[w.height];
+    if (!next) return;
+    if (next.side !== side) {
+      w.lives -= 1;
+      w.shake = 0.5;
+      w.time = Math.max(0, w.time - 1.2);
+      playSound('select');
+      if (w.lives <= 0) {
+        w.finished = true;
+        game.fail('계단 방향과 다른 쪽을 눌렀어요. 다음 칸이 어느 쪽인지 보고 눌러 봐요.');
+      }
+      return;
+    }
+    w.height += 1;
+    w.offset = 1;
+    w.time = Math.min(maxTime, w.time + gain);
+    playSound('fill');
+    if (w.height >= stage.goal) {
+      w.finished = true;
+      game.succeed(`${stage.topicMark} 깊게 묻는 질문 계단을 ${stage.goal}칸 올랐어요!`);
+    }
+  };
 
   const frame = (ctx: CanvasRenderingContext2D, dt: number) => {
     const w = worldRef.current;
-    const pressing = keys.held.current.action || keys.held.current.up;
 
-    if (dt > 0 && !w.finished && w.phase === 'ready') {
-      if (!pressing && moveRef.current === 0) w.armed = true;
-      if ((pressing || moveRef.current !== 0) && w.armed) {
-        w.phase = 'climb';
-        w.armed = false;
-        w.vy = jumpV;
-      }
-    } else if (dt > 0 && !w.finished) {
-      const dir = (keys.held.current.left ? -1 : 0) + (keys.held.current.right ? 1 : 0) + moveRef.current;
-      w.x += clamp(dir, -1, 1) * 340 * dt;
-      if (w.x < -HERO_R) w.x = WORLD_W + HERO_R;
-      if (w.x > WORLD_W + HERO_R) w.x = -HERO_R;
+    if (dt > 0 && game.playing && !w.finished) {
+      if (nudgeRef.current !== 0) { climb(nudgeRef.current); nudgeRef.current = 0; }
+      if (keys.consumePress('left')) climb(-1);
+      if (keys.consumePress('right')) climb(1);
 
-      w.vy += gravity * dt;
-      w.y += w.vy * dt;
-
-      // 화면이 따라 올라간다 — 캐릭터가 위쪽 1/3을 넘으면 세상을 아래로 민다
-      if (w.y < WORLD_H * 0.36) {
-        const lift = WORLD_H * 0.36 - w.y;
-        w.y += lift;
-        w.height += lift;
-        for (const plank of w.planks) plank.y += lift;
-      }
-
-      // 내려올 때만 발판을 밟는다
-      if (w.vy > 0) {
-        for (const plank of w.planks) {
-          if (plank.broken) continue;
-          if (w.y + HERO_R < plank.y || w.y + HERO_R > plank.y + 22) continue;
-          if (w.x < plank.x - HERO_R || w.x > plank.x + plank.w + HERO_R) continue;
-          if (plank.deep) {
-            w.vy = jumpV;
-            w.current = plank.text;
-          } else {
-            plank.broken = true;
-            w.vy = jumpV * 0.42;
-            w.current = plank.text;
-          }
-          break;
+      if (w.phase === 'climb') {
+        w.time = Math.max(0, w.time - drain * dt);
+        w.offset = Math.max(0, w.offset - dt * 6);
+        w.shake = Math.max(0, w.shake - dt * 2);
+        if (w.time <= 0) {
+          w.finished = true;
+          game.fail('시간이 다 되었어요. 쉬지 않고 다음 칸 쪽 버튼을 눌러 올라가 봐요.');
         }
       }
 
-      if (w.y > WORLD_H + 40) {
-        w.lives -= 1;
-        w.phase = 'ready';
-        w.armed = false;
-        w.vy = 0;
-        w.y = WORLD_H - 120;
-        w.x = WORLD_W / 2;
-        // 떨어지면 조금 아래에서 다시 시작한다 — 처음부터는 아니다
-        const back = Math.min(w.height, 300);
-        w.height -= back;
-        for (const plank of w.planks) plank.y -= back;
-      }
-
-      if (Math.round(w.height) !== hud.height || w.lives !== hud.lives || w.current !== hud.current) {
-        setHud({ height: Math.round(w.height), lives: w.lives, current: w.current });
-      }
-
-      if (w.lives <= 0) {
-        w.finished = true;
-        game.fail('아래로 떨어졌어요. 이유를 묻는 깊은 질문 발판을 밟아 올라가 봐요.');
-      } else if (w.height >= stage.goalHeight) {
-        w.finished = true;
-        game.succeed(`${stage.topic}을 깊게 묻는 질문으로 과제에 도움이 되는 답까지 올라갔어요!`);
+      const nextText = w.steps[w.height]?.text ?? '';
+      if (w.height !== hud.height || w.lives !== hud.lives
+        || Math.abs(w.time - hud.time) > 0.09 || nextText !== hud.text) {
+        setHud({ height: w.height, lives: w.lives, time: w.time, text: nextText });
       }
     }
 
     ctx.fillStyle = BOARD.bg;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    // 목표 높이 표시
-    const goalY = WORLD_H - 80 - (stage.goalHeight - w.height);
-    if (goalY > -60 && goalY < WORLD_H) {
-      panel(ctx, 0, goalY - 26, WORLD_W, 52, '#064E3B', PLAY.goal, 0);
-      centerText(ctx, '과제에 도움이 되는 답', WORLD_W / 2, goalY, 26, BOARD.ink);
+    const shakeX = w.shake > 0 ? Math.sin(w.shake * 46) * 7 : 0;
+    ctx.save();
+    ctx.translate(shakeX, 0);
+
+    /* 계단은 학생을 가운데 고정하고 세상이 내려오는 방식으로 그린다.
+       index번 계단의 가로 자리는 0번부터 그 칸까지의 좌우 이동을 모두 더한 값이고,
+       학생은 마지막으로 밟은 칸(height-1) 위에 선다. 다음 칸은 반드시 학생보다 위에
+       그려져야 "어느 쪽으로 오를까"가 눈에 보인다. */
+    const DX = STEP_W * 0.46;
+    const posOf = (index: number) => {
+      let px = CENTER;
+      for (let k = 0; k <= index; k += 1) px += w.steps[k].side * DX;
+      return px;
+    };
+    const heroX = w.height === 0 ? CENTER : posOf(w.height - 1);
+    const shift = w.offset * STEP_H;
+
+    // 발밑 계단(또는 시작 바닥)
+    panel(ctx, heroX - STEP_W / 2, HERO_Y + 26 + shift, STEP_W, 34, '#334155', BOARD.line, 8);
+
+    for (let i = 0; i <= 7; i += 1) {
+      const index = w.height + i;
+      if (index >= w.steps.length) break;
+      const sx = posOf(index) - (w.height === 0 ? 0 : 0);
+      const sy = HERO_Y + 26 - (i + 1) * STEP_H + shift;
+      if (sy < -60 || sy > WORLD_H + 60) continue;
+      const isNext = i === 0;
+      panel(ctx, sx - STEP_W / 2, sy, STEP_W, 34,
+        isNext ? '#065F46' : '#1E293B', isNext ? PLAY.goal : BOARD.line, 8);
+      if (isNext) {
+        centerText(ctx, w.steps[index].side < 0 ? '◀ 왼쪽' : '오른쪽 ▶', sx, sy + 17, 22, BOARD.ink);
+      }
     }
 
-    for (const plank of w.planks) {
-      if (plank.y < -40 || plank.y > WORLD_H + 40) continue;
-      if (plank.broken) continue;
-      panel(
-        ctx, plank.x, plank.y, plank.w, 22,
-        plank.deep ? '#065F46' : '#334155',
-        plank.deep ? PLAY.goal : BOARD.line, 8,
-      );
-      centerText(ctx, plank.text, plank.x + plank.w / 2, plank.y + 11, 20, BOARD.ink);
-    }
-
+    // 캐릭터 — 발밑 계단 바로 위에 선다
+    const hy = HERO_Y + shift;
     ctx.beginPath();
-    ctx.arc(w.x, w.y, HERO_R, 0, Math.PI * 2);
+    ctx.arc(heroX, hy, 24, 0, Math.PI * 2);
     ctx.fillStyle = PLAY.hero;
     ctx.fill();
     ctx.lineWidth = 4;
     ctx.strokeStyle = PLAY.heroEdge;
     ctx.stroke();
-    centerText(ctx, '❓', w.x, w.y + 1, 22, '#3B2100');
+    centerText(ctx, '❓', heroX, hy + 1, 22, '#3B2100');
+    ctx.restore();
+
+    // 남은 시간 막대
+    const ratio = clamp(w.time / maxTime, 0, 1);
+    panel(ctx, 40, 22, WORLD_W - 80, 30, BOARD.overlay, BOARD.line, 10);
+    ctx.fillStyle = ratio < 0.3 ? PLAY.hazard : PLAY.goal;
+    ctx.fillRect(44, 26, (WORLD_W - 88) * ratio, 22);
+    centerText(ctx, `남은 시간 ${w.time.toFixed(1)}초 · ${w.height} / ${stage.goal}칸`, WORLD_W / 2, 37, 21, BOARD.ink);
+
+    panel(ctx, 40, 62, WORLD_W - 80, 42, BOARD.overlay, PLAY.info, 10);
+    centerText(ctx, `다음 계단의 질문 · ${w.steps[w.height]?.text ?? ''}`, WORLD_W / 2, 84, 21, BOARD.ink);
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 220, WORLD_H - 96, 440, 60, BOARD.overlay, PLAY.hero, 14);
-      centerText(
-        ctx,
-        w.armed ? '스페이스나 ← → 를 누르면 오릅니다' : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, WORLD_H - 66, 24, BOARD.ink,
-      );
+      panel(ctx, WORLD_W / 2 - 250, WORLD_H - 60, 500, 46, BOARD.overlay, PLAY.hero, 12);
+      centerText(ctx, '← → 를 누르면 오르기가 시작됩니다', WORLD_W / 2, WORLD_H - 37, 22, BOARD.ink);
     }
   };
 
   return (
     <MiniGameFrame
-      badge="질문 발판 오르기"
-      instruction={`${stage.topic}을 깊게 묻는 초록 발판을 밟아 위로 오르세요. 회색 발판은 밟으면 바스러집니다.`}
-      progress={{ label: '오른 높이', value: Math.min(hud.height, stage.goalHeight), max: stage.goalHeight }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      badge="질문 계단 오르기"
+      instruction="다음 계단이 왼쪽이면 왼쪽, 오른쪽이면 오른쪽을 누르세요. 한 칸 오를 때마다 시간이 조금 늘어납니다."
+      progress={{ label: '오른 칸', value: hud.height, max: stage.goal }}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={hud.time} timeTotal={maxTime} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -256,33 +263,25 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => { moveRef.current = -1; window.setTimeout(() => { moveRef.current = 0; }, 220); }} emoji="⬅️" label="왼쪽" />
-          <MiniGameButton onClick={() => { moveRef.current = 1; window.setTimeout(() => { moveRef.current = 0; }, 220); }} emoji="➡️" label="오른쪽" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 오르기" variant="primary" />
+          <MiniGameButton onClick={() => { nudgeRef.current = -1; }} emoji="⬅️" label="왼쪽" variant="primary" />
+          <MiniGameButton onClick={() => { nudgeRef.current = 1; }} emoji="➡️" label="오른쪽" variant="primary" />
+          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" />
         </>
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col gap-2">
-        <p
-          className="rounded-xl px-3 py-1.5 text-[15px] font-black"
-          style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8', color: 'var(--board-ink)' }}
-        >
-          지금 밟은 질문 · {hud.current || '아직 없습니다'}
-        </p>
-        <div className="flex min-h-0 flex-1 items-center justify-center">
-          <div className="aspect-video max-h-full w-full max-w-[760px]">
-            <GameCanvas
-              active={game.playing}
-              width={WORLD_W}
-              height={WORLD_H}
-              onFrame={frame}
-              onPointer={(pointer) => {
-                if (pointer.phase === 'up') { moveRef.current = 0; return; }
-                moveRef.current = pointer.x < WORLD_W / 2 ? -1 : 1;
-              }}
-              ariaLabel={`깊은 질문 발판을 밟아 오르는 놀이. 오른 높이 ${hud.height}, 남은 기회 ${hud.lives}개.`}
-            />
-          </div>
+      <div className="flex min-h-0 flex-1 items-center justify-center">
+        <div className="aspect-video max-h-full w-full max-w-[760px]">
+          <GameCanvas
+            active={game.playing}
+            width={WORLD_W}
+            height={WORLD_H}
+            onFrame={frame}
+            onPointer={(pointer) => {
+              if (pointer.phase !== 'down') return;
+              nudgeRef.current = pointer.x < WORLD_W / 2 ? -1 : 1;
+            }}
+            ariaLabel={`질문 계단을 오르는 놀이. 오른 칸 ${hud.height}, 남은 기회 ${hud.lives}개.`}
+          />
         </div>
       </div>
     </MiniGameFrame>

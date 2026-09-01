@@ -2,151 +2,122 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, toRadians, useGameKeys,
+  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, randRange, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
 /**
- * m2-l3 · 좁혀서 조준하기 (장르 27 · 조준 슈팅)
+ * m2-l3 · 레이저로 고르기 (장르 27 · 조준 슈팅)
  *
- * "구체적으로 말하기"를 조준의 폭으로 만든다. 아무 말도 붙이지 않으면 빔이 넓게 퍼져
- * 엉뚱한 물건까지 한꺼번에 맞고, 이름·종류·개수를 붙일수록 부채꼴이 좁아진다.
+ * "구체적으로 말할수록 아이미가 정확히 찾아 준다"를 **보이는 정도**로 만든다.
+ * 말 조각을 하나도 붙이지 않으면 내려오는 물건이 모두 흐릿해 무엇인지 알 수 없고,
+ * 종류·색·개수를 붙일수록 맞는 물건만 또렷해진다.
  *
- * 그래서 이 게임은 "맞히기"가 아니라 "덜 맞히기"가 실력이다. 넓은 빔으로도 목표는
- * 맞지만, 함께 맞은 것들 때문에 아이미가 엉뚱한 것을 가져온다.
+ * 레이저는 언제든 쏠 수 있다. 어려운 것은 조준이 아니라 "무엇을 쏠지 알아보는 일"이다.
  */
 
 const WORLD_W = 960;
 const WORLD_H = 540;
-const GUN_X = WORLD_W / 2;
-const GUN_Y = WORLD_H - 62;
+const GUN_Y = WORLD_H - 54;
 
-interface Thing {
+interface Item {
+  id: number;
   x: number;
   y: number;
+  vy: number;
   kind: string;
-  color: string;
   label: string;
+  color: string;
+  target: boolean;
+  hit: boolean;
 }
 
 interface Chip {
   id: string;
   text: string;
-  /** 이 말을 붙이면 빔이 몇 도까지 좁아지는가 */
-  spread: number;
-  /** 이 말이 걸러 내는 물건의 조건 */
-  keeps: (thing: Thing) => boolean;
+  /** 이 말을 붙이면 또렷해지는 물건의 조건 */
+  reveals: (kind: string) => boolean;
 }
 
 interface StageConfig {
   id: string;
   label: string;
-  goal: string;
   spoken: string;
-  things: Thing[];
-  chips: Chip[];
-  /** 목표에 해당하는 물건의 kind */
+  goal: string;
   targetKind: string;
-  targetCount: number;
-}
-
-const RED = '#F87171';
-const BLUE = '#60A5FA';
-const GREEN = '#4ADE80';
-const YELLOW = '#FCD34D';
-
-function line(x: number, y: number, kind: string, color: string, label: string): Thing {
-  return { x, y, kind, color, label };
+  need: number;
+  pool: { kind: string; label: string; color: string }[];
+  chips: Chip[];
 }
 
 const STAGES: StageConfig[] = [
   {
     id: 'pencil',
     label: '기본',
-    goal: '빨간 색연필 3자루',
-    spoken: '빨간 색연필 세 자루만 가져오게 해요.',
+    spoken: '빨간 색연필만 골라 쏘세요.',
+    goal: '빨간 색연필',
     targetKind: 'red-pencil',
-    targetCount: 3,
-    things: [
-      line(150, 120, 'red-pencil', RED, '빨간 색연필'),
-      line(300, 90, 'red-pencil', RED, '빨간 색연필'),
-      line(470, 130, 'red-pencil', RED, '빨간 색연필'),
-      line(620, 95, 'blue-pencil', BLUE, '파란 색연필'),
-      line(770, 135, 'blue-pencil', BLUE, '파란 색연필'),
-      line(220, 215, 'crayon', GREEN, '크레파스'),
-      line(560, 210, 'crayon', GREEN, '크레파스'),
-      line(390, 195, 'eraser', YELLOW, '지우개'),
-      line(700, 220, 'eraser', YELLOW, '지우개'),
-      line(90, 205, 'ruler', '#C4B5FD', '자'),
-      line(840, 200, 'ruler', '#C4B5FD', '자'),
-      line(480, 60, 'eraser', YELLOW, '지우개'),
+    need: 5,
+    pool: [
+      { kind: 'red-pencil', label: '빨간 색연필', color: '#F87171' },
+      { kind: 'blue-pencil', label: '파란 색연필', color: '#60A5FA' },
+      { kind: 'crayon', label: '크레파스', color: '#4ADE80' },
+      { kind: 'eraser', label: '지우개', color: '#FCD34D' },
     ],
     chips: [
-      { id: 'kind', text: '색연필', spread: 30, keeps: (t) => t.kind.endsWith('pencil') },
-      { id: 'color', text: '빨간', spread: 15, keeps: (t) => t.kind === 'red-pencil' },
-      { id: 'count', text: '3자루', spread: 7, keeps: () => true },
+      { id: 'kind', text: '색연필', reveals: (k) => k.endsWith('pencil') },
+      { id: 'color', text: '빨간', reveals: (k) => k === 'red-pencil' },
     ],
   },
   {
-    id: 'snack',
+    id: 'milk',
     label: '1단계',
-    goal: '작은 우유 2개',
-    spoken: '작은 우유 두 개만 가져오게 해요.',
+    spoken: '작은 우유만 골라 쏘세요.',
+    goal: '작은 우유',
     targetKind: 'small-milk',
-    targetCount: 2,
-    things: [
-      line(180, 110, 'small-milk', '#E2E8F0', '작은 우유'),
-      line(420, 85, 'small-milk', '#E2E8F0', '작은 우유'),
-      line(640, 120, 'big-milk', '#94A3B8', '큰 우유'),
-      line(810, 100, 'big-milk', '#94A3B8', '큰 우유'),
-      line(120, 205, 'juice', '#FB923C', '주스'),
-      line(330, 215, 'juice', '#FB923C', '주스'),
-      line(540, 200, 'bread', '#D6A347', '빵'),
-      line(730, 215, 'bread', '#D6A347', '빵'),
-      line(260, 55, 'bread', '#D6A347', '빵'),
-      line(880, 190, 'juice', '#FB923C', '주스'),
+    need: 6,
+    pool: [
+      { kind: 'small-milk', label: '작은 우유', color: '#E2E8F0' },
+      { kind: 'big-milk', label: '큰 우유', color: '#94A3B8' },
+      { kind: 'juice', label: '주스', color: '#FB923C' },
+      { kind: 'bread', label: '빵', color: '#D6A347' },
     ],
     chips: [
-      { id: 'kind', text: '우유', spread: 26, keeps: (t) => t.kind.endsWith('milk') },
-      { id: 'size', text: '작은', spread: 13, keeps: (t) => t.kind === 'small-milk' },
-      { id: 'count', text: '2개', spread: 6, keeps: () => true },
+      { id: 'kind', text: '우유', reveals: (k) => k.endsWith('milk') },
+      { id: 'size', text: '작은', reveals: (k) => k === 'small-milk' },
     ],
   },
   {
     id: 'book',
     label: '2단계',
-    goal: '노란 그림책 2권',
-    spoken: '노란 그림책 두 권만 가져오게 해요.',
+    spoken: '노란 그림책만 골라 쏘세요.',
+    goal: '노란 그림책',
     targetKind: 'yellow-picture',
-    targetCount: 2,
-    things: [
-      line(210, 95, 'yellow-picture', YELLOW, '노란 그림책'),
-      line(560, 75, 'yellow-picture', YELLOW, '노란 그림책'),
-      line(380, 120, 'blue-picture', BLUE, '파란 그림책'),
-      line(720, 110, 'blue-picture', BLUE, '파란 그림책'),
-      line(110, 195, 'yellow-note', YELLOW, '노란 공책'),
-      line(470, 205, 'yellow-note', YELLOW, '노란 공책'),
-      line(840, 185, 'yellow-note', YELLOW, '노란 공책'),
-      line(300, 200, 'story', '#C4B5FD', '이야기책'),
-      line(650, 195, 'story', '#C4B5FD', '이야기책'),
-      line(890, 95, 'story', '#C4B5FD', '이야기책'),
+    need: 7,
+    pool: [
+      { kind: 'yellow-picture', label: '노란 그림책', color: '#FCD34D' },
+      { kind: 'blue-picture', label: '파란 그림책', color: '#60A5FA' },
+      { kind: 'yellow-note', label: '노란 공책', color: '#FDE68A' },
+      { kind: 'story', label: '이야기책', color: '#C4B5FD' },
     ],
     chips: [
-      { id: 'kind', text: '그림책', spread: 24, keeps: (t) => t.kind.endsWith('picture') },
-      { id: 'color', text: '노란', spread: 12, keeps: (t) => t.kind === 'yellow-picture' },
-      { id: 'count', text: '2권', spread: 6, keeps: () => true },
+      { id: 'kind', text: '그림책', reveals: (k) => k.endsWith('picture') },
+      { id: 'color', text: '노란', reveals: (k) => k === 'yellow-picture' },
     ],
   },
 ];
 
-const BASE_SPREAD = 60;
-
-interface Shot {
-  angle: number;
-  spread: number;
-  life: number;
-  hits: Thing[];
+interface World {
+  items: Item[];
+  gunX: number;
+  beam: number;
+  spawn: number;
+  nextId: number;
+  got: number;
+  lives: number;
+  phase: 'ready' | 'play';
+  finished: boolean;
 }
 
 export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
@@ -154,152 +125,170 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
   const stage = STAGES[game.stageIndex];
   const tuning = game.tuning;
 
-  /* 지원 수준은 빔의 너그러움으로 나타난다. 충분한 지원에서는 같은 말을 붙여도
-     조금 더 좁게 모여 실수 여유가 크고, 고등에서는 같은 말로도 덜 좁아진다. */
-  const spreadScale = 1 / clamp(tuning.tolerance, 0.7, 1.7);
-  const thingR = 26 * clamp(tuning.size, 0.85, 1.3);
-  const maxShots = tuning.lives;
+  /* 지원 수준은 내려오는 속도·간격·기회로 나타난다. 물건과 말 조각은 같다. */
+  const fallSpeed = 70 * clamp(tuning.speed, 0.6, 1.35);
+  const spawnEvery = 1.25 / clamp(tuning.density, 0.7, 1.35);
+  const maxLives = tuning.lives;
+  const itemR = 34 * clamp(tuning.size, 0.9, 1.2);
 
   const [chips, setChips] = useState<string[]>([]);
-  const [shotsLeft, setShotsLeft] = useState(maxShots);
-  const angleRef = useRef(-90);
-  const shotRef = useRef<Shot | null>(null);
-  const finishedRef = useRef(false);
+  const worldRef = useRef<World>({
+    items: [], gunX: WORLD_W / 2, beam: 0, spawn: 0, nextId: 1,
+    got: 0, lives: maxLives, phase: 'ready', finished: false,
+  });
+  const randomRef = useRef(createRandom(game.seed));
+  const [hud, setHud] = useState({ got: 0, lives: maxLives });
   const keys = useGameKeys(game.playing);
+  const pointerRef = useRef<number | null>(null);
 
   useEffect(() => {
+    randomRef.current = createRandom(game.seed);
+    worldRef.current = {
+      items: [], gunX: WORLD_W / 2, beam: 0, spawn: 0, nextId: 1,
+      got: 0, lives: maxLives, phase: 'ready', finished: false,
+    };
     setChips([]);
-    setShotsLeft(maxShots);
-    angleRef.current = -90;
-    shotRef.current = null;
-    finishedRef.current = false;
-  }, [game.round, game.stageIndex, maxShots]);
+    setHud({ got: 0, lives: maxLives });
+    pointerRef.current = null;
+  }, [game.round, game.stageIndex, stage, game.seed, maxLives]);
 
-  const spreadNow = () => {
-    let spread = BASE_SPREAD;
-    for (const chip of stage.chips) {
-      if (chips.includes(chip.id)) spread = Math.min(spread, chip.spread);
-    }
-    return clamp(spread * spreadScale, 4, 72);
-  };
-
-  const toggleChip = (id: string) => {
-    if (!game.playing) return;
-    playSound('select');
-    setChips((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  /** 붙인 말 조각으로 이 물건이 얼마나 또렷하게 보이는가. 0이면 무엇인지 알 수 없다. */
+  const clarityOf = (kind: string) => {
+    if (chips.length === 0) return 0;
+    const matched = stage.chips.filter((chip) => chips.includes(chip.id) && chip.reveals(kind)).length;
+    const applied = stage.chips.filter((chip) => chips.includes(chip.id)).length;
+    return applied === 0 ? 0 : matched / applied;
   };
 
   const fire = () => {
-    if (!game.playing || shotRef.current) return;
-    const spread = spreadNow();
-    const half = toRadians(spread / 2);
-    const aim = toRadians(angleRef.current);
-    const hits = stage.things.filter((thing) => {
-      const dx = thing.x - GUN_X;
-      const dy = thing.y - GUN_Y;
-      const angle = Math.atan2(dy, dx);
-      let diff = angle - aim;
-      while (diff > Math.PI) diff -= Math.PI * 2;
-      while (diff < -Math.PI) diff += Math.PI * 2;
-      return Math.abs(diff) <= half;
-    });
-    shotRef.current = { angle: angleRef.current, spread, life: 0, hits };
-    playSound('confirm');
+    const w = worldRef.current;
+    if (!game.playing || w.finished) return;
+    if (w.phase === 'ready') { w.phase = 'play'; return; }
+    w.beam = 0.16;
+    playSound('select');
 
-    const wanted = stage.things.filter((t) => t.kind === stage.targetKind);
-    const exact = hits.length === wanted.length && hits.every((h) => h.kind === stage.targetKind);
-    const left = shotsLeft - 1;
-    setShotsLeft(left);
+    // 레이저는 총구 바로 위 세로줄. 그 줄에 가장 가까운 물건 하나를 맞힌다.
+    const target = w.items
+      .filter((item) => !item.hit && Math.abs(item.x - w.gunX) <= itemR)
+      .sort((a, b) => b.y - a.y)[0];
+    if (!target) return;
 
-    if (exact) {
-      finishedRef.current = true;
-      game.succeed(`${stage.goal}만 정확히 담았어요. 이름과 개수를 넣으니 아이미가 헷갈리지 않습니다.`);
-    } else if (left <= 0) {
-      finishedRef.current = true;
-      const extra = hits.filter((h) => h.kind !== stage.targetKind);
-      game.fail(
-        extra.length > 0
-          ? `${extra[0].label}까지 함께 담겼어요. 말 조각을 더 붙여 빔을 좁혀 봐요.`
-          : '담긴 것이 모자랐어요. 조준을 옮겨 다시 해 봐요.',
-      );
+    target.hit = true;
+    if (target.target) {
+      w.got += 1;
+      playSound('confirm');
+      setHud({ got: w.got, lives: w.lives });
+      if (w.got >= stage.need) {
+        w.finished = true;
+        game.succeed(`${stage.goal}만 골라 담았어요. 말을 구체적으로 붙이니 무엇인지 또렷하게 보였습니다.`);
+      }
+    } else {
+      w.lives -= 1;
+      setHud({ got: w.got, lives: w.lives });
+      if (w.lives <= 0) {
+        w.finished = true;
+        game.fail(`${stage.goal}이 아닌 것을 쐈어요. 말 조각을 붙여 또렷하게 만든 다음 쏴 봐요.`);
+      }
     }
   };
 
   const frame = (ctx: CanvasRenderingContext2D, dt: number) => {
-    if (dt > 0 && game.playing && !shotRef.current) {
-      const turn = 46 * dt;
-      if (keys.held.current.left) angleRef.current -= turn;
-      if (keys.held.current.right) angleRef.current += turn;
-      angleRef.current = clamp(angleRef.current, -160, -20);
+    const w = worldRef.current;
+    const random = randomRef.current;
+
+    if (dt > 0 && game.playing && !w.finished) {
+      if (pointerRef.current !== null) w.gunX = pointerRef.current;
+      if (keys.held.current.left) w.gunX -= 460 * dt;
+      if (keys.held.current.right) w.gunX += 460 * dt;
+      w.gunX = clamp(w.gunX, 40, WORLD_W - 40);
       if (keys.consumePress('action')) fire();
-    }
-    const shot = shotRef.current;
-    if (shot && dt > 0) {
-      shot.life += dt;
-      if (shot.life > 1.1 && !finishedRef.current) shotRef.current = null;
+      w.beam = Math.max(0, w.beam - dt);
+
+      if (w.phase === 'play') {
+        w.spawn -= dt;
+        if (w.spawn <= 0) {
+          w.spawn = spawnEvery;
+          const spec = stage.pool[Math.floor(random() * stage.pool.length)];
+          w.items.push({
+            id: w.nextId += 1,
+            x: randRange(random, 70, WORLD_W - 70),
+            y: -itemR,
+            vy: fallSpeed * randRange(random, 0.9, 1.15),
+            kind: spec.kind,
+            label: spec.label,
+            color: spec.color,
+            target: spec.kind === stage.targetKind,
+            hit: false,
+          });
+        }
+        for (const item of w.items) {
+          if (item.hit) continue;
+          item.y += item.vy * dt;
+        }
+        // 목표 물건을 놓치면 기회가 준다. 목표가 아닌 것은 그냥 지나가도 괜찮다.
+        for (const item of w.items) {
+          if (item.hit || item.y < WORLD_H + itemR) continue;
+          item.hit = true;
+          if (!item.target) continue;
+          w.lives -= 1;
+          setHud({ got: w.got, lives: w.lives });
+          if (w.lives <= 0 && !w.finished) {
+            w.finished = true;
+            game.fail(`${stage.goal}을 놓쳤어요. 말 조각을 붙여 또렷하게 만든 다음 쏴 봐요.`);
+          }
+        }
+        w.items = w.items.filter((item) => !item.hit || item.y < WORLD_H + 120);
+      }
     }
 
     ctx.fillStyle = BOARD.bg;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    // 목표 카드 — 학생이 읽고 무엇을 담을지 정하는 유일한 글
-    panel(ctx, WORLD_W / 2 - 250, 8, 500, 44, BOARD.overlay, PLAY.goal, 12);
-    centerText(ctx, `담을 것 · ${stage.goal}`, WORLD_W / 2, 30, 24, BOARD.ink);
+    panel(ctx, WORLD_W / 2 - 250, 12, 500, 46, BOARD.overlay, PLAY.goal, 12);
+    centerText(ctx, `골라 담을 것 · ${stage.goal}`, WORLD_W / 2, 36, 24, BOARD.ink);
 
-    // 빔 부채꼴
-    const spread = shot ? shot.spread : spreadNow();
-    const aim = toRadians(shot ? shot.angle : angleRef.current);
-    const half = toRadians(spread / 2);
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(GUN_X, GUN_Y);
-    ctx.arc(GUN_X, GUN_Y, 700, aim - half, aim + half);
-    ctx.closePath();
-    ctx.fillStyle = shot ? 'rgba(251, 191, 36, 0.32)' : 'rgba(56, 189, 248, 0.16)';
-    ctx.fill();
-    ctx.strokeStyle = shot ? PLAY.hero : PLAY.info;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.restore();
-
-    // 물건
-    for (const thing of stage.things) {
-      const hit = shot ? shot.hits.includes(thing) : false;
-      const wanted = thing.kind === stage.targetKind;
+    for (const item of w.items) {
+      if (item.hit) continue;
+      const clarity = clarityOf(item.kind);
+      ctx.globalAlpha = 0.28 + clarity * 0.72;
       ctx.beginPath();
-      ctx.arc(thing.x, thing.y, thingR, 0, Math.PI * 2);
-      ctx.fillStyle = thing.color;
+      ctx.arc(item.x, item.y, itemR, 0, Math.PI * 2);
+      ctx.fillStyle = clarity > 0 ? item.color : '#475569';
       ctx.fill();
-      ctx.lineWidth = hit ? 6 : 3;
-      ctx.strokeStyle = hit ? (wanted ? PLAY.goal : PLAY.hazard) : BOARD.line;
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = clarity >= 1 ? PLAY.goal : BOARD.line;
       ctx.stroke();
-      centerText(ctx, thing.label, thing.x, thing.y + thingR + 18, 20, BOARD.inkDim);
+      if (clarity > 0.4) centerText(ctx, item.label, item.x, item.y + itemR + 18, 20, BOARD.ink);
+      else centerText(ctx, '?', item.x, item.y, 30, BOARD.ink);
+      ctx.globalAlpha = 1;
     }
 
-    // 대포
-    panel(ctx, GUN_X - 46, GUN_Y - 12, 92, 40, BOARD.surface, PLAY.hero, 10);
-    ctx.save();
-    ctx.translate(GUN_X, GUN_Y);
-    ctx.rotate(aim);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fillRect(0, -9, 62, 18);
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 3;
-    ctx.strokeRect(0, -9, 62, 18);
-    ctx.restore();
+    if (w.beam > 0) {
+      ctx.strokeStyle = PLAY.hero;
+      ctx.lineWidth = 8;
+      ctx.globalAlpha = w.beam / 0.16;
+      ctx.beginPath();
+      ctx.moveTo(w.gunX, GUN_Y - 20);
+      ctx.lineTo(w.gunX, 70);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
 
-    centerText(ctx, `빔의 폭 ${Math.round(spread)}도`, GUN_X, GUN_Y + 42, 22, BOARD.inkDim);
-    if (!shot && game.playing) {
-      centerText(ctx, '← → 로 겨누고 스페이스로 보냅니다', GUN_X, WORLD_H - 14, 20, BOARD.inkDim);
+    panel(ctx, w.gunX - 44, GUN_Y - 20, 88, 44, BOARD.surface, PLAY.hero, 10);
+    centerText(ctx, '🔫', w.gunX, GUN_Y + 2, 28, BOARD.ink);
+
+    if (w.phase === 'ready' && !w.finished) {
+      panel(ctx, WORLD_W / 2 - 250, WORLD_H / 2 - 34, 500, 68, BOARD.overlay, PLAY.hero, 14);
+      centerText(ctx, '판을 누르거나 스페이스를 누르면 시작합니다', WORLD_W / 2, WORLD_H / 2, 24, BOARD.ink);
     }
   };
 
   return (
     <MiniGameFrame
-      badge="좁혀서 조준하기"
-      instruction="말 조각을 붙일수록 빔이 좁아집니다. 담을 것만 정확히 들어오게 겨누고 보내세요."
-      progress={{ label: '붙인 말', value: chips.length, max: stage.chips.length }}
-      hud={<GameHud lives={shotsLeft} maxLives={maxShots} />}
+      badge="레이저로 고르기"
+      instruction="말 조각을 붙일수록 내려오는 물건이 또렷해집니다. 좌우로 옮겨 골라 담을 것만 쏘세요."
+      progress={{ label: '담은 것', value: hud.got, max: stage.need }}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -307,8 +296,8 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 겨누기" />
-          <MiniGameButton onClick={fire} disabled={!game.playing} emoji="✨" label="보내기" variant="primary" />
+          <MiniGameButton onClick={fire} disabled={!game.playing} emoji="⚡" label="쏘기" variant="primary" />
+          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" />
         </>
       }
     >
@@ -320,20 +309,26 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
               <button
                 key={chip.id}
                 type="button"
-                onClick={() => toggleChip(chip.id)}
+                onClick={() => {
+                  playSound('select');
+                  setChips((prev) => (prev.includes(chip.id) ? prev.filter((x) => x !== chip.id) : [...prev, chip.id]));
+                }}
                 aria-pressed={on}
                 disabled={!game.playing}
                 className="min-h-11 rounded-xl px-3 text-[15px] font-black transition"
                 style={{
                   background: on ? '#38BDF8' : 'var(--board-surface)',
                   color: on ? '#0F172A' : 'var(--board-ink)',
-                  border: `2px solid ${on ? '#0EA5E9' : 'var(--board-line)'}`,
+                  border: '2px solid #38BDF8',
                 }}
               >
                 {on ? '＋ ' : ''}{chip.text}
               </button>
             );
           })}
+          <span className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+            말 조각을 붙이면 물건이 또렷해집니다
+          </span>
         </div>
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <div className="aspect-video max-h-full w-full max-w-[760px]">
@@ -343,13 +338,11 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
               height={WORLD_H}
               onFrame={frame}
               onPointer={(pointer) => {
-                if (!game.playing || shotRef.current) return;
-                const dx = pointer.x - GUN_X;
-                const dy = pointer.y - GUN_Y;
-                angleRef.current = clamp((Math.atan2(dy, dx) * 180) / Math.PI, -160, -20);
+                pointerRef.current = pointer.x;
                 if (pointer.phase === 'down') fire();
+                if (pointer.phase === 'up') pointerRef.current = null;
               }}
-              ariaLabel={`${stage.goal}을 담기 위해 빔을 겨누는 놀이. 붙인 말 ${chips.length}개, 남은 기회 ${shotsLeft}번.`}
+              ariaLabel={`${stage.goal}만 골라 쏘는 놀이. 담은 것 ${hud.got}개, 남은 기회 ${hud.lives}개.`}
             />
           </div>
         </div>

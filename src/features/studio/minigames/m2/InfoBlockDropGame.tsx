@@ -200,7 +200,8 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
   const dangerY = FLOOR_Y - maxStack * cellH;
   /* 화면을 가로지르는 데 3초 넘게 걸리는 속도다. 흔한 낙하 퍼즐의 절반이며,
      낱말을 읽고 열을 정하는 시간이 조작 시간보다 길어야 한다. */
-  const fallSpeed = 105 * tuning.speed;
+  /* 학생이 읽고 고를 시간이 있어야 한다. 처음 속도의 절반으로 낮춘다. */
+  const fallSpeed = 52 * tuning.speed;
   const junkChance = clamp(stage.junkChance * tuning.density, 0.12, 0.42);
 
   const worldRef = useRef<World>(buildWorld(stage, game.seed, junkChance));

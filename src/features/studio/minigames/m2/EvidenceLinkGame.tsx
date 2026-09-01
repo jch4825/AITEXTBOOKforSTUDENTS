@@ -1,149 +1,128 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, shuffle, useCountdown } from '../engine';
+import {
+  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, randInt, useGameKeys,
+} from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
 /**
- * m2-l9 · 주장과 근거 잇기 (장르 43 · 사천성)
+ * m2-l9 · 주장과 근거 쌓기 (장르 14 → 낙하 블록 퍼즐)
  *
- * "아이미에게 다시 묻지 말고 공지와 대조하라"를 패 잇기로 만든다. 주장 패는 혼자서는
- * 지워지지 않고, 같은 사실을 말하는 공지 근거 패와 이어져야 사라진다.
+ * "아이미에게 다시 묻지 말고 공지와 대조하라"를 줄 맞추기로 만든다. 위에서 주장
+ * 조각이 떨어지고, 아래 공지 줄과 나란히 한 줄이 꽉 차면 그 줄이 "확인 완료"로 지워진다.
  *
- * 판에는 일부러 짝이 없는 주장을 남겨 둔다. 다 지우고 나면 그 패만 남아, 확인할 수
- * 없는 주장이 무엇인지 눈으로 보인다.
+ * 조각을 아무 데나 쌓으면 판이 금세 천장에 닿는다. 어디를 채워야 줄이 완성되는지
+ * 보고 넣는 것이 곧 "무엇과 대조할지 고르는 일"이다.
  */
 
-const COLS = 6;
-const ROWS = 5;
+const WORLD_W = 960;
+const WORLD_H = 540;
+const COLS = 10;
+const ROWS = 15;
+const CELL = 28;
+/* 위쪽 공지 띠와 겹치지 않게 판을 아래로 내리고, 왼쪽 안내 칸을 피해 오른쪽으로 민다. */
+const BOARD_X = (WORLD_W - COLS * CELL) / 2 + 100;
+const BOARD_Y = 80;
 
-interface PairSpec {
-  claim: string;
-  proof: string;
-}
+/** 일곱 조각. 각 회전은 [행, 열] 목록으로 적어 둔다. */
+const SHAPES: number[][][][] = [
+  // I
+  [[[1, 0], [1, 1], [1, 2], [1, 3]], [[0, 2], [1, 2], [2, 2], [3, 2]]],
+  // O
+  [[[0, 1], [0, 2], [1, 1], [1, 2]]],
+  // T
+  [[[0, 1], [1, 0], [1, 1], [1, 2]], [[0, 1], [1, 1], [1, 2], [2, 1]],
+   [[1, 0], [1, 1], [1, 2], [2, 1]], [[0, 1], [1, 0], [1, 1], [2, 1]]],
+  // S
+  [[[0, 1], [0, 2], [1, 0], [1, 1]], [[0, 1], [1, 1], [1, 2], [2, 2]]],
+  // Z
+  [[[0, 0], [0, 1], [1, 1], [1, 2]], [[0, 2], [1, 1], [1, 2], [2, 1]]],
+  // J
+  [[[0, 0], [1, 0], [1, 1], [1, 2]], [[0, 1], [0, 2], [1, 1], [2, 1]],
+   [[1, 0], [1, 1], [1, 2], [2, 2]], [[0, 1], [1, 1], [2, 0], [2, 1]]],
+  // L
+  [[[0, 2], [1, 0], [1, 1], [1, 2]], [[0, 1], [1, 1], [2, 1], [2, 2]],
+   [[1, 0], [1, 1], [1, 2], [2, 0]], [[0, 0], [0, 1], [1, 1], [2, 1]]],
+];
+
+const COLORS = ['#38BDF8', '#FBBF24', '#C4B5FD', '#4ADE80', '#FB7185', '#60A5FA', '#FB923C'];
 
 interface StageConfig {
   id: string;
   label: string;
   spoken: string;
-  pairs: PairSpec[];
-  lonely: string[];
-  seconds: number;
+  notice: string;
+  claims: string[];
+  need: number;
+  fall: number;
 }
 
 const STAGES: StageConfig[] = [
   {
     id: 'trip',
     label: '기본',
-    spoken: '현장학습 공지와 아이미의 말을 맞춰 봐요.',
-    seconds: 150,
-    pairs: [
-      { claim: '9시에 모여요', proof: '공지 · 모임 9시' },
-      { claim: '체육관 앞이에요', proof: '공지 · 체육관 앞' },
-      { claim: '물병을 챙겨요', proof: '공지 · 물병 필수' },
-      { claim: '금요일이에요', proof: '공지 · 금요일' },
-      { claim: '비 오면 미뤄요', proof: '공지 · 우천 연기' },
-    ],
-    lonely: ['간식이 나와요', '3시에 끝나요'],
+    spoken: '현장학습 공지와 대조해요.',
+    notice: '현장학습 공지 · 금요일 9시 · 체육관 앞 · 물병',
+    claims: ['9시에 모여요', '체육관 앞이에요', '물병을 챙겨요', '금요일이에요'],
+    need: 2,
+    fall: 0.38,
   },
   {
     id: 'library',
     label: '1단계',
-    spoken: '도서관 공지와 아이미의 말을 맞춰 봐요.',
-    seconds: 135,
-    pairs: [
-      { claim: '2층에 있어요', proof: '공지 · 2층' },
-      { claim: '두 권 빌려요', proof: '공지 · 2권까지' },
-      { claim: '일주일 빌려요', proof: '공지 · 7일' },
-      { claim: '월요일 쉬어요', proof: '공지 · 월요일 휴관' },
-      { claim: '학생증이 필요해요', proof: '공지 · 학생증 지참' },
-      { claim: '조용히 읽어요', proof: '공지 · 정숙' },
-    ],
-    lonely: ['간식을 먹어도 돼요', '밤 9시까지 열어요'],
+    spoken: '도서관 공지와 대조해요.',
+    notice: '도서관 공지 · 2층 · 2권까지 · 7일 · 월요일 휴관',
+    claims: ['2층에 있어요', '두 권 빌려요', '일주일 빌려요', '월요일 쉬어요'],
+    need: 3,
+    fall: 0.32,
   },
   {
     id: 'sports',
     label: '2단계',
-    spoken: '운동회 공지와 아이미의 말을 맞춰 봐요.',
-    seconds: 120,
-    pairs: [
-      { claim: '운동장에서 해요', proof: '공지 · 운동장' },
-      { claim: '체육복을 입어요', proof: '공지 · 체육복' },
-      { claim: '모자를 써요', proof: '공지 · 모자 착용' },
-      { claim: '2교시에 시작해요', proof: '공지 · 2교시' },
-      { claim: '가족도 와요', proof: '공지 · 가족 참관' },
-      { claim: '점심은 급식이에요', proof: '공지 · 급식 제공' },
-    ],
-    lonely: ['상품을 줘요', '오후에도 계속해요'],
+    spoken: '운동회 공지와 대조해요.',
+    notice: '운동회 공지 · 운동장 · 체육복 · 2교시 · 급식',
+    claims: ['운동장에서 해요', '체육복을 입어요', '2교시에 시작해요', '점심은 급식이에요'],
+    need: 3,
+    fall: 0.27,
   },
 ];
 
-interface Tile {
-  id: number;
-  text: string;
-  /** 같은 값이면 짝. 짝 없는 주장은 -1 */
-  pair: number;
-  claim: boolean;
-  cleared: boolean;
+interface Piece {
+  kind: number;
+  rot: number;
+  r: number;
+  c: number;
+  claim: string;
 }
 
-function buildBoard(stage: StageConfig, seed: number): (Tile | null)[][] {
-  const tiles: Tile[] = [];
-  let id = 0;
-  stage.pairs.forEach((pair, index) => {
-    tiles.push({ id: id++, text: pair.claim, pair: index, claim: true, cleared: false });
-    tiles.push({ id: id++, text: pair.proof, pair: index, claim: false, cleared: false });
-  });
-  for (const text of stage.lonely) {
-    tiles.push({ id: id++, text, pair: -1, claim: true, cleared: false });
-  }
-
-  const random = createRandom(seed);
-  const slots = shuffle(random, Array.from({ length: COLS * ROWS }, (_, i) => i)).slice(0, tiles.length);
-  const board: (Tile | null)[][] = Array.from({ length: ROWS }, () => Array.from({ length: COLS }, () => null));
-  slots.forEach((slot, index) => {
-    board[Math.floor(slot / COLS)][slot % COLS] = tiles[index];
-  });
-  return board;
+interface World {
+  grid: number[][];
+  piece: Piece | null;
+  next: number;
+  timer: number;
+  cleared: number;
+  lives: number;
+  phase: 'ready' | 'play';
+  finished: boolean;
+  banner: string;
+  /** 빨리 내리기가 남은 시간. 버튼 한 번이 한 프레임만 듣던 문제를 막는다. */
+  soft: number;
 }
 
-/** 빈 칸(또는 판 바깥 한 칸)만 지나서 두 번 이하로 꺾여 이어지는가. */
-function canLink(board: (Tile | null)[][], a: [number, number], b: [number, number]): boolean {
-  const free = (r: number, c: number) => {
-    if (r < -1 || r > ROWS || c < -1 || c > COLS) return false;
-    if (r === -1 || r === ROWS || c === -1 || c === COLS) return true;
-    return board[r][c] === null;
-  };
-  const target = `${b[0]}-${b[1]}`;
-  const start: [number, number] = a;
-  // [행, 열, 방향, 꺾은 횟수]
-  const best = new Map<string, number>();
-  const queue: [number, number, number, number][] = [];
-  const DR = [-1, 0, 1, 0];
-  const DC = [0, 1, 0, -1];
-  for (let d = 0; d < 4; d += 1) {
-    const nr = start[0] + DR[d];
-    const nc = start[1] + DC[d];
-    if (`${nr}-${nc}` === target) return true;
-    if (free(nr, nc)) queue.push([nr, nc, d, 0]);
-  }
-  while (queue.length > 0) {
-    const [r, c, dir, turns] = queue.shift() as [number, number, number, number];
-    const key = `${r}-${c}-${dir}`;
-    if ((best.get(key) ?? 9) <= turns) continue;
-    best.set(key, turns);
-    for (let d = 0; d < 4; d += 1) {
-      const nextTurns = d === dir ? turns : turns + 1;
-      if (nextTurns > 2) continue;
-      const nr = r + DR[d];
-      const nc = c + DC[d];
-      if (`${nr}-${nc}` === target) return true;
-      if (!free(nr, nc)) continue;
-      queue.push([nr, nc, d, nextTurns]);
-    }
-  }
-  return false;
+function emptyGrid() {
+  return Array.from({ length: ROWS }, () => Array.from({ length: COLS }, () => -1));
+}
+
+function cellsOf(piece: Piece) {
+  const rots = SHAPES[piece.kind];
+  return rots[piece.rot % rots.length].map(([r, c]) => [piece.r + r, piece.c + c]);
+}
+
+function fits(grid: number[][], piece: Piece) {
+  return cellsOf(piece).every(([r, c]) =>
+    c >= 0 && c < COLS && r < ROWS && (r < 0 || grid[r][c] < 0));
 }
 
 export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
@@ -151,154 +130,206 @@ export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
   const stage = STAGES[game.stageIndex];
   const tuning = game.tuning;
 
+  /* 지원 수준은 떨어지는 간격과 기회로 나타난다. 지워야 할 줄 수는 스테이지가 정한다. */
+  const fallStep = stage.fall / clamp(tuning.speed, 0.7, 1.3);
   const maxLives = tuning.lives;
-  const seconds = Math.round(stage.seconds * tuning.time);
 
-  const [board, setBoard] = useState<(Tile | null)[][]>(() => buildBoard(stage, game.seed));
-  const [picked, setPicked] = useState<[number, number] | null>(null);
-  const [lives, setLives] = useState(maxLives);
-  const [cleared, setCleared] = useState(0);
-  const [marked, setMarked] = useState<number[]>([]);
-  const [note, setNote] = useState('');
+  const worldRef = useRef<World>({
+    grid: emptyGrid(), piece: null, next: 0, timer: 0, cleared: 0,
+    lives: maxLives, phase: 'ready', finished: false, banner: '', soft: 0,
+  });
+  const randomRef = useRef(createRandom(game.seed));
+  const [hud, setHud] = useState({ cleared: 0, lives: maxLives, claim: '' });
+  const keys = useGameKeys(game.playing);
+  const nudgeRef = useRef<'left' | 'right' | 'down' | 'rot' | null>(null);
 
   useEffect(() => {
-    setBoard(buildBoard(stage, game.seed));
-    setPicked(null);
-    setLives(maxLives);
-    setCleared(0);
-    setMarked([]);
-    setNote('');
+    randomRef.current = createRandom(game.seed);
+    worldRef.current = {
+      grid: emptyGrid(), piece: null, next: randInt(randomRef.current, 0, SHAPES.length),
+      timer: 0, cleared: 0, lives: maxLives, phase: 'ready', finished: false, banner: '', soft: 0,
+    };
+    setHud({ cleared: 0, lives: maxLives, claim: '' });
+    nudgeRef.current = null;
   }, [game.round, game.stageIndex, stage, game.seed, maxLives]);
 
-  const timeLeft = useCountdown(game.playing, seconds, game.round * 100 + game.stageIndex, () => {
-    game.fail('시간이 지났어요. 짝이 되는 공지 근거를 먼저 찾아 봐요.');
-  });
+  const spawn = (w: World) => {
+    const random = randomRef.current;
+    const kind = w.next;
+    w.next = randInt(random, 0, SHAPES.length);
+    const claim = stage.claims[randInt(random, 0, stage.claims.length)];
+    const piece: Piece = { kind, rot: 0, r: -2, c: Math.floor(COLS / 2) - 2, claim };
+    if (!fits(w.grid, piece)) {
+      w.finished = true;
+      game.fail('조각이 천장까지 쌓였어요. 빈 곳을 채워 줄을 지워 봐요.');
+      return;
+    }
+    w.piece = piece;
+  };
 
-  const lonelyIds = useMemo(
-    () => board.flat().filter((tile): tile is Tile => !!tile && tile.pair === -1).map((tile) => tile.id),
-    [board],
-  );
-  const allPairsCleared = cleared >= stage.pairs.length;
+  const lockPiece = (w: World) => {
+    const piece = w.piece;
+    if (!piece) return;
+    for (const [r, c] of cellsOf(piece)) {
+      if (r >= 0) w.grid[r][c] = piece.kind;
+    }
+    w.piece = null;
 
-  const pick = (r: number, c: number) => {
-    if (!game.playing) return;
-    const tile = board[r][c];
-    if (!tile) return;
-
-    // 짝을 다 지운 뒤에는 남은 주장에 확인 도장을 찍는 단계다.
-    if (allPairsCleared && tile.pair === -1) {
-      if (marked.includes(tile.id)) return;
-      playSound('stamp');
-      const next = [...marked, tile.id];
-      setMarked(next);
-      setNote(`"${tile.text}"는 공지에 없어요. 어른에게 확인하기로 표시했습니다.`);
-      if (next.length === lonelyIds.length) {
-        game.succeed('공지와 맞는 말은 모두 잇고, 공지에 없는 말은 확인하기로 표시했어요.');
+    let removed = 0;
+    for (let r = ROWS - 1; r >= 0; r -= 1) {
+      if (w.grid[r].some((v) => v < 0)) continue;
+      w.grid.splice(r, 1);
+      w.grid.unshift(Array.from({ length: COLS }, () => -1));
+      removed += 1;
+      r += 1;
+    }
+    if (removed > 0) {
+      w.cleared += removed;
+      w.banner = `공지와 대조해 ${removed}줄을 확인했어요.`;
+      playSound('confirm');
+      if (w.cleared >= stage.need) {
+        w.finished = true;
+        game.succeed('주장을 공지와 나란히 놓고 확인해 모두 지웠어요!');
+        return;
       }
-      return;
+    }
+    spawn(w);
+  };
+
+  const move = (w: World, dc: number, dr: number) => {
+    if (!w.piece) return false;
+    const test = { ...w.piece, c: w.piece.c + dc, r: w.piece.r + dr };
+    if (!fits(w.grid, test)) return false;
+    w.piece = test;
+    return true;
+  };
+
+  const rotate = (w: World) => {
+    if (!w.piece) return;
+    const rots = SHAPES[w.piece.kind];
+    const test = { ...w.piece, rot: (w.piece.rot + 1) % rots.length };
+    if (fits(w.grid, test)) { w.piece = test; return; }
+    for (const shift of [-1, 1, -2, 2]) {
+      const shifted = { ...test, c: test.c + shift };
+      if (fits(w.grid, shifted)) { w.piece = shifted; return; }
+    }
+  };
+
+  const frame = (ctx: CanvasRenderingContext2D, dt: number) => {
+    const w = worldRef.current;
+
+    if (dt > 0 && game.playing && !w.finished) {
+      const nudge = nudgeRef.current;
+      nudgeRef.current = null;
+
+      if (w.phase === 'ready') {
+        if (nudge || keys.consumePress('action') || keys.consumePress('left')
+          || keys.consumePress('right') || keys.consumePress('down')) {
+          w.phase = 'play';
+          spawn(w);
+        }
+      } else {
+        if (nudge === 'left' || keys.consumePress('left')) move(w, -1, 0);
+        if (nudge === 'right' || keys.consumePress('right')) move(w, 1, 0);
+        if (nudge === 'rot' || keys.consumePress('up') || keys.consumePress('action')) rotate(w);
+        if (nudge === 'down') w.soft = 0.5;
+        w.soft = Math.max(0, w.soft - dt);
+        const soft = w.soft > 0 || keys.held.current.down;
+
+        w.timer += dt * (soft ? 8 : 1);
+        if (w.timer >= fallStep) {
+          w.timer = 0;
+          if (!move(w, 0, 1)) lockPiece(w);
+        }
+      }
+
+      if (w.cleared !== hud.cleared || w.lives !== hud.lives || (w.piece?.claim ?? '') !== hud.claim) {
+        setHud({ cleared: w.cleared, lives: w.lives, claim: w.piece?.claim ?? '' });
+      }
     }
 
-    if (!picked) {
-      playSound('select');
-      setPicked([r, c]);
-      setNote('');
-      return;
-    }
-    if (picked[0] === r && picked[1] === c) {
-      setPicked(null);
-      return;
+    ctx.fillStyle = BOARD.bg;
+    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+
+    panel(ctx, 14, 16, WORLD_W - 28, 42, BOARD.overlay, PLAY.goal, 10);
+    centerText(ctx, `📢 ${stage.notice}`, WORLD_W / 2, 37, 21, BOARD.ink);
+
+    panel(ctx, BOARD_X - 6, BOARD_Y - 6, COLS * CELL + 12, ROWS * CELL + 12, BOARD.overlay, BOARD.line, 10);
+    for (let r = 0; r < ROWS; r += 1) {
+      for (let c = 0; c < COLS; c += 1) {
+        const v = w.grid[r][c];
+        const x = BOARD_X + c * CELL;
+        const y = BOARD_Y + r * CELL;
+        if (v < 0) {
+          ctx.strokeStyle = 'rgba(100, 116, 139, 0.22)';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(x, y, CELL, CELL);
+        } else {
+          panel(ctx, x + 1, y + 1, CELL - 2, CELL - 2, COLORS[v], BOARD.ink, 5);
+        }
+      }
     }
 
-    const first = board[picked[0]][picked[1]];
-    if (!first) {
-      setPicked([r, c]);
-      return;
+    if (w.piece) {
+      for (const [r, c] of cellsOf(w.piece)) {
+        if (r < 0) continue;
+        panel(ctx, BOARD_X + c * CELL + 1, BOARD_Y + r * CELL + 1, CELL - 2, CELL - 2,
+          COLORS[w.piece.kind], BOARD.ink, 5);
+      }
     }
 
-    if (first.pair === -1 || tile.pair === -1 || first.pair !== tile.pair || first.claim === tile.claim) {
-      setPicked(null);
-      const left = lives - 1;
-      setLives(left);
-      setNote('짝이 아니에요. 같은 사실을 말하는 공지 근거를 찾아 봐요.');
-      if (left <= 0) game.fail('짝을 찾지 못했어요. 주장 옆에 같은 사실이 적힌 공지를 찾아 이어 봐요.');
-      return;
-    }
+    // 왼쪽 안내 — 지금 떨어지는 주장과 다음 조각
+    panel(ctx, 18, 100, 250, 120, BOARD.surface, PLAY.info, 12);
+    centerText(ctx, '지금 주장', 143, 126, 20, BOARD.inkDim);
+    centerText(ctx, w.piece?.claim ?? '준비 중', 143, 160, 21, BOARD.ink);
+    centerText(ctx, `지운 줄 ${w.cleared} / ${stage.need}`, 143, 196, 21, PLAY.goal);
 
-    if (!canLink(board, picked, [r, c])) {
-      setPicked(null);
-      setNote('지금은 길이 막혔어요. 다른 짝을 먼저 지워 길을 내 봐요.');
-      return;
+    if (w.phase === 'ready' && !w.finished) {
+      panel(ctx, 18, 246, 250, 88, BOARD.overlay, PLAY.hero, 12);
+      centerText(ctx, '방향키나 아래 버튼을', 143, 276, 21, BOARD.ink);
+      centerText(ctx, '누르면 시작합니다', 143, 304, 21, BOARD.ink);
     }
-
-    playSound('confirm');
-    const next = board.map((row) => row.slice());
-    next[picked[0]][picked[1]] = null;
-    next[r][c] = null;
-    setBoard(next);
-    setPicked(null);
-    setCleared((n) => n + 1);
-    setNote(`"${first.claim ? first.text : tile.text}"를 공지로 확인했어요.`);
+    if (w.banner) centerText(ctx, w.banner, 143, 370, 20, PLAY.goal);
   };
 
   return (
     <MiniGameFrame
       badge="주장과 근거 잇기"
-      instruction="아이미의 말과 같은 사실이 적힌 공지 쪽지를 눌러 이으세요. 두 번까지만 꺾이는 길로 이어집니다."
-      progress={{ label: '확인한 말', value: cleared, max: stage.pairs.length }}
-      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      instruction="위에서 떨어지는 주장 조각을 좌우로 옮기고 돌려서 한 줄을 꽉 채우세요. 채운 줄은 공지와 대조를 마친 줄로 지워집니다."
+      progress={{ label: '확인한 줄', value: hud.cleared, max: stage.need }}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 놓기" variant="primary" />}
+      actions={
+        <>
+          <MiniGameButton onClick={() => { nudgeRef.current = 'left'; }} emoji="⬅️" label="왼쪽" />
+          <MiniGameButton onClick={() => { nudgeRef.current = 'rot'; }} emoji="🔃" label="돌리기" />
+          <MiniGameButton onClick={() => { nudgeRef.current = 'right'; }} emoji="➡️" label="오른쪽" />
+          <MiniGameButton onClick={() => { nudgeRef.current = 'down'; }} emoji="⬇️" label="빨리" />
+          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" variant="primary" />
+        </>
+      }
     >
-      <div className="flex min-h-0 flex-1 flex-col gap-2">
-        {allPairsCleared && (
-          <p
-            className="rounded-xl px-3 py-1.5 text-[15px] font-black"
-            style={{ background: 'var(--board-surface)', border: '2px solid #FBBF24', color: 'var(--board-ink)' }}
-          >
-            남은 말은 공지에 없어요. 눌러서 어른에게 확인하기로 표시하세요.
-          </p>
-        )}
-        <div
-          className="grid min-h-0 flex-1 gap-1 rounded-xl p-1.5"
-          style={{
-            gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`,
-            background: 'var(--board-overlay)',
-            border: '2px solid var(--board-line)',
-          }}
-        >
-          {board.map((row, r) => row.map((tile, c) => {
-            if (!tile) return <div key={`${r}-${c}`} />;
-            const isPicked = picked?.[0] === r && picked?.[1] === c;
-            const isMarked = marked.includes(tile.id);
-            const claim = tile.claim;
-            return (
-              <button
-                key={`${r}-${c}`}
-                type="button"
-                onClick={() => pick(r, c)}
-                disabled={!game.playing || isMarked}
-                className="min-h-0 rounded-lg px-1 py-0.5 text-[14px] font-black leading-tight transition"
-                style={{
-                  background: isMarked
-                    ? '#78350F'
-                    : isPicked ? '#0EA5E9' : claim ? 'var(--board-surface)' : '#3F3410',
-                  color: isPicked ? '#0F172A' : 'var(--board-ink)',
-                  border: `2px solid ${isMarked ? '#FBBF24' : isPicked ? '#38BDF8' : claim ? '#60A5FA' : '#D6A347'}`,
-                }}
-              >
-                {isMarked ? '🔔 ' : ''}{tile.text}
-              </button>
-            );
-          }))}
+      <div className="flex min-h-0 flex-1 items-center justify-center">
+        <div className="aspect-video max-h-full w-full max-w-[760px]">
+          <GameCanvas
+            active={game.playing}
+            width={WORLD_W}
+            height={WORLD_H}
+            onFrame={frame}
+            onPointer={(pointer) => {
+              if (pointer.phase !== 'down') return;
+              if (pointer.y > WORLD_H * 0.72) { nudgeRef.current = 'down'; return; }
+              if (pointer.x < BOARD_X) { nudgeRef.current = 'left'; return; }
+              if (pointer.x > BOARD_X + COLS * CELL) { nudgeRef.current = 'right'; return; }
+              nudgeRef.current = 'rot';
+            }}
+            ariaLabel={`주장 조각을 쌓아 줄을 지우는 놀이. 확인한 줄 ${hud.cleared}개, 남은 기회 ${hud.lives}개.`}
+          />
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
-          {note || (picked ? '이을 쪽지를 하나 더 누르세요.' : '파란 쪽지는 아이미의 말, 노란 쪽지는 학교 공지입니다.')}
-        </p>
       </div>
     </MiniGameFrame>
   );

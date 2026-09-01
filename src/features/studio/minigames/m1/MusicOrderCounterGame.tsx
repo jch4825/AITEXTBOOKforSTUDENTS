@@ -450,7 +450,7 @@ export default function MusicOrderCounterGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="음악 주문대"
-      instruction="쪽지에서 개인정보 조각을 휴지통으로 옮기고, 남은 조각을 주문판의 분위기·길이 칸에 끼운 뒤 아이미에게 보냅니다. 돌아온 결과 카드는 오른쪽 세 칸 중 하나로 옮기세요."
+      instruction="정해진 시간 안에 인공지능에게 알려 주면 안 되는 개인정보는 버리기 상자로 옮기고, 분위기 표현과 시간·길이 표현은 알맞은 자리로 옮겨 보세요."
       progress={{ label: '보낸 주문', value: world.served, max: stage.target }}
       hud={<GameHud lives={world.lives} maxLives={maxLives} timeLeft={front ? front.patience : 0} timeTotal={patienceMax} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
