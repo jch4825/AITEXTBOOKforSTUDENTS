@@ -65,14 +65,14 @@ export const M3_PORTFOLIO: ModulePortfolioDefinition = {
     {
       id: 'student-work',
       title: '내가 직접 할 일',
-      prompt: '내가 먼저 생각하고, 선택하고, 고치고, 자기 말로 완성한 부분을 적어 보세요.',
-      placeholder: '예: 과제 목적에 맞는 질문을 고르고 답을 내 말로 다시 설명했어.',
+      prompt: '내가 먼저 스스로 생각하고, 선택하고, 고치고, 나만의 표현으로 완성한 부분을 적어 보세요.',
+      placeholder: '예: 과제 목적에 맞는 질문을 고르고 답을 나만의 표현으로 다시 설명했어요.',
     },
     {
       id: 'verification-rule',
       title: '결과를 확인하는 규칙',
       prompt: '사전, 교과서, 계산기, 원문, 그림 중 어떤 근거로 AI 결과를 확인할지 적어 보세요.',
-      placeholder: '예: 계산은 계산기로, 낱말은 학생 사전으로, 요약은 원문으로 확인할 거야.',
+      placeholder: '예: 계산은 계산기로, 낱말은 학생 사전으로, 요약은 원문으로 확인할 거예요.',
     },
   ],
   transferPrompt:
@@ -80,6 +80,6 @@ export const M3_PORTFOLIO: ModulePortfolioDefinition = {
   nextChoices: [
     { id: 'think-first', emoji: '🧠', label: 'AI를 보기 전에 내 생각을 먼저 남길게요.' },
     { id: 'check-source', emoji: '🔎', label: '사전·교과서·계산기·원문으로 확인할게요.' },
-    { id: 'own-expression', emoji: '✍️', label: '제출할 생각과 표현은 내 말로 완성할게요.' },
+    { id: 'own-expression', emoji: '✍️', label: '제출할 생각과 표현은 나만의 표현으로 완성할게요.' },
   ],
 };
