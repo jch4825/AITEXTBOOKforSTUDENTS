@@ -60,13 +60,13 @@ export const M4_PORTFOLIO: ModulePortfolioDefinition = {
       id: 'verify',
       title: '확인할 때',
       prompt: 'AI 답이나 온라인 정보가 중요할 때 무엇을 어떤 독립 자료와 비교할지 적어 보세요.',
-      placeholder: '예: AI 답의 날짜와 근거를 오늘 학교 공식 공지와 비교할 거야.',
+      placeholder: '예: AI 답의 날짜와 근거를 오늘 학교 공식 공지와 비교할 거예요.',
     },
     {
       id: 'before-sharing',
       title: '보내기 전',
       prompt: '채팅이나 사진을 보내기 전에 가리거나 동의를 확인하거나 보내지 않을 정보를 적어 보세요.',
-      placeholder: '예: 얼굴, 이름, 위치, 일정과 다른 사람이 보이는지 먼저 확인할 거야.',
+      placeholder: '예: 얼굴, 이름, 위치, 일정과 다른 사람이 찍혔는지 먼저 확인할 거예요.',
     },
     {
       id: 'risk-and-help',
