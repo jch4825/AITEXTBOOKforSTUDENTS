@@ -25,6 +25,11 @@ interface Props {
   /** 프레임 테두리·립 색. 스튜디오가 넘겨주는 단원 강조색을 그대로 쓴다. */
   accent?: string;
   progress?: Progress;
+  /**
+   * 보드 위에 붙는 상태 표시(남은 기회·점수·남은 시간). GameHud를 넣으면 톤이 맞는다.
+   * 진행 칸 수(progress)와 달리 매 프레임 바뀌는 값이라 보드 쪽에 둔다.
+   */
+  hud?: React.ReactNode;
   stages?: MiniGameStageTab[];
   activeStageIndex?: number;
   onStageSelect?: (index: number) => void;
@@ -49,6 +54,7 @@ export default function MiniGameFrame({
   instruction,
   accent = 'var(--brand-ink)',
   progress,
+  hud,
   stages,
   activeStageIndex = 0,
   onStageSelect,
@@ -148,8 +154,9 @@ export default function MiniGameFrame({
 
       {/* 플레이 보드 — 유일한 다크 영역 */}
       <div
-        className="mini-game-board relative flex min-h-0 flex-1 flex-col overflow-auto rounded-xl p-2.5 sm:p-3"
+        className="mini-game-board relative flex min-h-0 flex-1 flex-col gap-2 overflow-auto rounded-xl p-2.5 sm:p-3"
       >
+        {hud}
         {children}
       </div>
 

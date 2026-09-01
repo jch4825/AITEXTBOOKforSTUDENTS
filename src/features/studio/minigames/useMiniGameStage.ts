@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSpeak } from '../../../hooks/useSpeak';
+import { tuningFor } from './engine/difficulty';
 import type { SupportLevel } from '../types';
 import type { MiniGameStatus } from './types';
 
@@ -52,6 +53,18 @@ export function useMiniGameStage({ supportLevel, stageCount, autoResetOnFailMs =
     setStatus('playing');
     setMessage('');
     setRound((n) => n + 1);
+  }, []);
+
+  /**
+   * 시뮬레이션이 끝난 뒤 조작 가능한 상태로만 돌아온다.
+   *
+   * retry는 round를 올려 판을 새로 만든다. 그런데 "실행해 보고 틀린 곳만 고쳐 다시
+   * 실행하는" 게임에서는 학생이 만든 배치가 그대로 남아야 한다. 그 자리에 retry를
+   * 쓰면 고칠 대상 자체가 사라진다.
+   */
+  const resume = useCallback(() => {
+    setStatus('playing');
+    setMessage('');
   }, []);
 
   /** 스테이지 전환. 범위를 벗어나면 무시한다. */
@@ -120,5 +133,15 @@ export function useMiniGameStage({ supportLevel, stageCount, autoResetOnFailMs =
     succeed,
     fail,
     retry,
+    resume,
+    /** 지원 수준별 속도·크기·허용 오차 배율. 같은 게임의 요구 수준만 바꾼다. */
+    tuning: tuningFor(supportLevel),
+    /**
+     * 판 배치를 만드는 씨앗. 스테이지와 시도 횟수로 만들어, 다시 하기를 누르면
+     * 새 배치가 나오면서도 같은 스테이지의 같은 시도는 늘 같은 배치가 된다.
+     */
+    seed: (stageIndex + 1) * 7919 + round * 104729,
+    /** 조작을 받아도 되는 상태인지. status !== 'playing'을 게임마다 다시 쓰지 않게 한다. */
+    playing: status === 'playing',
   };
 }
