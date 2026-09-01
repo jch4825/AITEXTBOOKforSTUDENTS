@@ -2578,6 +2578,85 @@
     background: var(--editorial-paper);
   }
 
+  /* 단원 마무리의 "다 했습니다!" 안내. 지면이 길어 알림이 화면 밖에 있으면 단추가
+     고장 난 것처럼 보인다. 푸터 바로 위에 고정해 어디를 보고 있든 눈에 들어오게 한다.
+     sticky는 쓸 수 없다. 본문 스크롤 영역 안에 배경 레이어가 제 스크롤 상자를 만들어
+     붙을 자리를 잃는다. */
+  .module-close-requirement {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--ai-lesson-footer-height, 3.5rem) + 0.75rem);
+    z-index: 31;
+    width: min(48rem, calc(100vw - 1.5rem));
+    max-height: min(40vh, 20rem);
+    overflow-y: auto;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-width: 2px;
+    background: var(--editorial-paper);
+  }
+
+  .module-close-requirement-body strong {
+    display: block;
+    font-weight: 850;
+    line-height: 1.5;
+  }
+
+  .module-close-requirement-body ul {
+    margin-top: 0.5rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+
+  .module-close-requirement-body li {
+    margin-top: 0.25rem;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  /* 교사 도구 도크가 푸터 중앙 위에 앉는다(태블릿 이상). 알림을 그 위로 올려 겹치지 않게 한다. */
+  /* 태블릿 이상에서는 차례가 왼쪽을 차지하고 교사 도구 도크가 푸터 중앙 위에 앉는다.
+     알림은 방금 누른 "다 했습니다!" 옆, 오른쪽 아래에 세워 둘 다 가리지 않는다. */
+  @media (min-width: 768px) {
+    .module-close-requirement {
+      right: 1.5rem;
+      left: auto;
+      bottom: calc(var(--ai-lesson-footer-height, 3.5rem) + 3.75rem);
+      transform: none;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .module-close-requirement .module-close-requirement-close {
+      align-self: flex-start;
+    }
+  }
+
+  .module-close-requirement-note {
+    margin-top: 0.6rem;
+    color: var(--muted);
+    font-size: 0.9em;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  .module-close-requirement-close {
+    flex-shrink: 0;
+    align-self: flex-end;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    border: 2px solid currentColor;
+    border-radius: var(--r-pill);
+    background: var(--editorial-paper);
+    font-weight: 800;
+  }
+
   .studio-margin-note {
     padding: 0.75rem 0.875rem;
     border-left: 3px solid var(--accent);

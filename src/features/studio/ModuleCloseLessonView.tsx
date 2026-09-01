@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import MicroLessonFrame from '../../components/MicroLessonFrame';
 import ScreentoneBackdrop from '../../components/lesson/ScreentoneBackdrop';
 import { useProgress } from '../../context/ProgressContext';
@@ -42,7 +42,12 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
   const [selectedArtifacts, setSelectedArtifacts] = useState<string[]>([]);
   const [guideCopy, setGuideCopy] = useState<Record<string, string>>({});
   const [nextMethod, setNextMethod] = useState<StudioExpression>();
-  const [completionMessage, setCompletionMessage] = useState('');
+  // 마치기를 눌렀는데 남은 것이 있었는지. 남은 것을 다 채우면 알림은 스스로 사라진다.
+  const [requirementShown, setRequirementShown] = useState(false);
+  const artifactSectionRef = useRef<HTMLElement | null>(null);
+  const guideSectionRef = useRef<HTMLElement | null>(null);
+  const criteriaSectionRef = useRef<HTMLElement | null>(null);
+  const nextSectionRef = useRef<HTMLElement | null>(null);
   const evidence = useMemo(
     () => loadStudioEvidence().filter((record) => definition.studioLessonIds.includes(record.lessonId)),
     [definition.studioLessonIds],
@@ -60,23 +65,57 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
       : [...current, lessonId]);
   }
 
+  /**
+   * 아직 남은 칸. 마치기 단추를 눌렀는데 아무 일도 일어나지 않는 것처럼 보이던 자리다.
+   * 무엇이 남았는지 하나씩 세어 두고, 그 자리로 화면을 옮겨 준다.
+   */
+  const missingRequirements = useMemo(() => {
+    const items: { id: string; message: string; ref: typeof artifactSectionRef }[] = [];
+    if (definition.artifactChoices?.length && selectedArtifacts.length < 3) {
+      items.push({
+        id: 'artifacts',
+        message: `탐구 기록을 3개 이상 골라 주세요. 지금은 ${selectedArtifacts.length}개입니다.`,
+        ref: artifactSectionRef,
+      });
+    }
+    const emptyGuideSections = definition.guideSections
+      ?.filter((section) => !guideCopy[section.id]?.trim()).length ?? 0;
+    if (emptyGuideSections > 0) {
+      items.push({
+        id: 'guide',
+        message: `설명서에 아직 비어 있는 칸이 ${emptyGuideSections}개 있어요.`,
+        ref: guideSectionRef,
+      });
+    }
+    if (selectedCriteria.length < 1) {
+      items.push({
+        id: 'criteria',
+        message: '내가 잘한 과정을 하나 이상 골라 주세요.',
+        ref: criteriaSectionRef,
+      });
+    }
+    if (!isMeaningfulStudioExpression(nextMethod)) {
+      items.push({
+        id: 'next',
+        message: '새 상황에서 써 볼 방법을 남겨 주세요.',
+        ref: nextSectionRef,
+      });
+    }
+    return items;
+  }, [definition.artifactChoices, definition.guideSections, guideCopy, nextMethod, selectedArtifacts, selectedCriteria]);
+
   function finish() {
-    const missingArtifacts = Boolean(
-      definition.artifactChoices?.length && selectedArtifacts.length < 3,
-    );
-    const missingGuideSection = Boolean(
-      definition.guideSections?.some((section) => !guideCopy[section.id]?.trim()),
-    );
-    if (
-      missingArtifacts
-      || missingGuideSection
-      || selectedCriteria.length < 1
-      || !isMeaningfulStudioExpression(nextMethod)
-    ) {
-      setCompletionMessage(
-        definition.completionRequirement
-          ?? '탐구 기록 3개, 설명서 세 칸, 잘한 과정 1개, 새 상황의 방법을 모두 남기면 마칠 수 있어요.',
-      );
+    const [firstMissing] = missingRequirements;
+    if (firstMissing) {
+      // 남은 칸은 이 화면 어디에나 있고 지면은 길다. 알림만 띄우면 학생이 보고 있는 자리에서는
+      // 아무 변화가 없어 단추가 고장 난 것처럼 보였다. 채워야 할 자리로 화면을 옮겨 준다.
+      setRequirementShown(true);
+      const target = firstMissing.ref.current;
+      if (target) {
+        const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+        target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        target.focus({ preventScroll: true });
+      }
       return;
     }
     markCompleted(definition.lessonId);
@@ -137,7 +176,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
           ) : null}
 
           {definition.artifactChoices?.length ? (
-            <section className="studio-editorial p-6">
+            <section className="studio-editorial p-6" ref={artifactSectionRef} tabIndex={-1}>
               <p className="studio-kicker" style={{ color: theme.secondary }}>1단계 · 탐구 기록 고르기</p>
               <h2 className="mt-1 text-xl font-extrabold">
                 {definition.artifactHeading ?? '설명서에 넣을 기록을 3개 이상 골라요'}
@@ -203,7 +242,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
           </section>
 
           {definition.guideSections?.length ? (
-            <section className="studio-editorial p-6">
+            <section className="studio-editorial p-6" ref={guideSectionRef} tabIndex={-1}>
               <p className="studio-kicker" style={{ color: theme.secondary }}>2단계 · 설명서 작성하기</p>
               <h2 className="mt-1 text-xl font-extrabold">
                 {definition.guideHeading ?? '아이미를 사용할 때 기억할 세 가지'}
@@ -245,7 +284,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
             </section>
           ) : null}
 
-          <section className="studio-editorial p-6">
+          <section className="studio-editorial p-6" ref={criteriaSectionRef} tabIndex={-1}>
             <h2 className="text-xl font-extrabold">3단계 · 내가 잘한 과정</h2>
             <p className="mt-1 text-sm text-[color:var(--muted)]">하나 이상 골라 보십시오.</p>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -270,7 +309,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
             </div>
           </section>
 
-          <section className="studio-editorial p-6">
+          <section className="studio-editorial p-6" ref={nextSectionRef} tabIndex={-1}>
             <h2 className="mb-4 text-xl font-extrabold">4단계 · 새 상황에서 써 볼 방법</h2>
             <StudioExpressionInput
               value={nextMethod}
@@ -280,16 +319,40 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
               accent={theme.accent}
               onChange={setNextMethod}
             />
-            {completionMessage ? (
-              <p
-                className="mt-4 rounded-xl border-2 p-4 text-sm font-bold"
-                style={{ borderColor: theme.accent, color: theme.accent, background: theme.accentSoft }}
-                role="alert"
-              >
-                {completionMessage}
-              </p>
-            ) : null}
           </section>
+
+          {/* 남은 칸 알림은 지면 끝이 아니라 화면 아래에 붙어 따라온다. 학생이 어디를 보고
+              있든 마치기를 누른 결과가 보여야 한다. */}
+          {requirementShown && missingRequirements.length > 0 ? (
+            <div
+              className="module-close-requirement studio-editorial"
+              style={{ borderColor: theme.accent, color: theme.accent }}
+              role="alert"
+            >
+              <div className="module-close-requirement-body">
+                {/* 남은 칸을 먼저 세운다. 좁은 화면에서는 첫 줄만 보이는 일이 있어,
+                    긴 안내 문장을 앞에 두면 정작 무엇이 남았는지가 가려진다. */}
+                <strong>아직 남은 것이 있어요</strong>
+                <ul>
+                  {missingRequirements.map((item) => (
+                    <li key={item.id}>{item.message}</li>
+                  ))}
+                </ul>
+                <p className="module-close-requirement-note">
+                  {definition.completionRequirement
+                    ?? '탐구 기록 3개, 설명서 세 칸, 잘한 과정 1개, 새 상황의 방법을 모두 남기면 마칠 수 있어요.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setRequirementShown(false)}
+                className="module-close-requirement-close"
+                style={{ borderColor: theme.accent, color: theme.accent }}
+              >
+                닫기
+              </button>
+            </div>
+          ) : null}
         </main>
       </ScreentoneBackdrop>
     </MicroLessonFrame>
