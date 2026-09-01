@@ -16,7 +16,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
     ],
     visualNovel: {
       title: '아이미의 어려운 자기소개',
-      objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 내 말로 소개해요.',
+      objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 나만의 표현으로 소개해요.',
       seasonTag: '[아이미가 왔다 · 1화] 어려운 자기소개',
       nextEpisodeHook: '다음 시간 — 아이미도 선풍기 같은 기계일까요?',
       scenes: [
@@ -200,7 +200,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
     artifact: {
       kind: 'action-card',
       title: '탐구 성찰 기록',
-      prompt: '“AI(인공지능)는 …이며, …을 할 수 있는 도구예요” 문장을 내 말로 완성해 봐요.',
+      prompt: '“AI(인공지능)는 …이며, …을 할 수 있는 도구예요” 문장을 나만의 표현으로 완성해 봐요.',
     },
     transfer: {
       title: '도서관에 새로운 인공지능 추천 기계가 생겼어요.',

@@ -30,7 +30,7 @@ export const LESSON_OBJECTIVES: LessonObjective[] = [
   {
     lessonId: 'm1-l1',
     studentMission:
-      '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 내 말로 소개해요.',
+      '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 나만의 표현으로 소개해요.',
     teacherObjective:
       '생활 사례를 근거로 AI의 뜻과 AI가 돕는 일을 두 가지 이상 자기 말로 소개할 수 있다.',
     aiRole:

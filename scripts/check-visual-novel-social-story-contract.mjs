@@ -159,7 +159,7 @@ if (types.includes('speaker: string') || m1Studio.includes('speaker:')) {
 }
 for (const token of [
   "title: '아이미의 어려운 자기소개'",
-  "objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 내 말로 소개해요.'",
+  "objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 나만의 표현으로 소개해요.'",
   "imageSrc: '/lessons/story/m1/m1-l1-scene-01.webp'",
   '아이미의 설명에는 어려운 말이 많았습니다.',
   'AI(인공지능)는 사람처럼 학습하고 판단하여 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
@@ -172,7 +172,7 @@ for (const token of [
 for (const retiredToken of ['어제 자리표', '아이미가 본 것은 어제 자리표']) {
   if (m1Studio.includes(retiredToken)) throw new Error(`retired m1-l1 story remains: ${retiredToken}`);
 }
-if (!m1Lesson.includes("objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 내 말로 소개해요.'")) {
+if (!m1Lesson.includes("objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 나만의 표현으로 소개해요.'")) {
   throw new Error('m1-l1 must expose one shared learning objective');
 }
 
