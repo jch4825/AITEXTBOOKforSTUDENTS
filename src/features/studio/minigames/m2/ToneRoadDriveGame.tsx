@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BOARD, PLAY, GameCanvas, GameHud, approach, centerText, circleRectHit, clamp,
-  fillRoundRect, lerp, panel, useGameKeys,
+  drawContain, fillRoundRect, lerp, panel, useGameImages, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -206,6 +206,7 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
   const pointerRef = useRef({ down: false, x: WORLD_W / 2 });
   const [hud, setHud] = useState({ taken: 0, lives: tuning.lives });
   const keys = useGameKeys(game.playing);
+  const art = useGameImages({ car: '/images/games/car-top.jpg' }, { cutoutWhite: true });
 
   useEffect(() => {
     worldRef.current = buildWorld(stage, curves, amp, tuning.lives);
@@ -360,9 +361,12 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
     const bobY = world.phase === 'ready' ? Math.sin(world.bob) * 3 : 0;
     ctx.save();
     ctx.translate(world.carX + shakeX, CAR_Y + bobY);
-    panel(ctx, -CAR_HW, -CAR_HH, CAR_HW * 2, CAR_HH * 2, PLAY.hero, PLAY.heroEdge, 12);
-    panel(ctx, -CAR_HW + 8, -CAR_HH + 9, CAR_HW * 2 - 16, 22, BOARD.overlay, PLAY.heroEdge, 6);
-    centerText(ctx, '✉️', 0, 16, 26, BOARD.ink);
+    // 흰 바탕은 받을 때 이미 지웠다. 여기서는 그대로 얹기만 한다.
+    if (!drawContain(ctx, art.map.current.car, 0, 0, CAR_HW * 2.6, CAR_HH * 2.6)) {
+      panel(ctx, -CAR_HW, -CAR_HH, CAR_HW * 2, CAR_HH * 2, PLAY.hero, PLAY.heroEdge, 12);
+      panel(ctx, -CAR_HW + 8, -CAR_HH + 9, CAR_HW * 2 - 16, 22, BOARD.overlay, PLAY.heroEdge, 6);
+      centerText(ctx, '✉️', 0, 16, 26, BOARD.ink);
+    }
     ctx.restore();
 
     // 위쪽 띠 — 읽을 사람과 실어야 할 사실. 이 게임에서 학생이 읽는 글은 여기뿐이다.

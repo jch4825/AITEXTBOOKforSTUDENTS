@@ -12,7 +12,9 @@ export { default as GameHud } from './GameHud';
 export { useGameLoop, useReducedMotion, useCountdown } from './useGameLoop';
 export { useGameKeys } from './useGameKeys';
 export type { GameKey, GameKeyState } from './useGameKeys';
-export { BOARD, PLAY, fillRoundRect, panel, centerText } from './palette';
+export { BOARD, PLAY, fillRoundRect, roundRectPath, panel, centerText } from './palette';
+export { useGameImages, drawCover, drawContain } from './useGameImages';
+export type { GameImages, GameArt } from './useGameImages';
 export { tuningFor } from './difficulty';
 export type { GameTuning } from './difficulty';
 export {

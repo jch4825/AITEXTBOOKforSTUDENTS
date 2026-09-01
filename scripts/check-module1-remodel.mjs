@@ -105,7 +105,7 @@ assert(
 assert(
   portfolioView.includes('selectedArtifacts.length < 3')
     && portfolioView.includes('isMeaningfulStudioExpression(nextMethod)')
-    && portfolioView.includes('completionMessage'),
+    && portfolioView.includes('missingRequirements'),
   'm1-l11: explicit portfolio completion requirements are missing',
 );
 assert(studios.includes("title: '탐구 성찰 기록'"), 'm1-l1: artifact must be an inquiry reflection record');

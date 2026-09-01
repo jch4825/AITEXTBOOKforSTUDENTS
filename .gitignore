@@ -42,3 +42,6 @@ vite.std*.log
 
 # Local visual review artifacts
 output/
+
+# 로컬 점검판(미니게임 갤러리 등). 배포와 무관하다.
+scratch/

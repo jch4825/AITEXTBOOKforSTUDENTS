@@ -35,8 +35,13 @@ export const PLAY = {
   extraEdge: '#6D28D9',
 } as const;
 
-/** 캔버스에 둥근 사각형을 채운다. 2D 컨텍스트의 roundRect가 없는 브라우저도 있다. */
-export function fillRoundRect(
+/**
+ * 둥근 사각형의 경로만 만든다. 칠하지 않는다.
+ *
+ * 테두리만 그리려고 fillRoundRect를 부르면 속까지 칠해져 그 안에 그려 둔 것이 덮인다.
+ * 실제로 m1-l4에서 액자 테두리가 사진을 통째로 덮은 적이 있어 함수를 갈라 두었다.
+ */
+export function roundRectPath(
   ctx: CanvasRenderingContext2D,
   x: number, y: number, w: number, h: number, r: number,
 ): void {
@@ -52,6 +57,14 @@ export function fillRoundRect(
   ctx.lineTo(x, y + radius);
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
+}
+
+/** 둥근 사각형을 지금 fillStyle로 채운다. */
+export function fillRoundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number, w: number, h: number, r: number,
+): void {
+  roundRectPath(ctx, x, y, w, h, r);
   ctx.fill();
 }
 

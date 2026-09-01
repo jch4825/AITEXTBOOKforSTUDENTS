@@ -7,6 +7,7 @@ import {
 } from '../engine';
 import type { GameTuning } from '../engine';
 import { playSound } from '../../../../utils/sound';
+import { publicAssetUrl } from '../../../../utils/publicAssetUrl';
 import type { MiniGameProps } from '../types';
 
 /**
@@ -21,6 +22,27 @@ import type { MiniGameProps } from '../types';
  * 찾아낸 물건에는 이름표와 "무엇을 도와주는지" 한 줄이 붙어, 마지막에 학생이 소개할
  * 문장 다섯 개가 판 위에 그대로 남는다.
  */
+
+/**
+ * 물건 그림. 이모지 대신 실제 그림을 쓰면 "우리 집에 있는 그것"으로 읽힌다.
+ *
+ * 스테이지마다 이름이 조금씩 달라서(얼굴 잠금·얼굴 사물함·얼굴 도어록) 이름이 아니라
+ * 이모지를 열쇠로 삼는다. 이모지는 같은 물건이면 스테이지가 달라도 같게 적어 두었다.
+ * 그림이 없는 물건은 이모지가 그대로 남는다.
+ */
+const ART: Record<string, string> = {
+  '🎧': '/images/games/ai-music.jpg',
+  '🎵': '/images/games/ai-music.jpg',
+  '🔐': '/images/games/ai-facelock.jpg',
+  '🔊': '/images/games/ai-speaker.jpg',
+  '📷': '/images/games/ai-translate.jpg',
+  '🤖': '/images/games/ai-vacuum.jpg',
+  '🌀': '/images/games/plain-fan.jpg',
+  '💡': '/images/games/plain-switch.jpg',
+  '⏰': '/images/games/plain-clock.jpg',
+  '🫖': '/images/games/plain-kettle.jpg',
+  '🚪': '/images/games/plain-handle.jpg',
+};
 
 const AI_TARGET = 5;
 const BASE_SECONDS = 62;
@@ -431,12 +453,28 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
                   aria-label={item.found ? `${item.name}. ${item.help}` : `${item.name} 누르기`}
                   className="grid aspect-square w-full place-items-center rounded-full leading-none disabled:cursor-default"
                   style={{
-                    background: item.found ? 'rgba(52, 211, 153, 0.2)' : 'var(--board-surface)',
+                    /* 그림과 이모지가 한 가족으로 보이게 모두 흰 종이 위에 얹는다.
+                       받은 그림이 흰 바탕이라, 면을 흰색으로 맞추면 네모난 바탕이 사라진다. */
+                    background: item.found ? 'rgba(52, 211, 153, 0.28)' : '#FFFFFF',
                     border: `2px solid ${edge}`,
+                    color: '#0F172A',
                     fontSize: `${Math.round(clamp(item.size * 2.6, 18, 42))}px`,
                   }}
                 >
-                  <span aria-hidden="true">{item.emoji}</span>
+                  {ART[item.emoji] ? (
+                    /* 그림은 흰 바탕 위에 그려져 있다. 흰 동그란 종이 위에 얹으면
+                       네모난 바탕이 보이지 않고 스티커처럼 읽힌다. */
+                    <img
+                      src={publicAssetUrl(ART[item.emoji])}
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      className="h-full w-full rounded-full object-contain"
+                      style={{ background: '#FFFFFF' }}
+                    />
+                  ) : (
+                    <span aria-hidden="true">{item.emoji}</span>
+                  )}
                 </button>
                 {item.found ? (
                   <span

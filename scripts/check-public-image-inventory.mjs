@@ -55,9 +55,37 @@ if (retiredLessonFiles.length > 0) {
   throw new Error(`retired root lesson images remain: ${retiredLessonFiles.join(', ')}`);
 }
 
+/*
+ * 경로를 통째로 적지 않고 `lens-${stage.kind}-0.jpg`처럼 조립하는 곳이 있다. 이름을 그대로
+ * 찾는 방식만 쓰면 이런 그림이 전부 고아로 잡힌다. 그래서 조립식 경로는 ${...} 자리를
+ * ${...} 자리에서 잘라 낸 조각들로 파일 이름을 맞춰 본다.
+ */
+const namePatterns = [...source.matchAll(/['"`]([^'"`\s)]*?\.(?:webp|png|jpe?g|svg))['"`]/gi)]
+  .map((match) => path.basename(match[1]))
+  .filter((name) => name.includes('${'))
+  .map((name) => name.split(/\$\{[^}]*\}/));
+
+/** 조립식 이름과 맞는지 본다. 정규식으로 옮기면 역슬래시가 겹쳐 읽기 어려워 조각으로 맞춘다. */
+function matchesPattern(name, parts) {
+  if (!name.startsWith(parts[0])) return false;
+  let at = parts[0].length;
+  for (let index = 1; index < parts.length; index += 1) {
+    const part = parts[index];
+    // ${...} 자리가 비면 다른 파일까지 통과하므로 최소 한 글자는 채워져야 한다.
+    if (index === parts.length - 1) return name.endsWith(part) && name.length - part.length > at;
+    const found = name.indexOf(part, at + 1);
+    if (found < 0) return false;
+    at = found + part.length;
+  }
+  return true;
+}
+
 const publicImageFiles = filesUnder('public/images');
 for (const file of publicImageFiles) {
-  if (!source.includes(path.basename(file))) throw new Error(`unreferenced public/images asset remains: ${file}`);
+  const name = path.basename(file);
+  if (source.includes(name)) continue;
+  if (namePatterns.some((parts) => matchesPattern(name, parts))) continue;
+  throw new Error(`unreferenced public/images asset remains: ${file}`);
 }
 
 const characterPngs = filesUnder('public/characters').filter((file) => file.endsWith('.png'));

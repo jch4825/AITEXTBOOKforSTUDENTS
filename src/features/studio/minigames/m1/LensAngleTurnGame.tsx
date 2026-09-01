@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, approach, centerText, clamp, fillRoundRect, panel, useGameKeys,
+  BOARD, PLAY, GameCanvas, GameHud, approach, centerText, clamp, drawCover, fillRoundRect,
+  panel, roundRectPath, useGameImages, useGameKeys,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -221,6 +222,15 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
   const grabRef = useRef({ x: 0, y: 0 });
   const [view, setView] = useState({ seconds: totalSeconds, fixed: 0, tier: 0 });
   const keys = useGameKeys(game.playing);
+  /* 각도마다 실제로 찍은 사진을 한 장씩 둔다. 0번이 가장 잘 보이는 각도이고 4번이
+     가장 알아보기 어려운 각도다. 스테이지가 바뀌면 그 물건의 다섯 장만 새로 받는다. */
+  const art = useGameImages({
+    a0: `/images/games/lens-${stage.kind}-0.jpg`,
+    a1: `/images/games/lens-${stage.kind}-1.jpg`,
+    a2: `/images/games/lens-${stage.kind}-2.jpg`,
+    a3: `/images/games/lens-${stage.kind}-3.jpg`,
+    a4: `/images/games/lens-${stage.kind}-4.jpg`,
+  });
 
   useEffect(() => {
     worldRef.current = buildWorld(stage, totalSeconds);
@@ -305,20 +315,26 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
 
     // 사진 틀 — 이 안이 아이미가 보는 그림이다
     ctx.save();
-    ctx.beginPath();
-    fillRoundRect(ctx, FRAME.x, FRAME.y, FRAME.w, FRAME.h, 18);
+    roundRectPath(ctx, FRAME.x, FRAME.y, FRAME.w, FRAME.h, 18);
     ctx.clip();
     ctx.fillStyle = BOARD.surface;
     ctx.fillRect(FRAME.x, FRAME.y, FRAME.w, FRAME.h);
 
-    ctx.save();
-    ctx.translate(OBJ.x, OBJ.y);
-    // 옆으로 돌수록 실루엣이 납작해져 알아보기 어려워진다. 각도가 왜 중요한지가 눈에 보인다.
-    ctx.scale(0.24 + 0.76 * Math.abs(Math.cos(radians)), 1);
-    if (stage.kind === 'cup') drawCup(ctx, Math.cos(radians));
-    else if (stage.kind === 'scissors') drawScissors(ctx);
-    else drawBook(ctx);
-    ctx.restore();
+    /* 돌린 각도를 사진 다섯 장 가운데 하나로 바꾼다. 0도에 가까울수록 잘 보이는 사진이
+       나오고, 이 구간 나눔은 위에서 쓴 frontness와 같은 방향이라 막대와 사진이 어긋나지 않는다. */
+    const turned = Math.abs(norm);
+    const band = turned < 20 ? 0 : turned < 45 ? 1 : turned < 75 ? 2 : turned < 110 ? 3 : 4;
+    const photo = art.map.current[`a${band}`];
+    if (!drawCover(ctx, photo, FRAME.x, FRAME.y, FRAME.w, FRAME.h)) {
+      // 사진을 아직 못 받았으면 도형으로 그린다. 놀이가 멈추지는 않는다.
+      ctx.save();
+      ctx.translate(OBJ.x, OBJ.y);
+      ctx.scale(0.24 + 0.76 * Math.abs(Math.cos(radians)), 1);
+      if (stage.kind === 'cup') drawCup(ctx, Math.cos(radians));
+      else if (stage.kind === 'scissors') drawScissors(ctx);
+      else drawBook(ctx);
+      ctx.restore();
+    }
 
     // 가림막
     ctx.fillStyle = PLAY.extraEdge;
@@ -340,10 +356,10 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
       centerText(ctx, '손잡이를 잡으면 시작합니다', FRAME.x + 290, FRAME.y + 294, 26, BOARD.ink);
     }
     ctx.restore();
+    // 액자 테두리 — 속을 칠하면 방금 그린 사진을 덮는다. 경로만 만들어 선만 긋는다.
     ctx.strokeStyle = BOARD.line;
     ctx.lineWidth = 4;
-    ctx.beginPath();
-    fillRoundRect(ctx, FRAME.x, FRAME.y, FRAME.w, FRAME.h, 18);
+    roundRectPath(ctx, FRAME.x, FRAME.y, FRAME.w, FRAME.h, 18);
     ctx.stroke();
 
     // 회전 다이얼
