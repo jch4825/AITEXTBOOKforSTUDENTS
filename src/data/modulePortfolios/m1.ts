@@ -70,7 +70,7 @@ export const M1_PORTFOLIO: ModulePortfolioDefinition = {
     {
       id: 'checks',
       title: '사람이 확인하고 결정할 일',
-      prompt: '어떤 근거와 사람에게 확인할지 써 봐요.',
+      prompt: '어떤 근거 자료를 대조하고 누구에게 확인해야 할지 써 봐요.',
       placeholder: '예: 날짜와 장소는 공식 공지에서 확인하고 마지막 사용 여부는 사람이 정해요.',
     },
   ],
