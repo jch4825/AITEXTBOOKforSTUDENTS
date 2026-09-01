@@ -54,13 +54,10 @@ export default function VisualNovelExperience({
   // 모든 차시의 이야기 마지막에서 완료 연출을 재생한다. 연출 종류는 차시마다 다르고,
   // 어떤 차시에서 빼야 할 사정이 생기면 데이터에서 false로 끌 수 있다.
   const showFinalSceneCelebration = story.celebrateFinalScene !== false && isStoryEnd;
-  const activeKnowledge = story.knowledge[scene.knowledgeStep];
-  const spokenText = [
-    copy.text,
-    copy.perspective,
-    activeKnowledge.core,
-    supportLevel !== 'full' ? activeKnowledge.detail[supportLevel] : null,
-  ].filter(Boolean).join(' ');
+  // 대사 듣기는 지금 펼친 대사 칸만 읽는다. 개념 카드까지 이어 읽으면 학생이 대사를
+  // 따라 읽는 동안 옆 지면의 설명이 계속 흘러나와 어디를 듣는지 잃는다. 개념은
+  // 카드마다 붙은 제 듣기 단추로 따로 읽는다(ConceptNotes).
+  const spokenText = [copy.text, copy.perspective].filter(Boolean).join(' ');
 
   const allDictTerms = STUDENT_DICTIONARY.flatMap((entry) => [
     entry.term,
