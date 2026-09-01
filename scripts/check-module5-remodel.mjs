@@ -165,7 +165,7 @@ function mobileFooterButtonFontRem() {
   const blocks = [...styles.matchAll(/\.comic-frame-footer \.btn\s*\{([^}]*)\}/g)].map((m) => m[1]);
   const mobile = blocks.find((body) => /min-height:\s*44px/.test(body));
   if (!mobile) return null;
-  const size = mobile.match(/font-size:\s*(\d*\.?\d+)rem;/);
+  const size = mobile.match(/font-size:\s*(?:calc\()?(\d*\.?\d+)rem/);
   return size ? Number(size[1]) : null;
 }
 const footerFontRem = mobileFooterButtonFontRem();

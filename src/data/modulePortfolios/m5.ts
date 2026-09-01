@@ -68,19 +68,19 @@ export const M5_PORTFOLIO: ModulePortfolioDefinition = {
       id: 'situation-and-goal',
       title: '현재·목표·정보',
       prompt: '지금 상태, 원하는 결과, 이미 아는 정보와 더 확인할 정보를 나누어 적어 보세요.',
-      placeholder: '예: 지금은 안내판 자리가 바뀌었고, 방문객이 새 위치를 찾게 하는 것이 목표야.',
+      placeholder: '예: 지금은 안내판 자리가 바뀌었고, 방문객이 새 위치를 찾게 하는 것이 목표예요.',
     },
     {
       id: 'tasks-order-alternatives',
       title: '작은 과제·순서·대안',
       prompt: '필요한 작은 과제와 먼저 해야 하는 이유, 막혔을 때 비교할 다른 방법을 적어 보세요.',
-      placeholder: '예: 새 위치 확인 뒤 표지 수정이 먼저야. 출력이 안 되면 손글씨와 화면 안내를 비교할 거야.',
+      placeholder: '예: 새 위치 확인 뒤 표지 수정이 먼저예요. 출력이 안 되면 손글씨와 화면 안내를 비교할 거예요.',
     },
     {
       id: 'run-check-revise',
       title: '실행·확인·수정',
       prompt: '한 단계씩 확인할 기준, 목표와 결과를 비교할 자료, 조건이 바뀔 때 고칠 계획을 적어 보세요.',
-      placeholder: '예: 표지를 붙인 뒤 입구에서 보이는지 확인하고, 장소가 또 바뀌면 멈춰 경로부터 고칠 거야.',
+      placeholder: '예: 표지를 붙인 뒤 입구에서 보이는지 확인하고, 장소가 또 바뀌면 멈춰 경로부터 고칠 거예요.',
     },
   ],
   transferPrompt:
