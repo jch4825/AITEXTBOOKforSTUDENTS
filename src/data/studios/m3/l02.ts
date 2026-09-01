@@ -199,6 +199,15 @@ export const M3_L2_STUDIO: StudioDefinition = {
     transfer: {
       title: '새 낱말 “서식지” 확인하기',
       description: '“여우의 서식지를 보호해요”라는 문장에서 같은 방법을 사용해 보세요.',
+      stimuli: [
+        {
+          id: 'm3-l2-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l2-transfer.webp',
+          alt: '그림책과 글책과 태블릿에서 내려온 선이 아래 빈 점선 칸으로 이어지고, 두 곳에는 초록 체크가 한 곳에는 가위표가 붙은 장면',
+          caption: '세 곳의 설명과 내 말로 적을 빈 칸',
+        },
+      ],
       choices: [
         { id: 'guess-context', emoji: '🦊', label: '문장과 그림으로 뜻을 먼저 짐작해요.', reaction: '좋은 첫걸음이에요! 이제 짐작을 확인할 차례예요.' },
         { id: 'compare-dictionary', emoji: '📖', label: 'AI 설명과 학생 사전을 비교해요.', reaction: '두 설명의 공통점이 뜻을 더 분명하게 해 줬어요.' },

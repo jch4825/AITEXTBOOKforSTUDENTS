@@ -199,6 +199,15 @@ export const M4_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '간식 사진 공유하기',
       description: '간식 사진 뒤 유리창에 친구 얼굴과 교실 번호가 비칩니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l5-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l5-transfer.webp',
+          alt: '간식 접시를 찍은 사진 위쪽 유리창에 사람 얼굴 둘이 비쳐 있고, 그 부분에 동그라미와 가위표가 표시된 장면',
+          caption: '찍으려던 것 뒤로 비친 사람들',
+        },
+      ],
       choices: [
         { id: 'safe-by-subject', emoji: '🍪', label: '음식 사진이니 그대로 보내요.', reaction: '유리창에 비친 얼굴과 번호까지 함께 퍼졌습니다.' },
         { id: 'check-reflection', emoji: '🔍', label: '반사된 얼굴과 위치를 가리거나 다시 찍어요.', reaction: '반사까지 확인하니 안심하고 보낼 수 있었습니다.' },

@@ -198,6 +198,15 @@ export const M2_L2_STUDIO: StudioDefinition = {
     transfer: {
       title: '여행 준비 부탁을 나눈다면',
       description: 'AI에게 교통편, 준비물, 여행 소개 글을 한꺼번에 부탁하려고 합니다.',
+      stimuli: [
+        {
+          id: 'm2-l2-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l2-transfer.webp',
+          alt: '버스와 가방과 말풍선 카드 세 장에서 내려온 선 세 개가 짧은 글 덩어리 하나로 모이는 장면',
+          caption: '세 가지 부탁이 한 문장으로 모이는 모습',
+        },
+      ],
       choices: [
         { id: 'travel-all-at-once', emoji: '📦', label: '세 부탁을 한 문장에 모두 넣습니다.', reaction: '결과가 이번에도 뒤섞여 나왔습니다.' },
         { id: 'travel-order', emoji: '📅', label: '날짜와 교통편을 먼저 확인한 뒤 준비물을 요청합니다.', reaction: '순서대로 요청하니 결과가 훨씬 분명했습니다.' },

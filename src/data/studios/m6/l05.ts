@@ -199,6 +199,15 @@ export const M6_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '오후 예보가 바뀌었을 때',
       description: '오후 비 시작 시간이 빨라졌다는 공식 업데이트가 나왔습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l5-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l5-transfer.webp',
+          alt: '태블릿 예보에서 비 표시가 화살표를 따라 앞 시간으로 옮겨져 있고, 창밖은 흐리며 창턱에 겉옷과 우산이 놓인 장면',
+          caption: '앞으로 당겨진 비 표시와 창턱의 준비물',
+        },
+      ],
       choices: [
         { id: 'keep-morning-plan', emoji: '☀️', label: '아침에 정한 준비는 바꾸지 않아요.', reaction: '빨라진 비 시작 시간에 우산 없이 젖을 뻔했습니다.' },
         { id: 'update-afternoon-prep', emoji: '🔄', label: '최신 공식 예보와 활동 시간을 다시 보고 준비를 고쳐요.', reaction: '바뀐 시간에 맞춰 준비를 미리 조정할 수 있었습니다.' },

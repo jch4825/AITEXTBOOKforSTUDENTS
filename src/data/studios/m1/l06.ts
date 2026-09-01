@@ -205,6 +205,15 @@ export const M1_L6_STUDIO: StudioDefinition = {
       title: '분리배출 모양을 배우는 AI라면',
       description: '원형 표시만 많이 배운 AI가 네모난 재활용 표지를 일반 쓰레기로 분류했습니다.',
       prompt: 'AI의 부족한 학습 자료를 골고루 보완하는 방법을 친구에게 알기 쉽게 설명해 봐요.',
+      stimuli: [
+        {
+          id: 'm1-l6-transfer-image',
+          kind: 'image',
+          src: '/images/m1-l6-transfer.webp',
+          alt: '책상 위 작은 인공지능 기기 앞에 동그라미 카드가 잔뜩 놓여 있고, 한 학생이 네모 카드 한 장을 들어 보이는 장면',
+          caption: '동그라미만 많이 배운 분류기와 새로 들어온 네모 카드',
+        },
+      ],
       choices: [
         { id: 'balance-recycle-data', emoji: '📚', label: '동그라미, 네모 등 다양한 모양과 재질의 표지 자료를 고르게 추가합니다.', isCorrect: true, reaction: '자료를 보완하자 네모 표지도 잘 구별했습니다.' },
         { id: 'compare-recycle-test', emoji: '🔍', label: '자료를 보완한 뒤 같은 시험용 자료로 판정 결과를 전후 비교합니다.', isCorrect: true, reaction: '같은 시험으로 비교하니 나아진 점이 분명히 보였습니다.' },

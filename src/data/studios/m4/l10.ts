@@ -199,6 +199,15 @@ export const M4_L10_STUDIO: StudioDefinition = {
     transfer: {
       title: '게임 추천 영상 살펴보기',
       description: '좋아하는 사람이 추천한 게임 영상에 유료 아이템 링크와 “반드시 이겨요”라는 말이 있습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l10-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l10-transfer.webp',
+          alt: '태블릿에서 재생 중인 영상 위에 돋보기를 대자 아주 작은 장바구니와 가격표 표시가 드러나는 장면',
+          caption: '돋보기로 보아야 보이는 작은 표시',
+        },
+      ],
       choices: [
         { id: 'buy-because-favorite', emoji: '⭐', label: '좋아하는 사람이 추천했으니 바로 사요.', reaction: '좋아하는 사람의 추천도 광고일 수 있었습니다.' },
         { id: 'find-ad-clues', emoji: '🧾', label: '광고 표시·링크·과장·가격과 내 필요를 확인해요.', reaction: '단서를 확인하니 필요한지 스스로 판단할 수 있었습니다.' },

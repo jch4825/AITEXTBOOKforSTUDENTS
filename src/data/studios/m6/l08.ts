@@ -198,6 +198,15 @@ export const M6_L8_STUDIO: StudioDefinition = {
     transfer: {
       title: '갑자기 어지러울 때',
       description: '서 있기 어렵고 어지러운 느낌이 갑자기 생겼습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l8-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l8-transfer.webp',
+          alt: '보청기를 낀 학생이 벤치에 앉은 채 몸 상태를 나타낸 그림 카드를 들어, 다가온 어른에게 보이는 장면',
+          caption: '안전하게 앉아 상태를 알리는 그림 카드',
+        },
+      ],
       choices: [
         { id: 'search-disease-name', emoji: '🔍', label: '혼자 병명 검색부터 해요.', reaction: '검색하는 동안에도 어지러움은 그대로였습니다.' },
         { id: 'report-dizziness', emoji: '🆘', label: '안전한 곳에서 멈추고 가까운 어른에게 즉시 어지러움과 변화를 알려요.', reaction: '멈추고 알리니 바로 도움을 받을 수 있었습니다.' },

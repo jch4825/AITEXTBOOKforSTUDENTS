@@ -199,6 +199,15 @@ export const M6_L4_STUDIO: StudioDefinition = {
     transfer: {
       title: '지하철 반대 방향 상황',
       description: '노선 색은 같지만 승강장 방향이 반대이고 안내 방송이 어렵습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l4-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l4-transfer.webp',
+          alt: '왼쪽과 오른쪽으로 서로 반대를 가리키는 승강장 표지판 사이에서, 학생이 승강장 카드를 들고 서 있는 장면',
+          caption: '서로 반대를 가리키는 두 승강장 표시',
+        },
+      ],
       choices: [
         { id: 'take-any-platform', emoji: '🚇', label: '노선 색이 같으니 가까운 승강장으로 가요.', reaction: '반대 방향 열차를 탈 뻔했습니다.' },
         { id: 'ask-station-staff', emoji: '🙋', label: '목적지 방향 표지와 공지를 보고 역무원에게 다시 확인해요.', reaction: '역무원의 확인으로 정확한 방향을 알 수 있었습니다.' },

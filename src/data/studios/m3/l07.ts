@@ -200,6 +200,15 @@ export const M3_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '학급 안내문 요약하기',
       description: '준비물, 제출 날짜, 제출 장소가 담긴 학급 안내문을 두 문장으로 줄여 보세요.',
+      stimuli: [
+        {
+          id: 'm3-l7-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l7-transfer.webp',
+          alt: '네 가지 항목이 적힌 안내문에서 두 항목에만 동그라미가 그려져 있고, 옆에는 두 칸이 비어 있는 카드와 연필이 놓인 장면',
+          caption: '남길 것을 표시한 안내문과 빈 요약 카드',
+        },
+      ],
       choices: [
         { id: 'mark-required', emoji: '🖍️', label: '준비물·날짜·장소를 먼저 표시해요.', reaction: '표시해 두니 요약과 비교할 기준이 생겼습니다.' },
         { id: 'compare-source', emoji: '🔗', label: '요약 문장을 원문 근거와 연결해요.', reaction: '연결해 보니 빠진 부분이 눈에 띄었습니다.' },

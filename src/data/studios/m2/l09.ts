@@ -198,6 +198,15 @@ export const M2_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '동아리 장소를 확인한다면',
       description: 'AI는 오늘 동아리 모임이 과학실이라고 말하지만 최근 교실 공사가 있었습니다.',
+      stimuli: [
+        {
+          id: 'm2-l9-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l9-transfer.webp',
+          alt: '공사 안내가 붙은 문에 가위표가 있고, 그 앞 의자 위 태블릿에는 같은 방이 초록 체크와 함께 표시된 장면',
+          caption: '공사 안내가 붙은 문과 그 방을 가리키는 화면',
+        },
+      ],
       choices: [
         { id: 'ask-ai-place-again', emoji: '❓', label: '같은 AI에게 장소가 맞는지 반복해 묻습니다.', reaction: '같은 답을 반복해서 들었을 뿐 새 근거는 없었습니다.' },
         { id: 'check-latest-place-notice', emoji: '🏛️', label: '오늘 날짜의 학교 공지나 담당자에게 확인합니다.', reaction: '공사로 장소가 바뀐 사실을 확인할 수 있었습니다.' },

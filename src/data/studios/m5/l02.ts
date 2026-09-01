@@ -199,6 +199,15 @@ export const M5_L2_STUDIO: StudioDefinition = {
     transfer: {
       title: '학급 발표 준비 나누기',
       description: '학급 발표라는 큰 일을 준비해야 합니다. 먼저 무엇을 하겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l2-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l2-transfer.webp',
+          alt: '휠체어를 탄 학생이 빈 카드가 담긴 바구니를 들고, 커다란 점선 네모만 그려진 칠판을 바라보는 장면',
+          caption: '아직 한 장도 쓰지 않은 카드와 큰 빈 칠판',
+        },
+      ],
       choices: [
         { id: 'start-slides-only', emoji: '🖥️', label: '필요한 일을 보지 않고 화면 자료부터 만들어요.', reaction: '나중에 빠진 준비가 있다는 걸 알게 됐습니다.' },
         { id: 'separate-presentation-tasks', emoji: '🧩', label: '내용·말하기·자료·장소 과제를 먼저 나눠요.', reaction: '필요한 일이 한눈에 보이니 빠짐없이 준비할 수 있었습니다.' },

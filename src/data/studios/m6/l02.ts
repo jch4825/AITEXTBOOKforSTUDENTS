@@ -199,6 +199,15 @@ export const M6_L2_STUDIO: StudioDefinition = {
     transfer: {
       title: '새 준비물 구매 계산',
       description: '공책 두 권과 풀 한 개를 살 때 AI 합계가 나왔습니다. 어떻게 확인하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l2-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l2-transfer.webp',
+          alt: '휠체어가 들어갈 수 있는 낮은 계산대 위에 공책과 풀과 태블릿과 계산기가 놓이고, 물건마다 붙은 가격표는 비어 있는 장면',
+          caption: '살 물건과 검산에 쓸 계산기',
+        },
+      ],
       choices: [
         { id: 'accept-new-ai-total', emoji: '💬', label: 'AI가 두 번 말했으니 맞다고 정해요.', reaction: '두 번 말해도 재질문은 확인이 아니었습니다.' },
         { id: 'verify-new-purchase', emoji: '🔢', label: '가격표와 수량으로 식을 만들고 계산기·영수증으로 확인해요.', reaction: '계산기로 확인하니 정확한 금액을 알 수 있었습니다.' },

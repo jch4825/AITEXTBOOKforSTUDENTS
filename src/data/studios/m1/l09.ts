@@ -206,6 +206,15 @@ export const M1_L9_STUDIO: StudioDefinition = {
       title: '여행 사진을 설명한다면',
       description: '친구가 볼 수 있도록 여행 사진의 장면 설명과 짧은 음성 안내를 만들려고 합니다.',
       prompt: '목적에 꼭 맞는 AI 도구를 선택하는 방법을 친구에게 알기 쉽게 설명해 봐요.',
+      stimuli: [
+        {
+          id: 'm1-l9-transfer-image',
+          kind: 'image',
+          src: '/images/m1-l9-transfer.webp',
+          alt: '학생이 그림 카드 태블릿을 눌러 바닷가 사진을 설명하고, 옆에서 마이크 표시가 있는 사진 화면을 들어 보이는 장면',
+          caption: '바닷가 사진과 그림 카드로 만드는 설명',
+        },
+      ],
       choices: [
         { id: 'plan-photo-tools', emoji: '🗺️', label: '사진 묘사 도구와 음성 변환 도구 각각의 입력과 결과를 구분해 선택합니다.', isCorrect: true, reaction: '두 도구를 나누어 쓰니 결과가 훨씬 정확했습니다.' },
         { id: 'verify-photo-description', emoji: '👁️', label: '얼굴 사진을 함부로 넣지 않고 생성된 설명이 실제 사진과 맞는지 확인합니다.', isCorrect: true, reaction: '설명과 사진을 비교하니 안심하고 쓸 수 있었습니다.' },

@@ -199,6 +199,15 @@ export const M5_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '작품 파일 올리기',
       description: '파일 선택, 이름 확인, 올리기, 완료 확인이 필요한 상황입니다. 어떻게 진행하겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l7-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l7-transfer.webp',
+          alt: '노트북 화면에 폴더와 이름표와 올리기와 확인 네 단계가 나란히 있고, 그 가운데 한 칸만 점선으로 비어 있는 장면',
+          caption: '네 단계 가운데 아직 비어 있는 한 칸',
+        },
+      ],
       choices: [
         { id: 'upload-all-fast', emoji: '📤', label: '여러 파일을 한꺼번에 고르고 바로 끝났다고 생각해요.', reaction: '일부 파일이 제대로 올라가지 않은 걸 나중에 알았습니다.' },
         { id: 'upload-checkpoints', emoji: '🔎', label: '파일 이름과 완료 표시를 단계마다 확인해요.', reaction: '단계마다 확인하니 빠진 파일 없이 끝났습니다.' },

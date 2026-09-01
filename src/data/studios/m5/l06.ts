@@ -199,6 +199,15 @@ export const M5_L6_STUDIO: StudioDefinition = {
     transfer: {
       title: '체육관 안 부스 찾기',
       description: '“체육관 부스”가 여러 곳을 뜻합니다. 어떻게 안전하게 고치겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l6-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l6-transfer.webp',
+          alt: '넓은 체육관에 똑같은 깃발을 단 부스 여러 개가 흩어져 있고, 가운데에서 휠체어를 탄 학생이 태블릿을 들고 둘러보는 장면',
+          caption: '같은 표시를 단 여러 부스',
+        },
+      ],
       choices: [
         { id: 'share-home-route', emoji: '🏠', label: '집에서 학교까지 오는 경로를 모두 알려요.', reaction: '필요하지 않은 개인 정보까지 담기게 됐습니다.' },
         { id: 'use-building-clues', emoji: '🏀', label: '현재 건물 안·입구 번호·부스 표지 색을 더해요.', reaction: '건물 안 단서만으로도 정확히 찾을 수 있었습니다.' },

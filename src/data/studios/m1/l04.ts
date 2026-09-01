@@ -205,6 +205,15 @@ export const M1_L4_STUDIO: StudioDefinition = {
       title: '흐린 분리배출 표지판',
       description: '빛이 반사되어 글자가 흐릿하게 찍힌 분리배출 표지판을 AI가 “일반 쓰레기”라고 잘못 인식했습니다. 이럴 때는 어떻게 확인해야 할까요?',
       prompt: '흐릿한 표지판 사진을 AI가 잘못 읽었을 때 어떻게 대처해야 할지 알기 쉽게 설명해 봐요.',
+      stimuli: [
+        {
+          id: 'm1-l4-transfer-image',
+          kind: 'image',
+          src: '/images/m1-l4-transfer.webp',
+          alt: '휠체어를 탄 학생이 복도 분리배출함 옆에서 태블릿을 들고 있고, 태블릿 화면에는 건전지 그림이 떠 있는 장면',
+          caption: 'AI가 읽어 낸 결과와 실제 분리배출함 표시',
+        },
+      ],
       choices: [
         { id: 'change-sign-angle', emoji: '📐', label: '빛 반사를 줄이도록 표지판 사진의 각도와 밝기를 바꾸어 다시 인식해 봅니다.', isCorrect: true, reaction: '각도를 바꾸자 표지판 글자가 선명하게 다시 보였습니다.' },
         { id: 'ask-staff', emoji: '👤', label: '실제 표지판을 눈으로 보거나 담당자 안내와 비교합니다.', isCorrect: true, reaction: '실제 표지판을 보니 답이 분명해졌습니다.' },

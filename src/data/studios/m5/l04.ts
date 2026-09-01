@@ -199,6 +199,15 @@ export const M5_L4_STUDIO: StudioDefinition = {
     transfer: {
       title: '학급 준비 일정이 바뀌었어요',
       description: '발표 마감이 앞당겨지고 친구 한 명이 도움을 줄 수 있게 됐습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l4-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l4-transfer.webp',
+          alt: '일정 띠에서 한 카드가 앞으로 당겨지자 뒤쪽 카드들이 서로 겹쳐 있고, 위에는 빈 점선 말풍선이, 아래 선반에는 도움 카드 한 장이 남은 장면',
+          caption: '앞당겨진 한 칸과 겹쳐 버린 뒤 일정',
+        },
+      ],
       choices: [
         { id: 'keep-old-order', emoji: '📌', label: '조건이 달라도 처음 순서를 그대로 지켜요.', reaction: '앞당겨진 마감을 놓칠 뻔했습니다.' },
         { id: 'recheck-criteria', emoji: '🔄', label: '새 마감과 도움 가능성으로 먼저 할 일을 다시 정해요.', reaction: '같은 기준으로 다시 보니 새 순서가 자연스러웠습니다.' },

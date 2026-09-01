@@ -204,6 +204,15 @@ export const M1_L8_STUDIO: StudioDefinition = {
       title: '비가 올 때 체험회를 열까?',
       description: '공식 일기예보에는 비 올 확률이 70%라고 적혀 있고, AI는 우산과 실내 활동을 추천했습니다. 체험회를 실제로 열지는 담당 선생님이 안전과 장소 상황을 보고 정합니다.',
       prompt: '날씨 정보, AI 추천, 행사 진행 결정을 알맞은 세 가지 기준으로 나누어 봐요.',
+      stimuli: [
+        {
+          id: 'm1-l8-transfer-image',
+          kind: 'image',
+          src: '/images/m1-l8-transfer.webp',
+          alt: '창밖에 비가 내리는 교실에서 학생이 돋보기로 예보 화면을 보고, 선생님이 그림 카드 표를 들고 서 있는 장면',
+          caption: '비 예보 화면과 선생님이 든 결정 카드',
+        },
+      ],
       choices: [
         { id: 'forecast-fact', emoji: '📌', label: '공식 일기예보의 비 올 확률은 근거로 확인하는 사실입니다.', isCorrect: true, reaction: '기상청 확률 표시를 그대로 근거로 남겼습니다.' },
         { id: 'ai-weather-suggestion', emoji: '🤖', label: '준비물과 대체 활동 추천은 AI의 1차 판단으로 받고 사람이 검토합니다.', isCorrect: true, reaction: '아이미의 추천을 사람이 다시 살펴본 뒤 사용했습니다.' },

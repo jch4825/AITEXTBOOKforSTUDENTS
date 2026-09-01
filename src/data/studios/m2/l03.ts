@@ -198,6 +198,15 @@ export const M2_L3_STUDIO: StudioDefinition = {
     transfer: {
       title: '“그거 정리해 줘”를 바꾼다면',
       description: '친구에게 받은 긴 준비물 메모를 AI로 정리하려고 합니다.',
+      stimuli: [
+        {
+          id: 'm2-l3-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l3-transfer.webp',
+          alt: '빽빽하게 글이 적힌 종이 옆에 물음표 카드가 놓이고, 태블릿 화면 가운데는 점선 네모만 비어 있는 장면',
+          caption: '재료는 많은데 결과가 비어 있는 화면',
+        },
+      ],
       choices: [
         { id: 'repeat-organize-that', emoji: '👉', label: '“그거 정리해 줘”라고만 요청합니다.', reaction: '아이미: "그거요? 무엇을 정리할지 저에게 알려 주시겠어요?"' },
         { id: 'name-note-format', emoji: '📋', label: '준비물 메모를 종류별 표로 정리해 달라고 합니다.', reaction: '아이미: "종류별 표로 깔끔하게 정리했어요!"' },

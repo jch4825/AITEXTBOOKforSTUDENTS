@@ -199,6 +199,15 @@ export const M4_L3_STUDIO: StudioDefinition = {
     transfer: {
       title: '분실물 문의 고치기',
       description: '분실물 사진을 찾으려고 집 주소와 혼자 있는 시간을 함께 쓰려 합니다. 어떻게 고치겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l3-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l3-transfer.webp',
+          alt: '보청기를 낀 학생이 노트북 화면의 분실물 글을 보고 있고, 화면에는 물병과 함께 집과 시계 그림이 들어 있는 장면',
+          caption: '물건과 함께 나를 알아볼 정보가 들어간 문의 글',
+        },
+      ],
       choices: [
         { id: 'share-all-details', emoji: '📣', label: '찾기 쉽도록 모든 정보를 공개해요.', reaction: '집 주소와 혼자 있는 시간까지 알려져 위험할 수 있었습니다.' },
         { id: 'keep-item-details', emoji: '🎒', label: '물건 특징과 잃어버린 공식 장소만 남겨요.', reaction: '필요한 정보만으로도 분실물을 찾을 수 있었습니다.' },

@@ -198,6 +198,15 @@ export const M2_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '길지만 정확한 준비물 안내라면',
       description: '준비물 안내가 정확하지만 너무 길어 한눈에 읽기 어렵습니다.',
+      stimuli: [
+        {
+          id: 'm2-l7-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l7-transfer.webp',
+          alt: '책상에서 바닥까지 늘어진 두루마리 안내문의 모든 줄이 똑같은 굵기로 이어지고, 옆에 작은 빈 카드와 시계가 놓인 장면',
+          caption: '어느 줄이 중요한지 표시가 없는 긴 안내문',
+        },
+      ],
       choices: [
         { id: 'shorten-anything', emoji: '✂️', label: '중요한 내용도 빼고 무조건 짧게 만듭니다.', reaction: '짧아졌지만 정작 준비물 목록이 사라졌습니다.' },
         { id: 'preserve-items', emoji: '🔒', label: '준비물과 날짜는 지키고 설명만 줄여 달라고 합니다.', reaction: '짧고 정확한 안내문이 완성됐습니다.' },

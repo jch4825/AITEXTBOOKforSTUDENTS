@@ -198,6 +198,15 @@ export const M3_L6_STUDIO: StudioDefinition = {
     transfer: {
       title: '거스름돈을 확인해요',
       description: '10,000원을 내고 6,600원어치 물건을 샀습니다. 거스름돈을 어떻게 확인할까요?',
+      stimuli: [
+        {
+          id: 'm3-l6-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l6-transfer.webp',
+          alt: '쟁반 위에 지폐와 영수증과 동전이 놓이고, 그 옆 점선 카드 안에 물음표가 있으며 계산기가 함께 놓인 장면',
+          caption: '낸 돈과 영수증, 아직 모르는 거스름돈',
+        },
+      ],
       choices: [
         { id: 'estimate-change', emoji: '🧠', label: '먼저 3,000원보다 조금 클 것이라고 예상해요.', reaction: '좋은 첫걸음이었습니다. 이제 계산기로 확인할 차례입니다.' },
         { id: 'calculator-change', emoji: '🧮', label: '10000-6600을 계산기에 입력해요.', reaction: '계산기 화면에 정확한 거스름돈이 나타났습니다.' },

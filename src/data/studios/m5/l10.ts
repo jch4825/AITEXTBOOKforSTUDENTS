@@ -199,6 +199,15 @@ export const M5_L10_STUDIO: StudioDefinition = {
     transfer: {
       title: '다른 친구에게도 통하는 안내',
       description: '수정한 사람은 성공했습니다. 다음 확인은 무엇이 좋을까요?',
+      stimuli: [
+        {
+          id: 'm5-l10-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l10-transfer.webp',
+          alt: '한 학생이 물음표와 가위표와 체크가 그려진 안내 카드를 세워 보이고, 그 안내를 처음 보는 학생이 마주 서 있는 장면',
+          caption: '만든 사람의 안내와 처음 보는 사람',
+        },
+      ],
       choices: [
         { id: 'declare-fixed-once', emoji: '1️⃣', label: '내가 한 번 성공했으니 모두에게 된다고 정해요.', reaction: '한 번 성공이 모두의 성공을 보장하지는 않았습니다.' },
         { id: 'test-other-user', emoji: '👥', label: '처음 보는 친구가 같은 안내로 성공하는지 확인해요.', reaction: '다른 친구도 무사히 도착해 더 믿을 수 있었습니다.' },

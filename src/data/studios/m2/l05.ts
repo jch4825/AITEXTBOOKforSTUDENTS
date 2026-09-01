@@ -198,6 +198,15 @@ export const M2_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '친구와 선생님께 부탁한다면',
       description: '같은 준비물 확인을 친구와 선생님에게 각각 부탁하려고 합니다.',
+      stimuli: [
+        {
+          id: 'm2-l5-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l5-transfer.webp',
+          alt: '복도에서 그림 카드 태블릿을 든 학생이 친구와 선생님 사이에 서 있고, 양쪽으로 향한 말풍선 두 개가 모두 비어 있는 장면',
+          caption: '같은 부탁을 건넬 친구와 선생님',
+        },
+      ],
       choices: [
         { id: 'same-request-both', emoji: '👥', label: '두 사람에게 같은 표현만 사용합니다.', reaction: '친구에게는 너무 딱딱하고, 선생님께는 너무 편하게 들렸습니다.' },
         { id: 'adapt-request-tone', emoji: '💬', label: '부탁 내용은 지키고 관계에 맞는 표현을 고릅니다.', reaction: '준비물 내용은 그대로, 표현만 자연스럽게 전달됐습니다.' },

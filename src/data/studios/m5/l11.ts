@@ -199,6 +199,15 @@ export const M5_L11_STUDIO: StudioDefinition = {
     transfer: {
       title: '체험회 장소와 시간이 바뀌었을 때',
       description: '설치 장소가 좁아지고 준비 시간이 10분 줄었습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l11-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l11-transfer.webp',
+          alt: '바닥에 테이프로 그은 사각형 자리보다, 옆에 쌓인 상자와 책상이 훨씬 많이 놓인 장면',
+          caption: '테이프로 그은 자리와 들여놓을 짐',
+        },
+      ],
       choices: [
         { id: 'keep-plan-secretly', emoji: '📦', label: '처음 계획을 바꾸지 않고 준비물을 모두 가져가요.', reaction: '좁아진 공간과 줄어든 시간에 계획이 맞지 않았습니다.' },
         { id: 'check-new-conditions', emoji: '🔄', label: '공간·시간·안전 조건을 다시 확인하고 단계와 준비물을 줄여요.', reaction: '바뀐 조건에 맞춰 계획이 자연스럽게 들어맞았습니다.' },

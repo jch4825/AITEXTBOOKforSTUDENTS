@@ -199,6 +199,15 @@ export const M6_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '도움 가능 시간이 바뀌었을 때',
       description: '함께 도와줄 사람이 오후가 아니라 오전에만 가능합니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l7-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l7-transfer.webp',
+          alt: '일과 판의 왼쪽에는 카드가 하나만 남고 오른쪽에는 카드가 겹겹이 쌓여 있으며, 그 가운데 한 자리가 점선으로 비어 있는 장면',
+          caption: '오전으로 옮겨진 도움과 빽빽해진 오후',
+        },
+      ],
       choices: [
         { id: 'ignore-help-time', emoji: '🙉', label: '도움 시간이 달라도 처음 계획을 그대로 둬요.', reaction: '오후에 도와줄 사람이 없어 활동이 막혔습니다.' },
         { id: 'revise-help-time', emoji: '🕘', label: '도움이 필요한 활동을 오전으로 옮기고 쉼과 이동도 다시 맞춰요.', reaction: '바뀐 도움 시간에 맞춰 계획이 자연스럽게 들어맞았습니다.' },

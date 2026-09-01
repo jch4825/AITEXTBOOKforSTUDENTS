@@ -199,6 +199,15 @@ export const M4_L6_STUDIO: StudioDefinition = {
     transfer: {
       title: '자동 재생 영상 멈추기',
       description: '다음 영상이 갑자기 불편하게 느껴졌습니다. 어떻게 행동하겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l6-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l6-transfer.webp',
+          alt: '헤드폰을 낀 학생이 멈춤 표시가 뜬 화면에 손을 대고 있고, 아래 다음 영상 자리 세 칸은 점선으로 비어 있는 장면',
+          caption: '멈춘 화면과 아직 열지 않은 다음 영상',
+        },
+      ],
       choices: [
         { id: 'watch-to-explain', emoji: '▶️', label: '설명하려고 끝까지 봐요.', reaction: '설명은 느낀 것만으로도 충분히 전할 수 있었습니다.' },
         { id: 'stop-distance-tell', emoji: '⏹️', label: '멈추고 거리를 둔 뒤 믿을 만한 사람에게 알려요.', reaction: '같은 순서로 다시 한번 안전하게 멈출 수 있었습니다.' },

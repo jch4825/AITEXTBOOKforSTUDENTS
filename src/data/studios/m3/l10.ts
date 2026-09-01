@@ -200,6 +200,15 @@ export const M3_L10_STUDIO: StudioDefinition = {
     transfer: {
       title: '다른 과목에서 같은 복습 사용하기',
       description: '사회나 과학에서 오늘 배운 내용 하나를 골라 회상, 확인, 자기 설명 순서로 복습해 보세요.',
+      stimuli: [
+        {
+          id: 'm3-l10-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l10-transfer.webp',
+          alt: '한 학생이 책을 덮어 손으로 누른 채 이야기하고, 마주 앉은 학생이 공책의 빈 점선 칸에 받아 적으려는 장면',
+          caption: '자료를 덮고 먼저 떠올려 보는 복습',
+        },
+      ],
       choices: [
         { id: 'recall-first', emoji: '🧠', label: '책을 덮고 기억나는 것을 먼저 말해요.', reaction: '기억나는 만큼 말해 보니 무엇을 확인할지 보였습니다.' },
         { id: 'check-source', emoji: '📚', label: '교과서와 내 기록을 다시 확인해요.', reaction: '확인해 보니 빠졌던 부분이 분명해졌습니다.' },

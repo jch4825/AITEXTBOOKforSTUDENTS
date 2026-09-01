@@ -199,6 +199,15 @@ export const M4_L4_STUDIO: StudioDefinition = {
     transfer: {
       title: '비밀번호 재설정 링크',
       description: '낯선 메시지가 비밀번호를 다시 만들라며 링크를 보냈습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l4-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l4-transfer.webp',
+          alt: '책상에 놓인 평범한 휴대전화 화면에 열쇠 그림이 든 낯선 메시지 하나만 떠 있는 장면',
+          caption: '열쇠를 요구하는 낯선 메시지',
+        },
+      ],
       choices: [
         { id: 'open-message-link', emoji: '🔗', label: '메시지 링크를 바로 열어요.', reaction: '메시지 속 링크는 진짜 계정 화면이 아닐 수 있어요. 지금이라도 어른과 공식 사이트를 함께 찾으면 안전해요.' },
         { id: 'official-route', emoji: '🏫', label: '메시지를 닫고 어른과 공식 사이트를 직접 찾아요.', reaction: '민준 선생님: "이 길이 맞아. 공식 주소는 직접 찾는 거야."' },

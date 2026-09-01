@@ -199,6 +199,15 @@ export const M5_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '순서 퍼즐에서 도움받기',
       description: '단계 두 개의 앞뒤 관계에서 막혔습니다. 어떤 도움을 고르겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l5-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l5-transfer.webp',
+          alt: '싹과 어린나무와 큰 나무 퍼즐이 이어져 있는데 다음 조각이 맞지 않아 가위표가 붙었고, 아래에는 뒤집힌 도움 카드 네 장이 놓인 장면',
+          caption: '맞지 않는 조각과 아직 뒤집힌 도움 카드',
+        },
+      ],
       choices: [
         { id: 'show-full-order', emoji: '📋', label: '전체 순서 정답을 바로 보여 달라고 해요.', reaction: '순서는 맞았지만 왜 그런지는 알 수 없었습니다.' },
         { id: 'choose-process-question', emoji: '❔', label: '어떤 단계가 다음 단계에 필요한지 묻는 힌트를 골라요.', reaction: '질문 하나로 스스로 이유를 찾을 수 있었습니다.' },

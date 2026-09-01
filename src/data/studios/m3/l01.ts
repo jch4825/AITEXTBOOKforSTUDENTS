@@ -199,6 +199,15 @@ export const M3_L1_STUDIO: StudioDefinition = {
     transfer: {
       title: '모르는 낱말을 깊게 묻기',
       description: '책에서 “서식지”를 만났습니다. 뜻과 쓰임을 알기 위해 어떤 질문을 이어서 하겠어요?',
+      stimuli: [
+        {
+          id: 'm3-l1-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l1-transfer.webp',
+          alt: '휠체어를 탄 학생이 여우가 그려진 책을 펼쳐 읽고 있고, 옆 책상의 태블릿에는 짧은 답과 물음표가 떠 있는 장면',
+          caption: '여우 책과 짧은 답이 돌아온 화면',
+        },
+      ],
       choices: [
         { id: 'habitat-yes-no', emoji: '❔', label: '“서식지는 장소야?”라고 확인해요.', reaction: '아이미: "네, 장소예요!" (확인엔 확인만큼의 답이 돌아왔습니다.)' },
         { id: 'habitat-meaning', emoji: '📘', label: '“서식지는 무슨 뜻이고 어디에 쓰는 말이야?”라고 물어요.', reaction: '아이미: "뜻과 쓰임을 같이 알려 드릴게요!"' },

@@ -199,6 +199,15 @@ export const M6_L11_STUDIO: StudioDefinition = {
     transfer: {
       title: '온라인 게임 채팅 자기소개',
       description: '처음 만난 게임 친구가 학교와 사는 곳을 묻습니다. 어떻게 소개하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l11-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l11-transfer.webp',
+          alt: '휠체어를 탄 학생이 컴퓨터 앞에 앉아 있고, 화면의 채팅 말풍선에는 학교와 집 그림이, 답을 적을 칸은 점선으로 비어 있는 장면',
+          caption: '학교와 사는 곳을 묻는 채팅과 비어 있는 답 칸',
+        },
+      ],
       choices: [
         { id: 'share-school-location', emoji: '📍', label: '친해지려고 학교와 사는 곳을 자세히 말해요.', reaction: '별칭과 취미만으로도 충분히 친해질 수 있었어요.' },
         { id: 'safe-game-intro', emoji: '🎮', label: '별칭과 게임 취미만 말하고 개인정보 질문은 거절해요.', reaction: '아이미: "그 정도만 알려 줘도 함께 게임하기엔 충분해요!"' },

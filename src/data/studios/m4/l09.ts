@@ -199,6 +199,15 @@ export const M4_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '사진을 요구하는 새 메시지',
       description: '다른 낯선 계정이 “친구가 되려면 얼굴 사진을 보내”라고 요구합니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l9-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l9-transfer.webp',
+          alt: '휠체어를 탄 학생이 얼굴 그림이 뜬 휴대전화를 몸에서 떼어 들고, 문 쪽에 선 어른을 바라보는 장면',
+          caption: '사진을 요구하는 메시지와 어른이 있는 쪽',
+        },
+      ],
       choices: [
         { id: 'send-photo', emoji: '🤳', label: '친구가 되기 위해 사진을 보내요.', reaction: '보낸 사진은 되돌릴 수 없었습니다. 지금이라도 믿을 만한 사람에게 알릴 수 있습니다.' },
         { id: 'refuse-and-alert', emoji: '🙋', label: '보내지 않고 차단한 뒤 도움망에 알려요.', reaction: '거절과 알림 모두 안전한 선택이었습니다.' },

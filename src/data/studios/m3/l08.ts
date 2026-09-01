@@ -198,6 +198,15 @@ export const M3_L8_STUDIO: StudioDefinition = {
     transfer: {
       title: '친구 퀴즈를 먼저 풀어 보기',
       description: '친구가 만든 낱말 퀴즈를 정답을 보지 않고 먼저 풀고 피드백을 사용해 보세요.',
+      stimuli: [
+        {
+          id: 'm3-l8-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l8-transfer.webp',
+          alt: '한 학생이 동물 그림이 있는 퀴즈 카드를 들어 보이고, 마주 앉은 학생 앞의 답 자리가 점선으로 비어 있는 장면',
+          caption: '친구가 낸 퀴즈와 아직 비어 있는 답 자리',
+        },
+      ],
       choices: [
         { id: 'hide-answer', emoji: '🙈', label: '정답 부분을 가리고 먼저 답해요.', reaction: '가리고 답하니 무엇을 아는지 스스로 알 수 있었습니다.' },
         { id: 'explain-reason', emoji: '💬', label: '답을 고른 이유를 표현해요.', reaction: '이유를 말하니 다음 힌트가 더 잘 이해됐습니다.' },

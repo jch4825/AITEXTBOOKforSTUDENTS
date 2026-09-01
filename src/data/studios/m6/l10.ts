@@ -199,6 +199,15 @@ export const M6_L10_STUDIO: StudioDefinition = {
     transfer: {
       title: '다른 직업인을 만나기 전',
       description: '마을 제빵사를 만나기 전에 AI가 예상한 정보가 있습니다. 어떻게 준비하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l10-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l10-transfer.webp',
+          alt: '학생이 공책의 빈 점선 칸에 연필을 대고 있고, 옆 태블릿에는 인공지능이 내놓은 그림 한 장만 떠 있는 장면',
+          caption: 'AI의 예상 그림 한 장과 아직 비어 있는 질문 칸',
+        },
+      ],
       choices: [
         { id: 'repeat-ai-job-answer', emoji: '🤖', label: 'AI 예상만 읽고 실제 질문은 하지 않아요.', reaction: '실제로 만나 보니 예상과 다른 점이 많았습니다.' },
         { id: 'prepare-next-interview', emoji: '📝', label: '일·협력·도구·도움 질문을 만들고 실제 사람 설명과 비교해요.', reaction: '질문을 준비하니 실제 이야기를 더 깊이 들을 수 있었습니다.' },

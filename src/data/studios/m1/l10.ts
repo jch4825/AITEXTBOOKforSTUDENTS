@@ -205,6 +205,15 @@ export const M1_L10_STUDIO: StudioDefinition = {
       title: '체험회 안내 문구를 만든다면',
       description: 'AI가 만든 안내 문구에 사실과 다른 행사 시간이 적혀 있습니다. 이럴 때는 어떻게 해야 할까요?',
       prompt: 'AI의 추천 결과를 검토하여 그대로 쓸지, 고쳐서 쓸지, 쓰지 않을지 결정하는 방법을 친구에게 알기 쉽게 설명해 봐요.',
+      stimuli: [
+        {
+          id: 'm1-l10-transfer-image',
+          kind: 'image',
+          src: '/images/m1-l10-transfer.webp',
+          alt: '책상 위 안내문의 시계 줄만 속이 빈 채로 그려지고 그 옆에 가위표가 있으며, 벽에 붙은 공식 공지에는 같은 시계 줄이 채워지고 초록 체크가 붙어 있는 장면',
+          caption: '시간 줄이 비어 있는 AI 안내문과 시간이 적힌 공식 공지',
+        },
+      ],
       choices: [
         { id: 'modify-time', emoji: '✏️', label: '학교 공식 공지표를 확인해 잘못된 행사 시간을 바르게 수정하여 사용합니다.', isCorrect: true, reaction: '공지표와 비교해 정확한 시간으로 고쳤습니다.' },
         { id: 'reject-unsafe', emoji: '🚫', label: '잘못된 정보가 너무 많거나 위험한 내용을 담고 있다면 사용하지 않고 거절합니다.', isCorrect: true, reaction: '위험한 요청은 거절하는 것이 안전했습니다.' },

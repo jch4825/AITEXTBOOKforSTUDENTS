@@ -199,6 +199,15 @@ export const M3_L3_STUDIO: StudioDefinition = {
     transfer: {
       title: '물의 순환을 쉽게 설명하기',
       description: '증발, 구름, 비가 이어지는 물의 순환 설명을 쉬운 말로 바꿔 보세요.',
+      stimuli: [
+        {
+          id: 'm3-l3-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l3-transfer.webp',
+          alt: '물의 순환을 모두 그린 큰 그림 옆에, 두 단계 자리가 점선과 가위표로 비어 있는 작은 그림이 붙어 있는 장면',
+          caption: '완전한 설명과 두 단계가 빠진 쉬운 설명',
+        },
+      ],
       choices: [
         { id: 'keep-cycle', emoji: '🔄', label: '물이 올라가고 모이고 다시 내리는 순서를 남겨요.', reaction: '순서가 남으니 순환 과정이 정확히 전해졌습니다.' },
         { id: 'rain-only', emoji: '🌧️', label: '비가 온다는 결과만 남겨요.', reaction: '증발과 구름 과정이 빠져 순환을 알 수 없었습니다.' },

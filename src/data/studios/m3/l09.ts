@@ -198,6 +198,15 @@ export const M3_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '해바라기 그림 설명하기',
       description: '해바라기 한 송이가 창가에 있는 새 그림을 같은 기준으로 설명해 보세요.',
+      stimuli: [
+        {
+          id: 'm3-l9-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l9-transfer.webp',
+          alt: '목발을 짚은 학생이 이젤에 놓인 해바라기 그림을 가리키고, 그림 속 유리병 부분에 가위표가 표시된 장면',
+          caption: '해바라기 그림과 짐작으로 남은 부분',
+        },
+      ],
       choices: [
         { id: 'visible-facts', emoji: '🌻', label: '색, 수, 위치처럼 보이는 사실을 말해요.', reaction: '눈에 보이는 사실만으로도 설명이 분명해졌습니다.' },
         { id: 'avoid-feeling', emoji: '💭', label: '꽃이 행복하다는 마음은 사실로 단정하지 않아요.', reaction: '마음을 단정하지 않으니 더 정확한 설명이 됐습니다.' },

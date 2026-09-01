@@ -199,6 +199,15 @@ export const M5_L8_STUDIO: StudioDefinition = {
     transfer: {
       title: '체험 인원 합계 확인',
       description: 'AI가 여러 모둠의 인원을 더해 합계를 제시했습니다. 어떻게 확인하겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l8-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l8-transfer.webp',
+          alt: '모둠 인원 카드 네 장에서 태블릿의 합계 칸으로 선이 이어지는데, 그 가운데 한 선만 끊어져 점선으로 남은 장면',
+          caption: '한 줄이 끊어진 채 나온 인원 합계',
+        },
+      ],
       choices: [
         { id: 'ask-ai-same-total', emoji: '🔁', label: '같은 AI에게 합계가 맞는지 다시 물어요.', reaction: '재질문은 확인이 아니라는 걸 8화에서도 배웠습니다. 같은 답이 그대로 돌아왔습니다.' },
         { id: 'calculator-check', emoji: '🧮', label: '원래 인원표를 보고 계산기나 직접 계산으로 확인해요.', reaction: '다른 방법으로 확인하니 차이가 바로 보였습니다.' },

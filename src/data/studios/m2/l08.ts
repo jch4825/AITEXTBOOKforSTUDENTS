@@ -198,6 +198,15 @@ export const M2_L8_STUDIO: StudioDefinition = {
     transfer: {
       title: '약속 일정을 알려 준다면',
       description: '세 번의 모임 날짜, 시간, 장소를 친구가 빠르게 비교할 수 있게 정리하려고 합니다.',
+      stimuli: [
+        {
+          id: 'm2-l8-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l8-transfer.webp',
+          alt: '같은 시계와 달력과 위치 그림이 저마다 다른 자리에 놓인 종이 세 장 옆에, 빈 점선 표가 놓인 장면',
+          caption: '배치가 서로 다른 세 장의 모임 안내',
+        },
+      ],
       choices: [
         { id: 'schedule-long-story', emoji: '📖', label: '모든 일정을 긴 이야기로 씁니다.', reaction: '세 번의 일정을 비교하기 어려웠습니다.' },
         { id: 'schedule-table', emoji: '📊', label: '날짜·시간·장소 열이 있는 표를 요청합니다.', reaction: '한눈에 비교되는 표가 나왔습니다.' },

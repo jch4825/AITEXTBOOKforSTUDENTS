@@ -199,6 +199,15 @@ export const M6_L3_STUDIO: StudioDefinition = {
     transfer: {
       title: '보건소 연습 지도 확인',
       description: '가상의 보건소 지도에서 AI가 표지에 없는 뒷길을 제안했습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l3-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l3-transfer.webp',
+          alt: '지도에 점선으로 이어진 길 한 구간이 아무것도 그려지지 않은 채 가위표가 놓이고, 다른 길에는 초록 체크가 붙은 장면',
+          caption: '길이 그려지지 않은 구간이 있는 지도',
+        },
+      ],
       choices: [
         { id: 'take-clinic-backroad', emoji: '🚶', label: 'AI가 가깝다고 했으니 지도 밖 뒷길을 골라요.', reaction: '확인할 표지가 없어 불안했습니다.' },
         { id: 'check-clinic-map', emoji: '🏥', label: '고정 지도·공식 표지·안내소로 확인되는 경로를 골라요.', reaction: '표지가 모두 맞아 안심하고 갈 수 있었습니다.' },

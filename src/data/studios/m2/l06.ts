@@ -198,6 +198,15 @@ export const M2_L6_STUDIO: StudioDefinition = {
     transfer: {
       title: '주말 나들이를 준비한다면',
       description: '날씨, 이동, 준비물을 한 번에 부탁하지 않고 단계별로 계획하려고 합니다.',
+      stimuli: [
+        {
+          id: 'm2-l6-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l6-transfer.webp',
+          alt: '해와 버스와 가방 그림 카드 세 장이 책상에 놓여 있고, 그 아래 순서를 놓을 자리가 점선으로 비어 있는 장면',
+          caption: '할 일 카드와 아직 정하지 않은 순서 자리',
+        },
+      ],
       choices: [
         { id: 'outing-all-at-once', emoji: '📦', label: '모든 계획을 한 요청에 맡깁니다.', reaction: '날씨와 이동, 준비물이 뒤섞여 나왔습니다.' },
         { id: 'outing-stepwise', emoji: '🪜', label: '날짜와 날씨를 확인한 뒤 이동과 준비물을 이어 요청합니다.', reaction: '단계마다 결과가 다음 단계에 정확히 이어졌습니다.' },

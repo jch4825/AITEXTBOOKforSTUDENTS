@@ -198,6 +198,15 @@ export const M2_L1_STUDIO: StudioDefinition = {
     transfer: {
       title: '이름을 모르는 물건을 찾는다면',
       description: '교실에서 이름은 모르지만 종이를 묶을 때 쓰는 작은 물건을 찾고 있습니다.',
+      stimuli: [
+        {
+          id: 'm2-l1-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l1-transfer.webp',
+          alt: '흩어진 종이 더미와 문구류가 담긴 상자 사이에 물음표 카드가 놓이고, 그 위 점선 네모가 빈 채로 가위표가 붙어 있는 장면',
+          caption: '묶어야 할 종이와 이름을 모르는 문구류',
+        },
+      ],
       choices: [
         { id: 'say-that-object', emoji: '👉', label: '“그거 찾아 줘”라고만 말합니다.', reaction: '아이미: "그거요? 어떤 물건인지 알려 주시겠어요?"' },
         { id: 'describe-object', emoji: '💡', label: '쓰임, 모양, 있는 장소를 말합니다.', reaction: '아이미: "종이를 묶는 물건이군요! 찾았어요!"' },

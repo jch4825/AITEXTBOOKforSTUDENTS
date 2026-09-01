@@ -199,6 +199,15 @@ export const M4_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '친구에게 준비물 부탁하기',
       description: '친구에게 색종이 세 장을 쉬는 시간까지 빌리고 싶습니다. 어떻게 말하겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l7-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l7-transfer.webp',
+          alt: '한 학생이 무엇과 몇 개와 언제를 뜻하는 그림이 담긴 태블릿을 마주 앉은 친구에게 보이고, 마지막 칸은 점선으로 비어 있는 장면',
+          caption: '무엇을 몇 개 언제까지 빌릴지 담은 부탁 카드',
+        },
+      ],
       choices: [
         { id: 'rough-friend', emoji: '📣', label: '“야, 그거 빨리 줘”라고 말해요.', reaction: '친구도 무엇을 달라는 건지 알 수 없었습니다.' },
         { id: 'clear-friend', emoji: '🤝', label: '쓸 목적, 색종이 세 장, 시간을 넣어 부탁해요.', reaction: '친구가 바로 무엇을 도와야 할지 알 수 있었습니다.' },

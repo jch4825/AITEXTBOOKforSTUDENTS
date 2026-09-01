@@ -199,6 +199,15 @@ export const M5_L3_STUDIO: StudioDefinition = {
     transfer: {
       title: '프로젝터 모의 설치 순서',
       description: '프로젝터를 실제로 조작하지 않고 설치 카드의 순서를 정합니다. 무엇을 먼저 확인하겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l3-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l3-transfer.webp',
+          alt: '플러그와 전원과 화면과 선과 확인을 뜻하는 카드 다섯 장이 흩어져 있고, 그 아래 순서를 놓을 다섯 칸이 점선으로 비어 있는 장면',
+          caption: '흩어진 설치 단계 카드와 빈 순서 줄',
+        },
+      ],
       choices: [
         { id: 'turn-on-first', emoji: '🔌', label: '위치와 도움 없이 전원부터 켜요.', reaction: '위치를 다시 확인해야 해 처음부터 다시 했습니다.' },
         { id: 'safe-projector-order', emoji: '🧑‍🏫', label: '성인 도움·안전한 위치·모의 순서를 먼저 확인해요.', reaction: '안전한 위치부터 확인하니 나머지가 순조로웠습니다.' },

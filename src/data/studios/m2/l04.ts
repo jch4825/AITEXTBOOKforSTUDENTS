@@ -198,6 +198,15 @@ export const M2_L4_STUDIO: StudioDefinition = {
     transfer: {
       title: '표 제목 예시를 만든다면',
       description: '준비물 표의 칸 제목을 AI에게 만들어 달라고 부탁하려고 합니다.',
+      stimuli: [
+        {
+          id: 'm2-l4-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l4-transfer.webp',
+          alt: '표의 내용 칸은 모두 채워져 있는데 맨 윗줄 머리글 칸만 점선으로 비어 있는 장면',
+          caption: '내용은 있고 제목 줄이 비어 있는 표',
+        },
+      ],
       choices: [
         { id: 'table-no-example', emoji: '❌', label: '“표를 예쁘게 해 줘”라고만 합니다.', reaction: '표의 열 제목이 매번 다르게 나왔습니다.' },
         { id: 'table-good-example', emoji: '📌', label: '“물건 | 수량 | 담당” 예시를 보여 줍니다.', reaction: '예시와 똑같은 모양의 표가 나왔습니다.' },

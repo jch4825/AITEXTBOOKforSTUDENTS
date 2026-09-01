@@ -199,6 +199,15 @@ export const M6_L1_STUDIO: StudioDefinition = {
     transfer: {
       title: '학교 준비물을 산다면',
       description: 'AI가 공책, 색연필, 풀을 추천했지만 교실에 있는 물건과 예산은 아직 모릅니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l1-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l1-transfer.webp',
+          alt: '문구점에서 빈 바구니를 든 학생이 추천 목록 태블릿을 보고 있고, 생각 풍선 안에는 이미 집 선반에 있는 공책이 그려진 장면',
+          caption: '추천 목록과 이미 가지고 있는 물건',
+        },
+      ],
       choices: [
         { id: 'buy-school-list', emoji: '🎒', label: '추천된 준비물을 모두 바로 사요.', reaction: '교실에 이미 있던 물건까지 다시 사게 됐습니다.' },
         { id: 'check-school-supplies', emoji: '✅', label: '교실 재고·필요 수량·가격·예산을 확인해 목록을 고쳐요.', reaction: '확인해 보니 꼭 필요한 것만 사면 충분했습니다.' },

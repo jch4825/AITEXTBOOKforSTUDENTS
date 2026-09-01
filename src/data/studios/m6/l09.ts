@@ -199,6 +199,15 @@ export const M6_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '정류장 안내가 어려울 때',
       description: '직원이 빠르게 설명해 이해하기 어렵습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l9-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l9-transfer.webp',
+          alt: '창구 너머 직원의 말이 빠른 물결 점선으로 이어지고, 학생이 멈춤 손바닥과 거북 그림이 담긴 태블릿을 들어 올리는 장면',
+          caption: '빠른 설명과 천천히 말해 달라는 카드',
+        },
+      ],
       choices: [
         { id: 'pretend-understood', emoji: '🤐', label: '이해한 척하고 아무 방향으로 가요.', reaction: '잘못된 방향으로 가고 말았습니다.' },
         { id: 'ask-repeat-at-stop', emoji: '🔁', label: '천천히 다시 말해 달라고 요청하고 목적지를 다시 확인해요.', reaction: '다시 물으니 정확한 방향을 알 수 있었습니다.' },

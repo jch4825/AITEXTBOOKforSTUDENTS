@@ -199,6 +199,15 @@ export const M5_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '입구 화면도 쓸 수 없을 때',
       description: '고른 화면 안내 방법을 갑자기 사용할 수 없습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l9-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l9-transfer.webp',
+          alt: '큰 화면에 연결이 끊어졌다는 표시와 가위표가 떠 있고, 학생이 돋보기를 든 채 바라보며 옆 책상에는 종이와 펜이 놓인 장면',
+          caption: '쓸 수 없게 된 화면과 옆에 놓인 종이',
+        },
+      ],
       choices: [
         { id: 'stop-all-guidance', emoji: '🛑', label: '화면을 못 쓰니 안내 자체를 포기해요.', reaction: '목표인 안내는 여전히 남아 있었습니다.' },
         { id: 'switch-non-screen', emoji: '🪧', label: '손글씨 표지와 사람 안내처럼 화면이 필요 없는 대안을 다시 비교해요.', reaction: '다른 길을 다시 비교하니 여전히 안내를 할 수 있었습니다.' },

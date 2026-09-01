@@ -199,6 +199,15 @@ export const M4_L8_STUDIO: StudioDefinition = {
     transfer: {
       title: '주말 계획 바꾸기',
       description: '주말 가족 일정이 늦게 시작하는 날에는 평일 계획을 어떻게 바꾸겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l8-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l8-transfer.webp',
+          alt: '주간 계획표의 평일 칸은 그림 카드로 가득 찼는데 주말 두 칸은 점선으로 비어 있고, 옆에 비와 걷기 카드 두 장이 놓인 장면',
+          caption: '꽉 찬 평일과 비어 있는 주말 칸',
+        },
+      ],
       choices: [
         { id: 'ignore-change', emoji: '📌', label: '상황이 달라도 평일 시각만 그대로 써요.', reaction: '바뀐 일정과 자꾸 부딪혔습니다.' },
         { id: 'adjust-plan', emoji: '🔄', label: '몸 신호와 가족 일정을 보고 멈춤 시점과 다음 행동을 다시 정해요.', reaction: '바뀐 상황에 맞춰 계획도 자연스럽게 따라왔습니다.' },

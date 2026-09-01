@@ -198,6 +198,15 @@ export const M2_L10_STUDIO: StudioDefinition = {
     transfer: {
       title: '다른 목적의 짧은 대화를 만든다면',
       description: '동아리 모집 문구를 새로 만들며 요청, 수정, 확인, 결정을 짧게 반복합니다.',
+      stimuli: [
+        {
+          id: 'm2-l10-transfer-image',
+          kind: 'image',
+          src: '/images/m2-l10-transfer.webp',
+          alt: '세 학생이 큰 종이에 모집 문구 초안을 적고 있고, 옆에는 가위표가 붙은 이전 초안 여러 장이 놓인 장면',
+          caption: '고쳐 가며 다듬는 모집 문구 초안',
+        },
+      ],
       choices: [
         { id: 'transfer-one-shot', emoji: '📄', label: '첫 결과를 확인하지 않고 바로 게시합니다.', reaction: '오류가 있는 문구가 그대로 게시되고 말았습니다.' },
         { id: 'transfer-full-cycle', emoji: '🔄', label: '대상과 형식을 넣고 결과를 고친 뒤 공식 정보와 확인합니다.', reaction: '확인까지 마친 문구가 완성됐습니다.' },

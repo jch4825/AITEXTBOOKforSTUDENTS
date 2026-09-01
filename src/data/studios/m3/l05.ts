@@ -198,6 +198,15 @@ export const M3_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '같은 시작을 다른 분위기로',
       description: '비 오는 학교와 작은 로봇은 그대로 두고 이야기 분위기만 바꿔 보세요.',
+      stimuli: [
+        {
+          id: 'm3-l5-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l5-transfer.webp',
+          alt: '같은 첫 문장이 적힌 공책 옆에 차가운 색과 따뜻한 색으로 그려진 복도 그림 두 장이 놓이고, 그 사이가 점선으로 비어 있는 장면',
+          caption: '같은 시작에서 갈라지는 두 가지 분위기',
+        },
+      ],
       choices: [
         { id: 'joyful-version', emoji: '🌈', label: '즐겁고 따뜻한 이야기로 바꿔요.' },
         { id: 'curious-version', emoji: '✨', label: '신기하고 궁금한 이야기로 바꿔요.' },

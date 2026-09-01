@@ -201,6 +201,15 @@ export const M4_L2_STUDIO: StudioDefinition = {
     transfer: {
       title: '준비물 변경 소식 확인하기',
       description: '친구 메시지와 어제 반 공지, 오늘 담당 선생님 공지가 서로 다릅니다. 무엇을 기준으로 고르겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l2-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l2-transfer.webp',
+          alt: '휴대전화 메시지와 낡은 종이와 새 안내문이 나란히 놓이고, 아래 시간 화살표를 따라 가위표와 물음표와 초록 체크가 각각 붙은 장면',
+          caption: '날짜가 서로 다른 세 곳의 소식',
+        },
+      ],
       choices: [
         { id: 'friend-message', emoji: '💬', label: '가장 먼저 받은 친구 메시지를 골라요.', reaction: '먼저 왔다고 해서 가장 정확한 것은 아니었습니다.' },
         { id: 'today-teacher', emoji: '✅', label: '오늘 담당 선생님 공지의 날짜와 내용을 확인해요.', reaction: '오늘 날짜와 담당자가 확실한 근거가 됐습니다.' },

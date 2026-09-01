@@ -199,6 +199,15 @@ export const M3_L4_STUDIO: StudioDefinition = {
     transfer: {
       title: '“조용하다”를 새 장면에 쓰기',
       description: '도서관, 운동회, 번개 사진 중 “조용하다”가 어울리는 장면과 문장을 만들어 보세요.',
+      stimuli: [
+        {
+          id: 'm3-l4-transfer-image',
+          kind: 'image',
+          src: '/images/m3-l4-transfer.webp',
+          alt: '도서관과 운동장과 번개 치는 밤을 그린 액자 세 개가 나란히 놓이고, 그 아래 이름표 자리가 점선으로 비어 있는 장면',
+          caption: '세 장면과 아직 붙이지 않은 낱말표',
+        },
+      ],
       choices: [
         { id: 'library', emoji: '📚', label: '도서관 장면에 어울리는 문장을 만들어요.', reaction: '조용한 도서관에 딱 맞는 문장이 됐습니다.' },
         { id: 'sports-day', emoji: '📣', label: '응원 소리가 큰 운동회 장면과 비교해요.', reaction: '비교해 보니 운동회엔 어울리지 않는 낱말임이 분명해졌습니다.' },

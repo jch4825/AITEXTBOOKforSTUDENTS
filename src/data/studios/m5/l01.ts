@@ -199,6 +199,15 @@ export const M5_L1_STUDIO: StudioDefinition = {
     transfer: {
       title: '준비물 한 개가 부족해요',
       description: '활동 시작 전 색종이 한 묶음이 부족합니다. 문제를 어떻게 정의하겠어요?',
+      stimuli: [
+        {
+          id: 'm5-l1-transfer-image',
+          kind: 'image',
+          src: '/images/m5-l1-transfer.webp',
+          alt: '책상에 준비물 묶음 네 개가 놓이고 가운데 한 자리가 점선으로 비어 있으며, 위쪽 시계가 시작 시각을 가리키는 장면',
+          caption: '한 자리가 빈 준비물 자리와 다가오는 시작 시각',
+        },
+      ],
       choices: [
         { id: 'blame-preparer', emoji: '📣', label: '누가 준비를 잘못했는지 먼저 찾아요.', reaction: '누구 잘못인지 찾는 동안에도 문제는 그대로였습니다.' },
         { id: 'check-missing-item', emoji: '🔎', label: '필요한 수량, 지금 수량, 다른 물건으로 바꿀 수 있는지 확인해요.', reaction: '확인해 보니 바로 대체할 방법이 보였습니다.' },

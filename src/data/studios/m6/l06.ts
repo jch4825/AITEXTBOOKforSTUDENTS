@@ -199,6 +199,15 @@ export const M6_L6_STUDIO: StudioDefinition = {
     transfer: {
       title: '다른 과일도 없을 때',
       description: '계획한 대체 과일도 없다는 사실을 알게 되었습니다. 어떻게 하겠어요?',
+      stimuli: [
+        {
+          id: 'm6-l6-transfer-image',
+          kind: 'image',
+          src: '/images/m6-l6-transfer.webp',
+          alt: '계량컵과 그릇과 빵으로 이어지는 요리 순서 카드 가운데 한 자리가 점선으로 비어 있고, 위에는 가위표가 붙어 뒤집힌 카드 두 장이 놓인 장면',
+          caption: '한 자리가 빈 순서와 쓸 수 없게 된 대체 카드',
+        },
+      ],
       choices: [
         { id: 'use-unknown-food', emoji: '❓', label: '이름을 모르는 다른 재료를 바로 넣어요.', reaction: '확인되지 않은 재료가 계획에 들어갈 뻔했습니다.' },
         { id: 'substitute-missing-fruit', emoji: '🔄', label: '멈추고 재고·건강 정보를 어른과 확인해 계획을 다시 고쳐요.', reaction: '어른과 함께 확인하니 안전한 대체 재료를 찾을 수 있었습니다.' },

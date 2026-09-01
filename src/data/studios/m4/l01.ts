@@ -199,6 +199,15 @@ export const M4_L1_STUDIO: StudioDefinition = {
     transfer: {
       title: '바뀐 교실 확인하기',
       description: 'AI는 체험 장소가 2층이라고 했지만 오늘 안내판에는 변경 표시가 있습니다. 어떻게 확인하겠어요?',
+      stimuli: [
+        {
+          id: 'm4-l1-transfer-image',
+          kind: 'image',
+          src: '/images/m4-l1-transfer.webp',
+          alt: '안내판의 한 줄이 새 종이로 덮여 있고, 그 아래 태블릿에는 덮이기 전 그림이 그대로 떠 있으며 가위표가 붙은 장면',
+          caption: '새 종이로 덮인 안내판과 옛 정보를 말하는 화면',
+        },
+      ],
       choices: [
         { id: 'follow-old-room', emoji: '2️⃣', label: 'AI가 말한 2층으로 바로 가요.', reaction: '2층에 도착해 보니 체험이 옮겨져 있었습니다.' },
         { id: 'check-latest-board', emoji: '📋', label: '오늘 공식 안내판의 날짜와 변경 표시를 봐요.', reaction: '변경 표시 덕분에 바뀐 장소를 바로 확인할 수 있었습니다.' },
