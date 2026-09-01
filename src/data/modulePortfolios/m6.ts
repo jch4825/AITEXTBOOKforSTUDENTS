@@ -69,19 +69,19 @@ export const M6_PORTFOLIO: ModulePortfolioDefinition = {
       id: 'purpose-budget-plan',
       title: '목적·예산·하루 계획',
       prompt: '마을 행사에서 하고 싶은 일, 사용할 예산, 장보기와 휴식·도움 시간을 어떻게 확인할지 적어 보세요.',
-      placeholder: '예: 필요한 간식만 목록에 남기고 계산기로 합계를 확인한 뒤 점심과 쉬는 시간을 넣을 거야.',
+      placeholder: '예: 필요한 간식만 목록에 남기고 계산기로 합계를 확인한 뒤 점심과 쉬는 시간을 넣을 거예요.',
     },
     {
       id: 'movement-weather-check',
       title: '이동·날씨·조건 변화',
       prompt: '고정 지도와 공식 교통·날씨 정보에서 확인할 항목과 상황이 달라질 때 고칠 계획을 적어 보세요.',
-      placeholder: '예: 번호와 방향, 오늘 운행 공지를 보고 비 시간이 바뀌면 이동과 준비물을 다시 정할 거야.',
+      placeholder: '예: 번호와 방향, 오늘 운행 공지를 보고 비 시간이 바뀌면 이동과 준비물을 다시 정할 거예요.',
     },
     {
       id: 'health-communication-boundary',
       title: '건강·소통·정보 범위',
       prompt: '몸이 불편하거나 설명이 어렵거나 개인정보를 물을 때 누구에게 어떤 방식으로 표현할지 적어 보세요.',
-      placeholder: '예: 몸 상태는 그림 카드로 선생님께 먼저 알리고, 온라인에는 별칭과 취미만 소개할 거야.',
+      placeholder: '예: 몸 상태는 그림 카드로 선생님께 먼저 알리고, 온라인에는 별칭과 취미만 소개할 거예요.',
     },
   ],
   transferPrompt:
