@@ -131,7 +131,7 @@ export const M2_L9_STUDIO: StudioDefinition = {
           detail: {
             full: '맞는지 볼 문장을 골라요.',
             light: '느낌이나 말투보다 자료와 비교할 수 있는 주장을 표시합니다.',
-            challenge: '검증 가능한 주장을 구체적으로 분리해야 어떤 근거가 필요한지 결정할 수 있습니다.',
+            challenge: '사실인지 확인해야 할 핵심 내용을 명확히 짚어내야, 그것을 검증하기 위해 어떤 자료와 근거를 찾아야 할지 올바르게 판단할 수 있습니다.',
           },
         },
         {
@@ -140,7 +140,7 @@ export const M2_L9_STUDIO: StudioDefinition = {
           detail: {
             full: '다른 믿을 만한 자료를 찾아요.',
             light: '같은 답을 반복해도 새로운 출처가 생긴 것은 아닙니다.',
-            challenge: '동일한 시스템의 반복 응답은 오류 원인이 공유될 수 있으므로 독립된 검증으로 보기 어렵습니다.',
+            challenge: '같은 AI에게 계속 되묻는 것은 똑같은 오류를 반복할 수 있으므로, 진짜 사실을 확인하는 객관적인 검증 방법이 될 수 없습니다.',
           },
           flow: { input: 'AI의 확인할 주장', process: '독립된 출처·날짜 비교', output: '근거로 수정한 판단' },
         },
@@ -150,7 +150,7 @@ export const M2_L9_STUDIO: StudioDefinition = {
           detail: {
             full: '누가 언제 쓴 자료인지 봐요.',
             light: '오래된 공식 자료와 최신 공식 자료가 다르면 최신 변경을 확인합니다.',
-            challenge: '출처의 권위뿐 아니라 게시 날짜, 적용 시점, 담당 범위를 함께 평가해야 현재 상황의 근거가 됩니다.',
+            challenge: '믿을 만한 곳에서 나온 자료라 하더라도 작성된 날짜와 적용 시점을 함께 살펴야만, 지금 우리 상황에 꼭 맞는 정확한 근거로 활용할 수 있습니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L9_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '아이미의 종료 시간 주장을 무엇으로 확인하겠습니까?',
+      prompt: '아이미가 말한 종료 시간이 맞는지 확인하려면 무엇을 살펴보아야 할까요?',
       choices: [
         { id: 'ask-ai-really', emoji: '❓', label: '같은 AI에게 “정말이야?”라고 다시 묻습니다.', reaction: '아이미: "정말이에요! 세 번째로 확인해 드렸어요!" (같은 답이 세 번째 반복됐습니다.)' },
         { id: 'check-latest-official', emoji: '📰', label: '최신 학교 공지의 날짜와 담당자를 확인합니다.', reaction: '윤아: "오늘 날짜 공지네. 담당 선생님 성함도 있어."' },

@@ -131,7 +131,7 @@ export const M2_L6_STUDIO: StudioDefinition = {
           detail: {
             full: '큰 부탁을 작은 부탁으로 나눠요.',
             light: '각 단계가 한 가지 분명한 결과를 만들도록 정합니다.',
-            challenge: '복잡한 과제를 검토 가능한 하위 과제로 분해하면 누락 원인과 수정 지점을 찾기 쉬워집니다.',
+            challenge: '복잡한 과제를 작은 단계로 나누어 하나씩 해결해 나가면, 빠진 부분이 어디인지 찾기 쉽고 잘못된 곳을 바로잡기도 훨씬 쉬워집니다.',
           },
         },
         {
@@ -140,7 +140,7 @@ export const M2_L6_STUDIO: StudioDefinition = {
           detail: {
             full: '앞에서 찾은 내용을 다음에 넣어요.',
             light: '앞 단계 결과를 그대로 넘기기 전에 맞는지 확인합니다.',
-            challenge: '확인한 중간 결과만 다음 단계에 넣으면 대화의 앞뒤 흐름과 작업이 잘 이어집니다.',
+            challenge: '앞 단계에서 확인한 결과를 다음 요청의 정보로 활용하면, 전체 작업 과정이 자연스럽게 이어지고 완성도 높은 결과를 얻을 수 있습니다.',
           },
           flow: { input: '목적과 기능 자료', process: '단계별 요청·중간 확인', output: '완성된 준비표' },
         },
@@ -150,7 +150,7 @@ export const M2_L6_STUDIO: StudioDefinition = {
           detail: {
             full: '한 단계씩 확인해요.',
             light: '문제가 생기면 마지막이 아니라 그 단계에서 바로 고칩니다.',
-            challenge: '검토 지점을 미리 두면 오류가 누적되는 것을 줄이고 수정 비용을 낮출 수 있습니다.',
+            challenge: '단계마다 확인하는 과정을 거치면 잘못된 정보가 쌓이는 것을 막을 수 있고, 나중에 처음부터 다시 해야 하는 번거로움을 줄일 수 있습니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L6_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '준비표를 다시 만들 때 어떤 단계를 먼저 시작하겠습니까?',
+      prompt: '준비표를 빠짐없이 완성하려면 어떤 단계부터 먼저 시작해야 할까요?',
       choices: [
         { id: 'ask-whole-plan-again', emoji: '📦', label: '같은 큰 요청을 다시 보냅니다.', reaction: '아이미: "저는 여전히 장소를 몰라요…"' },
         { id: 'confirm-purpose-place', emoji: '1️⃣', label: '목적과 사용할 장소부터 확인합니다.', reaction: '아이미: "장소부터요? 좋아요, 그걸 알려 주시면 표가 훨씬 정확해져요!"' },

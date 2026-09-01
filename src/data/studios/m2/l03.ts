@@ -131,7 +131,7 @@ export const M2_L3_STUDIO: StudioDefinition = {
           detail: {
             full: '무엇인지 정확히 말해요.',
             light: '정확한 대상 표현은 AI가 살펴볼 결과 범위를 좁힙니다.',
-            challenge: '대상 범주와 수량을 명시하면 요청의 해석 범위를 줄여 목적에 맞는 결과를 비교하기 쉬워집니다.',
+            challenge: '원하는 대상의 종류와 수량을 구체적으로 밝히면, AI가 엉뚱하게 해석할 가능성을 줄여 목적에 알맞은 결과를 얻기 쉬워집니다.',
           },
         },
         {
@@ -140,7 +140,7 @@ export const M2_L3_STUDIO: StudioDefinition = {
           detail: {
             full: '필요한 조건만 넣어요.',
             light: '조건이 결과 선택에 어떤 영향을 주는지 생각합니다.',
-            challenge: '모든 정보를 나열하지 않고 의사결정에 영향을 주는 조건을 선별해야 요청이 명확하고 안전합니다.',
+            challenge: '불필요한 정보를 늘어놓지 않고 꼭 필요한 핵심 조건만 골라 요청해야, AI의 대답도 명확해지고 개인정보도 안전하게 지킬 수 있습니다.',
           },
           flow: { input: '대상과 필요한 조건', process: '결과 범위 좁히기', output: '조건에 맞는 후보' },
         },
@@ -150,7 +150,7 @@ export const M2_L3_STUDIO: StudioDefinition = {
           detail: {
             full: '조건마다 맞는지 표시해요.',
             light: '요청이 구체적이어도 새 결과를 바로 정답으로 사용하지 않습니다.',
-            challenge: '조건별 충족 여부를 같은 기준으로 비교하면 요청 수정의 효과와 남은 문제를 확인할 수 있습니다.',
+            challenge: '처음 제시했던 조건에 맞는지 꼼꼼히 비교해 보면, 요청을 수정한 뒤 무엇이 나아졌고 어떤 점이 아직 부족한지 쉽게 확인할 수 있습니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L3_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '첫 결과를 바꾸려면 어떤 정보를 먼저 넣겠습니까?',
+      prompt: '엉뚱한 첫 결과를 바로잡으려면 어떤 조건을 먼저 추가해야 할까요?',
       choices: [
         { id: 'say-fun-only', emoji: '🎉', label: '“재미있는 걸로”만 더 말합니다.', reaction: '아이미: "재미의 기준을 몰라 또 헤맸어요… 비슷한 놀이를 또 골랐네요."' },
         { id: 'add-target-conditions', emoji: '📋', label: '대상, 인원, 시간, 공간을 넣습니다.', reaction: '아이미: "이제 알겠어요! 여섯 명이 20분 안에 교실에서 할 수 있는 놀이 말이군요!"' },

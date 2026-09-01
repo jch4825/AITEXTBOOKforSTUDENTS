@@ -140,7 +140,7 @@ export const M2_L5_STUDIO: StudioDefinition = {
           detail: {
             full: '중요한 내용은 그대로 두어요.',
             light: '바뀌면 안 되는 사실과 대상에 맞게 바꿀 표현을 따로 표시합니다.',
-            challenge: '내용 층과 표현 층을 분리하면 스타일 수정 중 사실이 누락되거나 변하는 문제를 줄일 수 있습니다.',
+            challenge: '전달할 핵심 내용과 표현할 말투를 구분하여 생각하면, 말투를 다듬는 과정에서 중요한 정보가 빠지거나 왜곡되는 실수를 줄일 수 있습니다.',
           },
           flow: { input: '사실과 읽을 사람 조건', process: '내용 고정·말투 조정', output: '읽을 사람별 안내 글' },
         },
@@ -150,7 +150,7 @@ export const M2_L5_STUDIO: StudioDefinition = {
           detail: {
             full: '그럴듯해도 다시 확인해요.',
             light: '자연스러운 표현과 정확한 내용을 서로 다른 기준으로 살펴봅니다.',
-            challenge: '역할과 말투를 넣은 요청은 표현을 바꿀 뿐, 내용이 맞는지는 따로 확인해야 합니다.',
+            challenge: '정중하거나 그럴듯한 말투로 작성되었다고 해서 내용까지 항상 정확한 것은 아니므로, 실제 사실과 일치하는지는 반드시 따로 확인해야 합니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L5_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '두 사람에게 어떤 안내 글을 만들겠습니까?',
+      prompt: '읽는 사람이 다른 두 사람에게 안내 글을 어떻게 작성해야 할까요?',
       choices: [
         { id: 'same-notice-both', emoji: '👥', label: '한 안내 글을 두 사람에게 똑같이 보냅니다.', reaction: '동생이 안내문을 보고 어려워했습니다.' },
         { id: 'two-tones-one-fact', emoji: '🗣️', label: '사실은 지키고 읽을 사람별 말투를 바꿉니다.', reaction: '아이미: "시간과 장소는 그대로, 말투만 바꾸는 거군요. 할 수 있어요!"' },

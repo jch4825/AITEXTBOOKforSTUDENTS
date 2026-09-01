@@ -131,7 +131,7 @@ export const M2_L10_STUDIO: StudioDefinition = {
           detail: {
             full: '내가 정말 필요한 일을 골라요.',
             light: '홍보 문구, 준비 목록, 소개 대본 중 목적을 분명히 말합니다.',
-            challenge: '어디에 쓸지와 성공 기준을 먼저 정하면 답이 알맞은지 판단할 수 있습니다.',
+            challenge: '답변을 어디에 어떻게 활용할지 구체적인 목표와 성공 기준을 먼저 정해 두어야, AI의 답변이 본래 목적에 잘 맞는지 올바르게 평가할 수 있습니다.',
           },
         },
         {
@@ -140,7 +140,7 @@ export const M2_L10_STUDIO: StudioDefinition = {
           detail: {
             full: '대화의 모든 단계를 기록해요.',
             light: '결과만 저장하지 않고 어떻게 고치고 확인했는지 함께 남깁니다.',
-            challenge: '과정 기록을 남기면 어디에서 나온 답인지, 왜 고쳤는지, 내 생각이 어떻게 바뀌었는지 볼 수 있습니다.',
+            challenge: '대화의 전체 과정을 기록으로 남겨 두면, 답변의 출처와 수정한 이유뿐만 아니라 스스로 문제를 해결해 나간 생각의 변화를 한눈에 살펴볼 수 있습니다.',
           },
           flow: { input: '실제 목적과 첫 요청', process: '결과·수정·근거 확인', output: '최종 결정과 대화 기록' },
         },
@@ -150,7 +150,7 @@ export const M2_L10_STUDIO: StudioDefinition = {
           detail: {
             full: '어떤 답인지 표시를 봐요.',
             light: '어느 경로든 결과를 바로 믿지 않고 독립된 자료와 비교합니다.',
-            challenge: '답이 실제 AI에서 왔는지 연습용 답인지 표시하고, 둘 다 같은 방법으로 확인해야 합니다.',
+            challenge: '화면에 제시된 답변이 실제 AI의 응답인지 수업용 예시인지 구분하여 살펴보고, 어떤 경우라도 신뢰할 수 있는 근거 자료와 대조하여 사실을 확인해야 합니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L10_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '어떤 과제와 최초 요청으로 대화를 시작하겠습니까?',
+      prompt: '어떤 과제를 골라 아이미와 첫 대화를 시작해 볼까요?',
       choices: [
         { id: 'choose-promo-copy', emoji: '📢', label: '행사 시간과 장소가 있는 홍보 문구를 만듭니다.', reaction: '아이미: "홍보 문구군요! 행사 시간과 장소부터 알려 주시면 시작할게요."' },
         { id: 'choose-activity-list', emoji: '📋', label: '체험 활동의 준비 목록을 만듭니다.', reaction: '아이미: "준비 목록이군요! 참가 인원부터 알려 주시면 시작할게요."' },
@@ -193,7 +193,7 @@ export const M2_L10_STUDIO: StudioDefinition = {
     artifact: {
       kind: 'repair-card',
       title: '전체 대화·검증 기록',
-      prompt: '목적, 최초 요청, 첫 결과 판단, 수정 요청, 근거 확인, 최종 결과와 결정을 타임라인으로 남겨 봐요.',
+      prompt: '목적, 최초 요청, 첫 결과 판단, 수정 요청, 근거 확인, 최종 결과와 결정을 대화의 순서대로 한눈에 정리해 봐요.',
     },
     transfer: {
       title: '다른 목적의 짧은 대화를 만든다면',

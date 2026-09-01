@@ -131,7 +131,7 @@ export const M2_L8_STUDIO: StudioDefinition = {
           detail: {
             full: '할 일에 맞는 답 모양을 골라요.',
             light: '읽는 사람이 결과로 무엇을 해야 하는지 생각합니다.',
-            challenge: '정보 탐색, 순차 실행, 핵심 전달이라는 사용 목적에 따라 적절한 출력 구조가 달라집니다.',
+            challenge: '정보를 한눈에 비교하기, 순서대로 차근차근 따라 하기, 핵심을 기억하기처럼 글을 활용하는 목적에 따라 알맞은 글의 모양(형식)이 달라집니다.',
           },
         },
         {
@@ -140,7 +140,7 @@ export const M2_L8_STUDIO: StudioDefinition = {
           detail: {
             full: '표와 목록의 규칙을 말해요.',
             light: '결과가 형식을 지켰는지 확인할 기준을 함께 정합니다.',
-            challenge: '검증 가능한 형식 제약을 명시하면 결과의 준수 여부를 객관적으로 평가할 수 있습니다.',
+            challenge: '표의 항목이나 번호의 개수처럼 눈으로 확인할 수 있는 구체적인 규칙을 정해 주면, AI가 답변 형식을 잘 지켰는지 쉽게 판단할 수 있습니다.',
           },
           flow: { input: '내용과 사용 목적', process: '형식 규칙 적용', output: '표·목록·한 문장' },
         },
@@ -150,7 +150,7 @@ export const M2_L8_STUDIO: StudioDefinition = {
           detail: {
             full: '모양과 내용을 모두 봐요.',
             light: '짧고 예쁜 결과만으로 좋은 답이라고 판단하지 않습니다.',
-            challenge: '형식 준수와 내용 정확성은 독립된 평가 기준이므로 두 항목을 별도로 검토해야 합니다.',
+            challenge: '원하는 모양대로 예쁘게 정리되었다고 해서 내용까지 정확한 것은 아니므로, 글의 모양과 실제 내용이 맞는지는 각각 따로 꼼꼼히 확인해야 합니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L8_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '세 과제에 어떤 답의 모양을 연결하겠습니까?',
+      prompt: '세 가지 과제의 목적에 알맞은 답변 형식을 어떻게 연결해야 할까요?',
       choices: [
         { id: 'all-short-sentences', emoji: '✂️', label: '모두 가장 짧은 한 문장으로 만듭니다.', reaction: '시간표가 한 문장에 구겨져 시간 비교가 불가능해졌습니다.' },
         { id: 'match-purpose-format', emoji: '🎯', label: '시간표·번호 목록·한 문장을 목적에 맞게 나눕니다.', reaction: '윤아: "표는 비교, 번호는 순서, 한 문장은 홍보. 딱이야."' },

@@ -7,7 +7,7 @@ export const M2_PORTFOLIO: ModulePortfolioDefinition = {
   kicker: '2단원 성장 포트폴리오',
   title: '나의 프롬프트 노트',
   description:
-    '체험회 준비에서 만든 열 번의 요청 기록을 꺼내 첫 요청, 수정 요청, 확인 근거, 최종 판단이 이어지는 한 권의 프롬프트 노트로 완성합니다.',
+    '체험회 준비 과정에서 남긴 열 번의 요청 기록을 바탕으로, 첫 요청부터 수정 요청, 근거 확인, 최종 결정까지 이어지는 나만의 프롬프트 노트를 완성해 봐요.',
   closingStory: [
     {
       id: 'm2-close-question',
@@ -76,7 +76,7 @@ export const M2_PORTFOLIO: ModulePortfolioDefinition = {
     },
   ],
   transferPrompt:
-    '새 동아리원이 실제 목적 하나를 골랐습니다. 그 친구가 첫 요청을 쓰고, 결과를 고쳐 묻고, 독립된 자료로 확인한 뒤 최종 사용을 결정하도록 세 단계 안내를 만들어 보세요.',
+    '새로 들어온 동아리 친구가 첫 요청 작성부터 결과 검토, 근거 확인, 최종 판단까지 스스로 해낼 수 있도록 돕는 세 단계 안내서를 만들어 봐요.',
   nextChoices: [
     { id: 'purpose-first', emoji: '🎯', label: '무엇을 왜 만들지 먼저 말할게요.' },
     { id: 'repair-with-criteria', emoji: '🧩', label: '부족한 점을 기준과 함께 고쳐 물을게요.' },

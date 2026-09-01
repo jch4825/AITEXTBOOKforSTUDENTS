@@ -131,7 +131,7 @@ export const M2_L2_STUDIO: StudioDefinition = {
           detail: {
             full: '부탁을 하나씩 나눠요.',
             light: '짧음보다 무엇을 먼저 해결할지 분명한 것이 중요합니다.',
-            challenge: '목적 단위로 요청을 분할하면 각 결과의 누락과 완료 여부를 따로 검토할 수 있습니다.',
+            challenge: '부탁할 내용을 목적에 따라 하나씩 나누어 요청하면, 각 결과에 빠진 내용이 없는지 꼼꼼하게 검토할 수 있습니다.',
           },
         },
         {
@@ -140,7 +140,7 @@ export const M2_L2_STUDIO: StudioDefinition = {
           detail: {
             full: '급한 부탁을 먼저 해요.',
             light: '마감 시간과 앞뒤 관계를 기준으로 대화 순서를 정합니다.',
-            challenge: '마감 시간과 먼저 필요한 일을 보면 여러 부탁의 순서를 이유 있게 정할 수 있습니다.',
+            challenge: '마감 시간과 일의 앞뒤 관계를 따져보면 여러 가지 부탁을 어떤 순서로 요청해야 할지 합리적으로 정할 수 있습니다.',
           },
           flow: { input: '여러 목적의 부탁', process: '마감과 관계로 분할', output: '순서가 있는 요청 묶음' },
         },
@@ -150,7 +150,7 @@ export const M2_L2_STUDIO: StudioDefinition = {
           detail: {
             full: '하나를 확인하고 다음으로 가요.',
             light: '각 단계의 결과가 목적에 맞는지 보고 다음 요청을 시작합니다.',
-            challenge: '중간 결과를 검토하면 앞 단계의 오류가 다음 단계로 이어지는 것을 줄일 수 있습니다.',
+            challenge: '각 단계의 결과를 바로바로 검토하면, 앞 단계에서 생긴 잘못된 정보가 다음 단계로 이어지는 실수를 막을 수 있습니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L2_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '세 부탁 중 무엇을 어떻게 먼저 요청하겠습니까?',
+      prompt: '세 가지 부탁 중 어떤 것을 먼저 요청해야 할까요?',
       choices: [
         { id: 'repeat-all', emoji: '📦', label: '세 부탁을 더 짧은 한 문장에 다시 넣습니다.', reaction: '아이미: "또 섞여 나왔어요! 짧아져도 목적은 그대로 섞여 있네요."' },
         { id: 'start-deadline', emoji: '⏱️', label: '마감이 빠른 안내문부터 따로 요청합니다.', reaction: '아이미: "안내문 하나만요? 좋아요, 이건 자신 있어요!"' },

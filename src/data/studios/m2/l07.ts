@@ -131,7 +131,7 @@ export const M2_L7_STUDIO: StudioDefinition = {
           detail: {
             full: '무엇이 불편한지 말해요.',
             light: '수정할 부분을 찾을 수 있는 기준을 한 가지 이상 넣습니다.',
-            challenge: '관찰 가능한 수정 기준을 제시하면 원하는 변화와 결과의 차이를 평가할 수 있습니다.',
+            challenge: '구체적으로 눈에 보이는 수정 기준을 제시해야, 내가 원했던 방향대로 답변이 잘 바뀌었는지 명확하게 비교하고 판단할 수 있습니다.',
           },
         },
         {
@@ -140,7 +140,7 @@ export const M2_L7_STUDIO: StudioDefinition = {
           detail: {
             full: '중요한 내용은 남겨 달라고 해요.',
             light: '표현을 바꾸는 동안 유지할 사실을 따로 표시합니다.',
-            challenge: '불변 조건을 명시하면 스타일 수정 과정에서 핵심 정보가 누락되거나 왜곡되는 위험을 줄입니다.',
+            challenge: '바뀌어서는 안 될 핵심 조건을 명확히 정해 주면, 말투나 분량을 다듬는 과정에서 중요한 정보가 빠지거나 달라지는 위험을 줄일 수 있습니다.',
           },
           flow: { input: '첫 답과 수정 기준', process: '유지·수정·삭제', output: '검토 가능한 개선본' },
         },
@@ -150,7 +150,7 @@ export const M2_L7_STUDIO: StudioDefinition = {
           detail: {
             full: '전과 후를 나란히 봐요.',
             light: '쉬워졌다는 느낌만 보지 않고 사실이 남았는지 확인합니다.',
-            challenge: '전후 비교는 요청 수정의 효과뿐 아니라 의도하지 않은 정보 손실도 발견하게 합니다.',
+            challenge: '수정 전과 후의 결과를 나란히 비교해 보면, 글이 얼마나 좋아졌는지뿐만 아니라 빠뜨린 정보가 없는지도 함께 발견할 수 있습니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L7_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '두 번째 안내를 보고 어떻게 다시 요청하겠습니까?',
+      prompt: '핵심 정보가 빠져버린 두 번째 안내를 보고, 우리는 어떻게 다시 요청해야 할까요?',
       choices: [
         { id: 'say-dislike-only', emoji: '💬', label: '“아직 마음에 안 들어”라고만 말합니다.', reaction: '아이미가 무엇을 고칠지 몰라 엉뚱한 곳을 바꿨습니다.' },
         { id: 'lock-and-revise', emoji: '🔒', label: '지킬 사실과 고칠 표현을 함께 말합니다.', reaction: '아이미: "시간과 장소는 그대로, 어려운 낱말만 바꾸라는 거군요. 확실해요!"' },

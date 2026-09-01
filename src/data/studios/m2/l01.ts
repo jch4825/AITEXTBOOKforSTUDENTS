@@ -131,7 +131,7 @@ export const M2_L1_STUDIO: StudioDefinition = {
           detail: {
             full: '말하지 않은 뜻은 다르게 알아들을 수 있어요.',
             light: '목적이나 대상이 빠지면 AI가 다른 뜻으로 추측할 수 있습니다.',
-            challenge: '모호한 요청은 가능한 해석의 범위를 넓혀 목적과 다른 결과가 나올 가능성을 높입니다.',
+            challenge: '요청이 모호하거나 구체적이지 않으면 AI가 잘못 해석하여 원하지 않는 엉뚱한 결과를 내놓을 가능성이 높아집니다.',
           },
           flow: { input: '요청에 적힌 정보', process: '가능한 뜻 추측', output: 'AI가 만든 결과' },
         },
@@ -150,7 +150,7 @@ export const M2_L1_STUDIO: StudioDefinition = {
           detail: {
             full: '다시 나온 답도 살펴봐요.',
             light: '대상, 날짜, 준비물이 실제 안내와 같은지 확인합니다.',
-            challenge: '수정 요청은 정확성을 보장하지 않으므로 독립된 원래 자료와 결과를 다시 대조합니다.',
+            challenge: '요청을 수정했다고 해서 결과가 항상 정확하다고 믿지 말고, 공식적인 원래 자료와 비교하여 사실을 다시 확인해야 합니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L1_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '아이미가 다른 안내를 보여 주었을 때 무엇을 먼저 하겠습니까?',
+      prompt: '아이미가 엉뚱한 안내를 보여 주었을 때, 우리는 무엇을 먼저 해야 할까요?',
       choices: [
         { id: 'repeat-vague', emoji: '🔁', label: '같은 요청을 그대로 반복합니다.', reaction: '아이미: "또 지난달 음악회 안내네요! 같은 요청엔 같은 답이에요."' },
         { id: 'find-missing-info', emoji: '🔍', label: '목적과 대상 중 빠진 정보를 찾습니다.', reaction: '윤아: "그래, 목적이랑 날짜부터 채우자."' },

@@ -131,7 +131,7 @@ export const M2_L4_STUDIO: StudioDefinition = {
           detail: {
             full: '보고 따라 할 예를 보여 줘요.',
             light: '예시는 말로 설명하기 어려운 결과 모양을 구체적으로 보여 줍니다.',
-            challenge: '예시는 출력 패턴의 구체적 기준을 제공해 결과의 구조적 일관성을 높일 수 있습니다.',
+            challenge: '원하는 예시를 함께 보여 주면 AI가 참고할 명확한 기준이 생겨, 답변의 형식과 분량을 일정하게 맞출 수 있습니다.',
           },
           flow: { input: '요청과 한 가지 예시', process: '예시의 패턴 참고', output: '비슷한 모양의 결과' },
         },
@@ -141,7 +141,7 @@ export const M2_L4_STUDIO: StudioDefinition = {
           detail: {
             full: '예시가 맞는지 먼저 봐요.',
             light: '좋은 모양만 보지 않고 예시의 내용과 사실도 확인합니다.',
-            challenge: '예시는 형식과 내용 모두에 영향을 주므로 잘못된 패턴을 제공하면 오류가 반복될 수 있습니다.',
+            challenge: '예시는 형식뿐 아니라 내용에도 영향을 주므로, 잘못된 정보를 예시로 넣으면 AI 역시 그 오류를 그대로 따라 할 수 있습니다.',
           },
         },
         {
@@ -150,7 +150,7 @@ export const M2_L4_STUDIO: StudioDefinition = {
           detail: {
             full: '무엇이 달라졌는지 찾아요.',
             light: '예시를 넣은 뒤 좋아진 점과 새로 생긴 오류를 함께 찾습니다.',
-            challenge: '동일한 요청 조건에서 예시만 바꾸어 비교하면 예시가 결과에 미친 영향을 구분할 수 있습니다.',
+            challenge: '같은 질문에서 예시만 다르게 넣어 결과를 비교해 보면, 예시가 AI의 답변에 어떤 영향을 미치는지 명확하게 파악할 수 있습니다.',
           },
         },
       ],
@@ -165,7 +165,7 @@ export const M2_L4_STUDIO: StudioDefinition = {
       ],
     },
     firstAttempt: {
-      prompt: '세 결과 중 어떤 예시를 요청에 사용하겠습니까?',
+      prompt: 'AI에게 좋은 답변을 얻으려면 어떤 예시를 보여 주어야 할까요?',
       choices: [
         { id: 'no-example', emoji: '❌', label: '예시 없이 “잘 만들어 줘”라고 합니다.', reaction: '이번에도 결과의 길이와 모양이 제각각으로 나왔습니다.' },
         { id: 'verified-example', emoji: '✅', label: '내용과 형식이 확인된 한 줄 예시를 사용합니다.', reaction: '아이미: "이 모양이군요! 이제 헤매지 않고 만들 수 있어요."' },
@@ -197,7 +197,7 @@ export const M2_L4_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '표 제목 예시를 만든다면',
-      description: '준비물 표의 열 제목을 AI에게 만들게 하려고 합니다.',
+      description: '준비물 표의 칸 제목을 AI에게 만들어 달라고 부탁하려고 합니다.',
       choices: [
         { id: 'table-no-example', emoji: '❌', label: '“표를 예쁘게 해 줘”라고만 합니다.', reaction: '표의 열 제목이 매번 다르게 나왔습니다.' },
         { id: 'table-good-example', emoji: '📌', label: '“물건 | 수량 | 담당” 예시를 보여 줍니다.', reaction: '예시와 똑같은 모양의 표가 나왔습니다.' },
