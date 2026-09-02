@@ -38,7 +38,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm1-l7', genre: 12, genreName: '같은 말 짝짓기', badge: '같은 말 짝짓기', component: 'SummaryDiffGame' },
   { lessonId: 'm1-l8', genre: 17, genreName: '분류 매치', badge: '같은 모양 상자 옮기기', component: 'JudgmentCratePushGame' },
   { lessonId: 'm1-l9', genre: 16, genreName: '파이프 연결', badge: '도구 관 잇기', component: 'ToolPipeConnectGame' },
-  { lessonId: 'm1-l10', genre: 44, genreName: '요리 타이쿤', badge: '음악 주문대', component: 'MusicOrderCounterGame' },
+  { lessonId: 'm1-l10', genre: 42, genreName: '카드 짝맞추기', badge: '노래 짝 맞추기', component: 'SongMatchGame' },
 
   // ── M2 · 프롬프트 ────────────────────────────────────────────
   { lessonId: 'm2-l1', genre: 14, genreName: '낙하 블록 퍼즐', badge: '정보 블록 쌓기', component: 'InfoBlockDropGame' },
