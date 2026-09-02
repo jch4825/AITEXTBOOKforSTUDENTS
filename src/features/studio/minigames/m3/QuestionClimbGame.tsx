@@ -20,8 +20,12 @@ import type { MiniGameProps } from '../types';
 
 const WORLD_W = 960;
 const WORLD_H = 540;
-const HERO_Y = WORLD_H - 190;
-const STEP_H = 62;
+/* 캐릭터가 선 높이와 계단 간격.
+   간격이 캐릭터 지름보다 좁으면 다음 칸이 머리 위에 겹쳐 그려져, 어느 것이 밟을 칸인지
+   알아볼 수 없다. 발밑 계단(HERO_Y + 26)과 캐릭터 반지름 22를 함께 넘도록 잡은 값이다. */
+const HERO_Y = WORLD_H - 170;
+const HERO_R = 22;
+const STEP_H = 88;
 const STEP_W = 132;
 const CENTER = WORLD_W / 2;
 
@@ -109,10 +113,13 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
   const stage = STAGES[game.stageIndex];
   const tuning = game.tuning;
 
-  /* 지원 수준은 시간 여유와 줄어드는 속도, 기회로 나타난다. 계단과 질문은 같다. */
-  const maxTime = stage.seconds * clamp(tuning.time, 0.9, 1.7);
-  const drain = stage.drain / clamp(tuning.time, 0.9, 1.6);
-  const gain = 0.42 * clamp(tuning.tolerance, 0.8, 1.5);
+  /* 지원 수준은 시간 여유와 줄어드는 속도, 기회로 나타난다. 계단과 질문은 같다.
+     기준은 "한 칸에 몇 초를 쓸 수 있는가"(gain / drain)다. 이 값이 0.4초 아래로
+     내려가면 다음 칸이 어느 쪽인지 읽을 틈이 없어 아무도 끝까지 오르지 못한다.
+     지금은 충분한 지원 1.9초, 중학 0.9초, 고등 0.5~0.65초다. */
+  const maxTime = stage.seconds * clamp(tuning.time, 0.85, 1.6);
+  const drain = stage.drain / clamp(tuning.time, 0.85, 1.5);
+  const gain = 0.9 * clamp(tuning.tolerance, 0.85, 1.4);
   const maxLives = tuning.lives;
 
   const worldRef = useRef<World>({
@@ -142,7 +149,7 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
     if (next.side !== side) {
       w.lives -= 1;
       w.shake = 0.5;
-      w.time = Math.max(0, w.time - 1.2);
+      w.time = Math.max(0, w.time - 0.9);
       playSound('select');
       if (w.lives <= 0) {
         w.finished = true;
@@ -188,22 +195,38 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
     ctx.fillStyle = BOARD.bg;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    const shakeX = w.shake > 0 ? Math.sin(w.shake * 46) * 7 : 0;
-    ctx.save();
-    ctx.translate(shakeX, 0);
+    /* 계단은 학생을 화면 한가운데 두고 세상이 흘러 내려오는 방식으로 그린다.
+       칸의 절대 자리를 그대로 쓰면 좌우 이동이 계속 쌓여, 열 칸쯤 오른 뒤에는 계단과
+       학생이 함께 화면 밖으로 걸어 나갔다. 그래서 지금 밟고 선 칸을 원점으로 삼고
+       거기서 얼마나 떨어졌는지만 그린다.
 
-    /* 계단은 학생을 가운데 고정하고 세상이 내려오는 방식으로 그린다.
-       index번 계단의 가로 자리는 0번부터 그 칸까지의 좌우 이동을 모두 더한 값이고,
-       학생은 마지막으로 밟은 칸(height-1) 위에 선다. 다음 칸은 반드시 학생보다 위에
-       그려져야 "어느 쪽으로 오를까"가 눈에 보인다. */
+       한 칸 오른 직후에는 세상이 한 칸 뒤에 있다가 제자리로 돌아온다(offset). 세로로
+       내려오는 만큼 가로로도 되돌아와야 계단이 툭 끊기지 않는다. */
     const DX = STEP_W * 0.46;
-    const posOf = (index: number) => {
-      let px = CENTER;
+    const walkTo = (index: number) => {
+      let px = 0;
       for (let k = 0; k <= index; k += 1) px += w.steps[k].side * DX;
       return px;
     };
-    const heroX = w.height === 0 ? CENTER : posOf(w.height - 1);
+    const base = w.height === 0 ? 0 : walkTo(w.height - 1);
+    const posOf = (index: number) => CENTER + walkTo(index) - base;
+    const heroX = CENTER;
+    const lastSide = w.height > 0 ? w.steps[w.height - 1].side : 0;
+    const slide = w.offset * lastSide * DX;
     const shift = w.offset * STEP_H;
+
+    const shakeX = w.shake > 0 ? Math.sin(w.shake * 46) * 7 : 0;
+    ctx.save();
+    ctx.translate(shakeX + slide, 0);
+
+    // 이미 밟고 지나온 계단. 발밑만 그리면 계단이 아니라 허공에 뜬 판으로 보인다.
+    for (let back = 1; back <= 3; back += 1) {
+      const index = w.height - 1 - back;
+      if (index < 0) break;
+      const by = HERO_Y + 26 + back * STEP_H + shift;
+      if (by > WORLD_H + 40) break;
+      panel(ctx, posOf(index) - STEP_W / 2, by, STEP_W, 34, '#1E293B', BOARD.line, 8);
+    }
 
     // 발밑 계단(또는 시작 바닥)
     panel(ctx, heroX - STEP_W / 2, HERO_Y + 26 + shift, STEP_W, 34, '#334155', BOARD.line, 8);
@@ -211,9 +234,11 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
     for (let i = 0; i <= 7; i += 1) {
       const index = w.height + i;
       if (index >= w.steps.length) break;
-      const sx = posOf(index) - (w.height === 0 ? 0 : 0);
+      const sx = posOf(index);
       const sy = HERO_Y + 26 - (i + 1) * STEP_H + shift;
-      if (sy < -60 || sy > WORLD_H + 60) continue;
+      // 위 두 띠(남은 시간·다음 질문)를 침범하는 칸은 그리지 않는다. 겹쳐 그리면
+      // 글자와 계단이 서로를 갉아먹어 어느 쪽이 눌러야 할 칸인지 알아볼 수 없다.
+      if (sy < 118 || sy > WORLD_H + 60) continue;
       const isNext = i === 0;
       panel(ctx, sx - STEP_W / 2, sy, STEP_W, 34,
         isNext ? '#065F46' : '#1E293B', isNext ? PLAY.goal : BOARD.line, 8);
@@ -225,7 +250,7 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
     // 캐릭터 — 발밑 계단 바로 위에 선다
     const hy = HERO_Y + shift;
     ctx.beginPath();
-    ctx.arc(heroX, hy, 24, 0, Math.PI * 2);
+    ctx.arc(heroX, hy, HERO_R, 0, Math.PI * 2);
     ctx.fillStyle = PLAY.hero;
     ctx.fill();
     ctx.lineWidth = 4;
