@@ -378,7 +378,13 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
 
   const items = itemsRef.current;
   const cursor = cursorRef.current;
-  const noteEdge = note.tone === 'good' ? '#34D399' : note.tone === 'warn' ? '#FB7185' : '#38BDF8';
+  /* 설명 띠가 보드 밖 종이 면으로 내려왔다. 보드용 형광 톤을 종이에 얹으면 글자 대비가
+     무너지므로 프레임의 성공·실패 배너와 같은 시맨틱 피드백 색을 쓴다. */
+  const noteSkin = note.tone === 'good'
+    ? { edge: 'var(--ok)', fill: 'var(--ok-bg)', ink: '#14532D' }
+    : note.tone === 'warn'
+      ? { edge: 'var(--warn)', fill: 'var(--warn-bg)', ink: '#7C2D12' }
+      : { edge: 'var(--line)', fill: 'var(--paper-0)', ink: 'var(--ink-1)' };
 
   return (
     <MiniGameFrame
@@ -398,23 +404,24 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].scene} 장면으로 옮겼어요.`)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 찾기" variant="primary" />}
-    >
-      <div className="flex min-h-0 flex-1 flex-col gap-2">
-        {/* 읽을 글은 이 띠 한 곳에만 둔다. 물건마다 긴 글이 붙으면 읽을 수 없다. */}
+      /* 읽을 글은 이 띠 한 곳에만 둔다. 물건마다 긴 글이 붙으면 판을 가려서 읽을 수 없다. */
+      footer={(
         <div
-          className="flex items-center gap-2 rounded-xl px-2.5 py-1.5"
-          style={{ background: 'var(--board-surface)', border: `2px solid ${noteEdge}` }}
+          className="flex items-center gap-2 rounded-xl px-2.5 py-2"
+          style={{ background: noteSkin.fill, border: `2px solid ${noteSkin.edge}` }}
         >
           <span aria-hidden="true" className="text-[22px]">{stage.sceneEmoji}</span>
-          <span role="status" className="text-[15px] font-black leading-snug" style={{ color: 'var(--board-ink)' }}>
+          <span role="status" className="text-[15px] font-black leading-snug" style={{ color: noteSkin.ink }}>
             {note.text}
           </span>
-          <span className="ml-auto shrink-0 text-[15px] font-black" style={{ color: 'var(--board-ink)' }}>
+          <span className="ml-auto shrink-0 text-[15px] font-black" style={{ color: noteSkin.ink }}>
             {stage.scene}
           </span>
         </div>
-
+      )}
+      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 찾기" variant="primary" />}
+    >
+      <div className="flex min-h-0 flex-1 flex-col gap-2">
         <GameStage ariaLabel={`${stage.scene} 장면에서 AI가 든 물건을 찾는 놀이. 찾은 물건 ${foundCount}개, 남은 기회 ${lives}개.`}>
           {/* 장면 얼개 — 눌리는 것이 아니므로 조작을 받지 않는다 */}
           {stage.decor.map((piece, index) => (
@@ -476,25 +483,24 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
                     <span aria-hidden="true">{item.emoji}</span>
                   )}
                 </button>
-                {item.found ? (
+                {/*
+                  이름표는 찾았든 아니든 같은 크기다. 찾은 것만 크게 만들었더니 옆 물건을
+                  덮어 다음에 무엇을 고를지 볼 수 없었다. 무엇을 찾았는지는 색으로 알리고,
+                  설명은 판 밖 아래 띠에서 읽는다.
+                  못 찾은 물건의 이름표는 충분한 지원·중학에서만 붙인다. 고등은 그림만 보고 고른다.
+                */}
+                {(item.found || game.hintAllowed) && (
                   <span
-                    className="absolute left-1/2 top-full mt-1 block w-[134px] -translate-x-1/2 rounded-lg px-1.5 py-1 text-center text-[14px] font-black leading-tight"
-                    style={{ background: 'var(--board-overlay)', border: '2px solid #34D399', color: 'var(--board-ink)' }}
+                    aria-hidden="true"
+                    className="absolute left-1/2 top-full mt-0.5 block -translate-x-1/2 whitespace-nowrap rounded px-1 text-[14px] leading-tight"
+                    style={{
+                      background: item.found ? 'rgba(52, 211, 153, 0.32)' : 'var(--board-overlay)',
+                      color: 'var(--board-ink)',
+                      fontWeight: item.found ? 900 : 700,
+                    }}
                   >
                     {item.name}
-                    <span className="mt-0.5 block font-bold">{item.help}</span>
                   </span>
-                ) : (
-                  // 이름표는 충분한 지원·중학에서만 붙인다. 고등은 그림만 보고 골라야 한다.
-                  game.hintAllowed && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute left-1/2 top-full mt-0.5 block -translate-x-1/2 whitespace-nowrap rounded px-1 text-[14px] font-bold leading-tight"
-                      style={{ background: 'var(--board-overlay)', color: 'var(--board-ink)' }}
-                    >
-                      {item.name}
-                    </span>
-                  )
                 )}
               </div>
             );

@@ -36,6 +36,13 @@ interface Props {
   status: MiniGameStatus;
   /** 성공·실패 배너 문구. 비텍스트 피드백의 보조이므로 한 줄로 짧게. */
   message?: string;
+  /**
+   * 조작 버튼 바로 위에 붙는 설명 띠.
+   *
+   * 보드 안에 띄우면 놀이 장면을 가린다. 판 위에서 눈으로 알아보는 것과 글로 읽는 것을
+   * 갈라 두려고 이 자리를 만들었다. 보드 밖 종이 면이므로 다크 보드 색을 쓰지 않는다.
+   */
+  footer?: React.ReactNode;
   /** 하단 조작 버튼들. MiniGameButton을 쓰면 톤이 맞는다. */
   actions?: React.ReactNode;
   /** 실제 플레이 보드. 프레임이 다크 배경을 깔아주므로 자체 배경을 두지 않는다. */
@@ -60,6 +67,7 @@ export default function MiniGameFrame({
   onStageSelect,
   status,
   message,
+  footer,
   actions,
   children,
 }: Props) {
@@ -175,6 +183,8 @@ export default function MiniGameFrame({
           {message}
         </div>
       )}
+
+      {footer}
 
       {actions && <div className="flex items-center gap-1.5">{actions}</div>}
     </div>
