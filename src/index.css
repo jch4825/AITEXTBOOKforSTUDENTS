@@ -3320,10 +3320,10 @@
   }
 }
 
-/* 모바일만 그림 아래에 대사를 쌓고, 768px 이상은 이미지와 대사창을 계속
-   2열로 유지한다. 행 높이를 그림 높이에 고정하지 않는 것이 핵심이다.
-   그림(16:9)과 대사 중 큰 쪽이 행 높이를 정하므로, 글자를 키우거나 대사가
-   긴 장면에서도 마지막 줄이 상자 밖으로 잘리지 않고 창에 남은 세로를 쓴다.
+/* 모바일만 그림 아래에 대사를 쌓고, 768px 이상은 이미지와 대사창을 2열로 둔다.
+   두 상자는 폭도 높이도 같다. 각본을 대사 칸으로 다시 쓴 뒤로 한 칸이 100자 남짓이라
+   대사창이 그림보다 길 이유가 없어졌고, 길이가 어긋나면 지면 한가운데가 한쪽으로만
+   늘어져 보인다. 그래서 행 높이는 16:9 그림 높이로 못 박고 대사가 거기에 맞춘다.
    @layer 밖에서 선언해 기존 데스크톱 고정 높이 규칙을 확실히 덮는다. */
 @media (min-width: 768px) {
   .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full,
@@ -3335,39 +3335,117 @@
   }
 
   .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-stage {
-    /* 무대 한 행이 쓸 수 있는 최대 높이. 이 값을 넘기면 장면 버튼과 이전·다음
-       줄이 첫 화면 밖으로 밀린다. rem이라 글자 크기를 키우면 함께 줄어든다. */
-    --scenario-stage-max: max(12rem, calc(100dvh - 28.4rem));
+    /* 무대 한 행의 높이 = 한 열을 가득 채운 16:9 그림의 높이.
+       창이 낮아 그만큼 쓸 수 없을 때는 두 상자가 **함께** 줄어든다. 한쪽만 줄이면
+       바로 대칭이 깨진다. rem이라 글자 크기를 키우면 상한이 함께 내려간다. */
+    --scenario-stage-max: min(
+      calc((100cqw - var(--scenario-stage-gap)) * 0.28125),
+      max(12rem, calc(100dvh - 28.4rem))
+    );
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: auto;
+    grid-template-rows: minmax(0, 1fr);
     align-items: stretch;
-    height: auto;
-    /* 무대가 늘 상한만큼 자리를 차지한다. 한 장면 안에서 대사 칸을 넘길 때마다
+    /* 상한에 걸려 좁아진 무대는 지면 가운데에 둔다. 왼쪽에 붙이면 두 상자만 한쪽으로
+       쏠려 아래 장면 버튼 줄과 축이 어긋난다. */
+    width: min(100%, calc(var(--scenario-stage-max) * 32 / 9 + var(--scenario-stage-gap)));
+    margin-inline: auto;
+    height: var(--scenario-stage-max);
+    /* 무대가 늘 같은 자리를 차지한다. 한 장면 안에서 대사 칸을 넘길 때마다
        대사창이 자라 장면 버튼과 「다음」이 100px씩 내려가면, 같은 자리를 반복해서
        누르는 학생의 손가락 밑에서 버튼이 달아난다. 자리를 미리 잡아 두면 칸이
        바뀌어도 버튼은 그대로 있고, 대사는 그 안에서 세로 가운데에 놓인다. */
     min-height: var(--scenario-stage-max);
   }
 
-  /* 그림은 언제나 원본 16:9다. 대사가 길어 행이 커져도 따라 늘어나지 않고,
-     창이 낮아 상한에 걸리면 잘리는 대신 폭까지 함께 줄어 그림 전체가 남는다. */
+  /* 그림은 제 열을 가득 채운다. 열 폭이 곧 행 높이의 16/9이므로 늘리거나 자르지
+     않아도 원본 16:9가 그대로 지켜진다. */
   .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-image-frame {
-    align-self: start;
-    justify-self: center;
-    width: min(100%, calc(var(--scenario-stage-max) * 16 / 9));
-    height: auto;
+    align-self: stretch;
+    justify-self: stretch;
+    width: 100%;
+    height: 100%;
     max-height: none;
-    aspect-ratio: 16 / 9;
   }
 
-  /* 대사창은 그림 높이를 최소로 삼고 내용만큼 자란다. 창이 아주 낮을 때만
-     상한에 걸려 내부 스크롤이 생긴다. */
+  /* 대사창은 그림과 같은 크기의 상자다. 위아래 길이가 같아야 지면이 좌우로 맞물린다.
+     드물게 긴 칸만 상자 안에서 스크롤한다. */
   .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-dialogue {
-    height: auto;
+    align-self: stretch;
+    height: 100%;
     min-width: 0;
     min-height: 0;
-    max-height: var(--scenario-stage-max);
+    max-height: none;
     overflow-y: auto;
+  }
+
+  /* 상자가 그림 높이에 맞춰 낮아진 만큼 안쪽 여백과 줄 사이만 조인다.
+     읽는 글자 크기는 건드리지 않는다(a701e4b에서 일부러 3px 키운 값이다).
+     여백과 행간만으로도 상자를 넘치는 대사 칸이 중학 40칸→4칸, 고등 96칸→10칸으로
+     줄어 남는 칸만 상자 안에서 스크롤한다. */
+  .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-dialogue {
+    padding: 0.7rem;
+  }
+
+  .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .speaker-dialogue {
+    gap: 0.35rem;
+  }
+
+  .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-dialogue .speaker-dialogue p {
+    line-height: 1.5;
+  }
+
+  .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-dialogue > .visual-novel-perspective {
+    margin-top: 0.25rem;
+    line-height: 1.45;
+  }
+
+  /* 지면이 좁으면 같은 16:9 상자에 대사가 들어가지 못한다. 대사 글자는 지면 폭을 따라
+     줄어들다가 1.15rem에서 멈추는데 상자는 계속 줄어들기 때문이다. 이 구간에서는
+     "대칭"보다 "대사가 잘리지 않는 것"이 앞선다. 그래서 넓은 지면에서만 두 상자를
+     같은 크기로 맞물리고, 좁은 지면에서는 예전처럼 대사창이 필요한 자리를 잡는다.
+     50rem은 계측값이다. 상자를 넘치는 대사 칸이 지면 929px(51.6rem)에서 중학 9/744인데,
+     872px(48.4rem)에서 32/744, 780px(43.3rem)에서 123/744로 급히 늘어난다.
+     기준이 rem이므로 글자를 키우면 문턱도 함께 올라가, 큰 글자에서는 더 넓은 지면부터
+     대칭이 된다. 차례를 접으면 1280px에서도 지면이 1022px이 되어 대칭 쪽으로 들어온다. */
+  @container (max-width: 50rem) {
+    /* 좁은 지면에서는 옆으로 나란히 두는 것 자체가 성립하지 않는다. 열 하나가 350px
+       남짓인데 대사 글자는 1.15rem에서 더 줄지 않아, 두 상자를 같은 16:9로 맞추면
+       열 352px에서 중학 305/744칸이 잘린다. 그래서 모바일과 같이 그림 아래에 대사를
+       쌓는다. 좌우로 나눌 것이 없어지므로 두 상자가 같은 폭으로 위아래로 맞물리고,
+       대사창은 필요한 만큼만 차지한다. */
+    .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-stage {
+      /* 그림 한 장과 대사 상자가 각각 쓸 수 있는 세로 여유. 34rem은 지면 제목·자막·
+         장면 선택줄·바깥 화면 틀이 늘 차지하는 자리다(계측: 768×1024에서 411px). */
+      --scenario-stacked-room: max(8rem, calc(100dvh - 34rem));
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto;
+      width: 100%;
+      height: auto;
+      min-height: 0;
+    }
+
+    /* 그림은 지면 폭을 가득 쓰되, 창이 낮으면 폭까지 함께 줄어 그림 전체가 남는다.
+       그림·대사·조작줄이 한 화면에 들어가야 하므로 두 상자가 같은 여유를 나눠 쓴다. */
+    .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-image-frame {
+      align-self: start;
+      justify-self: center;
+      width: min(100%, calc(var(--scenario-stacked-room) * 16 / 9));
+      height: auto;
+      max-height: none;
+      aspect-ratio: 16 / 9;
+    }
+
+    /* PC·태블릿에서는 상자 자리가 고정이어야 한다. 대사 칸을 넘길 때마다 상자가 자라면
+       장면 버튼과 「다음」이 같은 자리를 반복해 누르는 학생의 손가락 밑에서 달아난다.
+       15rem은 계측값이다. 이 배치에서 가장 긴 대사 칸이 지면 594px에서 254px,
+       700px에서 225px이므로 어느 폭에서도 한 상자에 들어간다. 남는 자리는 대사가
+       세로 가운데에 놓이며 채운다(justify-content: safe center). */
+    .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .visual-novel-dialogue {
+      align-self: start;
+      height: auto;
+      min-height: min(15rem, var(--scenario-stacked-room));
+      max-height: none;
+    }
   }
 
   .studio-editorial-scenario-frame .studio-editorial-scenario.lesson-spread--full .speaker-dialogue,
