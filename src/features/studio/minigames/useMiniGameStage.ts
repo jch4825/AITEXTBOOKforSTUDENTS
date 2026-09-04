@@ -4,16 +4,14 @@ import { tuningFor } from './engine/difficulty';
 import type { SupportLevel } from '../types';
 import type { MiniGameStatus } from './types';
 
-/**
- * 지원 수준별 스테이지 노출 수.
- * 충분한 지원(full)은 첫 스테이지만 반복해도 학습이 완료되고,
- * 도전적(challenge)은 준비된 스테이지를 전부 연다.
+/*
+ * 스테이지는 지원 수준과 상관없이 셋을 모두 연다.
+ *
+ * 예전에는 충분한 지원이면 첫 판만, 중학이면 두 판만 열었다. 그런데 지원 수준 셋은
+ * 뼈대가 같고 요구 수준만 달라야 한다는 것이 제품 계약이다(CLAUDE.md, difficulty.ts).
+ * 판을 덜어 내면 충분한 지원을 쓰는 학생은 뒤쪽 장면을 아예 만나지 못하고, 교사도
+ * "오늘은 2단계까지" 같은 운영을 할 수 없다. 요구 수준의 차이는 tuning이 맡는다.
  */
-const STAGE_BUDGET: Record<SupportLevel, number> = {
-  full: 1,
-  light: 2,
-  challenge: Number.POSITIVE_INFINITY,
-};
 
 /** 힌트(정답 경로 보여주기) 버튼 노출 정책. 도전적 수준에서는 숨긴다. */
 const HINT_POLICY: Record<SupportLevel, boolean> = {
@@ -44,7 +42,7 @@ export function useMiniGameStage({ supportLevel, stageCount, autoResetOnFailMs =
   const [message, setMessage] = useState('');
   const [round, setRound] = useState(0);
 
-  const visibleStageCount = Math.max(1, Math.min(stageCount, STAGE_BUDGET[supportLevel]));
+  const visibleStageCount = Math.max(1, stageCount);
   const hintAllowed = HINT_POLICY[supportLevel];
   const isLocked = status === 'running';
 

@@ -138,6 +138,21 @@ if (!fs.existsSync(genresPath)) {
   }
 }
 
+/* 세 단계는 지원 수준과 상관없이 모두 열려 있어야 한다.
+   지원 수준 셋은 뼈대가 같고 요구 수준만 다르다는 것이 제품 계약이다. 예전에는 지원
+   수준별로 노출할 스테이지 수를 잘랐고, 그래서 충분한 지원을 쓰는 학생은 뒤쪽 두 판을
+   아예 만나지 못했다. 요구 수준의 차이는 tuning이 맡는다. */
+const stageHookPath = path.join(minigameRoot, 'useMiniGameStage.ts');
+if (!fs.existsSync(stageHookPath)) {
+  errors.push('스테이지 훅이 없습니다: src/features/studio/minigames/useMiniGameStage.ts');
+} else {
+  const hookSource = fs.readFileSync(stageHookPath, 'utf8');
+  const capped = /visibleStageCount\s*=\s*[^;]*supportLevel/.test(hookSource);
+  if (capped) {
+    errors.push('스테이지 노출 수를 지원 수준으로 자르고 있습니다. 세 단계는 모두 열려야 합니다.');
+  }
+}
+
 /* 놀이는 태블릿·PC 크기에서만 연다.
    미니게임의 조작은 드래그·조준·타이밍이라 390px 휴대전화에서는 판과 손가락이 겹쳐
    조작 자체가 성립하지 않는다. 슬롯이 다시 무조건 게임을 그리면 이 계약이 깨지므로
