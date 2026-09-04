@@ -88,13 +88,15 @@ export default function MiniGameFrame({
   return (
     <div
       data-minigame-frame
-      className="surface-sticker flex h-full min-h-0 flex-col gap-2.5 overflow-hidden rounded-2xl p-3.5 sm:p-4"
+      className="surface-sticker flex h-full min-h-0 flex-col gap-2 overflow-hidden rounded-2xl p-3 sm:p-3.5"
       style={{
         '--surface-edge': accent,
       } as React.CSSProperties}
     >
-      {/* 이름표 + 진행 수치 */}
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      {/* 이름표 + 난이도 + 진행 수치.
+          난이도를 따로 한 줄에 두었더니 그 줄만 60px 남짓을 먹어 놀이판이 그만큼 눌렸다.
+          셋은 모두 "이 판이 무엇인지" 알리는 머리글이라 한 줄에 모은다. */}
+      <div className="flex flex-wrap items-center gap-2">
         <span
           className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[14px] font-black"
           style={{ background: tint, border: `1.5px solid ${accent}` }}
@@ -102,8 +104,42 @@ export default function MiniGameFrame({
           <Icon name="cards" size={16} />
           {badge}
         </span>
+
+        {/* 난이도 — 세 칸을 붙인 길쭉한 한 덩어리로 둔다. 낱개 버튼 셋보다 높이를 덜 쓰고,
+            지금 어느 칸에 서 있는지도 한눈에 읽힌다. */}
+        {stages && stages.length > 1 && (
+          <div
+            role="group"
+            aria-label="난이도 고르기"
+            className="flex shrink-0 items-center overflow-hidden rounded-full"
+            style={{ border: `1.5px solid var(--line)` }}
+          >
+            {stages.map((stage, index) => {
+              const active = index === activeStageIndex;
+              const stageLabel = STAGE_LABELS[stage.label] ?? stage.label;
+              return (
+                <button
+                  key={stage.id}
+                  type="button"
+                  onClick={() => onStageSelect?.(index)}
+                  aria-pressed={active}
+                  // 손가락으로 누르는 칸이므로 최소 44px 높이를 지킨다.
+                  className="min-h-11 shrink-0 px-4 text-[14px] font-black transition"
+                  style={{
+                    background: active ? accent : 'var(--paper-1)',
+                    color: active ? 'var(--paper-0)' : 'var(--ink-2)',
+                    borderLeft: index === 0 ? 'none' : '1.5px solid var(--line)',
+                  }}
+                >
+                  {stageLabel}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {progress && (
-          <span className="text-[14px] font-bold" style={{ color: 'var(--ink-2)' }}>
+          <span className="ml-auto text-[14px] font-bold" style={{ color: 'var(--ink-2)' }}>
             {progress.label}{' '}
             <strong className="text-base font-black" style={{ color: accent }}>
               {progress.value}
@@ -114,37 +150,10 @@ export default function MiniGameFrame({
         )}
       </div>
 
-      {/* 난이도 스테이지 탭 — 지원 수준에 따라 열리는 개수가 달라진다 */}
-      {stages && stages.length > 1 && (
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
-          {stages.map((stage, index) => {
-            const active = index === activeStageIndex;
-            const stageLabel = STAGE_LABELS[stage.label] ?? stage.label;
-            return (
-              <button
-                key={stage.id}
-                type="button"
-                onClick={() => onStageSelect?.(index)}
-                aria-pressed={active}
-                // 손가락으로 누르는 탭이므로 최소 44px 높이를 지킨다.
-                className="min-h-11 shrink-0 rounded-lg px-3 py-1 text-[14px] font-black transition"
-                style={{
-                  background: active ? accent : 'var(--paper-1)',
-                  color: active ? 'var(--paper-0)' : 'var(--ink-2)',
-                  border: `1.5px solid ${active ? accent : 'var(--line)'}`,
-                }}
-              >
-                {stageLabel}
-              </button>
-            );
-          })}
-        </div>
-      )}
-
       {/* 안내 문장 + 읽어주기 */}
       <div className="flex items-start gap-2">
         <p
-          className="flex-1 text-[15px] font-bold leading-relaxed sm:text-[16px]"
+          className="flex-1 text-[15px] font-bold leading-normal sm:text-[16px]"
           style={{ color: 'var(--ink-2)' }}
         >
           {instruction}

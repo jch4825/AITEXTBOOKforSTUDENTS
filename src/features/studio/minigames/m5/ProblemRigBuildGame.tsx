@@ -316,7 +316,7 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
         )}
 
         <div className="flex min-h-0 flex-1 items-center justify-center">
-          <div className="aspect-video max-h-full w-full max-w-[640px]">
+          <div className="game-canvas-fit">
             <GameCanvas
               active={game.playing || game.status === 'running'}
               width={WORLD_W}

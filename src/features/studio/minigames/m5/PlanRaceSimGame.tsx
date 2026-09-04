@@ -357,7 +357,7 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
         {note && <p className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>}
 
         <div className="flex min-h-0 flex-1 items-center justify-center">
-          <div className="aspect-video max-h-full w-full max-w-[700px]">
+          <div className="game-canvas-fit">
             <GameCanvas
               active={game.playing || game.status === 'running'}
               width={WORLD_W}

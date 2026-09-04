@@ -911,6 +911,9 @@ export default function StudioExperience({
         secondary={secondary}
         left={left}
         right={right}
+        /* 놀이가 실제로 열리는 단계에서만 왼쪽 면을 넓힌다. 판이 안 열리는 화면 크기나
+           놀이가 없는 차시에서는 지면이 반반으로 남는다. */
+        spreadClassName={isCompleteStage && miniGamePlayable ? 'lesson-spread--wide-left' : undefined}
       />
       <InquiryCertificateModal
         isOpen={showCertificateModal}

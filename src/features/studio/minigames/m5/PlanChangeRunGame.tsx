@@ -299,7 +299,7 @@ export default function PlanChangeRunGame({ supportLevel }: MiniGameProps) {
       }
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
-        <div className="aspect-video max-h-full w-full max-w-[760px]">
+        <div className="game-canvas-fit">
           <GameCanvas
             active={game.playing}
             width={WORLD_W}
