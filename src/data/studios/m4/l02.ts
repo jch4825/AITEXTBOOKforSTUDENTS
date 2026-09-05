@@ -6,8 +6,8 @@ export const M4_L2_STUDIO: StudioDefinition = {
     id: 'm4-source-trust-lab',
     lessonId: 'm4-l2',
     moduleId: 'm4',
-    title: '더 믿을 만한 자료 고르기',
-    subtitle: '누가 작성했는지 알 수 없는 글, 지난 공지, 최신 공식 공지를 같은 기준으로 꼼꼼히 비교해 봐요.',
+    title: '출처와 날짜를 보고 믿을 만한 자료 고르기',
+    subtitle: '출처와 작성 날짜를 꼼꼼히 살펴보고 더 믿을 만한 자료를 골라봐요.',
     format: 'B',
     visualNovel: {
       title: '“체험회가 취소되었대”라는 소문이 돌 때 어떻게 해야 할까요',

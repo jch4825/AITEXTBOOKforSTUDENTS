@@ -163,7 +163,7 @@ export default function WordLockRoomGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="낱말 자물쇠 방"
-      instruction={`방 안 물건을 눌러 '${stage.word}'이 쓰인 문장을 모으세요. ${needClues}개를 모으면 자물쇠가 돌아갑니다.`}
+      instruction={`방 안의 물건들을 눌러 '${stage.word}' 낱말이 들어간 문장을 찾아보세요. 단서를 모두 찾으면 자물쇠가 열립니다.`}
       progress={{ label: '모은 문장', value: found.length, max: stage.clues.length }}
       hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

@@ -410,7 +410,7 @@ export default function VoiceRhythmGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="말 받아쓰기 리듬"
-      instruction="파란 낱말이 초록 선에 닿을 때 그 줄의 A·S·D 키를 누르고, 붉은 소음은 지나가게 둡니다. 왼쪽 스위치를 켜면 잠깐 동안 소음이 줄어듭니다."
+      instruction="파란 낱말이 초록 선에 닿을 때 알맞은 자리를 눌러 보세요. 빨간 소음은 누르지 않고 지나가게 두면 됩니다."
       progress={{ label: '바르게 받아쓴 낱말', value: view.ok, max: stage.words.length }}
       hud={<GameHud lives={view.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

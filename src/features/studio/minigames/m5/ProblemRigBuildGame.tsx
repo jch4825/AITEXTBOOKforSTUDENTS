@@ -241,7 +241,7 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="문제 수레 조립"
-      instruction="조각을 눌러 세 자리에 끼운 다음 시험 주행을 누르세요. 자리에 맞지 않는 조각은 모난 바퀴가 됩니다."
+      instruction="문제에 알맞은 부품 3개를 골라 자동차에 끼운 다음, 시험 주행 단추를 눌러 굴려 보세요."
       progress={{ label: '채운 자리', value: (['now', 'want', 'gap'] as Slot[]).filter((s) => slots[s]).length, max: 3 }}
       hud={<GameHud lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

@@ -192,7 +192,7 @@ export default function CoinMergeGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="동전 합치기"
-      instruction={`같은 금액 타일을 밀어 합치세요. ${stage.goal.toLocaleString()}원 타일을 만들면 됩니다. 방향키나 아래 버튼을 씁니다.`}
+      instruction={`금액이 같은 동전 타일을 밀어 하나로 합치면서, ${stage.goal.toLocaleString()}원 타일을 만들어 보세요.`}
       progress={{ label: '가장 큰 금액', value: best, max: stage.goal }}
       hud={<GameHud score={left} scoreLabel="남은 밀기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

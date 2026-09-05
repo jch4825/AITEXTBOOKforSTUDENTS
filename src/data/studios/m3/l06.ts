@@ -5,8 +5,8 @@ export const M3_L6_STUDIO: StudioDefinition = {
     id: 'm3-calculation-verification-lab',
     lessonId: 'm3-l6',
     moduleId: 'm3',
-    title: '계산은 다른 도구로 확인하기',
-    subtitle: '합계를 먼저 예상하고 계산기로 확인해 AI 풀이의 오류 지점을 찾아요.',
+    title: '계산 결과는 직접 확인하기',
+    subtitle: '간식 금액을 먼저 예상하고, 계산기로 두드려 틀린 부분을 찾아봐요.',
     format: 'B',
     visualNovel: {
       title: '간식 합계가 두 가지로 나왔어요',

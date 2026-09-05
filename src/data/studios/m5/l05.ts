@@ -6,8 +6,8 @@ export const M5_L5_STUDIO: StudioDefinition = {
     id: 'm5-adjustable-help',
     lessonId: 'm5-l5',
     moduleId: 'm5',
-    title: '답 대신 필요한 만큼 도움받기',
-    subtitle: '첫 시도를 남기고 작은 단서·과정 질문·부분 예시 중 필요한 도움을 골라봐요.',
+    title: '정답 대신 필요한 만큼만 힌트 얻기',
+    subtitle: '정답을 바로 보지 않고, 스스로 생각할 수 있도록 필요한 만큼만 힌트를 얻어 봐요.',
     format: 'D',
     visualNovel: {
       title: '포스터 배치 퍼즐이 풀리지 않고 꽉 막혀버렸어요',

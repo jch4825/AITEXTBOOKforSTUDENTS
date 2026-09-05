@@ -5,8 +5,8 @@ export const M1_L8_STUDIO: StudioDefinition = {
     id: 'm1-help-boundary-map',
     lessonId: 'm1-l8',
     moduleId: 'm1',
-    title: '사실과 판단, 누가 결정할까?',
-    subtitle: '사실은 근거로 확인하고, AI의 1차 판단과 사람의 최종 판단을 구분해 봐요.',
+    title: '사실 확인과 최종 결정은 누가 할까요?',
+    subtitle: '진짜 사실인지 확인하고, 사람이 결정해야 하는 일을 알아봐요.',
     format: 'A',
     decisionTitle: '아이미가 나눈 기준을 함께 검토해 봐요.',
     suggestedQuestions: [

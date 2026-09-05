@@ -6,8 +6,8 @@ export const M4_L9_STUDIO: StudioDefinition = {
     id: 'm4-risk-request-help-network',
     lessonId: 'm4-l9',
     moduleId: 'm4',
-    title: '이상한 요청을 어른에게 알리기',
-    subtitle: '사진·암호·선물·비밀·만남 단서를 찾고 개인 도움망으로 연결해 봐요.',
+    title: '위험하거나 이상한 요구는 어른에게 알리기',
+    subtitle: '위험하거나 이상한 요구를 알아채고, 도움을 받을 수 있는 사람에게 알려 봐요.',
     format: 'C',
     visualNovel: {
       title: '선물과 비밀 만남을 제안하는 낯선 메시지를 받았을 때',

@@ -6,8 +6,8 @@ export const M5_L11_STUDIO: StudioDefinition = {
     id: 'm5-condition-change-plan',
     lessonId: 'm5-l11',
     moduleId: 'm5',
-    title: '조건이 바뀌면 계획도 바꾸기',
-    subtitle: '준비물·도구·시간·안전 정보가 달라지면 멈추고 계획을 다시 세워요.',
+    title: '상황이 바뀌었을 때 안전하게 계획 바꾸기',
+    subtitle: '상황이나 조건이 바뀌었을 때 하던 일을 멈추고 안전하게 새 계획을 세워 봐요.',
     format: 'A',
     visualNovel: {
       title: '준비물 도구 부족과 미확인된 알레르기 정보',

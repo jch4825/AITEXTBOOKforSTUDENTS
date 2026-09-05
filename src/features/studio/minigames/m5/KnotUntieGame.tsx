@@ -217,7 +217,7 @@ export default function KnotUntieGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="매듭 풀기"
-      instruction="방향을 고르고 두드리세요. 맞는 방향이면 내 힘이 찹니다. 막히면 힌트를 한 칸만 받을 수 있습니다."
+      instruction="매듭이 풀리는 방향을 골라 톡톡 두드려 보세요. 풀기 어려울 때는 힌트 단추를 누르면 도움을 받을 수 있어요."
       progress={{ label: '푼 매듭', value: hud.index, max: stage.count }}
       hud={<GameHud score={hud.power} scoreLabel="내 힘" timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

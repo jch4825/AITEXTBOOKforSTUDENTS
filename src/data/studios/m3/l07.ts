@@ -6,8 +6,8 @@ export const M3_L7_STUDIO: StudioDefinition = {
     id: 'm3-evidence-summary-lab',
     lessonId: 'm3-l7',
     moduleId: 'm3',
-    title: '긴 글의 핵심을 남기기',
-    subtitle: '읽는 목적에 맞는 핵심을 먼저 고르고 AI 요약의 누락을 원문에서 찾아요.',
+    title: '긴 글에서 중요한 내용 찾기',
+    subtitle: '긴 글에서 중요한 내용을 먼저 찾고, 인공지능 요약에 빠진 부분을 채워 봐요.',
     format: 'C',
     visualNovel: {
       title: '준비 시간이 사라진 세 문장 요약',

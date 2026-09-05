@@ -508,7 +508,7 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
   return (
     <MiniGameFrame
       badge="대화 핀볼"
-      instruction="발사대를 누르고 있다가 놓아 공을 쏘고, A 키와 D 키(또는 화면 왼쪽·오른쪽 절반)로 날개를 쳐서 목적 → 구체 → 근거 → 결정 범퍼를 순서대로 켜세요. 넷이 다 켜지면 가운데 문이 열립니다."
+      instruction="공을 쏘아 올린 뒤, 날개를 움직여 목적 → 구체 → 근거 → 결정 범퍼를 순서대로 맞춰 보세요. 네 개가 모두 켜지면 문이 열립니다."
       progress={{ label: '순서대로 켠 곳', value: view.lit, max: 4 }}
       hud={<GameHud lives={view.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

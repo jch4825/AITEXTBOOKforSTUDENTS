@@ -6,8 +6,8 @@ export const M2_L2_STUDIO: StudioDefinition = {
     id: 'm2-one-purpose-at-a-time',
     lessonId: 'm2-l2',
     moduleId: 'm2',
-    title: '한 번에 한 가지 부탁',
-    subtitle: '여러 부탁을 목적과 순서에 따라 나누어 요청해 봐요.',
+    title: '한 번에 한 가지씩 부탁해요',
+    subtitle: '여러 가지 부탁을 한 번에 하지 않고, 중요한 것부터 하나씩 나누어 말해 봐요.',
     format: 'B',
     visualNovel: {
       title: '세 가지 부탁을 한 문장에 넣었더니',

@@ -6,8 +6,8 @@ export const M4_L4_STUDIO: StudioDefinition = {
     id: 'm4-password-refusal-route',
     lessonId: 'm4-l4',
     moduleId: 'm4',
-    title: '비밀번호와 인증 코드는 보내지 않기',
-    subtitle: '보안 정보 요구를 거절하고 믿을 만한 어른과 공식 복구 절차를 확인해 봐요.',
+    title: '비밀번호와 개인 인증 정보는 보내지 않기',
+    subtitle: '비밀번호를 묻는 이상한 요구는 거절하고, 믿을 만한 어른에게 도움을 청해 봐요.',
     format: 'C',
     visualNovel: {
       title: '“선생님 확인용이니 인증 코드를 보내 줘”라는 수상한 메시지',

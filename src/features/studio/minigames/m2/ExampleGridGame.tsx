@@ -209,7 +209,7 @@ export default function ExampleGridGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="예시 지뢰 찾기"
-      instruction="칸을 눌러 열면 옆에 숨은 엉뚱한 답의 개수가 예시로 나옵니다. 위험해 보이는 칸은 깃발 모드로 표시하세요."
+      instruction="칸을 눌러 열면서 숨어 있는 엉뚱한 답을 찾아보세요. 잘못된 예시가 숨어 있는 위험한 칸에는 깃발을 꽂아 표시해 봅시다."
       progress={{ label: '연 칸', value: opened, max: safeTotal }}
       hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

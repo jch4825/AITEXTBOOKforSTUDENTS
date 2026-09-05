@@ -423,7 +423,7 @@ export default function SourceClimbGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="출처 절벽 오르기"
-      instruction={`${stage.title} 손잡이에 적힌 출처와 날짜를 보고 더 믿을 만한 쪽을 잡으세요. 손잡이를 누르거나, 좌우 방향키로 고르고 스페이스를 누릅니다.`}
+      instruction={`${stage.title} 손잡이에 적힌 출처와 날짜를 살펴보고, 더 믿을 수 있는 쪽을 골라 올라가 보세요.`}
       progress={{ label: '오른 칸', value: hud.level, max: stage.levels }}
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

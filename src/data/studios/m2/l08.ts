@@ -6,8 +6,8 @@ export const M2_L8_STUDIO: StudioDefinition = {
     id: 'm2-output-format-studio',
     lessonId: 'm2-l8',
     moduleId: 'm2',
-    title: '답의 모양을 정해요',
-    subtitle: '목적에 맞는 표·번호 목록·한 문장 형식을 고르고 결과를 확인해 봐요.',
+    title: '원하는 모양을 정해서 부탁해요',
+    subtitle: '표나 번호 목록처럼 내가 원하는 모양을 정해서 부탁하고 결과를 살펴봐요.',
     format: 'B',
     visualNovel: {
       title: '모든 결과가 긴 문단으로 나왔어요',

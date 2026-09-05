@@ -389,7 +389,7 @@ export default function StopTimingGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="멈춤 타이밍"
-      instruction="한 번 누르면 시계 바늘이 돕니다. 바늘이 초록 칸에 들어왔을 때 다시 눌러 멈추세요. 스페이스 키로도 멈출 수 있습니다."
+      instruction="시계 바늘이 돌아갈 때 잘 살펴보다가, 초록색 칸에 들어왔을 때 화면이나 스페이스 키를 눌러 멈추어 보세요."
       progress={{ label: '정한 다음 행동', value: hud.cleared, max: ROUNDS }}
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

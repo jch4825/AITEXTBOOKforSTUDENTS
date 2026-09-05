@@ -278,7 +278,7 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="질문 계단 오르기"
-      instruction="다음 계단이 왼쪽이면 왼쪽, 오른쪽이면 오른쪽을 누르세요. 한 칸 오를 때마다 시간이 조금 늘어납니다."
+      instruction="계단이 놓인 방향에 맞추어 왼쪽 또는 오른쪽을 눌러 보세요. 한 칸씩 올라갈 때마다 시간이 늘어납니다."
       progress={{ label: '오른 칸', value: hud.height, max: stage.goal }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={hud.time} timeTotal={maxTime} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

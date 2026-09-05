@@ -495,7 +495,7 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="모호한 말 베기"
-      instruction="누른 채 지나가면 칼자국이 생깁니다. 회색 구름의 모호한 말만 베고, 초록 자물쇠의 지킬 사실은 그대로 지나가게 둡니다. 방향키로 칼을 옮기고 스페이스를 누르면 가로로 휘두릅니다."
+      instruction="알기 어려운 모호한 말(회색 구름)만 가볍게 베어 보세요. 꼭 지켜야 할 중요한 사실(초록 자물쇠)은 다치지 않게 그대로 두어야 해요."
       progress={{ label: '벤 모호한 말', value: Math.min(hud.sliced, TARGET_VAGUE), max: TARGET_VAGUE }}
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} score={keptCount} scoreLabel="지킨 사실" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

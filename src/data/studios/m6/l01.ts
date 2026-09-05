@@ -6,8 +6,8 @@ export const M6_L1_STUDIO: StudioDefinition = {
     id: 'm6-shopping-choice',
     lessonId: 'm6-l1',
     moduleId: 'm6',
-    title: '조건에 맞는 장보기',
-    subtitle: 'AI 목록을 실제 재고·가격·예산·알레르기 조건과 비교해 고쳐요.',
+    title: '조건과 예산에 맞추어 장보기',
+    subtitle: '장바구니 목록을 살펴보고 우리 집 재고와 예산, 알레르기에 맞게 고쳐 봐요.',
     format: 'C',
     visualNovel: {
       title: '실제 생활 조건을 모르는 아이미의 첫 장보기 목록',

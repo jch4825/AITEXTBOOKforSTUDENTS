@@ -5,8 +5,8 @@ export const M1_L3_STUDIO: StudioDefinition = {
     id: 'm1-answer-making-lab',
     lessonId: 'm1-l3',
     moduleId: 'm1',
-    title: 'AI는 어떻게 답을 만들까?',
-    subtitle: 'AI가 다음 말을 이어 답을 만드는 모습을 보고, 확인할 문장을 찾아봐요.',
+    title: '인공지능은 어떻게 답을 만들까요?',
+    subtitle: '인공지능이 낱말을 이어 답을 만드는 모습을 보고, 진짜 맞는지 확인해 봐요.',
     format: 'B',
     suggestedQuestions: [
       '오늘 우리 학교 식단은 뭐야?',

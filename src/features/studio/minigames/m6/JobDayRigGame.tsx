@@ -237,7 +237,7 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="직업 하루 조립"
-      instruction="부품을 흥미·강점·필요한 도움 자리에 끼우고 하루 시험을 누르세요. 막연한 이미지는 중간에 부서집니다."
+      instruction="내가 좋아하는 것, 잘하는 것, 도움이 필요한 것을 알맞게 골라 채운 다음, 하루 일과를 시작해 보세요."
       progress={{ label: '채운 자리', value: (['like', 'strong', 'help'] as Slot[]).filter((s) => slots[s]).length, max: 3 }}
       hud={<GameHud lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

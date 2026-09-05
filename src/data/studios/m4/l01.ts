@@ -6,8 +6,8 @@ export const M4_L1_STUDIO: StudioDefinition = {
     id: 'm4-confident-answer-audit',
     lessonId: 'm4-l1',
     moduleId: 'm4',
-    title: '자신 있는 AI 답도 확인하기',
-    subtitle: 'AI 답의 날짜와 근거를 최신 공식 시간표와 비교해 고쳐 봐요.',
+    title: '그럴듯한 대답도 사실인지 다시 확인하기',
+    subtitle: '인공지능이 자신 있게 대답해도, 최신 시간표 공지와 대조하여 사실인지 확인해 봐요.',
     format: 'C',
     visualNovel: {
       title: '체험회 시간표가 서로 다르게 두 개가 나왔어요',

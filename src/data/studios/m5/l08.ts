@@ -6,8 +6,8 @@ export const M5_L8_STUDIO: StudioDefinition = {
     id: 'm5-goal-result-verification',
     lessonId: 'm5-l8',
     moduleId: 'm5',
-    title: '목표와 결과를 비교하기',
-    subtitle: '처음 정한 조건과 완성 결과를 나란히 놓고 독립된 방법으로 확인해요.',
+    title: '처음 세운 목표와 결과를 꼼꼼히 비교하기',
+    subtitle: '처음 세운 계획과 완성된 결과를 나란히 놓고 꼼꼼하게 비교해 봐요.',
     format: 'B',
     visualNovel: {
       title: '겉보기엔 그럴듯하지만 한 가지가 빠진 완성 안내문',

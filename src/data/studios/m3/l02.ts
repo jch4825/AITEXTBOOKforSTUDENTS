@@ -6,8 +6,8 @@ export const M3_L2_STUDIO: StudioDefinition = {
     id: 'm3-word-evidence-lab',
     lessonId: 'm3-l2',
     moduleId: 'm3',
-    title: '모르는 낱말 확인하기',
-    subtitle: '문맥에서 뜻을 짐작하고 AI 설명과 학생 사전을 비교해 나만의 표현으로 적어 봐요.',
+    title: '어려운 낱말 뜻 확인하기',
+    subtitle: '모르는 낱말의 뜻을 짐작해 보고, 인공지능의 설명과 국어사전을 비교해 봐요.',
     format: 'B',
     visualNovel: {
       title: '전시 안내에서 만난 “생태계”',

@@ -6,8 +6,8 @@ export const M2_L10_STUDIO: StudioDefinition = {
     id: 'm2-complete-dialogue-studio',
     lessonId: 'm2-l10',
     moduleId: 'm2',
-    title: '한 번의 진짜 대화 완성하기',
-    subtitle: '요청·결과·수정·근거·결정을 하나의 대화 기록으로 연결해 봐요.',
+    title: '인공지능과 제대로 대화 완성하기',
+    subtitle: '부탁하기부터 결과 확인, 수정, 최종 결정까지 대화를 차례대로 완성해 봐요.',
     format: 'E',
     visualNovel: {
       title: '체험회에 필요한 결과를 직접 완성해요',

@@ -6,8 +6,8 @@ export const M6_L7_STUDIO: StudioDefinition = {
     id: 'm6-personal-day-plan',
     lessonId: 'm6-l7',
     moduleId: 'm6',
-    title: '나에게 맞는 하루 계획',
-    subtitle: '해야 할 일·쉼·도움·걸리는 시간을 함께 넣고 조건이 바뀌면 계획을 고쳐요.',
+    title: '나에게 알맞은 하루 생활 계획 세우기',
+    subtitle: '할 일과 함께 쉬는 시간도 챙기며, 나에게 꼭 맞는 하루 계획을 세워 봐요.',
     format: 'E',
     visualNovel: {
       title: '쉬는 시간과 점심이 쏙 빠진 빽빽한 하루 일정',

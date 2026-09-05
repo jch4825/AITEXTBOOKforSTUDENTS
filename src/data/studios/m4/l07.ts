@@ -6,8 +6,8 @@ export const M4_L7_STUDIO: StudioDefinition = {
     id: 'm4-respectful-request-rewrite',
     lessonId: 'm4-l7',
     moduleId: 'm4',
-    title: '분명하고 존중 있게 부탁하기',
-    subtitle: '거친 단어만 지우지 말고 목적·행동·조건이 보이는 부탁으로 고쳐 봐요.',
+    title: '올바르고 예의 바른 말로 부탁하기',
+    subtitle: '거친 말 대신 예의 바르고 존중하는 말로 분명하게 부탁해 봐요.',
     format: 'D',
     visualNovel: {
       title: '급한 마음에 짧게 던진 부탁이 엉뚱하게 전달되었어요',

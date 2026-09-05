@@ -6,8 +6,8 @@ export const M5_L4_STUDIO: StudioDefinition = {
     id: 'm5-priority-criteria',
     lessonId: 'm5-l4',
     moduleId: 'm5',
-    title: '무엇부터 할지 기준으로 정하기',
-    subtitle: '안전·마감·영향·도움 가능성을 보고 먼저 할 일을 비교해 봐요.',
+    title: '중요한 기준에 따라 먼저 할 일 정하기',
+    subtitle: '안전과 마감 시간, 도움받을 사람을 생각하며 먼저 할 일을 정해 봐요.',
     format: 'C',
     visualNovel: {
       title: '동시에 쏟아진 세 가지 요청 중에서 무엇부터 해야 할까요',

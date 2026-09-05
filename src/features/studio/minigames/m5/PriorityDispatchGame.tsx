@@ -227,7 +227,7 @@ export default function PriorityDispatchGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="먼저 할 일 보내기"
-      instruction="세 곳의 막대가 차오릅니다. 가장 빨리 차오르는 곳부터 사람을 보내 해결하세요."
+      instruction="도움이 급한 곳을 찾아 먼저 해결해 보세요. 막대가 가장 높이 올라간 곳부터 차례대로 사람을 보내면 됩니다."
       progress={{ label: '해결한 일', value: hud.cleared, max: stage.sites.length }}
       hud={<GameHud score={hud.idle} scoreLabel="본부 대기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

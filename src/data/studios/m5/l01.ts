@@ -6,8 +6,8 @@ export const M5_L1_STUDIO: StudioDefinition = {
     id: 'm5-problem-definition-map',
     lessonId: 'm5-l1',
     moduleId: 'm5',
-    title: '문제를 정확히 찾기',
-    subtitle: '배송 지연 상황에서 현재·목표·모르는 정보·도움을 나누어 봐요.',
+    title: '해결해야 할 문제를 정확하게 찾기',
+    subtitle: '물건이 오지 않은 상황에서 지금 모습과 바라는 목표를 나누어 살펴봐요.',
     format: 'A',
     visualNovel: {
       title: '체험회 준비 물품이 도착하지 않은 빈 설치 공간',

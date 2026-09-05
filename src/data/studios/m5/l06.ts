@@ -6,8 +6,8 @@ export const M5_L6_STUDIO: StudioDefinition = {
     id: 'm5-safe-clarification',
     lessonId: 'm5-l6',
     moduleId: 'm5',
-    title: 'AI가 다르게 알아들었을 때',
-    subtitle: 'AI 추정과 빠진 정보를 찾고 개인정보 없이 안전한 위치 단서를 더해 봐요.',
+    title: '잘못 알아들었을 때 자세히 다시 설명하기',
+    subtitle: '인공지능이 잘못 알아들었을 때 개인정보 없이 안전한 단서를 보태어 다시 말해 봐요.',
     format: 'B',
     visualNovel: {
       title: '“도서관 앞 부스”를 물었더니 엉뚱한 다른 도서관을 알려줬어요',

@@ -6,8 +6,8 @@ export const M6_L3_STUDIO: StudioDefinition = {
     id: 'm6-fixed-map-route-check',
     lessonId: 'm6-l3',
     moduleId: 'm6',
-    title: '지도와 현장 표지로 길 확인하기',
-    subtitle: '개인 위치를 보내지 않는 고정된 연습 지도에서 표지와 공식 안내로 경로를 확인해요.',
+    title: '지도와 표지판을 보며 길 찾기',
+    subtitle: '지도와 길가의 표지판을 직접 살펴보며 안전한 길을 찾아가 봐요.',
     format: 'C',
     visualNovel: {
       title: '지도에는 전혀 나오지 않는 수상한 지름길',

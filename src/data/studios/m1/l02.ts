@@ -5,8 +5,8 @@ export const M1_L2_STUDIO: StudioDefinition = {
     id: 'm1-feature-investigation',
     lessonId: 'm1-l2',
     moduleId: 'm1',
-    title: '기계와 AI는 어떻게 다를까?',
-    subtitle: '기계가 어떤 정보를 입력받아 동작하는지 살펴보고, 인공지능(AI) 기술이 쓰인 기능을 찾아봐요.',
+    title: '기계와 인공지능은 어떻게 다를까요?',
+    subtitle: '기계가 움직이는 방법을 살펴보고, 인공지능이 쓰인 곳을 찾아봐요.',
     format: 'D',
     decisionTitle: '아이미에게 쉽게 물어봐요.',
     suggestedQuestions: [

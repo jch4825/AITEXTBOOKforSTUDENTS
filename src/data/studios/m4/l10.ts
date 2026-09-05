@@ -6,8 +6,8 @@ export const M4_L10_STUDIO: StudioDefinition = {
     id: 'm4-sponsored-recommendation-audit',
     lessonId: 'm4-l10',
     moduleId: 'm4',
-    title: '추천 속 광고 단서 찾기',
-    subtitle: '협찬·구매 링크·과장·빠진 정보를 내 필요·대안·예산과 비교해 봐요.',
+    title: '알맞은 정보와 광고 구별하기',
+    subtitle: '추천 글 속에 숨어 있는 광고와 과장된 표현을 바르게 구별해 봐요.',
     format: 'B',
     visualNovel: {
       title: '“모두에게 가장 좋다”는 추천 영상 속 숨은 광고',

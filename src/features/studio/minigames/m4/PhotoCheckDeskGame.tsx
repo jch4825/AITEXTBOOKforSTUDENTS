@@ -583,7 +583,7 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="사진 검사대"
-      instruction="돋보기를 끌어 사진을 살펴보세요. 위험한 곳을 찾으면 아래 서랍에서 스티커를 끌어다 덮고, 붙이기를 누릅니다."
+      instruction="돋보기로 사진 구석구석을 살펴보고, 개인정보가 보이는 위험한 곳에 보호 스티커를 붙여 가려 보세요."
       progress={{ label: '가린 곳', value: hud.covered, max: 4 }}
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={totalTime} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

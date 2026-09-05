@@ -446,7 +446,7 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="카메라 각도 돌리기"
-      instruction={`위 손잡이로 빛을, 아래 손잡이로 각도를 바꾸고 ${stage.name}을 덮은 가림막은 끌어서 치우세요. 오른쪽 막대가 목표선을 넘은 채로 잠깐 기다리면 아이미가 알아봅니다.`}
+      instruction={`손잡이를 움직여 밝기와 각도를 맞추고, 가림막을 옆으로 치워 보세요. ${stage.name} 모습이 또렷해지면 인공지능이 알아봅니다.`}
       progress={{ label: '고친 곳', value: view.fixed, max: 3 }}
       hud={<GameHud timeLeft={view.seconds} timeTotal={totalSeconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

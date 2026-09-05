@@ -224,7 +224,7 @@ export default function SymptomClinicGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="아픈 곳 짚기"
-      instruction="아픈 곳에 알맞은 도구를 고르고 원 가운데를 짚으세요. 가장자리에 닿으면 손이 흔들린 것으로 봅니다."
+      instruction="몸이 불편한 곳에 꼭 맞는 치료 도구를 고른 다음, 동그라미 한가운데를 가만히 짚어 치료해 보세요."
       progress={{ label: '적은 알림', value: marked.length, max: stage.spots.length }}
       hud={<GameHud lives={shakes} maxLives={maxShakes} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

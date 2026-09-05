@@ -254,7 +254,7 @@ export default function OneCounterQueueGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="급한 부탁 풍선"
-      instruction="묶음 부탁이 풍선 여러 개로 떠 있어요. 가장 크고 빨간 풍선부터 하나씩 눌러 보내세요."
+      instruction="여러 가지 부탁이 풍선으로 떠 있어요. 가장 급하고 중요한 빨간 풍선부터 차례대로 하나씩 눌러 보내 보세요."
       progress={{ label: '보낸 부탁', value: hud.done, max: stage.need }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

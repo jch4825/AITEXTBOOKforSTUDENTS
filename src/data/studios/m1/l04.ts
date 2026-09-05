@@ -5,8 +5,8 @@ export const M1_L4_STUDIO: StudioDefinition = {
     id: 'm1-image-recognition-lab',
     lessonId: 'm1-l4',
     moduleId: 'm1',
-    title: 'AI의 눈 실험실',
-    subtitle: '사진 조건을 바꾸어 AI의 답이 달라지는지 살펴보고 원본과 다시 비교해 봐요.',
+    title: '사진을 알아보는 인공지능',
+    subtitle: '사진이 가려지거나 어두울 때 인공지능의 답이 어떻게 달라지는지 살펴봐요.',
     format: 'B',
     decisionTitle: '아이미와 함께 직접 실험해 봐요.',
     suggestedQuestions: [

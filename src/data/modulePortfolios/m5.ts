@@ -3,7 +3,7 @@ import type { ModulePortfolioDefinition } from './types';
 export const M5_PORTFOLIO: ModulePortfolioDefinition = {
   lessonId: 'm5-l12',
   moduleId: 'm5',
-  crumb: '5단원 · 문제 해결 대작전',
+  crumb: '5단원 · 인공지능으로 문제 해결하기',
   kicker: '5단원 성장 포트폴리오',
   title: '문제 해결 지도',
   description:

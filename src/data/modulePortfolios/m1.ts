@@ -3,9 +3,9 @@ import type { ModulePortfolioDefinition } from './types';
 export const M1_PORTFOLIO: ModulePortfolioDefinition = {
   lessonId: 'm1-l11',
   moduleId: 'm1',
-  crumb: '1단원 · 아이미를 알아가는 탐구 기록',
+  crumb: '1단원 · 인공지능 알아보기',
   kicker: 'AI 동아리 첫 주 프로젝트',
-  title: '아이미 사용 설명서',
+  title: '나만의 인공지능 사용 설명서',
   description: '새로 온 친구가 아이미를 안전하게 활용할 수 있도록, 열 번의 탐구 기록을 바탕으로 입력, 결과, 사람이 확인할 점을 한 장의 설명서로 정리해 봐요.',
   closingStory: [
     {
@@ -44,15 +44,15 @@ export const M1_PORTFOLIO: ModulePortfolioDefinition = {
   ],
   artifactChoices: [
     { lessonId: 'm1-l1', label: '아이미와 처음 만난 날', artifact: 'AI 정의 카드' },
-    { lessonId: 'm1-l2', label: '기계와 AI는 어떻게 다를까?', artifact: '기능 분석 지도' },
-    { lessonId: 'm1-l3', label: 'AI는 어떻게 답을 만들까?', artifact: 'AI 답 검토 기록표' },
-    { lessonId: 'm1-l4', label: 'AI의 눈 실험실', artifact: '이미지 인식 실험 기록' },
-    { lessonId: 'm1-l5', label: 'AI의 귀는 어떻게 들을까?', artifact: '나에게 편한 입력 방법 카드' },
-    { lessonId: 'm1-l6', label: 'AI는 자료로 배워요', artifact: '학습 자료 전후 결과표' },
-    { lessonId: 'm1-l7', label: 'AI가 빠르게 도와주는 일', artifact: '요약·번역 검토 기록표' },
-    { lessonId: 'm1-l8', label: '사실과 판단, 누가 결정할까?', artifact: '사실 확인·AI의 1차 판단·사람의 최종 판단 구분표' },
-    { lessonId: 'm1-l9', label: '일에 맞는 AI 도구 고르기', artifact: '도구 선택 계획서' },
-    { lessonId: 'm1-l10', label: 'AI 결과를 사용할까?', artifact: 'AI 결과 사용 판단 기록' },
+    { lessonId: 'm1-l2', label: '기계와 인공지능은 어떻게 다를까요?', artifact: '기능 분석 지도' },
+    { lessonId: 'm1-l3', label: '인공지능은 어떻게 답을 만들까요?', artifact: 'AI 답 검토 기록표' },
+    { lessonId: 'm1-l4', label: '사진을 알아보는 인공지능', artifact: '이미지 인식 실험 기록' },
+    { lessonId: 'm1-l5', label: '소리를 알아듣는 인공지능', artifact: '나에게 편한 입력 방법 카드' },
+    { lessonId: 'm1-l6', label: '인공지능은 많은 자료로 배워요', artifact: '학습 자료 전후 결과표' },
+    { lessonId: 'm1-l7', label: '인공지능이 빠르고 쉽게 도와주는 일', artifact: '요약·번역 검토 기록표' },
+    { lessonId: 'm1-l8', label: '사실 확인과 최종 결정은 누가 할까요?', artifact: '사실 확인·AI의 1차 판단·사람의 최종 판단 구분표' },
+    { lessonId: 'm1-l9', label: '알맞은 인공지능 도구 고르기', artifact: '도구 선택 계획서' },
+    { lessonId: 'm1-l10', label: '인공지능이 만든 결과 확인하고 사용하기', artifact: 'AI 결과 사용 판단 기록' },
   ],
   guideSections: [
     {

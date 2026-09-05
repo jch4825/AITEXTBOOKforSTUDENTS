@@ -6,8 +6,8 @@ export const M5_L2_STUDIO: StudioDefinition = {
     id: 'm5-task-decomposition-board',
     lessonId: 'm5-l2',
     moduleId: 'm5',
-    title: '큰 일을 작은 과제로 나누기',
-    subtitle: '순서를 정하기 전에 부스에 필요한 과제를 빠짐없이 찾아봐요.',
+    title: '큰 문제를 작은 단계로 나누기',
+    subtitle: '순서를 정하기 전에 부스를 꾸미는 데 필요한 일들을 빠짐없이 찾아봐요.',
     format: 'B',
     visualNovel: {
       title: '“부스를 설치하라”는 막연하고 큰 일 앞에서',

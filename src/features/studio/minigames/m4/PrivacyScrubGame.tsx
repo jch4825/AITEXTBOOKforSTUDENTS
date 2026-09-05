@@ -490,7 +490,7 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="개인정보 지우기"
-      instruction="붉게 덧칠된 개인정보를 문질러 지우고, 초록 밑줄이 그어진 조건은 남겨 주세요. 화면을 끌거나, 방향키로 지우개를 옮기고 스페이스를 누른 채 문지릅니다."
+      instruction="빨간색으로 표시된 개인정보를 문질러 지우고, 꼭 필요한 요청 조건(초록색 밑줄)만 깨끗하게 남겨 보세요."
       progress={{ label: '가린 정보', value: hud.covered, max: privateTotal }}
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={Math.ceil(totalTime)} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

@@ -6,8 +6,8 @@ export const M2_L5_STUDIO: StudioDefinition = {
     id: 'm2-audience-tone-studio',
     lessonId: 'm2-l5',
     moduleId: 'm2',
-    title: '누구에게 보여 줄 답인지 말해요',
-    subtitle: '대상과 말투를 바꾸되 중요한 사실은 따로 지켜 봐요.',
+    title: '읽을 사람과 알맞은 말투를 정해요',
+    subtitle: '읽을 사람에 맞게 말투를 바꾸되, 날짜와 장소 같은 사실은 따로 확인해 봐요.',
     format: 'D',
     visualNovel: {
       title: '하나의 안내문을 두 사람에게 보냈더니',

@@ -225,7 +225,7 @@ export default function ExpressionDeskGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="표현 교환대"
-      instruction="손님의 상황을 읽고 알맞은 표현 카드를 고르세요. 손님이 편한 방법(말·글·그림)도 함께 맞춰야 합니다."
+      instruction="도움을 청하는 손님의 마음을 살피고, 손님이 편안해하는 방법(말·글·그림)에 맞추어 알맞은 표현 카드를 골라 보세요."
       progress={{ label: '응대한 손님', value: served, max: stage.need }}
       hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={front?.patience ?? 0} timeTotal={patience} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

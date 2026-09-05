@@ -305,7 +305,7 @@ export default function StepHookSwingGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="단계 재료 모으기"
-      instruction="바이러스를 피해 미로를 돌며 빛나는 재료를 순서대로 모으세요. 방향키나 아래 버튼으로 움직입니다."
+      instruction="위험한 바이러스를 피해 미로를 움직이며, 빛나는 재료를 순서대로 모아 보세요."
       progress={{ label: '모은 단계', value: hud.taken, max: stage.steps.length }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

@@ -338,7 +338,7 @@ export default function SongMatchGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="노래 짝 맞추기"
-      instruction="아이미가 만들어 온 노래를 끌어서 어울리는 부탁 카드 위에 놓으세요. 한 가지만 어긋난 노래는 고쳐서 써요, 아주 안 맞는 노래는 안 써요 상자로 옮깁니다."
+      instruction="인공지능이 만든 노래를 어울리는 부탁 카드 위로 옮겨 보세요. 고쳐서 쓸 노래와 안 쓸 노래도 알맞은 상자에 나누어 담아 봅시다."
       progress={{ label: '짝지은 노래', value: doneCount, max: songs.length }}
       hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

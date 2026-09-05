@@ -5,8 +5,8 @@ export const M6_L8_STUDIO: StudioDefinition = {
     id: 'm6-health-human-first',
     lessonId: 'm6-l8',
     moduleId: 'm6',
-    title: '아픈 상태를 사람에게 알리기',
-    subtitle: 'AI 진단 대신 관찰한 몸 상태를 말·그림 카드로 표현해 믿을 만한 어른에게 먼저 알려요.',
+    title: '몸이 아프거나 불편할 때 어른에게 알리기',
+    subtitle: '몸이 아프거나 불편할 때 말이나 그림 카드로 표현하고 어른에게 바로 알려 봐요.',
     format: 'D',
     visualNovel: {
       title: '야외 마을 활동 중 갑자기 배가 아프고 움직이기 힘들 때',

@@ -222,7 +222,7 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="로봇청소기 한 붓 그리기"
-      instruction="충전소(🔌)에서 출발해 옆 칸을 이어서 눌러 길을 그려요. 끌기 대신 칸을 차례로 눌러도 됩니다. 장애물은 지나갈 수 없고, 바닥을 하나도 남기지 않아야 성공합니다."
+      instruction="충전소(🔌)에서 출발해 바닥 칸을 차례대로 눌러 청소 길을 만들어 보세요. 장애물을 피해 모든 바닥을 빠짐없이 청소해 봅시다."
       progress={{ label: '청소한 바닥', value: path.length, max: totalCleanable }}
       stages={ROOM_LAYOUTS.slice(0, visibleStageCount).map((room) => ({
         id: room.id,

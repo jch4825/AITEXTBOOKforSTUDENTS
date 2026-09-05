@@ -5,8 +5,8 @@ export const M3_L9_STUDIO: StudioDefinition = {
     id: 'm3-image-evidence-review',
     lessonId: 'm3-l9',
     moduleId: 'm3',
-    title: '그림에서 사실과 추측 나누기',
-    subtitle: '그림에서 직접 보이는 근거와 AI가 덧붙인 추측을 문장별로 나누어요.',
+    title: '그림에서 사실과 생각 구별하기',
+    subtitle: '그림에서 눈에 직접 보이는 사실과 마음대로 짐작한 생각을 바르게 구별해 봐요.',
     format: 'B',
     visualNovel: {
       title: '가방을 든 두 학생은 정말 소풍을 가는 중일까요',

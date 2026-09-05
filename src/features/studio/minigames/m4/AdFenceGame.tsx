@@ -477,7 +477,7 @@ export default function AdFenceGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="광고 구역 두르기"
-      instruction="가장자리에서 안쪽으로 선을 그어 광고 게시물을 두르세요. 방향키를 누르거나 화면을 끌어 움직이고, 가장자리로 돌아오면 그 안이 확보됩니다. 긋는 중에 과장 문구에 닿으면 선이 지워집니다."
+      instruction="선을 그어 과장된 광고 게시물을 둘러싸 보세요. 지나친 과장 문구에 닿지 않게 조심하며 안전하게 영역을 확보해 봅시다."
       progress={{ label: '찾은 광고 단서', value: Math.min(hud.found, need), max: need }}
       hud={(
         <GameHud

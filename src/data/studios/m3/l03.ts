@@ -6,8 +6,8 @@ export const M3_L3_STUDIO: StudioDefinition = {
     id: 'm3-accurate-simple-explanation-lab',
     lessonId: 'm3-l3',
     moduleId: 'm3',
-    title: '쉽지만 정확하게 다시 설명하기',
-    subtitle: '어려운 말을 줄여도 꼭 남아야 할 사실은 지켜 봐요.',
+    title: '쉽고 정확하게 다시 설명하기',
+    subtitle: '어려운 말을 쉬운 말로 바꿀 때도 중요한 사실이 빠지지 않았는지 살펴봐요.',
     format: 'C',
     visualNovel: {
       title: '“식물이 햇빛을 먹어요”라는 설명만으로 충분할까요',

@@ -302,7 +302,7 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="형식 틀로 흘리기"
-      instruction="할 일에 맞는 형식을 골라 통에 붙이고, 마우스로 드래그하면 미끄럼틀을 만들 수 있어요. 구슬이 통에 들어가면 성공입니다."
+      instruction="알맞은 모양 틀을 골라 통에 붙이고, 길을 그려 미끄럼틀을 만들어 보세요. 구슬이 알맞은 통 안으로 쏙 들어가면 완성됩니다."
       progress={{ label: '보낸 구슬', value: round, max: stage.jobs.length }}
       hud={<GameHud lives={lives} maxLives={maxLives} score={Math.round(ink)} scoreLabel="남은 잉크" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

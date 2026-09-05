@@ -143,7 +143,7 @@ export default function MiniGameFrame({
       {/* 안내 문장 + 읽어주기 */}
       <div className="flex items-start gap-2">
         <p
-          className="flex-1 text-[15px] font-bold leading-normal sm:text-[16px]"
+          className="flex-1 text-[17px] font-bold leading-relaxed sm:text-[19px]"
           style={{ color: 'var(--ink-2)' }}
         >
           {instruction}
@@ -189,7 +189,7 @@ export default function MiniGameFrame({
       {message && (status === 'success' || status === 'fail') && (
         <div
           role="status"
-          className="rounded-xl px-3 py-2 text-center text-[15px] font-black leading-relaxed"
+          className="rounded-xl px-3 py-2 text-center text-[16px] font-black leading-relaxed sm:text-[17px]"
           style={
             status === 'success'
               ? { background: 'var(--ok-bg)', color: '#14532d', border: '1.5px solid var(--ok)' }

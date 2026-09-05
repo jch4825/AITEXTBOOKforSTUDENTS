@@ -6,8 +6,8 @@ export const M6_L10_STUDIO: StudioDefinition = {
     id: 'm6-real-work-exploration',
     lessonId: 'm6-l10',
     moduleId: 'm6',
-    title: '직업을 실제 사람과 함께 알아보기',
-    subtitle: 'AI의 직업 예상과 실제 자료·직업인 설명을 비교하고 나의 흥미·강점·도움을 연결해요.',
+    title: '실제 일하는 사람들의 이야기 들어보기',
+    subtitle: '인공지능의 설명과 실제 일하는 사람들의 이야기를 비교하며 나의 꿈을 찾아봐요.',
     format: 'A',
     visualNovel: {
       title: 'AI가 단순하게 예상한 사서의 하루와 현장의 진짜 이야기',

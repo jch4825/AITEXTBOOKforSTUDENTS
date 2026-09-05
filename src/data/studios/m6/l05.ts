@@ -6,8 +6,8 @@ export const M6_L5_STUDIO: StudioDefinition = {
     id: 'm6-official-weather-prep',
     lessonId: 'm6-l5',
     moduleId: 'm6',
-    title: '공식 예보로 옷 준비하기',
-    subtitle: '지역·날짜가 있는 최신 예보와 활동·내 감각을 함께 보고 준비해요.',
+    title: '날씨 예보에 맞게 옷차림 준비하기',
+    subtitle: '오늘 날씨 예보를 확인하고, 내 몸과 활동에 딱 맞는 옷차림을 준비해 봐요.',
     format: 'B',
     visualNovel: {
       title: '지역과 날짜가 쏙 빠진 모호한 “따뜻한 날씨” 안내',

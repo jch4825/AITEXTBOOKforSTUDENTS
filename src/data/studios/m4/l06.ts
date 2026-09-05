@@ -6,8 +6,8 @@ export const M4_L6_STUDIO: StudioDefinition = {
     id: 'm4-uncomfortable-content-stop',
     lessonId: 'm4-l6',
     moduleId: 'm4',
-    title: '불편한 내용을 만났을 때 멈추기',
-    subtitle: '내용을 다시 읽지 않고 멈춤·가리기·거리두기·알리기를 연습해 봐요.',
+    title: '불편한 화면이나 글을 보았을 때 멈추기',
+    subtitle: '불편한 화면을 보았을 때 다시 읽지 않고 멈추며 어른에게 알리는 연습을 해 봐요.',
     format: 'A',
     visualNovel: {
       title: '기분을 불편하게 만드는 낯선 메시지를 만났을 때',

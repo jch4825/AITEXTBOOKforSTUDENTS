@@ -421,7 +421,7 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="정보 블록 쌓기"
-      instruction="내려오는 낱말을 읽고 좌우 방향키나 화면 누르기로 알맞은 이름표 열을 고르세요. 아래 방향키를 누르면 빨리 내려갑니다. 빨간 줄까지 잡동사니가 쌓이면 판이 끝납니다."
+      instruction="내려오는 낱말을 읽고 알맞은 이름표 상자로 옮겨 담아 보세요. 필요한 정보와 상관없는 잡동사니를 알맞게 나누어 봅시다."
       progress={{ label: '완성한 부탁', value: hud.lines, max: 3 }}
       hud={<GameHud lives={hud.room} maxLives={maxStack} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

@@ -218,7 +218,7 @@ export default function TwoViewIntroGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="두 방향 소개"
-      instruction="조각을 세 자리에 끼우고 시점을 돌려 두 창을 견주세요. 두 창 모두에서 바르게 읽혀야 합니다."
+      instruction="나를 소개하는 글 조각을 알맞게 넣은 뒤, 내가 볼 때와 다른 사람이 볼 때 모두 마음이 잘 전해지는지 살펴보세요."
       progress={{ label: '채운 자리', value: filled, max: SLOTS.length }}
       hud={<GameHud lives={checks} maxLives={maxChecks} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

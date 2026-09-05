@@ -254,7 +254,7 @@ export default function BusBoardTimingGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="버스 타는 순간"
-      instruction="전광판 공지와 번호·방향이 같은 차가 서서 문이 열린 동안에만 타세요. 다른 차는 그냥 보냅니다."
+      instruction="안내판에 나온 번호와 방향이 같은 버스가 멈추어 문이 열렸을 때 타 보세요. 번호가 다른 버스는 그냥 보내세요."
       progress={{ label: '바르게 탄 차', value: hud.boarded, max: stage.need }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

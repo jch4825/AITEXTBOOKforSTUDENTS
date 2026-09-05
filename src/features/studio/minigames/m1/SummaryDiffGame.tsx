@@ -191,7 +191,7 @@ export default function SummaryDiffGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="같은 말 짝짓기"
-      instruction="왼쪽 원문 줄을 누른 다음, 오른쪽 요약에서 같은 말을 눌러 짝을 지으세요. 짝이 없는 줄은 아래 빠짐 칸으로 보냅니다."
+      instruction="왼쪽 글을 먼저 누르고, 오른쪽 요약에서 같은 뜻을 가진 말을 찾아 짝지어 보세요. 요약에서 빠진 글은 아래 빠짐 칸으로 옮겨 봅시다."
       progress={{ label: '짝지은 줄', value: matched, max: total }}
       hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

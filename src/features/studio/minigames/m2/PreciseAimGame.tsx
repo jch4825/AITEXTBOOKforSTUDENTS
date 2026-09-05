@@ -286,7 +286,7 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="레이저로 고르기"
-      instruction="말 조각을 붙일수록 내려오는 물건이 또렷해집니다. 좌우로 옮겨 골라 담을 것만 쏘세요."
+      instruction="자세한 조건을 더할수록 물건의 모습이 또렷해집니다. 내가 찾으려는 물건을 정확히 조준하여 맞춰 보세요."
       progress={{ label: '담은 것', value: hud.got, max: stage.need }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
@@ -327,7 +327,7 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
             );
           })}
           <span className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
-            말 조각을 붙이면 물건이 또렷해집니다
+            조건 조각을 붙이면 물건이 또렷해집니다
           </span>
         </div>
         <div className="flex min-h-0 flex-1 items-center justify-center">

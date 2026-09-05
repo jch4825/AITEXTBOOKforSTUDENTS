@@ -389,7 +389,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="생활 속 AI 찾기"
-      instruction="장면에서 스스로 보고 듣고 알아보는 물건 다섯 개를 눌러 찾으세요. 방향키로 돋보기를 옮기고 스페이스로 누를 수도 있습니다."
+      instruction="그림 속에서 스스로 보고 듣고 알아보는 인공지능 물건을 찾아 눌러 보세요. 돋보기를 움직여 5개를 모두 찾아봅시다."
       progress={{ label: '찾은 AI', value: foundCount, max: AI_TARGET }}
       hud={(
         <GameHud

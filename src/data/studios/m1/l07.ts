@@ -5,8 +5,8 @@ export const M1_L7_STUDIO: StudioDefinition = {
     id: 'm1-fast-help-review',
     lessonId: 'm1-l7',
     moduleId: 'm1',
-    title: '빠른 도움 검토실',
-    subtitle: 'AI의 요약과 번역을 원문과 비교하여 빠르면서도 안전하게 사용해 봐요.',
+    title: '인공지능이 빠르고 쉽게 도와주는 일',
+    subtitle: '인공지능이 줄여 준 글을 원래 글과 비교하며 빠진 곳을 찾아봐요.',
     format: 'C',
     decisionTitle: '아이미와 함께 요약과 번역 결과를 직접 검토해 봐요.',
     suggestedQuestions: [

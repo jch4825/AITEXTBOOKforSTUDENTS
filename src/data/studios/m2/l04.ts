@@ -6,8 +6,8 @@ export const M2_L4_STUDIO: StudioDefinition = {
     id: 'm2-example-comparison-lab',
     lessonId: 'm2-l4',
     moduleId: 'm2',
-    title: '좋은 예시를 보여 줘요',
-    subtitle: '좋은 예시와 틀린 예시가 결과에 주는 영향을 비교해 봐요.',
+    title: '알맞은 예시를 보여 주며 부탁해요',
+    subtitle: '원하는 모양의 예시를 보여 주었을 때 인공지능의 답이 어떻게 달라지는지 비교해 봐요.',
     format: 'B',
     visualNovel: {
       title: '안내 문구의 모양이 제각각으로 나왔어요',

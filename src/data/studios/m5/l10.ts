@@ -6,8 +6,8 @@ export const M5_L10_STUDIO: StudioDefinition = {
     id: 'm5-error-retest',
     lessonId: 'm5-l10',
     moduleId: 'm5',
-    title: '오류를 찾아 다시 시험하기',
-    subtitle: '안내 화면의 잘못된 단추 순서를 재현하고 고친 뒤 같은 조건에서 다시 시험해요.',
+    title: '잘못된 부분을 찾아 고치고 다시 해보기',
+    subtitle: '잘못된 부분을 찾아 바르게 고친 뒤, 처음부터 다시 시험해 봐요.',
     format: 'B',
     visualNovel: {
       title: '방문객을 엉뚱한 처음 화면으로 되돌려 보낸 잘못된 단추 순서',

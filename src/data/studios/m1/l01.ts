@@ -6,7 +6,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
     lessonId: 'm1-l1',
     moduleId: 'm1',
     title: '아이미와 처음 만난 날',
-    subtitle: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아봐요.',
+    subtitle: '인공지능이 무엇인지 알아보고, 우리를 어떻게 돕는지 살펴봐요.',
     format: 'A',
     decisionTitle: '아이미에게 쉽게 물어봐요.',
     suggestedQuestions: [

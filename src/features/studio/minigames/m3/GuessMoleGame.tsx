@@ -239,7 +239,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="추측만 두드리기"
-      instruction="물음표가 붙은 추측 말풍선만 두드리세요. 눈 표시가 붙은 사실은 그대로 두어야 합니다."
+      instruction="짐작해서 쓴 말(물음표 표시)만 톡톡 두드려 보세요. 직접 눈으로 확인한 사실(눈 표시)은 그대로 남겨 둡니다."
       progress={{ label: '고친 추측', value: hud.caught, max: GOAL }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

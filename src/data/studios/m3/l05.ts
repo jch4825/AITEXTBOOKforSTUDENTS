@@ -5,8 +5,8 @@ export const M3_L5_STUDIO: StudioDefinition = {
     id: 'm3-story-choice-studio',
     lessonId: 'm3-l5',
     moduleId: 'm3',
-    title: 'AI와 이야기를 함께 만들기',
-    subtitle: 'AI의 제안을 재료로 보고 내 조건과 생각이 담긴 결말을 만들어요.',
+    title: '인공지능과 함께 이야기 짓기',
+    subtitle: '인공지능의 제안을 참고하여 내 생각과 어울리는 이야기 결말을 만들어 봐요.',
     format: 'A',
     visualNovel: {
       title: '비 오는 학교에 남은 작은 로봇',

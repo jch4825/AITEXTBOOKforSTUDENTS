@@ -6,8 +6,8 @@ export const M2_L3_STUDIO: StudioDefinition = {
     id: 'm2-specific-target-lab',
     lessonId: 'm2-l3',
     moduleId: 'm2',
-    title: '대상을 정확히 말해요',
-    subtitle: '모호한 말을 이름·종류·개수와 필요한 조건으로 바꾸어 봐요.',
+    title: '무엇이 필요한지 구체적으로 말해요',
+    subtitle: '모호한 말 대신 이름과 개수처럼 필요한 조건을 구체적으로 말해 봐요.',
     format: 'D',
     visualNovel: {
       title: '체험회 놀이가 너무 어려워요',

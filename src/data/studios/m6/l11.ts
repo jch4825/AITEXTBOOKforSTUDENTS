@@ -6,8 +6,8 @@ export const M6_L11_STUDIO: StudioDefinition = {
     id: 'm6-safe-self-introduction',
     lessonId: 'm6-l11',
     moduleId: 'm6',
-    title: '상대에 맞는 자기소개 만들기',
-    subtitle: '내가 먼저 쓴 소개를 AI 제안과 비교하고 교실용·온라인용 공개 범위를 다르게 정해요.',
+    title: '읽는 사람에 어울리는 나만의 자기소개 만들기',
+    subtitle: '교실에서 보여 줄 소개와 인터넷에 올릴 소개를 나누어 나만의 자기소개를 써 봐요.',
     format: 'E',
     visualNovel: {
       title: '하나의 자기소개를 교실과 온라인 어디서나 똑같이 써도 될까요',

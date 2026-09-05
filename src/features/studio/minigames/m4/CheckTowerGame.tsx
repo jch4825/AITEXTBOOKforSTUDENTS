@@ -293,7 +293,7 @@ export default function CheckTowerGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="확인 탑 세우기"
-      instruction="주장에 맞는 확인 탑을 고르고 길목의 빈 자리를 눌러 세우세요. 맞는 탑만 그 주장을 막습니다."
+      instruction="알맞은 확인 탑을 골라 길목에 세워 보세요. 근거가 바른 탑을 세우면 거짓 소문을 막아낼 수 있어요."
       progress={{ label: '확인한 답', value: hud.stopped, max: stage.total }}
       hud={<GameHud lives={maxLeaks - hud.leaked} maxLives={maxLeaks} score={hud.coins} scoreLabel="확인 시간" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

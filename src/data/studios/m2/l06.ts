@@ -6,8 +6,8 @@ export const M2_L6_STUDIO: StudioDefinition = {
     id: 'm2-stepwise-request-workshop',
     lessonId: 'm2-l6',
     moduleId: 'm2',
-    title: '요청 공동 제작소',
-    subtitle: '큰 과제를 작은 단계로 나누고 앞 단계 결과를 다음 요청에 이어 써 봐요.',
+    title: '단계를 나누어 차례대로 부탁해요',
+    subtitle: '큰 일을 작은 단계로 나누고, 앞서 나온 결과를 다음 부탁에 이어 써 봐요.',
     format: 'E',
     visualNovel: {
       title: '체험회 준비표에 빠진 것이 많아요',

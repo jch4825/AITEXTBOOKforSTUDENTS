@@ -244,7 +244,7 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="떠올린 순서 뱀"
-      instruction="다음 차례로 빛나는 조각만 순서대로 먹으세요. 벽이나 몸에 부딪히면 기회가 줄어듭니다."
+      instruction="반짝이는 조각을 차례대로 하나씩 모아 보세요. 벽이나 몸에 부딪히지 않게 조심해서 움직여 봅시다."
       progress={{ label: '떠올린 차례', value: hud.index, max: count }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

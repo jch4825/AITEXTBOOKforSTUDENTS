@@ -6,8 +6,8 @@ export const M2_L9_STUDIO: StudioDefinition = {
     id: 'm2-independent-verification-lab',
     lessonId: 'm2-l9',
     moduleId: 'm2',
-    title: '다시 묻기와 확인하기는 달라요',
-    subtitle: 'AI의 재답변이 아니라 독립된 최신 근거로 주장을 확인해 봐요.',
+    title: '인공지능의 답을 직접 확인해요',
+    subtitle: '인공지능에게 다시 묻지 않고, 학교 공지사항을 직접 찾아 확인해 봐요.',
     format: 'C',
     visualNovel: {
       title: '체험회가 5시에 끝난다고?',

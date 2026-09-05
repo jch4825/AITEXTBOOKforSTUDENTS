@@ -250,7 +250,7 @@ export default function CodeRequestPushGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="요구 밀어내기"
-      instruction="붉은 요구 공은 판 밖으로 밀어내고, 초록 공식 절차 공은 가운데 안전한 자리에 남기세요."
+      instruction="위험한 요구 공(빨간 공)은 판 밖으로 밀어내고, 안전한 공식 절차 공(초록 공)만 가운데에 남겨 보세요."
       progress={{ label: '밀어낸 요구', value: hud.pushed, max: dangerTotal }}
       hud={<GameHud timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

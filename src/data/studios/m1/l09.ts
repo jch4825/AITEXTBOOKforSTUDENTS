@@ -5,8 +5,8 @@ export const M1_L9_STUDIO: StudioDefinition = {
     id: 'm1-tool-selection-studio',
     lessonId: 'm1-l9',
     moduleId: 'm1',
-    title: 'AI 도구 선택 스튜디오',
-    subtitle: '하려는 일의 입력과 결과를 먼저 정하고 알맞은 AI 도구를 골라봐요.',
+    title: '알맞은 인공지능 도구 고르기',
+    subtitle: '내가 하려는 일에 꼭 맞는 알맞은 인공지능 도구를 골라봐요.',
     format: 'D',
     decisionTitle: '아이미와 함께 알맞은 AI 도구를 골라봐요.',
     suggestedQuestions: [

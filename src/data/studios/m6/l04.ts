@@ -6,8 +6,8 @@ export const M6_L4_STUDIO: StudioDefinition = {
     id: 'm6-transit-change',
     lessonId: 'm6-l4',
     moduleId: 'm6',
-    title: '교통 정보와 방향 확인하기',
-    subtitle: '비슷한 번호와 반대 방향을 구분하고 공식 공지와 현장 안내를 우선해요.',
+    title: '버스 번호와 방향 확인하고 타기',
+    subtitle: '버스 번호와 가는 방향을 확인하고, 헷갈릴 때는 어른에게 안전하게 물어봐요.',
     format: 'B',
     visualNovel: {
       title: '12번과 21번 버스, 과연 어느 쪽 방향을 타야 할까요',

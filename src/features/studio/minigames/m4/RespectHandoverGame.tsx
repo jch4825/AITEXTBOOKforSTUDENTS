@@ -540,7 +540,7 @@ export default function RespectHandoverGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="흔들 팔로 건네기"
-      instruction={`마우스를 천천히 움직이거나 방향키로 손을 옮기고, 스페이스나 클릭으로 물건을 집어 ${stage.receiver} 앞 받침대에 놓으세요. 손이 빠르면 왼쪽 거친 말이 켜집니다.`}
+      instruction={`손을 천천히 움직여 물건을 집은 뒤, ${stage.receiver} 앞 받침대에 조심스럽게 놓아 보세요. 서두르지 않고 차분하게 건네 봅시다.`}
       progress={{ label: '건넨 물건', value: hud.delivered, max: stage.items.length }}
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.sec} timeTotal={totalTime} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

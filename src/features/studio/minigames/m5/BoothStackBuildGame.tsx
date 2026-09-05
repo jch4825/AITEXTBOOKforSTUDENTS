@@ -254,7 +254,7 @@ export default function BoothStackBuildGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="부스 세우기"
-      instruction="부품을 고르고 판을 눌러 놓으세요. 받쳐 줄 부품이 없으면 떨어져 부서집니다."
+      instruction="알맞은 부품을 골라 바닥 판에 차례대로 쌓아 보세요. 아래에 받쳐 주는 부품이 없으면 무너질 수 있어요."
       progress={{ label: '세운 부품', value: hud.built, max: stage.parts.length }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

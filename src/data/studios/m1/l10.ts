@@ -5,8 +5,8 @@ export const M1_L10_STUDIO: StudioDefinition = {
     id: 'm1-ai-result-decision',
     lessonId: 'm1-l10',
     moduleId: 'm1',
-    title: 'AI 결과를 사용할까?',
-    subtitle: '안전한 요청을 한 뒤 결과를 확인하고 사용·수정·거절을 골라봐요.',
+    title: '인공지능이 만든 결과 확인하고 사용하기',
+    subtitle: '인공지능이 만든 결과를 꼼꼼히 확인하고, 쓸지 말지 스스로 결정해 봐요.',
     format: 'E',
     decisionTitle: '아이미에게 상황에 어울리는 노래를 함께 요청해 봐요.',
     suggestedQuestions: [

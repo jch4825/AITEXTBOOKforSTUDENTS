@@ -187,7 +187,7 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="조건 맞춰 담기"
-      instruction={`아이미의 목록을 고치세요. ${stage.avoid} 알레르기와 품절을 빼고, 예산 ${budget.toLocaleString()}원 안에서 필요한 종류를 모두 담습니다.`}
+      instruction={`장바구니 목록을 살펴보며 알레르기가 있는 ${stage.avoid}와 다 팔린 물건을 빼고, 정해진 금액(${budget.toLocaleString()}원) 안에서 필요한 물건을 골라 담아 보세요.`}
       progress={{
         label: '갖춘 종류',
         value: stage.needKinds.filter((kind) => cart.some((id) => itemById(id).kind === kind)).length,

@@ -263,7 +263,7 @@ export default function ChatMazeGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="대화 미로"
-      instruction="붉은 요구 함정을 피해 증거 두 가지를 줍고 어른 출구로 가세요. 방향키나 아래 버튼으로 움직입니다."
+      instruction="수상한 요구를 피해 증거 두 가지를 모은 뒤, 믿을 수 있는 어른이 계신 출구로 이동해 보세요."
       progress={{ label: '모은 증거', value: hud.picked, max: 2 }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

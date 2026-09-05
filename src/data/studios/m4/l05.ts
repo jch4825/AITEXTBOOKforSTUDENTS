@@ -6,8 +6,8 @@ export const M4_L5_STUDIO: StudioDefinition = {
     id: 'm4-photo-sharing-check',
     lessonId: 'm4-l5',
     moduleId: 'm4',
-    title: '사진을 보내기 전 살펴보기',
-    subtitle: '사진 내용과 공유 대상·목적을 함께 보고 전송, 가리기, 보내지 않기를 판단해 봐요.',
+    title: '사진을 올리기 전에 한 번 더 살펴보기',
+    subtitle: '사진을 올리기 전에 내 얼굴과 이름표, 친구 모습이 찍히지 않았는지 확인해 봐요.',
     format: 'C',
     visualNovel: {
       title: '체험회 준비 사진 속 네 가지 단서',

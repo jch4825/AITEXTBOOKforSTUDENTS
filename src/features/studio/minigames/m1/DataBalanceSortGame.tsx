@@ -434,7 +434,7 @@ export default function DataBalanceSortGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="배움 상자 골고루"
-      instruction={`손수레를 방향키나 끌기로 움직여 떨어지는 카드를 받으세요. 배움 상자 ${stage.kinds.length}개를 모두 ${stage.target}장으로 똑같이 채우면 성공하고, 이미 많은 모양은 일부러 흘려보냅니다.`}
+      instruction={`손수레를 움직여 떨어지는 카드를 받아 보세요. 모양별 배움 상자 ${stage.kinds.length}개에 카드를 ${stage.target}장씩 골고루 채워 봅시다.`}
       progress={{ label: '가득 찬 배움 상자', value: filled, max: stage.kinds.length }}
       hud={<GameHud timeLeft={hud.sec} timeTotal={totalTime} score={hud.counts.reduce((sum, count) => sum + count, 0)} scoreLabel="받은 카드" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

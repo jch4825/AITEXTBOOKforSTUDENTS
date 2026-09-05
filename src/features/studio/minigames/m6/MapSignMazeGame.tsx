@@ -295,7 +295,7 @@ export default function MapSignMazeGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="지도와 표지 미로"
-      instruction="지도의 점선만 믿지 말고 표지판을 밟아 확인하세요. 공사 구간은 지도에 길처럼 그려져 있습니다."
+      instruction="화면의 안내선만 믿지 말고 길가의 표지판을 직접 확인하며 걸어가세요. 공사 중인 곳은 피해서 안전하게 가야 해요."
       progress={{ label: '확인한 표지', value: hud.signs, max: totalSigns }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

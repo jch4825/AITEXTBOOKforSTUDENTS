@@ -6,8 +6,8 @@ export const M5_L9_STUDIO: StudioDefinition = {
     id: 'm5-alternative-comparison',
     lessonId: 'm5-l9',
     moduleId: 'm5',
-    title: '대안을 기준으로 비교하기',
-    subtitle: '프린터를 쓸 수 없을 때 여러 방법을 만들고 같은 기준으로 비교해요.',
+    title: '다른 방법을 찾아보고 장단점 비교하기',
+    subtitle: '방법이 막혔을 때 다른 좋은 방법을 두 가지 이상 찾아보고 서로 비교해 봐요.',
     format: 'C',
     visualNovel: {
       title: '갑자기 멈춰버린 프린터와 문제를 해결할 세 가지 대안',

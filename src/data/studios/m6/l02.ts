@@ -6,8 +6,8 @@ export const M6_L2_STUDIO: StudioDefinition = {
     id: 'm6-money-calculator-check',
     lessonId: 'm6-l2',
     moduleId: 'm6',
-    title: '돈은 계산기로 확인하기',
-    subtitle: '가격표와 수량으로 식을 만들고 계산기·영수증으로 합계와 거스름돈을 검산해요.',
+    title: '계산기로 가격과 거스름돈 확인하기',
+    subtitle: '가격표를 보고 계산기를 두드려 합계와 거스름돈을 꼼꼼히 확인해 봐요.',
     format: 'B',
     visualNovel: {
       title: 'AI가 알려준 합계와 실제 계산대 금액이 달라요',

@@ -257,7 +257,7 @@ export default function TaskSplitFactoryGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="과제 분해 공장"
-      instruction="기계를 눌러 놓고 같은 칸을 다시 누르면 방향이 돕니다. 큰 일을 나누고 딴 일은 걸러 출고하세요."
+      instruction="큰 일을 작은 단계로 나누어 주는 기계를 알맞게 놓고, 관계없는 일은 걸러내어 차례대로 완성해 보세요."
       progress={{ label: '내보낸 과제', value: shipped, max: stage.need }}
       hud={<GameHud timeLeft={left} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

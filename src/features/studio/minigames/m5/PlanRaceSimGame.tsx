@@ -291,7 +291,7 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="두 방법 시험 경주"
-      instruction={`카드를 골라 두 방법을 각각 ${stage.slots}장씩 채우고 출발을 누르세요. 기준에 맞는 쪽이 이겨야 합니다.`}
+      instruction={`기준에 알맞은 해결 방법을 골라 빈칸에 카드를 ${stage.slots}장씩 채운 다음, 출발 단추를 눌러 보세요.`}
       progress={{ label: '채운 카드', value: lanes[0].length + lanes[1].length, max: stage.slots * 2 }}
       hud={<GameHud lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

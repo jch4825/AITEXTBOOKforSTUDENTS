@@ -5,8 +5,8 @@ export const M1_L5_STUDIO: StudioDefinition = {
     id: 'm1-speech-recognition-lab',
     lessonId: 'm1-l5',
     moduleId: 'm1',
-    title: 'AI의 귀 실험실',
-    subtitle: '소리가 글자로 바뀌는 과정을 살펴보고 나에게 맞는 입력 방법을 골라봐요.',
+    title: '소리를 알아듣는 인공지능',
+    subtitle: '말소리가 글자로 바뀌는 과정을 살펴보고, 나에게 편한 입력 방법을 골라봐요.',
     format: 'C',
     decisionTitle: '아이미와 함께 소음 조건과 입력 방법을 직접 실험해 봐요.',
     suggestedQuestions: [

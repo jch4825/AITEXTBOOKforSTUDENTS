@@ -285,7 +285,7 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="낱말 세기 비행"
-      instruction={`장면에 어울리는 '${stage.word}'의 세기 높이로 날아 틈을 지나가세요. 화면을 누르거나 스페이스를 누르면 올라가고, 놓으면 내려갑니다.`}
+      instruction={`장면에 어울리는 '${stage.word}'의 뜻에 맞추어 알맞은 높이로 날아가 보세요. 화면을 누르면 올라가고 놓으면 내려옵니다.`}
       progress={{ label: '지나간 장면', value: hud.cleared, max: stage.scenes.length }}
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}

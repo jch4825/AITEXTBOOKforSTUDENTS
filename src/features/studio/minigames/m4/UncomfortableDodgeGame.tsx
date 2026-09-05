@@ -247,7 +247,7 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
   return (
     <MiniGameFrame
       badge="불편한 화면 피하기"
-      instruction="붉은 화면에 닿지 말고 초록 안전지대로 가서 3초 머무르세요. 파도마다 안전지대 자리가 바뀝니다."
+      instruction="빨간색 위험 구역을 피해 초록색 안전 구역으로 이동한 뒤 3초 동안 머물러 보세요."
       progress={{ label: '넘긴 파도', value: hud.wave, max: stage.waves }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={Math.max(0, HOLD_NEED - hud.hold)} timeTotal={HOLD_NEED} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

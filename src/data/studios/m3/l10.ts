@@ -6,8 +6,8 @@ export const M3_L10_STUDIO: StudioDefinition = {
     id: 'm3-self-explanation-review-studio',
     lessonId: 'm3-l10',
     moduleId: 'm3',
-    title: '오늘 배운 내용을 나만의 표현으로 복습하기',
-    subtitle: '이전 자료를 보기 전에 스스로 먼저 떠올리고 확인한 뒤 나만의 표현으로 다시 설명해요.',
+    title: '오늘 배운 내용 스스로 복습하기',
+    subtitle: '교과서를 덮고 오늘 배운 내용을 먼저 떠올린 뒤, 내 생각과 말로 다시 설명해 봐요.',
     format: 'E',
     visualNovel: {
       title: '정리한 기록을 다시 보기 전에 머릿속에 무엇이 먼저 떠오를까요',

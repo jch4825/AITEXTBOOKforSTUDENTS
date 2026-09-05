@@ -5,8 +5,8 @@ export const M1_L6_STUDIO: StudioDefinition = {
     id: 'm1-training-data-lab',
     lessonId: 'm1-l6',
     moduleId: 'm1',
-    title: 'AI의 배움 재료 실험실',
-    subtitle: '학습 자료가 달라지면 AI의 결과가 어떻게 달라지는지 비교해 봐요.',
+    title: '인공지능은 많은 자료로 배워요',
+    subtitle: '배움 자료가 골고루 들어있지 않으면 어떤 실수를 하는지 비교해 봐요.',
     format: 'B',
     decisionTitle: '아이미와 함께 학습 자료를 직접 조사해 봐요.',
     suggestedQuestions: [

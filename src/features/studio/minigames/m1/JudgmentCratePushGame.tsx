@@ -164,7 +164,7 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="같은 모양 상자 옮기기"
-      instruction="상자를 하나 고른 다음, 상자에 붙은 것과 같은 모양이 그려진 자리를 누르세요."
+      instruction="상자를 하나 고른 다음, 상자에 그려진 모양과 똑같은 자리를 찾아 눌러 보세요."
       progress={{ label: '옮긴 상자', value: placed, max: stage.items.length }}
       hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

@@ -6,8 +6,8 @@ export const M5_L3_STUDIO: StudioDefinition = {
     id: 'm5-reasoned-sequence',
     lessonId: 'm5-l3',
     moduleId: 'm5',
-    title: '이유가 있는 순서 만들기',
-    subtitle: '선행 조건·안전·도구를 연결하고 모의 실행으로 막히는 지점을 고쳐 봐요.',
+    title: '차례차례 알맞은 순서 정하기',
+    subtitle: '어떤 일을 먼저 해야 안전한지 생각하며 알맞은 순서를 정해 봐요.',
     format: 'E',
     visualNovel: {
       title: '예쁜 장식부터 붙였다가 전원선 연결이 막혀버렸어요',

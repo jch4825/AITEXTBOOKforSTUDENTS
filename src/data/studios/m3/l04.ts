@@ -6,8 +6,8 @@ export const M3_L4_STUDIO: StudioDefinition = {
     id: 'm3-word-in-context-studio',
     lessonId: 'm3-l4',
     moduleId: 'm3',
-    title: '낱말을 문장에서 써 보기',
-    subtitle: '뜻과 반대말, 장면 속 단서를 살펴 낱말이 어울리는 나만의 문장을 만들어요.',
+    title: '배운 낱말로 문장 만들기',
+    subtitle: '낱말의 뜻과 반대말을 살펴보고, 장면에 어울리는 나만의 문장을 만들어 봐요.',
     format: 'B',
     visualNovel: {
       title: '“선명하다”라는 낱말이 가장 잘 어울리는 장면은 무엇일까요',

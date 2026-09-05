@@ -20,12 +20,12 @@ export interface LessonStory {
 }
 
 export const MODULE_EPISODES: Record<ModuleId, { title: string; synopsis: string }> = {
-  m1: { title: 'AI 동아리 첫 주 — 아이미 탐구 기록', synopsis: '진우와 윤아가 아이미의 입력, 결과, 한계를 시험하며 사용 설명서를 만듭니다.' },
-  m2: { title: '아이미랑 말하는 법', synopsis: '아이미에게 어떻게 물어봐야 좋은 답이 오는지 연습합니다.' },
-  m3: { title: '아이미랑 공부하기', synopsis: '아이미가 공부 도우미가 되어 함께 배웁니다.' },
-  m4: { title: '우리들의 안전 약속', synopsis: '민준 선생님과 함께 AI를 안전하게 쓰는 약속을 배웁니다.' },
-  m5: { title: '문제해결 대작전', synopsis: '문제를 작게 나누고 순서를 세우는 힘을 기릅니다.' },
-  m6: { title: '아이미와 마을로', synopsis: '배운 것을 들고 마을로! 생활 속에서 AI를 활용합니다.' },
+  m1: { title: '인공지능 알아보기 — 아이미 탐구 기록', synopsis: '진우와 윤아가 아이미가 일하는 방법과 한계를 시험하며 사용 설명서를 만듭니다.' },
+  m2: { title: '인공지능과 대화하기', synopsis: '인공지능에게 어떻게 부탁해야 좋은 답을 얻을 수 있는지 연습합니다.' },
+  m3: { title: '인공지능과 함께 공부하기', synopsis: '인공지능이 공부 도우미가 되어 함께 배웁니다.' },
+  m4: { title: '인공지능을 안전하게 사용하기', synopsis: '선생님과 함께 인공지능을 안전하고 바르게 사용하는 약속을 배웁니다.' },
+  m5: { title: '인공지능으로 문제 해결하기', synopsis: '문제를 작게 나누고 차례대로 해결하는 힘을 기릅니다.' },
+  m6: { title: '인공지능과 함께하는 생활', synopsis: '배운 내용을 바탕으로 일상생활 속에서 인공지능을 안전하게 활용합니다.' },
 };
 
 export const LESSON_STORIES: Record<string, LessonStory> = {

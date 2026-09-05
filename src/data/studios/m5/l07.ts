@@ -6,8 +6,8 @@ export const M5_L7_STUDIO: StudioDefinition = {
     id: 'm5-step-checkpoints',
     lessonId: 'm5-l7',
     moduleId: 'm5',
-    title: '한 단계 실행하고 확인하기',
-    subtitle: '긴 설치 안내를 한 단계씩 실행하고 체크포인트에서 결과를 확인해요.',
+    title: '한 단계씩 차례대로 실행하고 확인하기',
+    subtitle: '한꺼번에 하지 않고 한 단계씩 차례대로 실행하며 잘 되었는지 확인해 봐요.',
     format: 'E',
     visualNovel: {
       title: '한꺼번에 쏟아진 긴 설치 안내 앞에서',

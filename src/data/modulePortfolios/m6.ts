@@ -3,16 +3,16 @@ import type { ModulePortfolioDefinition } from './types';
 export const M6_PORTFOLIO: ModulePortfolioDefinition = {
   lessonId: 'm6-l12',
   moduleId: 'm6',
-  crumb: '6단원 · AI와 생활하기',
+  crumb: '6단원 · 인공지능과 함께하는 생활',
   kicker: '6단원 졸업 포트폴리오',
-  title: '나의 AI 생활 포트폴리오',
+  title: '인공지능과 함께하는 생활 포트폴리오',
   description:
     '장보기, 계산, 길과 교통, 날씨, 음식 계획, 일정, 건강, 소통, 직업, 자기소개 기록을 연결해 마을 행사 하루를 계획하고 나의 AI 생활 원칙을 발표합니다.',
   storyHeading: '마을 생활 미션을 마친 나에게',
   artifactHeading: '생활 포트폴리오에 넣을 기록을 3개 이상 골라요',
   artifactDescription: '1차시부터 11차시까지 만든 모든 생활 판단 기록을 하루 계획에 연결할 수 있어요.',
   guideHeading: '나의 하루를 지키는 세 가지 생활 원칙',
-  printLabel: '나의 AI 생활 포트폴리오 인쇄하기',
+  printLabel: '인공지능과 함께하는 생활 포트폴리오 인쇄하기',
   completionRequirement:
     '탐구 기록 3개, 생활 원칙 세 칸, 잘한 과정 1개, 새 하루의 방법을 모두 남기면 졸업할 수 있어요.',
   closingStory: [

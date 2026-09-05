@@ -271,7 +271,7 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="이야기 길 뛰기"
-      instruction="먼저 결말을 고르세요. 그 결말로 이어지는 파란 발판만 밟을 수 있습니다. → 로 달리고 스페이스로 뜁니다."
+      instruction="이야기의 결말을 먼저 고르고, 그 결말로 이어지는 파란 발판을 밟아 힘차게 달려가 보세요."
       progress={{ label: '나아간 길', value: hud.progress, max: 100 }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
@@ -290,7 +290,7 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         {ending === null ? (
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-2">
-            <p className="text-[17px] font-black" style={{ color: 'var(--board-ink)' }}>내 이야기의 결말을 먼저 고르세요</p>
+            <p className="text-[17px] font-black" style={{ color: 'var(--board-ink)' }}>내 이야기의 결말을 먼저 골라 보세요</p>
             {stage.endings.map((text, index) => (
               <button
                 key={text}

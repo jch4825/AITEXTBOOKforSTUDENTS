@@ -6,8 +6,8 @@ export const M6_L6_STUDIO: StudioDefinition = {
     id: 'm6-safe-food-plan',
     lessonId: 'm6-l6',
     moduleId: 'm6',
-    title: '조건에 맞게 음식 계획 바꾸기',
-    subtitle: '실제 조리 없이 재료·알레르기·도구·사람 도움 카드를 비교해 안전 계획을 만들어요.',
+    title: '안전하게 요리 순서 만들기',
+    subtitle: '재료와 조리 도구를 살펴보고, 다치지 않도록 안전한 요리 순서를 만들어 봐요.',
     format: 'E',
     visualNovel: {
       title: '그대로 따라 만들면 위험한 AI 간식 초안',

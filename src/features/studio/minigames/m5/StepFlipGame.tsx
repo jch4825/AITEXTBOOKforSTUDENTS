@@ -276,7 +276,7 @@ export default function StepFlipGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="한 단계씩 뒤집기"
-      instruction="스페이스로 위아래를 뒤집어 가시를 피하세요. 뒤집기는 확인 발판을 밟아야 다시 열립니다."
+      instruction="스페이스 키를 눌러 위아래를 뒤집으며 뾰족한 가시를 피하세요. 확인 발판을 밟아야 다시 뒤집을 수 있어요."
       progress={{ label: '끝낸 단계', value: hud.done, max: stage.checks.length }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

@@ -198,7 +198,7 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="조건표와 대조"
-      instruction="사진에서 조건표와 어긋난 곳을 누른 다음, 트레이에서 맞는 부품을 골라 그 자리에 채우세요."
+      instruction="완성된 그림에서 조건과 다른 부분을 찾아 누른 뒤, 아래 상자에서 알맞은 물건을 골라 바꾸어 보세요."
       progress={{ label: '고친 곳', value: fixed.length, max: stage.spots.length }}
       hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

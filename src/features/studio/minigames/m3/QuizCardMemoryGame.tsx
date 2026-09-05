@@ -186,7 +186,7 @@ export default function QuizCardMemoryGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="양면 퀴즈 카드"
-      instruction="문제 카드를 먼저 열고 스스로 답을 떠올린 다음, 모래시계가 도는 동안 정답 카드를 찾으세요."
+      instruction="문제 카드를 먼저 열어 스스로 답을 떠올려 본 뒤, 알맞은 정답 카드를 찾아 짝을 맞추어 보세요."
       progress={{ label: '맞춘 쌍', value: clearedPairs, max: stage.pairs.length }}
       hud={
         <GameHud

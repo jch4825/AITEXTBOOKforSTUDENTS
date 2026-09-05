@@ -295,7 +295,7 @@ export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="주장과 근거 잇기"
-      instruction="위에서 떨어지는 주장 조각을 좌우로 옮기고 돌려서 한 줄을 꽉 채우세요. 채운 줄은 공지와 대조를 마친 줄로 지워집니다."
+      instruction="위에서 떨어지는 조각을 움직여 한 줄을 빈틈없이 채워 보세요. 줄을 맞추면 학교 공지와 확인을 마친 줄이 되어 사라집니다."
       progress={{ label: '확인한 줄', value: hud.cleared, max: stage.need }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

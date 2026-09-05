@@ -5,8 +5,8 @@ export const M3_L8_STUDIO: StudioDefinition = {
     id: 'm3-delayed-answer-quiz-studio',
     lessonId: 'm3-l8',
     moduleId: 'm3',
-    title: '정답을 나중에 보는 퀴즈',
-    subtitle: '먼저 떠올리고 답한 뒤 정답과 해설을 확인하는 퀴즈를 설계해요.',
+    title: '스스로 풀어보는 퀴즈 카드',
+    subtitle: '스스로 먼저 생각하여 풀어 보고, 나중에 정답과 해설을 확인하는 퀴즈 카드를 만들어 봐요.',
     format: 'E',
     visualNovel: {
       title: '문제 바로 옆에 정답이 먼저 적혀 있다면 어떻게 될까요',

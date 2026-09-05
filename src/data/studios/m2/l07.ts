@@ -6,8 +6,8 @@ export const M2_L7_STUDIO: StudioDefinition = {
     id: 'm2-revision-criteria-lab',
     lessonId: 'm2-l7',
     moduleId: 'm2',
-    title: '부족한 점을 다시 말해요',
-    subtitle: '첫 답에서 지킬 사실과 고칠 표현을 구체적으로 나누어 봐요.',
+    title: '부족한 부분을 고쳐서 다시 부탁해요',
+    subtitle: '첫 번째 답에서 부족한 부분을 찾아 지킬 사실을 정해서 다시 부탁해 봐요.',
     format: 'C',
     visualNovel: {
       title: '이해하기 쉬워졌지만 장소와 시간이 사라졌어요',

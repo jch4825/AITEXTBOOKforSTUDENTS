@@ -6,8 +6,8 @@ export const M4_L3_STUDIO: StudioDefinition = {
     id: 'm4-privacy-clue-redaction',
     lessonId: 'm4-l3',
     moduleId: 'm4',
-    title: '개인정보 단서 가리기',
-    subtitle: '직접적인 개인정보뿐만 아니라 모이면 나를 알아볼 수 있는 간접 단서까지 꼼꼼히 가려 봐요.',
+    title: '개인정보는 가리고 필요한 조건만 말하기',
+    subtitle: '나를 알아볼 수 있는 개인정보 단서를 가리고, 꼭 필요한 내용만 남겨 봐요.',
     format: 'B',
     visualNovel: {
       title: '도움을 요청하기 위해 쓴 채팅 초안에 숨은 위험',

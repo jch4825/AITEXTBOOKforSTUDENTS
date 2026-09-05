@@ -6,8 +6,8 @@ export const M3_L1_STUDIO: StudioDefinition = {
     id: 'm3-question-depth-lab',
     lessonId: 'm3-l1',
     moduleId: 'm3',
-    title: '궁금한 것을 깊게 묻기',
-    subtitle: '같은 주제를 세 가지 질문으로 바꾸고 답의 정보 범위를 비교해 봐요.',
+    title: '궁금한 점을 깊이 있게 묻기',
+    subtitle: '질문을 여러 가지 방법으로 바꾸어 보며, 공부에 가장 도움 되는 질문을 골라봐요.',
     format: 'D',
     visualNovel: {
       title: '“펭귄은 새야?”라는 질문 다음에는 무엇을 물어봐야 할까요',

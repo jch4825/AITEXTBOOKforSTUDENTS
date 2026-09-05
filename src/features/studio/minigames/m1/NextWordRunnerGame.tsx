@@ -454,7 +454,7 @@ export default function NextWordRunnerGame() {
           <span className="text-xl">🏃‍♂️</span>
           <div>
             <h3 className="font-extrabold text-base leading-tight text-amber-300">
-              아이미의 횡스크롤 다음 단어 잇기 런너
+              다음 낱말 이어 말하기 놀이
             </h3>
             <p className="text-[14px] text-slate-300 font-medium">{stage.title}</p>
           </div>
@@ -499,7 +499,7 @@ export default function NextWordRunnerGame() {
       {/* Hint Alert */}
       {showHint && (
         <div className="mb-2 p-2.5 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-200 text-[14px] font-bold leading-relaxed">
-          💡 <strong>게임 방법:</strong> 오른쪽에서 천천히 다가오는 말풍선 중 더 그럴듯한 단어(큰 풍선, 높은 % 수치)를 손으로 눌러 터뜨려 보세요!
+          💡 <strong>놀이 방법:</strong> 오른쪽에서 천천히 다가오는 말풍선 중 더 어울리는 낱말(큰 풍선, 높은 % 수치)을 손으로 눌러 터뜨려 보세요!
         </div>
       )}
 
@@ -518,16 +518,16 @@ export default function NextWordRunnerGame() {
         {gameState === 'idle' && (
           <div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 bg-[color:var(--board-overlay)] p-4 text-center">
             <span className="text-4xl animate-bounce">🎈</span>
-            <h4 className="text-lg font-black text-white">다음 단어를 잇는 횡스크롤 런너 미니 게임</h4>
+            <h4 className="text-lg font-black text-white">다음 낱말을 이어 문장 만들기</h4>
             <p className="text-[14px] text-slate-300 max-w-xs font-medium leading-relaxed">
-              아이미에게 다가오는 말풍선 중 가장 그럴듯한 단어 풍선을 눌러 터뜨리고, 멋진 문장을 이어 완성해 봐요!
+              아이미에게 다가오는 말풍선 중 가장 어울리는 낱말 풍선을 눌러 터뜨리고, 멋진 문장을 이어 완성해 보세요!
             </p>
             <button
               type="button"
               onClick={() => startStage(0)}
               className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-[15px] rounded-xl depth-overlay cursor-pointer transform transition hover:scale-105 active:scale-95"
             >
-              🚀 게임 시작하기
+              🚀 시작하기
             </button>
           </div>
         )}
@@ -543,7 +543,7 @@ export default function NextWordRunnerGame() {
               "{builtSentence}"
             </p>
             <p className="text-[14px] text-slate-300 max-w-xs font-medium leading-relaxed">
-              아이미가 가장 그럴듯한 다음 단어들을 이어 당당히 답을 만들었습니다! 그렇지만 이 대답이 진짜 사실인지 <strong>{stage.factCheckSource}</strong>에서 확인해야 할까요?
+              아이미가 가장 어울리는 다음 낱말들을 이어 당당하게 답을 만들었습니다! 이 대답이 진짜 사실인지 <strong>{stage.factCheckSource}</strong>에서 확인해 볼까요?
             </p>
 
             <button
@@ -551,7 +551,7 @@ export default function NextWordRunnerGame() {
               onClick={() => setGameState('fact_check')}
               className="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-black text-[14px] sm:text-[15px] rounded-xl depth-paper cursor-pointer transform transition hover:scale-105"
             >
-              🔍 {stage.factCheckSource} 대조해보기!
+              🔍 {stage.factCheckSource} 확인하기!
             </button>
           </div>
         )}

@@ -6,8 +6,8 @@ export const M4_L8_STUDIO: StudioDefinition = {
     id: 'm4-stop-time-plan',
     lessonId: 'm4-l8',
     moduleId: 'm4',
-    title: '멈출 시간을 함께 정하기',
-    subtitle: '사용 기록·몸 신호·일정·지원 조건으로 나에게 맞는 멈춤 계획을 세워 봐요.',
+    title: '인공지능을 멈추고 쉴 시간 정하기',
+    subtitle: '내 몸의 신호와 생활 일정을 살펴보고, 인공지능을 멈추고 쉴 계획을 세워 봐요.',
     format: 'E',
     visualNovel: {
       title: '추천 영상에 빠져 중요한 준비 시간을 놓쳐버렸어요',

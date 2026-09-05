@@ -6,8 +6,8 @@ export const M6_L9_STUDIO: StudioDefinition = {
     id: 'm6-self-advocacy-expression',
     lessonId: 'm6-l9',
     moduleId: 'm6',
-    title: '인사·도움·거절을 내 방식으로 표현하기',
-    subtitle: '인사뿐 아니라 도움 요청·거절·재설명을 말·글·그림 카드 중 편한 방법으로 연습해요.',
+    title: '상황에 맞게 내 마음 표현하기',
+    subtitle: '인사하기, 도움 청하기, 거절하기를 내가 편한 방법(말·글·그림)으로 연습해 봐요.',
     format: 'D',
     visualNovel: {
       title: '정중하고 예의 바르게 내 뜻을 분명히 거절할 수 있어요',

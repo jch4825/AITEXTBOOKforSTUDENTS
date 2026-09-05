@@ -183,7 +183,7 @@ export default function WeatherCardGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="날씨 옷 카드"
-      instruction="공식 예보가 바라는 수치를 넘기는 카드를 내세요. 아이미의 한마디가 아니라 숫자를 보고 고릅니다."
+      instruction="기상청 날씨 안내에 나온 기온과 강수량을 잘 확인하고, 그 조건에 딱 맞는 옷차림과 준비물 카드를 골라 보세요."
       progress={{ label: '넘긴 예보', value: Math.min(turn, stage.turns.length), max: stage.turns.length }}
       hud={<GameHud lives={lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

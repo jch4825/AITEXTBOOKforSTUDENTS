@@ -6,8 +6,8 @@ export const M2_L1_STUDIO: StudioDefinition = {
     id: 'm2-missing-information-lab',
     lessonId: 'm2-l1',
     moduleId: 'm2',
-    title: '빠진 정보를 찾아요',
-    subtitle: 'AI가 다르게 알아들은 요청에서 필요한 정보만 안전하게 더해 봐요.',
+    title: '빠진 정보를 찾아 채워요',
+    subtitle: '인공지능이 엉뚱하게 알아들었을 때, 빠진 정보만 안전하게 채워 봐요.',
     format: 'A',
     visualNovel: {
       title: '내일 안내를 알려 달라고 했더니',
