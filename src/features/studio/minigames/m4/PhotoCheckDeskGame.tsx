@@ -345,16 +345,34 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
   const commit = (world: World) => {
     const s = world.held;
     if (!s || world.finished || world.phase !== 'play') return;
+    /* 겹쳐 놓기만 하면 그 자리에 맞춰 붙는다.
+       예전에는 학생이 손잡이를 끌어 단서를 통째로 감싸야 붙었다. 학교 간판처럼 옆으로 긴
+       것은 크기를 정확히 맞추기 어려워 사실상 덮이지 않았고, 그 한 곳 때문에 판이 끝까지
+       가지 않았다. 이 차시가 묻는 것은 "무엇을 가려야 하는가"이지 손놀림이 아니다. */
     const targets = world.clues.filter((c) => c.found && !c.covered
-      && s.x <= c.x + slack && s.y <= c.y + slack
-      && s.x + s.w >= c.x + c.w - slack && s.y + s.h >= c.y + c.h - slack);
+      && s.x < c.x + c.w + slack && s.x + s.w > c.x - slack
+      && s.y < c.y + c.h + slack && s.y + s.h > c.y - slack);
     if (targets.length === 0) {
       playSound('select');
       notice(world, world.clues.some((c) => c.found && !c.covered)
-        ? '아직 보여요. 스티커를 조금 더 크게 만들어 덮어 주세요.'
+        ? '가릴 자리 위로 스티커를 옮겨 주세요.'
         : '먼저 돋보기로 위험한 곳을 찾아 주세요.');
       return;
     }
+
+    // 이미 감싸고 있으면 학생이 정한 크기를 그대로 둔다. 너무 크게 만든 책임도 그대로 남는다.
+    const wraps = targets.every((c) => s.x <= c.x + slack && s.y <= c.y + slack
+      && s.x + s.w >= c.x + c.w - slack && s.y + s.h >= c.y + c.h - slack);
+    if (!wraps) {
+      const left = Math.min(...targets.map((c) => c.x)) - 8;
+      const top = Math.min(...targets.map((c) => c.y)) - 8;
+      s.x = left;
+      s.y = top;
+      s.w = clamp(Math.max(...targets.map((c) => c.x + c.w)) + 8 - left, MIN_W, MAX_W);
+      s.h = clamp(Math.max(...targets.map((c) => c.y + c.h)) + 8 - top, MIN_H, MAX_H);
+      clampSticker(s);
+    }
+
     if (visibleRatio(world.stickers.concat([s])) < VISIBLE_FLOOR) {
       world.lives -= 1;
       world.held = null;
