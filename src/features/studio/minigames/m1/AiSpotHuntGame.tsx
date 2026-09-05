@@ -30,30 +30,48 @@ import type { MiniGameProps } from '../types';
  * 이모지를 열쇠로 삼는다. 이모지는 같은 물건이면 스테이지가 달라도 같게 적어 두었다.
  * 그림이 없는 물건은 이모지가 그대로 남는다.
  */
+/**
+ * 물건 이름과 그림 파일.
+ *
+ * 열쇠를 이모지로 잡았더니 서로 다른 물건이 한 그림을 물려받았다. 💡은 전등과 가로등이,
+ * 🔔은 수업 종과 초인종이 함께 써서 가로등 자리에 벽 스위치가 떴다. 이름은 겹치지 않으므로
+ * 이름을 열쇠로 삼는다. 같은 물건이 여러 장면에 나오면 같은 파일을 가리키면 된다.
+ *
+ * 여기 없는 이름은 이모지로 그린다. 놀이는 그대로 돌아간다.
+ */
 const ART: Record<string, string> = {
-  '🎧': '/images/games/ai-music.jpg',
-  '🎵': '/images/games/ai-music.jpg',
-  '🔐': '/images/games/ai-facelock.jpg',
-  '🔊': '/images/games/ai-speaker.jpg',
-  '📷': '/images/games/ai-translate.jpg',
-  '🤖': '/images/games/ai-vacuum.jpg',
-  '🌀': '/images/games/plain-fan.jpg',
-  '💡': '/images/games/plain-switch.jpg',
-  '⏰': '/images/games/plain-clock.jpg',
-  '🫖': '/images/games/plain-kettle.jpg',
-  '🚪': '/images/games/plain-handle.jpg',
+  '음악 앱': '/images/games/ai-music.jpg',
+  '얼굴 잠금': '/images/games/ai-facelock.jpg',
+  '얼굴 사물함': '/images/games/ai-facelock.jpg',
+  '얼굴 도어록': '/images/games/ai-facelock.jpg',
+  '말하는 스피커': '/images/games/ai-speaker.jpg',
+  '말 듣는 스피커': '/images/games/ai-speaker.jpg',
+  '번역 앱': '/images/games/ai-translate.jpg',
+  '청소 로봇': '/images/games/ai-vacuum.jpg',
+  '배달 로봇': '/images/games/ai-vacuum.jpg',
+  '선풍기': '/images/games/plain-fan.jpg',
+  '전등': '/images/games/plain-switch.jpg',
+  '태엽 시계': '/images/games/plain-clock.jpg',
+  '주전자': '/images/games/plain-kettle.jpg',
+  '문손잡이': '/images/games/plain-handle.jpg',
+  '손잡이 문': '/images/games/plain-handle.jpg',
 };
 
 const AI_TARGET = 5;
 const BASE_SECONDS = 62;
 /** 판 가로 기준 물건 크기(%) — 크기를 제각각으로 만들어 눈으로 훑게 한다. */
-const BASE_SIZE = 9.4;
+/* 물건 하나의 지름(판 너비에 대한 %).
+   예전에는 최대 17%까지 커져 충분한 지원에서 판 너비의 6분의 1을 한 물건이 차지했다.
+   그림끼리 서로를 가려 무엇을 고르는지 알 수 없었다. */
+const BASE_SIZE = 7.0;
+const MIN_SIZE = 5.2;
+const MAX_SIZE = 11.5;
 /** 떠다니는 속도(%/초). 판을 가로지르는 데 40초가 넘게 걸릴 만큼 느리다. */
 const BASE_DRIFT = 1.7;
-const MIN_X = 13;
-const MAX_X = 87;
-const MIN_Y = 17;
-const MAX_Y = 83;
+const MIN_X = 10;
+const MAX_X = 90;
+const MIN_Y = 14;
+const MAX_Y = 86;
 
 interface Thing {
   name: string;
@@ -196,6 +214,17 @@ interface SpotItem extends Thing {
 }
 
 /**
+ * 두 물건이 겹치지 않으려면 가운데끼리 얼마나 떨어져야 하는가.
+ *
+ * 반지름을 더한 값에 여유를 얹는다. 여유가 그림 크기와 따로 노는 값인 까닭은 이름표
+ * 때문이다. 이름표는 그림보다 넓고 아래로 삐져나온다. 원끼리만 안 닿게 잡았더니
+ * "초인종"과 "태엽 시계"의 글자가 겹쳐 둘 다 읽을 수 없었다.
+ */
+function gapNeeded(a: number, b: number): number {
+  return (a + b) / 2 + 5.8;
+}
+
+/**
  * 판 배치를 만든다.
  *
  * 자리는 씨앗 난수로 흩고, 이미 놓인 물건과 겹치지 않을 자리를 찾다가 자리가 없으면
@@ -213,15 +242,17 @@ function buildItems(stage: StageConfig, tuning: GameTuning, seed: number): SpotI
 
   const placed: SpotItem[] = [];
   for (const thing of shuffle(random, pool)) {
-    const size = clamp(BASE_SIZE * randRange(random, 0.76, 1.3) * tuning.size, 6.4, 17);
+    const size = clamp(BASE_SIZE * randRange(random, 0.76, 1.3) * tuning.size, MIN_SIZE, MAX_SIZE);
     let x = 50;
     let y = 50;
     for (let attempt = 0; attempt < 60; attempt += 1) {
       x = randRange(random, MIN_X, MAX_X);
       y = randRange(random, MIN_Y, MAX_Y);
-      // 세로는 판이 짧아 같은 1%라도 더 가깝게 보인다. 그래서 세로 거리를 줄여서 잰다.
-      const need = 16 - attempt * 0.22;
-      if (placed.every((other) => Math.hypot(other.x - x, (other.y - y) * 0.62) > need)) break;
+      /* 떨어져야 할 거리는 두 물건의 크기에서 나온다. 예전에는 크기와 상관없이 16으로
+         고정해 두어, 큰 물건 둘이 나란히 놓이면 처음부터 겹쳐 있었다.
+         세로는 판이 짧아 같은 1%라도 더 가깝게 보이므로 줄여서 잰다. */
+      const room = (other: SpotItem) => gapNeeded(size, other.size) - attempt * 0.1;
+      if (placed.every((other) => Math.hypot(other.x - x, (other.y - y) * 0.62) > room(other))) break;
     }
     const angle = randRange(random, 0, Math.PI * 2);
     const speed = BASE_DRIFT * randRange(random, 0.55, 1.35) * tuning.speed;
@@ -368,6 +399,34 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
       if (item.y > MAX_Y) { item.y = MAX_Y; item.vy = -Math.abs(item.vy); }
     }
 
+    /* 겹친 물건을 서로 밀어낸다.
+       처음 자리를 잘 잡아도 떠다니다 보면 결국 겹친다. 그림이 겹치면 무엇을 고르는지
+       알 수 없고, 누르면 위에 있는 쪽이 눌린다. 찾은 물건은 제자리에 멈춰 있어야 하므로
+       밀지 않고, 아직 못 찾은 쪽만 비켜 준다. */
+    const list = itemsRef.current;
+    for (let i = 0; i < list.length; i += 1) {
+      for (let j = i + 1; j < list.length; j += 1) {
+        const a = list[i];
+        const b = list[j];
+        if (a.found && b.found) continue;
+        const dx = b.x - a.x;
+        const dy = (b.y - a.y) * 0.62;
+        const gap = Math.hypot(dx, dy);
+        const need = gapNeeded(a.size, b.size);
+        if (gap >= need || gap < 0.001) continue;
+        // 한 번에 다 떼어 놓으면 튕기듯 흔들린다. 절반씩 여러 프레임에 걸쳐 벌린다.
+        const push = (need - gap) * 0.5;
+        const ux = dx / gap;
+        const uy = dy / gap;
+        const moveA = a.found ? 0 : b.found ? push : push / 2;
+        const moveB = b.found ? 0 : a.found ? push : push / 2;
+        a.x = clamp(a.x - ux * moveA, MIN_X, MAX_X);
+        a.y = clamp(a.y - (uy / 0.62) * moveA, MIN_Y, MAX_Y);
+        b.x = clamp(b.x + ux * moveB, MIN_X, MAX_X);
+        b.y = clamp(b.y + (uy / 0.62) * moveB, MIN_Y, MAX_Y);
+      }
+    }
+
     // 자리 갱신은 매 프레임 다시 그릴 필요가 없다. 20fps로 낮춰 판이 무거워지지 않게 한다.
     paintRef.current += dt;
     if (paintRef.current >= 0.05) {
@@ -468,11 +527,11 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
                     fontSize: `${Math.round(clamp(item.size * 2.6, 18, 42))}px`,
                   }}
                 >
-                  {ART[item.emoji] ? (
+                  {ART[item.name] ? (
                     /* 그림은 흰 바탕 위에 그려져 있다. 흰 동그란 종이 위에 얹으면
                        네모난 바탕이 보이지 않고 스티커처럼 읽힌다. */
                     <img
-                      src={publicAssetUrl(ART[item.emoji])}
+                      src={publicAssetUrl(ART[item.name])}
                       alt=""
                       aria-hidden="true"
                       loading="lazy"
