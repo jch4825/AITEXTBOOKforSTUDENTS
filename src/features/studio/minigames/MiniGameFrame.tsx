@@ -138,16 +138,6 @@ export default function MiniGameFrame({
           </div>
         )}
 
-        {progress && (
-          <span className="ml-auto text-[14px] font-bold" style={{ color: 'var(--ink-2)' }}>
-            {progress.label}{' '}
-            <strong className="text-base font-black" style={{ color: accent }}>
-              {progress.value}
-            </strong>
-            {' / '}
-            {progress.max}
-          </span>
-        )}
       </div>
 
       {/* 안내 문장 + 읽어주기 */}
@@ -173,7 +163,25 @@ export default function MiniGameFrame({
       <div
         className="mini-game-board relative flex min-h-0 flex-1 flex-col gap-2 overflow-auto rounded-xl p-2.5 sm:p-3"
       >
-        {hud}
+        {/* 남은 기회·시간과 진행 수치는 한 줄에 둔다.
+            진행 수치를 이름표 줄에 두었더니, 이름이 긴 차시에서는 난이도 탭에 밀려 줄이
+            접히고 그만큼 놀이판이 눌렸다. 셋 다 "지금 판이 어떤 상태인가"를 알리는 값이라
+            판 안에 함께 두는 편이 찾기도 쉽다. */}
+        {(hud || progress) && (
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            {hud && <div className="min-w-0 flex-1">{hud}</div>}
+            {progress && (
+              <span className="shrink-0 text-[15px] font-black" style={{ color: '#CBD5E1' }}>
+                {progress.label}{' '}
+                <strong className="text-[18px]" style={{ color: 'var(--board-ink)' }}>
+                  {progress.value}
+                </strong>
+                {' / '}
+                {progress.max}
+              </span>
+            )}
+          </div>
+        )}
         {children}
       </div>
 
