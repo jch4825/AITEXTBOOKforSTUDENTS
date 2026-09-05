@@ -50,13 +50,13 @@ const STAGES: StageConfig[] = [
     planks: [
       { x: 120, y: GROUND - 70, w: 180, text: '다툰 날 저녁', ending: -1 },
       { x: 400, y: GROUND - 130, w: 170, text: '먼저 말을 건다', ending: 0 },
-      { x: 400, y: GROUND - 250, w: 170, text: '혼자 연습한다', ending: 1 },
-      { x: 700, y: GROUND - 150, w: 170, text: '사과를 적는다', ending: 0 },
-      { x: 700, y: GROUND - 280, w: 170, text: '계획을 세운다', ending: 1 },
-      { x: 990, y: GROUND - 110, w: 170, text: '함께 웃는다', ending: 0 },
-      { x: 990, y: GROUND - 300, w: 170, text: '끝까지 해낸다', ending: 1 },
-      { x: 1280, y: GROUND - 90, w: 200, text: '나란히 걷는다', ending: 0 },
-      { x: 1280, y: GROUND - 320, w: 200, text: '혼자 웃는다', ending: 1 },
+      { x: 400, y: GROUND - 75, w: 170, text: '혼자 연습한다', ending: 1 },
+      { x: 700, y: GROUND - 165, w: 170, text: '사과를 적는다', ending: 0 },
+      { x: 700, y: GROUND - 110, w: 170, text: '계획을 세운다', ending: 1 },
+      { x: 990, y: GROUND - 140, w: 170, text: '함께 웃는다', ending: 0 },
+      { x: 990, y: GROUND - 95, w: 170, text: '끝까지 해낸다', ending: 1 },
+      { x: 1280, y: GROUND - 115, w: 200, text: '나란히 걷는다', ending: 0 },
+      { x: 1280, y: GROUND - 70, w: 200, text: '혼자 웃는다', ending: 1 },
       { x: 1560, y: GROUND - 70, w: 220, text: '이야기의 끝', ending: -1 },
     ],
   },
@@ -68,14 +68,14 @@ const STAGES: StageConfig[] = [
     endings: ['도움을 청한다', '방법을 바꾼다'],
     planks: [
       { x: 110, y: GROUND - 70, w: 180, text: '무거운 상자 앞', ending: -1 },
-      { x: 390, y: GROUND - 140, w: 160, text: '손을 든다', ending: 0 },
-      { x: 390, y: GROUND - 260, w: 160, text: '수레를 찾는다', ending: 1 },
-      { x: 660, y: GROUND - 170, w: 160, text: '이유를 말한다', ending: 0 },
-      { x: 660, y: GROUND - 300, w: 160, text: '작게 나눈다', ending: 1 },
-      { x: 930, y: GROUND - 120, w: 160, text: '함께 든다', ending: 0 },
-      { x: 930, y: GROUND - 330, w: 160, text: '한 번에 옮긴다', ending: 1 },
-      { x: 1200, y: GROUND - 100, w: 180, text: '고맙다고 한다', ending: 0 },
-      { x: 1200, y: GROUND - 350, w: 180, text: '기록을 남긴다', ending: 1 },
+      { x: 390, y: GROUND - 130, w: 160, text: '손을 든다', ending: 0 },
+      { x: 390, y: GROUND - 75, w: 160, text: '수레를 찾는다', ending: 1 },
+      { x: 660, y: GROUND - 165, w: 160, text: '이유를 말한다', ending: 0 },
+      { x: 660, y: GROUND - 110, w: 160, text: '작게 나눈다', ending: 1 },
+      { x: 930, y: GROUND - 140, w: 160, text: '함께 든다', ending: 0 },
+      { x: 930, y: GROUND - 95, w: 160, text: '한 번에 옮긴다', ending: 1 },
+      { x: 1200, y: GROUND - 115, w: 180, text: '고맙다고 한다', ending: 0 },
+      { x: 1200, y: GROUND - 70, w: 180, text: '기록을 남긴다', ending: 1 },
       { x: 1480, y: GROUND - 80, w: 180, text: '정리한다', ending: -1 },
       { x: 1740, y: GROUND - 70, w: 220, text: '이야기의 끝', ending: -1 },
     ],
@@ -88,16 +88,16 @@ const STAGES: StageConfig[] = [
     endings: ['어른께 알린다', '표지를 찾는다'],
     planks: [
       { x: 100, y: GROUND - 70, w: 170, text: '길을 잃은 날', ending: -1 },
-      { x: 360, y: GROUND - 140, w: 150, text: '가게로 들어간다', ending: 0 },
-      { x: 360, y: GROUND - 270, w: 150, text: '지도를 편다', ending: 1 },
-      { x: 610, y: GROUND - 180, w: 150, text: '도와 달라고 한다', ending: 0 },
-      { x: 610, y: GROUND - 310, w: 150, text: '표지판을 읽는다', ending: 1 },
-      { x: 860, y: GROUND - 130, w: 150, text: '이름을 말한다', ending: 0 },
-      { x: 860, y: GROUND - 350, w: 150, text: '방향을 정한다', ending: 1 },
-      { x: 1110, y: GROUND - 110, w: 150, text: '기다린다', ending: 0 },
-      { x: 1110, y: GROUND - 300, w: 150, text: '걸어간다', ending: 1 },
-      { x: 1370, y: GROUND - 90, w: 170, text: '가족을 만난다', ending: 0 },
-      { x: 1370, y: GROUND - 260, w: 170, text: '집에 닿는다', ending: 1 },
+      { x: 360, y: GROUND - 130, w: 150, text: '가게로 들어간다', ending: 0 },
+      { x: 360, y: GROUND - 75, w: 150, text: '지도를 편다', ending: 1 },
+      { x: 610, y: GROUND - 165, w: 150, text: '도와 달라고 한다', ending: 0 },
+      { x: 610, y: GROUND - 110, w: 150, text: '표지판을 읽는다', ending: 1 },
+      { x: 860, y: GROUND - 140, w: 150, text: '이름을 말한다', ending: 0 },
+      { x: 860, y: GROUND - 95, w: 150, text: '방향을 정한다', ending: 1 },
+      { x: 1110, y: GROUND - 115, w: 150, text: '기다린다', ending: 0 },
+      { x: 1110, y: GROUND - 70, w: 150, text: '걸어간다', ending: 1 },
+      { x: 1370, y: GROUND - 140, w: 170, text: '가족을 만난다', ending: 0 },
+      { x: 1370, y: GROUND - 95, w: 170, text: '집에 닿는다', ending: 1 },
       { x: 1650, y: GROUND - 70, w: 180, text: '한숨 돌린다', ending: -1 },
       { x: 1900, y: GROUND - 70, w: 220, text: '이야기의 끝', ending: -1 },
     ],
@@ -111,6 +111,8 @@ interface World {
   vy: number;
   camera: number;
   lives: number;
+  /** 다른 결말 발판을 밟아 되돌아온 직후의 표시 시간 */
+  bounce: number;
   onGround: boolean;
   finished: boolean;
   phase: 'ready' | 'run';
@@ -132,7 +134,7 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
 
   const [ending, setEnding] = useState<number | null>(null);
   const worldRef = useRef<World>({
-    x: 160, y: GROUND - 110, vx: 0, vy: 0, camera: 0, lives: maxLives,
+    x: 160, y: GROUND - 110, vx: 0, vy: 0, camera: 0, lives: maxLives, bounce: 0,
     onGround: false, finished: false, phase: 'ready', armed: true, current: '',
   });
   const [hud, setHud] = useState({ lives: maxLives, progress: 0, current: '' });
@@ -142,7 +144,7 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
 
   const resetWorld = () => {
     worldRef.current = {
-      x: 160, y: GROUND - 110, vx: 0, vy: 0, camera: 0, lives: maxLives,
+      x: 160, y: GROUND - 110, vx: 0, vy: 0, camera: 0, lives: maxLives, bounce: 0,
       onGround: false, finished: false, phase: 'ready', armed: true, current: '',
     };
     setHud({ lives: maxLives, progress: 0, current: '' });
@@ -182,11 +184,29 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
         w.onGround = false;
         if (w.vy > 0) {
           for (const plank of planks) {
-            // 내 결말로 이어지지 않는 발판은 밟히지 않는다 — 끊긴 길이다
-            if (plank.ending !== -1 && plank.ending !== chosen) continue;
             const width = plank.w * plankScale;
             if (w.y + HERO_R < plank.y || w.y + HERO_R > plank.y + 26) continue;
             if (w.x < plank.x - HERO_R || w.x > plank.x + width + HERO_R) continue;
+
+            /* 모든 발판을 밟을 수 있게 둔다.
+               예전에는 다른 결말의 발판을 그려만 두고 통과시켰다. 학생 눈에는 분명히
+               발판이 있는데 밟으면 그대로 떨어져 기회를 잃었다. 왜 떨어졌는지 알 수 없는
+               실패다. 지금은 밟히되, 다른 결말로 가는 발판이면 앞 발판으로 되돌린다.
+               기회는 줄지 않는다 — 잘못 읽은 것은 구덩이에 빠진 것과 다르다. */
+            if (plank.ending !== -1 && plank.ending !== chosen) {
+              const back = planks
+                .filter((item) => (item.ending === -1 || item.ending === chosen) && item.x < plank.x)
+                .pop();
+              w.x = back ? back.x + 40 : 160;
+              w.y = (back ? back.y : GROUND - 70) - HERO_R;
+              w.vy = 0;
+              w.onGround = true;
+              w.bounce = 0.9;
+              w.current = `${plank.text} — 이 길은 다른 결말로 가요`;
+              playSound('select');
+              break;
+            }
+
             w.y = plank.y - HERO_R;
             w.vy = 0;
             w.onGround = true;
@@ -200,6 +220,7 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
         }
         if (!jumping) w.armed = true;
 
+        if (w.bounce > 0) w.bounce = Math.max(0, w.bounce - dt);
         if (w.x < 30) w.x = 30;
         w.camera = clamp(w.x - WORLD_W * 0.35, 0, stage.goalX - WORLD_W + 240);
 
@@ -252,7 +273,8 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
 
     ctx.beginPath();
     ctx.arc(w.x, w.y, HERO_R, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
+    // 되돌아온 직후에는 붉게 물들여, 왜 뒤로 갔는지 눈으로도 알게 한다
+    ctx.fillStyle = w.bounce > 0 ? '#FB7185' : PLAY.hero;
     ctx.fill();
     ctx.lineWidth = 4;
     ctx.strokeStyle = PLAY.heroEdge;
@@ -271,7 +293,7 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="이야기 길 뛰기"
-      instruction="이야기의 결말을 먼저 고르고, 그 결말로 이어지는 파란 발판을 밟아 힘차게 달려가 보세요."
+      instruction="이야기의 결말을 먼저 고르고, 그 결말로 이어지는 파란 발판을 밟아 달려가 보세요. 붉은 발판은 다른 결말로 가는 길이라, 밟으면 앞 발판으로 되돌아옵니다."
       progress={{ label: '나아간 길', value: hud.progress, max: 100 }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
