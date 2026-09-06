@@ -20,7 +20,11 @@ import type { MiniGameProps } from '../types';
 const WORLD_W = 960;
 const WORLD_H = 540;
 const HOLE_COLS = 3;
-const HOLE_ROWS = 3;
+/* 아홉 칸을 250x108로 두었더니 말풍선 하나가 판 너비의 4분의 1뿐이라, 실제 화면에서는
+   글자와 표시가 손톱만 하게 보였다. 여섯 칸으로 줄여 하나를 290x150으로 키운다. */
+const HOLE_ROWS = 2;
+const HOLE_W = 290;
+const HOLE_H = 150;
 
 interface StageConfig {
   id: string;
@@ -36,7 +40,7 @@ const STAGES: StageConfig[] = [
     id: 'park',
     label: '기본',
     scene: '공원',
-    spoken: '공원 그림에서 추측만 두드려요.',
+    spoken: '공원에서 물음표만 눌러요.',
     guesses: [
       { text: '가방 주인은 급했나 봐요', fixed: '가방이 열려 있어서 급했을 수 있습니다' },
       { text: '곧 비가 올 거예요', fixed: '우산을 든 사람이 있어 비를 대비했을 수 있습니다' },
@@ -50,7 +54,7 @@ const STAGES: StageConfig[] = [
     id: 'class',
     label: '1단계',
     scene: '교실',
-    spoken: '교실 그림에서 추측만 두드려요.',
+    spoken: '교실에서 물음표만 눌러요.',
     guesses: [
       { text: '시험을 봤나 봐요', fixed: '책상에 연필과 종이가 놓여 있습니다' },
       { text: '선생님이 화났어요', fixed: '선생님이 앞에 서 있습니다' },
@@ -64,7 +68,7 @@ const STAGES: StageConfig[] = [
     id: 'stop',
     label: '2단계',
     scene: '정류장',
-    spoken: '정류장 그림에서 추측만 두드려요.',
+    spoken: '정류장에서 물음표만 눌러요.',
     guesses: [
       { text: '버스가 늦었어요', fixed: '사람들이 서서 기다립니다' },
       { text: '저 사람은 학생이에요', fixed: '가방을 메고 있습니다' },
@@ -117,16 +121,71 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
     setFixedList([]);
   }, [game.round, game.stageIndex, stage, game.seed, maxLives]);
 
+  /**
+   * 배경 장면을 그린다.
+   *
+   * 머리글은 "공원 그림"이라고 말하는데 판에는 검은 구멍만 있었다. 무엇을 보고 사실과
+   * 추측을 나누라는 것인지 알 수 없다. 말풍선이 떠오르는 자리가 어떤 곳인지 눈으로
+   * 보여 준다.
+   */
+  const drawScene = (ctx: CanvasRenderingContext2D) => {
+    const skyH = 300;
+    ctx.fillStyle = stage.id === 'classroom' ? '#1E293B' : '#123047';
+    ctx.fillRect(0, 64, WORLD_W, skyH - 64);
+    ctx.fillStyle = stage.id === 'classroom' ? '#3B2F26' : '#14532D';
+    ctx.fillRect(0, skyH, WORLD_W, WORLD_H - skyH);
+
+    if (stage.id === 'park') {
+      // 해와 나무 셋, 벤치 하나
+      ctx.fillStyle = '#FBBF24';
+      ctx.beginPath();
+      ctx.arc(860, 120, 34, 0, Math.PI * 2);
+      ctx.fill();
+      for (const [x, s] of [[110, 1], [420, 0.8], [720, 0.92]] as [number, number][]) {
+        ctx.fillStyle = '#78350F';
+        ctx.fillRect(x - 9 * s, skyH - 70 * s, 18 * s, 70 * s);
+        ctx.fillStyle = '#166534';
+        ctx.beginPath();
+        ctx.arc(x, skyH - 92 * s, 46 * s, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      panel(ctx, 540, skyH + 34, 150, 20, '#7C4A21', '#5B3315', 6);
+      ctx.fillStyle = '#5B3315';
+      ctx.fillRect(556, skyH + 54, 12, 34);
+      ctx.fillRect(662, skyH + 54, 12, 34);
+    } else if (stage.id === 'classroom') {
+      // 칠판과 책상 셋
+      panel(ctx, 120, 96, 420, 150, '#14532D', '#0F3D22', 10);
+      for (const x of [180, 430, 680]) {
+        panel(ctx, x, skyH + 20, 160, 18, '#7C4A21', '#5B3315', 6);
+        ctx.fillStyle = '#5B3315';
+        ctx.fillRect(x + 12, skyH + 38, 12, 46);
+        ctx.fillRect(x + 136, skyH + 38, 12, 46);
+      }
+    } else {
+      // 정류장 표지와 버스
+      ctx.fillStyle = '#94A3B8';
+      ctx.fillRect(150, skyH - 130, 12, 130);
+      panel(ctx, 108, skyH - 176, 96, 52, '#1D4ED8', '#93C5FD', 8);
+      panel(ctx, 560, skyH - 118, 300, 118, '#B45309', '#FCD34D', 12);
+      ctx.fillStyle = '#0B1220';
+      ctx.beginPath();
+      ctx.arc(630, skyH, 22, 0, Math.PI * 2);
+      ctx.arc(800, skyH, 22, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  };
+
   const holeBox = (index: number) => {
     const col = index % HOLE_COLS;
     const row = Math.floor(index / HOLE_COLS);
-    const w = 250;
-    const h = 108;
+    const w = HOLE_W;
+    const h = HOLE_H;
     const gapX = (WORLD_W - HOLE_COLS * w) / (HOLE_COLS + 1);
-    const gapY = 24;
+    const gapY = 26;
     return {
       x: gapX + col * (w + gapX),
-      y: 96 + row * (h + gapY),
+      y: 104 + row * (h + gapY),
       w,
       h,
     };
@@ -144,7 +203,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
         const caught = prev.caught + 1;
         if (caught >= GOAL && !finishedRef.current) {
           finishedRef.current = true;
-          game.succeed('추측만 골라 두드리고 근거 있는 설명으로 고쳤어요!');
+          game.succeed('물음표만 골라 눌러서 근거 있는 말로 고쳤어요!');
         }
         return { ...prev, caught };
       });
@@ -153,7 +212,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
         const lives = prev.lives - 1;
         if (lives <= 0 && !finishedRef.current) {
           finishedRef.current = true;
-          game.fail('눈으로 보이는 사실을 두드렸어요. 눈 표시가 있는 말은 그대로 두어요.');
+          game.fail('눈동자(사실)를 눌러서 터졌어요. 눈동자는 그대로 두세요.');
         }
         return { ...prev, lives };
       });
@@ -195,7 +254,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
               const lives = prev.lives - 1;
               if (lives <= 0 && !finishedRef.current) {
                 finishedRef.current = true;
-                game.fail('추측을 놓쳤어요. 물음표가 붙은 말은 두드려 고쳐 봐요.');
+                game.fail('물음표(추측)를 놓쳤어요. 사라지기 전에 눌러 보세요.');
               }
               return { ...prev, lives };
             });
@@ -207,14 +266,19 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
 
     ctx.fillStyle = BOARD.bg;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    drawScene(ctx);
 
-    panel(ctx, 20, 14, WORLD_W - 40, 46, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, `${stage.scene} 그림 · 물음표는 추측, 눈은 사실입니다`, WORLD_W / 2, 37, 22, BOARD.ink);
+    panel(ctx, 20, 12, WORLD_W - 40, 46, BOARD.overlay, PLAY.info, 12);
+    centerText(
+      ctx, `${stage.scene}에서 떠오른 말 · ❓ 사라지기 전에 누르기 · 👁️ 그대로 두기`,
+      WORLD_W / 2, 35, 22, BOARD.ink,
+    );
 
     for (let i = 0; i < HOLE_COLS * HOLE_ROWS; i += 1) {
       const box = holeBox(i);
-      panel(ctx, box.x, box.y, box.w, box.h, '#0B1220', BOARD.line, 12);
       const mole = molesRef.current.find((m) => m.hole === i && !m.hit);
+      /* 빈 자리는 그리지 않는다. 여섯 상자를 늘 깔아 두었더니 그 상자가 장면을 통째로
+         덮어, 배경을 그려도 하늘도 나무도 보이지 않았다. 말은 장면에서 떠오른다. */
       if (!mole) continue;
       const rise = clamp(1 - Math.abs(mole.life / mole.total - 0.5) * 2, 0.25, 1);
       const h = box.h * 0.82 * rise;
@@ -224,9 +288,9 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
         mole.guess ? '#4C1D95' : '#064E3B',
         mole.guess ? PLAY.extra : PLAY.goal, 12,
       );
-      if (h > 40) {
-        centerText(ctx, mole.guess ? '💭' : '👁️', box.x + box.w / 2, y + 20, 22, BOARD.ink);
-        centerText(ctx, mole.text, box.x + box.w / 2, y + h / 2 + 12, 20, BOARD.ink);
+      if (h > 52) {
+        centerText(ctx, mole.guess ? '❓' : '👁️', box.x + box.w / 2, y + 34, 44, BOARD.ink);
+        centerText(ctx, mole.text, box.x + box.w / 2, y + h / 2 + 30, 22, BOARD.ink);
       }
     }
 
@@ -239,7 +303,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="추측만 두드리기"
-      instruction="짐작해서 쓴 말(물음표 표시)만 톡톡 두드려 보세요. 직접 눈으로 확인한 사실(눈 표시)은 그대로 남겨 둡니다."
+      instruction="물음표(추측)가 나오면 사라지기 전에 누르세요. 눈동자(사실)를 잘못 누르면 터집니다."
       progress={{ label: '고친 추측', value: hud.caught, max: GOAL }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
@@ -269,7 +333,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
                   }
                 }
               }}
-              ariaLabel={`${stage.scene} 그림에서 추측 말풍선을 두드리는 놀이. 고친 추측 ${hud.caught}개, 남은 기회 ${hud.lives}개.`}
+              ariaLabel={`${stage.scene}에서 물음표 말풍선을 누르는 놀이. 고친 추측 ${hud.caught}개, 남은 기회 ${hud.lives}개.`}
             />
           </div>
         </div>
@@ -277,7 +341,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
           className="min-h-[40px] rounded-xl px-3 py-1.5 text-[15px] font-bold leading-snug"
           style={{ background: 'var(--board-surface)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
         >
-          {fixedList.length > 0 ? `근거 있는 설명 · ${fixedList.join(' / ')}` : '두드린 추측이 여기에서 근거 있는 설명으로 바뀝니다.'}
+          {fixedList.length > 0 ? `근거 있는 설명 · ${fixedList.join(' / ')}` : '누른 물음표가 여기에서 근거 있는 말로 바뀝니다.'}
         </p>
       </div>
     </MiniGameFrame>
