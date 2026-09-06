@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, dist, panel, pointInRect, useGameKeys,
+  BOARD, GameCanvas, GameHud, PLAY, centerText, clamp, dist, drawCover, panel, pointInRect, useGameImages, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
+import type { GameArt } from '../engine';
 import type { MiniGameProps } from '../types';
 
 /**
@@ -143,15 +144,25 @@ function personBox(p: Person) {
   };
 }
 
+/**
+ * 가려야 할 네 곳. 그림 속 자리에 맞춘 값이다.
+ *
+ * 예전에는 사람 도형의 좌표에서 계산했다. 그림으로 바꾸면 그 계산은 그림과 아무 상관이
+ * 없어진다. 세 장면 모두 같은 구도로 뽑았으므로 자리도 하나로 적는다.
+ */
+const CLUE_BOXES = {
+  face: { x: 205, y: 143, w: 68, h: 68 },
+  tag: { x: 201, y: 225, w: 76, h: 30 },
+  sign: { x: 544, y: 135, w: 240, h: 64 },
+  other: { x: 841, y: 156, w: 56, h: 56 },
+};
+
 function buildClues(stage: StageConfig): Clue[] {
-  const me = personBox(stage.me);
-  const other = personBox(stage.other);
-  const s = stage.sign;
   return [
-    { id: 'face', name: '내 얼굴', ...me.head, found: false, covered: false },
-    { id: 'tag', name: '이름표', ...me.tag, found: false, covered: false },
-    { id: 'sign', name: s.name, x: s.x - 4, y: s.y - 4, w: s.w + 8, h: s.h + 8, found: false, covered: false },
-    { id: 'other', name: '다른 사람 얼굴', ...other.head, found: false, covered: false },
+    { id: 'face', name: '내 얼굴', ...CLUE_BOXES.face, found: false, covered: false },
+    { id: 'tag', name: '이름표', ...CLUE_BOXES.tag, found: false, covered: false },
+    { id: 'sign', name: stage.sign.name, ...CLUE_BOXES.sign, found: false, covered: false },
+    { id: 'other', name: '다른 사람 얼굴', ...CLUE_BOXES.other, found: false, covered: false },
   ];
 }
 
@@ -216,7 +227,18 @@ function drawPerson(ctx: CanvasRenderingContext2D, p: Person, detail: boolean, t
   }
 }
 
-function drawScene(ctx: CanvasRenderingContext2D, stage: StageConfig, detail: boolean) {
+/**
+ * 사진 한 장을 그린다.
+ *
+ * 예전에는 하늘·땅·사람을 도형으로 그렸다. 학생이 "사진을 보내기 전에 살펴본다"를 겪어야
+ * 하는데, 도형 몇 개로는 그것이 사진으로 읽히지 않았다. 지금은 Blender로 뽑은 장면 한 장을
+ * 얹는다. 그림이 아직 안 왔으면 아래 도형 그리기가 그대로 대신한다 — 놀이는 멈추지 않는다.
+ *
+ * 그림은 912x330 자리에 1:1로 들어가도록 뽑았다. 그래서 아래 CLUE_BOXES의 자리와
+ * 그림 속 얼굴·이름표·간판이 정확히 맞는다.
+ */
+function drawScene(ctx: CanvasRenderingContext2D, stage: StageConfig, detail: boolean, photo?: GameArt) {
+  if (drawCover(ctx, photo, PHOTO.x, PHOTO.y, PHOTO.w, PHOTO.h)) return;
   ctx.fillStyle = TONE.sky;
   ctx.fillRect(PHOTO.x, PHOTO.y, PHOTO.w, GROUND_Y - PHOTO.y);
   ctx.fillStyle = TONE.ground;
@@ -297,6 +319,13 @@ function buildWorld(stage: StageConfig, lives: number, seconds: number): World {
 export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
   const game = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
   const stage = STAGES[game.stageIndex];
+
+  /* 장면 세 장. 파일 이름이 스테이지 id와 같아 한 줄로 고른다. */
+  const art = useGameImages({
+    field: '/images/games/photo-field.jpg',
+    trip: '/images/games/photo-picnic.jpg',
+    gate: '/images/games/photo-gate.jpg',
+  });
   const tuning = game.tuning;
 
   const lensR = 78 * tuning.size;
@@ -470,13 +499,13 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
     ctx.beginPath();
     ctx.rect(PHOTO.x, PHOTO.y, PHOTO.w, PHOTO.h);
     ctx.clip();
-    drawScene(ctx, stage, false);
+    drawScene(ctx, stage, false, art.map.current[stage.id]);
     // 같은 그림을 살짝 밀어 겹쳐 그리면 초점이 안 맞은 사진처럼 보인다. 흐림 필터는
     // 브라우저마다 무겁고 지원이 갈려서 그림 두 겹으로 대신한다.
     ctx.save();
     ctx.globalAlpha = 0.5;
     ctx.translate(5, 4);
-    drawScene(ctx, stage, false);
+    drawScene(ctx, stage, false, art.map.current[stage.id]);
     ctx.restore();
     ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
     ctx.fillRect(PHOTO.x, PHOTO.y, PHOTO.w, PHOTO.h);
@@ -485,7 +514,7 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
     ctx.beginPath();
     ctx.arc(world.lensX, world.lensY, lensR, 0, Math.PI * 2);
     ctx.clip();
-    drawScene(ctx, stage, true);
+    drawScene(ctx, stage, true, art.map.current[stage.id]);
     ctx.restore();
 
     for (const clue of world.clues) {
