@@ -18,10 +18,17 @@ import type { MiniGameProps } from '../types';
 
 const WORLD_W = 960;
 const WORLD_H = 540;
-const COLS = 16;
-const ROWS = 9;
+/* 칸 수. 16x9로 두었더니 한 칸이 60x47이라 "어떤 모양" 같은 글자가 칸을 넘쳐
+   옆 조각과 겹쳐 읽혔다. 12x7로 줄여 한 칸을 80x61로 넓힌다. */
+const COLS = 12;
+const ROWS = 7;
 const CELL_W = WORLD_W / COLS;
-const CELL_H = (WORLD_H - 60) / ROWS;
+/* 위 44px는 떠올린 차례를 적는 띠, 아래 56px는 속도 게이지 자리다. */
+const BOARD_TOP = 60;
+const BOARD_BOTTOM = 56;
+const CELL_H = (WORLD_H - BOARD_TOP - BOARD_BOTTOM) / ROWS;
+const PACE_MIN = 0.6;
+const PACE_MAX = 1.8;
 
 interface Piece {
   c: number;
@@ -109,7 +116,10 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
   const tuning = game.tuning;
 
   /* 지원 수준은 한 칸 움직이는 간격과 기회로 나타난다. 떠올릴 차례는 스테이지가 정한다. */
-  const step = 0.5 / clamp(tuning.speed, 0.7, 1.35);
+  /* 학생이 스스로 고르는 속도. 지원 수준이 정한 값 위에 얹는다.
+     손이 느린 학생은 늦추고, 익숙해지면 올려 쓴다. */
+  const [pace, setPace] = useState(1);
+  const step = 0.5 / (clamp(tuning.speed, 0.7, 1.35) * pace);
   const maxLives = tuning.lives;
   const count = stage.steps.length;
 
@@ -120,6 +130,7 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
   useEffect(() => {
     worldRef.current = buildWorld(stage, game.seed, maxLives, count);
     setHud({ index: 0, lives: maxLives });
+    setPace(1);
   }, [game.round, game.stageIndex, stage, game.seed, maxLives, count]);
 
   const turn = (c: number, r: number) => {
@@ -179,7 +190,7 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
           }
           if (w.lives <= 0) {
             w.finished = true;
-            game.fail('벽이나 순서를 놓쳤어요. 다음 차례로 빛나는 조각만 먹어 봐요.');
+            game.fail('생명력을 다 썼어요. 초록색 조각만 차례대로 먹어 보아요.');
           } else if (w.index >= w.pieces.length) {
             w.finished = true;
             game.succeed(`${stage.topic}의 차례를 처음부터 끝까지 내 힘으로 떠올렸어요!`);
@@ -194,9 +205,15 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
     // 지금까지 떠올린 차례
     const recalled = w.pieces.filter((p) => p.eaten).map((p) => p.text).join(' → ');
     panel(ctx, 12, 8, WORLD_W - 24, 44, BOARD.overlay, PLAY.info, 10);
-    centerText(ctx, recalled ? `떠올린 차례 · ${recalled}` : `${stage.topic} · 빛나는 조각부터 먹으세요`, WORLD_W / 2, 30, 22, BOARD.ink);
+    centerText(ctx, recalled ? `떠올린 차례 · ${recalled}` : `${stage.topic} · 초록색 조각부터 먹으세요`, WORLD_W / 2, 30, 22, BOARD.ink);
 
-    const top = 60;
+    const top = BOARD_TOP;
+
+    /* 벽을 붉게 두른다. 어디까지가 판인지 눈에 보이지 않으면 왜 부딪혔는지 알 수 없다. */
+    ctx.strokeStyle = '#FB7185';
+    ctx.lineWidth = 6;
+    ctx.strokeRect(3, top + 3, COLS * CELL_W - 6, ROWS * CELL_H - 6);
+
     // 판 눈금
     ctx.strokeStyle = 'rgba(100, 116, 139, 0.28)';
     ctx.lineWidth = 1;
@@ -216,15 +233,17 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
     w.pieces.forEach((piece, index) => {
       if (piece.eaten) return;
       const active = index === w.index;
+      /* 다음에 먹을 조각은 초록, 나머지는 회색 상자다. 예전에는 둘 다 어두운 남색이라
+         무엇이 다음 차례인지 알아보기 어려웠다. */
       panel(
         ctx, piece.c * CELL_W + 2, top + piece.r * CELL_H + 2, CELL_W - 4, CELL_H - 4,
-        active ? '#065F46' : '#1E293B',
-        active ? PLAY.goal : 'rgba(100, 116, 139, 0.6)', 8,
+        active ? '#16A34A' : '#475569',
+        active ? '#86EFAC' : '#94A3B8', 8,
       );
-      centerText(ctx, `${index + 1}`, piece.c * CELL_W + CELL_W / 2, top + piece.r * CELL_H + 16, 20,
-        active ? BOARD.ink : BOARD.inkDim);
-      centerText(ctx, piece.text, piece.c * CELL_W + CELL_W / 2, top + piece.r * CELL_H + CELL_H / 2 + 8, 20,
-        active ? BOARD.ink : 'rgba(203, 213, 225, 0.55)');
+      centerText(ctx, `${index + 1}`, piece.c * CELL_W + CELL_W / 2, top + piece.r * CELL_H + 17, 18,
+        active ? '#052E16' : BOARD.inkDim);
+      centerText(ctx, piece.text, piece.c * CELL_W + CELL_W / 2, top + piece.r * CELL_H + CELL_H / 2 + 12, 16,
+        active ? '#052E16' : BOARD.ink);
     });
 
     w.body.forEach((seg, index) => {
@@ -235,16 +254,26 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
       );
     });
 
+    // 속도 게이지 — 판 아래에 둔다
+    const gaugeY = WORLD_H - BOARD_BOTTOM + 12;
+    centerText(ctx, '느리게', 66, gaugeY + 16, 20, BOARD.inkDim);
+    centerText(ctx, '빠르게', WORLD_W - 66, gaugeY + 16, 20, BOARD.inkDim);
+    panel(ctx, 130, gaugeY, WORLD_W - 260, 32, BOARD.overlay, BOARD.line, 10);
+    const ratio = (pace - PACE_MIN) / (PACE_MAX - PACE_MIN);
+    ctx.fillStyle = PLAY.hero;
+    ctx.fillRect(134, gaugeY + 4, (WORLD_W - 268) * ratio, 24);
+    centerText(ctx, `뱀 속도 ${pace.toFixed(1)}배 · 눌러서 바꾸기`, WORLD_W / 2, gaugeY + 17, 20, BOARD.ink);
+
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 230, WORLD_H - 62, 460, 52, BOARD.overlay, PLAY.hero, 12);
-      centerText(ctx, '방향키를 누르면 움직입니다', WORLD_W / 2, WORLD_H - 36, 24, BOARD.ink);
+      panel(ctx, WORLD_W / 2 - 230, WORLD_H - BOARD_BOTTOM - 62, 460, 52, BOARD.overlay, PLAY.hero, 12);
+      centerText(ctx, '방향키를 누르면 움직입니다', WORLD_W / 2, WORLD_H - BOARD_BOTTOM - 36, 24, BOARD.ink);
     }
   };
 
   return (
     <MiniGameFrame
       badge="떠올린 순서 뱀"
-      instruction="반짝이는 조각을 차례대로 하나씩 모아 보세요. 벽이나 몸에 부딪히지 않게 조심해서 움직여 봅시다."
+      instruction="초록색 조각을 차례대로 잡아먹어 보아요. 회색 상자를 먼저 먹으면 생명력이 떨어집니다. 붉은 벽에 부딪혀도 떨어집니다."
       progress={{ label: '떠올린 차례', value: hud.index, max: count }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
@@ -271,6 +300,13 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
             onFrame={frame}
             onPointer={(pointer) => {
               if (pointer.phase !== 'down') return;
+              /* 아래 게이지를 누르면 그 자리만큼 속도가 정해진다. 단추를 따로 두면
+                 조작 줄이 일곱 개가 되어 좁은 화면에서 글자가 접힌다. */
+              if (pointer.y >= WORLD_H - BOARD_BOTTOM) {
+                const ratio = clamp((pointer.x - 134) / (WORLD_W - 268), 0, 1);
+                setPace(Number((PACE_MIN + (PACE_MAX - PACE_MIN) * ratio).toFixed(1)));
+                return;
+              }
               const w = worldRef.current;
               const head = w.body[0];
               const hx = head.c * CELL_W + CELL_W / 2;
