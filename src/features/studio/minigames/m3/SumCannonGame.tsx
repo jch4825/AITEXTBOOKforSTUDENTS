@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, toRadians, useGameKeys,
+  BOARD, GameCanvas, GameHud, PLAY, centerText, clamp, createRandom, panel, randInt, toRadians, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -25,52 +25,78 @@ interface StageConfig {
   id: string;
   label: string;
   spoken: string;
-  items: { name: string; price: number; count: number }[];
-  /** 아이미 풀이 — 틀린 줄이 하나 있다 */
-  lines: string[];
-  wrongLine: number;
+  /** 물건 이름만 스테이지가 정한다. 값과 개수는 판마다 새로 뽑는다. */
+  names: string[];
   wind: number;
 }
 
+interface Basket {
+  items: { name: string; price: number; count: number }[];
+  total: number;
+  /** 아이미 풀이. 한 줄이 틀려 있다. */
+  lines: string[];
+  wrongLine: number;
+}
+
 const STAGES: StageConfig[] = [
-  {
-    id: 'snack',
-    label: '기본',
-    spoken: '간식 합계를 예상해 쏴 봐요.',
-    items: [
-      { name: '사탕', price: 400, count: 2 },
-      { name: '우유', price: 900, count: 1 },
-    ],
-    lines: ['사탕 400원 × 2 = 800원', '우유 900원', '합계 1,600원'],
-    wrongLine: 2,
-    wind: 0,
-  },
-  {
-    id: 'stationery',
-    label: '1단계',
-    spoken: '학용품 합계를 예상해 쏴 봐요.',
-    items: [
-      { name: '공책', price: 1200, count: 2 },
-      { name: '연필', price: 300, count: 3 },
-    ],
-    lines: ['공책 1,200원 × 2 = 2,400원', '연필 300원 × 3 = 800원', '합계 3,200원'],
-    wrongLine: 1,
-    wind: 0,
-  },
-  {
-    id: 'party',
-    label: '2단계',
-    spoken: '잔치 준비물 합계를 예상해 쏴 봐요.',
-    items: [
-      { name: '풍선', price: 250, count: 4 },
-      { name: '종이컵', price: 1100, count: 2 },
-      { name: '주스', price: 1500, count: 1 },
-    ],
-    lines: ['풍선 250원 × 4 = 1,000원', '종이컵 1,100원 × 2 = 2,200원', '주스 1,500원', '합계 4,200원'],
-    wrongLine: 3,
-    wind: 34,
-  },
+  { id: 'snack', label: '기본', spoken: '간식 합계를 예상해 쏴 봐요.', names: ['사탕', '우유'], wind: 0 },
+  { id: 'stationery', label: '1단계', spoken: '학용품 합계를 예상해 쏴 봐요.', names: ['공책', '연필'], wind: 0 },
+  { id: 'party', label: '2단계', spoken: '잔치 준비물 합계를 예상해 쏴 봐요.', names: ['풍선', '종이컵', '주스'], wind: 34 },
 ];
+
+/**
+ * 이번 판에 살 물건과 값을 뽑는다.
+ *
+ * 값을 스테이지에 적어 두었더니 몇 번을 다시 해도 합계가 늘 같았다. 한 번 외우면 계산할
+ * 일이 없어진다. 그래서 판마다 새로 뽑되, 합계는 1,500원에서 6,000원 사이에 100원 단위로
+ * 떨어지게 한다. 발사 자리로 옮기는 눈금이 그 범위에 맞춰져 있고, 100원 아래 자리는
+ * 학생이 셈하기에 잔가지가 된다.
+ */
+function buildBasket(stage: StageConfig, seed: number): Basket {
+  const random = createRandom(seed);
+  let items = stage.names.map((name) => ({ name, price: 0, count: 0 }));
+  let total = 0;
+  for (let attempt = 0; attempt < 200; attempt += 1) {
+    items = stage.names.map((name) => ({
+      name,
+      price: randInt(random, 2, 13) * 100,
+      count: randInt(random, 1, 4),
+    }));
+    total = items.reduce((sum, item) => sum + item.price * item.count, 0);
+    if (total >= 1500 && total <= 6000) break;
+  }
+  // 200번을 뽑아도 범위 밖이면 마지막 물건 값으로 맞춘다. 판이 열리지 않는 일은 없어야 한다.
+  if (total < 1500 || total > 6000) {
+    const last = items[items.length - 1];
+    const others = total - last.price * last.count;
+    last.count = 1;
+    last.price = clamp(Math.round((3000 - others) / 100) * 100, 200, 3000);
+    total = others + last.price;
+  }
+
+  const lines = items.map((item) => (item.count > 1
+    ? `${item.name} ${item.price.toLocaleString()}원 × ${item.count} = ${(item.price * item.count).toLocaleString()}원`
+    : `${item.name} ${item.price.toLocaleString()}원`));
+  lines.push(`합계 ${total.toLocaleString()}원`);
+
+  /* 아이미 풀이에는 늘 틀린 줄이 하나 있다. 어느 줄이 틀렸는지도 판마다 바뀌어야
+     "합계만 보면 된다"는 요령이 통하지 않는다. */
+  const wrongLine = randInt(random, 0, lines.length);
+  if (wrongLine === lines.length - 1) {
+    const off = (randInt(random, 1, 5) + 1) * 100 * (random() < 0.5 ? -1 : 1);
+    lines[wrongLine] = `합계 ${Math.max(100, total + off).toLocaleString()}원`;
+  } else {
+    const item = items[wrongLine];
+    const off = (randInt(random, 1, 4) + 1) * 100;
+    const shown = item.price * item.count + off;
+    lines[wrongLine] = item.count > 1
+      ? `${item.name} ${item.price.toLocaleString()}원 × ${item.count} = ${shown.toLocaleString()}원`
+      : `${item.name} ${shown.toLocaleString()}원`;
+  }
+
+  return { items, total, lines, wrongLine };
+}
+
 
 interface Shot {
   x: number;
@@ -81,8 +107,10 @@ interface Shot {
   landX: number;
 }
 
-/** 금액을 화면 가로 자리로 바꾼다. 1원 = 0.13픽셀 정도로 잡아 5천 원이 판에 들어온다. */
-const SCALE = 0.135;
+/** 금액을 화면 가로 자리로 바꾼다. */
+/* 1원을 몇 픽셀로 놓을지. 합계가 최대 6,000원이므로 6,000 x 0.12 + 90 = 810px에 선다.
+   과녁 상자가 최대 163px이라 여기서 더 키우면 상자가 판 오른쪽(960px) 밖으로 나간다. */
+const SCALE = 0.12;
 const priceToX = (won: number) => GUN_X + won * SCALE;
 
 export default function SumCannonGame({ supportLevel }: MiniGameProps) {
@@ -90,7 +118,8 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
   const stage = STAGES[game.stageIndex];
   const tuning = game.tuning;
 
-  const total = stage.items.reduce((sum, item) => sum + item.price * item.count, 0);
+  const basket = React.useMemo(() => buildBasket(stage, game.seed), [stage, game.seed]);
+  const total = basket.total;
   /* 지원 수준은 과녁 폭과 발수, 바람으로 나타난다. */
   const targetW = 96 * clamp(tuning.tolerance, 0.7, 1.7);
   const maxShots = tuning.lives;
@@ -217,10 +246,10 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
     }
 
     // 아이미 풀이
-    panel(ctx, 20, 14, 470, 30 + stage.lines.length * 30, BOARD.overlay, PLAY.info, 12);
+    panel(ctx, 20, 14, 470, 30 + basket.lines.length * 30, BOARD.overlay, PLAY.info, 12);
     centerText(ctx, '아이미의 풀이', 255, 34, 22, BOARD.inkDim);
-    stage.lines.forEach((text, index) => {
-      const wrong = calcOpen && index === stage.wrongLine;
+    basket.lines.forEach((text, index) => {
+      const wrong = calcOpen && index === basket.wrongLine;
       centerText(ctx, text, 255, 62 + index * 30, 22, wrong ? PLAY.hazard : BOARD.ink);
     });
 
@@ -254,7 +283,7 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
-          {stage.items.map((item) => (
+          {basket.items.map((item) => (
             <span
               key={item.name}
               className="rounded-lg px-2 py-1 text-[15px] font-black"
