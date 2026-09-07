@@ -11,7 +11,8 @@
  *   재선택 구조(05-ENGINE-SPEC §3)를 소리로 되돌리는 셈이다.
  * - **말소리를 덮지 않는다.** TTS가 읽는 중이면 건너뛴다. 듣기로 이해하는 학생에게
  *   대사 위에 얹힌 효과음은 대사를 통째로 뭉갠다.
- * - **연타로 겹치지 않는다.** 같은 소리는 300ms 안에 다시 울리지 않는다.
+ * - **연타로 겹치지 않는다.** 같은 소리는 300ms 안에 다시 울리지 않는다. 다만 한 칸
+ *   이동처럼 사건이 그보다 촘촘한 곳은 `{ rapid: true }`로 이 억제를 끈다.
  */
 import { publicAssetUrl } from './publicAssetUrl';
 
@@ -88,7 +89,19 @@ export function primeSounds(): void {
   for (const name of SOUND_NAMES) void load(name);
 }
 
-export function playSound(name: SoundName): void {
+export interface PlaySoundOptions {
+  /**
+   * 반복 억제(300ms)를 건너뛴다.
+   *
+   * 억제는 같은 단추를 연타할 때 소리가 겹쳐 들리는 것을 막으려고 둔 것이다. 그런데
+   * 미로에서 한 칸 옮기는 일처럼 사건 자체가 0.11~0.23초 간격으로 일어나는 곳에서는,
+   * 억제가 걸려 두 칸에 한 번만 소리가 나고 학생은 소리와 걸음을 잇지 못한다.
+   * 사건 하나에 소리 하나가 반드시 대응해야 하는 곳에만 켠다.
+   */
+  rapid?: boolean;
+}
+
+export function playSound(name: SoundName, options?: PlaySoundOptions): void {
   if (!enabled) return;
   const audio = audioContext();
   if (!audio) return;
@@ -97,7 +110,7 @@ export function playSound(name: SoundName): void {
   if (typeof window !== 'undefined' && window.speechSynthesis?.speaking) return;
 
   const now = performance.now();
-  if (now - (lastPlayedAt.get(name) ?? Number.NEGATIVE_INFINITY) < REPEAT_GUARD_MS) return;
+  if (!options?.rapid && now - (lastPlayedAt.get(name) ?? Number.NEGATIVE_INFINITY) < REPEAT_GUARD_MS) return;
   lastPlayedAt.set(name, now);
 
   const buffer = buffers.get(name);

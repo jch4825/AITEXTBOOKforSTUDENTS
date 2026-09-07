@@ -35,6 +35,52 @@ const CY = 262;
 const CR = 118;
 const RING = 26;
 
+/**
+ * 시계침을 진짜 시계처럼 그린다.
+ *
+ * 앞서는 끝이 둥근 굵은 선에 동그라미 하나를 얹은 모양이라 막대사탕처럼 보였다.
+ * 실제 시계의 침은 축 가까이가 가장 넓고 끝으로 가면서 한 점으로 좁아지며, 축 뒤로
+ * 짧은 꼬리가 나온다. 그 셋이 있어야 "무엇을 가리키는 물건"으로 읽힌다.
+ *
+ * angle은 이미 12시가 -PI/2가 되도록 돌려 놓은 값을 받는다.
+ */
+function drawClockHand(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  angle: number,
+  length: number,
+  halfWidth: number,
+  tail: number,
+  fill: string,
+  edge: string,
+): void {
+  const dx = Math.cos(angle);
+  const dy = Math.sin(angle);
+  // 침의 폭 방향. 진행 방향을 90도 돌린 것이다.
+  const px = -dy;
+  const py = dx;
+  // 가장 넓은 자리는 축에서 조금 나온 곳에 둔다. 축 바로 위에 두면 축에 가려 안 보인다.
+  const shoulder = length * 0.16;
+  const tailHalf = halfWidth * 0.62;
+
+  ctx.beginPath();
+  ctx.moveTo(cx + dx * length, cy + dy * length);
+  ctx.lineTo(cx + dx * shoulder + px * halfWidth, cy + dy * shoulder + py * halfWidth);
+  ctx.lineTo(cx - dx * tail + px * tailHalf, cy - dy * tail + py * tailHalf);
+  ctx.lineTo(cx - dx * tail - px * tailHalf, cy - dy * tail - py * tailHalf);
+  ctx.lineTo(cx + dx * shoulder - px * halfWidth, cy + dy * shoulder - py * halfWidth);
+  ctx.closePath();
+
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.strokeStyle = edge;
+  ctx.lineWidth = 3;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+  ctx.lineJoin = 'miter';
+}
+
 interface RoundPlan {
   /** 이 회차의 멈춤 신호. 판 위쪽 띠 한 곳에만 크게 적는다. */
   signal: string;
@@ -321,31 +367,22 @@ export default function StopTimingGame({ supportLevel }: MiniGameProps) {
       ctx.stroke();
     }
 
+    // 침 끝은 눈금 띠(안쪽 88px) 안으로 4px 들어가게 두어, 어느 칸을 가리키는지 붙여 읽힌다.
     const na = world.angle - Math.PI / 2;
-    const tipX = cx + Math.cos(na) * (CR - RING - 14);
-    const tipY = CY + Math.sin(na) * (CR - RING - 14);
-    ctx.strokeStyle = PLAY.hero;
-    ctx.lineWidth = 9;
-    ctx.lineCap = 'round';
+    drawClockHand(ctx, cx, CY, na, 92, 9, 26, PLAY.hero, PLAY.heroEdge);
+
+    // 축은 침 위에 덮는다. 침이 여기에 박혀 도는 것으로 보인다.
+    ctx.fillStyle = BOARD.overlay;
     ctx.beginPath();
-    ctx.moveTo(cx - Math.cos(na) * 20, CY - Math.sin(na) * 20);
-    ctx.lineTo(tipX, tipY);
-    ctx.stroke();
-    ctx.lineCap = 'butt';
-    ctx.fillStyle = PLAY.hero;
-    ctx.beginPath();
-    ctx.arc(tipX, tipY, 11, 0, TAU);
+    ctx.arc(cx, CY, 13, 0, TAU);
     ctx.fill();
     ctx.strokeStyle = PLAY.heroEdge;
     ctx.lineWidth = 3;
     ctx.stroke();
-
-    ctx.fillStyle = BOARD.overlay;
+    ctx.fillStyle = PLAY.heroEdge;
     ctx.beginPath();
-    ctx.arc(cx, CY, 15, 0, TAU);
+    ctx.arc(cx, CY, 5, 0, TAU);
     ctx.fill();
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
     centerText(ctx, `${Math.min(world.cleared + 1, ROUNDS)} / ${ROUNDS}`, cx, CY + 56, 24, BOARD.inkDim);
 
     // 지금 무엇을 하면 되는지 한 줄. 시계 안이 아니라 아래 한 곳에만 둔다.

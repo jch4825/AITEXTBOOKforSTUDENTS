@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BOARD, PLAY, GameCanvas, GameHud, centerText, circleHit, clamp, createRandom, dist, panel,
-  pick, randRange, useGameKeys,
+  randRange, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -21,13 +21,77 @@ import type { MiniGameProps } from '../types';
 const WORLD_W = 960;
 const WORLD_H = 540;
 
+/*
+ * 위험 신호는 글자가 아니라 도형으로 구분한다.
+ *
+ * 앞서는 조각 안에 신호 이름을 20px로 적었다. 그런데 조각의 지름은 84~116px인데
+ * '사진을 보내라는 말'은 200px이라 글자가 조각 밖으로 한참 삐져나왔고, 조각 여럿이
+ * 겹치면 어느 글자가 어느 조각의 것인지도 알 수 없었다.
+ *
+ * 신호의 이름은 판 아래 띠에서 읽고, 판 위에서는 모양으로만 구분한다. 색만으로
+ * 나누지 않는 것은 색을 구별하기 어려운 학생도 모양은 셀 수 있기 때문이다.
+ */
+type ShapeKind = 'triangle' | 'square' | 'pentagon' | 'hexagon' | 'star';
+
+const SHAPE_KINDS: ShapeKind[] = ['triangle', 'square', 'pentagon', 'hexagon', 'star'];
+
+/** 꼭짓점이 적을수록 같은 반지름에서 작아 보인다. 눈에 비슷한 크기로 맞추는 배율. */
+const SHAPE_SCALE: Record<ShapeKind, number> = {
+  triangle: 1.15, square: 1.06, pentagon: 1.02, hexagon: 1, star: 1.12,
+};
+
+/** 판정 반지름 배율. 도형 안쪽에 들어오는 원의 크기라, 모서리 밖은 닿아도 봐준다. */
+const SHAPE_HIT: Record<ShapeKind, number> = {
+  triangle: 0.55, square: 0.7, pentagon: 0.76, hexagon: 0.8, star: 0.5,
+};
+
+/** 도형의 꼭짓점. 캔버스와 판 아래 띠의 작은 표시가 같은 계산을 쓴다. */
+function shapePoints(kind: ShapeKind, cx: number, cy: number, r: number): Array<[number, number]> {
+  const start = -Math.PI / 2;
+  if (kind === 'star') {
+    return Array.from({ length: 10 }, (_, i) => {
+      const radius = i % 2 === 0 ? r : r * 0.46;
+      const a = start + (i * Math.PI) / 5;
+      return [cx + Math.cos(a) * radius, cy + Math.sin(a) * radius] as [number, number];
+    });
+  }
+  const sides = kind === 'triangle' ? 3 : kind === 'square' ? 4 : kind === 'pentagon' ? 5 : 6;
+  // 사각형만 반 칸 돌린다. 꼭짓점을 위로 두면 마름모로 서서 '네모'로 읽히지 않는다.
+  const turn = kind === 'square' ? Math.PI / 4 : 0;
+  return Array.from({ length: sides }, (_, i) => {
+    const a = start + turn + (i * Math.PI * 2) / sides;
+    return [cx + Math.cos(a) * r, cy + Math.sin(a) * r] as [number, number];
+  });
+}
+
+function traceShape(ctx: CanvasRenderingContext2D, kind: ShapeKind, cx: number, cy: number, r: number): void {
+  const pts = shapePoints(kind, cx, cy, r * SHAPE_SCALE[kind]);
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0], pts[0][1]);
+  for (let i = 1; i < pts.length; i += 1) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.closePath();
+}
+
+/** 판 아래 띠에 붙는 작은 도형. 판 위의 조각과 같은 모양이라 눈으로 이어진다. */
+function ShapeMark({ kind }: { kind: ShapeKind }) {
+  const pts = shapePoints(kind, 11, 11, 9.5 * SHAPE_SCALE[kind])
+    .map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`)
+    .join(' ');
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" className="shrink-0">
+      <polygon points={pts} fill="#3F1D2B" stroke="#F87171" strokeWidth="2" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 interface Shard {
   x: number;
   y: number;
   vx: number;
   vy: number;
   r: number;
-  text: string;
+  /** stage.signals의 몇 번째 신호인가. 모양과 이름표가 여기서 함께 나온다. */
+  signal: number;
 }
 
 interface StageConfig {
@@ -115,7 +179,7 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
         vx: ((tx - x) / d) * shardSpeed,
         vy: ((ty - y) / d) * shardSpeed,
         r: randRange(random, 42, 58),
-        text: pick(random, stage.signals),
+        signal: Math.floor(random() * stage.signals.length),
       };
     });
     w.safeX = randRange(random, 140, WORLD_W - 140);
@@ -163,7 +227,8 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
           if (shard.x > WORLD_W + 120) shard.x = -100;
           if (shard.y < -120) shard.y = WORLD_H + 100;
           if (shard.y > WORLD_H + 120) shard.y = -100;
-          if (w.timer <= 0 && circleHit(w.x, w.y, heroR, shard.x, shard.y, shard.r * 0.72)) {
+          const hitR = shard.r * SHAPE_HIT[SHAPE_KINDS[shard.signal % SHAPE_KINDS.length]];
+          if (w.timer <= 0 && circleHit(w.x, w.y, heroR, shard.x, shard.y, hitR)) {
             w.lives -= 1;
             w.timer = 1.4;
             playSound('select');
@@ -174,7 +239,8 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
         if (dist(w.x, w.y, w.safeX, w.safeY) < safeR) {
           w.hold += dt;
           if (w.hold >= HOLD_NEED) {
-            const named = w.shards[0]?.text ?? stage.signals[0];
+            const first = w.shards[0];
+            const named = first ? stage.signals[first.signal % stage.signals.length] : stage.signals[0];
             if (!w.named.includes(named)) w.named.push(named);
             w.wave += 1;
             playSound('stamp');
@@ -213,19 +279,36 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
     ctx.strokeStyle = PLAY.goal;
     ctx.lineWidth = 4;
     ctx.stroke();
-    centerText(ctx, '믿을 만한 어른', w.safeX, w.safeY - 12, 22, PLAY.goal);
+    // 지원 수준에 따라 원이 작아진다. 이름표를 원 안에 맞춰 줄여야 글자가 밖으로 나가지 않는다.
+    const safeLabel = '믿을 만한 어른';
+    ctx.font = '900 22px system-ui, sans-serif';
+    const labelRoom = safeR * 2 * 0.86;
+    const labelSize = Math.max(16, Math.min(22, Math.floor((labelRoom / ctx.measureText(safeLabel).width) * 22)));
+    centerText(ctx, safeLabel, w.safeX, w.safeY - 12, labelSize, PLAY.goal);
     centerText(ctx, `${Math.max(0, HOLD_NEED - w.hold).toFixed(1)}초`, w.safeX, w.safeY + 16, 22, BOARD.ink);
 
     for (const shard of w.shards) {
-      ctx.beginPath();
-      ctx.arc(shard.x, shard.y, shard.r, 0, Math.PI * 2);
+      const kind = SHAPE_KINDS[shard.signal % SHAPE_KINDS.length];
+      traceShape(ctx, kind, shard.x, shard.y, shard.r);
       ctx.fillStyle = '#3F1D2B';
       ctx.fill();
       ctx.lineWidth = 4;
       ctx.strokeStyle = PLAY.hazard;
+      ctx.lineJoin = 'round';
       ctx.stroke();
-      centerText(ctx, '🚫', shard.x, shard.y - 10, 24, BOARD.ink);
-      centerText(ctx, shard.text, shard.x, shard.y + 16, 20, BOARD.ink);
+      // 가운데의 작은 가위표. 어떤 모양이든 같은 자리에 같은 크기로 들어가 밖으로 넘지 않는다.
+      const mark = shard.r * 0.26;
+      ctx.strokeStyle = PLAY.hazard;
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(shard.x - mark, shard.y - mark);
+      ctx.lineTo(shard.x + mark, shard.y + mark);
+      ctx.moveTo(shard.x + mark, shard.y - mark);
+      ctx.lineTo(shard.x - mark, shard.y + mark);
+      ctx.stroke();
+      ctx.lineCap = 'butt';
+      ctx.lineJoin = 'miter';
     }
 
     ctx.globalAlpha = w.timer > 0 ? 0.45 : 1;
@@ -277,9 +360,19 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
           className="min-h-[38px] rounded-xl px-3 py-1.5 text-[15px] font-bold"
           style={{ background: 'var(--board-surface)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
         >
-          {hud.named.length > 0
-            ? `어른에게 알린 위험 신호 · ${hud.named.join(' / ')}`
-            : '안전지대에 머무르면 만난 위험 신호에 이름을 붙여 기록합니다.'}
+          {hud.named.length > 0 ? (
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span>어른에게 알린 위험 신호</span>
+              {hud.named.map((name) => (
+                <span key={name} className="inline-flex items-center gap-1.5">
+                  <ShapeMark kind={SHAPE_KINDS[stage.signals.indexOf(name) % SHAPE_KINDS.length]} />
+                  {name}
+                </span>
+              ))}
+            </span>
+          ) : (
+            '판 위의 도형은 모두 피할 신호입니다. 안전지대에 머무르면 그 신호에 이름을 붙여 기록합니다.'
+          )}
         </p>
       </div>
     </MiniGameFrame>

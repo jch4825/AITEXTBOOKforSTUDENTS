@@ -178,7 +178,18 @@ export default function ChatMazeGame({ supportLevel }: MiniGameProps) {
     w.c = nc;
     w.r = nr;
 
-    if ((tile === 'a' || tile === 'b') && !takenRef.current.includes(tile)) {
+    const picking = (tile === 'a' || tile === 'b') && !takenRef.current.includes(tile);
+
+    /*
+     * 한 칸 옮길 때마다 발소리를 낸다.
+     *
+     * 걸음은 0.11~0.23초마다 일어나 공용 반복 억제(300ms)에 걸린다. 그대로 두면 두 칸에
+     * 한 번만 울려 소리와 걸음이 어긋나므로 이 소리만 억제를 끈다. 증거를 줍는 칸에서는
+     * 줍는 소리가 따로 울리므로 발소리를 겹치지 않는다.
+     */
+    if (!picking) playSound('select', { rapid: true });
+
+    if (picking) {
       takenRef.current.push(tile);
       w.picked = [...takenRef.current];
       playSound('fill');
@@ -222,7 +233,7 @@ export default function ChatMazeGame({ supportLevel }: MiniGameProps) {
     panel(ctx, 20, 12, WORLD_W - 40, 46, BOARD.overlay, PLAY.info, 12);
     centerText(
       ctx,
-      w.hit || '붉은 칸은 요구 함정입니다. 증거 두 가지를 모아 출구로 가세요.',
+      w.hit || '붉은 칸을 지나가지 말고, 증거 두 가지를 모아 출구로 가세요.',
       WORLD_W / 2, 35, 22, BOARD.ink,
     );
 
