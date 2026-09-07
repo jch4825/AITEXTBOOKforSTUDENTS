@@ -60,7 +60,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm3-l5', genre: 1, genreName: '횡스크롤 점프맵', badge: '이야기 길 뛰기', component: 'StoryJumpMapGame' },
   { lessonId: 'm3-l6', genre: 28, genreName: '포탄 각도', badge: '합계 대포', component: 'SumCannonGame' },
   { lessonId: 'm3-l7', genre: 13, genreName: '3매치 퍼즐', badge: '같은 뜻 세 개', component: 'SummaryMatchGame' },
-  { lessonId: 'm3-l8', genre: 42, genreName: '카드 짝맞추기', badge: '양면 퀴즈 카드', component: 'QuizCardMemoryGame' },
+  { lessonId: 'm3-l8', genre: 42, genreName: '카드 짝맞추기', badge: '같은 그림 카드', component: 'SamePictureMemoryGame' },
   { lessonId: 'm3-l9', genre: 32, genreName: '두더지 잡기', badge: '추측만 두드리기', component: 'GuessMoleGame' },
   { lessonId: 'm3-l10', genre: 36, genreName: '뱀 키우기', badge: '떠올린 순서 뱀', component: 'RecallSnakeGame' },
 

@@ -1948,8 +1948,11 @@
    넓혔을 때 지면이 890px에서 1174px가 되어 놀이가 접힌 선 아래로 내려갔다.
    지면을 화면 높이에 묶고, 길어지는 쪽만 그 안에서 스크롤한다. */
 @media (min-width: 1024px) {
+  /* 왼쪽으로 몰아 주는 폭은 2.2:1이다. 1.6:1로 두었을 때 판이 498px밖에 되지 않아
+     카드 열여섯 장 판에서 한 칸이 110px로 좁아졌고, 그 안의 그림은 알아볼 수 없었다.
+     오른쪽은 앞 단계에서 쓴 글을 다시 읽는 면이라 좁아져도 읽는 데 지장이 없다. */
   .lesson-spread--wide-left .lesson-spread-pages {
-    grid-template-columns: 1.6fr 1fr;
+    grid-template-columns: 2.2fr 1fr;
     height: clamp(34rem, 78vh, 52rem);
   }
   .lesson-spread--wide-left .lesson-page {

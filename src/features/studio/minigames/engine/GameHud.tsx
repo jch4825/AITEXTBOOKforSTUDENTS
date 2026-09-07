@@ -12,6 +12,9 @@ interface HudProps {
   timeTotal?: number;
 }
 
+/** 하트를 낱개로 늘어놓는 상한. 이보다 많으면 하트 하나와 숫자로 바꾼다. */
+const HEART_CAP = 8;
+
 /**
  * 게임 상단 상태 표시.
  *
@@ -37,11 +40,22 @@ export default function GameHud({
       {showLives && (
         <span className="flex items-center gap-1 text-[15px] font-black" style={{ color: 'var(--board-ink)' }}>
           <span className="sr-only">남은 기회 {lives}개</span>
-          {Array.from({ length: maxLives }).map((_, index) => (
-            <span key={index} aria-hidden="true" style={{ opacity: index < (lives ?? 0) ? 1 : 0.25 }}>
-              ❤️
+          {/*
+            하트는 여덟 개까지만 늘어놓는다. 뒤집기 횟수처럼 기회가 서른 번 넘게 주어지는
+            게임에서는 하트가 줄을 가득 채우고 두 줄로 접혀 판을 눌렀다. 그때는 하트 하나와
+            숫자로 바꿔 같은 자리에 같은 뜻을 남긴다.
+          */}
+          {maxLives <= HEART_CAP ? (
+            Array.from({ length: maxLives }).map((_, index) => (
+              <span key={index} aria-hidden="true" style={{ opacity: index < (lives ?? 0) ? 1 : 0.25 }}>
+                ❤️
+              </span>
+            ))
+          ) : (
+            <span aria-hidden="true">
+              ❤️ <strong className="text-[18px]">{lives}</strong> / {maxLives}
             </span>
-          ))}
+          )}
         </span>
       )}
       {typeof score === 'number' && (
