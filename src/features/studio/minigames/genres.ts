@@ -54,7 +54,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
 
   // ── M3 · 공부 도우미 ─────────────────────────────────────────
   { lessonId: 'm3-l1', genre: 2, genreName: '무한 계단', badge: '질문 계단 오르기', component: 'QuestionClimbGame' },
-  { lessonId: 'm3-l2', genre: 18, genreName: '방탈출 퍼즐', badge: '낱말 자물쇠 방', component: 'WordLockRoomGame' },
+  { lessonId: 'm3-l2', genre: 13, genreName: '3매치 퍼즐', badge: '뜻 줄 밀기', component: 'MeaningShiftGame' },
   { lessonId: 'm3-l3', genre: 26, genreName: '벽돌깨기', badge: '어려운 말 벽 깨기', component: 'HardWordBreakGame' },
   { lessonId: 'm3-l4', genre: 8, genreName: '비행 플래피', badge: '낱말 세기 비행', component: 'WordStrengthFlyGame' },
   { lessonId: 'm3-l5', genre: 1, genreName: '횡스크롤 점프맵', badge: '이야기 길 뛰기', component: 'StoryJumpMapGame' },
