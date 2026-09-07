@@ -65,7 +65,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm3-l10', genre: 36, genreName: '뱀 키우기', badge: '떠올린 순서 뱀', component: 'RecallSnakeGame' },
 
   // ── M4 · 안전 ────────────────────────────────────────────────
-  { lessonId: 'm4-l1', genre: 34, genreName: '타워 디펜스', badge: '확인 탑 세우기', component: 'CheckTowerGame' },
+  { lessonId: 'm4-l1', genre: 27, genreName: '레이저 슈팅', badge: '틀린 답 쏘기', component: 'ClaimShooterGame' },
   { lessonId: 'm4-l2', genre: 5, genreName: '등반 클라이밍', badge: '출처 절벽 오르기', component: 'SourceClimbGame' },
   { lessonId: 'm4-l3', genre: 21, genreName: '정돈 클리닝', badge: '개인정보 지우기', component: 'PrivacyScrubGame' },
   { lessonId: 'm4-l4', genre: 33, genreName: '밀쳐내기', badge: '요구 밀어내기', component: 'CodeRequestPushGame' },

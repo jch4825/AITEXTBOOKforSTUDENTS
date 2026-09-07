@@ -102,6 +102,9 @@ export default function GameCanvas({
         toLocal(event, 'up');
       }}
       onPointerCancel={(event) => toLocal(event, 'up')}
+      /* 놀이 중에 오른쪽 단추를 누르면 브라우저 메뉴가 판을 덮는다. 조작으로 쓰지는
+         않지만 메뉴는 막는다. */
+      onContextMenu={(event) => event.preventDefault()}
       style={{ touchAction: 'none' }}
       className={`h-full w-full min-h-0 rounded-xl ${className}`}
     />
