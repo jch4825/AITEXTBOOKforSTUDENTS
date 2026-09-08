@@ -71,7 +71,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm4-l4', genre: 33, genreName: '밀쳐내기', badge: '요구 밀어내기', component: 'CodeRequestPushGame' },
   { lessonId: 'm4-l5', genre: 11, genreName: '숨은 그림 찾기', badge: '사진 검사대', component: 'PhotoCheckDeskGame' },
   { lessonId: 'm4-l6', genre: 24, genreName: '탄막 피하기', badge: '불편한 화면 피하기', component: 'UncomfortableDodgeGame' },
-  { lessonId: 'm4-l7', genre: 10, genreName: '물리 흔들기', badge: '흔들 팔로 건네기', component: 'RespectHandoverGame' },
+  { lessonId: 'm4-l7', genre: 43, genreName: '가로세로 낱말 퍼즐', badge: '가로세로 낱말', component: 'PoliteWordCrossGame' },
   { lessonId: 'm4-l8', genre: 30, genreName: '타이밍 액션', badge: '멈춤 타이밍', component: 'StopTimingGame' },
   { lessonId: 'm4-l9', genre: 4, genreName: '미로 찾기', badge: '대화 미로', component: 'ChatMazeGame' },
   { lessonId: 'm4-l10', genre: 35, genreName: '땅따먹기', badge: '광고 구역 두르기', component: 'AdFenceGame' },
