@@ -1,4 +1,5 @@
 import React from 'react';
+import BauhausMark from './BauhausMark';
 
 interface HudProps {
   /** 남은 기회. 0이면 표시하지 않는다. */
@@ -10,6 +11,8 @@ interface HudProps {
   /** 남은 시간(초). 있으면 막대로 그린다. */
   timeLeft?: number;
   timeTotal?: number;
+  /** 바우하우스 어휘로 전환한 게임인가. 하트와 모래시계를 기하 마크로 바꾼다. */
+  bauhaus?: boolean;
 }
 
 /** 하트를 낱개로 늘어놓는 상한. 이보다 많으면 하트 하나와 숫자로 바꾼다. */
@@ -30,6 +33,7 @@ export default function GameHud({
   scoreLabel = '점수',
   timeLeft,
   timeTotal,
+  bauhaus = false,
 }: HudProps) {
   const showLives = typeof lives === 'number' && typeof maxLives === 'number' && maxLives > 0;
   const showTime = typeof timeLeft === 'number' && typeof timeTotal === 'number' && timeTotal > 0;
@@ -38,7 +42,10 @@ export default function GameHud({
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
       {showLives && (
-        <span className="flex items-center gap-1 text-[15px] font-black" style={{ color: 'var(--board-ink)' }}>
+        <span
+          className="flex items-center gap-1 text-[15px] font-black"
+          style={{ color: bauhaus ? 'var(--game-board-yellow)' : 'var(--board-ink)' }}
+        >
           <span className="sr-only">남은 기회 {lives}개</span>
           {/*
             하트는 여덟 개까지만 늘어놓는다. 뒤집기 횟수처럼 기회가 서른 번 넘게 주어지는
@@ -48,39 +55,52 @@ export default function GameHud({
           {maxLives <= HEART_CAP ? (
             Array.from({ length: maxLives }).map((_, index) => (
               <span key={index} aria-hidden="true" style={{ opacity: index < (lives ?? 0) ? 1 : 0.25 }}>
-                ❤️
+                {bauhaus ? <BauhausMark kind="life" size={15} /> : '❤️'}
               </span>
             ))
           ) : (
-            <span aria-hidden="true">
-              ❤️ <strong className="text-[18px]">{lives}</strong> / {maxLives}
+            <span aria-hidden="true" className="inline-flex items-center gap-1">
+              {bauhaus ? <BauhausMark kind="life" size={15} /> : '❤️'}
+              <strong className="text-[18px]">{lives}</strong> / {maxLives}
             </span>
           )}
         </span>
       )}
       {typeof score === 'number' && (
-        <span className="text-[15px] font-black" style={{ color: 'var(--board-ink)' }}>
+        <span
+          className="text-[15px] font-black"
+          style={{ color: bauhaus ? 'var(--game-board-ink)' : 'var(--board-ink)' }}
+        >
           {scoreLabel} <strong className="text-[18px]">{Math.round(score)}</strong>
         </span>
       )}
       {showTime && (
         <span className="flex min-w-[120px] flex-1 items-center gap-2">
           <span className="sr-only">남은 시간 {Math.ceil(timeLeft)}초</span>
-          <span aria-hidden="true" className="text-[15px]">⏳</span>
+          {bauhaus
+            ? <BauhausMark kind="bar" size={15} />
+            : <span aria-hidden="true" className="text-[15px]">⏳</span>}
           <span
             aria-hidden="true"
-            className="h-3 flex-1 overflow-hidden rounded-full"
-            style={{ background: 'var(--board-overlay)', border: '2px solid var(--board-line)' }}
+            className={`h-3 flex-1 overflow-hidden${bauhaus ? '' : ' rounded-full'}`}
+            style={bauhaus
+              ? { background: 'var(--game-board)', border: 'var(--game-hair) solid var(--game-board-grey)' }
+              : { background: 'var(--board-overlay)', border: '2px solid var(--board-line)' }}
           >
             <span
-              className="block h-full rounded-full transition-[width] duration-100"
+              className={`block h-full transition-[width] duration-100${bauhaus ? '' : ' rounded-full'}`}
               style={{
                 width: `${timeRatio * 100}%`,
-                background: timeRatio < 0.25 ? '#FB923C' : '#38BDF8',
+                background: bauhaus
+                  ? (timeRatio < 0.25 ? 'var(--game-board-red)' : 'var(--game-board-blue)')
+                  : (timeRatio < 0.25 ? '#FB923C' : '#38BDF8'),
               }}
             />
           </span>
-          <span className="w-9 text-right text-[15px] font-black" style={{ color: 'var(--board-ink)' }}>
+          <span
+            className="w-9 text-right text-[15px] font-black"
+            style={{ color: bauhaus ? 'var(--game-board-ink)' : 'var(--board-ink)' }}
+          >
             {Math.ceil(timeLeft)}
           </span>
         </span>

@@ -45,6 +45,8 @@ export const BAUHAUS = {
   /** 놀이판 — 유일한 어두운 면 */
   board: {
     ground: '#16181C',
+    /** 바탕보다 한 겹 뜬 구조물 면(길·띠·판). 글자를 얹지 않으므로 대비를 요구하지 않는다. */
+    surface: '#1F2328',
     ink: '#F5F2EA',
     red: '#F2685E',
     blue: '#6FA8E8',

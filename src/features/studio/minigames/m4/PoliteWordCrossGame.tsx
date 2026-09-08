@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, shuffle, useCountdown } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, shuffle, useCountdown } from '../engine';
 import { useSpeak } from '../../../../hooks/useSpeak';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -33,6 +33,13 @@ interface WordSpec {
   hint: string;
   /** 이 낱말이 부탁의 어느 칸인지. 게임과 차시 학습 내용을 잇는 끈이다. */
   slot: string;
+  /**
+   * 이 낱말의 색.
+   *
+   * 낱말이 넷이고 바우하우스 색도 넷이라 하나씩 맡는다. 다 채운 낱말은 다섯째 색을
+   * 쓰지 않고 **칸을 그 낱말의 색으로 꽉 채운다** — 도형과 바탕을 뒤집는 것이
+   * 바우하우스의 어법이고, 새 색을 들이지 않아도 "끝났다"가 한눈에 보인다.
+   */
   color: string;
 }
 
@@ -55,19 +62,19 @@ interface WordSpec {
  */
 const WORDS: WordSpec[] = [
   {
-    word: '존중', row: 0, col: 0, dir: 'across', color: '#60A5FA',
+    word: '존중', row: 0, col: 0, dir: 'across', color: 'var(--game-board-blue)',
     hint: '아이미에게도 친구에게도 ○○하는 말로 부탁해요.', slot: '존중 표현 칸',
   },
   {
-    word: '중요', row: 0, col: 1, dir: 'down', color: '#4ADE80',
+    word: '중요', row: 0, col: 1, dir: 'down', color: 'var(--game-board-yellow)',
     hint: '왜 필요한지, 무엇이 가장 ○○한지를 먼저 밝혀요.', slot: '목적 칸',
   },
   {
-    word: '요약', row: 1, col: 1, dir: 'across', color: '#FBBF24',
+    word: '요약', row: 1, col: 1, dir: 'across', color: 'var(--game-board-red)',
     hint: '긴 안내문을 세 줄로 ○○해 주세요.', slot: '행동 칸',
   },
   {
-    word: '약속', row: 1, col: 2, dir: 'down', color: '#C084FC',
+    word: '약속', row: 1, col: 2, dir: 'down', color: 'var(--game-board-grey)',
     hint: '오후 한 시까지라고 시간을 ○○했어요.', slot: '조건 칸',
   },
 ];
@@ -141,12 +148,13 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
   /*
    * 칸 크기는 놀이 지면이 판에 내주는 높이에서 거꾸로 계산했다.
    *
-   * 실측하면 판 안에 쓸 수 있는 높이는 372px이고, 여기에 낱말 판·글자 보관함·안내 한 줄이
+   * 실측하면 판 안에 쓸 수 있는 높이는 363px이고, 여기에 낱말 판·글자 보관함·안내 한 줄이
    * 모두 들어가야 한다. 96px에 배율 1.32를 그대로 곱하면 판만 393px이 되어 보관함이 판
    * 밖으로 밀려났다. 학생이 판과 보관함을 한눈에 보지 못하면 이 놀이는 성립하지 않는다.
-   * 그래서 기준을 70px로 낮추고 배율 상한도 1.15로 묶는다(충분한 지원 81 · 중학 70 · 고등 59).
+   * 그래서 기준을 66px로 낮추고 배율 상한도 1.15로 묶는다(충분한 지원 76 · 중학 66 · 고등 55).
+   * 바우하우스 프레임의 테두리가 종이 프레임보다 두꺼워 판 높이를 12px 더 먹는다.
    */
-  const cellPx = Math.round(70 * clamp(tuning.size, 0.84, 1.15));
+  const cellPx = Math.round(66 * clamp(tuning.size, 0.84, 1.15));
   /* 보관함 조각은 한 줄에 다 서야 한다. 두 줄이 되면 그만큼 판이 위로 밀린다. */
   const tilePx = Math.min(64, Math.round(cellPx * 0.82));
   const snapRadius = cellPx * 0.75;
@@ -391,10 +399,11 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="가로세로 낱말"
       instruction="아래 글자 조각을 빈칸으로 끌어다 낱말을 완성해 보세요. 조각을 누른 뒤 빈칸을 눌러도 들어갑니다. 가운데 칸의 글자는 가로 낱말과 세로 낱말에 함께 들어갑니다."
       progress={{ label: '맞춘 낱말', value: done.length, max: words.length }}
-      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -402,14 +411,14 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />
           {game.hintAllowed && (
-            <MiniGameButton onClick={useHint} emoji="💡" label="한 글자 넣기" />
+            <MiniGameButton onClick={useHint} mark="bang" label="한 글자 넣기" />
           )}
         </>
       }
     >
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
+      <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
         <div className="flex flex-wrap items-start gap-4">
           {/* 낱말 판 */}
           <div
@@ -448,24 +457,23 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
                   onClick={() => onCellClick(key)}
                   disabled={!game.playing || letter !== undefined}
                   aria-label={label}
-                  className="grid place-items-center rounded-lg font-black transition disabled:cursor-default"
+                  className="grid place-items-center font-black transition disabled:cursor-default"
                   style={{
                     width: cellPx,
                     height: cellPx,
                     fontSize: `${cellFont}px`,
-                    background: solved ? 'var(--board-overlay)' : 'var(--board-surface)',
-                    color: isWrong ? '#FCA5A5' : 'var(--board-ink)',
+                    /* 다 채운 낱말의 칸은 그 낱말 색으로 뒤집는다. */
+                    background: solved ? across.color : 'var(--game-board)',
+                    color: solved ? 'var(--game-board)' : 'var(--game-board-ink)',
                     /* 교차 칸은 위·왼쪽이 가로 낱말 색, 아래·오른쪽이 세로 낱말 색이다.
                        세로 쪽은 점선으로 두어 색을 못 가려도 갈린 것이 보인다. */
-                    borderTop: `${solved ? 3 : 2}px solid ${solved ? '#4ADE80' : across.color}`,
-                    borderLeft: `${solved ? 3 : 2}px solid ${solved ? '#4ADE80' : across.color}`,
-                    borderBottom: `${solved ? 3 : 2}px ${down ? 'dashed' : 'solid'} ${
-                      solved ? '#4ADE80' : (down?.color ?? across.color)
-                    }`,
-                    borderRight: `${solved ? 3 : 2}px ${down ? 'dashed' : 'solid'} ${
-                      solved ? '#4ADE80' : (down?.color ?? across.color)
-                    }`,
-                    outline: hover === key ? '3px solid #FACC15' : lit ? '3px solid #FDE68A' : 'none',
+                    borderTop: `var(--game-line) solid ${across.color}`,
+                    borderLeft: `var(--game-line) solid ${across.color}`,
+                    borderBottom: `var(--game-line) ${down ? 'dashed' : 'solid'} ${down?.color ?? across.color}`,
+                    borderRight: `var(--game-line) ${down ? 'dashed' : 'solid'} ${down?.color ?? across.color}`,
+                    outline: hover === key
+                      ? 'var(--game-heavy) solid var(--game-board-yellow)'
+                      : lit ? 'var(--game-line) solid var(--game-board-yellow)' : 'none',
                     outlineOffset: '2px',
                     transform: isWrong ? 'translateX(-3px)' : 'none',
                   }}
@@ -486,15 +494,24 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
                   <button
                     type="button"
                     onClick={() => { setFocus(index); speakNow(spec.hint.replace('○○', solved ? spec.word : '무엇')); }}
-                    className="flex w-full items-start gap-2 rounded-lg px-2.5 py-1.5 text-left text-[15px] font-bold leading-snug transition"
+                    className="flex w-full items-start gap-2 px-2.5 py-1.5 text-left text-[15px] font-bold leading-snug transition"
                     style={{
-                      background: focus === index ? 'var(--board-overlay)' : 'var(--board-surface)',
-                      border: `2px solid ${solved ? '#4ADE80' : spec.color}`,
-                      color: 'var(--board-ink)',
+                      background: solved ? spec.color : 'var(--game-board)',
+                      border: `var(--game-line) solid ${spec.color}`,
+                      color: solved ? 'var(--game-board)' : 'var(--game-board-ink)',
+                      outline: focus === index ? 'var(--game-hair) solid var(--game-board-ink)' : 'none',
                     }}
                   >
-                    <span aria-hidden="true" className="text-[17px]" style={{ color: solved ? '#4ADE80' : spec.color }}>
-                      {solved ? '✓' : spec.dir === 'across' ? '→' : '↓'}
+                    <span
+                      aria-hidden="true"
+                      className="shrink-0 pt-0.5"
+                      style={{ color: solved ? 'var(--game-board)' : spec.color }}
+                    >
+                      <BauhausMark
+                        kind={solved ? 'check' : 'arrow'}
+                        size={17}
+                        rotate={solved || spec.dir === 'across' ? 0 : 90}
+                      />
                     </span>
                     <span className="min-w-0">
                       {solved ? spec.hint.replace('○○', spec.word) : spec.hint}
@@ -521,15 +538,16 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
               onPointerUp={(event) => onTilePointerUp(event, tile)}
               onPointerCancel={() => { dragRef.current = null; setGhost(null); setHover(null); }}
               onClick={() => onTileClick(tile)}
-              className="grid place-items-center rounded-lg font-black transition disabled:opacity-25"
+              className="grid place-items-center font-black transition disabled:opacity-25"
               style={{
                 width: tilePx,
                 height: tilePx,
                 fontSize: `${Math.round(tilePx * 0.5)}px`,
                 touchAction: 'none',
-                background: 'var(--board-surface)',
-                border: `${picked === tile.id ? 3 : 2}px solid ${picked === tile.id ? '#FACC15' : 'var(--board-line)'}`,
-                color: 'var(--board-ink)',
+                background: 'var(--game-board)',
+                border: `var(--game-line) solid ${
+                  picked === tile.id ? 'var(--game-board-yellow)' : 'var(--game-board-grey)'}`,
+                color: 'var(--game-board-ink)',
                 opacity: wrong?.tile === tile.id ? 0.4 : undefined,
               }}
             >
@@ -538,14 +556,14 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
           ))}
         </div>
 
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
 
       {/* 끌고 있는 글자. 손끝을 그대로 따라온다. */}
       {ghost && (
         <span
           aria-hidden="true"
-          className="pointer-events-none fixed z-50 grid place-items-center rounded-lg font-black"
+          className="pointer-events-none fixed z-50 grid place-items-center font-black"
           style={{
             left: 0,
             top: 0,
@@ -553,9 +571,9 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
             height: tilePx,
             fontSize: `${Math.round(tilePx * 0.5)}px`,
             transform: `translate3d(${ghost.x - tilePx / 2}px, ${ghost.y - tilePx / 2}px, 0)`,
-            background: 'var(--board-surface)',
-            border: '3px solid #FACC15',
-            color: 'var(--board-ink)',
+            background: 'var(--game-board)',
+            border: 'var(--game-heavy) solid var(--game-board-yellow)',
+            color: 'var(--game-board-ink)',
           }}
         >
           {ghost.letter}

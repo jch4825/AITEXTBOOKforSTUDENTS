@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Icon from '../../../components/Icon';
+import BauhausMark from './engine/BauhausMark';
+import type { MarkKind } from './engine/BauhausMark';
 import { useSpeak } from '../../../hooks/useSpeak';
 import { playSound } from '../../../utils/sound';
 import type { MiniGameStageTab, MiniGameStatus } from './types';
@@ -45,6 +47,14 @@ interface Props {
   footer?: React.ReactNode;
   /** 하단 조작 버튼들. MiniGameButton을 쓰면 톤이 맞는다. */
   actions?: React.ReactNode;
+  /**
+   * 바우하우스 어휘로 전환한 게임인가.
+   *
+   * 62개를 한 번에 바꿀 수 없어 프레임이 두 어휘를 함께 안고 간다. 전환하지 않은
+   * 게임에 새 프레임만 씌우면 바깥은 바우하우스, 안은 옛 팔레트인 반쪽짜리가 된다.
+   * 전환이 끝나면 이 플래그와 옛 갈래를 함께 걷어낸다.
+   */
+  bauhaus?: boolean;
   /** 실제 플레이 보드. 프레임이 다크 배경을 깔아주므로 자체 배경을 두지 않는다. */
   children: React.ReactNode;
 }
@@ -69,6 +79,7 @@ export default function MiniGameFrame({
   message,
   footer,
   actions,
+  bauhaus = false,
   children,
 }: Props) {
   const { speakNow } = useSpeak();
@@ -88,20 +99,26 @@ export default function MiniGameFrame({
   return (
     <div
       data-minigame-frame
-      className="surface-sticker flex h-full min-h-0 flex-col gap-2 overflow-hidden rounded-2xl p-3 sm:p-3.5"
-      style={{
-        '--surface-edge': accent,
-      } as React.CSSProperties}
+      className={`flex h-full min-h-0 flex-col gap-2 overflow-hidden p-3 sm:p-3.5${
+        bauhaus ? '' : ' surface-sticker rounded-2xl'}`}
+      style={bauhaus ? {
+        background: 'var(--game-paper)',
+        border: 'var(--game-heavy) solid var(--game-ink)',
+        color: 'var(--game-ink)',
+      } : ({ '--surface-edge': accent } as React.CSSProperties)}
     >
       {/* 이름표 + 난이도 + 진행 수치.
           난이도를 따로 한 줄에 두었더니 그 줄만 60px 남짓을 먹어 놀이판이 그만큼 눌렸다.
           셋은 모두 "이 판이 무엇인지" 알리는 머리글이라 한 줄에 모은다. */}
       <div className="flex flex-wrap items-center gap-2">
         <span
-          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[14px] font-black"
-          style={{ background: tint, border: `1.5px solid ${accent}` }}
+          className={`inline-flex items-center gap-1.5 px-3 py-1 text-[14px] font-black${
+            bauhaus ? '' : ' rounded-full'}`}
+          style={bauhaus
+            ? { background: 'var(--game-yellow)', border: 'var(--game-line) solid var(--game-keyline)', color: 'var(--game-ink)' }
+            : { background: tint, border: `1.5px solid ${accent}` }}
         >
-          <Icon name="cards" size={16} />
+          {bauhaus ? <BauhausMark kind="square" size={14} /> : <Icon name="cards" size={16} />}
           {badge}
         </span>
 
@@ -111,8 +128,8 @@ export default function MiniGameFrame({
           <div
             role="group"
             aria-label="난이도 고르기"
-            className="flex shrink-0 items-center overflow-hidden rounded-full"
-            style={{ border: `1.5px solid var(--line)` }}
+            className={`flex shrink-0 items-center overflow-hidden${bauhaus ? '' : ' rounded-full'}`}
+            style={{ border: bauhaus ? 'var(--game-line) solid var(--game-ink)' : '1.5px solid var(--line)' }}
           >
             {stages.map((stage, index) => {
               const active = index === activeStageIndex;
@@ -125,7 +142,11 @@ export default function MiniGameFrame({
                   aria-pressed={active}
                   // 손가락으로 누르는 칸이므로 최소 44px 높이를 지킨다.
                   className="min-h-11 shrink-0 px-4 text-[14px] font-black transition"
-                  style={{
+                  style={bauhaus ? {
+                    background: active ? 'var(--game-blue)' : 'var(--game-paper)',
+                    color: active ? 'var(--game-paper)' : 'var(--game-ink)',
+                    borderLeft: index === 0 ? 'none' : 'var(--game-line) solid var(--game-ink)',
+                  } : {
                     background: active ? accent : 'var(--paper-1)',
                     color: active ? 'var(--paper-0)' : 'var(--ink-2)',
                     borderLeft: index === 0 ? 'none' : '1.5px solid var(--line)',
@@ -144,7 +165,7 @@ export default function MiniGameFrame({
       <div className="flex items-start gap-2">
         <p
           className="flex-1 text-[17px] font-bold leading-relaxed sm:text-[19px]"
-          style={{ color: 'var(--ink-2)' }}
+          style={{ color: bauhaus ? 'var(--game-ink)' : 'var(--ink-2)' }}
         >
           {instruction}
         </p>
@@ -152,16 +173,25 @@ export default function MiniGameFrame({
           type="button"
           onClick={() => speakNow(instruction)}
           aria-label="설명 읽어주기"
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-lg text-[17px] transition"
-          style={{ background: tint, border: `1.5px solid ${accent}` }}
+          className={`grid h-11 w-11 shrink-0 place-items-center text-[17px] transition${
+            bauhaus ? '' : ' rounded-lg'}`}
+          style={bauhaus
+            ? { background: 'var(--game-paper)', border: 'var(--game-line) solid var(--game-ink)', color: 'var(--game-ink)' }
+            : { background: tint, border: `1.5px solid ${accent}` }}
         >
-          <span aria-hidden="true">🔊</span>
+          {bauhaus ? <BauhausMark kind="sound" size={22} /> : <span aria-hidden="true">🔊</span>}
         </button>
       </div>
 
       {/* 플레이 보드 — 유일한 다크 영역 */}
       <div
-        className="mini-game-board relative flex min-h-0 flex-1 flex-col gap-2 overflow-auto rounded-xl p-2.5 sm:p-3"
+        className={`mini-game-board relative flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-2.5 sm:p-3${
+          bauhaus ? '' : ' rounded-xl'}`}
+        style={bauhaus ? {
+          background: 'var(--game-board)',
+          border: 'var(--game-line) solid var(--game-ink)',
+          color: 'var(--game-board-ink)',
+        } : undefined}
       >
         {/* 남은 기회·시간과 진행 수치는 한 줄에 둔다.
             진행 수치를 이름표 줄에 두었더니, 이름이 긴 차시에서는 난이도 탭에 밀려 줄이
@@ -171,9 +201,15 @@ export default function MiniGameFrame({
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             {hud && <div className="min-w-0 flex-1">{hud}</div>}
             {progress && (
-              <span className="shrink-0 text-[15px] font-black" style={{ color: '#CBD5E1' }}>
+              <span
+                className="shrink-0 text-[15px] font-black"
+                style={{ color: bauhaus ? 'var(--game-board-grey)' : '#CBD5E1' }}
+              >
                 {progress.label}{' '}
-                <strong className="text-[18px]" style={{ color: 'var(--board-ink)' }}>
+                <strong
+                  className="text-[18px]"
+                  style={{ color: bauhaus ? 'var(--game-board-ink)' : 'var(--board-ink)' }}
+                >
                   {progress.value}
                 </strong>
                 {' / '}
@@ -189,14 +225,21 @@ export default function MiniGameFrame({
       {message && (status === 'success' || status === 'fail') && (
         <div
           role="status"
-          className="rounded-xl px-3 py-2 text-center text-[16px] font-black leading-relaxed sm:text-[17px]"
-          style={
-            status === 'success'
+          className={`px-3 py-2 text-center text-[16px] font-black leading-relaxed sm:text-[17px]${
+            bauhaus ? ' flex items-center justify-center gap-2' : ' rounded-xl'}`}
+          style={bauhaus
+            ? {
+              background: 'var(--game-paper)',
+              color: status === 'success' ? 'var(--game-blue)' : 'var(--game-red)',
+              border: `var(--game-heavy) solid ${status === 'success' ? 'var(--game-blue)' : 'var(--game-red)'}`,
+            }
+            : status === 'success'
               ? { background: 'var(--ok-bg)', color: '#14532d', border: '1.5px solid var(--ok)' }
-              : { background: 'var(--warn-bg)', color: '#7c2d12', border: '1.5px solid var(--warn)' }
-          }
+              : { background: 'var(--warn-bg)', color: '#7c2d12', border: '1.5px solid var(--warn)' }}
         >
-          {status === 'success' ? '🎉 ' : '🔄 '}
+          {bauhaus
+            ? <BauhausMark kind={status === 'success' ? 'check' : 'retry'} size={22} />
+            : <span aria-hidden="true">{status === 'success' ? '🎉 ' : '🔄 '}</span>}
           {message}
         </div>
       )}
@@ -211,7 +254,10 @@ export default function MiniGameFrame({
 interface ButtonProps {
   onClick: () => void;
   disabled?: boolean;
-  emoji: string;
+  /** 아직 전환하지 않은 게임이 쓰는 이모지. 전환한 게임은 mark를 쓴다. */
+  emoji?: string;
+  /** 바우하우스 기하 마크. 주면 이모지 대신 이것을 그린다. */
+  mark?: MarkKind;
   label: string;
   /** primary는 "실행"처럼 그 화면의 주된 다음 동작 하나에만 쓴다. */
   variant?: 'primary' | 'quiet';
@@ -223,24 +269,32 @@ export function MiniGameButton({
   onClick,
   disabled = false,
   emoji,
+  mark,
   label,
   variant = 'quiet',
   accent = 'var(--brand-ink)',
 }: ButtonProps) {
   const primary = variant === 'primary';
+  /* mark를 준 게임은 바우하우스로 전환한 게임이다. 모서리를 각지게 두고 색도 갈아 끼운다. */
+  const bauhaus = mark !== undefined;
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex min-h-12 flex-1 items-center justify-center gap-1 rounded-xl px-1 py-1 text-[14px] font-black leading-tight transition disabled:opacity-45 sm:text-[15px]"
-      style={{
+      className={`flex min-h-12 flex-1 items-center justify-center gap-1.5 px-1 py-1 text-[14px] font-black leading-tight transition disabled:opacity-45 sm:text-[15px]${
+        bauhaus ? '' : ' rounded-xl'}`}
+      style={bauhaus ? {
+        background: primary ? 'var(--game-blue)' : 'var(--game-paper)',
+        color: primary ? 'var(--game-paper)' : 'var(--game-ink)',
+        border: `var(--game-line) solid ${primary ? 'var(--game-blue)' : 'var(--game-ink)'}`,
+      } : {
         background: primary ? accent : 'var(--paper-1)',
         color: primary ? 'var(--paper-0)' : 'var(--ink-1)',
         border: `2px solid ${primary ? accent : 'var(--line)'}`,
       }}
     >
-      <span aria-hidden="true">{emoji}</span>
+      {mark ? <BauhausMark kind={mark} size={20} /> : <span aria-hidden="true">{emoji}</span>}
       {label}
     </button>
   );

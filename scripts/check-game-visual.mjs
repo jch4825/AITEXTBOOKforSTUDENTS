@@ -34,13 +34,16 @@ const PALETTE_FILES = new Set([
  * 전환할 때마다 한 줄씩 추가한다.
  */
 const MIGRATED = new Set([
+  'm1/SongDrumCheckGame.tsx',
+  'm4/PoliteWordCrossGame.tsx',
+  'm4/UncomfortableDodgeGame.tsx',
 ]);
 
 /*
  * 래칫 기준선. 2026-09-08 전환 시작 시점의 실측값이다.
  * 전환이 진행되면 이 수치는 내려가기만 해야 한다. 내려가면 여기도 함께 낮춘다.
  */
-const BASELINE = { hex: 487, emoji: 618 };
+const BASELINE = { hex: 455, emoji: 591 };
 
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -52,10 +55,17 @@ function walk(dir) {
 const files = walk(gameRoot).filter((f) => /\.(?:ts|tsx)$/.test(f));
 
 const HEX = /#[0-9A-Fa-f]{6}\b/g;
-/** 한글·한자 영역을 뺀 그림문자 대역. 이모지와 화살표·도형 기호를 함께 잡는다. */
+/*
+ * 그림으로 쓰는 문자만 잡는다.
+ *
+ * 한글·한자 영역을 빼고, 글에서 쓰이는 관용 기호도 뺀다. '○'는 한국어에서 빈칸을
+ * 나타내는 표기라("○○하는 말로 부탁해요") 아이콘이 아니라 글의 일부다. 이것까지
+ * 막으면 힌트 문장을 쓸 수 없다.
+ */
+const TEXT_SYMBOLS = new Set(['○']);
 const isPictograph = (ch) => {
   const c = ch.codePointAt(0);
-  return c > 0x2500 && !(c >= 0x3131 && c < 0xd800);
+  return c > 0x2500 && !(c >= 0x3131 && c < 0xd800) && !TEXT_SYMBOLS.has(ch);
 };
 
 function countEmoji(source) {

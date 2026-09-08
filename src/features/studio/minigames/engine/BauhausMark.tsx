@@ -12,7 +12,9 @@ import React from 'react';
 
 export type MarkKind =
   | 'arrow' | 'check' | 'cross' | 'retry' | 'sound'
-  | 'life' | 'dot' | 'bang' | 'circle' | 'square' | 'triangle';
+  | 'life' | 'dot' | 'bang'
+  /* 캔버스의 도형 어휘와 같은 모양들. 판 안에서 본 것을 판 밖 설명에서 다시 만난다. */
+  | 'circle' | 'square' | 'triangle' | 'diamond' | 'bar' | 'plus' | 'semicircle';
 
 interface Props {
   kind: MarkKind;
@@ -72,6 +74,19 @@ function paths(kind: MarkKind): React.ReactNode {
       return <circle cx="12" cy="12" r="8" fill="currentColor" />;
     case 'triangle':
       return <polygon points="12,3 21,19 3,19" fill="currentColor" />;
+    case 'diamond':
+      return <polygon points="12,3 21,12 12,21 3,12" fill="currentColor" />;
+    case 'bar':
+      return <rect x="3" y="8" width="18" height="8" fill="currentColor" />;
+    case 'plus':
+      return (
+        <>
+          <rect x="3" y="9" width="18" height="6" fill="currentColor" />
+          <rect x="9" y="3" width="6" height="18" fill="currentColor" />
+        </>
+      );
+    case 'semicircle':
+      return <path d="M 3 16 A 9 9 0 0 1 21 16 Z" fill="currentColor" />;
     case 'dot':
       return <circle cx="12" cy="12" r="5" fill="currentColor" />;
     case 'bang':

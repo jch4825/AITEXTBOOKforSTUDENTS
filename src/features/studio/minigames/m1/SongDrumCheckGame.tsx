@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -36,6 +36,9 @@ const BAND_X = 380;
 /* 첫 곡이 화면 오른쪽에 이미 보이는 자리에서 출발한다. 화면 밖에서 시작하면 판을 연 뒤
    대여섯 초 동안 빈 띠만 보게 되어, 무엇을 기다리는 판인지 알 수 없다. */
 const SPAWN_X = 900;
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 type Kind = 'use' | 'fix' | 'skip';
 
@@ -252,76 +255,65 @@ export default function SongDrumCheckGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 20, 14, WORLD_W - 40, 44, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, '아이미가 만든 댄스 타임 곡 목록', WORLD_W / 2, 36, 24, BOARD.ink);
+    drawBar(ctx, 20, 14, WORLD_W - 40, 44, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+    centerText(ctx, '아이미가 만든 댄스 타임 곡 목록', WORLD_W / 2, 36, 24, B.ink);
 
-    // 곡이 흐르는 줄
-    ctx.fillStyle = BOARD.overlay;
-    ctx.fillRect(0, LANE_Y - CARD_H / 2 - 12, WORLD_W, CARD_H + 24);
+    /* 곡이 흐르는 줄. 위아래 선만 그어 길이라는 것만 알린다. */
+    drawBar(ctx, 0, LANE_Y - CARD_H / 2 - 12, WORLD_W, CARD_H + 24, {
+      stroke: B.grey, width: STROKE.hair,
+    });
 
-    // 판정 띠 — 이 안에 있을 때만 북이 통한다
-    ctx.fillStyle = 'rgba(250, 204, 21, 0.16)';
-    ctx.fillRect(BAND_X - hitHalf, LANE_Y - CARD_H / 2 - 12, hitHalf * 2, CARD_H + 24);
-    ctx.strokeStyle = '#FACC15';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(BAND_X - hitHalf, LANE_Y - CARD_H / 2 - 12, hitHalf * 2, CARD_H + 24);
+    /* 판정 띠 — 이 안에 있을 때만 북이 통한다. 노랑은 "지금 여기"를 가리키는 자리다. */
+    drawBar(ctx, BAND_X - hitHalf, LANE_Y - CARD_H / 2 - 12, hitHalf * 2, CARD_H + 24, {
+      stroke: B.yellow, width: STROKE.heavy,
+    });
 
     for (const card of w.cards) {
       if (card.x < -CARD_W || card.x > WORLD_W + CARD_W) continue;
-      const x = card.x - CARD_W / 2;
-      const y = LANE_Y - CARD_H / 2;
       const settled = card.state !== 'flow';
-      ctx.fillStyle = settled ? (card.state === 'right' ? '#14532D' : '#4C1D24') : BOARD.surface;
-      ctx.beginPath();
-      ctx.roundRect(x, y, CARD_W, CARD_H, 14);
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = settled
-        ? (card.state === 'right' ? PLAY.goal : PLAY.hazard)
-        : card.song.kind === 'skip' ? '#94A3B8' : BOARD.line;
-      ctx.stroke();
-      centerText(ctx, card.song.title, card.x, LANE_Y - 18, 22, BOARD.ink);
-      centerText(ctx, card.song.tag, card.x, LANE_Y + 20, 20, '#CBD5E1');
+      const face = settled ? (card.state === 'right' ? B.blue : B.red) : B.surface;
+      drawBar(ctx, card.x - CARD_W / 2, LANE_Y - CARD_H / 2, CARD_W, CARD_H, {
+        fill: face,
+        stroke: settled ? B.keyline : B.grey,
+        width: STROKE.base,
+      });
+      const ink = settled ? B.ground : B.ink;
+      centerText(ctx, card.song.title, card.x, LANE_Y - 18, 22, ink);
+      centerText(ctx, card.song.tag, card.x, LANE_Y + 20, 20, settled ? B.ground : B.grey);
       if (card.mark > 0) {
-        centerText(ctx, card.state === 'right' ? '✓' : '✕', card.x, LANE_Y - 62, 34,
-          card.state === 'right' ? PLAY.goal : PLAY.hazard);
+        drawMark(ctx, card.state === 'right' ? 'check' : 'cross', card.x, LANE_Y - 62, 34,
+          card.state === 'right' ? B.blue : B.red);
       }
     }
 
-    drawDrum(ctx, GREEN_X, DRUM_Y, drumR, w.greenFlash, '#22C55E', '#14532D', '써요', '← 왼쪽 · 스페이스');
-    drawDrum(ctx, ORANGE_X, DRUM_Y, drumR, w.orangeFlash, '#FB923C', '#7C2D12', '고쳐요', '→ 오른쪽');
+    /* 북 둘. 그대로 쓰는 곡은 파랑, 고쳐 쓰는 곡은 노랑이다. */
+    drawDrum(ctx, GREEN_X, DRUM_Y, drumR, w.greenFlash, B.blue, '써요', '← 왼쪽 · 스페이스');
+    drawDrum(ctx, ORANGE_X, DRUM_Y, drumR, w.orangeFlash, B.yellow, '고쳐요', '→ 오른쪽');
 
-    // 세 번째 답 — 치지 않기
-    panel(ctx, 700, DRUM_Y - 74, 236, 148, BOARD.overlay, '#94A3B8', 14);
-    centerText(ctx, '느린 자장가는', 818, DRUM_Y - 34, 22, '#CBD5E1');
-    centerText(ctx, '치지 않고', 818, DRUM_Y + 2, 22, BOARD.ink);
-    centerText(ctx, '보냅니다', 818, DRUM_Y + 38, 22, BOARD.ink);
+    /* 세 번째 답 — 치지 않기. 북이 아니라 회색 판으로 두어 "누르는 것이 아니다"를 알린다. */
+    drawBar(ctx, 700, DRUM_Y - 74, 236, 148, { fill: B.ground, stroke: B.grey, width: STROKE.base });
+    centerText(ctx, '느린 자장가는', 818, DRUM_Y - 34, 22, B.grey);
+    centerText(ctx, '치지 않고', 818, DRUM_Y + 2, 22, B.ink);
+    centerText(ctx, '보냅니다', 818, DRUM_Y + 38, 22, B.ink);
   };
 
   const drawDrum = (
     ctx: CanvasRenderingContext2D,
     cx: number, cy: number, r: number, flash: number,
-    skin: string, edge: string, label: string, keyHint: string,
+    skin: string, label: string, keyHint: string,
   ) => {
+    /* 북은 원이다. 두드리면 잠깐 커진다. */
     const grow = 1 + flash * 0.5;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r * grow, 0, Math.PI * 2);
-    ctx.fillStyle = skin;
-    ctx.fill();
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = edge;
-    ctx.stroke();
-    // 북 가죽의 안쪽 테. 두드리는 면이라는 것을 모양으로 알린다.
-    ctx.beginPath();
-    ctx.arc(cx, cy, r * grow * 0.68, 0, Math.PI * 2);
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = edge;
-    ctx.stroke();
-    centerText(ctx, label, cx, cy, 26, '#0F172A');
-    centerText(ctx, keyHint, cx, cy + r + 26, 20, '#CBD5E1');
+    drawShape(ctx, 'circle', cx, cy, r * 2 * grow, {
+      fill: skin, stroke: B.keyline, width: STROKE.base,
+    });
+    /* 안쪽 고리 하나. 두드리는 면이라는 것을 모양으로 알린다. */
+    drawShape(ctx, 'circle', cx, cy, r * 1.36 * grow, { stroke: B.ground, width: STROKE.hair });
+    centerText(ctx, label, cx, cy, 26, B.ground);
+    centerText(ctx, keyHint, cx, cy + r + 26, 20, B.grey);
   };
 
   const onPointer = (pointer: { x: number; y: number; phase: 'down' | 'move' | 'up' }) => {
@@ -332,10 +324,11 @@ export default function SongDrumCheckGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="박자 맞춰 북치기"
       instruction="곡이 노란 띠 안에 들어올 때 알맞은 북을 쳐 보세요. 댄스 타임에 쓸 수 없는 곡은 치지 않고 보냅니다."
       progress={{ label: '고른 곡', value: hud.correct, max: stage.order.length }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -346,7 +339,7 @@ export default function SongDrumCheckGame({ supportLevel }: MiniGameProps) {
           초록 북은 그대로 쓰는 곡, 주황 북은 이름을 빼고 고쳐 쓰는 곡입니다. 치지 않고 보내는 것도 하나의 답입니다.
         </p>
       }
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex min-h-0 flex-1 items-center justify-center">
@@ -361,7 +354,7 @@ export default function SongDrumCheckGame({ supportLevel }: MiniGameProps) {
             />
           </div>
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{hud.note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{hud.note}</p>
       </div>
     </MiniGameFrame>
   );

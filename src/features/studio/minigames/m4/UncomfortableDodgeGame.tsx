@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, circleHit, clamp, createRandom, dist, panel,
-  randRange, useGameKeys,
+  BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, circleHit, clamp,
+  createRandom, dist, drawBar, drawShape, randRange, useGameKeys,
 } from '../engine';
+import type { ShapeKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -24,65 +25,23 @@ const WORLD_H = 540;
 /*
  * 위험 신호는 글자가 아니라 도형으로 구분한다.
  *
- * 앞서는 조각 안에 신호 이름을 20px로 적었다. 그런데 조각의 지름은 84~116px인데
- * '사진을 보내라는 말'은 200px이라 글자가 조각 밖으로 한참 삐져나왔고, 조각 여럿이
- * 겹치면 어느 글자가 어느 조각의 것인지도 알 수 없었다.
+ * 앞서는 조각 안에 신호 이름을 20px로 적었다. 조각의 지름은 84~116px인데
+ * '사진을 보내라는 말'은 200px이라 글자가 조각 밖으로 한참 삐져나왔다. 이름은 판 아래
+ * 띠에서 읽고, 판 위에서는 모양으로만 구분한다.
  *
- * 신호의 이름은 판 아래 띠에서 읽고, 판 위에서는 모양으로만 구분한다. 색만으로
- * 나누지 않는 것은 색을 구별하기 어려운 학생도 모양은 셀 수 있기 때문이다.
+ * 도형은 바우하우스 어휘에서 고르되 **원과 사각형은 뺀다.** 그 둘은 학생(노랑 원)과
+ * 안전지대(파랑 사각형)의 자리라, 위험 조각이 같은 모양을 쓰면 뜻이 겹친다.
+ * 다섯 조각은 모두 빨강이다 — 색이 역할(위험)을 지고, 모양이 종류(어느 신호)를 진다.
  */
-type ShapeKind = 'triangle' | 'square' | 'pentagon' | 'hexagon' | 'star';
+const SIGNAL_SHAPES: ShapeKind[] = ['triangle', 'diamond', 'cross', 'bar', 'semicircle'];
 
-const SHAPE_KINDS: ShapeKind[] = ['triangle', 'square', 'pentagon', 'hexagon', 'star'];
+/** 판 아래 띠에 붙는 같은 모양. 판 위에서 본 것을 설명에서 다시 만난다. */
+const SIGNAL_MARKS = ['triangle', 'diamond', 'plus', 'bar', 'semicircle'] as const;
 
-/** 꼭짓점이 적을수록 같은 반지름에서 작아 보인다. 눈에 비슷한 크기로 맞추는 배율. */
-const SHAPE_SCALE: Record<ShapeKind, number> = {
-  triangle: 1.15, square: 1.06, pentagon: 1.02, hexagon: 1, star: 1.12,
+/** 판정 반지름 배율. 도형 안쪽에 들어오는 원의 크기라 모서리 밖은 닿아도 봐준다. */
+const SHAPE_HIT: Record<string, number> = {
+  triangle: 0.55, diamond: 0.62, cross: 0.6, bar: 0.5, semicircle: 0.6,
 };
-
-/** 판정 반지름 배율. 도형 안쪽에 들어오는 원의 크기라, 모서리 밖은 닿아도 봐준다. */
-const SHAPE_HIT: Record<ShapeKind, number> = {
-  triangle: 0.55, square: 0.7, pentagon: 0.76, hexagon: 0.8, star: 0.5,
-};
-
-/** 도형의 꼭짓점. 캔버스와 판 아래 띠의 작은 표시가 같은 계산을 쓴다. */
-function shapePoints(kind: ShapeKind, cx: number, cy: number, r: number): Array<[number, number]> {
-  const start = -Math.PI / 2;
-  if (kind === 'star') {
-    return Array.from({ length: 10 }, (_, i) => {
-      const radius = i % 2 === 0 ? r : r * 0.46;
-      const a = start + (i * Math.PI) / 5;
-      return [cx + Math.cos(a) * radius, cy + Math.sin(a) * radius] as [number, number];
-    });
-  }
-  const sides = kind === 'triangle' ? 3 : kind === 'square' ? 4 : kind === 'pentagon' ? 5 : 6;
-  // 사각형만 반 칸 돌린다. 꼭짓점을 위로 두면 마름모로 서서 '네모'로 읽히지 않는다.
-  const turn = kind === 'square' ? Math.PI / 4 : 0;
-  return Array.from({ length: sides }, (_, i) => {
-    const a = start + turn + (i * Math.PI * 2) / sides;
-    return [cx + Math.cos(a) * r, cy + Math.sin(a) * r] as [number, number];
-  });
-}
-
-function traceShape(ctx: CanvasRenderingContext2D, kind: ShapeKind, cx: number, cy: number, r: number): void {
-  const pts = shapePoints(kind, cx, cy, r * SHAPE_SCALE[kind]);
-  ctx.beginPath();
-  ctx.moveTo(pts[0][0], pts[0][1]);
-  for (let i = 1; i < pts.length; i += 1) ctx.lineTo(pts[i][0], pts[i][1]);
-  ctx.closePath();
-}
-
-/** 판 아래 띠에 붙는 작은 도형. 판 위의 조각과 같은 모양이라 눈으로 이어진다. */
-function ShapeMark({ kind }: { kind: ShapeKind }) {
-  const pts = shapePoints(kind, 11, 11, 9.5 * SHAPE_SCALE[kind])
-    .map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`)
-    .join(' ');
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" className="shrink-0">
-      <polygon points={pts} fill="#3F1D2B" stroke="#F87171" strokeWidth="2" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 interface Shard {
   x: number;
@@ -227,7 +186,7 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
           if (shard.x > WORLD_W + 120) shard.x = -100;
           if (shard.y < -120) shard.y = WORLD_H + 100;
           if (shard.y > WORLD_H + 120) shard.y = -100;
-          const hitR = shard.r * SHAPE_HIT[SHAPE_KINDS[shard.signal % SHAPE_KINDS.length]];
+          const hitR = shard.r * SHAPE_HIT[SIGNAL_SHAPES[shard.signal % SIGNAL_SHAPES.length]];
           if (w.timer <= 0 && circleHit(w.x, w.y, heroR, shard.x, shard.y, hitR)) {
             w.lives -= 1;
             w.timer = 1.4;
@@ -236,7 +195,9 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
         }
         w.timer = Math.max(0, w.timer - dt);
 
-        if (dist(w.x, w.y, w.safeX, w.safeY) < safeR) {
+        /* 안전지대는 사각형이므로 사각형으로 잰다. 원으로 재면 모서리에 선 학생이
+           그림상 안에 있는데도 세어지지 않는다. */
+        if (Math.abs(w.x - w.safeX) <= safeR && Math.abs(w.y - w.safeY) <= safeR) {
           w.hold += dt;
           if (w.hold >= HOLD_NEED) {
             /* 이 파도에 실제로 떠 있던 신호 가운데 아직 기록하지 않은 것을 남긴다.
@@ -272,76 +233,53 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = BAUHAUS.board.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    // 안전지대
-    ctx.beginPath();
-    ctx.arc(w.safeX, w.safeY, safeR, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(74, 222, 128, 0.14)';
-    ctx.fill();
-    ctx.strokeStyle = PLAY.goal;
-    ctx.lineWidth = 4;
-    ctx.stroke();
-    /* 이름표는 원 위에 올린다.
-       원 안에 맞추려면 고등 수준(반지름 66.6)에서 글자를 20 단위 아래로 줄여야 하는데,
-       캔버스 글자의 하한은 20 단위다(engine/palette.ts). 원 밖으로 올리면 폭 제약이
-       사라지고, 안전지대는 화면 안쪽에만 놓이므로 이름표가 판을 벗어나지도 않는다. */
-    centerText(ctx, '믿을 만한 어른', w.safeX, w.safeY - safeR - 18, 22, PLAY.goal);
-    centerText(ctx, `${Math.max(0, HOLD_NEED - w.hold).toFixed(1)}초`, w.safeX, w.safeY, 26, BOARD.ink);
+    /* 안전지대는 파랑 사각형이다. 바우하우스 어휘에서 목표의 자리다. */
+    drawShape(ctx, 'square', w.safeX, w.safeY, safeR * 2, {
+      fill: BAUHAUS.board.blue, stroke: BAUHAUS.board.keyline, width: STROKE.hair,
+    });
+    /* 이름표는 사각형 위에 올린다. 안쪽에 맞추려면 글자를 20 단위 아래로 줄여야 하는데
+       캔버스 글자의 하한이 20 단위라(engine/palette.ts) 안에 넣을 수 없다. */
+    centerText(ctx, '믿을 만한 어른', w.safeX, w.safeY - safeR - 26, 22, BAUHAUS.board.blue);
+    centerText(ctx, `${Math.max(0, HOLD_NEED - w.hold).toFixed(1)}초`, w.safeX, w.safeY, 30, BAUHAUS.board.ground);
 
     for (const shard of w.shards) {
-      const kind = SHAPE_KINDS[shard.signal % SHAPE_KINDS.length];
-      traceShape(ctx, kind, shard.x, shard.y, shard.r);
-      ctx.fillStyle = '#3F1D2B';
-      ctx.fill();
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = PLAY.hazard;
-      ctx.lineJoin = 'round';
-      ctx.stroke();
-      // 가운데의 작은 가위표. 어떤 모양이든 같은 자리에 같은 크기로 들어가 밖으로 넘지 않는다.
-      const mark = shard.r * 0.26;
-      ctx.strokeStyle = PLAY.hazard;
-      ctx.lineWidth = 5;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(shard.x - mark, shard.y - mark);
-      ctx.lineTo(shard.x + mark, shard.y + mark);
-      ctx.moveTo(shard.x + mark, shard.y - mark);
-      ctx.lineTo(shard.x - mark, shard.y + mark);
-      ctx.stroke();
-      ctx.lineCap = 'butt';
-      ctx.lineJoin = 'miter';
+      const kind = SIGNAL_SHAPES[shard.signal % SIGNAL_SHAPES.length];
+      drawShape(ctx, kind, shard.x, shard.y, shard.r * 2, {
+        fill: BAUHAUS.board.red, stroke: BAUHAUS.board.keyline, width: STROKE.hair,
+      });
     }
 
+    /* 학생은 노랑 원이다. 닿은 직후에는 얇게 그려 무적 상태를 알린다. */
     ctx.globalAlpha = w.timer > 0 ? 0.45 : 1;
-    ctx.beginPath();
-    ctx.arc(w.x, w.y, heroR, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
+    drawShape(ctx, 'circle', w.x, w.y, heroR * 2, {
+      fill: BAUHAUS.board.yellow, stroke: BAUHAUS.board.keyline, width: STROKE.base,
+    });
     ctx.globalAlpha = 1;
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 250, WORLD_H - 88, 500, 56, BOARD.overlay, PLAY.hero, 14);
-      centerText(ctx, '방향키나 끌기로 움직이면 시작합니다', WORLD_W / 2, WORLD_H - 60, 24, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 240, WORLD_H - 88, 480, 56, {
+        fill: BAUHAUS.board.ground, stroke: BAUHAUS.board.yellow, width: STROKE.base,
+      });
+      centerText(ctx, '방향키나 끌기로 움직이면 시작합니다', WORLD_W / 2, WORLD_H - 60, 24, BAUHAUS.board.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="불편한 화면 피하기"
-      instruction="빨간색 위험 구역을 피해 초록색 안전 구역으로 이동한 뒤 3초 동안 머물러 보세요."
+      instruction="빨간 도형을 피해 파란 사각형 안으로 들어간 뒤 3초 동안 머물러 보세요."
       progress={{ label: '넘긴 파도', value: hud.wave, max: stage.waves }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={Math.max(0, HOLD_NEED - hud.hold)} timeTotal={HOLD_NEED} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} timeLeft={Math.max(0, HOLD_NEED - hud.hold)} timeTotal={HOLD_NEED} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex min-h-0 flex-1 items-center justify-center">
@@ -360,15 +298,19 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
           </div>
         </div>
         <p
-          className="min-h-[38px] rounded-xl px-3 py-1.5 text-[15px] font-bold"
-          style={{ background: 'var(--board-surface)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
+          className="min-h-[38px] px-3 py-1.5 text-[15px] font-bold"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+            color: 'var(--game-board-ink)',
+          }}
         >
           {hud.named.length > 0 ? (
             <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <span>어른에게 알린 위험 신호</span>
               {hud.named.map((name) => (
                 <span key={name} className="inline-flex items-center gap-1.5">
-                  <ShapeMark kind={SHAPE_KINDS[stage.signals.indexOf(name) % SHAPE_KINDS.length]} />
+                  <BauhausMark kind={SIGNAL_MARKS[stage.signals.indexOf(name) % SIGNAL_MARKS.length]} size={22} />
                   {name}
                 </span>
               ))}
