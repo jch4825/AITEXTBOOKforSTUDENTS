@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, shuffle, toRadians, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawShape,
+  shuffle, toRadians, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m4-l2 · 자료 탑 무너뜨리기 (장르 28 · 포탄 각도)
@@ -273,13 +277,13 @@ export default function SourceTowerGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, W, H);
 
-    panel(ctx, 20, 14, W - 40, 44, BOARD.overlay, PLAY.info, 10);
-    centerText(ctx, `${stage.title} · 믿기 어려운 자료만 무너뜨려요`, W / 2, 37, 22, BOARD.ink);
+    drawBar(ctx, 20, 14, W - 40, 44, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `${stage.title} · 믿기 어려운 자료만 무너뜨려요`, W / 2, 37, 22, B.ink);
 
-    ctx.fillStyle = '#334155';
+    ctx.fillStyle = B.surface;
     ctx.fillRect(0, GROUND, W, H - GROUND);
 
     for (const block of w.blocks) {
@@ -289,42 +293,33 @@ export default function SourceTowerGame({ supportLevel }: MiniGameProps) {
       const by = blockY(block.row);
       /* 자료를 색으로 미리 나누지 않는다. 붉고 푸른 것을 보고 쏘면 출처와 날짜를 읽을
          까닭이 없어진다. 맞은 뒤에만 어느 쪽이었는지 잠깐 물든다. */
-      const tell = block.shake > 0 ? '#FB7185' : BOARD.line;
-      panel(ctx, bx, by, BLOCK_W, BLOCK_H, '#243449', tell, 8);
-      centerText(ctx, block.source.from, bx + BLOCK_W / 2, by + 22, 18, BOARD.ink);
-      centerText(ctx, block.source.when, bx + BLOCK_W / 2, by + 44, 18, '#CBD5E1');
+      const tell = block.shake > 0 ? B.red : B.grey;
+      drawBar(ctx, bx, by, BLOCK_W, BLOCK_H, { fill: B.surface, stroke: tell, width: STROKE.base });
+      centerText(ctx, block.source.from, bx + BLOCK_W / 2, by + 22, 18, B.ink);
+      centerText(ctx, block.source.when, bx + BLOCK_W / 2, by + 44, 18, B.grey);
     }
 
     // 대포
     ctx.save();
     ctx.translate(GUN_X, GROUND - 26);
     ctx.rotate(toRadians(-angle));
-    ctx.fillStyle = PLAY.hero;
-    ctx.fillRect(0, -9, 30 + power * 0.5, 18);
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 4;
-    ctx.strokeRect(0, -9, 30 + power * 0.5, 18);
+    drawBar(ctx, 0, -9, 30 + power * 0.5, 18,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
     ctx.restore();
-    ctx.beginPath();
-    ctx.arc(GUN_X, GROUND - 20, 24, 0, Math.PI * 2);
-    ctx.fillStyle = '#475569';
-    ctx.fill();
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    drawShape(ctx, 'circle', GUN_X, GROUND - 20, 48,
+      { fill: B.surface, stroke: B.grey, width: STROKE.base });
 
     const shot = w.shot;
     if (shot) {
-      ctx.beginPath();
-      ctx.arc(shot.x, shot.y, 11, 0, Math.PI * 2);
-      ctx.fillStyle = shot.live ? PLAY.goal : '#94A3B8';
-      ctx.fill();
+      drawShape(ctx, 'circle', shot.x, shot.y, 22,
+        { fill: shot.live ? B.blue : B.grey, stroke: B.keyline, width: 1 });
     }
 
-    centerText(ctx, `각도 ${Math.round(angle)}도 · 힘 ${Math.round(power)}`, 200, GROUND + 42, 22, BOARD.ink);
+    centerText(ctx, `각도 ${Math.round(angle)}도 · 힘 ${Math.round(power)}`, 200, GROUND + 42, 22, B.ink);
     if (w.noteT > 0 && w.note) {
-      panel(ctx, W / 2 - 330, H - 46, 660, 36, BOARD.overlay, PLAY.info, 8);
-      centerText(ctx, w.note, W / 2, H - 27, 20, BOARD.ink);
+      drawBar(ctx, W / 2 - 330, H - 46, 660, 36,
+        { fill: B.ground, stroke: B.blue, width: STROKE.hair });
+      centerText(ctx, w.note, W / 2, H - 27, 20, B.ink);
     }
   };
 
@@ -332,10 +327,11 @@ export default function SourceTowerGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="자료 탑 무너뜨리기"
       instruction="탑에 쌓인 자료의 출처와 날짜를 읽어 보세요. 어디서 왔는지 알 수 없거나 너무 오래된 자료만 각도와 힘을 맞추어 무너뜨립니다. 포탄은 줄의 맨 위 자료부터 맞습니다."
       progress={{ label: '치운 자료', value: hud.broken, max: hud.broken + weakLeft }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} score={hud.left} scoreLabel="남은 포탄" />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} score={hud.left} scoreLabel="남은 포탄" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -343,12 +339,18 @@ export default function SourceTowerGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => setAngle((a) => clamp(a + 6, 8, 78))} emoji="⬆️" label="위로" />
-          <MiniGameButton onClick={() => setAngle((a) => clamp(a - 6, 8, 78))} emoji="⬇️" label="아래로" />
-          <MiniGameButton onClick={() => setPower((p) => clamp(p - 6, 24, 100))} emoji="➖" label="약하게" />
-          <MiniGameButton onClick={() => setPower((p) => clamp(p + 6, 24, 100))} emoji="➕" label="세게" />
-          <MiniGameButton onClick={() => { fireRef.current = true; }} emoji="💥" label="쏘기" variant="primary" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" />
+          <MiniGameButton onClick={() => setAngle((a) => clamp(a + 6, 8, 78))} mark="arrow" markRotate={270} label="위로" />
+          <MiniGameButton onClick={() => setAngle((a) => clamp(a - 6, 8, 78))} mark="arrow" markRotate={90} label="아래로" />
+          <MiniGameButton onClick={() => setPower((p) => clamp(p - 6, 24, 100))} mark="bar" label="약하게" />
+          <MiniGameButton onClick={() => setPower((p) => clamp(p + 6, 24, 100))} mark="plus" label="세게" />
+          <MiniGameButton
+            onClick={() => { fireRef.current = true; }}
+            mark="arrow"
+            markRotate={315}
+            label="쏘기"
+            variant="primary"
+          />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" />
         </>
       }
     >

@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useCountdown, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
+  useCountdown, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m4-l9 · 대화 미로 (장르 4 · 미로 찾기)
@@ -227,14 +231,14 @@ export default function ChatMazeGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 20, 12, WORLD_W - 40, 46, BOARD.overlay, PLAY.info, 12);
+    drawBar(ctx, 20, 12, WORLD_W - 40, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(
       ctx,
       w.hit || '붉은 칸을 지나가지 말고, 증거 두 가지를 모아 출구로 가세요.',
-      WORLD_W / 2, 35, 22, BOARD.ink,
+      WORLD_W / 2, 35, 22, B.ink,
     );
 
     for (let r = 0; r < rows; r += 1) {
@@ -243,40 +247,44 @@ export default function ChatMazeGame({ supportLevel }: MiniGameProps) {
         const x = originX + c * cell;
         const y = originY + r * cell;
         if (tile === '#') {
-          panel(ctx, x, y, cell, cell, '#0B1220', 'rgba(100, 116, 139, 0.5)', 4);
+          drawBar(ctx, x, y, cell, cell, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
           continue;
         }
-        panel(ctx, x, y, cell, cell, '#1E293B', 'rgba(100, 116, 139, 0.25)', 4);
+        drawBar(ctx, x, y, cell, cell, { fill: B.surface, stroke: B.ground, width: STROKE.hair });
         if (tile >= '1' && tile <= '9') {
-          panel(ctx, x + 2, y + 2, cell - 4, cell - 4, '#7F1D1D', PLAY.hazard, 6);
-          centerText(ctx, '⚠️', x + cell / 2, y + cell / 2, Math.min(26, cell * 0.6), BOARD.ink);
+          /* 지나가면 안 되는 칸은 붉은 세모다. 판마다 위험은 늘 붉은 세모다. */
+          drawShape(ctx, 'triangle', x + cell / 2, y + cell / 2, cell * 0.72,
+            { fill: B.red, stroke: B.keyline, width: STROKE.hair });
         } else if ((tile === 'a' || tile === 'b') && !takenRef.current.includes(tile)) {
-          centerText(ctx, tile === 'a' ? '📸' : '📝', x + cell / 2, y + cell / 2, Math.min(26, cell * 0.62), BOARD.ink);
+          /* 모을 증거 둘은 서로 다른 도형이다. 무엇을 아직 못 모았는지 모양으로 안다. */
+          drawShape(ctx, tile === 'a' ? 'circle' : 'diamond', x + cell / 2, y + cell / 2, cell * 0.6,
+            { fill: B.blue, stroke: B.keyline, width: STROKE.hair });
         } else if (tile === 'E') {
           const open = takenRef.current.length >= 2;
-          panel(ctx, x + 2, y + 2, cell - 4, cell - 4, open ? '#065F46' : '#334155', open ? PLAY.goal : BOARD.line, 6);
-          centerText(ctx, open ? '🚪' : '🔒', x + cell / 2, y + cell / 2, Math.min(26, cell * 0.6), BOARD.ink);
+          drawBar(ctx, x + 2, y + 2, cell - 4, cell - 4, {
+            fill: open ? B.blue : B.surface,
+            stroke: open ? B.blue : B.grey,
+            width: STROKE.base,
+          });
+          drawMark(ctx, open ? 'check' : 'cross', x + cell / 2, y + cell / 2,
+            Math.min(24, cell * 0.5), open ? B.ground : B.grey);
         }
       }
     }
 
     const hx = originX + w.c * cell + cell / 2;
     const hy = originY + w.r * cell + cell / 2;
-    ctx.beginPath();
-    ctx.arc(hx, hy, cell * 0.32, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
+    drawShape(ctx, 'circle', hx, hy, cell * 0.64,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="대화 미로"
       instruction="수상한 요구를 피해 증거 두 가지를 모은 뒤, 믿을 수 있는 어른이 계신 출구로 이동해 보세요."
       progress={{ label: '모은 증거', value: hud.picked, max: 2 }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -284,11 +292,11 @@ export default function ChatMazeGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: -1 }; }} emoji="⬆️" label="위" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: 1 }; }} emoji="⬇️" label="아래" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: -1, r: 0 }; }} emoji="⬅️" label="왼쪽" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 1, r: 0 }; }} emoji="➡️" label="오른쪽" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" variant="primary" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: -1 }; }} mark="arrow" markRotate={270} label="위" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: 1 }; }} mark="arrow" markRotate={90} label="아래" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: -1, r: 0 }; }} mark="arrow" markRotate={180} label="왼쪽" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 1, r: 0 }; }} mark="arrow" label="오른쪽" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" variant="primary" />
         </>
       }
     >

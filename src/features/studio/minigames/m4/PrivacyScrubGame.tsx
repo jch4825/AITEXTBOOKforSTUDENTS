@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
+  useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m4-l3 · 개인정보 지우기 (장르 21 · 정돈 클리닝)
@@ -376,28 +380,28 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     // 읽을 글은 이 띠 한 곳에만 크게 둔다. 카드 위 글자마다 안내가 붙으면 아무것도 못 읽는다.
     const showNotice = world.noticeTimer > 0;
-    panel(ctx, 40, 10, 880, 56, BOARD.overlay, showNotice ? PLAY.hero : PLAY.info, 14);
-    centerText(ctx, showNotice ? world.notice : BASE_NOTICE, 480, 38, 26, BOARD.ink);
+    drawBar(ctx, 40, 10, 880, 56, { fill: B.ground, stroke: showNotice ? B.yellow : B.blue, width: STROKE.base });
+    centerText(ctx, showNotice ? world.notice : BASE_NOTICE, 480, 38, 26, B.ink);
 
-    panel(ctx, CARD_X, CARD_Y, CARD_W, CARD_H, BOARD.surface, BOARD.line, 16);
+    drawBar(ctx, CARD_X, CARD_Y, CARD_W, CARD_H, { fill: B.surface, stroke: B.grey, width: STROKE.base });
 
     ctx.font = `800 ${TEXT_SIZE}px "Pretendard", system-ui, sans-serif`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillStyle = BOARD.ink;
+    ctx.fillStyle = B.ink;
     for (const item of draws) ctx.fillText(item.text, item.x, item.y);
 
     for (const mark of marks) {
       if (mark.kind === 'private' && !mark.done) {
-        ctx.fillStyle = 'rgba(251, 113, 133, 0.42)';
-        ctx.fillRect(mark.x, mark.y, mark.w, mark.h);
-        ctx.strokeStyle = PLAY.hazard;
-        ctx.lineWidth = 3;
+        /* 가릴 곳은 붉은 테두리로만 두른다. 반투명한 면을 덮으면 정작 읽어야 할
+           글자가 가려져, 무엇이 개인정보인지 판단할 수 없다. */
+        ctx.strokeStyle = B.red;
+        ctx.lineWidth = STROKE.base;
         ctx.strokeRect(mark.x, mark.y, mark.w, mark.h);
       }
       if (mark.kind === 'need' && mark.warn) {
@@ -407,7 +411,7 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
     }
 
     // 지워진 칸 — 문지른 자리는 글자가 사라진다. 지운 만큼이 그대로 보여야 판단이 선다.
-    ctx.fillStyle = BOARD.overlay;
+    ctx.fillStyle = B.ground;
     for (let row = 0; row < ROWS; row += 1) {
       for (let col = 0; col < COLS; col += 1) {
         if (!world.erased[row * COLS + col]) continue;
@@ -418,12 +422,13 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
     for (const mark of marks) {
       if (mark.kind === 'private') {
         if (!mark.done) continue;
-        panel(ctx, mark.x, mark.y, mark.w, mark.h, BOARD.overlay, PLAY.goal, 8);
-        centerText(ctx, '✔', mark.x + mark.w / 2, mark.y + mark.h / 2, 30, PLAY.goal);
+        drawBar(ctx, mark.x, mark.y, mark.w, mark.h,
+          { fill: B.ground, stroke: B.blue, width: STROKE.base });
+        drawMark(ctx, 'check', mark.x + mark.w / 2, mark.y + mark.h / 2, 28, B.blue);
       } else {
         // 초록 줄은 지워도 남는다. 글자가 흐려져도 "여기는 남길 곳"이라는 표시는 사라지지 않아야 한다.
-        ctx.strokeStyle = mark.warn ? PLAY.hero : PLAY.goal;
-        ctx.lineWidth = 6;
+        ctx.strokeStyle = mark.warn ? B.yellow : B.blue;
+        ctx.lineWidth = STROKE.heavy;
         ctx.beginPath();
         ctx.moveTo(mark.x + 4, mark.y + mark.h - 7);
         ctx.lineTo(mark.x + mark.w - 4, mark.y + mark.h - 7);
@@ -434,8 +439,8 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
     if (world.hint > 0) {
       const target = marks.find((mark) => mark.kind === 'private' && !mark.done);
       if (target) {
-        ctx.strokeStyle = PLAY.extra;
-        ctx.lineWidth = 5;
+        ctx.strokeStyle = B.yellow;
+        ctx.lineWidth = STROKE.heavy;
         ctx.setLineDash([12, 8]);
         ctx.strokeRect(target.x - 8, target.y - 8, target.w + 16, target.h + 16);
         ctx.setLineDash([]);
@@ -444,33 +449,36 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
 
     ctx.beginPath();
     ctx.arc(world.ex, world.ey, radius, 0, Math.PI * 2);
-    ctx.fillStyle = pressing ? 'rgba(251, 191, 36, 0.30)' : 'rgba(251, 191, 36, 0.14)';
-    ctx.fill();
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 4;
+    /* 지우개는 노란 고리다. 누르는 동안에만 선이 굵어져 "지금 지우는 중"을 알린다.
+       면을 반투명하게 덮으면 그 아래 글자가 흐려져 무엇을 지우는지 볼 수 없다. */
+    ctx.strokeStyle = B.yellow;
+    ctx.lineWidth = pressing ? STROKE.heavy : STROKE.hair;
     ctx.stroke();
-    centerText(ctx, '🧽', world.ex, world.ey, 30, BOARD.ink);
 
     // 오른쪽 목록 — 가릴 것과 남길 것을 늘 같은 자리에서 셀 수 있게 한다.
-    panel(ctx, SIDE_X, CARD_Y, SIDE_W, CARD_H, BOARD.overlay, BOARD.line, 16);
-    centerText(ctx, '가릴 것', SIDE_X + SIDE_W / 2, CARD_Y + 30, 24, BOARD.inkDim);
+    drawBar(ctx, SIDE_X, CARD_Y, SIDE_W, CARD_H, { fill: B.ground, stroke: B.grey, width: STROKE.base });
+    centerText(ctx, '가릴 것', SIDE_X + SIDE_W / 2, CARD_Y + 30, 24, B.grey);
     let slot = 0;
     for (const mark of marks) {
       if (mark.kind !== 'private') continue;
       const y = CARD_Y + 66 + slot * 44;
-      panel(ctx, SIDE_X + 14, y - 18, SIDE_W - 28, 36,
-        mark.done ? '#14532D' : BOARD.surface, mark.done ? PLAY.goal : PLAY.hazard, 10);
-      centerText(ctx, mark.done ? `${mark.label} 가림` : mark.label, SIDE_X + SIDE_W / 2, y, 24, BOARD.ink);
+      drawBar(ctx, SIDE_X + 14, y - 18, SIDE_W - 28, 36, {
+        fill: mark.done ? B.blue : B.surface,
+        stroke: mark.done ? B.blue : B.red,
+        width: STROKE.base,
+      });
+      centerText(ctx, mark.done ? `${mark.label} 가림` : mark.label,
+        SIDE_X + SIDE_W / 2, y, 24, mark.done ? B.ground : B.ink);
       slot += 1;
     }
-    centerText(ctx, '남길 것', SIDE_X + SIDE_W / 2, CARD_Y + 242, 24, BOARD.inkDim);
+    centerText(ctx, '남길 것', SIDE_X + SIDE_W / 2, CARD_Y + 242, 24, B.grey);
     slot = 0;
     for (const mark of marks) {
       if (mark.kind !== 'need') continue;
       const y = CARD_Y + 278 + slot * 44;
-      panel(ctx, SIDE_X + 14, y - 18, SIDE_W - 28, 36,
-        BOARD.surface, mark.warn ? PLAY.hero : PLAY.goal, 10);
-      centerText(ctx, mark.warn ? `${mark.label} 주의` : `${mark.label} 지킴`, SIDE_X + SIDE_W / 2, y, 24, BOARD.ink);
+      drawBar(ctx, SIDE_X + 14, y - 18, SIDE_W - 28, 36,
+        { fill: B.surface, stroke: mark.warn ? B.yellow : B.blue, width: STROKE.base });
+      centerText(ctx, mark.warn ? `${mark.label} 주의` : `${mark.label} 지킴`, SIDE_X + SIDE_W / 2, y, 24, B.ink);
       slot += 1;
     }
 
@@ -478,21 +486,22 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
       const boxW = 470;
       const boxH = 76;
       const boxY = CARD_Y + CARD_H / 2 - boxH / 2 + Math.sin(world.pulse) * 4;
-      panel(ctx, CARD_X + (CARD_W - boxW) / 2, boxY, boxW, boxH, BOARD.overlay, PLAY.hero, 16);
+      drawBar(ctx, CARD_X + (CARD_W - boxW) / 2, boxY, boxW, boxH, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx,
         world.armed ? '누르면 시작합니다' : '손을 떼었다가 다시 누르세요',
-        CARD_X + CARD_W / 2, boxY + boxH / 2, 28, BOARD.ink,
+        CARD_X + CARD_W / 2, boxY + boxH / 2, 28, B.ink,
       );
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="개인정보 지우기"
-      instruction="빨간색으로 표시된 개인정보를 문질러 지우고, 꼭 필요한 요청 조건(초록색 밑줄)만 깨끗하게 남겨 보세요."
+      instruction="붉은 네모로 둘러진 개인정보를 문질러 지우고, 꼭 필요한 요청 조건은 파란 밑줄이 그어져 있으니 그대로 남겨 보세요."
       progress={{ label: '가린 정보', value: hud.covered, max: privateTotal }}
-      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={Math.ceil(totalTime)} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={Math.ceil(totalTime)} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title}으로 바꿨어요.`)}
@@ -500,12 +509,12 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 지우기" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 지우기" variant="primary" />
           {game.hintAllowed && (
             <MiniGameButton
               onClick={() => { worldRef.current.hint = 3; }}
               disabled={!game.playing}
-              emoji="💡"
+              mark="bang"
               label="다음 곳 보기"
             />
           )}

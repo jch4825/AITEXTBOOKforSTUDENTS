@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel,
-  createRandom, randInt, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
+  drawShape, randInt, useGameKeys,
 } from '../engine';
 import type { MiniGameProps } from '../types';
+import type { ShapeKind } from '../engine';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m4-l10 · 광고 구역 두르기 (장르 35 · 땅따먹기)
@@ -41,14 +45,21 @@ const FOE_SPEED = 2.3;
 const STEP_SEC = 0.16;
 const BASE_TIME = 90;
 
-const AD_MARKS = [
-  { emoji: '🏷️', name: '광고 표시' },
-  { emoji: '🛒', name: '구매 링크' },
-  { emoji: '💥', name: '과장 문구' },
+/*
+ * 게시물에 붙는 표시.
+ *
+ * 광고의 단서 셋은 붉은 계열의 서로 다른 도형, 스스로 판단한 근거 둘은 파란 도형이다.
+ * 색으로 광고와 근거를 가르고 도형으로 무엇인지 가른다 — 색만으로 나누면 판 위에서
+ * 빨강과 파랑의 밝기가 거의 같아 둘이 같은 회색이 된다.
+ */
+const AD_MARKS: { shape: ShapeKind; name: string }[] = [
+  { shape: 'triangle', name: '광고 표시' },
+  { shape: 'diamond', name: '구매 링크' },
+  { shape: 'cross', name: '과장 문구' },
 ];
-const GOOD_MARKS = [
-  { emoji: '✅', name: '필요와 맞음' },
-  { emoji: '💰', name: '예산과 맞음' },
+const GOOD_MARKS: { shape: ShapeKind; name: string }[] = [
+  { shape: 'square', name: '필요와 맞음' },
+  { shape: 'circle', name: '예산과 맞음' },
 ];
 
 interface Marker {
@@ -393,26 +404,32 @@ export default function AdFenceGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 12, 8, 936, 62, BOARD.overlay, PLAY.info, 14);
-    centerText(ctx, stage.title, 316, 26, 28, BOARD.ink);
-    centerText(ctx, '🏷️ 광고 표시 · 🛒 구매 링크 · 💥 과장', 316, 54, 24, BOARD.inkDim);
+    drawBar(ctx, 12, 8, 936, 62, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, stage.title, 316, 26, 28, B.ink);
+    /* 아래 줄은 붉은 도형 셋의 이름표다. 판에서 만날 모양을 여기서 먼저 보여 준다. */
+    AD_MARKS.forEach((mark, index) => {
+      const x = 96 + index * 156;
+      drawShape(ctx, mark.shape, x, 54, 20, { fill: B.red, stroke: B.keyline, width: 1 });
+      centerText(ctx, mark.name, x + 62, 54, 20, B.grey);
+    });
     const risky = world.trail.length > 0;
-    panel(ctx, 636, 14, 300, 50, BOARD.overlay, risky ? PLAY.hazard : PLAY.goal, 12);
-    centerText(ctx, risky ? '가장자리로 돌아가세요' : '지금은 안전해요', 786, 39, 24, BOARD.ink);
+    drawBar(ctx, 636, 14, 300, 50,
+      { fill: B.ground, stroke: risky ? B.red : B.blue, width: STROKE.base });
+    centerText(ctx, risky ? '가장자리로 돌아가세요' : '지금은 안전해요', 786, 39, 24, B.ink);
 
     for (let r = 0; r < rows; r += 1) {
       for (let c = 0; c < cols; c += 1) {
         const state = world.cells[r * cols + c];
         const x = originX + c * cellSize;
         const y = originY + r * cellSize;
-        ctx.fillStyle = state === OWNED ? '#14532D' : state === TRAIL ? PLAY.heroEdge : BOARD.surface;
+        ctx.fillStyle = state === OWNED ? B.blue : state === TRAIL ? B.yellow : B.surface;
         ctx.fillRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
         // 아직 두르지 않은 칸에는 게시물 조각처럼 글줄 두 개만 흐리게 그린다.
         if (state === WALL && !world.markerCells.has(r * cols + c)) {
-          ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
+          ctx.fillStyle = B.grey;
           ctx.fillRect(x + cellSize * 0.22, y + cellSize * 0.36, cellSize * 0.56, 3);
           ctx.fillRect(x + cellSize * 0.22, y + cellSize * 0.56, cellSize * 0.36, 3);
         }
@@ -424,63 +441,56 @@ export default function AdFenceGame({ supportLevel }: MiniGameProps) {
       const y = originY + marker.row * cellSize;
       const owned = world.cells[marker.row * cols + marker.col] === OWNED;
       const set = marker.ad ? AD_MARKS[marker.kind] : GOOD_MARKS[marker.kind];
-      if (marker.ad && owned) {
-        ctx.strokeStyle = PLAY.goal;
-        ctx.lineWidth = 3;
-        ctx.strokeRect(x + 3, y + 3, cellSize - 6, cellSize - 6);
-      } else if (!marker.ad && !owned) {
-        ctx.strokeStyle = PLAY.info;
-        ctx.lineWidth = 3;
+      if ((marker.ad && owned) || (!marker.ad && !owned)) {
+        ctx.strokeStyle = B.ink;
+        ctx.lineWidth = STROKE.hair;
         ctx.strokeRect(x + 3, y + 3, cellSize - 6, cellSize - 6);
       }
-      centerText(ctx, set.emoji, x + cellSize / 2, y + cellSize / 2, glyph, BOARD.ink);
+      drawShape(ctx, set.shape, x + cellSize / 2, y + cellSize / 2, glyph, {
+        fill: marker.ad ? B.red : B.blue,
+        stroke: B.keyline,
+        width: STROKE.hair,
+      });
     }
 
     for (const foe of world.foes) {
       const fx = originX + foe.x * cellSize;
       const fy = originY + foe.y * cellSize;
-      ctx.fillStyle = PLAY.hazardEdge;
-      ctx.beginPath();
-      ctx.arc(fx, fy, cellSize * FOE_R, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = PLAY.hazard;
-      ctx.lineWidth = 3;
-      ctx.stroke();
-      centerText(ctx, '💥', fx, fy, Math.max(24, cellSize * 0.5), BOARD.ink);
+      /* 쫓아오는 것은 붉은 세모다. 판마다 위험은 늘 붉은 세모다. */
+      drawShape(ctx, 'triangle', fx, fy, cellSize * FOE_R * 2,
+        { fill: B.red, stroke: B.keyline, width: STROKE.hair });
     }
 
     const shakeX = world.shake > 0 ? Math.sin(world.shake * 40) * 7 : 0;
-    ctx.fillStyle = PLAY.hero;
-    ctx.beginPath();
-    ctx.arc(px + shakeX, py, cellSize * 0.33, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 4;
-    ctx.stroke();
-    ctx.fillStyle = '#3B2100';
+    drawShape(ctx, 'circle', px + shakeX, py, cellSize * 0.66,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
+    ctx.fillStyle = B.ground;
     ctx.beginPath();
     ctx.arc(px + shakeX, py, cellSize * 0.12, 0, Math.PI * 2);
     ctx.fill();
 
     if (world.phase === 'ready' && !world.finished) {
-      panel(ctx, WORLD_W / 2 - 245, 452, 490, 58, BOARD.overlay, PLAY.hero, 16);
+      drawBar(ctx, WORLD_W / 2 - 245, 452, 490, 58,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx,
         world.armed
           ? (world.lives < tuning.lives ? '방향키나 화면을 누르면 다시 시작합니다' : '방향키나 화면을 누르면 시작합니다')
           : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, 481, 26, BOARD.ink,
+        WORLD_W / 2, 481, 26, B.ink,
       );
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="광고 구역 두르기"
       instruction="선을 그어 과장된 광고 게시물을 둘러싸 보세요. 지나친 과장 문구에 닿지 않게 조심하며 안전하게 영역을 확보해 봅시다."
       progress={{ label: '찾은 광고 단서', value: Math.min(hud.found, need), max: need }}
       hud={(
         <GameHud
+          bauhaus
           lives={hud.lives}
           maxLives={tuning.lives}
           score={hud.owned}
@@ -494,7 +504,7 @@ export default function AdFenceGame({ supportLevel }: MiniGameProps) {
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 담벼락으로 바꿨어요.`)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 두르기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 두르기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

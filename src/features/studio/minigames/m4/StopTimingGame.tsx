@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
+  drawShape, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m4-l8 · 멈춤 타이밍 (장르 30 · 타이밍 액션)
@@ -84,7 +88,6 @@ function drawClockHand(
 interface RoundPlan {
   /** 이 회차의 멈춤 신호. 판 위쪽 띠 한 곳에만 크게 적는다. */
   signal: string;
-  emoji: string;
   action: string;
 }
 
@@ -113,11 +116,11 @@ const STAGES: StageConfig[] = [
     baseArc: 1.32,
     arcStep: 0.16,
     rounds: [
-      { signal: '눈이 뻑뻑해졌어요', emoji: '💧', action: '물 마시기' },
-      { signal: '어깨가 뻐근해졌어요', emoji: '🙆', action: '몸 펴기' },
-      { signal: '밥 먹을 시간이 됐어요', emoji: '🍚', action: '밥 먹으러 가기' },
-      { signal: '창밖이 어두워졌어요', emoji: '🚶', action: '밖에 나가기' },
-      { signal: '다음 영상이 또 떴어요', emoji: '🧩', action: '다른 놀이 하기' },
+      { signal: '눈이 뻑뻑해졌어요', action: '물 마시기' },
+      { signal: '어깨가 뻐근해졌어요', action: '몸 펴기' },
+      { signal: '밥 먹을 시간이 됐어요', action: '밥 먹으러 가기' },
+      { signal: '창밖이 어두워졌어요', action: '밖에 나가기' },
+      { signal: '다음 영상이 또 떴어요', action: '다른 놀이 하기' },
     ],
   },
   {
@@ -130,11 +133,11 @@ const STAGES: StageConfig[] = [
     baseArc: 1.12,
     arcStep: 0.15,
     rounds: [
-      { signal: '정한 시간이 다 됐어요', emoji: '⏰', action: '시계 확인하기' },
-      { signal: '손목이 아파졌어요', emoji: '💧', action: '물 마시기' },
-      { signal: '숙제가 그대로 남았어요', emoji: '📒', action: '숙제 먼저 하기' },
-      { signal: '한 판만 더 하고 싶어졌어요', emoji: '🚶', action: '밖에 나가기' },
-      { signal: '잘 시간이 가까워졌어요', emoji: '🛏️', action: '잠자리 준비하기' },
+      { signal: '정한 시간이 다 됐어요', action: '시계 확인하기' },
+      { signal: '손목이 아파졌어요', action: '물 마시기' },
+      { signal: '숙제가 그대로 남았어요', action: '숙제 먼저 하기' },
+      { signal: '한 판만 더 하고 싶어졌어요', action: '밖에 나가기' },
+      { signal: '잘 시간이 가까워졌어요', action: '잠자리 준비하기' },
     ],
   },
   {
@@ -147,11 +150,11 @@ const STAGES: StageConfig[] = [
     baseArc: 0.95,
     arcStep: 0.13,
     rounds: [
-      { signal: '같은 영상이 계속 나와요', emoji: '🧩', action: '다른 놀이 하기' },
-      { signal: '머리가 아파졌어요', emoji: '💧', action: '물 마시기' },
-      { signal: '친구가 저를 부르고 있어요', emoji: '💬', action: '친구와 이야기하기' },
-      { signal: '손가락이 저려요', emoji: '🙆', action: '몸 펴기' },
-      { signal: '약속 시간이 다가와요', emoji: '🚶', action: '밖에 나가기' },
+      { signal: '같은 영상이 계속 나와요', action: '다른 놀이 하기' },
+      { signal: '머리가 아파졌어요', action: '물 마시기' },
+      { signal: '친구가 저를 부르고 있어요', action: '친구와 이야기하기' },
+      { signal: '손가락이 저려요', action: '몸 펴기' },
+      { signal: '약속 시간이 다가와요', action: '밖에 나가기' },
     ],
   },
 ];
@@ -312,39 +315,34 @@ export default function StopTimingGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     const plan = stage.rounds[Math.min(world.cleared, ROUNDS - 1)];
     const bandDone = world.cleared >= ROUNDS;
-    panel(ctx, 30, 10, 900, 58, BOARD.overlay, bandDone ? PLAY.goal : PLAY.info, 14);
+    drawBar(ctx, 30, 10, 900, 58,
+      { fill: B.ground, stroke: bandDone ? B.blue : B.grey, width: STROKE.base });
     centerText(
       ctx,
       bandDone ? '멈춤 계획을 다 정했어요' : `멈춤 신호 · ${plan.signal}`,
-      480, 39, 28, BOARD.ink,
+      480, 39, 28, B.ink,
     );
 
     // 빗나간 순간에는 시계가 흔들린다. 글보다 먼저 보이는 신호를 준다.
     const shake = world.flashBad > 0 ? Math.sin(world.flashBad * 38) * 7 : 0;
     const cx = CX + shake;
 
-    ctx.fillStyle = BOARD.surface;
-    ctx.beginPath();
-    ctx.arc(cx, CY, CR, 0, TAU);
-    ctx.fill();
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 3;
-    ctx.stroke();
+    drawShape(ctx, 'circle', cx, CY, CR * 2, { fill: B.surface, stroke: B.grey, width: STROKE.hair });
 
     const ringR = CR - RING / 2 - 4;
     ctx.lineWidth = RING;
-    ctx.strokeStyle = BOARD.overlay;
+    ctx.strokeStyle = B.ground;
     ctx.beginPath();
     ctx.arc(cx, CY, ringR, 0, TAU);
     ctx.stroke();
 
     // 내가 정한 멈춤 시간 — 이 칸 안에서 눌러야 멈춘다.
-    ctx.strokeStyle = PLAY.goal;
+    ctx.strokeStyle = B.blue;
     ctx.beginPath();
     ctx.arc(cx, CY, ringR, world.zoneStart - Math.PI / 2, world.zoneStart + world.zoneWidth - Math.PI / 2);
     ctx.stroke();
@@ -352,7 +350,7 @@ export default function StopTimingGame({ supportLevel }: MiniGameProps) {
 
     for (let tick = 0; tick < 12; tick += 1) {
       const a = (tick / 12) * TAU - Math.PI / 2;
-      ctx.strokeStyle = BOARD.line;
+      ctx.strokeStyle = B.grey;
       ctx.beginPath();
       ctx.moveTo(cx + Math.cos(a) * 82, CY + Math.sin(a) * 82);
       ctx.lineTo(cx + Math.cos(a) * 72, CY + Math.sin(a) * 72);
@@ -360,7 +358,7 @@ export default function StopTimingGame({ supportLevel }: MiniGameProps) {
     }
 
     if (world.flashGood > 0 || world.flashBad > 0) {
-      ctx.strokeStyle = world.flashGood > 0 ? PLAY.goal : PLAY.hazard;
+      ctx.strokeStyle = world.flashGood > 0 ? B.blue : B.red;
       ctx.lineWidth = 4 + Math.max(world.flashGood, world.flashBad) * 9;
       ctx.beginPath();
       ctx.arc(cx, CY, CR + 12, 0, TAU);
@@ -369,21 +367,12 @@ export default function StopTimingGame({ supportLevel }: MiniGameProps) {
 
     // 침 끝은 눈금 띠(안쪽 88px) 안으로 4px 들어가게 두어, 어느 칸을 가리키는지 붙여 읽힌다.
     const na = world.angle - Math.PI / 2;
-    drawClockHand(ctx, cx, CY, na, 92, 9, 26, PLAY.hero, PLAY.heroEdge);
+    drawClockHand(ctx, cx, CY, na, 92, 9, 26, B.yellow, B.keyline);
 
     // 축은 침 위에 덮는다. 침이 여기에 박혀 도는 것으로 보인다.
-    ctx.fillStyle = BOARD.overlay;
-    ctx.beginPath();
-    ctx.arc(cx, CY, 13, 0, TAU);
-    ctx.fill();
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-    ctx.fillStyle = PLAY.heroEdge;
-    ctx.beginPath();
-    ctx.arc(cx, CY, 5, 0, TAU);
-    ctx.fill();
-    centerText(ctx, `${Math.min(world.cleared + 1, ROUNDS)} / ${ROUNDS}`, cx, CY + 56, 24, BOARD.inkDim);
+    drawShape(ctx, 'circle', cx, CY, 26, { fill: B.ground, stroke: B.keyline, width: STROKE.hair });
+    drawShape(ctx, 'circle', cx, CY, 10, { fill: B.keyline });
+    centerText(ctx, `${Math.min(world.cleared + 1, ROUNDS)} / ${ROUNDS}`, cx, CY + 56, 24, B.grey);
 
     // 지금 무엇을 하면 되는지 한 줄. 시계 안이 아니라 아래 한 곳에만 둔다.
     let guide = '초록 칸에서 멈추세요';
@@ -392,49 +381,54 @@ export default function StopTimingGame({ supportLevel }: MiniGameProps) {
       if (!world.armed) guide = '손을 떼었다가 다시 누르세요';
       else guide = world.cleared > 0 || world.attempts > 0 ? '누르면 다시 돕니다' : '누르면 시계가 돕니다';
     }
-    panel(ctx, 70, 400, 384, 52, BOARD.overlay, world.phase === 'ready' ? PLAY.hero : PLAY.goal, 14);
-    centerText(ctx, guide, 262, 426, 24, BOARD.ink);
+    drawBar(ctx, 70, 400, 384, 52, {
+      fill: B.ground,
+      stroke: world.phase === 'ready' ? B.yellow : B.blue,
+      width: STROKE.base,
+    });
+    centerText(ctx, guide, 262, 426, 24, B.ink);
 
     // 나의 멈춤 계획 — 성공할 때마다 한 장씩 열린다.
-    centerText(ctx, '나의 멈춤 계획', 710, 82, 26, BOARD.inkDim);
+    centerText(ctx, '나의 멈춤 계획', 710, 82, 26, B.grey);
     for (let i = 0; i < ROUNDS; i += 1) {
       const y = 96 + i * 62;
       const open = i < world.cleared;
       const fresh = open && i === world.cleared - 1 && world.flashGood > 0;
-      panel(
-        ctx, 500, y, 420, 52,
-        open ? BOARD.surface : BOARD.overlay,
-        fresh ? PLAY.goal : open ? PLAY.goalEdge : BOARD.line,
-        12,
-      );
+      drawBar(ctx, 500, y, 420, 52, {
+        fill: open ? B.surface : B.ground,
+        stroke: open ? B.blue : B.grey,
+        width: fresh ? STROKE.heavy : STROKE.base,
+      });
       if (open) {
-        centerText(ctx, stage.rounds[i].emoji, 534, y + 26, 30, BOARD.ink);
-        centerText(ctx, stage.rounds[i].action, 740, y + 26, 26, BOARD.ink);
+        /* 정한 계획에는 파란 네모를 하나 세운다. 판마다 "정해졌다"는 파란 네모다. */
+        drawShape(ctx, 'square', 534, y + 26, 24,
+          { fill: B.blue, stroke: B.keyline, width: STROKE.hair });
+        centerText(ctx, stage.rounds[i].action, 740, y + 26, 26, B.ink);
       } else {
-        centerText(ctx, '?', 740, y + 26, 26, BOARD.inkDim);
+        centerText(ctx, '?', 740, y + 26, 26, B.grey);
       }
     }
 
     // 오늘 사용 시간 — 바늘이 도는 동안에만 차오르고, 멈추면 함께 멈춘다.
     const ratio = clamp(world.usage / usageMax, 0, 1);
-    panel(ctx, 30, 462, 900, 42, BOARD.overlay, BOARD.line, 12);
-    ctx.fillStyle = ratio > 0.75 ? PLAY.hazard : PLAY.info;
-    ctx.fillRect(34, 466, Math.max(0, 892 * ratio), 34);
-    centerText(ctx, '오늘 사용 시간', 140, 483, 24, BOARD.ink);
+    drawBar(ctx, 30, 462, 900, 42, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+    drawBar(ctx, 34, 466, Math.max(0, 892 * ratio), 34, { fill: ratio > 0.75 ? B.red : B.blue });
+    centerText(ctx, '오늘 사용 시간', 140, 483, 24, B.ink);
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="멈춤 타이밍"
-      instruction="시계 바늘이 돌아갈 때 잘 살펴보다가, 초록색 칸에 들어왔을 때 화면이나 스페이스 키를 눌러 멈추어 보세요."
+      instruction="시계 바늘이 돌아갈 때 잘 살펴보다가, 파란 칸에 들어왔을 때 화면이나 스페이스 키를 눌러 멈추어 보세요."
       progress={{ label: '정한 다음 행동', value: hud.cleared, max: ROUNDS }}
-      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

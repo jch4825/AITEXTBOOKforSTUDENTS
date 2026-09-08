@@ -2,9 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, dist, panel, useCountdown, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, dist, drawBar, drawShape, useCountdown,
+  useGameKeys,
 } from '../engine';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m4-l4 · 요구 밀어내기 (장르 33 · 범퍼카 밀쳐내기)
@@ -200,65 +204,59 @@ export default function CodeRequestPushGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    ctx.beginPath();
-    ctx.arc(CX, CY, boardR, 0, Math.PI * 2);
-    ctx.fillStyle = '#1E293B';
-    ctx.fill();
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    drawShape(ctx, 'circle', CX, CY, boardR * 2,
+      { fill: B.surface, stroke: B.grey, width: STROKE.base });
 
     ctx.beginPath();
     ctx.arc(CX, CY, SAFE_R, 0, Math.PI * 2);
-    ctx.strokeStyle = PLAY.goal;
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = B.blue;
+    ctx.lineWidth = STROKE.hair;
     ctx.setLineDash([10, 8]);
     ctx.stroke();
     ctx.setLineDash([]);
-    centerText(ctx, '안전한 자리', CX, CY - SAFE_R + 20, 20, PLAY.goal);
+    centerText(ctx, '안전한 자리', CX, CY - SAFE_R + 20, 20, B.blue);
 
     for (const ball of ballsRef.current) {
       if (ball.out) continue;
-      ctx.beginPath();
-      ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2);
-      ctx.fillStyle = ball.danger ? '#7F1D1D' : '#065F46';
-      ctx.fill();
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = ball.danger ? PLAY.hazard : PLAY.goal;
-      ctx.stroke();
-      panel(ctx, ball.x - 118, ball.y - BALL_R - 34, 236, 30, BOARD.overlay,
-        ball.danger ? PLAY.hazard : PLAY.goal, 8);
-      centerText(ctx, ball.text, ball.x, ball.y - BALL_R - 19, 20, BOARD.ink);
+      /* 위험한 요구는 붉은 세모, 공식 절차는 파란 네모다. 판 위에서 빨강과 파랑의
+         밝기가 거의 같아, 색만으로 나누면 둘이 같은 회색이 되기 때문이다. */
+      drawShape(ctx, ball.danger ? 'triangle' : 'square', ball.x, ball.y, BALL_R * 2, {
+        fill: ball.danger ? B.red : B.blue,
+        stroke: B.keyline,
+        width: STROKE.base,
+      });
+      drawBar(ctx, ball.x - 118, ball.y - BALL_R - 34, 236, 30, {
+        fill: B.ground,
+        stroke: ball.danger ? B.red : B.blue,
+        width: STROKE.hair,
+      });
+      centerText(ctx, ball.text, ball.x, ball.y - BALL_R - 19, 20, B.ink);
     }
 
     const hero2 = heroRef.current;
-    ctx.beginPath();
-    ctx.arc(hero2.x, hero2.y, heroR, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
-    centerText(ctx, '나', hero2.x, hero2.y + 1, 22, '#3B2100');
+    drawShape(ctx, 'circle', hero2.x, hero2.y, heroR * 2,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
+    centerText(ctx, '나', hero2.x, hero2.y + 1, 22, B.ground);
   };
 
   const dangerTotal = stage.danger.length;
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="요구 밀어내기"
-      instruction="위험한 요구 공(빨간 공)은 판 밖으로 밀어내고, 안전한 공식 절차 공(초록 공)만 가운데에 남겨 보세요."
+      instruction="위험한 요구는 붉은 세모입니다. 세모는 판 밖으로 밀어내고, 파란 네모로 그려진 공식 절차만 가운데에 남겨 보세요."
       progress={{ label: '밀어낸 요구', value: hud.pushed, max: dangerTotal }}
-      hud={<GameHud timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

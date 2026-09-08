@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, randInt, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawShape,
+  randInt, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m4-l1 · 틀린 답 쏘기 (장르 27 · 레이저 슈팅)
@@ -33,10 +37,16 @@ const SHIP_X = 92;
 type Kind = 'clock' | 'calendar' | 'floor';
 const KINDS: Kind[] = ['clock', 'calendar', 'floor'];
 
+/*
+ * 자료 종류마다 다른 테두리 색.
+ *
+ * 색이 종류를 가리고, 안에 그린 그림(시계·달력·건물)이 무엇인지 다시 말한다.
+ * 색을 구별하지 못해도 그림으로 어느 자료인지 알 수 있다.
+ */
 const KIND_COLOR: Record<Kind, string> = {
-  clock: '#38BDF8',
-  calendar: '#FBBF24',
-  floor: '#4ADE80',
+  clock: B.blue,
+  calendar: B.yellow,
+  floor: B.grey,
 };
 
 /** 오늘의 공식 자료. 이 값과 다른 답이 틀린 답이다. */
@@ -125,34 +135,28 @@ const FLOOR_COUNT = 5;
 
 /** 시계. 바늘로 몇 시인지 그린다. */
 function drawClock(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, hour: number) {
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.fillStyle = '#F8FAFC';
-  ctx.fill();
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = '#1F2937';
-  ctx.stroke();
+  drawShape(ctx, 'circle', cx, cy, r * 2, { fill: B.ink, stroke: B.ground, width: STROKE.base });
   for (let i = 0; i < 12; i += 1) {
     const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
     ctx.beginPath();
     ctx.moveTo(cx + Math.cos(a) * (r - 7), cy + Math.sin(a) * (r - 7));
     ctx.lineTo(cx + Math.cos(a) * (r - 3), cy + Math.sin(a) * (r - 3));
-    ctx.strokeStyle = '#64748B';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = B.grey;
+    ctx.lineWidth = STROKE.hair;
     ctx.stroke();
   }
   const a = ((hour % 12) / 12) * Math.PI * 2 - Math.PI / 2;
   ctx.beginPath();
   ctx.moveTo(cx, cy);
   ctx.lineTo(cx + Math.cos(a) * (r * 0.58), cy + Math.sin(a) * (r * 0.58));
-  ctx.strokeStyle = '#1F2937';
-  ctx.lineWidth = 5;
+  ctx.strokeStyle = B.ground;
+  ctx.lineWidth = STROKE.heavy;
   ctx.stroke();
   // 분침은 늘 12를 가리켜 정각만 읽으면 되게 한다
   ctx.beginPath();
   ctx.moveTo(cx, cy);
   ctx.lineTo(cx, cy - r * 0.8);
-  ctx.lineWidth = 3;
+  ctx.lineWidth = STROKE.hair;
   ctx.stroke();
 }
 
@@ -160,8 +164,8 @@ function drawClock(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: num
 function drawCalendar(ctx: CanvasRenderingContext2D, cx: number, cy: number, s: number, day: number) {
   const w = s * 2.1;
   const h = s * 1.6;
-  panel(ctx, cx - w / 2, cy - h / 2, w, h, '#F8FAFC', '#1F2937', 6);
-  ctx.fillStyle = '#CBD5E1';
+  drawBar(ctx, cx - w / 2, cy - h / 2, w, h, { fill: B.ink, stroke: B.ground, width: STROKE.hair });
+  ctx.fillStyle = B.grey;
   ctx.fillRect(cx - w / 2 + 3, cy - h / 2 + 3, w - 6, h * 0.24);
   const cell = (w - 10) / DAY_COUNT;
   for (let i = 0; i < DAY_COUNT; i += 1) {
@@ -169,7 +173,7 @@ function drawCalendar(ctx: CanvasRenderingContext2D, cx: number, cy: number, s: 
     const y = cy + h * 0.12;
     ctx.beginPath();
     ctx.arc(x, y, cell * 0.30, 0, Math.PI * 2);
-    ctx.fillStyle = i === day ? '#FB7185' : '#E2E8F0';
+    ctx.fillStyle = i === day ? B.red : B.grey;
     ctx.fill();
   }
 }
@@ -178,34 +182,28 @@ function drawCalendar(ctx: CanvasRenderingContext2D, cx: number, cy: number, s: 
 function drawFloor(ctx: CanvasRenderingContext2D, cx: number, cy: number, s: number, floor: number) {
   const w = s * 1.5;
   const h = s * 2.0;
-  panel(ctx, cx - w / 2, cy - h / 2, w, h, '#F8FAFC', '#1F2937', 6);
+  drawBar(ctx, cx - w / 2, cy - h / 2, w, h, { fill: B.ink, stroke: B.ground, width: STROKE.hair });
   const band = (h - 10) / FLOOR_COUNT;
   for (let i = 0; i < FLOOR_COUNT; i += 1) {
     // 아래가 1층이다
     const y = cy + h / 2 - 5 - band * (i + 1);
-    ctx.fillStyle = i === floor - 1 ? '#FBBF24' : '#E2E8F0';
+    ctx.fillStyle = i === floor - 1 ? B.blue : B.grey;
     ctx.fillRect(cx - w / 2 + 5, y + 2, w - 10, band - 4);
   }
 }
 
 /** 웃는 얼굴. 오늘 자료와 같은 답, 곧 쏘면 안 되는 것이다. */
 function drawSmile(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.fillStyle = '#FDE68A';
-  ctx.fill();
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = '#1F2937';
-  ctx.stroke();
-  ctx.fillStyle = '#1F2937';
+  drawShape(ctx, 'circle', cx, cy, r * 2, { fill: B.yellow, stroke: B.ground, width: STROKE.base });
+  ctx.fillStyle = B.ground;
   ctx.beginPath();
   ctx.arc(cx - r * 0.34, cy - r * 0.20, r * 0.12, 0, Math.PI * 2);
   ctx.arc(cx + r * 0.34, cy - r * 0.20, r * 0.12, 0, Math.PI * 2);
   ctx.fill();
   ctx.beginPath();
   ctx.arc(cx, cy + r * 0.06, r * 0.48, 0.2 * Math.PI, 0.8 * Math.PI);
-  ctx.lineWidth = 5;
-  ctx.strokeStyle = '#1F2937';
+  ctx.lineWidth = STROKE.heavy;
+  ctx.strokeStyle = B.ground;
   ctx.stroke();
 }
 
@@ -380,7 +378,7 @@ export default function ClaimShooterGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, W, H);
     if (w.flash > 0) {
       ctx.fillStyle = `rgba(251, 113, 133, ${w.flash * 0.4})`;
@@ -388,8 +386,8 @@ export default function ClaimShooterGame({ supportLevel }: MiniGameProps) {
     }
 
     // 오늘의 자료 — 왼쪽 위에 붙여 둔다. 견줄 것이 늘 보여야 한다.
-    panel(ctx, 18, 14, 396, 104, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, '오늘의 자료', 96, 40, 22, BOARD.ink);
+    drawBar(ctx, 18, 14, 396, 104, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, '오늘의 자료', 96, 40, 22, B.ink);
     drawClock(ctx, 210, 66, 30, stage.official.clock);
     drawCalendar(ctx, 300, 66, 30, stage.official.calendar);
     drawFloor(ctx, 378, 66, 30, stage.official.floor);
@@ -400,15 +398,18 @@ export default function ClaimShooterGame({ supportLevel }: MiniGameProps) {
       if (card.fade > 0) ctx.globalAlpha = Math.max(0, card.fade / 0.45);
       const same = card.value === officialOf(stage, card.kind);
       const box = cardSize + 12;
-      panel(ctx, card.x - box, card.y - box, box * 2, box * 2, BOARD.surface,
-        same ? '#FDE68A' : KIND_COLOR[card.kind], 12);
+      drawBar(ctx, card.x - box, card.y - box, box * 2, box * 2, {
+        fill: B.surface,
+        stroke: same ? B.yellow : KIND_COLOR[card.kind],
+        width: STROKE.base,
+      });
       if (same) drawSmile(ctx, card.x, card.y, cardSize);
       else drawValue(ctx, card.kind, card.value, card.x, card.y, cardSize);
       ctx.restore();
     }
 
     // 총알
-    ctx.fillStyle = PLAY.goal;
+    ctx.fillStyle = B.blue;
     for (const shot of w.shots) ctx.fillRect(shot.x, shot.y - 3, 22, 6);
 
     // 비행기
@@ -419,28 +420,31 @@ export default function ClaimShooterGame({ supportLevel }: MiniGameProps) {
     ctx.lineTo(SHIP_X - 10, shipY);
     ctx.lineTo(SHIP_X - 24, shipY + 22);
     ctx.closePath();
-    ctx.fillStyle = PLAY.hero;
+    ctx.fillStyle = B.yellow;
     ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = PLAY.heroEdge;
+    ctx.lineWidth = STROKE.base;
+    ctx.strokeStyle = B.keyline;
     ctx.stroke();
 
     if (w.noteT > 0 && w.note) {
-      panel(ctx, W / 2 - 300, H - 62, 600, 44, BOARD.overlay, PLAY.info, 10);
-      centerText(ctx, w.note, W / 2, H - 38, 22, BOARD.ink);
+      drawBar(ctx, W / 2 - 300, H - 62, 600, 44,
+        { fill: B.ground, stroke: B.blue, width: STROKE.hair });
+      centerText(ctx, w.note, W / 2, H - 38, 22, B.ink);
     }
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, W / 2 - 250, H / 2 - 30, 500, 60, BOARD.overlay, PLAY.hero, 14);
-      centerText(ctx, '위아래 방향키나 스페이스를 누르면 시작합니다', W / 2, H / 2 + 2, 24, BOARD.ink);
+      drawBar(ctx, W / 2 - 250, H / 2 - 30, 500, 60,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '위아래 방향키나 스페이스를 누르면 시작합니다', W / 2, H / 2 + 2, 24, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="틀린 답 쏘기"
       instruction="웃는 얼굴은 오늘의 자료와 같은 답이니 그대로 지나가게 두세요. 웃지 않는 답만 스페이스나 마우스 왼쪽 단추로 쏘아 보세요. 왼쪽 위 오늘의 자료와 무엇이 다른지 볼 수 있어요."
       progress={{ label: '찾은 다른 답', value: hud.down, max: stage.goal }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -450,16 +454,21 @@ export default function ClaimShooterGame({ supportLevel }: MiniGameProps) {
         <>
           <MiniGameButton
             onClick={() => { const w = worldRef.current; w.lane = Math.max(0, w.lane - 1); w.phase = 'fly'; }}
-            emoji="⬆️"
+            mark="arrow" markRotate={270}
             label="위로"
           />
           <MiniGameButton
             onClick={() => { const w = worldRef.current; w.lane = Math.min(LANES.length - 1, w.lane + 1); w.phase = 'fly'; }}
-            emoji="⬇️"
+            mark="arrow" markRotate={90}
             label="아래로"
           />
-          <MiniGameButton onClick={() => { fireRef.current = true; }} emoji="🔫" label="쏘기" variant="primary" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" />
+          <MiniGameButton
+            onClick={() => { fireRef.current = true; }}
+            mark="arrow"
+            label="쏘기"
+            variant="primary"
+          />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" />
         </>
       }
     >

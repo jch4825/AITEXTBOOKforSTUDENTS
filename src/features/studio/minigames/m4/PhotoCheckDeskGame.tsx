@@ -2,11 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, GameCanvas, GameHud, PLAY, centerText, clamp, dist, drawCover, panel, pointInRect, useGameImages, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, dist, drawBar, drawCover, drawMark,
+  drawShape, pointInRect, useGameImages, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { GameArt } from '../engine';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m4-l5 · 사진 검사대 (장르 11 · 숨은 그림 찾기)
@@ -36,13 +40,20 @@ const MAX_H = 260;
 /** 사진이 사진으로 남으려면 알아볼 수 있는 면이 절반은 있어야 한다. */
 const VISIBLE_FLOOR = 0.5;
 
-/** 사진 속 색. 어두운 판 위에 얹히는 한 장이라 형광 없이 서로만 구분되면 된다. */
+/*
+ * 사진 속 색.
+ *
+ * 이 도형 그림은 Blender 사진이 아직 안 왔을 때만 쓰는 대체 장면이다. 그래도 어휘는
+ * 같은 것을 쓴다 — 하늘·땅·건물은 밝기만 다른 무채색 세 단이고, 색은 사람에게만 준다.
+ * 학생이 찾아야 할 단서는 간판 글자·얼굴·이름표이지 색이 아니므로, 색을 줄여도
+ * 놀이는 그대로 성립하고 오히려 찾을 것이 도드라진다.
+ */
 const TONE = {
-  sky: '#3B5A7A', ground: '#3F6B45', wall: '#475569', wallEdge: '#94A3B8',
-  sign: '#F1F5F9', signEdge: '#0369A1', signInk: '#0F172A',
-  skin: '#E8B98C', skinEdge: '#7C4A15', tag: '#FDE68A', tagEdge: '#B45309',
-  trunk: '#78350F', leaf: '#166534', ball: '#F8FAFC', bench: '#92400E',
-  ink: '#1F2937', sticker: '#1E293B',
+  sky: B.surface, ground: B.grey, wall: B.ink, wallEdge: B.ground,
+  sign: B.blue, signEdge: B.keyline, signInk: B.ground,
+  skin: B.ink, skinEdge: B.ground, tag: B.yellow, tagEdge: B.ground,
+  trunk: B.ground, leaf: B.surface, ball: B.ink, bench: B.ground,
+  ink: B.ground, sticker: B.surface,
 };
 
 interface Person { x: number; footY: number; s: number; coat: string }
@@ -75,11 +86,11 @@ const STAGES: StageConfig[] = [
     spoken: '운동장 사진을 검사합니다.',
     building: { x: 56, y: 108, w: 236, h: 162 },
     sign: { x: 70, y: 140, w: 210, h: 48, text: '햇살중학교', size: 30, name: '학교 간판' },
-    me: { x: 452, footY: 372, s: 1, coat: '#C4B5FD' },
-    other: { x: 792, footY: 336, s: 0.82, coat: '#FBBF24' },
+    me: { x: 452, footY: 372, s: 1, coat: B.yellow },
+    other: { x: 792, footY: 336, s: 0.82, coat: B.blue },
     extras: [
-      { x: 336, footY: 368, s: 0.92, coat: '#38BDF8' },
-      { x: 566, footY: 366, s: 0.94, coat: '#FB7185' },
+      { x: 336, footY: 368, s: 0.92, coat: B.red },
+      { x: 566, footY: 366, s: 0.94, coat: B.grey },
     ],
     props: [
       { kind: 'tree', x: 672, y: 300, s: 1 },
@@ -94,11 +105,11 @@ const STAGES: StageConfig[] = [
     spoken: '소풍 사진을 검사합니다.',
     building: { x: 646, y: 120, w: 214, h: 150 },
     sign: { x: 664, y: 150, w: 178, h: 42, text: '가온공원', size: 28, name: '장소 간판' },
-    me: { x: 300, footY: 372, s: 0.86, coat: '#C4B5FD' },
-    other: { x: 520, footY: 344, s: 0.76, coat: '#FBBF24' },
+    me: { x: 300, footY: 372, s: 0.86, coat: B.yellow },
+    other: { x: 520, footY: 344, s: 0.76, coat: B.blue },
     extras: [
-      { x: 196, footY: 370, s: 0.82, coat: '#38BDF8' },
-      { x: 398, footY: 366, s: 0.8, coat: '#FB7185' },
+      { x: 196, footY: 370, s: 0.82, coat: B.red },
+      { x: 398, footY: 366, s: 0.8, coat: B.grey },
     ],
     props: [
       { kind: 'tree', x: 96, y: 300, s: 1.1 },
@@ -113,12 +124,12 @@ const STAGES: StageConfig[] = [
     spoken: '정문 사진을 검사합니다.',
     building: { x: 60, y: 126, w: 224, h: 144 },
     sign: { x: 80, y: 150, w: 154, h: 38, text: '별빛중학교', size: 26, name: '학교 간판' },
-    me: { x: 520, footY: 372, s: 0.74, coat: '#C4B5FD' },
-    other: { x: 766, footY: 340, s: 0.66, coat: '#FBBF24' },
+    me: { x: 520, footY: 372, s: 0.74, coat: B.yellow },
+    other: { x: 766, footY: 340, s: 0.66, coat: B.blue },
     extras: [
-      { x: 440, footY: 368, s: 0.72, coat: '#38BDF8' },
-      { x: 596, footY: 366, s: 0.7, coat: '#FB7185' },
-      { x: 344, footY: 362, s: 0.68, coat: '#34D399' },
+      { x: 440, footY: 368, s: 0.72, coat: B.red },
+      { x: 596, footY: 366, s: 0.7, coat: B.grey },
+      { x: 344, footY: 362, s: 0.68, coat: B.blue },
     ],
     props: [
       { kind: 'tree', x: 880, y: 302, s: 0.95 },
@@ -181,13 +192,13 @@ function drawProp(ctx: CanvasRenderingContext2D, p: Prop) {
     ctx.beginPath();
     ctx.arc(p.x, p.y - 13 * p.s, 13 * p.s, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#334155';
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = B.ground;
+    ctx.lineWidth = STROKE.hair;
     ctx.stroke();
     return;
   }
-  panel(ctx, p.x - 42 * p.s, p.y - 30 * p.s, 84 * p.s, 16 * p.s, TONE.bench, '#451A03', 5);
-  ctx.fillStyle = '#451A03';
+  drawBar(ctx, p.x - 42 * p.s, p.y - 30 * p.s, 84 * p.s, 16 * p.s, { fill: TONE.bench, stroke: B.grey, width: STROKE.base });
+  ctx.fillStyle = B.ground;
   ctx.fillRect(p.x - 34 * p.s, p.y - 16 * p.s, 8 * p.s, 16 * p.s);
   ctx.fillRect(p.x + 26 * p.s, p.y - 16 * p.s, 8 * p.s, 16 * p.s);
 }
@@ -198,7 +209,7 @@ function drawProp(ctx: CanvasRenderingContext2D, p: Prop) {
  */
 function drawPerson(ctx: CanvasRenderingContext2D, p: Person, detail: boolean, tagText: string | null) {
   const b = personBox(p);
-  panel(ctx, b.body.x, b.body.y, b.body.w, b.body.h, p.coat, '#0F172A', 10);
+  drawBar(ctx, b.body.x, b.body.y, b.body.w, b.body.h, { fill: p.coat, stroke: B.keyline, width: STROKE.base });
   ctx.fillStyle = TONE.skin;
   ctx.beginPath();
   ctx.arc(b.cx, b.cy, b.r, 0, Math.PI * 2);
@@ -222,8 +233,8 @@ function drawPerson(ctx: CanvasRenderingContext2D, p: Person, detail: boolean, t
     ctx.stroke();
   }
   if (tagText) {
-    panel(ctx, b.tag.x, b.tag.y, b.tag.w, b.tag.h, TONE.tag, TONE.tagEdge, 5);
-    if (detail) centerText(ctx, tagText, b.tag.x + b.tag.w / 2, b.tag.y + b.tag.h / 2, 20, '#3B2100');
+    drawBar(ctx, b.tag.x, b.tag.y, b.tag.w, b.tag.h, { fill: TONE.tag, stroke: TONE.tagEdge, width: STROKE.base });
+    if (detail) centerText(ctx, tagText, b.tag.x + b.tag.w / 2, b.tag.y + b.tag.h / 2, 20, B.ground);
   }
 }
 
@@ -244,9 +255,9 @@ function drawScene(ctx: CanvasRenderingContext2D, stage: StageConfig, detail: bo
   ctx.fillStyle = TONE.ground;
   ctx.fillRect(PHOTO.x, GROUND_Y, PHOTO.w, PHOTO.y + PHOTO.h - GROUND_Y);
   const b = stage.building;
-  panel(ctx, b.x, b.y, b.w, b.h, TONE.wall, TONE.wallEdge, 10);
+  drawBar(ctx, b.x, b.y, b.w, b.h, { fill: TONE.wall, stroke: TONE.wallEdge, width: STROKE.base });
   const s = stage.sign;
-  panel(ctx, s.x, s.y, s.w, s.h, TONE.sign, TONE.signEdge, 8);
+  drawBar(ctx, s.x, s.y, s.w, s.h, { fill: TONE.sign, stroke: TONE.signEdge, width: STROKE.base });
   if (detail) centerText(ctx, s.text, s.x + s.w / 2, s.y + s.h / 2, s.size, TONE.signInk);
   for (const prop of stage.props) drawProp(ctx, prop);
   for (const person of stage.extras) drawPerson(ctx, person, detail, null);
@@ -488,12 +499,12 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, W, H);
 
     const line = world.noticeT > 0 && world.notice ? world.notice : stage.title;
-    panel(ctx, TOP.x, TOP.y, TOP.w, TOP.h, BOARD.overlay, world.noticeT > 0 ? PLAY.hero : PLAY.info, 14);
-    centerText(ctx, line, TOP.x + TOP.w / 2, TOP.y + TOP.h / 2, world.noticeT > 0 ? 26 : 28, BOARD.ink);
+    drawBar(ctx, TOP.x, TOP.y, TOP.w, TOP.h, { fill: B.ground, stroke: world.noticeT > 0 ? B.yellow : B.blue, width: STROKE.base });
+    centerText(ctx, line, TOP.x + TOP.w / 2, TOP.y + TOP.h / 2, world.noticeT > 0 ? 26 : 28, B.ink);
 
     ctx.save();
     ctx.beginPath();
@@ -523,53 +534,54 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
       ctx.fillRect(clue.x - 5, clue.y - 5, clue.w + 10, clue.h + 10);
       ctx.save();
       ctx.setLineDash([9, 7]);
-      ctx.strokeStyle = PLAY.hazard;
-      ctx.lineWidth = 4;
+      ctx.strokeStyle = B.red;
+      ctx.lineWidth = STROKE.base;
       ctx.strokeRect(clue.x - 5, clue.y - 5, clue.w + 10, clue.h + 10);
       ctx.restore();
     }
 
-    for (const s of world.stickers) panel(ctx, s.x, s.y, s.w, s.h, TONE.sticker, PLAY.goal, 10);
+    for (const s of world.stickers) drawBar(ctx, s.x, s.y, s.w, s.h, { fill: TONE.sticker, stroke: B.blue, width: STROKE.base });
     for (const clue of world.clues) {
-      if (clue.covered) centerText(ctx, '✓', clue.x + clue.w / 2, clue.y + clue.h / 2, 30, PLAY.goal);
+      if (clue.covered) drawMark(ctx, 'check', clue.x + clue.w / 2, clue.y + clue.h / 2, 30, B.blue);
     }
 
     if (world.held) {
       const s = world.held;
-      panel(ctx, s.x, s.y, s.w, s.h, TONE.sticker, PLAY.hero, 10);
-      centerText(ctx, '가림', s.x + s.w / 2, s.y + s.h / 2, 24, BOARD.ink);
-      panel(ctx, s.x + s.w - 32, s.y + s.h - 32, 34, 34, PLAY.hero, PLAY.heroEdge, 7);
-      centerText(ctx, '↘', s.x + s.w - 15, s.y + s.h - 15, 24, '#3B2100');
+      drawBar(ctx, s.x, s.y, s.w, s.h, { fill: TONE.sticker, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '가림', s.x + s.w / 2, s.y + s.h / 2, 24, B.ink);
+      drawBar(ctx, s.x + s.w - 32, s.y + s.h - 32, 34, 34, { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
+      /* 오른쪽 아래 모서리를 잡아 늘리는 손잡이다. 대각선 화살표가 그것을 말한다. */
+      drawMark(ctx, 'arrow', s.x + s.w - 15, s.y + s.h - 15, 22, B.ground, Math.PI / 4);
     }
 
-    ctx.strokeStyle = PLAY.hero;
-    ctx.lineWidth = 5;
+    /* 돋보기는 노란 고리 하나다. 고리 자체가 돋보기 모양이라 안에 그림을 또 넣지 않는다. */
+    ctx.strokeStyle = B.yellow;
+    ctx.lineWidth = STROKE.heavy;
     ctx.beginPath();
     ctx.arc(world.lensX, world.lensY, lensR, 0, Math.PI * 2);
     ctx.stroke();
-    centerText(ctx, '🔍', world.lensX - lensR * 0.72, world.lensY - lensR * 0.72, 32, BOARD.ink);
 
     if (world.phase === 'ready' && !world.finished) {
-      panel(ctx, W / 2 - 260, 200, 520, 78, BOARD.overlay, PLAY.hero, 16);
+      drawBar(ctx, W / 2 - 260, 200, 520, 78, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx,
         world.armed ? '누르면 사진 검사를 시작합니다' : '손을 떼었다가 다시 누르세요',
-        W / 2, 239, 26, BOARD.ink,
+        W / 2, 239, 26, B.ink,
       );
     }
     ctx.restore();
 
-    panel(ctx, DRAWER.x, DRAWER.y, DRAWER.w, DRAWER.h, BOARD.overlay, BOARD.line, 14);
-    panel(ctx, SOURCE.x, SOURCE.y, SOURCE.w, SOURCE.h, TONE.sticker, world.held ? BOARD.line : PLAY.hero, 10);
-    centerText(ctx, '가림 스티커', SOURCE.x + SOURCE.w / 2, SOURCE.y + SOURCE.h / 2, 24, BOARD.ink);
-    centerText(ctx, '스티커를 끌어다 덮으세요', 420, 452, 24, BOARD.inkDim);
-    centerText(ctx, '모서리를 끌면 커집니다', 420, 492, 24, BOARD.inkDim);
-    centerText(ctx, '사진이 보이는 정도', BAR.x + BAR.w / 2, 440, 24, BOARD.inkDim);
-    panel(ctx, BAR.x, BAR.y, BAR.w, BAR.h, BOARD.surface, BOARD.line, 8);
+    drawBar(ctx, DRAWER.x, DRAWER.y, DRAWER.w, DRAWER.h, { fill: B.ground, stroke: B.grey, width: STROKE.base });
+    drawBar(ctx, SOURCE.x, SOURCE.y, SOURCE.w, SOURCE.h, { fill: TONE.sticker, stroke: world.held ? B.grey : B.yellow, width: STROKE.base });
+    centerText(ctx, '가림 스티커', SOURCE.x + SOURCE.w / 2, SOURCE.y + SOURCE.h / 2, 24, B.ink);
+    centerText(ctx, '스티커를 끌어다 덮으세요', 420, 452, 24, B.grey);
+    centerText(ctx, '모서리를 끌면 커집니다', 420, 492, 24, B.grey);
+    centerText(ctx, '사진이 보이는 정도', BAR.x + BAR.w / 2, 440, 24, B.grey);
+    drawBar(ctx, BAR.x, BAR.y, BAR.w, BAR.h, { fill: B.surface, stroke: B.grey, width: STROKE.base });
     const low = world.visible < VISIBLE_FLOOR;
-    ctx.fillStyle = low ? PLAY.hazard : PLAY.goal;
+    ctx.fillStyle = low ? B.red : B.blue;
     ctx.fillRect(BAR.x + 4, BAR.y + 4, (BAR.w - 8) * clamp(world.visible, 0, 1), BAR.h - 8);
-    ctx.strokeStyle = BOARD.ink;
+    ctx.strokeStyle = B.ink;
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(BAR.x + BAR.w / 2, BAR.y);
@@ -629,10 +641,11 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="사진 검사대"
       instruction="돋보기로 사진 구석구석을 살펴보고, 개인정보가 보이는 위험한 곳에 보호 스티커를 붙여 가려 보세요."
       progress={{ label: '가린 곳', value: hud.covered, max: 4 }}
-      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={totalTime} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={totalTime} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -640,14 +653,14 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 검사" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 검사" />
           {game.hintAllowed && (
-            <MiniGameButton onClick={hint} disabled={!game.playing} emoji="💡" label="힌트" />
+            <MiniGameButton onClick={hint} disabled={!game.playing} mark="bang" label="힌트" />
           )}
           <MiniGameButton
             onClick={() => commit(worldRef.current)}
             disabled={!game.playing || !hud.held}
-            emoji="🩹"
+            mark="square"
             label="붙이기"
             variant="primary"
           />
