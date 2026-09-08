@@ -46,6 +46,12 @@ interface WordSpec {
  * 가로 존중 = (0,0)(0,1) · 세로 중요 = (0,1)(1,1)
  * 가로 요약 = (1,1)(1,2) · 세로 약속 = (1,2)(2,2)
  * 겹치는 칸은 중·요·약 셋이다. 다섯 칸 중 셋이 두 낱말에 동시에 걸린다.
+ *
+ * 판을 5×5로 넓혀 낱말 섬(안내·내용)을 하나 더 얹어 봤지만 되돌렸다. 놀이 지면이 판에
+ * 내주는 높이는 372px인데 5×5 판만 394px이 되어, 힌트 카드와 글자 보관함이 판 밖으로
+ * 밀려나고 학생이 판과 보관함을 한눈에 볼 수 없었다. 한국어는 같은 음절을 나눠 쓰는
+ * 두 글자 낱말이 드물어 3×3 안에서 교차를 더 늘릴 수도 없다. 깊이 대신 한눈에 보이는
+ * 것을 택했다.
  */
 const WORDS: WordSpec[] = [
   {
@@ -132,7 +138,17 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
   const { speakNow } = useSpeak();
 
   /* 지원 수준은 칸 크기·방해 글자 수·시간·기회·디딤 글자로 나타난다. 판과 조작은 같다. */
-  const cellPx = Math.round(96 * clamp(tuning.size, 0.84, 1.32));
+  /*
+   * 칸 크기는 놀이 지면이 판에 내주는 높이에서 거꾸로 계산했다.
+   *
+   * 실측하면 판 안에 쓸 수 있는 높이는 372px이고, 여기에 낱말 판·글자 보관함·안내 한 줄이
+   * 모두 들어가야 한다. 96px에 배율 1.32를 그대로 곱하면 판만 393px이 되어 보관함이 판
+   * 밖으로 밀려났다. 학생이 판과 보관함을 한눈에 보지 못하면 이 놀이는 성립하지 않는다.
+   * 그래서 기준을 70px로 낮추고 배율 상한도 1.15로 묶는다(충분한 지원 81 · 중학 70 · 고등 59).
+   */
+  const cellPx = Math.round(70 * clamp(tuning.size, 0.84, 1.15));
+  /* 보관함 조각은 한 줄에 다 서야 한다. 두 줄이 되면 그만큼 판이 위로 밀린다. */
+  const tilePx = Math.min(64, Math.round(cellPx * 0.82));
   const snapRadius = cellPx * 0.75;
   const dragThreshold = 8 * clamp(tuning.size, 0.84, 1.32);
   const decoyCount = Math.max(1, Math.round(stage.decoyBase * tuning.density));
@@ -376,7 +392,7 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="가로세로 낱말"
-      instruction="아래 글자 조각을 빈칸으로 끌어다 낱말을 완성해 보세요. 조각을 누른 뒤 빈칸을 눌러도 들어갑니다."
+      instruction="아래 글자 조각을 빈칸으로 끌어다 낱말을 완성해 보세요. 조각을 누른 뒤 빈칸을 눌러도 들어갑니다. 가운데 칸의 글자는 가로 낱말과 세로 낱말에 함께 들어갑니다."
       progress={{ label: '맞춘 낱말', value: done.length, max: words.length }}
       hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
@@ -384,11 +400,6 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      footer={
-        <p className="text-[15px] font-bold leading-relaxed" style={{ color: 'var(--ink-2)' }}>
-          가운데 칸의 글자는 가로 낱말과 세로 낱말에 함께 들어갑니다. 한 칸을 맞히면 두 낱말이 같이 자랍니다.
-        </p>
-      }
       actions={
         <>
           <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />
@@ -512,9 +523,9 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
               onClick={() => onTileClick(tile)}
               className="grid place-items-center rounded-lg font-black transition disabled:opacity-25"
               style={{
-                width: Math.round(cellPx * 0.82),
-                height: Math.round(cellPx * 0.82),
-                fontSize: `${Math.round(cellFont * 0.9)}px`,
+                width: tilePx,
+                height: tilePx,
+                fontSize: `${Math.round(tilePx * 0.5)}px`,
                 touchAction: 'none',
                 background: 'var(--board-surface)',
                 border: `${picked === tile.id ? 3 : 2}px solid ${picked === tile.id ? '#FACC15' : 'var(--board-line)'}`,
@@ -538,10 +549,10 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
           style={{
             left: 0,
             top: 0,
-            width: Math.round(cellPx * 0.82),
-            height: Math.round(cellPx * 0.82),
-            fontSize: `${Math.round(cellFont * 0.9)}px`,
-            transform: `translate3d(${ghost.x - cellPx * 0.41}px, ${ghost.y - cellPx * 0.41}px, 0)`,
+            width: tilePx,
+            height: tilePx,
+            fontSize: `${Math.round(tilePx * 0.5)}px`,
+            transform: `translate3d(${ghost.x - tilePx / 2}px, ${ghost.y - tilePx / 2}px, 0)`,
             background: 'var(--board-surface)',
             border: '3px solid #FACC15',
             color: 'var(--board-ink)',

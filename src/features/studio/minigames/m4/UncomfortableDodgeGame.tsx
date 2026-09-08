@@ -239,9 +239,13 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
         if (dist(w.x, w.y, w.safeX, w.safeY) < safeR) {
           w.hold += dt;
           if (w.hold >= HOLD_NEED) {
-            const first = w.shards[0];
-            const named = first ? stage.signals[first.signal % stage.signals.length] : stage.signals[0];
-            if (!w.named.includes(named)) w.named.push(named);
+            /* 이 파도에 실제로 떠 있던 신호 가운데 아직 기록하지 않은 것을 남긴다.
+               앞서는 0번 조각의 신호를 그대로 썼는데, 그 조각은 학생이 피한 것과 아무
+               상관이 없고 같은 신호가 거듭 뽑히면 세 파도를 넘겨도 기록이 하나뿐이었다. */
+            const present = w.shards.map((s) => stage.signals[s.signal % stage.signals.length]);
+            const named = present.find((n) => !w.named.includes(n))
+              ?? stage.signals.find((n) => !w.named.includes(n));
+            if (named) w.named.push(named);
             w.wave += 1;
             playSound('stamp');
             if (w.wave >= stage.waves) {
@@ -279,13 +283,12 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
     ctx.strokeStyle = PLAY.goal;
     ctx.lineWidth = 4;
     ctx.stroke();
-    // 지원 수준에 따라 원이 작아진다. 이름표를 원 안에 맞춰 줄여야 글자가 밖으로 나가지 않는다.
-    const safeLabel = '믿을 만한 어른';
-    ctx.font = '900 22px system-ui, sans-serif';
-    const labelRoom = safeR * 2 * 0.86;
-    const labelSize = Math.max(16, Math.min(22, Math.floor((labelRoom / ctx.measureText(safeLabel).width) * 22)));
-    centerText(ctx, safeLabel, w.safeX, w.safeY - 12, labelSize, PLAY.goal);
-    centerText(ctx, `${Math.max(0, HOLD_NEED - w.hold).toFixed(1)}초`, w.safeX, w.safeY + 16, 22, BOARD.ink);
+    /* 이름표는 원 위에 올린다.
+       원 안에 맞추려면 고등 수준(반지름 66.6)에서 글자를 20 단위 아래로 줄여야 하는데,
+       캔버스 글자의 하한은 20 단위다(engine/palette.ts). 원 밖으로 올리면 폭 제약이
+       사라지고, 안전지대는 화면 안쪽에만 놓이므로 이름표가 판을 벗어나지도 않는다. */
+    centerText(ctx, '믿을 만한 어른', w.safeX, w.safeY - safeR - 18, 22, PLAY.goal);
+    centerText(ctx, `${Math.max(0, HOLD_NEED - w.hold).toFixed(1)}초`, w.safeX, w.safeY, 26, BOARD.ink);
 
     for (const shard of w.shards) {
       const kind = SHAPE_KINDS[shard.signal % SHAPE_KINDS.length];
