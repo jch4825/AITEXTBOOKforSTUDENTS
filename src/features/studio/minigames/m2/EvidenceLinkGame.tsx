@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, randInt, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, randInt,
+  useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l9 · 주장과 근거 쌓기 (장르 14 → 낙하 블록 퍼즐)
@@ -47,7 +51,14 @@ const SHAPES: number[][][][] = [
    [[1, 0], [1, 1], [1, 2], [2, 0]], [[0, 0], [0, 1], [1, 1], [2, 1]]],
 ];
 
-const COLORS = ['#38BDF8', '#FBBF24', '#C4B5FD', '#4ADE80', '#FB7185', '#60A5FA', '#FB923C'];
+/*
+ * 조각 일곱 가지의 색.
+ *
+ * 앞서는 일곱 색을 따로 골랐다. 바우하우스의 톤은 넷뿐이므로 넷을 돌려 쓴다.
+ * 조각은 모양이 서로 다르고 한 번에 하나씩만 떨어지므로, 색이 두 번 돌아와도
+ * 무엇이 무엇인지 헷갈리지 않는다.
+ */
+const COLORS = [B.blue, B.yellow, B.red, B.grey, B.blue, B.yellow, B.red];
 
 interface StageConfig {
   id: string;
@@ -248,24 +259,24 @@ export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 14, 16, WORLD_W - 28, 42, BOARD.overlay, PLAY.goal, 10);
-    centerText(ctx, `📢 ${stage.notice}`, WORLD_W / 2, 37, 21, BOARD.ink);
+    drawBar(ctx, 14, 16, WORLD_W - 28, 42, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, stage.notice, WORLD_W / 2, 37, 21, B.ink);
 
-    panel(ctx, BOARD_X - 6, BOARD_Y - 6, COLS * CELL + 12, ROWS * CELL + 12, BOARD.overlay, BOARD.line, 10);
+    drawBar(ctx, BOARD_X - 6, BOARD_Y - 6, COLS * CELL + 12, ROWS * CELL + 12,
+      { fill: B.ground, stroke: B.grey, width: STROKE.hair });
     for (let r = 0; r < ROWS; r += 1) {
       for (let c = 0; c < COLS; c += 1) {
         const v = w.grid[r][c];
         const x = BOARD_X + c * CELL;
         const y = BOARD_Y + r * CELL;
         if (v < 0) {
-          ctx.strokeStyle = 'rgba(100, 116, 139, 0.22)';
-          ctx.lineWidth = 1;
-          ctx.strokeRect(x, y, CELL, CELL);
+          drawBar(ctx, x, y, CELL, CELL, { fill: B.surface });
         } else {
-          panel(ctx, x + 1, y + 1, CELL - 2, CELL - 2, COLORS[v], BOARD.ink, 5);
+          drawBar(ctx, x + 1, y + 1, CELL - 2, CELL - 2,
+            { fill: COLORS[v], stroke: B.keyline, width: STROKE.hair });
         }
       }
     }
@@ -273,31 +284,32 @@ export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
     if (w.piece) {
       for (const [r, c] of cellsOf(w.piece)) {
         if (r < 0) continue;
-        panel(ctx, BOARD_X + c * CELL + 1, BOARD_Y + r * CELL + 1, CELL - 2, CELL - 2,
-          COLORS[w.piece.kind], BOARD.ink, 5);
+        drawBar(ctx, BOARD_X + c * CELL + 1, BOARD_Y + r * CELL + 1, CELL - 2, CELL - 2,
+          { fill: COLORS[w.piece.kind], stroke: B.keyline, width: STROKE.hair });
       }
     }
 
     // 왼쪽 안내 — 지금 떨어지는 주장과 다음 조각
-    panel(ctx, 18, 100, 250, 120, BOARD.surface, PLAY.info, 12);
-    centerText(ctx, '지금 주장', 143, 126, 20, BOARD.inkDim);
-    centerText(ctx, w.piece?.claim ?? '준비 중', 143, 160, 21, BOARD.ink);
-    centerText(ctx, `지운 줄 ${w.cleared} / ${stage.need}`, 143, 196, 21, PLAY.goal);
+    drawBar(ctx, 18, 100, 250, 120, { fill: B.surface, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, '지금 주장', 143, 126, 20, B.grey);
+    centerText(ctx, w.piece?.claim ?? '준비 중', 143, 160, 21, B.ink);
+    centerText(ctx, `지운 줄 ${w.cleared} / ${stage.need}`, 143, 196, 21, B.blue);
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, 18, 246, 250, 88, BOARD.overlay, PLAY.hero, 12);
-      centerText(ctx, '방향키나 아래 버튼을', 143, 276, 21, BOARD.ink);
-      centerText(ctx, '누르면 시작합니다', 143, 304, 21, BOARD.ink);
+      drawBar(ctx, 18, 246, 250, 88, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '방향키나 아래 버튼을', 143, 276, 21, B.ink);
+      centerText(ctx, '누르면 시작합니다', 143, 304, 21, B.ink);
     }
-    if (w.banner) centerText(ctx, w.banner, 143, 370, 20, PLAY.goal);
+    if (w.banner) centerText(ctx, w.banner, 143, 370, 20, B.blue);
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="주장과 근거 잇기"
       instruction="위에서 떨어지는 조각을 움직여 한 줄을 빈틈없이 채워 보세요. 줄을 맞추면 학교 공지와 확인을 마친 줄이 되어 사라집니다."
       progress={{ label: '확인한 줄', value: hud.cleared, max: stage.need }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -305,11 +317,21 @@ export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => { nudgeRef.current = 'left'; }} emoji="⬅️" label="왼쪽" />
-          <MiniGameButton onClick={() => { nudgeRef.current = 'rot'; }} emoji="🔃" label="돌리기" />
-          <MiniGameButton onClick={() => { nudgeRef.current = 'right'; }} emoji="➡️" label="오른쪽" />
-          <MiniGameButton onClick={() => { nudgeRef.current = 'down'; }} emoji="⬇️" label="빨리" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" variant="primary" />
+          <MiniGameButton
+            onClick={() => { nudgeRef.current = 'left'; }}
+            mark="arrow"
+            markRotate={180}
+            label="왼쪽"
+          />
+          <MiniGameButton onClick={() => { nudgeRef.current = 'rot'; }} mark="retry" label="돌리기" />
+          <MiniGameButton onClick={() => { nudgeRef.current = 'right'; }} mark="arrow" label="오른쪽" />
+          <MiniGameButton
+            onClick={() => { nudgeRef.current = 'down'; }}
+            mark="arrow"
+            markRotate={90}
+            label="빨리"
+          />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" variant="primary" />
         </>
       }
     >

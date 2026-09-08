@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, randRange, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawShape,
+  randRange, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l7 · 모호한 말 베기 (장르 25 · 슬라이싱)
@@ -28,9 +32,14 @@ const TARGET_VAGUE = 10;
 const FACT_COUNT = 4;
 const TRAIL_LIFE = 0.4;
 const CUT_LIFE = 0.55;
-/** 회색 슬레이트 계열. 형광색을 쓰지 않으면서 어두운 판 위에서 구름이 떠 보이는 밝기다. */
-const CLOUD_FILL = '#334155';
-const LOCK_FILL = '#14532D';
+/*
+ * 모호한 말은 회색 구름, 지켜야 할 사실은 파란 자물쇠다.
+ *
+ * 색만 다른 것이 아니라 모양이 다르다. 구름은 동그라미가 뭉친 것이고 자물쇠는
+ * 네모에 반원이 얹힌 것이라, 색을 구별하지 못해도 무엇을 베면 안 되는지 보인다.
+ */
+const CLOUD_FILL = B.surface;
+const LOCK_FILL = B.blue;
 
 interface StageConfig {
   id: string;
@@ -170,8 +179,8 @@ function drawCloud(ctx: CanvasRenderingContext2D, r: number): void {
   ];
   // 테두리를 전부 먼저 긋고 나중에 채우면 겹친 안쪽 선이 채움에 덮여 바깥 실루엣만 남는다.
   // 원마다 칠하고 긋는 순서로는 구름 속에 동그라미 자국이 비쳐 글자를 읽기 어렵다.
-  ctx.strokeStyle = BOARD.line;
-  ctx.lineWidth = 6;
+  ctx.strokeStyle = B.grey;
+  ctx.lineWidth = STROKE.heavy;
   for (const [bx, by, br] of blobs) {
     ctx.beginPath();
     ctx.arc(bx, by, br, 0, Math.PI * 2);
@@ -186,12 +195,14 @@ function drawCloud(ctx: CanvasRenderingContext2D, r: number): void {
 }
 
 function drawLock(ctx: CanvasRenderingContext2D, r: number): void {
-  ctx.strokeStyle = PLAY.goal;
-  ctx.lineWidth = 9;
+  /* 고리(반원) 하나와 몸통(네모) 하나. 자물쇠를 바우하우스의 두 도형으로 줄인 것이다. */
+  ctx.strokeStyle = B.blue;
+  ctx.lineWidth = STROKE.heavy;
   ctx.beginPath();
   ctx.arc(0, -r * 0.36, r * 0.46, Math.PI, 0);
   ctx.stroke();
-  panel(ctx, -r * 1.15, -r * 0.3, r * 2.3, r * 1.24, LOCK_FILL, PLAY.goal, 12);
+  drawBar(ctx, -r * 1.15, -r * 0.3, r * 2.3, r * 1.24,
+    { fill: LOCK_FILL, stroke: B.keyline, width: STROKE.base });
 }
 
 function drawPiece(ctx: CanvasRenderingContext2D, piece: Piece, cx: number, cy: number, withText: boolean): void {
@@ -203,7 +214,8 @@ function drawPiece(ctx: CanvasRenderingContext2D, piece: Piece, cx: number, cy: 
   if (withText) {
     // 글자는 크게 유지하되 조각 밖으로 넘치지 않는 선에서만 줄인다.
     const size = clamp(piece.r * 0.55, 20, 27);
-    centerText(ctx, piece.text, 0, piece.kind === 'fact' ? piece.r * 0.32 : 0, size, BOARD.ink);
+    centerText(ctx, piece.text, 0, piece.kind === 'fact' ? piece.r * 0.32 : 0, size,
+      piece.kind === 'fact' ? B.ground : B.ink);
   }
   ctx.restore();
 }
@@ -392,7 +404,7 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
     ctx.save();
     if (world.shake > 0) ctx.translate(Math.sin(world.shake * 44) * 11, Math.cos(world.shake * 37) * 5);
@@ -429,7 +441,7 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
       const prev = world.trail[i - 1];
       const alpha = Math.max(0, point.life / TRAIL_LIFE);
       ctx.globalAlpha = alpha;
-      ctx.strokeStyle = PLAY.hero;
+      ctx.strokeStyle = B.yellow;
       ctx.lineWidth = 6 + alpha * 10;
       ctx.beginPath();
       ctx.moveTo(prev.x, prev.y);
@@ -439,7 +451,7 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
     ctx.globalAlpha = 1;
 
     // 칼 표시 — 키보드 조작의 현재 자리
-    ctx.fillStyle = PLAY.hero;
+    ctx.fillStyle = B.yellow;
     ctx.beginPath();
     ctx.moveTo(world.bladeX, world.bladeY - 16);
     ctx.lineTo(world.bladeX + 13, world.bladeY);
@@ -449,25 +461,25 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
     ctx.fill();
 
     // 다시 부탁 띠 — 지금까지 지킨 사실이 모여 문장이 된다. 읽을 글은 여기 한 곳뿐이다.
-    panel(ctx, 10, 8, WORLD_W - 20, BAND_H - 14, BOARD.overlay, PLAY.info, 14);
-    centerText(ctx, stage.ask, WORLD_W / 2, 32, 24, BOARD.inkDim);
+    drawBar(ctx, 10, 8, WORLD_W - 20, BAND_H - 14, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, stage.ask, WORLD_W / 2, 32, 24, B.grey);
     for (let i = 0; i < FACT_COUNT; i += 1) {
       const x = 26 + i * 228;
       const lost = world.flash[i] > 0;
-      const fill = world.kept[i] ? LOCK_FILL : BOARD.surface;
-      const edge = lost ? PLAY.hazard : world.kept[i] ? PLAY.goal : BOARD.line;
-      panel(ctx, x, 50, 216, 40, fill, edge, 10);
+      const fill = world.kept[i] ? LOCK_FILL : B.surface;
+      const edge = lost ? B.red : world.kept[i] ? B.blue : B.grey;
+      drawBar(ctx, x, 50, 216, 40, { fill, stroke: edge, width: STROKE.base });
       centerText(
         ctx,
-        lost ? '＿＿＿' : stage.facts[i],
+        lost ? '___' : stage.facts[i],
         x + 108, 70, 24,
-        lost ? PLAY.hazard : world.kept[i] ? BOARD.ink : BOARD.inkDim,
+        lost ? B.red : world.kept[i] ? B.ground : B.grey,
       );
     }
 
     if (world.swing > 0) {
       ctx.globalAlpha = world.swing / 0.22;
-      ctx.strokeStyle = PLAY.hero;
+      ctx.strokeStyle = B.yellow;
       ctx.lineWidth = 14;
       ctx.beginPath();
       ctx.moveTo(world.bladeX - swingHalf, world.bladeY);
@@ -477,13 +489,13 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
     }
 
     if (world.phase === 'ready' && !world.finished) {
-      panel(ctx, WORLD_W / 2 - 190, WORLD_H - 104, 380, 62, BOARD.overlay, PLAY.hero, 16);
+      drawBar(ctx, WORLD_W / 2 - 190, WORLD_H - 104, 380, 62, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx,
         world.armed
           ? (world.lives < tuning.lives ? '누르면 다시 시작합니다' : '누르면 시작합니다')
           : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, WORLD_H - 73, 26, BOARD.ink,
+        WORLD_W / 2, WORLD_H - 73, 26, B.ink,
       );
     }
 
@@ -494,16 +506,17 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="모호한 말 베기"
-      instruction="알기 어려운 모호한 말(회색 구름)만 가볍게 베어 보세요. 꼭 지켜야 할 중요한 사실(초록 자물쇠)은 다치지 않게 그대로 두어야 해요."
+      instruction="알기 어려운 모호한 말은 회색 구름입니다. 구름만 가볍게 베어 보세요. 꼭 지켜야 할 사실은 파란 자물쇠이니 다치지 않게 그대로 두어야 해요."
       progress={{ label: '벤 모호한 말', value: Math.min(hud.sliced, TARGET_VAGUE), max: TARGET_VAGUE }}
-      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} score={keptCount} scoreLabel="지킨 사실" />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} score={keptCount} scoreLabel="지킨 사실" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 베기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 베기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

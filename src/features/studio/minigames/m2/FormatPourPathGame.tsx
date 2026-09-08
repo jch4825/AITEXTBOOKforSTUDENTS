@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel } from '../engine';
+import {
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape,
+} from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l8 · 형식 틀로 흘리기 (장르 6 · 경로 그리기)
@@ -264,16 +269,19 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     // 통 하나 — 학생이 고른 형식이 이름표가 된다
-    panel(ctx, binX, BIN_Y, binW, 96, BOARD.surface, picked ? PLAY.goal : BOARD.line, 14);
-    centerText(ctx, picked ?? '형식을 고르세요', binX + binW / 2, BIN_Y + 48, 28, BOARD.ink);
+    /* 통은 파란 사각형이다. 판마다 목표는 늘 파란 네모다. */
+    drawBar(ctx, binX, BIN_Y, binW, 96,
+      { fill: B.surface, stroke: picked ? B.blue : B.grey, width: STROKE.base });
+    centerText(ctx, picked ?? '형식을 고르세요', binX + binW / 2, BIN_Y + 48, 28, B.ink);
 
-    ctx.strokeStyle = PLAY.info;
+    /* 학생이 그은 길. 끝을 둥글리지 않는다 — 선은 시작과 끝이 있는 곧은 것이다. */
+    ctx.strokeStyle = B.grey;
     ctx.lineWidth = 10;
-    ctx.lineCap = 'round';
+    ctx.lineCap = 'butt';
     for (const seg of segsRef.current) {
       ctx.beginPath();
       ctx.moveTo(seg.ax, seg.ay);
@@ -283,28 +291,26 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
 
     const bx = ball ? ball.x : job.x;
     const by = ball ? ball.y : 150;
-    ctx.beginPath();
-    ctx.arc(bx, by, BALL_R, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fill();
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    /* 구슬은 노랑 동그라미다. 학생이 보내는 것은 판마다 늘 노랑 원이다. */
+    drawShape(ctx, 'circle', bx, by, BALL_R * 2,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
 
-    panel(ctx, WORLD_W / 2 - 300, 18, 600, 52, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, `할 일 · ${job.label}`, WORLD_W / 2, 44, 26, BOARD.ink);
+    drawBar(ctx, WORLD_W / 2 - 300, 18, 600, 52,
+      { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `할 일 · ${job.label}`, WORLD_W / 2, 44, 26, B.ink);
 
     if (game.playing && segsRef.current.length === 0) {
-      centerText(ctx, '마우스로 드래그하면 미끄럼틀을 만들 수 있어요', WORLD_W / 2, 100, 22, BOARD.inkDim);
+      centerText(ctx, '마우스로 드래그하면 미끄럼틀을 만들 수 있어요', WORLD_W / 2, 100, 22, B.grey);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="형식 틀로 흘리기"
       instruction="알맞은 모양 틀을 골라 통에 붙이고, 길을 그려 미끄럼틀을 만들어 보세요. 구슬이 알맞은 통 안으로 쏙 들어가면 완성됩니다."
       progress={{ label: '보낸 구슬', value: round, max: stage.jobs.length }}
-      hud={<GameHud lives={lives} maxLives={maxLives} score={Math.round(ink)} scoreLabel="남은 잉크" />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} score={Math.round(ink)} scoreLabel="남은 잉크" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -312,9 +318,15 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="처음부터" />
-          <MiniGameButton onClick={clearLast} disabled={game.isLocked} emoji="↩️" label="한 줄 지우기" />
-          <MiniGameButton onClick={pour} disabled={game.isLocked || !game.playing} emoji="🫗" label="쏟기" variant="primary" />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} mark="retry" label="처음부터" />
+          <MiniGameButton onClick={clearLast} disabled={game.isLocked} mark="cross" label="한 줄 지우기" />
+          <MiniGameButton
+            onClick={pour}
+            disabled={game.isLocked || !game.playing}
+            mark="arrow"
+            label="쏟기"
+            variant="primary"
+          />
         </>
       }
     >
@@ -327,11 +339,11 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
               onClick={() => { setPicked(format); setNote(''); playSound('select'); }}
               aria-pressed={picked === format}
               disabled={game.isLocked}
-              className="min-h-11 flex-1 rounded-xl px-2 text-[16px] font-black transition"
+              className="min-h-11 flex-1 px-2 text-[16px] font-black transition"
               style={{
-                background: picked === format ? '#4ADE80' : 'var(--board-surface)',
-                color: picked === format ? '#0F172A' : 'var(--board-ink)',
-                border: '2px solid #4ADE80',
+                background: picked === format ? 'var(--game-board-blue)' : 'var(--game-board)',
+                color: picked === format ? 'var(--game-board)' : 'var(--game-board-ink)',
+                border: 'var(--game-line) solid var(--game-board-blue)',
               }}
             >
               {format}
@@ -362,7 +374,7 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
             />
           </div>
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );

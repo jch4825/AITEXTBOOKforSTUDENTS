@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, randInt, useCountdown } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, randInt, useCountdown } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -72,7 +72,18 @@ function buildBoard(cols: number, rows: number, mines: number, seed: number): Ce
   return board;
 }
 
-const NUM_COLOR = ['', '#38BDF8', '#4ADE80', '#FBBF24', '#FB923C', '#FB7185', '#C4B5FD', '#F472B6', '#E2E8F0'];
+/*
+ * 둘레에 숨은 엉뚱한 답의 개수를 색으로도 알린다.
+ *
+ * 앞서는 여덟 가지 색을 차례로 썼다. 여덟 색은 서로 견줄 수 없고 순서도 없어
+ * 숫자를 다시 읽어야 했다. 여기서는 세 단으로 끊는다 — 하나는 파랑, 둘은 노랑,
+ * 셋 이상은 빨강. 많을수록 위험하다는 것이 색의 순서로 읽힌다.
+ */
+const NUM_COLOR = (near: number): string => {
+  if (near <= 1) return 'var(--game-board-blue)';
+  if (near === 2) return 'var(--game-board-yellow)';
+  return 'var(--game-board-red)';
+};
 
 export default function ExampleGridGame({ supportLevel }: MiniGameProps) {
   const game = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
@@ -208,10 +219,11 @@ export default function ExampleGridGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="예시 지뢰 찾기"
-      instruction="칸을 눌러 열면서 숨어 있는 엉뚱한 답을 찾아보세요. 잘못된 예시가 숨어 있는 위험한 칸에는 깃발을 꽂아 표시해 봅시다."
+      instruction="칸을 눌러 열면서 숨어 있는 엉뚱한 답을 찾아보세요. 잘못된 예시가 숨어 있는 위험한 칸에는 붉은 세모를 세워 표시해 봅시다."
       progress={{ label: '연 칸', value: opened, max: safeTotal }}
-      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -221,24 +233,24 @@ export default function ExampleGridGame({ supportLevel }: MiniGameProps) {
         <>
           <MiniGameButton
             onClick={() => setFlagMode((v) => !v)}
-            emoji={flagMode ? '🚩' : '⛏️'}
+            mark={flagMode ? 'triangle' : 'dot'}
             label={flagMode ? '깃발 모드' : '열기 모드'}
           />
           {game.hintAllowed && (
-            <MiniGameButton onClick={showExample} disabled={hints <= 0} emoji="💡" label={`예시 ${hints}`} />
+            <MiniGameButton onClick={showExample} disabled={hints <= 0} mark="bang" label={`예시 ${hints}`} />
           )}
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />
         </>
       }
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div
-          className="grid min-h-0 flex-1 gap-0.5 rounded-xl p-1.5"
+          className="grid min-h-0 flex-1 gap-0.5 p-1.5"
           style={{
             gridTemplateColumns: `repeat(${stage.cols}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${stage.rows}, minmax(0, 1fr))`,
-            background: 'var(--board-overlay)',
-            border: '2px solid var(--board-line)',
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-grey)',
           }}
         >
           {board.map((row, r) => row.map((cell, c) => (
@@ -255,18 +267,24 @@ export default function ExampleGridGame({ supportLevel }: MiniGameProps) {
               }}
               disabled={!game.playing || done}
               aria-label={`${r + 1}행 ${c + 1}열 ${cell.open ? `숫자 ${cell.near}` : cell.flag ? '깃발' : '닫힌 칸'}`}
-              className="flex min-h-0 items-center justify-center rounded text-[16px] font-black"
+              className="flex min-h-0 items-center justify-center text-[16px] font-black"
               style={{
-                background: cell.open ? 'var(--board-surface)' : '#334155',
-                border: `2px solid ${cell.flag ? '#FB7185' : cell.open ? 'rgba(100,116,139,0.35)' : '#64748B'}`,
-                color: cell.open ? NUM_COLOR[cell.near] : 'var(--board-ink)',
+                /* 아직 안 연 칸은 한 겹 뜬 면, 연 칸은 바탕과 같은 높이로 내려앉는다.
+                   여는 것이 곧 판판해지는 것이라 눌린 칸이 한눈에 갈린다. */
+                background: cell.open ? 'var(--game-board)' : 'var(--game-board-surface)',
+                border: `var(--game-hair) solid ${
+                  cell.flag ? 'var(--game-board-red)'
+                    : cell.open ? 'var(--game-board)' : 'var(--game-board-grey)'}`,
+                color: cell.open ? NUM_COLOR(cell.near) : 'var(--game-board-ink)',
               }}
             >
-              {cell.flag ? '🚩' : cell.open ? (cell.near > 0 ? cell.near : '') : ''}
+              {cell.flag
+                ? <BauhausMark kind="triangle" size={15} />
+                : cell.open && cell.near > 0 ? cell.near : ''}
             </button>
           )))}
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
           {note || '숫자는 그 칸 둘레에 숨은 엉뚱한 답의 개수입니다.'}
         </p>
       </div>

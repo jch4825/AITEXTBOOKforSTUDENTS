@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, pick, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, pick,
+  useGameKeys,
 } from '../engine';
 import { useSpeak } from '../../../../hooks/useSpeak';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l1 · 정보 블록 쌓기 (장르 14 · 낙하 블록 퍼즐)
@@ -167,7 +171,7 @@ function buildWorld(stage: StageConfig, seed: number, junkChance: number): World
 /** 지금까지 채운 부탁 문장. 칸이 비어 있으면 밑줄로 남겨 무엇이 빠졌는지 보이게 한다. */
 function sentenceParts(world: World, stage: StageConfig): string[] {
   const line = stage.lines[world.line];
-  return world.locked.map((word) => word ?? '＿＿').concat([line.tail]);
+  return world.locked.map((word) => word ?? '__').concat([line.tail]);
 }
 
 /** 판 폭을 넘지 않을 때까지 글자를 줄인다. 낱말 길이가 스테이지마다 달라 고정 크기로는 잘린다. */
@@ -300,11 +304,12 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     // 지금 부탁 띠 — 읽을 글은 여기 한 곳에만 크게 둔다.
-    panel(ctx, 20, 8, 920, 62, BOARD.overlay, world.flash > 0 ? PLAY.goal : PLAY.info, 14);
+    drawBar(ctx, 20, 8, 920, 62,
+      { fill: B.ground, stroke: world.flash > 0 ? B.yellow : B.blue, width: STROKE.base });
     const parts = sentenceParts(world, stage);
     const whole = parts.join(' ');
     const headSize = fitSize(ctx, whole, 872, 28, 22);
@@ -314,17 +319,15 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
     let cursor = WORLD_W / 2 - ctx.measureText(whole).width / 2;
     for (let i = 0; i < parts.length; i += 1) {
       const chunk = i < parts.length - 1 ? `${parts[i]} ` : parts[i];
-      ctx.fillStyle = i < COLS && world.locked[i] ? PLAY.goal : BOARD.inkDim;
+      ctx.fillStyle = i < COLS && world.locked[i] ? B.blue : B.grey;
       ctx.fillText(chunk, cursor, 39);
       cursor += ctx.measureText(chunk).width;
     }
     ctx.textAlign = 'center';
 
     // 판. 실수한 직후에는 테두리가 붉어져 글을 읽기 전에도 무슨 일이 났는지 보인다.
-    panel(
-      ctx, COL_X0 - 8, FIELD_TOP - 6, COLS * COL_W + 16, FLOOR_Y - FIELD_TOP + 12,
-      BOARD.surface, world.shake > 0 ? PLAY.hazard : BOARD.line, 12,
-    );
+    drawBar(ctx, COL_X0 - 8, FIELD_TOP - 6, COLS * COL_W + 16, FLOOR_Y - FIELD_TOP + 12,
+      { fill: B.surface, stroke: world.shake > 0 ? B.red : B.grey, width: STROKE.base });
     for (let col = 1; col < COLS; col += 1) {
       const x = COL_X0 + col * COL_W;
       ctx.strokeStyle = 'rgba(100, 116, 139, 0.55)';
@@ -343,8 +346,8 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
     ctx.fillRect(aimX + 2, FIELD_TOP, COL_W - 4, FLOOR_Y - FIELD_TOP);
 
     // 쌓임 한계선
-    ctx.strokeStyle = PLAY.hazard;
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = B.red;
+    ctx.lineWidth = STROKE.hair;
     ctx.setLineDash([14, 10]);
     ctx.beginPath();
     ctx.moveTo(COL_X0, dangerY);
@@ -357,9 +360,10 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
       const cx = x + COL_W / 2;
       world.junk[col].forEach((word, index) => {
         const top = FLOOR_Y - (index + 1) * cellH;
-        panel(ctx, x + 12, top + 3, COL_W - 24, cellH - 6, BOARD.overlay, PLAY.hazardEdge, 8);
+        drawBar(ctx, x + 12, top + 3, COL_W - 24, cellH - 6,
+          { fill: B.ground, stroke: B.red, width: STROKE.hair });
         const size = fitSize(ctx, word, COL_W - 44, 24, 20);
-        centerText(ctx, word, cx, top + cellH / 2, size, BOARD.inkDim);
+        centerText(ctx, word, cx, top + cellH / 2, size, B.grey);
       });
     }
 
@@ -374,9 +378,10 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
       ctx.lineTo(aimX + COL_W / 2, landTop + cellH);
       ctx.stroke();
       ctx.setLineDash([]);
-      panel(ctx, aimX + 12, world.y + 3, COL_W - 24, cellH - 6, BOARD.surface, PLAY.hero, 10);
+      drawBar(ctx, aimX + 12, world.y + 3, COL_W - 24, cellH - 6,
+        { fill: B.surface, stroke: B.yellow, width: STROKE.base });
       const size = fitSize(ctx, world.block.word, COL_W - 40, 26, 20);
-      centerText(ctx, world.block.word, aimX + COL_W / 2, world.y + cellH / 2, size, BOARD.ink);
+      centerText(ctx, world.block.word, aimX + COL_W / 2, world.y + cellH / 2, size, B.ink);
     }
 
     // 부탁 틀 — 네 열의 이름표. 채워진 칸은 초록으로 잠긴다.
@@ -385,28 +390,30 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
       const cx = x + COL_W / 2;
       const word = world.locked[col];
       const aiming = col === world.col;
-      panel(
-        ctx, x + 6, SLOT_TOP, COL_W - 12, SLOT_H,
-        word ? '#14532D' : BOARD.overlay,
-        word ? PLAY.goal : aiming ? PLAY.hero : PLAY.info, 12,
-      );
-      centerText(ctx, SLOT_LABELS[col], cx, SLOT_TOP + 25, 24, word ? BOARD.inkDim : BOARD.ink);
+      /* 채운 칸은 파랑으로 꽉 찬다. 지금 겨누는 칸만 노란 테두리를 두른다. */
+      drawBar(ctx, x + 6, SLOT_TOP, COL_W - 12, SLOT_H, {
+        fill: word ? B.blue : B.ground,
+        stroke: word ? B.blue : aiming ? B.yellow : B.grey,
+        width: aiming ? STROKE.heavy : STROKE.base,
+      });
+      centerText(ctx, SLOT_LABELS[col], cx, SLOT_TOP + 25, 24, word ? B.ground : B.ink);
       if (word) {
         const size = fitSize(ctx, word, COL_W - 40, 24, 20);
-        centerText(ctx, word, cx, SLOT_TOP + 52, size, PLAY.goal);
+        centerText(ctx, word, cx, SLOT_TOP + 52, size, B.ground);
       } else {
-        centerText(ctx, '＿＿', cx, SLOT_TOP + 52, 24, BOARD.inkDim);
+          centerText(ctx, '__', cx, SLOT_TOP + 52, 24, B.grey);
       }
     }
 
     if (world.phase === 'ready' && !world.finished) {
-      panel(ctx, WORLD_W / 2 - 350, 208, 700, world.note ? 88 : 62, BOARD.overlay, PLAY.hero, 16);
+      drawBar(ctx, WORLD_W / 2 - 350, 208, 700, world.note ? 88 : 62,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       const prompt = world.armed ? '누르면 블록이 내려옵니다' : '손을 떼었다가 다시 누르세요';
       if (world.note) {
-        centerText(ctx, world.note, WORLD_W / 2, 238, fitSize(ctx, world.note, 660, 26, 22), BOARD.ink);
-        centerText(ctx, prompt, WORLD_W / 2, 272, 24, BOARD.inkDim);
+        centerText(ctx, world.note, WORLD_W / 2, 238, fitSize(ctx, world.note, 660, 26, 22), B.ink);
+        centerText(ctx, prompt, WORLD_W / 2, 272, 24, B.grey);
       } else {
-        centerText(ctx, prompt, WORLD_W / 2, 239, 26, BOARD.ink);
+        centerText(ctx, prompt, WORLD_W / 2, 239, 26, B.ink);
       }
     }
   };
@@ -420,16 +427,17 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="정보 블록 쌓기"
       instruction="내려오는 낱말을 읽고 알맞은 이름표 상자로 옮겨 담아 보세요. 필요한 정보와 상관없는 잡동사니를 알맞게 나누어 봅시다."
       progress={{ label: '완성한 부탁', value: hud.lines, max: 3 }}
-      hud={<GameHud lives={hud.room} maxLives={maxStack} />}
+      hud={<GameHud bauhaus lives={hud.room} maxLives={maxStack} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 부탁으로 바꿨어요.`)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 쌓기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 쌓기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

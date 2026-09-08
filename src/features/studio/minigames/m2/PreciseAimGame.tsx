@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, randRange, useGameKeys,
+  BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
+  drawShape, randRange, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l3 · 레이저로 고르기 (장르 27 · 조준 슈팅)
@@ -60,10 +64,10 @@ const STAGES: StageConfig[] = [
     targetKind: 'red-pencil',
     need: 5,
     pool: [
-      { kind: 'red-pencil', label: '빨간 색연필', color: '#F87171' },
-      { kind: 'blue-pencil', label: '파란 색연필', color: '#60A5FA' },
-      { kind: 'crayon', label: '크레파스', color: '#4ADE80' },
-      { kind: 'eraser', label: '지우개', color: '#FCD34D' },
+      { kind: 'red-pencil', label: '빨간 색연필', color: B.red },
+      { kind: 'blue-pencil', label: '파란 색연필', color: B.blue },
+      { kind: 'crayon', label: '크레파스', color: B.yellow },
+      { kind: 'eraser', label: '지우개', color: B.grey },
     ],
     chips: [
       { id: 'kind', text: '색연필', reveals: (k) => k.endsWith('pencil') },
@@ -78,10 +82,10 @@ const STAGES: StageConfig[] = [
     targetKind: 'small-milk',
     need: 6,
     pool: [
-      { kind: 'small-milk', label: '작은 우유', color: '#E2E8F0' },
-      { kind: 'big-milk', label: '큰 우유', color: '#94A3B8' },
-      { kind: 'juice', label: '주스', color: '#FB923C' },
-      { kind: 'bread', label: '빵', color: '#D6A347' },
+      { kind: 'small-milk', label: '작은 우유', color: B.ink },
+      { kind: 'big-milk', label: '큰 우유', color: B.grey },
+      { kind: 'juice', label: '주스', color: B.red },
+      { kind: 'bread', label: '빵', color: B.yellow },
     ],
     chips: [
       { id: 'kind', text: '우유', reveals: (k) => k.endsWith('milk') },
@@ -96,10 +100,10 @@ const STAGES: StageConfig[] = [
     targetKind: 'yellow-picture',
     need: 7,
     pool: [
-      { kind: 'yellow-picture', label: '노란 그림책', color: '#FCD34D' },
-      { kind: 'blue-picture', label: '파란 그림책', color: '#60A5FA' },
-      { kind: 'yellow-note', label: '노란 공책', color: '#FDE68A' },
-      { kind: 'story', label: '이야기책', color: '#C4B5FD' },
+      { kind: 'yellow-picture', label: '노란 그림책', color: B.yellow },
+      { kind: 'blue-picture', label: '파란 그림책', color: B.blue },
+      { kind: 'yellow-note', label: '노란 공책', color: B.yellow },
+      { kind: 'story', label: '이야기책', color: B.grey },
     ],
     chips: [
       { id: 'kind', text: '그림책', reveals: (k) => k.endsWith('picture') },
@@ -241,30 +245,29 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, WORLD_W / 2 - 250, 12, 500, 46, BOARD.overlay, PLAY.goal, 12);
-    centerText(ctx, `골라 담을 것 · ${stage.goal}`, WORLD_W / 2, 36, 24, BOARD.ink);
+    drawBar(ctx, WORLD_W / 2 - 250, 12, 500, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `골라 담을 것 · ${stage.goal}`, WORLD_W / 2, 36, 24, B.ink);
 
     for (const item of w.items) {
       if (item.hit) continue;
       const clarity = clarityOf(item.kind);
       ctx.globalAlpha = 0.28 + clarity * 0.72;
-      ctx.beginPath();
-      ctx.arc(item.x, item.y, itemR, 0, Math.PI * 2);
-      ctx.fillStyle = clarity > 0 ? item.color : '#475569';
-      ctx.fill();
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = clarity >= 1 ? PLAY.goal : BOARD.line;
-      ctx.stroke();
-      if (clarity > 0.4) centerText(ctx, item.label, item.x, item.y + itemR + 18, 20, BOARD.ink);
-      else centerText(ctx, '?', item.x, item.y, 30, BOARD.ink);
+      /* 조건이 다 붙은 물건만 굵은 테두리를 얻는다. 아직 흐린 물건은 회색 면이다. */
+      drawShape(ctx, 'circle', item.x, item.y, itemR * 2, {
+        fill: clarity > 0 ? item.color : B.surface,
+        stroke: clarity >= 1 ? B.keyline : B.grey,
+        width: clarity >= 1 ? STROKE.heavy : STROKE.hair,
+      });
+      if (clarity > 0.4) centerText(ctx, item.label, item.x, item.y + itemR + 18, 20, B.ink);
+      else centerText(ctx, '?', item.x, item.y, 30, B.ink);
       ctx.globalAlpha = 1;
     }
 
     if (w.beam > 0) {
-      ctx.strokeStyle = PLAY.hero;
+      ctx.strokeStyle = B.yellow;
       ctx.lineWidth = 8;
       ctx.globalAlpha = w.beam / 0.16;
       ctx.beginPath();
@@ -274,21 +277,24 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
       ctx.globalAlpha = 1;
     }
 
-    panel(ctx, w.gunX - 44, GUN_Y - 20, 88, 44, BOARD.surface, PLAY.hero, 10);
-    centerText(ctx, '🔫', w.gunX, GUN_Y + 2, 28, BOARD.ink);
+    drawBar(ctx, w.gunX - 44, GUN_Y - 20, 88, 44, { fill: B.surface, stroke: B.yellow, width: STROKE.base });
+    /* 쏘는 것은 위를 향한 노란 세모다. 총 그림 대신 방향만 남긴다. */
+    drawShape(ctx, 'triangle', w.gunX, GUN_Y + 2, 30,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 250, WORLD_H / 2 - 34, 500, 68, BOARD.overlay, PLAY.hero, 14);
-      centerText(ctx, '판을 누르거나 스페이스를 누르면 시작합니다', WORLD_W / 2, WORLD_H / 2, 24, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 250, WORLD_H / 2 - 34, 500, 68, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '판을 누르거나 스페이스를 누르면 시작합니다', WORLD_W / 2, WORLD_H / 2, 24, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="레이저로 고르기"
       instruction="자세한 조건을 더할수록 물건의 모습이 또렷해집니다. 내가 찾으려는 물건을 정확히 조준하여 맞춰 보세요."
       progress={{ label: '담은 것', value: hud.got, max: stage.need }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -296,8 +302,15 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={fire} disabled={!game.playing} emoji="⚡" label="쏘기" variant="primary" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" />
+          <MiniGameButton
+            onClick={fire}
+            disabled={!game.playing}
+            mark="arrow"
+            markRotate={270}
+            label="쏘기"
+            variant="primary"
+          />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" />
         </>
       }
     >
@@ -315,18 +328,19 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
                 }}
                 aria-pressed={on}
                 disabled={!game.playing}
-                className="min-h-11 rounded-xl px-3 text-[15px] font-black transition"
+                className="flex min-h-11 items-center gap-1.5 px-3 text-[15px] font-black transition"
                 style={{
-                  background: on ? '#38BDF8' : 'var(--board-surface)',
-                  color: on ? '#0F172A' : 'var(--board-ink)',
-                  border: '2px solid #38BDF8',
+                  background: on ? 'var(--game-board-blue)' : 'var(--game-board)',
+                  color: on ? 'var(--game-board)' : 'var(--game-board-ink)',
+                  border: 'var(--game-line) solid var(--game-board-blue)',
                 }}
               >
-                {on ? '＋ ' : ''}{chip.text}
+                {on && <BauhausMark kind="plus" size={13} />}
+                {chip.text}
               </button>
             );
           })}
-          <span className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+          <span className="text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
             조건 조각을 붙이면 물건이 또렷해집니다
           </span>
         </div>

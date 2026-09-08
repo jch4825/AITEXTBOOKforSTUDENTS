@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, dist, panel, randRange, shuffle,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, dist, drawBar, drawMark,
+  drawShape, randRange, shuffle,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l2 · 급한 부탁 풍선 (풍선 터뜨리기)
@@ -209,60 +213,67 @@ export default function OneCounterQueueGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 16, 14, WORLD_W - 32, 48, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, `묶음 부탁 · ${stage.bundle}`, WORLD_W / 2, 38, 22, BOARD.ink);
+    drawBar(ctx, 16, 14, WORLD_W - 32, 48, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `묶음 부탁 · ${stage.bundle}`, WORLD_W / 2, 38, 22, B.ink);
 
     for (const b of w.balloons) {
       if (b.popped) continue;
       const r = radiusOf(b);
       const hot = clamp(b.urgency, 0, 1);
-      const fill = `rgb(${Math.round(56 + hot * 195)}, ${Math.round(189 - hot * 76)}, ${Math.round(248 - hot * 115)})`;
-      ctx.beginPath();
-      ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
-      ctx.fillStyle = fill;
-      ctx.fill();
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = hot > 0.72 ? '#7F1D1D' : '#0369A1';
-      ctx.stroke();
+      /*
+       * 급한 정도는 세 단이다.
+       *
+       * 앞서는 파랑에서 빨강으로 이어지는 그러데이션이었다. 중간 색이 끝없이 많으면
+       * 어느 쪽이 더 급한지 견주기 어렵고, 평면 채색이라는 이 어휘와도 맞지 않는다.
+       * 크기가 이미 급한 정도에 따라 이어져 자라므로, 색은 세 단으로 끊어 "지금 눌러야
+       * 하는 것"만 또렷하게 만든다. 가장 급한 풍선에는 느낌표를 함께 그린다 —
+       * 판 위에서 빨강과 파랑의 밝기가 거의 같기 때문이다.
+       */
+      const urgent = hot > 0.72;
+      const fill = urgent ? B.red : hot > 0.4 ? B.yellow : B.blue;
+      drawShape(ctx, 'circle', b.x, b.y, r * 2, { fill, stroke: B.keyline, width: STROKE.base });
       ctx.beginPath();
       ctx.moveTo(b.x, b.y + r);
       ctx.lineTo(b.x, b.y + r + 22);
-      ctx.strokeStyle = BOARD.line;
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = B.grey;
+      ctx.lineWidth = STROKE.hair;
       ctx.stroke();
-      centerText(ctx, b.text, b.x, b.y, Math.max(20, Math.round(r * 0.34)), '#0F172A');
+      centerText(ctx, b.text, b.x, b.y, Math.max(20, Math.round(r * 0.34)), B.ground);
+      if (urgent) drawMark(ctx, 'bang', b.x, b.y - r + 18, 22, B.ground);
 
       if (w.popping?.id === b.id) {
         const ratio = 1 - w.popping.left / popSeconds;
         ctx.beginPath();
         ctx.arc(b.x, b.y, r + 10, -Math.PI / 2, -Math.PI / 2 + ratio * Math.PI * 2);
-        ctx.strokeStyle = PLAY.goal;
-        ctx.lineWidth = 6;
+        ctx.strokeStyle = B.blue;
+        ctx.lineWidth = STROKE.heavy;
         ctx.stroke();
       }
     }
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 250, WORLD_H - 84, 500, 58, BOARD.overlay, PLAY.hero, 14);
-      centerText(ctx, '풍선을 누르면 시작합니다', WORLD_W / 2, WORLD_H - 55, 24, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 250, WORLD_H - 84, 500, 58,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '풍선을 누르면 시작합니다', WORLD_W / 2, WORLD_H - 55, 24, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="급한 부탁 풍선"
-      instruction="여러 가지 부탁이 풍선으로 떠 있어요. 가장 급하고 중요한 빨간 풍선부터 차례대로 하나씩 눌러 보내 보세요."
+      instruction="여러 가지 부탁이 풍선으로 떠 있어요. 가장 크고 느낌표가 붙은 붉은 풍선부터 차례대로 하나씩 눌러 보내 보세요."
       progress={{ label: '보낸 부탁', value: hud.done, max: stage.need }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex min-h-0 flex-1 items-center justify-center">
@@ -277,7 +288,7 @@ export default function OneCounterQueueGame({ supportLevel }: MiniGameProps) {
             />
           </div>
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{hud.note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{hud.note}</p>
       </div>
     </MiniGameFrame>
   );

@@ -2,11 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, approach, centerText, circleRectHit, clamp,
-  drawContain, fillRoundRect, lerp, panel, useGameImages, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, approach, centerText, circleRectHit, clamp, drawBar,
+  drawContain, drawShape, lerp, useGameImages, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+import type { ShapeKind } from '../engine';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l5 · 말투 도로 운전 (장르 31 · 스티어링)
@@ -41,20 +45,26 @@ const RIGHT_WALL_LABEL = '너무 편한 말';
 
 interface Audience {
   name: string;
-  emoji: string;
   /** -1이면 딱딱한 쪽, +1이면 편한 쪽으로 길이 옮겨 간다. */
   bias: number;
 }
 
-const PRINCIPAL: Audience = { name: '교장 선생님께', emoji: '🎓', bias: -1 };
-const FRIEND: Audience = { name: '친구에게', emoji: '🙂', bias: 1 };
-const PARENT: Audience = { name: '학부모님께', emoji: '👪', bias: -0.42 };
+const PRINCIPAL: Audience = { name: '교장 선생님께', bias: -1 };
+const FRIEND: Audience = { name: '친구에게', bias: 1 };
+const PARENT: Audience = { name: '학부모님께', bias: -0.42 };
 
 /** 반드시 실어야 하는 사실 세 가지. 순서가 곧 위쪽 띠의 칸 순서다. */
-const FACT_KINDS = [
-  { name: '시간', emoji: '🕐' },
-  { name: '장소', emoji: '🚩' },
-  { name: '준비물', emoji: '🎒' },
+/*
+ * 사실 셋에는 저마다 다른 도형을 준다.
+ *
+ * 앞서는 시계·깃발·가방 그림 문자였다. 그림 문자는 기기마다 모양이 달라 같은 뜻이
+ * 화면마다 다르게 보인다. 여기서는 도형 셋으로 나누고 이름을 함께 적는다 —
+ * 길 위의 상자와 위쪽 띠의 칸이 같은 도형이라 무엇을 주웠는지 바로 이어진다.
+ */
+const FACT_KINDS: { name: string; shape: ShapeKind }[] = [
+  { name: '시간', shape: 'circle' },
+  { name: '장소', shape: 'triangle' },
+  { name: '준비물', shape: 'square' },
 ];
 
 interface StageConfig {
@@ -288,7 +298,7 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.surface;
+    ctx.fillStyle = B.surface;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     const edges: { y: number; c: number }[] = [];
@@ -296,7 +306,7 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
       edges.push({ y, c: roadCenter(stage, curves, amp, world.traveled + (CAR_Y - y)) });
     }
 
-    ctx.fillStyle = BOARD.overlay;
+    ctx.fillStyle = B.ground;
     ctx.beginPath();
     ctx.moveTo(edges[0].c - half, edges[0].y);
     for (const edge of edges) ctx.lineTo(edge.c - half, edge.y);
@@ -309,12 +319,12 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
     const nearLeft = world.carX - CAR_HW - (nowCenter - half) < 26;
     const nearRight = (nowCenter + half) - (world.carX + CAR_HW) < 26;
 
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = nearLeft ? PLAY.hazard : PLAY.info;
+    ctx.lineWidth = STROKE.heavy;
+    ctx.strokeStyle = nearLeft ? B.red : B.blue;
     ctx.beginPath();
     edges.forEach((edge, i) => (i === 0 ? ctx.moveTo(edge.c - half, edge.y) : ctx.lineTo(edge.c - half, edge.y)));
     ctx.stroke();
-    ctx.strokeStyle = nearRight ? PLAY.hazard : PLAY.extra;
+    ctx.strokeStyle = nearRight ? B.red : B.yellow;
     ctx.beginPath();
     edges.forEach((edge, i) => (i === 0 ? ctx.moveTo(edge.c + half, edge.y) : ctx.lineTo(edge.c + half, edge.y)));
     ctx.stroke();
@@ -323,23 +333,24 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
     const firstLabel = Math.ceil((world.traveled - 150) / labelStep) * labelStep;
     for (let s = firstLabel; s < world.traveled + 470; s += labelStep) {
       const y = CAR_Y - (s - world.traveled);
-      drawWallLabel(ctx, LEFT_WALL_LABEL, 44, y, PLAY.info);
-      drawWallLabel(ctx, RIGHT_WALL_LABEL, WORLD_W - 44, y, PLAY.extra);
+      drawWallLabel(ctx, LEFT_WALL_LABEL, 44, y, B.blue);
+      drawWallLabel(ctx, RIGHT_WALL_LABEL, WORLD_W - 44, y, B.yellow);
     }
 
     const dashStep = 110;
     const firstDash = Math.ceil((world.traveled - 130) / dashStep) * dashStep;
-    ctx.fillStyle = BOARD.line;
+    ctx.fillStyle = B.grey;
     for (let s = firstDash; s < world.traveled + 470; s += dashStep) {
       const y = CAR_Y - (s - world.traveled);
-      fillRoundRect(ctx, roadCenter(stage, curves, amp, s) - 4, y - 24, 8, 48, 4);
+      ctx.fillRect(roadCenter(stage, curves, amp, s) - 4, y - 24, 8, 48);
     }
 
     const goalY = CAR_Y - (stage.length - world.traveled);
     if (goalY > -60 && goalY < WORLD_H + 60) {
       const goalCenter = roadCenter(stage, curves, amp, stage.length);
-      panel(ctx, goalCenter - half, goalY - 22, half * 2, 44, PLAY.goalEdge, PLAY.goal, 10);
-      centerText(ctx, '도착', goalCenter, goalY, 28, BOARD.ink);
+      drawBar(ctx, goalCenter - half, goalY - 22, half * 2, 44,
+        { fill: B.blue, stroke: B.keyline, width: STROKE.base });
+      centerText(ctx, '도착', goalCenter, goalY, 28, B.ground);
     }
 
     for (const item of world.items) {
@@ -347,14 +358,10 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
       const iy = CAR_Y - (item.s - world.traveled);
       if (iy < -70 || iy > WORLD_H + 70) continue;
       const ix = roadCenter(stage, curves, amp, item.s) + item.side * half;
-      ctx.fillStyle = PLAY.goalEdge;
-      ctx.beginPath();
-      ctx.arc(ix, iy, itemR, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = PLAY.goal;
-      ctx.lineWidth = 4;
-      ctx.stroke();
-      centerText(ctx, FACT_KINDS[item.kind].emoji, ix, iy, 32, BOARD.ink);
+      /* 주울 사실은 저마다의 도형으로 길 위에 놓인다. 파랑 한 톤을 함께 써
+         "이것이 주울 것"이라는 것도 색으로 알린다. */
+      drawShape(ctx, FACT_KINDS[item.kind].shape, ix, iy, itemR * 2,
+        { fill: B.blue, stroke: B.keyline, width: STROKE.base });
     }
 
     const shakeX = world.shake > 0 ? Math.sin(world.shake * 46) * 9 : 0;
@@ -363,56 +370,61 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
     ctx.translate(world.carX + shakeX, CAR_Y + bobY);
     // 흰 바탕은 받을 때 이미 지웠다. 여기서는 그대로 얹기만 한다.
     if (!drawContain(ctx, art.map.current.car, 0, 0, CAR_HW * 2.6, CAR_HH * 2.6)) {
-      panel(ctx, -CAR_HW, -CAR_HH, CAR_HW * 2, CAR_HH * 2, PLAY.hero, PLAY.heroEdge, 12);
-      panel(ctx, -CAR_HW + 8, -CAR_HH + 9, CAR_HW * 2 - 16, 22, BOARD.overlay, PLAY.heroEdge, 6);
-      centerText(ctx, '✉️', 0, 16, 26, BOARD.ink);
+      /* 그림을 못 받았을 때만 그리는 대체 차. 노랑은 학생이 모는 것을 뜻한다. */
+      drawBar(ctx, -CAR_HW, -CAR_HH, CAR_HW * 2, CAR_HH * 2,
+        { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
+      drawBar(ctx, -CAR_HW + 8, -CAR_HH + 9, CAR_HW * 2 - 16, 22, { fill: B.ground });
     }
     ctx.restore();
 
     // 위쪽 띠 — 읽을 사람과 실어야 할 사실. 이 게임에서 학생이 읽는 글은 여기뿐이다.
     const audience = stage.audiences[audienceIndexAt(stage, world.traveled)];
-    panel(ctx, 16, 12, 148, 58, BOARD.overlay, BOARD.line, 14);
-    centerText(ctx, '읽을 사람', 90, 41, 24, BOARD.inkDim);
-    panel(ctx, 172, 12, 300, 58, BOARD.overlay, PLAY.hero, 14);
-    centerText(ctx, `${audience.emoji} ${audience.name}`, 322, 41, 30, BOARD.ink);
+    drawBar(ctx, 16, 12, 148, 58, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+    centerText(ctx, '읽을 사람', 90, 41, 24, B.grey);
+    drawBar(ctx, 172, 12, 300, 58, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+    centerText(ctx, audience.name, 322, 41, 30, B.ink);
 
-    panel(ctx, WORLD_W - 366, 12, 350, 58, BOARD.overlay, PLAY.goal, 14);
-    centerText(ctx, '실을 사실', WORLD_W - 300, 41, 24, BOARD.inkDim);
+    drawBar(ctx, WORLD_W - 366, 12, 350, 58, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, '실을 사실', WORLD_W - 300, 41, 24, B.grey);
     FACT_KINDS.forEach((kind, index) => {
       const x = WORLD_W - 200 + index * 70;
       const got = world.items.some((item) => item.kind === index && item.taken);
-      panel(ctx, x - 30, 18, 60, 46, got ? PLAY.goalEdge : BOARD.surface, got ? PLAY.goal : BOARD.line, 10);
-      centerText(ctx, kind.emoji, x, 41, 28, BOARD.ink);
+      /* 주운 칸은 파랑으로 꽉 찬다. 길 위에서 본 도형이 여기서 그대로 채워진다. */
+      drawBar(ctx, x - 30, 18, 60, 46,
+        { fill: got ? B.blue : B.surface, stroke: got ? B.blue : B.grey, width: STROKE.hair });
+      drawShape(ctx, kind.shape, x, 41, 26,
+        { fill: got ? B.ground : B.grey, stroke: got ? B.ground : B.grey, width: 1 });
     });
 
     if (world.phase === 'ready' && !world.finished) {
       if (world.notice) {
-        panel(ctx, WORLD_W / 2 - 250, 84, 500, 52, BOARD.overlay, PLAY.hazard, 14);
-        centerText(ctx, world.notice, WORLD_W / 2, 110, 26, BOARD.ink);
+        drawBar(ctx, WORLD_W / 2 - 250, 84, 500, 52, { fill: B.ground, stroke: B.red, width: STROKE.base });
+        centerText(ctx, world.notice, WORLD_W / 2, 110, 26, B.ink);
       }
-      panel(ctx, WORLD_W / 2 - 235, WORLD_H - 92, 470, 58, BOARD.overlay, PLAY.hero, 16);
+      drawBar(ctx, WORLD_W / 2 - 235, WORLD_H - 92, 470, 58, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx,
         world.armed
           ? (world.lives < tuning.lives ? '누르면 다시 출발합니다' : '누르면 출발합니다')
           : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, WORLD_H - 63, 26, BOARD.ink,
+        WORLD_W / 2, WORLD_H - 63, 26, B.ink,
       );
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="말투 도로 운전"
       instruction="도로를 따라 차를 운전하며, 설명문에 꼭 필요한 정보 상자를 모아 보세요."
       progress={{ label: '주운 사실', value: hud.taken, max: FACT_KINDS.length }}
-      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 달리기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 달리기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

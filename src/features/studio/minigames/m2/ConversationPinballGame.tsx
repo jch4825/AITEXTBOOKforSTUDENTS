@@ -2,9 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, approach, centerText, clamp, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, approach, centerText, clamp, drawBar, drawMark, drawShape,
+  useGameKeys,
 } from '../engine';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l10 · 대화 핀볼 (장르 29 · 핀볼)
@@ -394,33 +398,37 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
     }
 
     // ── 그리기 ────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, W, H);
 
     // 읽을 글은 위쪽 띠 한 곳에만 크게 둔다.
-    panel(ctx, 12, 8, 936, 56, BOARD.overlay, w.wobble > 0 ? PLAY.hazard : PLAY.info, 14);
+    drawBar(ctx, 12, 8, 936, 56,
+      { fill: B.ground, stroke: w.wobble > 0 ? B.red : B.blue, width: STROKE.base });
     const banner = w.wobble > 0
       ? '순서를 건너뛰었어요. ①부터 차례로 켜요.'
       : (w.lit >= 4
         ? '문이 열렸어요. 공을 가운데 문에 넣으세요.'
         : `${NUMS[w.lit]} ${STEPS[w.lit]} — ${stage.lines[w.lit]}`);
-    centerText(ctx, banner, 480, 37, 28, BOARD.ink);
+    centerText(ctx, banner, 480, 37, 28, B.ink);
 
     // 왼쪽 — 순서 등 네 칸
-    panel(ctx, 12, 76, 246, 452, BOARD.surface, BOARD.line, 16);
-    centerText(ctx, '순서대로 켜기', 135, 100, 24, BOARD.inkDim);
+    drawBar(ctx, 12, 76, 246, 452, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+    centerText(ctx, '순서대로 켜기', 135, 100, 24, B.grey);
     for (let i = 0; i < 4; i += 1) {
       const y = 124 + i * 96;
       const on = i < w.lit;
-      panel(ctx, 24, y, 222, 80, on ? '#14532D' : BOARD.overlay, on ? PLAY.goal : BOARD.line, 14);
-      centerText(ctx, `${NUMS[i]} ${STEPS[i]}${on ? ' ✅' : ''}`, 135, y + 40, 28, on ? BOARD.ink : BOARD.inkDim);
+      /* 켠 칸은 파랑으로 꽉 찬다. 오른쪽 끝의 확인 표시가 같은 뜻을 모양으로도 얹는다. */
+      drawBar(ctx, 24, y, 222, 80,
+        { fill: on ? B.blue : B.ground, stroke: on ? B.blue : B.grey, width: STROKE.base });
+      centerText(ctx, `${NUMS[i]} ${STEPS[i]}`, on ? 122 : 135, y + 40, 28, on ? B.ground : B.grey);
+      if (on) drawMark(ctx, 'check', 216, y + 40, 24, B.ground);
     }
 
     // 판
-    panel(ctx, 270, 70, 434, 466, BOARD.overlay, BOARD.line, 18);
-    ctx.strokeStyle = BOARD.line;
+    drawBar(ctx, 270, 70, 434, 466, { fill: B.ground, stroke: B.grey, width: STROKE.base });
+    ctx.strokeStyle = B.grey;
     ctx.lineWidth = 7;
-    ctx.lineCap = 'round';
+    ctx.lineCap = 'butt';
     for (const seg of (w.launched ? [...WALLS, LANE_DOOR] : WALLS)) {
       ctx.beginPath();
       ctx.moveTo(seg[0], seg[1]);
@@ -430,36 +438,41 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
 
     // 가운데 문 — 닫혔을 때는 부딪히는 벽, 열리면 넣는 자리
     const open = w.lit >= 4;
-    panel(ctx, gx, gy, gateW, gateH, open ? BOARD.bg : PLAY.hazardEdge, open ? PLAY.goal : PLAY.hazard, 12);
-    centerText(ctx, open ? '사용 ✅' : '사용 🔒', gate[0], gate[1], 26, open ? PLAY.goal : BOARD.ink);
+    /* 문은 닫혔을 때 붉은 면, 열리면 파란 테두리만 남은 빈 자리가 된다.
+       "막혔다"와 "들어갈 수 있다"가 채움의 있고 없음으로 갈린다. */
+    drawBar(ctx, gx, gy, gateW, gateH, {
+      fill: open ? B.ground : B.red,
+      stroke: open ? B.blue : B.keyline,
+      width: STROKE.base,
+    });
+    centerText(ctx, '사용', gate[0] - 18, gate[1], 26, open ? B.blue : B.ground);
+    drawMark(ctx, open ? 'check' : 'cross', gate[0] + 26, gate[1], 24, open ? B.blue : B.ground);
 
     for (let i = 0; i < 4; i += 1) {
       const b = stage.bumpers[i];
       const on = i < w.lit;
       const isNext = i === w.lit;
       const rr = bumperR * (isNext ? nextBonus : 1);
-      ctx.beginPath();
-      ctx.arc(b[0], b[1], rr, 0, Math.PI * 2);
-      ctx.fillStyle = on ? '#14532D' : BOARD.surface;
-      ctx.fill();
-      ctx.strokeStyle = on ? PLAY.goal : (isNext ? PLAY.hero : BOARD.line);
-      ctx.lineWidth = isNext ? 6 : 4;
-      ctx.stroke();
+      drawShape(ctx, 'circle', b[0], b[1], rr * 2, {
+        fill: on ? B.blue : B.surface,
+        stroke: on ? B.blue : isNext ? B.yellow : B.grey,
+        width: isNext ? STROKE.heavy : STROKE.base,
+      });
       if (isNext) {
         // 지금 맞힐 곳만 숨 쉬듯 커졌다 작아진다. 글자보다 움직임이 먼저 읽힌다.
         ctx.beginPath();
         ctx.arc(b[0], b[1], rr + 6 + Math.sin(elapsed * 3) * 5, 0, Math.PI * 2);
-        ctx.strokeStyle = PLAY.hero;
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = B.yellow;
+        ctx.lineWidth = STROKE.hair;
         ctx.stroke();
       }
-      centerText(ctx, STEPS[i], b[0], b[1], 24, on ? PLAY.goal : BOARD.ink);
+      centerText(ctx, STEPS[i], b[0], b[1], 24, on ? B.ground : B.ink);
     }
 
     // 날개
-    ctx.lineCap = 'round';
+    ctx.lineCap = 'butt';
     ctx.lineWidth = flipR * 2;
-    ctx.strokeStyle = PLAY.hero;
+    ctx.strokeStyle = B.yellow;
     ctx.beginPath();
     ctx.moveTo(PIVOT_L, PIVOT_Y);
     ctx.lineTo(PIVOT_L + Math.cos(w.flipL) * flipLen, PIVOT_Y + Math.sin(w.flipL) * flipLen);
@@ -470,53 +483,56 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
     // 발사대 힘 막대
     if (w.charge > 0) {
       const barH = 250 * w.charge;
-      panel(ctx, DIV + 8, LANE_FLOOR - 6 - barH, 30, barH, PLAY.hero, PLAY.heroEdge, 8);
+      drawBar(ctx, DIV + 8, LANE_FLOOR - 6 - barH, 30, barH,
+        { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
     }
 
     // 공
-    ctx.beginPath();
-    ctx.arc(w.x, w.y, ballR, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.extra;
-    ctx.fill();
-    ctx.strokeStyle = PLAY.extraEdge;
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    /* 공은 노랑 동그라미다. 학생이 쏘아 보내는 것은 판마다 늘 노랑 원이다. */
+    drawShape(ctx, 'circle', w.x, w.y, ballR * 2,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
 
     // 오른쪽 — 이번 판에서 부탁하는 일과 판 기울기
-    panel(ctx, 716, 76, 232, 452, BOARD.surface, BOARD.line, 16);
-    centerText(ctx, '부탁하는 일', 832, 108, 24, BOARD.inkDim);
-    centerText(ctx, stage.topic[0], 832, 150, 26, BOARD.ink);
-    centerText(ctx, stage.topic[1], 832, 184, 26, BOARD.ink);
-    panel(ctx, 730, 220, 204, 66, BOARD.overlay, open ? PLAY.goal : BOARD.line, 12);
-    centerText(ctx, open ? '문 열림' : '문 닫힘', 832, 253, 26, open ? PLAY.goal : BOARD.inkDim);
-    centerText(ctx, '판 기울기', 832, 322, 24, BOARD.inkDim);
-    centerText(ctx, stage.tiltDrift < 0 ? '⬅ 왼쪽' : (stage.tiltDrift > 0 ? '오른쪽 ➡' : '가운데'), 832, 358, 26, BOARD.ink);
-    centerText(ctx, 'A 왼쪽 날개', 832, 434, 24, BOARD.inkDim);
-    centerText(ctx, 'D 오른쪽 날개', 832, 470, 24, BOARD.inkDim);
+    drawBar(ctx, 716, 76, 232, 452, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+    centerText(ctx, '부탁하는 일', 832, 108, 24, B.grey);
+    centerText(ctx, stage.topic[0], 832, 150, 26, B.ink);
+    centerText(ctx, stage.topic[1], 832, 184, 26, B.ink);
+    drawBar(ctx, 730, 220, 204, 66,
+      { fill: B.ground, stroke: open ? B.blue : B.grey, width: STROKE.base });
+    centerText(ctx, open ? '문 열림' : '문 닫힘', 832, 253, 26, open ? B.blue : B.grey);
+    centerText(ctx, '판 기울기', 832, 322, 24, B.grey);
+    centerText(ctx, stage.tiltDrift < 0 ? '왼쪽' : (stage.tiltDrift > 0 ? '오른쪽' : '가운데'), 832, 358, 26, B.ink);
+    if (stage.tiltDrift !== 0) {
+      drawMark(ctx, 'arrow', 832 + (stage.tiltDrift < 0 ? -58 : 58), 358, 26, B.grey,
+        stage.tiltDrift < 0 ? Math.PI : 0);
+    }
+    centerText(ctx, 'A 왼쪽 날개', 832, 434, 24, B.grey);
+    centerText(ctx, 'D 오른쪽 날개', 832, 470, 24, B.grey);
 
     // 준비 안내 — 첫 조작 전과 공이 빠진 뒤에 나온다.
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, 292, 392, 390, 62, BOARD.overlay, PLAY.hero, 16);
+      drawBar(ctx, 292, 392, 390, 62, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx,
         w.armed ? '누르고 있다가 놓으면 공이 나갑니다' : '손을 떼었다가 다시 누르세요',
-        487, 423, 26, BOARD.ink,
+        487, 423, 26, B.ink,
       );
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="대화 핀볼"
       instruction="공을 쏘아 올린 뒤, 날개를 움직여 목적 → 구체 → 근거 → 결정 범퍼를 순서대로 맞춰 보세요. 네 개가 모두 켜지면 문이 열립니다."
       progress={{ label: '순서대로 켠 곳', value: view.lit, max: 4 }}
-      hud={<GameHud lives={view.lives} maxLives={tuning.lives} />}
+      hud={<GameHud bauhaus lives={view.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].topic.join(' ')} 판으로 바꿨어요.`)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

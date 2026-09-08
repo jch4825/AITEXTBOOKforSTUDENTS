@@ -258,6 +258,13 @@ interface ButtonProps {
   emoji?: string;
   /** 바우하우스 기하 마크. 주면 이모지 대신 이것을 그린다. */
   mark?: MarkKind;
+  /**
+   * 마크를 돌리는 각도(도).
+   *
+   * 화살표 하나로 네 방향을 다 쓴다. 방향마다 다른 마크를 두면 어휘가 넷으로 늘고,
+   * 학생은 같은 뜻의 그림 넷을 따로 익혀야 한다.
+   */
+  markRotate?: number;
   label: string;
   /** primary는 "실행"처럼 그 화면의 주된 다음 동작 하나에만 쓴다. */
   variant?: 'primary' | 'quiet';
@@ -270,6 +277,7 @@ export function MiniGameButton({
   disabled = false,
   emoji,
   mark,
+  markRotate = 0,
   label,
   variant = 'quiet',
   accent = 'var(--brand-ink)',
@@ -294,7 +302,9 @@ export function MiniGameButton({
         border: `2px solid ${primary ? accent : 'var(--line)'}`,
       }}
     >
-      {mark ? <BauhausMark kind={mark} size={20} /> : <span aria-hidden="true">{emoji}</span>}
+      {mark
+        ? <BauhausMark kind={mark} size={20} rotate={markRotate} />
+        : <span aria-hidden="true">{emoji}</span>}
       {label}
     </button>
   );

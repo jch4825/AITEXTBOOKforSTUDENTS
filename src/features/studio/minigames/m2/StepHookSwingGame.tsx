@@ -2,10 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, dist, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, dist, drawBar, drawShape, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m2-l6 · 단계 재료 모으기 (팩맨 형식)
@@ -243,30 +246,32 @@ export default function StepHookSwingGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 16, 14, WORLD_W - 32, 52, BOARD.overlay, PLAY.info, 12);
+    drawBar(ctx, 16, 14, WORLD_W - 32, 52, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     const nextStep = stage.steps[Math.min(w.taken, stage.steps.length - 1)];
-    centerText(ctx, `${stage.goal} · 다음 단계 ${w.taken + 1} · ${nextStep}`, WORLD_W / 2, 40, 22, BOARD.ink);
+    centerText(ctx, `${stage.goal} · 다음 단계 ${w.taken + 1} · ${nextStep}`, WORLD_W / 2, 40, 22, B.ink);
 
     for (let r = 0; r < rows; r += 1) {
       for (let c = 0; c < cols; c += 1) {
         const x = originX + c * cell;
         const y = originY + r * cell;
         if (at(c, r) === '#') {
-          panel(ctx, x, y, cell, cell, '#1E293B', 'rgba(100,116,139,0.5)', 4);
+          drawBar(ctx, x, y, cell, cell, { fill: B.surface, stroke: B.grey, width: STROKE.hair });
           continue;
         }
         const pellet = pelletAt(c, r);
         if (pellet < 0 || pellet < w.taken) continue;
         const active = pellet === w.taken;
-        ctx.beginPath();
-        ctx.arc(x + cell / 2, y + cell / 2, active ? cell * 0.3 : cell * 0.16, 0, Math.PI * 2);
-        ctx.fillStyle = active ? PLAY.goal : 'rgba(148,163,184,0.45)';
-        ctx.fill();
+        /* 지금 모을 재료는 파란 사각형, 아직 차례가 아닌 재료는 작은 회색 점이다.
+           모양과 크기가 함께 달라져 색을 못 가려도 다음 차례가 보인다. */
         if (active) {
-          centerText(ctx, `${pellet + 1}`, x + cell / 2, y + cell / 2, Math.min(22, cell * 0.42), '#0F172A');
+          drawShape(ctx, 'square', x + cell / 2, y + cell / 2, cell * 0.6,
+            { fill: B.blue, stroke: B.keyline, width: STROKE.hair });
+          centerText(ctx, `${pellet + 1}`, x + cell / 2, y + cell / 2, Math.min(22, cell * 0.42), B.ground);
+        } else {
+          drawShape(ctx, 'circle', x + cell / 2, y + cell / 2, cell * 0.32, { fill: B.grey });
         }
       }
     }
@@ -274,40 +279,31 @@ export default function StepHookSwingGame({ supportLevel }: MiniGameProps) {
     for (const ghost of w.ghosts) {
       const gx = originX + ghost.c * cell + cell / 2;
       const gy = originY + ghost.r * cell + cell / 2;
-      ctx.beginPath();
-      ctx.arc(gx, gy, cell * 0.34, 0, Math.PI * 2);
-      ctx.fillStyle = PLAY.hazard;
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = PLAY.hazardEdge;
-      ctx.stroke();
-      centerText(ctx, '🦠', gx, gy, Math.min(22, cell * 0.5), '#3B0A18');
+      /* 위험은 언제나 붉은 세모다. 판마다 같은 모양이라 학생이 한 번 배우면 계속 쓴다. */
+      drawShape(ctx, 'triangle', gx, gy, cell * 0.76,
+        { fill: B.red, stroke: B.keyline, width: STROKE.hair });
     }
 
     const px = originX + w.c * cell + cell / 2;
     const py = originY + w.r * cell + cell / 2;
     ctx.globalAlpha = w.hitCool > 0 ? 0.45 : 1;
-    ctx.beginPath();
-    ctx.arc(px, py, cell * 0.36, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fill();
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
+    drawShape(ctx, 'circle', px, py, cell * 0.72,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
     ctx.globalAlpha = 1;
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 240, WORLD_H - 46, 480, 40, BOARD.overlay, PLAY.hero, 10);
-      centerText(ctx, '방향키를 누르면 움직입니다', WORLD_W / 2, WORLD_H - 26, 22, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 240, WORLD_H - 46, 480, 40, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '방향키를 누르면 움직입니다', WORLD_W / 2, WORLD_H - 26, 22, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="단계 재료 모으기"
-      instruction="위험한 바이러스를 피해 미로를 움직이며, 빛나는 재료를 순서대로 모아 보세요."
+      instruction="붉은 세모를 피해 미로를 움직이며, 파란 네모로 바뀐 재료를 순서대로 모아 보세요."
       progress={{ label: '모은 단계', value: hud.taken, max: stage.steps.length }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -315,11 +311,11 @@ export default function StepHookSwingGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: -1 }; }} emoji="⬆️" label="위" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: 1 }; }} emoji="⬇️" label="아래" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: -1, r: 0 }; }} emoji="⬅️" label="왼쪽" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 1, r: 0 }; }} emoji="➡️" label="오른쪽" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" variant="primary" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: -1 }; }} mark="arrow" markRotate={270} label="위" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: 1 }; }} mark="arrow" markRotate={90} label="아래" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: -1, r: 0 }; }} mark="arrow" markRotate={180} label="왼쪽" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 1, r: 0 }; }} mark="arrow" label="오른쪽" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" variant="primary" />
         </>
       }
     >
