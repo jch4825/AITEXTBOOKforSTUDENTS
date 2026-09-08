@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, randInt, useGameLoop } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, randInt, useGameLoop } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -172,24 +172,39 @@ export default function LeakFixPipeGame({ supportLevel }: MiniGameProps) {
     setNote(`${(flow.target) + 1}번 자리에서 샜어요. 그 자리를 눌러 돌리고 다시 시험하세요.`);
   });
 
-  const glyph = (cell: Cell) => {
+  /**
+   * 관 한 칸.
+   *
+   * 앞서는 상자 그리기 문자로 그렸다. 글꼴마다 굵기와 이음매가 달라
+   * 같은 관이 화면마다 다르게 보이고, 색과 굵기를 다룰 수도 없었다. 가운데에서
+   * 열린 쪽으로 선을 뻗어 직접 그린다 — 열린 방향이 곧 형태다.
+   */
+  const PipeShape = ({ cell, wet }: { cell: Cell; wet: boolean }) => {
     const dirs = openDirs(cell);
-    const has = (d: number) => dirs.includes(d);
-    if (has(1) && has(3)) return '━';
-    if (has(0) && has(2)) return '┃';
-    if (has(2) && has(1)) return '┏';
-    if (has(3) && has(2)) return '┓';
-    if (has(0) && has(1)) return '┗';
-    if (has(0) && has(3)) return '┛';
-    return '·';
+    const ends: Record<number, [number, number]> = {
+      0: [16, 0], 1: [32, 16], 2: [16, 32], 3: [0, 16],
+    };
+    const color = wet ? 'var(--game-board-blue)' : 'var(--game-board-grey)';
+    return (
+      <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        {dirs.map((d) => (
+          <line
+            key={d}
+            x1="16" y1="16" x2={ends[d][0]} y2={ends[d][1]}
+            stroke={color} strokeWidth="8" strokeLinecap="butt"
+          />
+        ))}
+      </svg>
+    );
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="새는 곳 고치기"
       instruction="물이 새는 파이프를 찾아 알맞게 돌려 연결한 뒤, 물을 다시 흘려보내 잘 흐르는지 확인해 보세요."
       progress={{ label: '이어진 칸', value: wet, max: COLS }}
-      hud={<GameHud lives={runs} maxLives={maxRuns} score={fixedLog.length} scoreLabel="고친 곳" />}
+      hud={<GameHud bauhaus lives={runs} maxLives={maxRuns} score={fixedLog.length} scoreLabel="고친 곳" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -197,11 +212,11 @@ export default function LeakFixPipeGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="처음으로" />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} mark="retry" label="처음으로" />
           <MiniGameButton
             onClick={runTest}
             disabled={game.isLocked || !game.playing}
-            emoji="💧"
+            mark="arrow"
             label={game.status === 'running' ? '흐르는 중…' : '다시 시험'}
             variant="primary"
           />
@@ -210,19 +225,29 @@ export default function LeakFixPipeGame({ supportLevel }: MiniGameProps) {
     >
       <div className="flex min-h-0 flex-1 flex-col justify-center gap-3">
         <p
-          className="rounded-xl px-3 py-1.5 text-[15px] font-black"
-          style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8', color: 'var(--board-ink)' }}
+          className="px-3 py-1.5 text-[15px] font-black"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+            color: 'var(--game-board-ink)',
+          }}
         >
           {stage.title} · {stage.steps.join(' → ')}
         </p>
 
         <div className="flex items-stretch gap-1">
           <span
-            className="flex w-12 shrink-0 items-center justify-center rounded-lg text-[20px]"
-            style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8', color: 'var(--board-ink)' }}
+            className="flex w-12 shrink-0 items-center justify-center"
+            style={{
+              background: 'var(--game-board)',
+              border: 'var(--game-line) solid var(--game-board-blue)',
+              color: 'var(--game-board-blue)',
+            }}
             aria-hidden="true"
           >
-            💧
+            {/* 물이 들어오는 곳은 동그라미, 끝나는 곳은 네모다. 두 끝이 다른 모양이라
+                어느 쪽에서 어느 쪽으로 흐르는지 색 없이도 읽힌다. */}
+            <BauhausMark kind="circle" size={20} />
           </span>
           {cells.map((cell, index) => {
             const isWet = index < wet;
@@ -234,29 +259,31 @@ export default function LeakFixPipeGame({ supportLevel }: MiniGameProps) {
                 onClick={() => rotate(index)}
                 disabled={game.isLocked || !game.playing}
                 aria-label={`${index + 1}번 관 돌리기`}
-                className="flex min-h-20 flex-1 flex-col items-center justify-center rounded-lg text-[28px] font-black transition"
+                className="flex min-h-20 flex-1 flex-col items-center justify-center font-black transition"
                 style={{
-                  background: isLeak ? 'rgba(251, 113, 133, 0.2)'
-                    : isWet ? 'rgba(56, 189, 248, 0.2)' : 'var(--board-surface)',
-                  border: `2px solid ${isLeak ? '#FB7185' : isWet ? '#38BDF8' : 'var(--board-line)'}`,
-                  color: 'var(--board-ink)',
+                  background: 'var(--game-board)',
+                  border: `${isLeak ? 'var(--game-heavy)' : 'var(--game-line)'} solid ${
+                    isLeak ? 'var(--game-board-red)'
+                      : isWet ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
+                  color: 'var(--game-board-ink)',
                 }}
               >
-                <span aria-hidden="true">{glyph(cell)}</span>
+                <PipeShape cell={cell} wet={isWet} />
                 <span className="text-[14px]">{index + 1}</span>
               </button>
             );
           })}
           <span
-            className="flex w-12 shrink-0 items-center justify-center rounded-lg text-[20px]"
+            className="flex w-12 shrink-0 items-center justify-center"
             style={{
-              background: wet >= COLS ? 'rgba(74, 222, 128, 0.2)' : 'var(--board-surface)',
-              border: `2px solid ${wet >= COLS ? '#4ADE80' : 'var(--board-line)'}`,
-              color: 'var(--board-ink)',
+              background: wet >= COLS ? 'var(--game-board-blue)' : 'var(--game-board)',
+              border: `var(--game-line) solid ${
+                wet >= COLS ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
+              color: wet >= COLS ? 'var(--game-board)' : 'var(--game-board-grey)',
             }}
             aria-hidden="true"
           >
-            🏁
+            <BauhausMark kind="square" size={20} />
           </span>
         </div>
 
@@ -264,15 +291,19 @@ export default function LeakFixPipeGame({ supportLevel }: MiniGameProps) {
           {fixedLog.map((index) => (
             <span
               key={index}
-              className="rounded-lg px-2 py-0.5 text-[14px] font-black"
-              style={{ background: 'rgba(74, 222, 128, 0.16)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
+              className="px-2 py-0.5 text-[14px] font-black"
+              style={{
+                background: 'var(--game-board-blue)',
+                border: 'var(--game-line) solid var(--game-board-blue)',
+                color: 'var(--game-board)',
+              }}
             >
               {index + 1}번 고침
             </span>
           ))}
         </div>
 
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
           {note || '먼저 다시 시험을 눌러 어디서 새는지 보세요.'}
         </p>
       </div>

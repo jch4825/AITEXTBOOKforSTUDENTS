@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel } from '../engine';
+import {
+  BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar,
+} from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m5-l3 · 부스 세우기 (장르 47 · 마을 건설)
@@ -21,7 +26,6 @@ const GROUND = WORLD_H - 70;
 interface Part {
   id: string;
   name: string;
-  emoji: string;
   w: number;
   h: number;
   /** 이 부품보다 먼저 놓여 있어야 하는 부품들 */
@@ -44,11 +48,11 @@ const STAGES: StageConfig[] = [
     spoken: '작은 부스를 순서대로 세워요.',
     holdSeconds: 3,
     parts: [
-      { id: 'floor', name: '바닥판', emoji: '🟫', w: 300, h: 34, needs: [], color: '#92400E' },
-      { id: 'postL', name: '왼쪽 기둥', emoji: '🪵', w: 40, h: 130, needs: ['floor'], color: '#B45309' },
-      { id: 'postR', name: '오른쪽 기둥', emoji: '🪵', w: 40, h: 130, needs: ['floor'], color: '#B45309' },
-      { id: 'roof', name: '지붕', emoji: '🏠', w: 320, h: 40, needs: ['postL', 'postR'], color: '#0369A1' },
-      { id: 'sign', name: '간판', emoji: '🪧', w: 180, h: 48, needs: ['roof'], color: '#7C3AED' },
+      { id: 'floor', name: '바닥판', w: 300, h: 34, needs: [], color: B.grey },
+      { id: 'postL', name: '왼쪽 기둥', w: 40, h: 130, needs: ['floor'], color: B.grey },
+      { id: 'postR', name: '오른쪽 기둥', w: 40, h: 130, needs: ['floor'], color: B.grey },
+      { id: 'roof', name: '지붕', w: 320, h: 40, needs: ['postL', 'postR'], color: B.blue },
+      { id: 'sign', name: '간판', w: 180, h: 48, needs: ['roof'], color: B.yellow },
     ],
   },
   {
@@ -57,12 +61,12 @@ const STAGES: StageConfig[] = [
     spoken: '전선까지 있는 부스를 순서대로 세워요.',
     holdSeconds: 3,
     parts: [
-      { id: 'floor', name: '바닥판', emoji: '🟫', w: 320, h: 34, needs: [], color: '#92400E' },
-      { id: 'wire', name: '전선', emoji: '🔌', w: 240, h: 22, needs: ['floor'], color: '#4B5563' },
-      { id: 'postL', name: '왼쪽 기둥', emoji: '🪵', w: 40, h: 140, needs: ['floor'], color: '#B45309' },
-      { id: 'postR', name: '오른쪽 기둥', emoji: '🪵', w: 40, h: 140, needs: ['floor'], color: '#B45309' },
-      { id: 'roof', name: '지붕', emoji: '🏠', w: 340, h: 40, needs: ['postL', 'postR'], color: '#0369A1' },
-      { id: 'sign', name: '간판', emoji: '🪧', w: 190, h: 48, needs: ['roof'], color: '#7C3AED' },
+      { id: 'floor', name: '바닥판', w: 320, h: 34, needs: [], color: B.grey },
+      { id: 'wire', name: '전선', w: 240, h: 22, needs: ['floor'], color: B.surface },
+      { id: 'postL', name: '왼쪽 기둥', w: 40, h: 140, needs: ['floor'], color: B.grey },
+      { id: 'postR', name: '오른쪽 기둥', w: 40, h: 140, needs: ['floor'], color: B.grey },
+      { id: 'roof', name: '지붕', w: 340, h: 40, needs: ['postL', 'postR'], color: B.blue },
+      { id: 'sign', name: '간판', w: 190, h: 48, needs: ['roof'], color: B.yellow },
     ],
   },
   {
@@ -71,13 +75,13 @@ const STAGES: StageConfig[] = [
     spoken: '큰 부스를 순서대로 세워요.',
     holdSeconds: 4,
     parts: [
-      { id: 'floor', name: '바닥판', emoji: '🟫', w: 340, h: 34, needs: [], color: '#92400E' },
-      { id: 'wire', name: '전선', emoji: '🔌', w: 250, h: 22, needs: ['floor'], color: '#4B5563' },
-      { id: 'postL', name: '왼쪽 기둥', emoji: '🪵', w: 40, h: 150, needs: ['floor'], color: '#B45309' },
-      { id: 'postR', name: '오른쪽 기둥', emoji: '🪵', w: 40, h: 150, needs: ['floor'], color: '#B45309' },
-      { id: 'shelf', name: '선반', emoji: '📚', w: 220, h: 26, needs: ['postL', 'postR'], color: '#0F766E' },
-      { id: 'roof', name: '지붕', emoji: '🏠', w: 360, h: 40, needs: ['postL', 'postR'], color: '#0369A1' },
-      { id: 'sign', name: '간판', emoji: '🪧', w: 200, h: 48, needs: ['roof'], color: '#7C3AED' },
+      { id: 'floor', name: '바닥판', w: 340, h: 34, needs: [], color: B.grey },
+      { id: 'wire', name: '전선', w: 250, h: 22, needs: ['floor'], color: B.surface },
+      { id: 'postL', name: '왼쪽 기둥', w: 40, h: 150, needs: ['floor'], color: B.grey },
+      { id: 'postR', name: '오른쪽 기둥', w: 40, h: 150, needs: ['floor'], color: B.grey },
+      { id: 'shelf', name: '선반', w: 220, h: 26, needs: ['postL', 'postR'], color: B.blue },
+      { id: 'roof', name: '지붕', w: 360, h: 40, needs: ['postL', 'postR'], color: B.blue },
+      { id: 'sign', name: '간판', w: 200, h: 48, needs: ['roof'], color: B.yellow },
     ],
   },
 ];
@@ -221,48 +225,55 @@ export default function BoothStackBuildGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
-    ctx.fillStyle = '#1E293B';
+    ctx.fillStyle = B.surface;
     ctx.fillRect(0, GROUND, WORLD_W, WORLD_H - GROUND);
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = B.grey;
+    ctx.lineWidth = STROKE.hair;
     ctx.beginPath();
     ctx.moveTo(0, GROUND);
     ctx.lineTo(WORLD_W, GROUND);
     ctx.stroke();
 
     for (const item of placedRef.current) {
-      panel(ctx, item.x - item.w / 2, item.y - item.h, item.w, item.h, item.color,
-        item.falling ? PLAY.hazard : BOARD.ink, 8);
-      if (item.h > 30) centerText(ctx, item.name, item.x, item.y - item.h / 2, 20, BOARD.ink);
+      /* 무너지는 부품은 붉은 테두리를 얻는다. 색이 아니라 테두리가 바뀌므로
+         부품 자체의 색(무엇인지)은 그대로 남는다. */
+      drawBar(ctx, item.x - item.w / 2, item.y - item.h, item.w, item.h, {
+        fill: item.color,
+        stroke: item.falling ? B.red : B.keyline,
+        width: item.falling ? STROKE.heavy : STROKE.base,
+      });
+      if (item.h > 30) centerText(ctx, item.name, item.x, item.y - item.h / 2, 20, B.ground);
     }
 
     const part = stage.parts.find((p) => p.id === selected);
     if (part && game.playing) {
-      panel(ctx, WORLD_W / 2 - 250, 14, 500, 44, BOARD.overlay, PLAY.info, 12);
-      centerText(ctx, `${part.emoji} ${part.name} · 판을 눌러 놓습니다`, WORLD_W / 2, 36, 22, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 250, 14, 500, 44, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+      centerText(ctx, `${part.name} · 판을 눌러 놓습니다`, WORLD_W / 2, 36, 22, B.ink);
     }
 
     const standing = placedRef.current.filter((item) => !item.falling).length;
     if (standing >= stage.parts.length && !finishedRef.current) {
-      panel(ctx, WORLD_W / 2 - 180, 70, 360, 44, BOARD.overlay, PLAY.goal, 12);
-      centerText(ctx, `${Math.max(0, holdNeed - holdRef.current).toFixed(1)}초만 더 버티세요`, WORLD_W / 2, 92, 22, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 180, 70, 360, 44,
+        { fill: B.ground, stroke: B.blue, width: STROKE.base });
+      centerText(ctx, `${Math.max(0, holdNeed - holdRef.current).toFixed(1)}초만 더 버티세요`, WORLD_W / 2, 92, 22, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="부스 세우기"
       instruction="알맞은 부품을 골라 바닥 판에 차례대로 쌓아 보세요. 아래에 받쳐 주는 부품이 없으면 무너질 수 있어요."
       progress={{ label: '세운 부품', value: hud.built, max: stage.parts.length }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 세우기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 세우기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex flex-wrap gap-1.5">
@@ -276,14 +287,19 @@ export default function BoothStackBuildGame({ supportLevel }: MiniGameProps) {
                 onClick={() => setSelected(part.id)}
                 disabled={!game.playing || used}
                 aria-pressed={on}
-                className="min-h-11 rounded-xl px-2.5 text-[15px] font-black transition"
+                className="flex min-h-11 items-center gap-1.5 px-2.5 text-[15px] font-black transition"
                 style={{
-                  background: used ? 'rgba(74, 222, 128, 0.16)' : on ? '#38BDF8' : 'var(--board-surface)',
-                  color: on && !used ? '#0F172A' : 'var(--board-ink)',
-                  border: `2px solid ${used ? '#4ADE80' : '#38BDF8'}`,
+                  /* 이미 쓴 부품은 파랑으로 꽉 차고 확인 표시가 붙는다. 고른 부품은
+                     노랑 — 지금 손에 쥔 것은 판마다 늘 노랑이다. */
+                  background: used ? 'var(--game-board-blue)'
+                    : on ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                  color: used || on ? 'var(--game-board)' : 'var(--game-board-ink)',
+                  border: `var(--game-line) solid ${
+                    used ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
                 }}
               >
-                {part.emoji} {part.name}{used ? ' ✓' : ''}
+                {part.name}
+                {used && <BauhausMark kind="check" size={14} />}
               </button>
             );
           })}
@@ -302,7 +318,7 @@ export default function BoothStackBuildGame({ supportLevel }: MiniGameProps) {
             />
           </div>
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );

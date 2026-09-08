@@ -2,11 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, randInt,
-  useCountdown, useGameKeys,
+  BAUHAUS, toRadians, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar,
+  drawMark, drawShape, randInt, useCountdown, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m5-l5 · 매듭 풀기 (장르 37 · 키우기 클리커)
@@ -21,11 +24,12 @@ import type { MiniGameProps } from '../types';
 const WORLD_W = 960;
 const WORLD_H = 540;
 
+/* 방향은 화살표 하나를 돌려 쓴다. 도(度)로 적어 캔버스와 DOM이 같은 값을 나눠 쓴다. */
 const DIRS = [
-  { c: 0, r: -1, name: '위', arrow: '↑' },
-  { c: 1, r: 0, name: '오른쪽', arrow: '→' },
-  { c: 0, r: 1, name: '아래', arrow: '↓' },
-  { c: -1, r: 0, name: '왼쪽', arrow: '←' },
+  { c: 0, r: -1, name: '위', deg: 270 },
+  { c: 1, r: 0, name: '오른쪽', deg: 0 },
+  { c: 0, r: 1, name: '아래', deg: 90 },
+  { c: -1, r: 0, name: '왼쪽', deg: 180 },
 ];
 
 interface Knot {
@@ -168,17 +172,17 @@ export default function KnotUntieGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 20, 14, WORLD_W - 40, 44, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, `막힌 문제 · ${stage.problem}`, WORLD_W / 2, 36, 22, BOARD.ink);
+    drawBar(ctx, 20, 14, WORLD_W - 40, 44, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `막힌 문제 · ${stage.problem}`, WORLD_W / 2, 36, 22, B.ink);
 
     // 줄과 매듭
     const y = 300;
-    ctx.strokeStyle = '#94A3B8';
+    ctx.strokeStyle = B.grey;
     ctx.lineWidth = 14;
-    ctx.lineCap = 'round';
+    ctx.lineCap = 'butt';
     ctx.beginPath();
     ctx.moveTo(80, y);
     ctx.lineTo(WORLD_W - 80, y);
@@ -188,38 +192,40 @@ export default function KnotUntieGame({ supportLevel }: MiniGameProps) {
     knots.forEach((item, index) => {
       const x = knots.length === 1 ? WORLD_W / 2 : 110 + index * gap;
       const active = index === indexRef.current;
-      ctx.beginPath();
-      ctx.arc(x, y, item.done ? 22 : 40, 0, Math.PI * 2);
-      ctx.fillStyle = item.done ? '#065F46' : active ? '#4C1D95' : '#334155';
-      ctx.fill();
-      ctx.lineWidth = 5;
-      ctx.strokeStyle = item.done ? PLAY.goal : active ? PLAY.extra : BOARD.line;
-      ctx.stroke();
-      centerText(ctx, item.done ? '✓' : `${index + 1}`, x, y, 26, BOARD.ink);
+      /* 푼 매듭은 작아지면서 파랑으로 꽉 찬다. 지금 푸는 매듭만 노란 테두리다. */
+      drawShape(ctx, 'circle', x, y, (item.done ? 22 : 40) * 2, {
+        fill: item.done ? B.blue : B.surface,
+        stroke: item.done ? B.blue : active ? B.yellow : B.grey,
+        width: active ? STROKE.heavy : STROKE.base,
+      });
+      if (item.done) drawMark(ctx, 'check', x, y, 24, B.ground);
+      else centerText(ctx, `${index + 1}`, x, y, 26, B.ink);
       if (active && revealRef.current > 0) {
-        centerText(ctx, DIRS[item.dir].arrow, x, y - 68, 40, PLAY.hero);
+        drawMark(ctx, 'arrow', x, y - 68, 40, B.yellow, toRadians(DIRS[item.dir].deg));
       }
     });
 
     // 내 힘 게이지
     if (knot) {
       const ratio = clamp(knot.fill / knot.need, 0, 1);
-      panel(ctx, WORLD_W / 2 - 220, 400, 440, 46, BOARD.overlay, PLAY.hero, 12);
-      ctx.fillStyle = PLAY.hero;
-      ctx.fillRect(WORLD_W / 2 - 214, 406, 428 * ratio, 34);
-      centerText(ctx, `${indexRef.current + 1}번 매듭 · 내 힘`, WORLD_W / 2, 423, 22, ratio > 0.5 ? '#3B2100' : BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 220, 400, 440, 46, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      drawBar(ctx, WORLD_W / 2 - 214, 406, 428 * ratio, 34, { fill: B.yellow });
+      centerText(ctx, `${indexRef.current + 1}번 매듭 · 내 힘`, WORLD_W / 2, 423, 22,
+        ratio > 0.5 ? B.ground : B.ink);
     }
 
-    centerText(ctx, `고른 방향 ${DIRS[dirRef.current].arrow} ${DIRS[dirRef.current].name}`, WORLD_W / 2, 480, 24, BOARD.ink);
-    centerText(ctx, '방향키로 방향을 고르고 스페이스를 누르세요', WORLD_W / 2, 512, 20, BOARD.inkDim);
+    centerText(ctx, `고른 방향 · ${DIRS[dirRef.current].name}`, WORLD_W / 2 + 18, 480, 24, B.ink);
+    drawMark(ctx, 'arrow', WORLD_W / 2 - 92, 480, 24, B.yellow, toRadians(DIRS[dirRef.current].deg));
+    centerText(ctx, '방향키로 방향을 고르고 스페이스를 누르세요', WORLD_W / 2, 512, 20, B.grey);
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="매듭 풀기"
       instruction="매듭이 풀리는 방향을 골라 톡톡 두드려 보세요. 풀기 어려울 때는 힌트 단추를 누르면 도움을 받을 수 있어요."
       progress={{ label: '푼 매듭', value: hud.index, max: stage.count }}
-      hud={<GameHud score={hud.power} scoreLabel="내 힘" timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus score={hud.power} scoreLabel="내 힘" timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -227,11 +233,11 @@ export default function KnotUntieGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={knock} disabled={!game.playing} emoji="✊" label="두드리기" variant="primary" />
+          <MiniGameButton onClick={knock} disabled={!game.playing} mark="dot" label="두드리기" variant="primary" />
           {game.hintAllowed && (
-            <MiniGameButton onClick={useHint} disabled={hud.hints <= 0} emoji="💡" label={`힌트 ${hud.hints}`} />
+            <MiniGameButton onClick={useHint} disabled={hud.hints <= 0} mark="bang" label={`힌트 ${hud.hints}`} />
           )}
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" />
         </>
       }
     >
@@ -244,14 +250,15 @@ export default function KnotUntieGame({ supportLevel }: MiniGameProps) {
               onClick={() => setDir(index)}
               aria-pressed={hud.dir === index}
               disabled={!game.playing}
-              className="min-h-11 rounded-xl px-3 text-[16px] font-black transition"
+              className="flex min-h-11 items-center gap-1.5 px-3 text-[16px] font-black transition"
               style={{
-                background: hud.dir === index ? '#C4B5FD' : 'var(--board-surface)',
-                color: hud.dir === index ? '#0F172A' : 'var(--board-ink)',
-                border: '2px solid #C4B5FD',
+                background: hud.dir === index ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                color: hud.dir === index ? 'var(--game-board)' : 'var(--game-board-ink)',
+                border: 'var(--game-line) solid var(--game-board-yellow)',
               }}
             >
-              {dir.arrow} {dir.name}
+              <BauhausMark kind="arrow" size={16} rotate={dir.deg} />
+              {dir.name}
             </button>
           ))}
         </div>

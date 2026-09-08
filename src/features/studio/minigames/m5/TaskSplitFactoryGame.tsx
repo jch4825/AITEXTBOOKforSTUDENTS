@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, useGameLoop } from '../engine';
+import { BauhausMark, GameHud, clamp, useGameLoop } from '../engine';
+import type { BauhausMarkKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -76,11 +77,12 @@ interface Item {
   junk: boolean;
 }
 
-const DIRS: Record<number, { c: number; r: number; arrow: string }> = {
-  0: { c: 1, r: 0, arrow: '→' },
-  1: { c: 0, r: 1, arrow: '↓' },
-  2: { c: -1, r: 0, arrow: '←' },
-  3: { c: 0, r: -1, arrow: '↑' },
+/* 방향은 화살표 하나를 돌려 쓴다. 도(度)로 적어 판과 단추가 같은 값을 나눠 쓴다. */
+const DIRS: Record<number, { c: number; r: number; deg: number }> = {
+  0: { c: 1, r: 0, deg: 0 },
+  1: { c: 0, r: 1, deg: 90 },
+  2: { c: -1, r: 0, deg: 180 },
+  3: { c: 0, r: -1, deg: 270 },
 };
 
 export default function TaskSplitFactoryGame({ supportLevel }: MiniGameProps) {
@@ -252,14 +254,18 @@ export default function TaskSplitFactoryGame({ supportLevel }: MiniGameProps) {
     split: '분해기',
     check: '검수대',
   };
-  const icon: Record<Exclude<Machine, null>, string> = { belt: '➡️', split: '✂️', check: '🔍' };
+  /* 기계 셋을 도형 셋으로 나눈다. 이름표는 아래 단추에 그대로 있다. */
+  const icon: Record<Exclude<Machine, null>, BauhausMarkKind> = {
+    belt: 'bar', split: 'cross', check: 'circle',
+  };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="과제 분해 공장"
       instruction="큰 일을 작은 단계로 나누어 주는 기계를 알맞게 놓고, 관계없는 일은 걸러내어 차례대로 완성해 보세요."
       progress={{ label: '내보낸 과제', value: shipped, max: stage.need }}
-      hud={<GameHud timeLeft={left} timeTotal={seconds} />}
+      hud={<GameHud bauhaus timeLeft={left} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -267,8 +273,14 @@ export default function TaskSplitFactoryGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 놓기" />
-          <MiniGameButton onClick={start} disabled={running || !game.playing} emoji="▶️" label="실행" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 놓기" />
+          <MiniGameButton
+            onClick={start}
+            disabled={running || !game.playing}
+            mark="arrow"
+            label="실행"
+            variant="primary"
+          />
         </>
       }
     >
@@ -281,28 +293,28 @@ export default function TaskSplitFactoryGame({ supportLevel }: MiniGameProps) {
               onClick={() => setTool(kind)}
               aria-pressed={tool === kind}
               disabled={running}
-              className="min-h-11 rounded-xl px-2.5 text-[15px] font-black transition"
+              className="flex min-h-11 items-center gap-1.5 px-2.5 text-[15px] font-black transition"
               style={{
-                background: tool === kind ? '#38BDF8' : 'var(--board-surface)',
-                color: tool === kind ? '#0F172A' : 'var(--board-ink)',
-                border: '2px solid #38BDF8',
+                background: tool === kind ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                color: tool === kind ? 'var(--game-board)' : 'var(--game-board-ink)',
+                border: 'var(--game-line) solid var(--game-board-yellow)',
               }}
             >
               {icon[kind]} {label[kind]} {used(kind)}/{budget[kind]}
             </button>
           ))}
-          <span className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+          <span className="text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
             투입 · {stage.big}
           </span>
         </div>
 
         <div
-          className="grid min-h-0 flex-1 gap-1 rounded-xl p-1.5"
+          className="grid min-h-0 flex-1 gap-1 p-1.5"
           style={{
             gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`,
-            background: 'var(--board-overlay)',
-            border: '2px solid var(--board-line)',
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-grey)',
           }}
         >
           {grid.map((row, r) => row.map((cell, c) => {
@@ -315,21 +327,33 @@ export default function TaskSplitFactoryGame({ supportLevel }: MiniGameProps) {
                 onContextMenu={(event) => { event.preventDefault(); clearCell(r, c); }}
                 disabled={running || !game.playing}
                 aria-label={`${r + 1}행 ${c + 1}열 ${cell ? label[cell] : '빈 칸'}`}
-                className="relative flex min-h-0 flex-col items-center justify-center rounded-lg text-[14px] font-black leading-tight"
+                className="relative flex min-h-0 flex-col items-center justify-center text-[14px] font-black leading-tight"
                 style={{
-                  background: cell ? 'var(--board-surface)' : 'rgba(30, 41, 59, 0.5)',
-                  border: `2px solid ${cell ? '#38BDF8' : 'rgba(100, 116, 139, 0.35)'}`,
-                  color: 'var(--board-ink)',
+                  background: cell ? 'var(--game-board-surface)' : 'var(--game-board)',
+                  border: `var(--game-hair) solid ${
+                    cell ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
+                  color: 'var(--game-board-ink)',
                 }}
               >
-                {cell && <span aria-hidden="true">{icon[cell]}{DIRS[dirs[r][c]].arrow}</span>}
-                {r === 2 && c === 0 && !cell && <span aria-hidden="true">📥</span>}
+                {cell && (
+                  <span className="flex items-center gap-0.5" style={{ color: 'var(--game-board-blue)' }}>
+                    <BauhausMark kind={icon[cell]} size={14} />
+                    <BauhausMark kind="arrow" size={12} rotate={DIRS[dirs[r][c]].deg} />
+                  </span>
+                )}
+                {r === 2 && c === 0 && !cell && (
+                  <span style={{ color: 'var(--game-board-grey)' }}>
+                    <BauhausMark kind="arrow" size={14} />
+                  </span>
+                )}
                 {item && (
                   <span
-                    className="absolute inset-x-0.5 bottom-0.5 rounded px-0.5 text-[14px]"
+                    className="absolute inset-x-0.5 bottom-0.5 px-0.5 text-[14px]"
                     style={{
-                      background: item.big ? '#7C3AED' : item.junk ? '#7F1D1D' : '#065F46',
-                      color: 'var(--board-ink)',
+                      /* 큰 일은 회색, 상관없는 일은 빨강, 작게 쪼갠 일은 파랑이다. */
+                      background: item.big ? 'var(--game-board-grey)'
+                        : item.junk ? 'var(--game-board-red)' : 'var(--game-board-blue)',
+                      color: 'var(--game-board)',
                     }}
                   >
                     {item.text}
@@ -339,7 +363,7 @@ export default function TaskSplitFactoryGame({ supportLevel }: MiniGameProps) {
             );
           }))}
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
           {note || '오른쪽 끝이 출고구입니다. 작은 과제만 내보내세요.'}
         </p>
       </div>

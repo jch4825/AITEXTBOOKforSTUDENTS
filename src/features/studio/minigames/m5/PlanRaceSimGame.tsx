@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel } from '../engine';
+import {
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape,
+} from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+import type { ShapeKind } from '../engine';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m5-l9 · 두 방법 시험 경주 (장르 38 · 오토배틀러)
@@ -29,7 +35,6 @@ interface Card {
 
 interface Gate {
   at: number;
-  emoji: string;
   name: string;
   key: 'time' | 'safe' | 'help';
   need: number;
@@ -44,6 +49,13 @@ interface StageConfig {
   gates: Gate[];
   slots: number;
 }
+
+/* 기준 셋에는 저마다 다른 도형이 붙는다. 관문 위의 도형과 아래 이름이 늘 같이 다닌다. */
+const CRITERION_SHAPE: Record<string, ShapeKind> = {
+  time: 'circle',
+  safe: 'triangle',
+  help: 'square',
+};
 
 const CRITERION_LABEL: Record<'time' | 'safe' | 'help', string> = {
   time: '시간',
@@ -67,9 +79,9 @@ const STAGES: StageConfig[] = [
       { id: 'call', name: '전화로 묻기', time: 1, safe: 3, help: 4 },
     ],
     gates: [
-      { at: 0.3, emoji: '🌧️', name: '비가 옵니다', key: 'safe', need: 7 },
-      { at: 0.62, emoji: '⏳', name: '시간이 촉박합니다', key: 'time', need: 3 },
-      { at: 0.86, emoji: '🧗', name: '짐이 무겁습니다', key: 'help', need: 5 },
+      { at: 0.3, name: '비가 옵니다', key: 'safe', need: 7 },
+      { at: 0.62, name: '시간이 촉박합니다', key: 'time', need: 3 },
+      { at: 0.86, name: '짐이 무겁습니다', key: 'help', need: 5 },
     ],
   },
   {
@@ -87,9 +99,9 @@ const STAGES: StageConfig[] = [
       { id: 'wait', name: '내일로 미루기', time: 0, safe: 4, help: 0 },
     ],
     gates: [
-      { at: 0.28, emoji: '⏳', name: '오늘까지 끝내야 합니다', key: 'time', need: 6 },
-      { at: 0.58, emoji: '🌧️', name: '물이 흘러 미끄럽습니다', key: 'safe', need: 8 },
-      { at: 0.84, emoji: '🧗', name: '혼자 들 수 없습니다', key: 'help', need: 4 },
+      { at: 0.28, name: '오늘까지 끝내야 합니다', key: 'time', need: 6 },
+      { at: 0.58, name: '물이 흘러 미끄럽습니다', key: 'safe', need: 8 },
+      { at: 0.84, name: '혼자 들 수 없습니다', key: 'help', need: 4 },
     ],
   },
   {
@@ -107,9 +119,9 @@ const STAGES: StageConfig[] = [
       { id: 'box', name: '상자에 담기', time: 3, safe: 3, help: 2 },
     ],
     gates: [
-      { at: 0.26, emoji: '🧗', name: '짐이 아주 무겁습니다', key: 'help', need: 7 },
-      { at: 0.56, emoji: '🌧️', name: '바닥이 젖었습니다', key: 'safe', need: 9 },
-      { at: 0.84, emoji: '⏳', name: '10분 안에 옮겨야 합니다', key: 'time', need: 5 },
+      { at: 0.26, name: '짐이 아주 무겁습니다', key: 'help', need: 7 },
+      { at: 0.56, name: '바닥이 젖었습니다', key: 'safe', need: 9 },
+      { at: 0.84, name: '10분 안에 옮겨야 합니다', key: 'time', need: 5 },
     ],
   },
 ];
@@ -244,16 +256,17 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
       redraw((n) => n + 1);
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 20, 12, WORLD_W - 40, 46, BOARD.overlay, PLAY.goal, 12);
-    centerText(ctx, `오늘의 기준 · ${CRITERION_LABEL[stage.criterion]}이 가장 중요합니다`, WORLD_W / 2, 35, 24, BOARD.ink);
+    drawBar(ctx, 20, 12, WORLD_W - 40, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `오늘의 기준 · ${CRITERION_LABEL[stage.criterion]}이 가장 중요합니다`, WORLD_W / 2, 35, 24, B.ink);
 
     const laneY = [190, 360];
     laneY.forEach((y, index) => {
-      panel(ctx, 60, y - 54, WORLD_W - 120, 108, BOARD.surface, PLAY.info, 12);
-      centerText(ctx, index === 0 ? '방법 가' : '방법 나', 110, y, 22, BOARD.ink);
+      drawBar(ctx, 60, y - 54, WORLD_W - 120, 108,
+        { fill: B.surface, stroke: B.grey, width: STROKE.base });
+      centerText(ctx, index === 0 ? '방법 가' : '방법 나', 110, y, 22, B.ink);
 
       for (const gate of stage.gates) {
         const gx = 180 + gate.at * (WORLD_W - 300);
@@ -263,37 +276,35 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
         ctx.moveTo(gx, y - 44);
         ctx.lineTo(gx, y + 44);
         ctx.stroke();
-        centerText(ctx, gate.emoji, gx, y - 34, 22, BOARD.ink);
-        centerText(ctx, `${CRITERION_LABEL[gate.key]} ${Math.round(gate.need * needScale)}`, gx, y + 36, 19, BOARD.inkDim);
+        drawShape(ctx, CRITERION_SHAPE[gate.key], gx, y - 34, 22,
+          { fill: B.blue, stroke: B.keyline, width: 1 });
+        centerText(ctx, `${CRITERION_LABEL[gate.key]} ${Math.round(gate.need * needScale)}`,
+          gx, y + 36, 19, B.grey);
       }
 
       const racer = racersRef.current[index];
       const rx = 180 + racer.pos * (WORLD_W - 300);
-      ctx.beginPath();
-      ctx.arc(rx, y, 18, 0, Math.PI * 2);
-      ctx.fillStyle = racer.stopped ? PLAY.hazard : PLAY.hero;
-      ctx.fill();
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = racer.stopped ? PLAY.hazardEdge : PLAY.heroEdge;
-      ctx.stroke();
+      drawShape(ctx, 'circle', rx, y, 36,
+        { fill: racer.stopped ? B.red : B.yellow, stroke: B.keyline, width: STROKE.base });
 
       const stat = sums(lanes[index]);
-      centerText(ctx, `시간 ${stat.time} · 안전 ${stat.safe} · 도움 ${stat.help}`, WORLD_W - 160, y, 20, BOARD.inkDim);
+      centerText(ctx, `시간 ${stat.time} · 안전 ${stat.safe} · 도움 ${stat.help}`, WORLD_W - 160, y, 20, B.grey);
       if (racer.stopped && racer.stopGate >= 0) {
-        centerText(ctx, `${stage.gates[racer.stopGate].name}에서 멈췄어요`, rx + 10, y - 66, 20, PLAY.hazard);
+        centerText(ctx, `${stage.gates[racer.stopGate].name}에서 멈췄어요`, rx + 10, y - 66, 20, B.red);
       }
     });
 
-    panel(ctx, WORLD_W - 100, 120, 34, 300, '#064E3B', PLAY.goal, 8);
-    centerText(ctx, '끝', WORLD_W - 83, 270, 22, BOARD.ink);
+    drawBar(ctx, WORLD_W - 100, 120, 34, 300, { fill: B.blue, stroke: B.keyline, width: STROKE.base });
+    centerText(ctx, '끝', WORLD_W - 83, 270, 22, B.ground);
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="두 방법 시험 경주"
       instruction={`기준에 알맞은 해결 방법을 골라 빈칸에 카드를 ${stage.slots}장씩 채운 다음, 출발 단추를 눌러 보세요.`}
       progress={{ label: '채운 카드', value: lanes[0].length + lanes[1].length, max: stage.slots * 2 }}
-      hud={<GameHud lives={tries} maxLives={maxTries} />}
+      hud={<GameHud bauhaus lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -301,8 +312,14 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="다시 짜기" />
-          <MiniGameButton onClick={start} disabled={game.isLocked || !ready} emoji="🏁" label="출발" variant="primary" />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} mark="retry" label="다시 짜기" />
+          <MiniGameButton
+            onClick={start}
+            disabled={game.isLocked || !ready}
+            mark="arrow"
+            label="출발"
+            variant="primary"
+          />
         </>
       }
     >
@@ -315,11 +332,11 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
               onClick={() => setPickLane(index)}
               aria-pressed={pickLane === index}
               disabled={game.isLocked}
-              className="min-h-11 flex-1 rounded-xl px-2 text-[15px] font-black transition"
+              className="min-h-11 flex-1 px-2 text-[15px] font-black transition"
               style={{
-                background: pickLane === index ? '#38BDF8' : 'var(--board-surface)',
-                color: pickLane === index ? '#0F172A' : 'var(--board-ink)',
-                border: '2px solid #38BDF8',
+                background: pickLane === index ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                color: pickLane === index ? 'var(--game-board)' : 'var(--game-board-ink)',
+                border: 'var(--game-line) solid var(--game-board-yellow)',
               }}
             >
               {index === 0 ? '방법 가' : '방법 나'} {lanes[index].length}/{stage.slots}
@@ -338,15 +355,20 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
                 type="button"
                 onClick={() => toggle(card.id)}
                 disabled={game.isLocked}
-                className="min-h-12 rounded-xl px-2 text-left text-[14px] font-black leading-tight transition"
+                className="min-h-12 px-2 text-left text-[14px] font-black leading-tight transition"
                 style={{
-                  background: used ? 'rgba(56, 189, 248, 0.18)' : 'var(--board-surface)',
-                  border: `2px solid ${inA ? '#38BDF8' : inB ? '#C4B5FD' : 'var(--board-line)'}`,
-                  color: 'var(--board-ink)',
+                  /* 가 줄에 넣은 카드는 파랑, 나 줄은 노랑 테두리다. 어느 줄에 넣었는지가
+                     카드 끝의 글자와 테두리 색 둘로 함께 읽힌다. */
+                  background: 'var(--game-board)',
+                  border: `var(--game-line) solid ${
+                    inA ? 'var(--game-board-blue)'
+                      : inB ? 'var(--game-board-yellow)' : 'var(--game-board-grey)'}`,
+                  color: 'var(--game-board-ink)',
+                  opacity: used ? 0.72 : 1,
                 }}
               >
                 {card.name}
-                <span className="block text-[14px]" style={{ color: '#94A3B8' }}>
+                <span className="block text-[14px]" style={{ color: 'var(--game-board-grey)' }}>
                   시간 {card.time} · 안전 {card.safe} · 도움 {card.help}{used ? (inA ? ' · 가' : ' · 나') : ''}
                 </span>
               </button>
@@ -354,7 +376,7 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
           })}
         </div>
 
-        {note && <p className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>}
+        {note && <p className="text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>}
 
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <div className="game-canvas-fit">

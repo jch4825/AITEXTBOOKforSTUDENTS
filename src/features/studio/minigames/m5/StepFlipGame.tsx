@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
+  useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m5-l7 · 한 단계씩 뒤집기 (장르 7 · 중력 반전)
@@ -218,12 +222,12 @@ export default function StepFlipGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
     ctx.save();
     ctx.translate(-w.camera, 0);
 
-    ctx.fillStyle = '#1E293B';
+    ctx.fillStyle = B.surface;
     ctx.fillRect(0, TOP - 26, stage.goalX + 300, 26);
     ctx.fillRect(0, BOTTOM, stage.goalX + 300, 26);
 
@@ -239,46 +243,51 @@ export default function StepFlipGame({ supportLevel }: MiniGameProps) {
         ctx.lineTo(sx + 30, baseY);
       }
       ctx.closePath();
-      ctx.fillStyle = PLAY.hazard;
+      ctx.fillStyle = B.red;
       ctx.fill();
     }
 
     stage.checks.forEach((check, index) => {
       const y = check.top ? TOP : BOTTOM - 30;
       const done = index < w.done;
-      panel(ctx, check.x - 96, y, 192, 30, done ? '#064E3B' : '#334155', done ? PLAY.goal : PLAY.info, 8);
-      centerText(ctx, `${done ? '✅ ' : ''}${check.label}`, check.x, y + 15, 20, BOARD.ink);
+      /* 밟은 확인 발판은 파랑으로 꽉 차고 확인 표시가 붙는다. */
+      drawBar(ctx, check.x - 96, y, 192, 30, {
+        fill: done ? B.blue : B.surface,
+        stroke: done ? B.blue : B.grey,
+        width: STROKE.base,
+      });
+      centerText(ctx, check.label, check.x + (done ? 12 : 0), y + 15, 20, done ? B.ground : B.ink);
+      if (done) drawMark(ctx, 'check', check.x - 74, y + 15, 18, B.ground);
     });
 
-    panel(ctx, stage.goalX, BOTTOM - 120, 150, 120, '#064E3B', PLAY.goal, 12);
-    centerText(ctx, '끝', stage.goalX + 75, BOTTOM - 60, 28, BOARD.ink);
+    drawBar(ctx, stage.goalX, BOTTOM - 120, 150, 120,
+      { fill: B.blue, stroke: B.keyline, width: STROKE.base });
+    centerText(ctx, '끝', stage.goalX + 75, BOTTOM - 60, 28, B.ground);
 
-    ctx.beginPath();
-    ctx.arc(w.x, w.y, HERO_R, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
+    drawShape(ctx, 'circle', w.x, w.y, HERO_R * 2,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
     ctx.restore();
 
-    panel(ctx, WORLD_W - 250, 12, 236, 42, BOARD.overlay, w.canFlip ? PLAY.goal : BOARD.line, 10);
+    drawBar(ctx, WORLD_W - 250, 12, 236, 42,
+      { fill: B.ground, stroke: w.canFlip ? B.blue : B.grey, width: STROKE.base });
     centerText(ctx, w.canFlip ? '뒤집기 열림' : '뒤집기 잠김 · 확인 발판을 밟으세요',
-      WORLD_W - 132, 33, 20, BOARD.ink);
+      WORLD_W - 132, 33, 20, B.ink);
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 220, WORLD_H / 2 - 30, 440, 60, BOARD.overlay, PLAY.hero, 14);
+      drawBar(ctx, WORLD_W / 2 - 220, WORLD_H / 2 - 30, 440, 60,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(ctx, w.armed ? '스페이스를 누르면 출발합니다' : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, WORLD_H / 2, 24, BOARD.ink);
+        WORLD_W / 2, WORLD_H / 2, 24, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="한 단계씩 뒤집기"
       instruction="스페이스 키를 눌러 위아래를 뒤집으며 뾰족한 가시를 피하세요. 확인 발판을 밟아야 다시 뒤집을 수 있어요."
       progress={{ label: '끝낸 단계', value: hud.done, max: stage.checks.length }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -288,10 +297,10 @@ export default function StepFlipGame({ supportLevel }: MiniGameProps) {
         <>
           <MiniGameButton
             onClick={() => { flipRef.current = true; window.setTimeout(() => { flipRef.current = false; }, 150); }}
-            emoji="🔃"
+            mark="retry"
             label="뒤집기"
           />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />
         </>
       }
     >

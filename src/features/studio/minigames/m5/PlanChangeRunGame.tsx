@@ -2,10 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m5-l11 · 계획 바꿔 달리기 (장르 3 · 무한 달리기)
@@ -213,17 +216,17 @@ export default function PlanChangeRunGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     const camera = w.x - HERO_X;
     ctx.save();
     ctx.translate(-camera, 0);
 
-    ctx.fillStyle = '#1E293B';
+    ctx.fillStyle = B.surface;
     ctx.fillRect(camera - 40, GROUND + 22, WORLD_W + 120, WORLD_H);
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = B.grey;
+    ctx.lineWidth = STROKE.hair;
     ctx.beginPath();
     ctx.moveTo(camera - 40, GROUND + 22);
     ctx.lineTo(camera + WORLD_W + 80, GROUND + 22);
@@ -231,11 +234,15 @@ export default function PlanChangeRunGame({ supportLevel }: MiniGameProps) {
 
     for (const sign of w.signs) {
       if (sign.x - camera < -140 || sign.x - camera > WORLD_W + 140) continue;
-      panel(ctx, sign.x - 150, GROUND - 232, 300, 58, sign.passed ? '#064E3B' : '#4C1D95',
-        sign.passed ? PLAY.goal : PLAY.extra, 12);
-      centerText(ctx, sign.text, sign.x, GROUND - 203, 21, BOARD.ink);
-      ctx.strokeStyle = sign.passed ? PLAY.goal : PLAY.extra;
-      ctx.lineWidth = 5;
+      /* 지난 표지판은 파랑으로 꽉 찬다. 아직 안 지난 표지판은 테두리만 남는다. */
+      drawBar(ctx, sign.x - 150, GROUND - 232, 300, 58, {
+        fill: sign.passed ? B.blue : B.surface,
+        stroke: sign.passed ? B.blue : B.grey,
+        width: STROKE.base,
+      });
+      centerText(ctx, sign.text, sign.x, GROUND - 203, 21, sign.passed ? B.ground : B.ink);
+      ctx.strokeStyle = sign.passed ? B.blue : B.grey;
+      ctx.lineWidth = STROKE.heavy;
       ctx.beginPath();
       ctx.moveTo(sign.x, GROUND - 174);
       ctx.lineTo(sign.x, GROUND + 20);
@@ -246,39 +253,45 @@ export default function PlanChangeRunGame({ supportLevel }: MiniGameProps) {
       if (obstacle.x - camera < -100 || obstacle.x - camera > WORLD_W + 100) continue;
       const width = 56 * obstacleScale;
       if (obstacle.need === 'jump') {
-        panel(ctx, obstacle.x - width / 2, GROUND - 64, width, 86, '#7F1D1D', PLAY.hazard, 8);
-        centerText(ctx, '담', obstacle.x, GROUND - 22, 20, BOARD.ink);
+        drawBar(ctx, obstacle.x - width / 2, GROUND - 64, width, 86,
+          { fill: B.red, stroke: B.keyline, width: STROKE.base });
+        centerText(ctx, '담', obstacle.x, GROUND - 22, 20, B.ground);
       } else {
-        panel(ctx, obstacle.x - width / 2, GROUND - 210, width, 120, '#7F1D1D', PLAY.hazard, 8);
-        centerText(ctx, '굴', obstacle.x, GROUND - 150, 20, BOARD.ink);
+        drawBar(ctx, obstacle.x - width / 2, GROUND - 210, width, 120,
+          { fill: B.red, stroke: B.keyline, width: STROKE.base });
+        centerText(ctx, '굴', obstacle.x, GROUND - 150, 20, B.ground);
       }
     }
 
-    panel(ctx, stage.goalX - 20, GROUND - 180, 130, 202, '#064E3B', PLAY.goal, 12);
-    centerText(ctx, '결승선', stage.goalX + 45, GROUND - 80, 24, BOARD.ink);
+    drawBar(ctx, stage.goalX - 20, GROUND - 180, 130, 202,
+      { fill: B.blue, stroke: B.keyline, width: STROKE.base });
+    centerText(ctx, '결승선', stage.goalX + 45, GROUND - 80, 24, B.ground);
 
     const bodyH = w.sliding > 0 ? 26 : 52;
     ctx.globalAlpha = w.stun > 0 ? 0.5 : 1;
-    panel(ctx, w.x - 20, w.y - bodyH, 40, bodyH, PLAY.hero, PLAY.heroEdge, 10);
+    drawBar(ctx, w.x - 20, w.y - bodyH, 40, bodyH,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
     ctx.globalAlpha = 1;
     ctx.restore();
 
-    panel(ctx, 20, 12, WORLD_W - 40, 46, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, `지금 계획 · ${w.plan}`, WORLD_W / 2, 35, 24, BOARD.ink);
+    drawBar(ctx, 20, 12, WORLD_W - 40, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `지금 계획 · ${w.plan}`, WORLD_W / 2, 35, 24, B.ink);
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 240, WORLD_H - 92, 480, 58, BOARD.overlay, PLAY.hero, 14);
+      drawBar(ctx, WORLD_W / 2 - 240, WORLD_H - 92, 480, 58,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(ctx, w.armed ? '스페이스를 누르면 출발합니다' : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, WORLD_H - 63, 24, BOARD.ink);
+        WORLD_W / 2, WORLD_H - 63, 24, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="계획 바꿔 달리기"
       instruction="스페이스 키를 눌러 뛰거나 아래 방향키로 웅크려 장애물을 피하세요. 표지판을 지나면 계획이 바뀌니 위의 안내를 잘 살펴보세요."
       progress={{ label: '나아간 길', value: hud.progress, max: 100 }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} score={hud.signs} scoreLabel="지난 표지" />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} score={hud.signs} scoreLabel="지난 표지" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -288,13 +301,13 @@ export default function PlanChangeRunGame({ supportLevel }: MiniGameProps) {
         <>
           <MiniGameButton
             onClick={() => { jumpRef.current = true; window.setTimeout(() => { jumpRef.current = false; }, 150); }}
-            emoji="⬆️" label="뛰기"
+            mark="arrow" markRotate={270} label="뛰기"
           />
           <MiniGameButton
             onClick={() => { slideRef.current = true; window.setTimeout(() => { slideRef.current = false; }, 260); }}
-            emoji="⬇️" label="낮게"
+            mark="arrow" markRotate={90} label="낮게"
           />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 달리기" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 달리기" variant="primary" />
         </>
       }
     >

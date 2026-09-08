@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel } from '../engine';
+import {
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape,
+} from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m5-l1 · 문제 수레 조립 (장르 48 · 조립 개조)
@@ -178,7 +183,7 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     // 언덕
@@ -191,14 +196,15 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
     }
     ctx.lineTo(WORLD_W, WORLD_H);
     ctx.closePath();
-    ctx.fillStyle = '#1E293B';
+    ctx.fillStyle = B.surface;
     ctx.fill();
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = B.grey;
+    ctx.lineWidth = STROKE.hair;
     ctx.stroke();
 
-    panel(ctx, WORLD_W - 150, groundY(1) - 84, 116, 84, '#064E3B', PLAY.goal, 12);
-    centerText(ctx, '문제 한 문장', WORLD_W - 92, groundY(1) - 42, 22, BOARD.ink);
+    drawBar(ctx, WORLD_W - 150, groundY(1) - 84, 116, 84,
+      { fill: B.blue, stroke: B.keyline, width: STROKE.base });
+    centerText(ctx, '문제 한 문장', WORLD_W - 92, groundY(1) - 42, 22, B.ground);
 
     // 수레
     const t = clamp(rig.progress, 0, 1);
@@ -206,8 +212,8 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
     const y = groundY(t);
     ctx.save();
     ctx.translate(x, y - 34);
-    panel(ctx, -56, -30, 112, 44, BOARD.surface, PLAY.hero, 10);
-    centerText(ctx, '문제', 0, -8, 22, BOARD.ink);
+    drawBar(ctx, -56, -30, 112, 44, { fill: B.surface, stroke: B.yellow, width: STROKE.base });
+    centerText(ctx, '문제', 0, -8, 22, B.ink);
     const order: Slot[] = ['now', 'want', 'gap'];
     order.forEach((slot, index) => {
       const chunk = chunkById(slots[slot]);
@@ -226,24 +232,27 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
         }
         ctx.closePath();
       }
-      ctx.fillStyle = ok ? PLAY.goal : PLAY.hazard;
+      /* 맞는 조각은 둥근 바퀴, 어긋난 조각은 모난 바퀴다. 굴러가지 않는다는 것이
+         모양으로 먼저 보이고 색이 뒤따른다. */
+      ctx.fillStyle = ok ? B.blue : B.red;
       ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = ok ? PLAY.goalEdge : PLAY.hazardEdge;
+      ctx.lineWidth = STROKE.hair;
+      ctx.strokeStyle = B.keyline;
       ctx.stroke();
     });
     ctx.restore();
 
-    panel(ctx, 20, 14, WORLD_W - 40, 42, BOARD.overlay, PLAY.info, 10);
-    centerText(ctx, `상황 · ${stage.scene}`, WORLD_W / 2, 35, 22, BOARD.ink);
+    drawBar(ctx, 20, 14, WORLD_W - 40, 42, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `상황 · ${stage.scene}`, WORLD_W / 2, 35, 22, B.ink);
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="문제 수레 조립"
       instruction="문제에 알맞은 부품 3개를 골라 자동차에 끼운 다음, 시험 주행 단추를 눌러 굴려 보세요."
       progress={{ label: '채운 자리', value: (['now', 'want', 'gap'] as Slot[]).filter((s) => slots[s]).length, max: 3 }}
-      hud={<GameHud lives={tries} maxLives={maxTries} />}
+      hud={<GameHud bauhaus lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -251,8 +260,14 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="다시 조립" />
-          <MiniGameButton onClick={drive} disabled={game.isLocked || !ready} emoji="🛻" label="시험 주행" variant="primary" />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} mark="retry" label="다시 조립" />
+          <MiniGameButton
+            onClick={drive}
+            disabled={game.isLocked || !ready}
+            mark="arrow"
+            label="시험 주행"
+            variant="primary"
+          />
         </>
       }
     >
@@ -263,14 +278,17 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
             return (
               <div
                 key={slot}
-                className="flex min-h-[62px] flex-1 flex-col justify-center rounded-xl px-2 py-1"
+                className="flex min-h-[62px] flex-1 flex-col justify-center px-2 py-1"
                 style={{
-                  background: 'var(--board-surface)',
-                  border: `2px solid ${chunk ? '#38BDF8' : 'var(--board-line)'}`,
+                  background: 'var(--game-board)',
+                  border: `var(--game-line) solid ${
+                    chunk ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
                 }}
               >
-                <span className="text-[14px] font-black" style={{ color: '#94A3B8' }}>{SLOT_LABEL[slot]}</span>
-                <span className="text-[15px] font-black leading-tight" style={{ color: 'var(--board-ink)' }}>
+                <span className="text-[14px] font-black" style={{ color: 'var(--game-board-grey)' }}>
+                  {SLOT_LABEL[slot]}
+                </span>
+                <span className="text-[15px] font-black leading-tight" style={{ color: 'var(--game-board-ink)' }}>
                   {chunk ? chunk.text : '조각을 넣으세요'}
                 </span>
               </div>
@@ -284,11 +302,11 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
             return (
               <div key={chunk.id} className="flex items-center gap-1">
                 <span
-                  className="rounded-lg px-2 py-1 text-[14px] font-black"
+                  className="px-2 py-1 text-[14px] font-black"
                   style={{
-                    background: used ? 'rgba(56, 189, 248, 0.2)' : 'var(--board-overlay)',
-                    border: '2px solid var(--board-line)',
-                    color: 'var(--board-ink)',
+                    background: used ? 'var(--game-board-blue)' : 'var(--game-board)',
+                    border: 'var(--game-hair) solid var(--game-board-grey)',
+                    color: used ? 'var(--game-board)' : 'var(--game-board-ink)',
                   }}
                 >
                   {chunk.text}
@@ -300,8 +318,12 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
                     onClick={() => place(chunk, slot)}
                     disabled={!game.playing}
                     aria-label={`${chunk.text}를 ${SLOT_LABEL[slot]} 자리에 넣기`}
-                    className="min-h-8 rounded px-1.5 text-[14px] font-black"
-                    style={{ background: 'var(--board-surface)', border: '2px solid var(--board-line)', color: 'var(--board-ink)' }}
+                    className="min-h-8 px-1.5 text-[14px] font-black"
+                    style={{
+                      background: 'var(--game-board)',
+                      border: 'var(--game-hair) solid var(--game-board-grey)',
+                      color: 'var(--game-board-ink)',
+                    }}
                   >
                     {SLOT_LABEL[slot][0]}
                   </button>
@@ -312,7 +334,7 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
         </div>
 
         {note && (
-          <p className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+          <p className="text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
         )}
 
         <div className="flex min-h-0 flex-1 items-center justify-center">

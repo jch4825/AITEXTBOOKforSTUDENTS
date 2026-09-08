@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, dist, panel } from '../engine';
+import {
+  BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, dist, drawBar, drawShape,
+} from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+import type { ShapeKind } from '../engine';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m5-l4 · 먼저 할 일 보내기 (장르 40 · 진지 점령)
@@ -22,7 +28,6 @@ const BASE = { x: WORLD_W / 2, y: WORLD_H - 90 };
 interface Site {
   x: number;
   y: number;
-  emoji: string;
   name: string;
   detail: string;
   /** 초당 차오르는 양 */
@@ -47,9 +52,9 @@ const STAGES: StageConfig[] = [
     spoken: '한꺼번에 온 세 가지 일에 사람을 보내요.',
     crew: 6,
     sites: [
-      { x: 180, y: 180, emoji: '🔥', name: '안전 문제', detail: '물이 새서 바닥이 미끄럽습니다', rate: 8.5 },
-      { x: 480, y: 130, emoji: '⏰', name: '마감 문제', detail: '오늘까지 내야 하는 신청서', rate: 5 },
-      { x: 780, y: 190, emoji: '🙋', name: '도움 요청', detail: '친구가 상자를 못 듭니다', rate: 3.2 },
+      { x: 180, y: 180, name: '안전 문제', detail: '물이 새서 바닥이 미끄럽습니다', rate: 8.5 },
+      { x: 480, y: 130, name: '마감 문제', detail: '오늘까지 내야 하는 신청서', rate: 5 },
+      { x: 780, y: 190, name: '도움 요청', detail: '친구가 상자를 못 듭니다', rate: 3.2 },
     ],
   },
   {
@@ -58,10 +63,10 @@ const STAGES: StageConfig[] = [
     spoken: '축제 준비 중에 생긴 일에 사람을 보내요.',
     crew: 6,
     sites: [
-      { x: 150, y: 160, emoji: '🔥', name: '안전 문제', detail: '전선이 바닥에 늘어져 있습니다', rate: 9.5 },
-      { x: 420, y: 220, emoji: '⏰', name: '마감 문제', detail: '30분 뒤에 손님이 옵니다', rate: 6 },
-      { x: 690, y: 140, emoji: '🙋', name: '도움 요청', detail: '간판을 혼자 들지 못합니다', rate: 3.8 },
-      { x: 850, y: 250, emoji: '📦', name: '정리할 일', detail: '빈 상자가 쌓여 있습니다', rate: 2.4 },
+      { x: 150, y: 160, name: '안전 문제', detail: '전선이 바닥에 늘어져 있습니다', rate: 9.5 },
+      { x: 420, y: 220, name: '마감 문제', detail: '30분 뒤에 손님이 옵니다', rate: 6 },
+      { x: 690, y: 140, name: '도움 요청', detail: '간판을 혼자 들지 못합니다', rate: 3.8 },
+      { x: 850, y: 250, name: '정리할 일', detail: '빈 상자가 쌓여 있습니다', rate: 2.4 },
     ],
   },
   {
@@ -70,10 +75,10 @@ const STAGES: StageConfig[] = [
     spoken: '현장학습 중에 생긴 일에 사람을 보내요.',
     crew: 5,
     sites: [
-      { x: 140, y: 200, emoji: '🔥', name: '안전 문제', detail: '길이 미끄러워 넘어질 수 있습니다', rate: 11 },
-      { x: 380, y: 130, emoji: '⏰', name: '마감 문제', detail: '버스가 10분 뒤에 떠납니다', rate: 7.5 },
-      { x: 620, y: 210, emoji: '🙋', name: '도움 요청', detail: '친구가 가방을 잃어버렸습니다', rate: 4.5 },
-      { x: 840, y: 150, emoji: '📦', name: '정리할 일', detail: '자리를 치워야 합니다', rate: 2.6 },
+      { x: 140, y: 200, name: '안전 문제', detail: '길이 미끄러워 넘어질 수 있습니다', rate: 11 },
+      { x: 380, y: 130, name: '마감 문제', detail: '버스가 10분 뒤에 떠납니다', rate: 7.5 },
+      { x: 620, y: 210, name: '도움 요청', detail: '친구가 가방을 잃어버렸습니다', rate: 4.5 },
+      { x: 840, y: 150, name: '정리할 일', detail: '자리를 치워야 합니다', rate: 2.6 },
     ],
   },
 ];
@@ -176,7 +181,7 @@ export default function PriorityDispatchGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     for (const site of sites) {
@@ -192,50 +197,52 @@ export default function PriorityDispatchGame({ supportLevel }: MiniGameProps) {
 
     for (const site of sites) {
       const danger = site.gauge > 65;
-      panel(ctx, site.x - 128, site.y - 62, 256, 124,
-        site.cleared ? '#064E3B' : danger ? '#7F1D1D' : BOARD.surface,
-        site.cleared ? PLAY.goal : danger ? PLAY.hazard : PLAY.info, 14);
-      centerText(ctx, `${site.emoji} ${site.name}`, site.x, site.y - 38, 22, BOARD.ink);
-      centerText(ctx, site.detail, site.x, site.y - 12, 19, BOARD.inkDim);
-      ctx.fillStyle = '#0F172A';
-      ctx.fillRect(site.x - 100, site.y + 6, 200, 16);
-      ctx.fillStyle = site.cleared ? PLAY.goal : danger ? PLAY.hazard : PLAY.hero;
-      ctx.fillRect(site.x - 100, site.y + 6, 200 * (site.cleared ? 0 : site.gauge / 100), 16);
-      centerText(ctx, site.cleared ? '해결' : `사람 ${site.workers}명`, site.x, site.y + 42, 20, BOARD.ink);
+      /* 해결한 곳은 파랑으로 꽉 차고, 급해진 곳은 붉은 굵은 테두리를 얻는다.
+         막대의 길이가 먼저 읽히고 색이 뒤따른다. */
+      drawBar(ctx, site.x - 128, site.y - 62, 256, 124, {
+        fill: site.cleared ? B.blue : B.surface,
+        stroke: site.cleared ? B.blue : danger ? B.red : B.grey,
+        width: danger ? STROKE.heavy : STROKE.base,
+      });
+      const ink = site.cleared ? B.ground : B.ink;
+      centerText(ctx, site.name, site.x, site.y - 38, 22, ink);
+      centerText(ctx, site.detail, site.x, site.y - 12, 19, site.cleared ? B.ground : B.grey);
+      drawBar(ctx, site.x - 100, site.y + 6, 200, 16, { fill: B.ground });
+      drawBar(ctx, site.x - 100, site.y + 6, 200 * (site.cleared ? 0 : site.gauge / 100), 16,
+        { fill: danger ? B.red : B.yellow });
+      centerText(ctx, site.cleared ? '해결' : `사람 ${site.workers}명`, site.x, site.y + 42, 20, ink);
     }
 
-    panel(ctx, BASE.x - 90, BASE.y - 34, 180, 68, BOARD.surface, PLAY.hero, 12);
-    centerText(ctx, '본부', BASE.x, BASE.y - 12, 22, BOARD.ink);
-    centerText(ctx, `대기 ${workers.filter((w) => w.target < 0).length}명`, BASE.x, BASE.y + 14, 20, BOARD.inkDim);
+    drawBar(ctx, BASE.x - 90, BASE.y - 34, 180, 68,
+      { fill: B.surface, stroke: B.yellow, width: STROKE.base });
+    centerText(ctx, '본부', BASE.x, BASE.y - 12, 22, B.ink);
+    centerText(ctx, `대기 ${workers.filter((w) => w.target < 0).length}명`, BASE.x, BASE.y + 14, 20, B.grey);
 
     for (const worker of workers) {
-      ctx.beginPath();
-      ctx.arc(worker.x, worker.y, 9, 0, Math.PI * 2);
-      ctx.fillStyle = PLAY.hero;
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = PLAY.heroEdge;
-      ctx.stroke();
+      drawShape(ctx, 'circle', worker.x, worker.y, 18,
+        { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
     }
 
     if (readyRef.current) {
-      panel(ctx, WORLD_W / 2 - 250, WORLD_H / 2 - 30, 500, 60, BOARD.overlay, PLAY.hero, 14);
-      centerText(ctx, '아래 버튼으로 사람을 보내면 시작합니다', WORLD_W / 2, WORLD_H / 2, 24, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 250, WORLD_H / 2 - 30, 500, 60,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '아래 버튼으로 사람을 보내면 시작합니다', WORLD_W / 2, WORLD_H / 2, 24, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="먼저 할 일 보내기"
       instruction="도움이 급한 곳을 찾아 먼저 해결해 보세요. 막대가 가장 높이 올라간 곳부터 차례대로 사람을 보내면 됩니다."
       progress={{ label: '해결한 일', value: hud.cleared, max: stage.sites.length }}
-      hud={<GameHud score={hud.idle} scoreLabel="본부 대기" />}
+      hud={<GameHud bauhaus score={hud.idle} scoreLabel="본부 대기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex min-h-0 flex-1 items-center justify-center">
@@ -264,20 +271,29 @@ export default function PriorityDispatchGame({ supportLevel }: MiniGameProps) {
                 type="button"
                 onClick={() => { readyRef.current = false; send(index); }}
                 disabled={!game.playing}
-                className="min-h-11 rounded-xl px-2.5 text-[15px] font-black"
-                style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8', color: 'var(--board-ink)' }}
+                className="flex min-h-11 items-center gap-1.5 px-2.5 text-[15px] font-black"
+                style={{
+                  background: 'var(--game-board)',
+                  border: 'var(--game-line) solid var(--game-board-blue)',
+                  color: 'var(--game-board-ink)',
+                }}
               >
-                {site.emoji} 보내기
+                <BauhausMark kind="arrow" size={15} />
+                보내기
               </button>
               <button
                 type="button"
                 onClick={() => recall(index)}
                 disabled={!game.playing}
                 aria-label={`${site.name}에서 한 명 부르기`}
-                className="min-h-11 rounded-xl px-2 text-[15px] font-black"
-                style={{ background: 'var(--board-overlay)', border: '2px solid var(--board-line)', color: 'var(--board-ink)' }}
+                className="grid min-h-11 place-items-center px-2 text-[15px] font-black"
+                style={{
+                  background: 'var(--game-board)',
+                  border: 'var(--game-line) solid var(--game-board-grey)',
+                  color: 'var(--game-board-ink)',
+                }}
               >
-                ↩
+                <BauhausMark kind="arrow" size={15} rotate={180} />
               </button>
             </span>
           ))}

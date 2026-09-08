@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, GameStage, clamp, useCountdown } from '../engine';
+import { BauhausMark, GameHud, GameStage, clamp, useCountdown } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -18,7 +18,6 @@ interface Spot {
   id: string;
   x: number;
   y: number;
-  emoji: string;
   /** 결과에서 무엇이 어긋났는지 */
   wrong: string;
   /** 채워야 할 부품 id */
@@ -30,9 +29,9 @@ interface StageConfig {
   label: string;
   spoken: string;
   title: string;
-  conditions: { emoji: string; text: string }[];
+  conditions: { text: string }[];
   spots: Spot[];
-  parts: { id: string; emoji: string; name: string }[];
+  parts: { id: string; name: string }[];
   seconds: number;
 }
 
@@ -44,23 +43,23 @@ const STAGES: StageConfig[] = [
     title: '축제 부스',
     seconds: 110,
     conditions: [
-      { emoji: '🪧', text: '간판을 답니다' },
-      { emoji: '🪑', text: '의자 두 개를 놓습니다' },
-      { emoji: '🔌', text: '전선을 바닥에 깝니다' },
-      { emoji: '🧴', text: '손 세정제를 둡니다' },
-      { emoji: '📋', text: '가격표를 붙입니다' },
+      { text: '간판을 답니다' },
+      { text: '의자 두 개를 놓습니다' },
+      { text: '전선을 바닥에 깝니다' },
+      { text: '손 세정제를 둡니다' },
+      { text: '가격표를 붙입니다' },
     ],
     spots: [
-      { id: 's1', x: 50, y: 22, emoji: '❔', wrong: '간판이 없습니다', fix: 'sign' },
-      { id: 's2', x: 26, y: 62, emoji: '🪑', wrong: '의자가 하나뿐입니다', fix: 'chair' },
-      { id: 's3', x: 72, y: 74, emoji: '❔', wrong: '전선이 깔리지 않았습니다', fix: 'wire' },
+      { id: 's1', x: 50, y: 22, wrong: '간판이 없습니다', fix: 'sign' },
+      { id: 's2', x: 26, y: 62, wrong: '의자가 하나뿐입니다', fix: 'chair' },
+      { id: 's3', x: 72, y: 74, wrong: '전선이 깔리지 않았습니다', fix: 'wire' },
     ],
     parts: [
-      { id: 'sign', emoji: '🪧', name: '간판' },
-      { id: 'chair', emoji: '🪑', name: '의자' },
-      { id: 'wire', emoji: '🔌', name: '전선' },
-      { id: 'plant', emoji: '🪴', name: '화분' },
-      { id: 'lamp', emoji: '💡', name: '전등' },
+      { id: 'sign', name: '간판' },
+      { id: 'chair', name: '의자' },
+      { id: 'wire', name: '전선' },
+      { id: 'plant', name: '화분' },
+      { id: 'lamp', name: '전등' },
     ],
   },
   {
@@ -70,23 +69,23 @@ const STAGES: StageConfig[] = [
     title: '나눔 도시락',
     seconds: 100,
     conditions: [
-      { emoji: '🍚', text: '밥을 담습니다' },
-      { emoji: '🥕', text: '채소를 넣습니다' },
-      { emoji: '🥚', text: '단백질을 넣습니다' },
-      { emoji: '🧊', text: '아이스팩을 넣습니다' },
-      { emoji: '🏷️', text: '알레르기 표시를 붙입니다' },
+      { text: '밥을 담습니다' },
+      { text: '채소를 넣습니다' },
+      { text: '단백질을 넣습니다' },
+      { text: '아이스팩을 넣습니다' },
+      { text: '알레르기 표시를 붙입니다' },
     ],
     spots: [
-      { id: 's1', x: 30, y: 30, emoji: '❔', wrong: '채소가 빠졌습니다', fix: 'veg' },
-      { id: 's2', x: 68, y: 34, emoji: '❔', wrong: '아이스팩이 없습니다', fix: 'ice' },
-      { id: 's3', x: 48, y: 74, emoji: '❔', wrong: '알레르기 표시가 없습니다', fix: 'tag' },
+      { id: 's1', x: 30, y: 30, wrong: '채소가 빠졌습니다', fix: 'veg' },
+      { id: 's2', x: 68, y: 34, wrong: '아이스팩이 없습니다', fix: 'ice' },
+      { id: 's3', x: 48, y: 74, wrong: '알레르기 표시가 없습니다', fix: 'tag' },
     ],
     parts: [
-      { id: 'veg', emoji: '🥕', name: '채소' },
-      { id: 'ice', emoji: '🧊', name: '아이스팩' },
-      { id: 'tag', emoji: '🏷️', name: '알레르기 표시' },
-      { id: 'candy', emoji: '🍬', name: '사탕' },
-      { id: 'fork', emoji: '🍴', name: '포크' },
+      { id: 'veg', name: '채소' },
+      { id: 'ice', name: '아이스팩' },
+      { id: 'tag', name: '알레르기 표시' },
+      { id: 'candy', name: '사탕' },
+      { id: 'fork', name: '포크' },
     ],
   },
   {
@@ -96,24 +95,24 @@ const STAGES: StageConfig[] = [
     title: '알림 게시판',
     seconds: 90,
     conditions: [
-      { emoji: '📅', text: '날짜를 크게 적습니다' },
-      { emoji: '📍', text: '장소를 적습니다' },
-      { emoji: '🕘', text: '시각을 적습니다' },
-      { emoji: '🎒', text: '준비물을 적습니다' },
-      { emoji: '☎️', text: '문의할 곳을 적습니다' },
+      { text: '날짜를 크게 적습니다' },
+      { text: '장소를 적습니다' },
+      { text: '시각을 적습니다' },
+      { text: '준비물을 적습니다' },
+      { text: '문의할 곳을 적습니다' },
     ],
     spots: [
-      { id: 's1', x: 26, y: 26, emoji: '❔', wrong: '날짜가 빠졌습니다', fix: 'date' },
-      { id: 's2', x: 70, y: 44, emoji: '❔', wrong: '준비물이 빠졌습니다', fix: 'bag' },
-      { id: 's3', x: 40, y: 76, emoji: '❔', wrong: '문의할 곳이 빠졌습니다', fix: 'call' },
-      { id: 's4', x: 78, y: 74, emoji: '❔', wrong: '시각이 빠졌습니다', fix: 'clock' },
+      { id: 's1', x: 26, y: 26, wrong: '날짜가 빠졌습니다', fix: 'date' },
+      { id: 's2', x: 70, y: 44, wrong: '준비물이 빠졌습니다', fix: 'bag' },
+      { id: 's3', x: 40, y: 76, wrong: '문의할 곳이 빠졌습니다', fix: 'call' },
+      { id: 's4', x: 78, y: 74, wrong: '시각이 빠졌습니다', fix: 'clock' },
     ],
     parts: [
-      { id: 'date', emoji: '📅', name: '날짜' },
-      { id: 'bag', emoji: '🎒', name: '준비물' },
-      { id: 'call', emoji: '☎️', name: '문의' },
-      { id: 'clock', emoji: '🕘', name: '시각' },
-      { id: 'star', emoji: '⭐', name: '장식' },
+      { id: 'date', name: '날짜' },
+      { id: 'bag', name: '준비물' },
+      { id: 'call', name: '문의' },
+      { id: 'clock', name: '시각' },
+      { id: 'star', name: '장식' },
     ],
   },
 ];
@@ -197,31 +196,40 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="조건표와 대조"
       instruction="완성된 그림에서 조건과 다른 부분을 찾아 누른 뒤, 아래 상자에서 알맞은 물건을 골라 바꾸어 보세요."
       progress={{ label: '고친 곳', value: fixed.length, max: stage.spots.length }}
-      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 대조하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 대조하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex flex-wrap gap-1">
           {stage.conditions.map((cond) => (
             <span
               key={cond.text}
-              className="rounded-lg px-2 py-1 text-[14px] font-black"
-              style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8', color: 'var(--board-ink)' }}
+              className="flex items-center gap-1.5 px-2 py-1 text-[14px] font-black"
+              style={{
+                background: 'var(--game-board)',
+                border: 'var(--game-hair) solid var(--game-board-blue)',
+                color: 'var(--game-board-ink)',
+              }}
             >
-              {cond.emoji} {cond.text}
+              <span style={{ color: 'var(--game-board-blue)' }}>
+                <BauhausMark kind="square" size={12} />
+              </span>
+              {cond.text}
             </span>
           ))}
         </div>
 
         <GameStage
+          bauhaus
           ariaLabel={`${stage.title} 완성 사진. 조건표와 어긋난 곳 ${stage.spots.length}군데를 찾습니다.`}
           onPointer={(pointer) => {
             if (pointer.phase !== 'down') return;
@@ -233,8 +241,12 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
           }}
         >
           <span
-            className="absolute left-1/2 top-2 -translate-x-1/2 rounded-lg px-2 py-0.5 text-[15px] font-black"
-            style={{ background: 'var(--board-overlay)', border: '2px solid var(--board-line)', color: 'var(--board-ink)' }}
+            className="absolute left-1/2 top-2 -translate-x-1/2 px-2 py-0.5 text-[15px] font-black"
+            style={{
+              background: 'var(--game-board)',
+              border: 'var(--game-hair) solid var(--game-board-grey)',
+              color: 'var(--game-board-ink)',
+            }}
           >
             {stage.title} 완성 사진
           </span>
@@ -251,12 +263,15 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
                   top: `${spot.y}%`,
                   width: spotSize,
                   height: spotSize,
-                  background: isFixed ? 'rgba(74, 222, 128, 0.2)' : 'rgba(251, 113, 133, 0.2)',
-                  border: `3px solid ${isFixed ? '#4ADE80' : '#FB7185'}`,
-                  color: 'var(--board-ink)',
+                  /* 고친 자리는 파란 네모, 아직 어긋난 자리는 붉은 세모다.
+                     둘의 밝기가 판 위에서 거의 같아 색만으로는 갈리지 않는다. */
+                  background: 'var(--game-board)',
+                  border: `var(--game-line) solid ${
+                    isFixed ? 'var(--game-board-blue)' : 'var(--game-board-red)'}`,
+                  color: isFixed ? 'var(--game-board-blue)' : 'var(--game-board-red)',
                 }}
               >
-                {isFixed ? stage.parts.find((p) => p.id === spot.fix)?.emoji : spot.emoji}
+                <BauhausMark kind={isFixed ? 'square' : 'triangle'} size={20} />
               </span>
             );
           })}
@@ -273,19 +288,22 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
                 onClick={() => setHolding(on ? null : part.id)}
                 disabled={!game.playing || used}
                 aria-pressed={on}
-                className="min-h-11 rounded-xl px-2.5 text-[15px] font-black transition"
+                className="flex min-h-11 items-center gap-1.5 px-2.5 text-[15px] font-black transition"
                 style={{
-                  background: used ? 'rgba(74, 222, 128, 0.16)' : on ? '#FBBF24' : 'var(--board-surface)',
-                  color: on ? '#3B2100' : 'var(--board-ink)',
-                  border: `2px solid ${used ? '#4ADE80' : '#FBBF24'}`,
+                  background: used ? 'var(--game-board-blue)'
+                    : on ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                  color: used || on ? 'var(--game-board)' : 'var(--game-board-ink)',
+                  border: `var(--game-line) solid ${
+                    used ? 'var(--game-board-blue)' : 'var(--game-board-yellow)'}`,
                 }}
               >
-                {part.emoji} {part.name}
+                <BauhausMark kind="square" size={13} />
+                {part.name}
               </button>
             );
           })}
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, randInt } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, randInt } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -205,10 +205,11 @@ export default function ClueMergeGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="단서 합치기"
       instruction="같은 모양의 단서 2개를 합쳐 더 자세한 요청을 만들고, 개인정보 조각은 휴지통에 넣어 버리세요."
       progress={{ label: '키운 단계', value: best, max: stage.goalLevel }}
-      hud={<GameHud score={left} scoreLabel="남은 옮기기" />}
+      hud={<GameHud bauhaus score={left} scoreLabel="남은 옮기기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -216,25 +217,32 @@ export default function ClueMergeGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={trash} disabled={!picked} emoji="🗑️" label="휴지통에 버리기" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />
+          <MiniGameButton onClick={trash} disabled={!picked} mark="cross" label="휴지통에 버리기" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />
         </>
       }
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <p
-          className="rounded-xl px-3 py-1.5 text-[15px] font-black"
-          style={{ background: 'var(--board-surface)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
+          className="flex items-center gap-2 px-3 py-1.5 text-[15px] font-black"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+            color: 'var(--game-board-ink)',
+          }}
         >
+          <span style={{ color: 'var(--game-board-blue)' }}>
+            <BauhausMark kind="square" size={16} />
+          </span>
           목표 · {stage.levels[stage.goalLevel]}
         </p>
         <div
-          className="grid min-h-0 flex-1 gap-1.5 rounded-xl p-1.5"
+          className="grid min-h-0 flex-1 gap-1.5 p-1.5"
           style={{
             gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`,
-            background: 'var(--board-overlay)',
-            border: '2px solid var(--board-line)',
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-grey)',
           }}
         >
           {board.map((row, r) => row.map((value, c) => {
@@ -249,18 +257,19 @@ export default function ClueMergeGame({ supportLevel }: MiniGameProps) {
                 onClick={() => tap(r, c)}
                 disabled={!game.playing || done || empty}
                 aria-label={empty ? `${r + 1}행 ${c + 1}열 빈 칸` : `${label(value)} 조각`}
-                className="min-h-0 rounded-lg px-1 text-[14px] font-black leading-tight transition"
+                className="min-h-0 px-1 text-[14px] font-black leading-tight transition"
                 style={{
+                  /* 고른 조각은 노랑(지금 손에 쥔 것), 개인정보 조각은 빨강,
+                     아직 못 쓰는 조각은 회색 면이다. */
                   background: empty ? 'transparent'
-                    : on ? '#38BDF8'
-                      : isPrivacy ? '#7F1D1D'
-                        : isLocked ? '#1F2937' : 'var(--board-surface)',
-                  border: `2px solid ${
-                    empty ? 'rgba(100, 116, 139, 0.3)'
-                      : isPrivacy ? '#FB7185'
-                        : isLocked ? '#4B5563' : '#38BDF8'
+                    : on ? 'var(--game-board-yellow)'
+                      : isPrivacy ? 'var(--game-board-red)' : 'var(--game-board-surface)',
+                  border: `var(--game-hair) solid ${
+                    empty ? 'var(--game-board-grey)'
+                      : isPrivacy ? 'var(--game-board-red)'
+                        : isLocked ? 'var(--game-board-grey)' : 'var(--game-board-blue)'
                   }`,
-                  color: on ? '#0F172A' : 'var(--board-ink)',
+                  color: on || isPrivacy ? 'var(--game-board)' : 'var(--game-board-ink)',
                   opacity: isLocked ? 0.6 : 1,
                 }}
               >
@@ -269,7 +278,7 @@ export default function ClueMergeGame({ supportLevel }: MiniGameProps) {
             );
           }))}
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );
