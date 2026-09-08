@@ -2,9 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
+  useGameKeys,
 } from '../engine';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m3-l3 · 어려운 말 벽 깨기 (장르 26 · 벽돌깨기)
@@ -228,54 +232,59 @@ export default function HardWordBreakGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     // 아래에 만들어지는 쉬운 설명
     const easyText = w.bricks.filter((b) => b.broken).slice(-5).map((b) => b.easy).join(' · ');
-    panel(ctx, 20, 16, WORLD_W - 40, 46, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, easyText ? `쉬운 말 · ${easyText}` : '회색 벽돌을 깨면 쉬운 말이 됩니다', WORLD_W / 2, 39, 22, BOARD.ink);
+    drawBar(ctx, 20, 16, WORLD_W - 40, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, easyText ? `쉬운 말 · ${easyText}` : '회색 벽돌을 깨면 쉬운 말이 됩니다', WORLD_W / 2, 39, 22, B.ink);
 
     for (const brick of w.bricks) {
       if (brick.broken) continue;
       const box = brickBox(brick);
       const cracked = brick.cracks > 0;
-      panel(
-        ctx, box.x, box.y, box.w, box.h,
-        brick.steel ? '#065F46' : '#334155',
-        brick.steel ? (cracked ? PLAY.hero : PLAY.goal) : BOARD.line, 8,
-      );
-      centerText(ctx, brick.text, box.x + box.w / 2, box.y + box.h / 2, 24, BOARD.ink);
-      if (cracked) centerText(ctx, '⚡'.repeat(brick.cracks), box.x + box.w / 2, box.y + box.h - 10, 20, PLAY.hero);
+      /* 남겨야 할 벽돌은 파란 면, 깨야 할 벽돌은 회색 면이다. 금이 간 파란 벽돌은
+         테두리가 노랑으로 바뀌고 아래에 금 자국이 하나씩 늘어 "위험하다"를 알린다. */
+      drawBar(ctx, box.x, box.y, box.w, box.h, {
+        fill: brick.steel ? B.blue : B.surface,
+        stroke: brick.steel ? (cracked ? B.yellow : B.keyline) : B.grey,
+        width: cracked ? STROKE.heavy : STROKE.base,
+      });
+      centerText(ctx, brick.text, box.x + box.w / 2, box.y + box.h / 2, 24,
+        brick.steel ? B.ground : B.ink);
+      for (let i = 0; i < brick.cracks; i += 1) {
+        drawMark(ctx, 'cross', box.x + 18 + i * 20, box.y + box.h - 12, 14, B.yellow);
+      }
     }
 
-    panel(ctx, w.paddle - paddleW / 2, WORLD_H - 54, paddleW, 18, PLAY.hero, PLAY.heroEdge, 9);
-    ctx.beginPath();
-    ctx.arc(w.bx, w.by, 12, 0, Math.PI * 2);
-    ctx.fillStyle = BOARD.ink;
-    ctx.fill();
+    drawBar(ctx, w.paddle - paddleW / 2, WORLD_H - 54, paddleW, 18,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
+    drawShape(ctx, 'circle', w.bx, w.by, 24, { fill: B.ink, stroke: B.keyline, width: 1 });
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 210, WORLD_H - 132, 420, 56, BOARD.overlay, PLAY.hero, 14);
+      drawBar(ctx, WORLD_W / 2 - 210, WORLD_H - 132, 420, 56,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx, w.armed ? '스페이스를 누르면 공이 나갑니다' : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, WORLD_H - 104, 24, BOARD.ink,
+        WORLD_W / 2, WORLD_H - 104, 24, B.ink,
       );
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="어려운 말 벽 깨기"
-      instruction="어려운 낱말(회색 벽돌)만 시원하게 깨뜨려 보세요. 꼭 남겨야 할 중요한 사실(초록 벽돌)은 깨지지 않게 조심합시다."
+      instruction="어려운 낱말은 회색 벽돌입니다. 회색만 시원하게 깨뜨려 보세요. 꼭 남겨야 할 사실은 파란 벽돌이니 깨지지 않게 조심합시다."
       progress={{ label: '쉬워진 말', value: hud.broken, max: hardTotal }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 치기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 치기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

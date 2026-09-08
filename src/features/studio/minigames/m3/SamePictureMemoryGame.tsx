@@ -183,11 +183,13 @@ export default function SamePictureMemoryGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="같은 그림 카드"
       instruction="처음에 잠깐 보여 주는 그림의 자리를 기억했다가 같은 그림 두 장을 찾아 보세요. 헛짚지 않고 이어서 찾으면 금색 도장을 받습니다."
       progress={{ label: '맞춘 쌍', value: clearedPairs, max: stage.pairs }}
       hud={
         <GameHud
+          bauhaus
           lives={tries}
           maxLives={maxTries}
           score={gold}
@@ -201,7 +203,7 @@ export default function SamePictureMemoryGame({ supportLevel }: MiniGameProps) {
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 섞기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 섞기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div
@@ -213,7 +215,11 @@ export default function SamePictureMemoryGame({ supportLevel }: MiniGameProps) {
         >
           {cards.map((card) => {
             const face = showAll || card.open || card.cleared;
-            const edge = card.cleared ? (card.gold ? '#FBBF24' : '#94A3B8') : face ? '#CBD5E1' : '#64748B';
+            /* 짝을 맞춘 카드는 굵은 테두리를 얻는다. 헛짚지 않고 이어서 맞춘 카드는
+               노랑, 그렇지 않은 카드는 회색이다. 굵기가 먼저 읽히고 색이 뒤따른다. */
+            const edge = card.cleared
+              ? (card.gold ? 'var(--game-board-yellow)' : 'var(--game-board-grey)')
+              : face ? 'var(--game-board-ink)' : 'var(--game-board-grey)';
             return (
               <button
                 key={card.id}
@@ -221,12 +227,12 @@ export default function SamePictureMemoryGame({ supportLevel }: MiniGameProps) {
                 onClick={() => flip(card)}
                 disabled={!game.playing || card.cleared || showAll}
                 aria-label={face ? card.spec.label : '뒤집힌 카드'}
-                className="relative block min-h-0 overflow-hidden rounded-xl p-1 transition disabled:cursor-default"
+                className="relative block min-h-0 overflow-hidden p-1 transition disabled:cursor-default"
                 style={{
                   /* 그림이 흰 바탕 위에 그려져 있다. 앞면도 흰 종이여야 그림이 스티커처럼 앉는다. */
-                  background: '#FFFFFF',
-                  border: `2px solid ${edge}`,
-                  color: '#0F172A',
+                  background: 'var(--game-art-ground)',
+                  border: `${card.cleared ? 'var(--game-heavy)' : 'var(--game-line)'} solid ${edge}`,
+                  color: 'var(--game-ink)',
                 }}
               >
                 {/*
@@ -243,13 +249,18 @@ export default function SamePictureMemoryGame({ supportLevel }: MiniGameProps) {
                   alt=""
                   aria-hidden="true"
                   className="h-full w-full object-contain"
-                  style={{ background: '#FFFFFF' }}
+                  style={{ background: 'var(--game-art-ground)' }}
                 />
                 {card.cleared && (
                   <span
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0"
-                    style={{ background: card.gold ? 'rgba(251, 191, 36, 0.24)' : 'rgba(148, 163, 184, 0.2)' }}
+                    style={{
+                      /* 맞춘 카드에는 도장을 한 귀퉁이에만 찍는다. 면을 통째로 덮으면
+                         그림이 가려져 무엇을 맞췄는지 다시 볼 수 없다. */
+                      background: card.gold ? 'var(--game-board-yellow)' : 'var(--game-board-grey)',
+                      clipPath: 'polygon(100% 0, 100% 42%, 58% 0)',
+                    }}
                   />
                 )}
                 {!face && (
@@ -258,9 +269,11 @@ export default function SamePictureMemoryGame({ supportLevel }: MiniGameProps) {
                     aria-hidden="true"
                     className="absolute inset-0"
                     style={{
-                      background: 'var(--board-overlay)',
+                      /* 뒷면은 판과 같은 어두운 면에 점 격자를 얹는다. 격자는 바우하우스의
+                         반복 무늬이자, 앞면 그림이 비치지 않는다는 신호다. */
+                      background: 'var(--game-board-surface)',
                       backgroundImage:
-                        'radial-gradient(circle, rgba(203, 213, 225, 0.35) 2px, transparent 2px)',
+                        'radial-gradient(circle, var(--game-board-grey) 2px, transparent 2px)',
                       backgroundSize: '18px 18px',
                     }}
                   />
@@ -269,7 +282,7 @@ export default function SamePictureMemoryGame({ supportLevel }: MiniGameProps) {
             );
           })}
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );

@@ -540,7 +540,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
                   style={{
                     /* 그림과 이모지가 한 가족으로 보이게 모두 흰 종이 위에 얹는다.
                        받은 그림이 흰 바탕이라, 면을 흰색으로 맞추면 네모난 바탕이 사라진다. */
-                    background: '#FFFFFF',
+                    background: 'var(--game-art-ground)',
                     border: `${item.found ? 'var(--game-heavy)' : 'var(--game-line)'} solid ${edge}`,
                     color: 'var(--game-ink)',
                     fontSize: `${Math.round(clamp(item.size * 2.6, 18, 42))}px`,
@@ -555,7 +555,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
                       aria-hidden="true"
                       loading="lazy"
                       className="h-full w-full rounded-full object-contain"
-                      style={{ background: '#FFFFFF' }}
+                      style={{ background: 'var(--game-art-ground)' }}
                     />
                   ) : (
                     <span aria-hidden="true">{item.emoji}</span>

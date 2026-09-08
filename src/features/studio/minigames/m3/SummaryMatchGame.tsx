@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, randInt } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, randInt } from '../engine';
+import type { BauhausMarkKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -18,7 +19,7 @@ const ROWS = 6;
 
 interface Kind {
   key: string;
-  emoji: string;
+  mark: BauhausMarkKind;
   label: string;
   color: string;
 }
@@ -31,12 +32,18 @@ interface Kind {
  * 앞의 넷만 깔려서, 아무리 이어 붙여도 요약 칸이 채워지지 않았다.
  * 아래 useMiniGameStage 옆의 kinds 계산이 이 관계를 강제한다.
  */
+/*
+ * 뜻 다섯에는 저마다 다른 도형을 준다.
+ *
+ * 톤은 넷뿐이라 색은 한 번 돌아오지만 도형은 다섯이 모두 다르다. 색을 구별하지
+ * 못하는 학생도 같은 도형 셋을 잇는 것으로 놀이가 성립한다.
+ */
 const KINDS: Kind[] = [
-  { key: 'when', emoji: '🕘', label: '언제', color: '#38BDF8' },
-  { key: 'where', emoji: '📍', label: '어디서', color: '#4ADE80' },
-  { key: 'what', emoji: '🎒', label: '무엇을', color: '#FBBF24' },
-  { key: 'care', emoji: '⚠️', label: '조심할 것', color: '#FB7185' },
-  { key: 'who', emoji: '👥', label: '누가', color: '#C4B5FD' },
+  { key: 'when', mark: 'circle', label: '언제', color: 'var(--game-board-blue)' },
+  { key: 'where', mark: 'square', label: '어디서', color: 'var(--game-board-yellow)' },
+  { key: 'what', mark: 'diamond', label: '무엇을', color: 'var(--game-board-grey)' },
+  { key: 'care', mark: 'triangle', label: '조심할 것', color: 'var(--game-board-red)' },
+  { key: 'who', mark: 'plus', label: '누가', color: 'var(--game-board-blue)' },
 ];
 
 interface StageConfig {
@@ -351,32 +358,37 @@ export default function SummaryMatchGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="같은 뜻 세 개"
       instruction="칸을 눌러 자리를 바꾸며 같은 뜻을 가진 말 세 개를 이어 보세요. 요약에 꼭 필요한 핵심 내용이 차곡차곡 채워집니다."
       progress={{ label: '채운 요약', value: totalFilled, max: totalNeeded }}
-      hud={<GameHud score={left} scoreLabel="남은 바꾸기" />}
+      hud={<GameHud bauhaus score={left} scoreLabel="남은 바꾸기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <p
-          className="rounded-xl px-3 py-1.5 text-[15px] font-bold leading-snug"
-          style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8', color: 'var(--board-ink)' }}
+          className="px-3 py-1.5 text-[15px] font-bold leading-snug"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+            color: 'var(--game-board-ink)',
+          }}
         >
           원래 글 · {stage.source}
         </p>
         <div className="flex min-h-0 flex-1 gap-2">
           <div
-            className="grid min-w-0 flex-1 gap-1 rounded-xl p-1.5"
+            className="grid min-w-0 flex-1 gap-1 p-1.5"
             style={{
               gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
               gridTemplateRows: `repeat(${ROWS}, minmax(0, 1fr))`,
-              background: 'var(--board-overlay)',
-              border: '2px solid var(--board-line)',
+              background: 'var(--game-board)',
+              border: 'var(--game-line) solid var(--game-board-grey)',
             }}
           >
             {grid.map((row, r) => row.map((value, c) => {
@@ -386,8 +398,11 @@ export default function SummaryMatchGame({ supportLevel }: MiniGameProps) {
                   <div
                     key={`${r}-${c}`}
                     aria-hidden="true"
-                    className="min-h-0 rounded-lg"
-                    style={{ background: 'var(--board-bg)', border: '2px dashed var(--board-line)' }}
+                    className="min-h-0"
+                    style={{
+                      background: 'var(--game-board)',
+                      border: 'var(--game-hair) dashed var(--game-board-grey)',
+                    }}
                   />
                 );
               }
@@ -401,17 +416,17 @@ export default function SummaryMatchGame({ supportLevel }: MiniGameProps) {
                   onClick={() => tap(r, c)}
                   disabled={!game.playing || done || busy}
                   aria-label={`${r + 1}행 ${c + 1}열 ${kind.label}${popping ? ', 이어졌어요' : ''}`}
-                  className="flex min-h-0 flex-col items-center justify-center rounded-lg text-[14px] font-black transition"
+                  className="flex min-h-0 flex-col items-center justify-center gap-0.5 text-[14px] font-black transition"
                   style={{
-                    /* 이어진 칸은 제 색으로 환하게 물들고 살짝 커진다. 터지는 장면이
-                       3매치의 보상이라 여기서 확실히 보여 줘야 한다. */
-                    background: popping ? '#FFFFFF' : on ? kind.color : 'var(--board-surface)',
-                    border: `${popping ? 4 : 2}px solid ${kind.color}`,
-                    color: popping || on ? '#0F172A' : 'var(--board-ink)',
+                    /* 이어진 칸은 테두리가 굵어지고 살짝 커진다. 터지는 장면이 3매치의
+                       보상이라 여기서 확실히 보여 줘야 한다. 새 색은 들이지 않는다. */
+                    background: on || popping ? kind.color : 'var(--game-board-surface)',
+                    border: `${popping ? 'var(--game-heavy)' : 'var(--game-hair)'} solid ${kind.color}`,
+                    color: on || popping ? 'var(--game-board)' : 'var(--game-board-ink)',
                     transform: popping ? 'scale(1.08)' : 'none',
                   }}
                 >
-                  <span className="text-[17px] leading-none" aria-hidden="true">{kind.emoji}</span>
+                  <BauhausMark kind={kind.mark} size={18} />
                   <span className="leading-tight">{kind.label}</span>
                 </button>
               );
@@ -425,17 +440,19 @@ export default function SummaryMatchGame({ supportLevel }: MiniGameProps) {
               return (
                 <div
                   key={need.key}
-                  className="flex flex-1 flex-col justify-center rounded-xl p-1.5"
+                  className="flex flex-1 flex-col justify-center p-1.5"
                   style={{
-                    background: full ? 'rgba(74, 222, 128, 0.16)' : 'var(--board-surface)',
-                    border: `2px solid ${full ? '#4ADE80' : kind.color}`,
+                    background: full ? kind.color : 'var(--game-board)',
+                    border: `var(--game-line) solid ${kind.color}`,
+                    color: full ? 'var(--game-board)' : 'var(--game-board-ink)',
                   }}
                 >
-                  <span className="text-[14px] font-black" style={{ color: 'var(--board-ink)' }}>
-                    {kind.emoji} {kind.label} {value}/{need.count}
+                  <span className="flex items-center gap-1.5 text-[14px] font-black">
+                    <BauhausMark kind={kind.mark} size={14} />
+                    {kind.label} {value}/{need.count}
                   </span>
                   {full && (
-                    <span className="text-[14px] font-bold leading-tight" style={{ color: 'var(--board-ink)' }}>
+                    <span className="text-[14px] font-bold leading-tight">
                       {need.sentence}
                     </span>
                   )}
@@ -444,7 +461,7 @@ export default function SummaryMatchGame({ supportLevel }: MiniGameProps) {
             })}
           </div>
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );

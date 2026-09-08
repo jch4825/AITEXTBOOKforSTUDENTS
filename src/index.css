@@ -136,6 +136,10 @@
     --game-board-yellow: #F5C518;/* 10.90 */
     --game-board-grey: #8A8F98;  /*  5.47 — 면·테두리 전용 */
     --game-board-keyline: #F5F2EA;
+    /* 받은 그림이 인쇄된 바탕. 팔레트 색이 아니라 자산의 성질이다.
+       카드·물건 그림은 흰 바탕 위에 그려져 있어, 면을 흰색으로 맞춰야 네모난
+       바탕이 사라지고 스티커처럼 앉는다. 그림을 다시 그리는 날 함께 옮긴다. */
+    --game-art-ground: #FFFFFF;
     /* 선 굵기 세 단. 이 셋 밖의 값을 쓰지 않는다. */
     --game-hair: 2px;
     --game-line: 3px;

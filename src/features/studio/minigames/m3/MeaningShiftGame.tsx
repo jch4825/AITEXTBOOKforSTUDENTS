@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, randInt } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, randInt } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -58,11 +58,11 @@ const STAGES: StageConfig[] = [
     need: 6,
     moves: 22,
     words: [
-      { key: 'humble', name: '겸손', color: '#38BDF8', phrases: ['낮춰요', '안 뽐내요', '먼저 세워요'] },
-      { key: 'thrift', name: '절약', color: '#4ADE80', phrases: ['아껴 써요', '덜 써요', '안 버려요'] },
-      { key: 'yield', name: '양보', color: '#FBBF24', phrases: ['내줘요', '비켜 줘요', '넘겨 줘요'] },
+      { key: 'humble', name: '겸손', color: 'var(--game-board-blue)', phrases: ['낮춰요', '안 뽐내요', '먼저 세워요'] },
+      { key: 'thrift', name: '절약', color: 'var(--game-board-yellow)', phrases: ['아껴 써요', '덜 써요', '안 버려요'] },
+      { key: 'yield', name: '양보', color: 'var(--game-board-red)', phrases: ['내줘요', '비켜 줘요', '넘겨 줘요'] },
     ],
-    filler: { key: 'greet', name: '인사', color: '#94A3B8', phrases: ['안녕하세요', '반가워요', '고마워요'] },
+    filler: { key: 'greet', name: '인사', color: 'var(--game-board-grey)', phrases: ['안녕하세요', '반가워요', '고마워요'] },
   },
   {
     id: 'care',
@@ -71,11 +71,11 @@ const STAGES: StageConfig[] = [
     need: 6,
     moves: 20,
     words: [
-      { key: 'care', name: '배려', color: '#38BDF8', phrases: ['살펴요', '물어봐요', '챙겨 줘요'] },
-      { key: 'honest', name: '정직', color: '#4ADE80', phrases: ['사실대로', '안 숨겨요', '그대로 말해요'] },
-      { key: 'together', name: '협동', color: '#FBBF24', phrases: ['힘 모아요', '나눠 해요', '같이 해요'] },
+      { key: 'care', name: '배려', color: 'var(--game-board-blue)', phrases: ['살펴요', '물어봐요', '챙겨 줘요'] },
+      { key: 'honest', name: '정직', color: 'var(--game-board-yellow)', phrases: ['사실대로', '안 숨겨요', '그대로 말해요'] },
+      { key: 'together', name: '협동', color: 'var(--game-board-red)', phrases: ['힘 모아요', '나눠 해요', '같이 해요'] },
     ],
-    filler: { key: 'clean', name: '청소', color: '#94A3B8', phrases: ['쓸어요', '닦아요', '치워요'] },
+    filler: { key: 'clean', name: '청소', color: 'var(--game-board-grey)', phrases: ['쓸어요', '닦아요', '치워요'] },
   },
   {
     id: 'duty',
@@ -84,11 +84,11 @@ const STAGES: StageConfig[] = [
     need: 6,
     moves: 18,
     words: [
-      { key: 'duty', name: '책임', color: '#38BDF8', phrases: ['내 몫 끝내요', '맡은 일 해요', '끝까지 해요'] },
-      { key: 'respect', name: '존중', color: '#4ADE80', phrases: ['다름 인정', '함부로 안 해요', '귀담아들어요'] },
-      { key: 'patience', name: '인내', color: '#FBBF24', phrases: ['기다려요', '참고 견뎌요', '안 서둘러요'] },
+      { key: 'duty', name: '책임', color: 'var(--game-board-blue)', phrases: ['내 몫 끝내요', '맡은 일 해요', '끝까지 해요'] },
+      { key: 'respect', name: '존중', color: 'var(--game-board-yellow)', phrases: ['다름 인정', '함부로 안 해요', '귀담아들어요'] },
+      { key: 'patience', name: '인내', color: 'var(--game-board-red)', phrases: ['기다려요', '참고 견뎌요', '안 서둘러요'] },
     ],
-    filler: { key: 'tidy', name: '정리', color: '#94A3B8', phrases: ['제자리에', '가지런히', '모아 둬요'] },
+    filler: { key: 'tidy', name: '정리', color: 'var(--game-board-grey)', phrases: ['제자리에', '가지런히', '모아 둬요'] },
   },
 ];
 
@@ -349,51 +349,57 @@ export default function MeaningShiftGame({ supportLevel }: MiniGameProps) {
   const totalFilled = filled.reduce((sum, value) => sum + value, 0);
 
   /** 가장자리 화살표 한 개. 판 둘레를 빙 둘러 놓는다. */
-  const arrow = (key: string, label: string, aria: string, onPress: () => void) => (
+  const arrow = (key: string, rotate: number, aria: string, onPress: () => void) => (
     <button
       key={key}
       type="button"
       onClick={onPress}
       disabled={!game.playing || done || busy}
       aria-label={aria}
-      className="grid min-h-0 place-items-center rounded text-[15px] font-black"
-      style={{ background: 'var(--board-surface)', border: '2px solid var(--board-line)', color: 'var(--board-ink)' }}
+      className="grid min-h-0 place-items-center"
+      style={{
+        background: 'var(--game-board-surface)',
+        border: 'var(--game-hair) solid var(--game-board-grey)',
+        color: 'var(--game-board-ink)',
+      }}
     >
-      {label}
+      {/* 화살표는 하나를 돌려 네 방향에 쓴다. 방향마다 다른 그림을 두지 않는다. */}
+      <BauhausMark kind="arrow" size={15} rotate={rotate} />
     </button>
   );
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="뜻 줄 밀기"
       instruction="가장자리 화살표를 누르면 그 줄이 통째로 밀립니다. 같은 뜻을 말한 조각을 셋으로 이어 보세요."
       progress={{ label: '채운 뜻', value: totalFilled, max: totalNeed }}
-      hud={<GameHud score={left} scoreLabel="남은 밀기" />}
+      hud={<GameHud bauhaus score={left} scoreLabel="남은 밀기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 gap-2">
         {/* 판 + 둘레 화살표. 바깥 한 칸이 화살표, 가운데 5x5가 조각이다. */}
         <div
-          className="grid min-w-0 flex-1 gap-1 rounded-xl p-1.5"
+          className="grid min-w-0 flex-1 gap-1 p-1.5"
           style={{
             gridTemplateColumns: `28px repeat(${COLS}, minmax(0, 1fr)) 28px`,
             gridTemplateRows: `24px repeat(${ROWS}, minmax(0, 1fr)) 24px`,
-            background: 'var(--board-overlay)',
-            border: '2px solid var(--board-line)',
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-grey)',
           }}
         >
           <span />
-          {Array.from({ length: COLS }, (_, c) => arrow(`t${c}`, '▼', `${c + 1}번 줄을 아래로 밀기`, () => shift('col', c, 1)))}
+          {Array.from({ length: COLS }, (_, c) => arrow(`t${c}`, 90, `${c + 1}번 줄을 아래로 밀기`, () => shift('col', c, 1)))}
           <span />
 
           {Array.from({ length: ROWS }, (_, r) => (
             <React.Fragment key={`row-${r}`}>
-              {arrow(`l${r}`, '◀', `${r + 1}번 줄을 왼쪽으로 밀기`, () => shift('row', r, -1))}
+              {arrow(`l${r}`, 180, `${r + 1}번 줄을 왼쪽으로 밀기`, () => shift('row', r, -1))}
               {Array.from({ length: COLS }, (_, c) => {
                 const cell = grid[r][c];
                 if (!cell) {
@@ -401,8 +407,11 @@ export default function MeaningShiftGame({ supportLevel }: MiniGameProps) {
                     <div
                       key={`${r}-${c}`}
                       aria-hidden="true"
-                      className="min-h-0 rounded-lg"
-                      style={{ background: 'var(--board-bg)', border: '2px dashed var(--board-line)' }}
+                      className="min-h-0"
+                      style={{
+                        background: 'var(--game-board)',
+                        border: 'var(--game-hair) dashed var(--game-board-grey)',
+                      }}
                     />
                   );
                 }
@@ -412,12 +421,13 @@ export default function MeaningShiftGame({ supportLevel }: MiniGameProps) {
                   <div
                     key={`${r}-${c}`}
                     aria-label={`${r + 1}행 ${c + 1}열 ${word.phrases[cell.phrase]}`}
-                    className="flex min-h-0 flex-col items-center justify-center rounded-lg px-0.5 text-center transition"
+                    className="flex min-h-0 flex-col items-center justify-center px-0.5 text-center transition"
                     style={{
-                      background: popping ? '#FFFFFF' : 'var(--board-surface)',
-                      border: `${popping ? 4 : 2}px solid ${word.color}`,
-                      color: popping ? '#0F172A' : 'var(--board-ink)',
-                      transform: popping ? 'scale(1.06)' : 'none',
+                      /* 이어진 조각은 그 낱말의 색으로 뒤집힌다. 새 색을 들이지 않고
+                         면과 글자를 맞바꾸는 것이 이 어휘의 "됐다" 신호다. */
+                      background: popping ? word.color : 'var(--game-board-surface)',
+                      border: `${popping ? 'var(--game-heavy)' : 'var(--game-hair)'} solid ${word.color}`,
+                      color: popping ? 'var(--game-board)' : 'var(--game-board-ink)',
                     }}
                   >
                     <span className="text-[14px] font-black leading-tight">{word.phrases[cell.phrase]}</span>
@@ -430,12 +440,12 @@ export default function MeaningShiftGame({ supportLevel }: MiniGameProps) {
                   </div>
                 );
               })}
-              {arrow(`r${r}`, '▶', `${r + 1}번 줄을 오른쪽으로 밀기`, () => shift('row', r, 1))}
+              {arrow(`r${r}`, 0, `${r + 1}번 줄을 오른쪽으로 밀기`, () => shift('row', r, 1))}
             </React.Fragment>
           ))}
 
           <span />
-          {Array.from({ length: COLS }, (_, c) => arrow(`b${c}`, '▲', `${c + 1}번 줄을 위로 밀기`, () => shift('col', c, -1)))}
+          {Array.from({ length: COLS }, (_, c) => arrow(`b${c}`, 270, `${c + 1}번 줄을 위로 밀기`, () => shift('col', c, -1)))}
           <span />
         </div>
 
@@ -447,16 +457,20 @@ export default function MeaningShiftGame({ supportLevel }: MiniGameProps) {
             return (
               <div
                 key={word.key}
-                className="flex flex-1 flex-col justify-center rounded-xl p-1.5"
+                className="flex flex-1 flex-col justify-center p-1.5"
                 style={{
-                  background: full ? 'rgba(74, 222, 128, 0.16)' : 'var(--board-surface)',
-                  border: `2px solid ${full ? '#4ADE80' : word.color}`,
+                  background: full ? word.color : 'var(--game-board)',
+                  border: `var(--game-line) solid ${word.color}`,
+                  color: full ? 'var(--game-board)' : 'var(--game-board-ink)',
                 }}
               >
-                <span className="text-[15px] font-black" style={{ color: 'var(--board-ink)' }}>
+                <span className="text-[15px] font-black">
                   {word.name} {value}/{stage.need}
                 </span>
-                <span className="text-[14px] font-bold leading-tight" style={{ color: '#CBD5E1' }}>
+                <span
+                  className="text-[14px] font-bold leading-tight"
+                  style={{ color: full ? 'var(--game-board)' : 'var(--game-board-grey)' }}
+                >
                   {full ? word.phrases.join(' · ') : '같은 뜻을 셋으로 이어요'}
                 </span>
               </div>

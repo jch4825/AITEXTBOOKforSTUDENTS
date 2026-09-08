@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useGameKeys,
+  BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape,
+  useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m3-l5 · 이야기 길 뛰기 (장르 1 · 횡스크롤 점프맵)
@@ -250,7 +254,7 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
     ctx.save();
     ctx.translate(-w.camera, 0);
@@ -259,43 +263,44 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
       const usable = plank.ending === -1 || plank.ending === chosen;
       const width = plank.w * plankScale;
       if (plank.x - w.camera > WORLD_W + 60 || plank.x + width - w.camera < -60) continue;
-      panel(
-        ctx, plank.x, plank.y, width, 26,
-        usable ? '#1E3A5F' : '#3F2937',
-        usable ? PLAY.info : '#7F1D1D', 8,
-      );
-      centerText(ctx, plank.text, plank.x + width / 2, plank.y + 13, 20, BOARD.ink);
+      /* 내 결말로 이어지는 발판은 파랑, 다른 결말로 새는 발판은 빨강이다. */
+      drawBar(ctx, plank.x, plank.y, width, 26, {
+        fill: B.surface,
+        stroke: usable ? B.blue : B.red,
+        width: STROKE.base,
+      });
+      centerText(ctx, plank.text, plank.x + width / 2, plank.y + 13, 20, B.ink);
     }
 
     // 결말 깃발
-    panel(ctx, stage.goalX, GROUND - 170, 210, 100, '#064E3B', PLAY.goal, 12);
-    centerText(ctx, ending !== null ? stage.endings[ending] : '결말', stage.goalX + 105, GROUND - 120, 24, BOARD.ink);
+    /* 결말은 파란 네모다. 판마다 도착할 곳은 늘 파란 네모다. */
+    drawBar(ctx, stage.goalX, GROUND - 170, 210, 100,
+      { fill: B.blue, stroke: B.keyline, width: STROKE.base });
+    centerText(ctx, ending !== null ? stage.endings[ending] : '결말',
+      stage.goalX + 105, GROUND - 120, 24, B.ground);
 
-    ctx.beginPath();
-    ctx.arc(w.x, w.y, HERO_R, 0, Math.PI * 2);
     // 되돌아온 직후에는 붉게 물들여, 왜 뒤로 갔는지 눈으로도 알게 한다
-    ctx.fillStyle = w.bounce > 0 ? '#FB7185' : PLAY.hero;
-    ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
+    drawShape(ctx, 'circle', w.x, w.y, HERO_R * 2,
+      { fill: w.bounce > 0 ? B.red : B.yellow, stroke: B.keyline, width: STROKE.base });
     ctx.restore();
 
     if (ending !== null && w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 220, WORLD_H - 92, 440, 56, BOARD.overlay, PLAY.hero, 14);
+      drawBar(ctx, WORLD_W / 2 - 220, WORLD_H - 92, 440, 56,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx, w.armed ? '→ 나 스페이스를 누르면 출발합니다' : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, WORLD_H - 64, 24, BOARD.ink,
+        WORLD_W / 2, WORLD_H - 64, 24, B.ink,
       );
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="이야기 길 뛰기"
       instruction="이야기의 결말을 먼저 고르고, 그 결말로 이어지는 파란 발판을 밟아 달려가 보세요. 붉은 발판은 다른 결말로 가는 길이라, 밟으면 앞 발판으로 되돌아옵니다."
       progress={{ label: '나아간 길', value: hud.progress, max: 100 }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -303,35 +308,46 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => { moveRef.current = 1; window.setTimeout(() => { moveRef.current = 0; }, 380); }} emoji="➡️" label="달리기" />
-          <MiniGameButton onClick={() => { jumpRef.current = true; window.setTimeout(() => { jumpRef.current = false; }, 180); }} emoji="⬆️" label="뛰기" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />
+          <MiniGameButton onClick={() => { moveRef.current = 1; window.setTimeout(() => { moveRef.current = 0; }, 380); }} mark="arrow" label="달리기" />
+          <MiniGameButton onClick={() => { jumpRef.current = true; window.setTimeout(() => { jumpRef.current = false; }, 180); }} mark="arrow" markRotate={270} label="뛰기" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />
         </>
       }
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         {ending === null ? (
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-2">
-            <p className="text-[17px] font-black" style={{ color: 'var(--board-ink)' }}>내 이야기의 결말을 먼저 골라 보세요</p>
+            <p className="text-[17px] font-black" style={{ color: 'var(--game-board-ink)' }}>내 이야기의 결말을 먼저 골라 보세요</p>
             {stage.endings.map((text, index) => (
               <button
                 key={text}
                 type="button"
                 onClick={() => { setEnding(index); resetWorld(); playSound('confirm'); }}
-                className="min-h-14 w-full max-w-[420px] rounded-xl px-4 text-[17px] font-black"
-                style={{ background: 'var(--board-surface)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
+                className="flex min-h-14 w-full max-w-[420px] items-center gap-2 px-4 text-[17px] font-black"
+                style={{
+                  background: 'var(--game-board)',
+                  border: 'var(--game-line) solid var(--game-board-blue)',
+                  color: 'var(--game-board-ink)',
+                }}
               >
-                🏁 {text}
+                <span style={{ color: 'var(--game-board-blue)' }}>
+                  <BauhausMark kind="square" size={18} />
+                </span>
+                {text}
               </button>
             ))}
           </div>
         ) : (
           <>
             <p
-              className="rounded-xl px-3 py-1.5 text-[15px] font-black"
-              style={{ background: 'var(--board-surface)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
+              className="px-3 py-1.5 text-[15px] font-black"
+              style={{
+                background: 'var(--game-board)',
+                border: 'var(--game-line) solid var(--game-board-blue)',
+                color: 'var(--game-board-ink)',
+              }}
             >
-              내 결말 · {stage.endings[ending]} {hud.current ? `／ 지금 발판 · ${hud.current}` : ''}
+              내 결말 · {stage.endings[ending]} {hud.current ? `· 지금 발판 · ${hud.current}` : ''}
             </p>
             <div className="flex min-h-0 flex-1 items-center justify-center">
               <div className="game-canvas-fit">

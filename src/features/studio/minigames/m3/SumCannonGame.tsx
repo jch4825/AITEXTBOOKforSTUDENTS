@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, GameCanvas, GameHud, PLAY, centerText, clamp, createRandom, panel, randInt, toRadians, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
+  drawShape, randInt, toRadians, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m3-l6 · 합계 대포 (장르 28 · 포탄 각도 맞추기)
@@ -197,14 +201,14 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     // 땅과 금액 눈금
-    ctx.fillStyle = '#1E293B';
+    ctx.fillStyle = B.surface;
     ctx.fillRect(0, GROUND, WORLD_W, WORLD_H - GROUND);
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = B.grey;
+    ctx.lineWidth = STROKE.hair;
     for (let won = 0; won <= 6000; won += 500) {
       const x = priceToX(won);
       if (x > WORLD_W) break;
@@ -212,17 +216,22 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
       ctx.moveTo(x, GROUND);
       ctx.lineTo(x, GROUND + (won % 1000 === 0 ? 20 : 11));
       ctx.stroke();
-      if (won % 1000 === 0) centerText(ctx, `${won / 1000}천`, x, GROUND + 38, 20, BOARD.inkDim);
+      if (won % 1000 === 0) centerText(ctx, `${won / 1000}천`, x, GROUND + 38, 20, B.grey);
     }
 
     // 과녁 — 계산기를 열면 정확한 자리가 드러난다
-    panel(ctx, targetX - targetW / 2, GROUND - 76, targetW, 76, calcOpen ? '#065F46' : '#334155',
-      calcOpen ? PLAY.goal : BOARD.line, 10);
-    centerText(ctx, calcOpen ? `${total.toLocaleString()}원` : '합계?', targetX, GROUND - 38, 24, BOARD.ink);
+    /* 계산기를 열면 과녁이 파랑으로 꽉 찬다. 어림한 자리와 확인한 자리가 채움으로 갈린다. */
+    drawBar(ctx, targetX - targetW / 2, GROUND - 76, targetW, 76, {
+      fill: calcOpen ? B.blue : B.surface,
+      stroke: calcOpen ? B.blue : B.grey,
+      width: STROKE.base,
+    });
+    centerText(ctx, calcOpen ? `${total.toLocaleString()}원` : '합계?',
+      targetX, GROUND - 38, 24, calcOpen ? B.ground : B.ink);
 
     // 지난 탄착점
     for (const mark of marksRef.current) {
-      ctx.fillStyle = PLAY.hazard;
+      ctx.fillStyle = B.red;
       ctx.fillRect(mark - 3, GROUND - 8, 6, 8);
     }
 
@@ -230,39 +239,39 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
     ctx.save();
     ctx.translate(GUN_X, GROUND - 26);
     ctx.rotate(toRadians(-angle));
-    ctx.fillStyle = PLAY.hero;
-    ctx.fillRect(0, -8, 26 + power * 0.5, 16);
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 3;
-    ctx.strokeRect(0, -8, 26 + power * 0.5, 16);
+    drawBar(ctx, 0, -8, 26 + power * 0.5, 16,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
     ctx.restore();
-    panel(ctx, GUN_X - 30, GROUND - 26, 60, 26, BOARD.surface, PLAY.heroEdge, 8);
+    drawBar(ctx, GUN_X - 30, GROUND - 26, 60, 26,
+      { fill: B.surface, stroke: B.keyline, width: STROKE.hair });
 
     if (shot && !shot.done) {
-      ctx.beginPath();
-      ctx.arc(shot.x, shot.y, 10, 0, Math.PI * 2);
-      ctx.fillStyle = BOARD.ink;
-      ctx.fill();
+      drawShape(ctx, 'circle', shot.x, shot.y, 20, { fill: B.ink, stroke: B.keyline, width: 1 });
     }
 
     // 아이미 풀이
-    panel(ctx, 20, 14, 470, 30 + basket.lines.length * 30, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, '아이미의 풀이', 255, 34, 22, BOARD.inkDim);
+    drawBar(ctx, 20, 14, 470, 30 + basket.lines.length * 30,
+      { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, '아이미의 풀이', 255, 34, 22, B.grey);
     basket.lines.forEach((text, index) => {
       const wrong = calcOpen && index === basket.wrongLine;
-      centerText(ctx, text, 255, 62 + index * 30, 22, wrong ? PLAY.hazard : BOARD.ink);
+      centerText(ctx, text, 255, 62 + index * 30, 22, wrong ? B.red : B.ink);
     });
 
-    centerText(ctx, `각도 ${Math.round(angle)}도 · 힘 ${Math.round(power)}`, WORLD_W - 170, 34, 22, BOARD.ink);
-    if (wind !== 0) centerText(ctx, `옆바람 ${wind > 0 ? '→' : '←'}`, WORLD_W - 170, 62, 22, PLAY.extra);
+    centerText(ctx, `각도 ${Math.round(angle)}도 · 힘 ${Math.round(power)}`, WORLD_W - 170, 34, 22, B.ink);
+    if (wind !== 0) {
+      centerText(ctx, '옆바람', WORLD_W - 186, 62, 22, B.grey);
+      drawMark(ctx, 'arrow', WORLD_W - 130, 62, 22, B.grey, wind > 0 ? 0 : Math.PI);
+    }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="합계 대포"
       instruction="간식의 전체 금액을 먼저 어림해 본 뒤, 각도와 힘을 맞추어 발사해 보세요. 계산기로 정확한 금액을 확인할 수도 있어요."
       progress={{ label: '쏜 횟수', value: maxShots - shots, max: maxShots }}
-      hud={<GameHud lives={shots} maxLives={maxShots} />}
+      hud={<GameHud bauhaus lives={shots} maxLives={maxShots} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -270,14 +279,21 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 쏘기" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 쏘기" />
           <MiniGameButton
             onClick={() => { setCalcOpen(true); playSound('select'); }}
             disabled={!game.playing}
-            emoji="🧮"
+            mark="square"
             label="계산기"
           />
-          <MiniGameButton onClick={fire} disabled={!game.playing} emoji="💥" label="쏘기" variant="primary" />
+          <MiniGameButton
+            onClick={fire}
+            disabled={!game.playing}
+            mark="arrow"
+            markRotate={315}
+            label="쏘기"
+            variant="primary"
+          />
         </>
       }
     >
@@ -286,13 +302,17 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
           {basket.items.map((item) => (
             <span
               key={item.name}
-              className="rounded-lg px-2 py-1 text-[15px] font-black"
-              style={{ background: 'var(--board-surface)', border: '2px solid var(--board-line)', color: 'var(--board-ink)' }}
+              className="px-2 py-1 text-[15px] font-black"
+              style={{
+                background: 'var(--game-board)',
+                border: 'var(--game-hair) solid var(--game-board-grey)',
+                color: 'var(--game-board-ink)',
+              }}
             >
               {item.name} {item.price.toLocaleString()}원 × {item.count}
             </span>
           ))}
-          <span className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+          <span className="text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
             {calcOpen ? `계산기 · 합계 ${total.toLocaleString()}원` : '↑↓ 각도 · ←→ 힘 · 스페이스 발사'}
           </span>
         </div>

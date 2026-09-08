@@ -53,6 +53,16 @@ const MIGRATED = new Set([
   'm2/StepHookSwingGame.tsx',
   'm2/ToneRoadDriveGame.tsx',
   'm2/VagueSliceGame.tsx',
+  'm3/GuessMoleGame.tsx',
+  'm3/HardWordBreakGame.tsx',
+  'm3/MeaningShiftGame.tsx',
+  'm3/QuestionClimbGame.tsx',
+  'm3/RecallSnakeGame.tsx',
+  'm3/SamePictureMemoryGame.tsx',
+  'm3/StoryJumpMapGame.tsx',
+  'm3/SumCannonGame.tsx',
+  'm3/SummaryMatchGame.tsx',
+  'm3/WordStrengthFlyGame.tsx',
   'm4/PoliteWordCrossGame.tsx',
   'm4/UncomfortableDodgeGame.tsx',
 ]);
@@ -70,7 +80,7 @@ const MIGRATED = new Set([
  * 래칫 기준선. 2026-09-08 전환 시작 시점의 실측값이다.
  * 전환이 진행되면 이 수치는 내려가기만 해야 한다. 내려가면 여기도 함께 낮춘다.
  */
-const BASELINE = { hex: 346, emoji: 452 };
+const BASELINE = { hex: 260, emoji: 400 };
 
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -99,6 +109,33 @@ function countEmoji(source) {
   let n = 0;
   for (const ch of source) if (isPictograph(ch)) n += 1;
   return n;
+}
+
+/**
+ * 여는 태그의 속성 부분만 잘라 낸다.
+ *
+ * 정규식 하나로 `<Tag ...>`를 잡으면 `onClick={() => ...}` 안의 `>`에서 끊긴다.
+ * 중괄호 깊이를 세어 진짜 태그 끝을 찾는다.
+ */
+function openingTags(source, tag) {
+  const found = [];
+  /* 템플릿 리터럴 안에서 `\b`는 백스페이스가 된다. 낱말 경계로 쓰려면 한 번 더 감싼다. */
+  const re = new RegExp(`<${tag}\\b`, 'g');
+  let match = re.exec(source);
+  while (match) {
+    let depth = 0;
+    let attrs = '';
+    for (let i = match.index + match[0].length; i < source.length; i += 1) {
+      const ch = source[i];
+      if (ch === '{') depth += 1;
+      else if (ch === '}') depth -= 1;
+      else if (ch === '>' && depth === 0) break;
+      attrs += ch;
+    }
+    found.push(attrs);
+    match = re.exec(source);
+  }
+  return found;
 }
 
 const errors = [];
@@ -142,6 +179,18 @@ for (const file of files) {
   }
   if (/backdrop-(?:blur|filter)|box-shadow|shadow-(?:sm|md|lg|xl)/.test(source)) {
     errors.push(`${rel}: 그림자와 블러는 쓰지 않습니다.`);
+  }
+  /*
+   * 프레임·판·HUD는 두 어휘를 함께 안고 가는 동안 bauhaus 플래그로 갈래를 고른다.
+   * 플래그를 빠뜨리면 게임 안은 바뀌었는데 남은 기회는 하트, 남은 시간은 모래시계로
+   * 남는다. 실제로 m3-l8에서 그렇게 새 나갔다 — 여러 줄로 쓴 태그를 놓쳤기 때문이다.
+   */
+  for (const tag of ['MiniGameFrame', 'GameHud', 'GameStage']) {
+    for (const attrs of openingTags(source, tag)) {
+      if (!/\bbauhaus\b/.test(attrs)) {
+        errors.push(`${rel}: <${tag}>에 bauhaus가 빠졌습니다. 옛 갈래로 그려집니다.`);
+      }
+    }
   }
 }
 

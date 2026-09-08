@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, pick, randRange,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawShape, pick,
+  randRange,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m3-l9 · 추측만 두드리기 (장르 32 · 두더지 잡기)
@@ -129,50 +133,51 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
    * 보여 준다.
    */
   const drawScene = (ctx: CanvasRenderingContext2D) => {
+    /*
+     * 장면 그림.
+     *
+     * 앞서는 갈색 나무·초록 잎·주황 버스처럼 사물의 색을 그대로 썼다. 색이 열두 가지로
+     * 늘면서 정작 눌러야 할 것과 두어야 할 것의 색이 배경에 묻혔다. 여기서는 배경을
+     * 두 면(하늘·바닥)과 회색 구조물로만 그리고, 빨강·파랑·노랑은 놀이에만 남긴다.
+     * 장면이 무엇인지는 형태가 말한다 — 기둥과 지붕, 둥근 나무, 네모난 칠판.
+     */
     const skyH = 300;
-    ctx.fillStyle = stage.id === 'classroom' ? '#1E293B' : '#123047';
+    ctx.fillStyle = B.surface;
     ctx.fillRect(0, 64, WORLD_W, skyH - 64);
-    ctx.fillStyle = stage.id === 'classroom' ? '#3B2F26' : '#14532D';
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, skyH, WORLD_W, WORLD_H - skyH);
+    ctx.fillStyle = B.grey;
+    ctx.fillRect(0, skyH - 2, WORLD_W, 2);
 
     if (stage.id === 'park') {
-      // 해와 나무 셋, 벤치 하나
-      ctx.fillStyle = '#FBBF24';
-      ctx.beginPath();
-      ctx.arc(860, 120, 34, 0, Math.PI * 2);
-      ctx.fill();
+      // 해 하나와 나무 셋, 벤치 하나
+      drawShape(ctx, 'circle', 860, 120, 68, { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
       for (const [x, s] of [[110, 1], [420, 0.8], [720, 0.92]] as [number, number][]) {
-        ctx.fillStyle = '#78350F';
-        ctx.fillRect(x - 9 * s, skyH - 70 * s, 18 * s, 70 * s);
-        ctx.fillStyle = '#166534';
-        ctx.beginPath();
-        ctx.arc(x, skyH - 92 * s, 46 * s, 0, Math.PI * 2);
-        ctx.fill();
+        drawBar(ctx, x - 9 * s, skyH - 70 * s, 18 * s, 70 * s, { fill: B.grey });
+        drawShape(ctx, 'circle', x, skyH - 92 * s, 92 * s,
+          { fill: B.surface, stroke: B.grey, width: STROKE.hair });
       }
-      panel(ctx, 540, skyH + 34, 150, 20, '#7C4A21', '#5B3315', 6);
-      ctx.fillStyle = '#5B3315';
+      drawBar(ctx, 540, skyH + 34, 150, 20, { fill: B.grey });
+      ctx.fillStyle = B.grey;
       ctx.fillRect(556, skyH + 54, 12, 34);
       ctx.fillRect(662, skyH + 54, 12, 34);
     } else if (stage.id === 'classroom') {
-      // 칠판과 책상 셋
-      panel(ctx, 120, 96, 420, 150, '#14532D', '#0F3D22', 10);
+      // 칠판 하나와 책상 셋
+      drawBar(ctx, 120, 96, 420, 150, { fill: B.ground, stroke: B.grey, width: STROKE.base });
       for (const x of [180, 430, 680]) {
-        panel(ctx, x, skyH + 20, 160, 18, '#7C4A21', '#5B3315', 6);
-        ctx.fillStyle = '#5B3315';
+        drawBar(ctx, x, skyH + 20, 160, 18, { fill: B.grey });
+        ctx.fillStyle = B.grey;
         ctx.fillRect(x + 12, skyH + 38, 12, 46);
         ctx.fillRect(x + 136, skyH + 38, 12, 46);
       }
     } else {
       // 정류장 표지와 버스
-      ctx.fillStyle = '#94A3B8';
+      ctx.fillStyle = B.grey;
       ctx.fillRect(150, skyH - 130, 12, 130);
-      panel(ctx, 108, skyH - 176, 96, 52, '#1D4ED8', '#93C5FD', 8);
-      panel(ctx, 560, skyH - 118, 300, 118, '#B45309', '#FCD34D', 12);
-      ctx.fillStyle = '#0B1220';
-      ctx.beginPath();
-      ctx.arc(630, skyH, 22, 0, Math.PI * 2);
-      ctx.arc(800, skyH, 22, 0, Math.PI * 2);
-      ctx.fill();
+      drawBar(ctx, 108, skyH - 176, 96, 52, { fill: B.surface, stroke: B.grey, width: STROKE.hair });
+      drawBar(ctx, 560, skyH - 118, 300, 118, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+      drawShape(ctx, 'circle', 630, skyH, 44, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+      drawShape(ctx, 'circle', 800, skyH, 44, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
     }
   };
 
@@ -264,14 +269,14 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
       molesRef.current = molesRef.current.filter((m) => !m.hit || m.life > -0.4);
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
     drawScene(ctx);
 
-    panel(ctx, 20, 12, WORLD_W - 40, 46, BOARD.overlay, PLAY.info, 12);
+    drawBar(ctx, 20, 12, WORLD_W - 40, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(
-      ctx, `${stage.scene}에서 떠오른 말 · ❓ 사라지기 전에 누르기 · 👁️ 그대로 두기`,
-      WORLD_W / 2, 35, 22, BOARD.ink,
+      ctx, `${stage.scene}에서 떠오른 말 · 빨간 세모는 누르기 · 파란 네모는 그대로 두기`,
+      WORLD_W / 2, 35, 22, B.ink,
     );
 
     for (let i = 0; i < HOLE_COLS * HOLE_ROWS; i += 1) {
@@ -283,35 +288,43 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
       const rise = clamp(1 - Math.abs(mole.life / mole.total - 0.5) * 2, 0.25, 1);
       const h = box.h * 0.82 * rise;
       const y = box.y + box.h - h - 6;
-      panel(
-        ctx, box.x + 10, y, box.w - 20, h,
-        mole.guess ? '#4C1D95' : '#064E3B',
-        mole.guess ? PLAY.extra : PLAY.goal, 12,
-      );
+      /* 추측은 붉은 세모, 사실은 파란 네모다. 판마다 같은 짝이라 학생은 한 번 배운
+         신호를 계속 쓴다. 색만으로 나누지 않는 것은 판 위에서 빨강과 파랑의 밝기가
+         거의 같기 때문이다. */
+      drawBar(ctx, box.x + 10, y, box.w - 20, h,
+        { fill: B.surface, stroke: mole.guess ? B.red : B.blue, width: STROKE.base });
       if (h > 52) {
-        centerText(ctx, mole.guess ? '❓' : '👁️', box.x + box.w / 2, y + 34, 44, BOARD.ink);
-        centerText(ctx, mole.text, box.x + box.w / 2, y + h / 2 + 30, 22, BOARD.ink);
+        if (mole.guess) {
+          drawShape(ctx, 'triangle', box.x + box.w / 2, y + 36, 44,
+            { fill: B.red, stroke: B.keyline, width: STROKE.hair });
+        } else {
+          drawShape(ctx, 'square', box.x + box.w / 2, y + 36, 38,
+            { fill: B.blue, stroke: B.keyline, width: STROKE.hair });
+        }
+        centerText(ctx, mole.text, box.x + box.w / 2, y + h / 2 + 30, 22, B.ink);
       }
     }
 
     if (readyRef.current) {
-      panel(ctx, WORLD_W / 2 - 230, WORLD_H - 96, 460, 60, BOARD.overlay, PLAY.hero, 14);
-      centerText(ctx, '판을 누르면 시작합니다', WORLD_W / 2, WORLD_H - 66, 24, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 230, WORLD_H - 96, 460, 60,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '판을 누르면 시작합니다', WORLD_W / 2, WORLD_H - 66, 24, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="추측만 두드리기"
-      instruction="물음표(추측)가 나오면 사라지기 전에 누르세요. 눈동자(사실)를 잘못 누르면 터집니다."
+      instruction="빨간 세모(추측)가 나오면 사라지기 전에 누르세요. 파란 네모(사실)를 잘못 누르면 터집니다."
       progress={{ label: '고친 추측', value: hud.caught, max: GOAL }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex min-h-0 flex-1 items-center justify-center">
@@ -333,15 +346,21 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
                   }
                 }
               }}
-              ariaLabel={`${stage.scene}에서 물음표 말풍선을 누르는 놀이. 고친 추측 ${hud.caught}개, 남은 기회 ${hud.lives}개.`}
+              ariaLabel={`${stage.scene}에서 빨간 세모 말풍선을 누르는 놀이. 고친 추측 ${hud.caught}개, 남은 기회 ${hud.lives}개.`}
             />
           </div>
         </div>
         <p
-          className="min-h-[40px] rounded-xl px-3 py-1.5 text-[15px] font-bold leading-snug"
-          style={{ background: 'var(--board-surface)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
+          className="min-h-[40px] px-3 py-1.5 text-[15px] font-bold leading-snug"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+            color: 'var(--game-board-ink)',
+          }}
         >
-          {fixedList.length > 0 ? `근거 있는 설명 · ${fixedList.join(' / ')}` : '누른 물음표가 여기에서 근거 있는 말로 바뀝니다.'}
+          {fixedList.length > 0
+            ? `근거 있는 설명 · ${fixedList.join(' / ')}`
+            : '누른 빨간 세모가 여기에서 근거 있는 말로 바뀝니다.'}
         </p>
       </div>
     </MiniGameFrame>

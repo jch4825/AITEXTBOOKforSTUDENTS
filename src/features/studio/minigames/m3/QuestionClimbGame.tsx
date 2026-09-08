@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, pick, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
+  drawShape, pick, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m3-l1 · 질문 계단 오르기 (무한 계단)
@@ -192,7 +196,7 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     /* 계단은 학생을 화면 한가운데 두고 세상이 흘러 내려오는 방식으로 그린다.
@@ -225,11 +229,13 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
       if (index < 0) break;
       const by = HERO_Y + 26 + back * STEP_H + shift;
       if (by > WORLD_H + 40) break;
-      panel(ctx, posOf(index) - STEP_W / 2, by, STEP_W, 34, '#1E293B', BOARD.line, 8);
+      drawBar(ctx, posOf(index) - STEP_W / 2, by, STEP_W, 34,
+        { fill: B.surface, stroke: B.grey, width: STROKE.hair });
     }
 
     // 발밑 계단(또는 시작 바닥)
-    panel(ctx, heroX - STEP_W / 2, HERO_Y + 26 + shift, STEP_W, 34, '#334155', BOARD.line, 8);
+    drawBar(ctx, heroX - STEP_W / 2, HERO_Y + 26 + shift, STEP_W, 34,
+      { fill: B.surface, stroke: B.ink, width: STROKE.hair });
 
     for (let i = 0; i <= 7; i += 1) {
       const index = w.height + i;
@@ -240,47 +246,50 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
       // 글자와 계단이 서로를 갉아먹어 어느 쪽이 눌러야 할 칸인지 알아볼 수 없다.
       if (sy < 118 || sy > WORLD_H + 60) continue;
       const isNext = i === 0;
-      panel(ctx, sx - STEP_W / 2, sy, STEP_W, 34,
-        isNext ? '#065F46' : '#1E293B', isNext ? PLAY.goal : BOARD.line, 8);
+      /* 다음에 밟을 계단만 파랑으로 꽉 찬다. 그 위의 화살표가 어느 쪽인지 말한다. */
+      drawBar(ctx, sx - STEP_W / 2, sy, STEP_W, 34, {
+        fill: isNext ? B.blue : B.surface,
+        stroke: isNext ? B.blue : B.grey,
+        width: STROKE.hair,
+      });
       if (isNext) {
-        centerText(ctx, w.steps[index].side < 0 ? '◀ 왼쪽' : '오른쪽 ▶', sx, sy + 17, 22, BOARD.ink);
+        const toLeft = w.steps[index].side < 0;
+        centerText(ctx, toLeft ? '왼쪽' : '오른쪽', sx + (toLeft ? 14 : -14), sy + 17, 22, B.ground);
+        drawMark(ctx, 'arrow', sx + (toLeft ? -32 : 42), sy + 17, 22, B.ground, toLeft ? Math.PI : 0);
       }
     }
 
     // 캐릭터 — 발밑 계단 바로 위에 선다
     const hy = HERO_Y + shift;
-    ctx.beginPath();
-    ctx.arc(heroX, hy, HERO_R, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
-    centerText(ctx, '❓', heroX, hy + 1, 22, '#3B2100');
+    /* 오르는 것은 노랑 동그라미다. 학생이 움직이는 것은 판마다 늘 노랑 원이다. */
+    drawShape(ctx, 'circle', heroX, hy, HERO_R * 2,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
+    drawMark(ctx, 'dot', heroX, hy, 16, B.ground);
     ctx.restore();
 
     // 남은 시간 막대
     const ratio = clamp(w.time / maxTime, 0, 1);
-    panel(ctx, 40, 22, WORLD_W - 80, 30, BOARD.overlay, BOARD.line, 10);
-    ctx.fillStyle = ratio < 0.3 ? PLAY.hazard : PLAY.goal;
-    ctx.fillRect(44, 26, (WORLD_W - 88) * ratio, 22);
-    centerText(ctx, `남은 시간 ${w.time.toFixed(1)}초 · ${w.height} / ${stage.goal}칸`, WORLD_W / 2, 37, 21, BOARD.ink);
+    drawBar(ctx, 40, 22, WORLD_W - 80, 30, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+    drawBar(ctx, 44, 26, (WORLD_W - 88) * ratio, 22, { fill: ratio < 0.3 ? B.red : B.blue });
+    centerText(ctx, `남은 시간 ${w.time.toFixed(1)}초 · ${w.height} / ${stage.goal}칸`, WORLD_W / 2, 37, 21, B.ink);
 
-    panel(ctx, 40, 62, WORLD_W - 80, 42, BOARD.overlay, PLAY.info, 10);
-    centerText(ctx, `다음 계단의 질문 · ${w.steps[w.height]?.text ?? ''}`, WORLD_W / 2, 84, 21, BOARD.ink);
+    drawBar(ctx, 40, 62, WORLD_W - 80, 42, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `다음 계단의 질문 · ${w.steps[w.height]?.text ?? ''}`, WORLD_W / 2, 84, 21, B.ink);
 
     if (w.phase === 'ready' && !w.finished) {
-      panel(ctx, WORLD_W / 2 - 250, WORLD_H - 60, 500, 46, BOARD.overlay, PLAY.hero, 12);
-      centerText(ctx, '← → 를 누르면 오르기가 시작됩니다', WORLD_W / 2, WORLD_H - 37, 22, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 250, WORLD_H - 60, 500, 46,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '← → 를 누르면 오르기가 시작됩니다', WORLD_W / 2, WORLD_H - 37, 22, B.ink);
     }
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="질문 계단 오르기"
       instruction="계단이 놓인 방향에 맞추어 왼쪽 또는 오른쪽을 눌러 보세요. 한 칸씩 올라갈 때마다 시간이 늘어납니다."
       progress={{ label: '오른 칸', value: hud.height, max: stage.goal }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={hud.time} timeTotal={maxTime} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} timeLeft={hud.time} timeTotal={maxTime} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -288,9 +297,9 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => { nudgeRef.current = -1; }} emoji="⬅️" label="왼쪽" variant="primary" />
-          <MiniGameButton onClick={() => { nudgeRef.current = 1; }} emoji="➡️" label="오른쪽" variant="primary" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" />
+          <MiniGameButton onClick={() => { nudgeRef.current = -1; }} mark="arrow" markRotate={180} label="왼쪽" variant="primary" />
+          <MiniGameButton onClick={() => { nudgeRef.current = 1; }} mark="arrow" label="오른쪽" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" />
         </>
       }
     >

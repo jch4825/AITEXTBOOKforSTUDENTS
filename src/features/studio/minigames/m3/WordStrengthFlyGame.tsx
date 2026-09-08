@@ -2,9 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
+  useGameKeys,
 } from '../engine';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m3-l4 · 낱말 세기 비행 (장르 8 · 비행/플래피)
@@ -220,7 +224,7 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     for (let band = 0; band < 3; band += 1) {
@@ -233,37 +237,41 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
       ctx.lineTo(WORLD_W, y);
       ctx.stroke();
       ctx.setLineDash([]);
-      panel(ctx, 10, y - 20, 132, 40, BOARD.overlay, BOARD.line, 10);
-      centerText(ctx, STRENGTH_BANDS[band], 76, y, 22, BOARD.inkDim);
+      drawBar(ctx, 10, y - 20, 132, 40, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+      centerText(ctx, STRENGTH_BANDS[band], 76, y, 22, B.grey);
     }
 
     for (const pillar of world.pillars) {
       if (pillar.x < -140 || pillar.x > WORLD_W + 200) continue;
       const gapCenter = BAND_Y[pillar.band];
       const done = pillar.passed;
-      const fill = done ? '#14532D' : PLAY.hazardEdge;
-      const edge = done ? PLAY.goal : PLAY.hazard;
-      panel(ctx, pillar.x - 46, -20, 92, gapCenter - gapHalf + 20, fill, edge, 10);
-      panel(ctx, pillar.x - 46, gapCenter + gapHalf, 92, WORLD_H - gapCenter - gapHalf + 20, fill, edge, 10);
-      // 틈 자리에 화살표만 둔다. 장면 글은 위쪽 띠에 한 번만 크게 적는다.
-      centerText(ctx, done ? '✓' : '▶', pillar.x, gapCenter, 30, done ? PLAY.goal : PLAY.hero);
+      /* 아직 지나지 않은 기둥은 붉고, 지난 기둥은 파랗다. 틈 자리의 마크가
+         "여기로 지나가라"와 "지났다"를 모양으로 한 번 더 말한다. */
+      const fill = done ? B.blue : B.red;
+      drawBar(ctx, pillar.x - 46, -20, 92, gapCenter - gapHalf + 20,
+        { fill, stroke: B.keyline, width: STROKE.hair });
+      drawBar(ctx, pillar.x - 46, gapCenter + gapHalf, 92, WORLD_H - gapCenter - gapHalf + 20,
+        { fill, stroke: B.keyline, width: STROKE.hair });
+      drawMark(ctx, done ? 'check' : 'arrow', pillar.x, gapCenter, 30, done ? B.blue : B.yellow);
     }
 
     // 다가오는 장면 — 학생이 읽고 높이를 정하는 유일한 글이다.
     const next = world.pillars.find((pillar) => !pillar.passed);
     if (next) {
-      panel(ctx, WORLD_W / 2 - 330, 12, 660, 56, BOARD.overlay, PLAY.info, 14);
-      centerText(ctx, next.text, WORLD_W / 2, 40, 28, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 330, 12, 660, 56,
+        { fill: B.ground, stroke: B.blue, width: STROKE.base });
+      centerText(ctx, next.text, WORLD_W / 2, 40, 28, B.ink);
     }
 
     if (world.phase === 'ready' && !world.finished) {
-      panel(ctx, WORLD_W / 2 - 210, WORLD_H - 96, 420, 62, BOARD.overlay, PLAY.hero, 16);
+      drawBar(ctx, WORLD_W / 2 - 210, WORLD_H - 96, 420, 62,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(
         ctx,
         world.armed
           ? (world.lives < tuning.lives ? '누르면 다시 출발합니다' : '누르면 출발합니다')
           : '손을 떼었다가 다시 누르세요',
-        WORLD_W / 2, WORLD_H - 65, 26, BOARD.ink,
+        WORLD_W / 2, WORLD_H - 65, 26, B.ink,
       );
     }
 
@@ -271,29 +279,25 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
     ctx.save();
     ctx.translate(HERO_X + shakeX, world.y);
     ctx.rotate(clamp(world.vy / (vyMax * 2.2), -0.5, 0.6));
-    ctx.fillStyle = PLAY.hero;
-    ctx.beginPath();
-    ctx.arc(0, 0, heroR, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 4;
-    ctx.stroke();
-    centerText(ctx, stage.word, 0, 1, 20, '#3B2100');
+    drawShape(ctx, 'circle', 0, 0, heroR * 2,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
+    centerText(ctx, stage.word, 0, 1, 20, B.ground);
     ctx.restore();
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="낱말 세기 비행"
       instruction={`장면에 어울리는 '${stage.word}'의 뜻에 맞추어 알맞은 높이로 날아가 보세요. 화면을 누르면 올라가고 놓으면 내려옵니다.`}
       progress={{ label: '지나간 장면', value: hud.cleared, max: stage.scenes.length }}
-      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 낱말로 바꿨어요.`)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 날기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 날기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">
