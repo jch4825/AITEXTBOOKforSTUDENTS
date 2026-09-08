@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, approach, centerText, clamp, drawCover, fillRoundRect,
-  panel, roundRectPath, useGameImages, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, approach, centerText, clamp, drawBar, drawCover,
+  drawMark, drawShape, useGameImages, useGameKeys,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -100,6 +100,9 @@ function buildWorld(stage: StageConfig, seconds: number): World {
   };
 }
 
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
+
 /** 가림막 네모와 물체 네모가 겹친 넓이의 비율. 학생이 옮긴 그대로에서 나온다. */
 function coverOf(cx: number, cy: number, cw: number, ch: number): number {
   const ox = Math.max(0, Math.min(cx + cw / 2, BOX.x + BOX.w) - Math.max(cx - cw / 2, BOX.x));
@@ -113,7 +116,7 @@ function drawCup(ctx: CanvasRenderingContext2D, cosA: number): void {
   ctx.beginPath();
   ctx.arc(side * 54, 4, 30, -Math.PI / 2, Math.PI / 2, side < 0);
   ctx.lineWidth = 14;
-  ctx.strokeStyle = '#94A3B8';
+  ctx.strokeStyle = B.grey;
   ctx.stroke();
 
   ctx.beginPath();
@@ -122,24 +125,19 @@ function drawCup(ctx: CanvasRenderingContext2D, cosA: number): void {
   ctx.lineTo(44, 64);
   ctx.lineTo(-44, 64);
   ctx.closePath();
-  ctx.fillStyle = '#CBD5E1';
+  ctx.fillStyle = B.ink;
   ctx.fill();
   ctx.lineWidth = 5;
-  ctx.strokeStyle = '#F8FAFC';
+  ctx.strokeStyle = B.ground;
   ctx.stroke();
 
-  ctx.beginPath();
-  ctx.ellipse(0, -58, 56, 14, 0, 0, Math.PI * 2);
-  ctx.fillStyle = '#64748B';
-  ctx.fill();
-  ctx.stroke();
+  drawBar(ctx, -56, -72, 112, 15, { fill: B.grey, stroke: B.ground, width: STROKE.hair });
 }
 
 /** 가위 — 두 날이 엇갈린 모양과 아래 고리 두 개가 알아보는 단서다. */
 function drawScissors(ctx: CanvasRenderingContext2D): void {
-  ctx.lineCap = 'round';
   ctx.lineWidth = 15;
-  ctx.strokeStyle = '#CBD5E1';
+  ctx.strokeStyle = B.ink;
   ctx.beginPath();
   ctx.moveTo(-26, 52);
   ctx.lineTo(30, -70);
@@ -148,7 +146,7 @@ function drawScissors(ctx: CanvasRenderingContext2D): void {
   ctx.stroke();
 
   ctx.lineWidth = 10;
-  ctx.strokeStyle = '#94A3B8';
+  ctx.strokeStyle = B.grey;
   ctx.beginPath();
   ctx.arc(-40, 70, 20, 0, Math.PI * 2);
   ctx.moveTo(60, 70);
@@ -157,16 +155,15 @@ function drawScissors(ctx: CanvasRenderingContext2D): void {
 
   ctx.beginPath();
   ctx.arc(0, -5, 8, 0, Math.PI * 2);
-  ctx.fillStyle = '#F8FAFC';
+  ctx.fillStyle = B.ink;
   ctx.fill();
-  ctx.lineCap = 'butt';
 }
 
 /** 책 — 펼친 두 쪽과 글줄. 옆으로 돌리면 그냥 막대가 된다. */
 function drawBook(ctx: CanvasRenderingContext2D): void {
   ctx.lineWidth = 5;
-  ctx.strokeStyle = '#94A3B8';
-  ctx.fillStyle = '#E2E8F0';
+  ctx.strokeStyle = B.grey;
+  ctx.fillStyle = B.ink;
   for (const dir of [-1, 1]) {
     ctx.beginPath();
     ctx.moveTo(dir * 76, -46);
@@ -296,28 +293,26 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     // 빛 손잡이
-    centerText(ctx, '어두움', 66, LIGHT_Y, 22, BOARD.inkDim);
-    centerText(ctx, '밝음', 644, LIGHT_Y, 22, BOARD.inkDim);
-    panel(ctx, TRACK_X0 - 6, LIGHT_Y - 11, TRACK_X1 - TRACK_X0 + 12, 22, BOARD.overlay, BOARD.line, 11);
+    centerText(ctx, '어두움', 66, LIGHT_Y, 22, B.grey);
+    centerText(ctx, '밝음', 644, LIGHT_Y, 22, B.grey);
+    drawBar(ctx, TRACK_X0 - 6, LIGHT_Y - 11, TRACK_X1 - TRACK_X0 + 12, 22,
+      { fill: B.ground, stroke: B.grey, width: STROKE.hair });
     const lightX = TRACK_X0 + world.light * (TRACK_X1 - TRACK_X0);
-    ctx.fillStyle = PLAY.hero;
-    ctx.beginPath();
-    ctx.arc(lightX, LIGHT_Y, handleR, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.lineWidth = 4;
-    ctx.stroke();
-    centerText(ctx, '☀', lightX, LIGHT_Y + 1, 26, '#3B2100');
+    /* 손잡이는 노랑 동그라미다. 학생이 쥐고 움직이는 것은 판마다 늘 노랑 원이다. */
+    drawShape(ctx, 'circle', lightX, LIGHT_Y, handleR * 2,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
+    drawMark(ctx, 'dot', lightX, LIGHT_Y, 16, B.ground);
 
     // 사진 틀 — 이 안이 아이미가 보는 그림이다
     ctx.save();
-    roundRectPath(ctx, FRAME.x, FRAME.y, FRAME.w, FRAME.h, 18);
+    ctx.beginPath();
+    ctx.rect(FRAME.x, FRAME.y, FRAME.w, FRAME.h);
     ctx.clip();
-    ctx.fillStyle = BOARD.surface;
+    ctx.fillStyle = B.surface;
     ctx.fillRect(FRAME.x, FRAME.y, FRAME.w, FRAME.h);
 
     /* 돌린 각도를 사진 다섯 장 가운데 하나로 바꾼다. 0도에 가까울수록 잘 보이는 사진이
@@ -337,12 +332,9 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
     }
 
     // 가림막
-    ctx.fillStyle = PLAY.extraEdge;
-    fillRoundRect(ctx, world.clothX - clothW / 2, world.clothY - clothH / 2, clothW, clothH, 16);
-    ctx.strokeStyle = PLAY.extra;
-    ctx.lineWidth = 4;
-    ctx.stroke();
-    centerText(ctx, '가림막', world.clothX, world.clothY, 26, '#F5F3FF');
+    drawBar(ctx, world.clothX - clothW / 2, world.clothY - clothH / 2, clothW, clothH,
+      { fill: B.grey, stroke: B.keyline, width: STROKE.base });
+    centerText(ctx, '가림막', world.clothX, world.clothY, 26, B.ground);
 
     // 밝기 — 어두우면 검게 덮이고 지나치게 밝으면 하얗게 날아간다
     const over = world.light - 0.5;
@@ -352,64 +344,56 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
     ctx.fillRect(FRAME.x, FRAME.y, FRAME.w, FRAME.h);
 
     if (!world.started && !world.finished) {
-      panel(ctx, FRAME.x + 74, FRAME.y + 268, 432, 52, BOARD.overlay, PLAY.info, 14);
-      centerText(ctx, '손잡이를 잡으면 시작합니다', FRAME.x + 290, FRAME.y + 294, 26, BOARD.ink);
+      drawBar(ctx, FRAME.x + 74, FRAME.y + 268, 432, 52,
+        { fill: B.ground, stroke: B.blue, width: STROKE.base });
+      centerText(ctx, '손잡이를 잡으면 시작합니다', FRAME.x + 290, FRAME.y + 294, 26, B.ink);
     }
     ctx.restore();
     // 액자 테두리 — 속을 칠하면 방금 그린 사진을 덮는다. 경로만 만들어 선만 긋는다.
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 4;
-    roundRectPath(ctx, FRAME.x, FRAME.y, FRAME.w, FRAME.h, 18);
-    ctx.stroke();
+    drawBar(ctx, FRAME.x, FRAME.y, FRAME.w, FRAME.h, { stroke: B.grey, width: STROKE.base });
 
     // 회전 다이얼
-    centerText(ctx, '돌리기', 66, DIAL_Y, 22, BOARD.inkDim);
-    panel(ctx, TRACK_X0 - 6, DIAL_Y - 11, TRACK_X1 - TRACK_X0 + 12, 22, BOARD.overlay, BOARD.line, 11);
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 3;
+    centerText(ctx, '돌리기', 66, DIAL_Y, 22, B.grey);
+    drawBar(ctx, TRACK_X0 - 6, DIAL_Y - 11, TRACK_X1 - TRACK_X0 + 12, 22,
+      { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+    ctx.strokeStyle = B.grey;
+    ctx.lineWidth = STROKE.hair;
     ctx.beginPath();
     ctx.moveTo(TRACK_MID, DIAL_Y - 18);
     ctx.lineTo(TRACK_MID, DIAL_Y + 18);
     ctx.stroke();
-    ctx.fillStyle = PLAY.info;
-    ctx.beginPath();
-    ctx.arc(world.dialX, DIAL_Y, handleR, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = PLAY.infoEdge;
-    ctx.lineWidth = 4;
-    ctx.stroke();
-    centerText(ctx, '⟳', world.dialX, DIAL_Y + 1, 26, '#04263B');
-    centerText(ctx, '방향키로도 됩니다', 355, DIAL_Y + 32, 20, BOARD.inkDim);
+    drawShape(ctx, 'circle', world.dialX, DIAL_Y, handleR * 2,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
+    /* 되돌리기 마크는 한 바퀴 도는 화살표다. 이 손잡이가 하는 일이 그대로 그림이 된다. */
+    drawMark(ctx, 'retry', world.dialX, DIAL_Y, 26, B.ground);
+    centerText(ctx, '방향키로도 됩니다', 355, DIAL_Y + 32, 20, B.grey);
 
     // 아이미 말풍선
-    panel(ctx, 676, 16, 270, 100, BOARD.overlay, PLAY.goal, 16);
-    centerText(ctx, lines[0], 811, 48, 26, BOARD.ink);
-    centerText(ctx, lines[1], 811, 86, 24, BOARD.inkDim);
+    drawBar(ctx, 676, 16, 270, 100, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, lines[0], 811, 48, 26, B.ink);
+    centerText(ctx, lines[1], 811, 86, 24, B.grey);
 
     // 알아본 정도 막대
-    centerText(ctx, '아이미가 알아봄', 811, 148, 22, BOARD.inkDim);
-    panel(ctx, BAR.x, BAR.y, BAR.w, BAR.h, BOARD.overlay, BOARD.line, 14);
+    centerText(ctx, '아이미가 알아봄', 811, 148, 22, B.grey);
+    drawBar(ctx, BAR.x, BAR.y, BAR.w, BAR.h, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
     const fillH = value * (BAR.h - 8);
-    ctx.fillStyle = value >= target ? PLAY.goal : PLAY.info;
-    fillRoundRect(ctx, BAR.x + 4, BAR.y + BAR.h - 4 - fillH, BAR.w - 8, fillH, 10);
+    drawBar(ctx, BAR.x + 4, BAR.y + BAR.h - 4 - fillH, BAR.w - 8, fillH, { fill: B.blue });
     const targetY = BAR.y + BAR.h - 4 - target * (BAR.h - 8);
-    ctx.strokeStyle = PLAY.hero;
-    ctx.lineWidth = 5;
+    ctx.strokeStyle = B.yellow;
+    ctx.lineWidth = STROKE.base;
     ctx.setLineDash([12, 8]);
     ctx.beginPath();
     ctx.moveTo(BAR.x - 16, targetY);
     ctx.lineTo(BAR.x + BAR.w + 16, targetY);
     ctx.stroke();
     ctx.setLineDash([]);
-    centerText(ctx, '목표', 724, targetY, 22, PLAY.hero);
+    centerText(ctx, '목표', 724, targetY, 22, B.yellow);
 
     // 목표선 위에서 버틴 시간
-    panel(ctx, 676, 504, 270, 32, BOARD.overlay, BOARD.line, 12);
-    centerText(ctx, '맞춘 시간', 730, 520, 20, BOARD.inkDim);
-    ctx.fillStyle = BOARD.surface;
-    fillRoundRect(ctx, 786, 511, 148, 18, 9);
-    ctx.fillStyle = PLAY.goal;
-    fillRoundRect(ctx, 786, 511, 148 * clamp(world.hold / holdNeed, 0, 1), 18, 9);
+    drawBar(ctx, 676, 504, 270, 32, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+    centerText(ctx, '맞춘 시간', 730, 520, 20, B.grey);
+    drawBar(ctx, 786, 511, 148, 18, { fill: B.surface });
+    drawBar(ctx, 786, 511, 148 * clamp(world.hold / holdNeed, 0, 1), 18, { fill: B.blue });
   };
 
   const onPointer = (pointer: { x: number; y: number; phase: 'down' | 'move' | 'up' }) => {
@@ -445,16 +429,17 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="카메라 각도 돌리기"
       instruction={`손잡이를 움직여 밝기와 각도를 맞추고, 가림막을 옆으로 치워 보세요. ${stage.name} 모습이 또렷해지면 인공지능이 알아봅니다.`}
       progress={{ label: '고친 곳', value: view.fixed, max: 3 }}
-      hud={<GameHud timeLeft={view.seconds} timeTotal={totalSeconds} />}
+      hud={<GameHud bauhaus timeLeft={view.seconds} timeTotal={totalSeconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].name} 사진으로 바꿨어요.`)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 찍기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 찍기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

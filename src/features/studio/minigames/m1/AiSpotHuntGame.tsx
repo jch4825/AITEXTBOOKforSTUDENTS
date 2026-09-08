@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
+  BauhausMark,
   GameHud, GameStage, clamp, createRandom, randRange, shuffle,
   useCountdown, useGameKeys, useGameLoop,
 } from '../engine';
@@ -29,6 +30,14 @@ import type { MiniGameProps } from '../types';
  * 스테이지마다 이름이 조금씩 달라서(얼굴 잠금·얼굴 사물함·얼굴 도어록) 이름이 아니라
  * 이모지를 열쇠로 삼는다. 이모지는 같은 물건이면 스테이지가 달라도 같게 적어 두었다.
  * 그림이 없는 물건은 이모지가 그대로 남는다.
+ */
+/*
+ * 그림이 아직 없는 물건은 이 파일에서만 그림 문자를 그대로 쓴다.
+ *
+ * 놀이 파트는 그림 문자를 쓰지 않는 것이 계약이지만, 여기서 그림 문자는 장식이 아니라
+ * 물건의 정체다. 고등 학년군에서는 이름표를 붙이지 않으므로(그림만 보고 고르는 것이
+ * 그 학년군의 과제다) 그림 문자를 걷어내면 물건 18개가 빈 동그라미가 된다.
+ * 남은 18개의 그림이 들어오는 날 함께 걷어내고 MIGRATED에 올린다.
  */
 /**
  * 물건 이름과 그림 파일.
@@ -82,14 +91,13 @@ interface Thing {
 
 interface Decor {
   x: number; y: number; w: number; h: number;
-  fill: string; edge: string; radius: number;
+  fill: string; edge: string; width: string;
 }
 
 interface StageConfig {
   id: string;
   label: string;
   scene: string;
-  sceneEmoji: string;
   ai: Thing[];
   /** 그냥 기계 후보. 실제로 몇 개를 꺼낼지는 tuning.density가 정한다. */
   plain: Thing[];
@@ -97,16 +105,22 @@ interface StageConfig {
   decor: Decor[];
 }
 
-const WALL = { fill: 'rgba(30, 41, 59, 0.9)', edge: 'rgba(100, 116, 139, 0.45)' };
-const FLOOR = { fill: 'rgba(56, 189, 248, 0.1)', edge: 'rgba(100, 116, 139, 0.4)' };
-const WARM = { fill: 'rgba(251, 191, 36, 0.12)', edge: 'rgba(100, 116, 139, 0.45)' };
+/*
+ * 장면 얼개의 세 가지 면.
+ *
+ * 앞서는 반투명한 색을 겹쳐 벽·바닥·따뜻한 자리를 구분했다. 겹친 투명면은 어느 색이
+ * 진짜인지 알 수 없게 만들고 바우하우스의 평면 채색과도 맞지 않는다. 세 면 모두
+ * 불투명한 한 가지 면 색을 쓰고, 다름은 테두리 굵기로만 만든다.
+ */
+const WALL = { fill: 'var(--game-board-surface)', edge: 'var(--game-board-grey)', width: 'var(--game-hair)' };
+const FLOOR = { fill: 'var(--game-board)', edge: 'var(--game-board-grey)', width: 'var(--game-hair)' };
+const WARM = { fill: 'var(--game-board-surface)', edge: 'var(--game-board-grey)', width: 'var(--game-line)' };
 
 const STAGES: StageConfig[] = [
   {
     id: 'home',
     label: '기본',
     scene: '우리 집',
-    sceneEmoji: '🏠',
     ai: [
       { name: '음악 앱', emoji: '🎧', help: '내가 좋아할 다음 노래를 골라 줘요.' },
       { name: '얼굴 잠금', emoji: '🔐', help: '얼굴을 알아보고 문을 열어 줘요.' },
@@ -126,17 +140,16 @@ const STAGES: StageConfig[] = [
     ],
     plainCount: 7,
     decor: [
-      { x: 0, y: 76, w: 100, h: 24, ...FLOOR, radius: 0 },
-      { x: 6, y: 8, w: 22, h: 30, ...WALL, radius: 8 },
-      { x: 66, y: 56, w: 28, h: 14, ...WARM, radius: 10 },
-      { x: 34, y: 80, w: 32, h: 14, ...WARM, radius: 12 },
+      { x: 0, y: 76, w: 100, h: 24, ...FLOOR },
+      { x: 6, y: 8, w: 22, h: 30, ...WALL },
+      { x: 66, y: 56, w: 28, h: 14, ...WARM },
+      { x: 34, y: 80, w: 32, h: 14, ...WARM },
     ],
   },
   {
     id: 'classroom',
     label: '1단계',
     scene: '교실',
-    sceneEmoji: '🏫',
     ai: [
       { name: '음악 앱', emoji: '🎵', help: '다음에 들을 노래를 골라 줘요.' },
       { name: '얼굴 사물함', emoji: '🔐', help: '얼굴을 알아보고 사물함을 열어 줘요.' },
@@ -158,17 +171,16 @@ const STAGES: StageConfig[] = [
     ],
     plainCount: 9,
     decor: [
-      { x: 0, y: 74, w: 100, h: 26, ...FLOOR, radius: 0 },
-      { x: 6, y: 7, w: 42, h: 26, ...WALL, radius: 8 },
-      { x: 84, y: 8, w: 12, h: 34, ...WALL, radius: 8 },
-      { x: 14, y: 78, w: 70, h: 16, ...WARM, radius: 10 },
+      { x: 0, y: 74, w: 100, h: 26, ...FLOOR },
+      { x: 6, y: 7, w: 42, h: 26, ...WALL },
+      { x: 84, y: 8, w: 12, h: 34, ...WALL },
+      { x: 14, y: 78, w: 70, h: 16, ...WARM },
     ],
   },
   {
     id: 'street',
     label: '2단계',
     scene: '길거리',
-    sceneEmoji: '🛣️',
     ai: [
       { name: '음악 앱', emoji: '🎧', help: '걷는 동안 들을 노래를 골라 줘요.' },
       { name: '얼굴 도어록', emoji: '🔐', help: '얼굴을 알아보고 현관을 열어 줘요.' },
@@ -192,10 +204,10 @@ const STAGES: StageConfig[] = [
     ],
     plainCount: 11,
     decor: [
-      { x: 0, y: 66, w: 100, h: 34, ...FLOOR, radius: 0 },
-      { x: 4, y: 5, w: 24, h: 40, ...WALL, radius: 8 },
-      { x: 66, y: 4, w: 30, h: 44, ...WALL, radius: 8 },
-      { x: 30, y: 86, w: 40, h: 8, ...WARM, radius: 6 },
+      { x: 0, y: 66, w: 100, h: 34, ...FLOOR },
+      { x: 4, y: 5, w: 24, h: 40, ...WALL },
+      { x: 66, y: 4, w: 30, h: 44, ...WALL },
+      { x: 30, y: 86, w: 40, h: 8, ...WARM },
     ],
   },
 ];
@@ -440,13 +452,14 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
   /* 설명 띠가 보드 밖 종이 면으로 내려왔다. 보드용 형광 톤을 종이에 얹으면 글자 대비가
      무너지므로 프레임의 성공·실패 배너와 같은 시맨틱 피드백 색을 쓴다. */
   const noteSkin = note.tone === 'good'
-    ? { edge: 'var(--ok)', fill: 'var(--ok-bg)', ink: '#14532D' }
+    ? { edge: 'var(--game-blue)', ink: 'var(--game-blue)' }
     : note.tone === 'warn'
-      ? { edge: 'var(--warn)', fill: 'var(--warn-bg)', ink: '#7C2D12' }
-      : { edge: 'var(--line)', fill: 'var(--paper-0)', ink: 'var(--ink-1)' };
+      ? { edge: 'var(--game-red)', ink: 'var(--game-red)' }
+      : { edge: 'var(--game-grey)', ink: 'var(--game-ink)' };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="생활 속 AI 찾기"
       instruction="그림 속에서 스스로 보고 듣고 알아보는 인공지능 물건을 찾아 눌러 보세요. 돋보기를 움직여 5개를 모두 찾아봅시다."
       progress={{ label: '찾은 AI', value: foundCount, max: AI_TARGET }}
@@ -466,10 +479,13 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
       /* 읽을 글은 이 띠 한 곳에만 둔다. 물건마다 긴 글이 붙으면 판을 가려서 읽을 수 없다. */
       footer={(
         <div
-          className="flex items-center gap-2 rounded-xl px-2.5 py-2"
-          style={{ background: noteSkin.fill, border: `2px solid ${noteSkin.edge}` }}
+          className="flex items-center gap-2 px-2.5 py-2"
+          style={{
+            background: 'var(--game-paper)',
+            border: `var(--game-line) solid ${noteSkin.edge}`,
+          }}
         >
-          <span aria-hidden="true" className="text-[22px]">{stage.sceneEmoji}</span>
+          <span style={{ color: noteSkin.edge }}><BauhausMark kind="square" size={18} /></span>
           <span role="status" className="text-[15px] font-black leading-snug" style={{ color: noteSkin.ink }}>
             {note.text}
           </span>
@@ -478,10 +494,10 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
           </span>
         </div>
       )}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 찾기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 찾기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
-        <GameStage ariaLabel={`${stage.scene} 장면에서 AI가 든 물건을 찾는 놀이. 찾은 물건 ${foundCount}개, 남은 기회 ${lives}개.`}>
+        <GameStage bauhaus ariaLabel={`${stage.scene} 장면에서 AI가 든 물건을 찾는 놀이. 찾은 물건 ${foundCount}개, 남은 기회 ${lives}개.`}>
           {/* 장면 얼개 — 눌리는 것이 아니므로 조작을 받지 않는다 */}
           {stage.decor.map((piece, index) => (
             <div
@@ -492,8 +508,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
                 left: `${piece.x}%`, top: `${piece.y}%`,
                 width: `${piece.w}%`, height: `${piece.h}%`,
                 background: piece.fill,
-                border: `2px solid ${piece.edge}`,
-                borderRadius: `${piece.radius}px`,
+                border: `${piece.width} solid ${piece.edge}`,
               }}
             />
           ))}
@@ -501,7 +516,11 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
           {items.map((item) => {
             const wobble = item.shake > 0 ? Math.sin(item.shake * 46) * 7 : 0;
             const scale = item.found ? 1.22 + item.pop * 0.3 : 1;
-            const edge = item.found ? '#34D399' : item.shake > 0 ? '#FB7185' : 'var(--board-line)';
+            /* 찾은 물건은 굵은 파란 테두리, 헛짚은 물건은 붉은 테두리다. 반투명한 면을
+               덮는 대신 선의 굵기와 색으로 알린다 — 면을 덮으면 그림이 가려진다. */
+            const edge = item.found
+              ? 'var(--game-board-blue)'
+              : item.shake > 0 ? 'var(--game-board-red)' : 'var(--game-board-grey)';
             return (
               <div
                 key={item.id}
@@ -521,9 +540,9 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
                   style={{
                     /* 그림과 이모지가 한 가족으로 보이게 모두 흰 종이 위에 얹는다.
                        받은 그림이 흰 바탕이라, 면을 흰색으로 맞추면 네모난 바탕이 사라진다. */
-                    background: item.found ? 'rgba(52, 211, 153, 0.28)' : '#FFFFFF',
-                    border: `2px solid ${edge}`,
-                    color: '#0F172A',
+                    background: '#FFFFFF',
+                    border: `${item.found ? 'var(--game-heavy)' : 'var(--game-line)'} solid ${edge}`,
+                    color: 'var(--game-ink)',
                     fontSize: `${Math.round(clamp(item.size * 2.6, 18, 42))}px`,
                   }}
                 >
@@ -553,8 +572,8 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
                     aria-hidden="true"
                     className="absolute left-1/2 top-full mt-0.5 block -translate-x-1/2 whitespace-nowrap rounded px-1 text-[14px] leading-tight"
                     style={{
-                      background: item.found ? 'rgba(52, 211, 153, 0.32)' : 'var(--board-overlay)',
-                      color: 'var(--board-ink)',
+                      background: item.found ? 'var(--game-board-blue)' : 'var(--game-board)',
+                      color: item.found ? 'var(--game-board)' : 'var(--game-board-ink)',
                       fontWeight: item.found ? 900 : 700,
                     }}
                   >
@@ -569,17 +588,17 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
           {cursor.visible && phase === 'hunt' && game.playing && (
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute grid place-items-center rounded-full text-[20px]"
+              /* 돋보기는 노란 고리 하나다. 고리 자체가 돋보기 모양이므로 안에
+                 그림 문자를 또 넣지 않는다. */
+              className="pointer-events-none absolute rounded-full"
               style={{
                 left: `${cursor.x}%`, top: `${cursor.y}%`,
                 width: '13%', aspectRatio: '1 / 1',
                 transform: 'translate(-50%, -50%)',
-                border: '3px solid #FBBF24',
+                border: 'var(--game-heavy) solid var(--game-board-yellow)',
                 zIndex: 8,
               }}
-            >
-              🔍
-            </div>
+            />
           )}
 
           {/* 준비 상태 — 첫 조작 전까지 물건이 움직이지 않고 시간도 흐르지 않는다. */}
@@ -588,10 +607,17 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
               <button
                 type="button"
                 onClick={() => setPhase('hunt')}
-                className="rounded-xl px-4 py-3 text-[16px] font-black"
-                style={{ background: 'var(--board-overlay)', border: '2px solid #FBBF24', color: 'var(--board-ink)' }}
+                className="flex items-center gap-2 px-4 py-3 text-[16px] font-black"
+                style={{
+                  background: 'var(--game-board)',
+                  border: 'var(--game-line) solid var(--game-board-yellow)',
+                  color: 'var(--game-board-ink)',
+                }}
               >
-                🔍 누르면 찾기를 시작합니다
+                <span style={{ color: 'var(--game-board-yellow)' }}>
+                  <BauhausMark kind="circle" size={18} />
+                </span>
+                누르면 찾기를 시작합니다
               </button>
             </div>
           )}

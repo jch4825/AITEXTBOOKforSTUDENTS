@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, GameStage, clamp, createRandom, shuffle, useCountdown } from '../engine';
+import { BauhausMark, GameHud, GameStage, clamp, createRandom, shuffle, useCountdown } from '../engine';
+import type { BauhausMarkKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -18,10 +19,28 @@ import type { MiniGameProps } from '../types';
 
 type Zone = 'fact' | 'ai' | 'human';
 
-const ZONE_INFO: Record<Zone, { name: string; shape: string; color: string; why: string }> = {
-  fact: { name: '사실 확인', shape: '●', color: '#38BDF8', why: '찾아보면 바로 알 수 있는 일이에요.' },
-  ai: { name: '아이미의 첫 판단', shape: '▲', color: '#FBBF24', why: '아이미가 먼저 해 보고 사람이 확인할 일이에요.' },
-  human: { name: '사람의 마지막 판단', shape: '■', color: '#FB7185', why: '사람이 반드시 마지막에 정해야 하는 일이에요.' },
+/*
+ * 자리마다 도형 하나와 그 도형의 이름을 함께 둔다.
+ *
+ * 판 위에서 빨강과 파랑의 밝기는 거의 같다. 색만으로 나누면 색을 구별하지 못하는
+ * 학생에게 둘은 같은 회색이 되므로, 뜻은 언제나 모양이 함께 진다. 이름을 따로 적는
+ * 것은 안내 문장이 "세모가 그려진 자리를 찾아 보세요"처럼 읽히게 하려는 것이다.
+ */
+const ZONE_INFO: Record<Zone, {
+  name: string; mark: BauhausMarkKind; shapeName: string; color: string; why: string;
+}> = {
+  fact: {
+    name: '사실 확인', mark: 'circle', shapeName: '동그라미', color: 'var(--game-board-blue)',
+    why: '찾아보면 바로 알 수 있는 일이에요.',
+  },
+  ai: {
+    name: '아이미의 첫 판단', mark: 'triangle', shapeName: '세모', color: 'var(--game-board-yellow)',
+    why: '아이미가 먼저 해 보고 사람이 확인할 일이에요.',
+  },
+  human: {
+    name: '사람의 마지막 판단', mark: 'square', shapeName: '네모', color: 'var(--game-board-red)',
+    why: '사람이 반드시 마지막에 정해야 하는 일이에요.',
+  },
 };
 
 interface Crate {
@@ -135,7 +154,7 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
 
     if (crate.zone !== zone) {
       setHeld(null);
-      setNote(`모양이 달라요. ${ZONE_INFO[crate.zone].shape} 모양이 그려진 자리를 찾아 보세요.`);
+      setNote(`모양이 달라요. ${ZONE_INFO[crate.zone].shapeName}가 그려진 자리를 찾아 보세요.`);
       setLives((value) => {
         const left = value - 1;
         if (left <= 0 && !doneRef.current) {
@@ -163,26 +182,36 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="같은 모양 상자 옮기기"
       instruction="상자를 하나 고른 다음, 상자에 그려진 모양과 똑같은 자리를 찾아 눌러 보세요."
       progress={{ label: '옮긴 상자', value: placed, max: stage.items.length }}
-      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <p
-          className="min-h-[42px] rounded-xl px-3 py-1.5 text-[15px] font-black leading-snug"
-          style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8', color: 'var(--board-ink)' }}
+          className="flex min-h-[42px] items-center gap-2 px-3 py-1.5 text-[15px] font-black leading-snug"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+            color: 'var(--game-board-ink)',
+          }}
         >
-          {heldCrate ? `${ZONE_INFO[heldCrate.zone].shape} ${heldCrate.text}` : note || '옮길 상자를 고르세요.'}
+          {heldCrate && (
+            <span className="shrink-0" style={{ color: ZONE_INFO[heldCrate.zone].color }}>
+              <BauhausMark kind={ZONE_INFO[heldCrate.zone].mark} size={18} />
+            </span>
+          )}
+          {heldCrate ? heldCrate.text : note || '옮길 상자를 고르세요.'}
         </p>
 
-        <GameStage ariaLabel={`부탁 상자를 같은 모양 자리로 옮기는 놀이. 옮긴 상자 ${placed}개.`}>
+        <GameStage bauhaus ariaLabel={`부탁 상자를 같은 모양 자리로 옮기는 놀이. 옮긴 상자 ${placed}개.`}>
           {crates.filter((crate) => !crate.placed).map((crate) => {
             const info = ZONE_INFO[crate.zone];
             const on = held === crate.id;
@@ -193,18 +222,19 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
                 onClick={() => { setHeld(crate.id); playSound('select'); setNote(''); }}
                 disabled={!game.playing}
                 aria-label={`${crate.text} 상자 고르기`}
-                className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-xl transition"
+                className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-0.5 transition"
                 style={{
                   left: `${crate.x}%`,
                   top: `${crate.y}%`,
                   width: `${crateW}%`,
                   minHeight: 62,
-                  background: on ? info.color : 'var(--board-surface)',
-                  border: `3px solid ${info.color}`,
-                  color: on ? '#0F172A' : 'var(--board-ink)',
+                  /* 고른 상자는 색을 뒤집는다. 새 색을 들이지 않고 "지금 이것"을 알리는 방법이다. */
+                  background: on ? info.color : 'var(--game-board)',
+                  border: `var(--game-line) solid ${info.color}`,
+                  color: on ? 'var(--game-board)' : 'var(--game-board-ink)',
                 }}
               >
-                <span className="text-[26px] leading-none" aria-hidden="true">{info.shape}</span>
+                <BauhausMark kind={info.mark} size={24} />
                 <span className="px-1 text-[14px] font-black leading-tight">{crate.text}</span>
               </button>
             );
@@ -222,16 +252,23 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
                 type="button"
                 onClick={() => put(zone)}
                 disabled={!game.playing}
-                className="flex min-h-[74px] flex-1 flex-col items-center justify-center rounded-xl px-1 transition"
+                className="flex min-h-[74px] flex-1 flex-col items-center justify-center gap-0.5 px-1 transition"
                 style={{
-                  background: done >= need ? 'rgba(74, 222, 128, 0.16)' : 'var(--board-overlay)',
-                  border: `3px solid ${done >= need ? '#4ADE80' : info.color}`,
-                  color: 'var(--board-ink)',
+                  /* 다 채운 자리는 그 자리의 색으로 꽉 찬다. 성공을 알리는 다섯째 색을
+                     들이지 않고, 도형과 바탕을 뒤집어 끝났음을 보인다. */
+                  background: done >= need ? info.color : 'var(--game-board)',
+                  border: `var(--game-line) solid ${info.color}`,
+                  color: done >= need ? 'var(--game-board)' : 'var(--game-board-ink)',
                 }}
               >
-                <span className="text-[30px] leading-none" aria-hidden="true">{info.shape}</span>
+                <BauhausMark kind={info.mark} size={28} />
                 <span className="text-[14px] font-black leading-tight">{info.name}</span>
-                <span className="text-[14px] font-bold" style={{ color: '#94A3B8' }}>{done} / {need}</span>
+                <span
+                  className="text-[14px] font-bold"
+                  style={{ color: done >= need ? 'var(--game-board)' : 'var(--game-board-grey)' }}
+                >
+                  {done} / {need}
+                </span>
               </button>
             );
           })}

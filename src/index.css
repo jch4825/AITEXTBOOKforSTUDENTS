@@ -127,6 +127,9 @@
     --game-keyline: #1A1A1A;
     /* 놀이판(어두운 면) 쪽 같은 어휘. DOM으로 그리는 게임이 판 안에서 쓴다. */
     --game-board: #16181C;
+    /* 바탕보다 한 겹 뜬 구조물 면(길·띠·장면 얼개). 글자를 얹지 않으므로 대비를
+       요구하지 않는다. 캔버스 쪽 BAUHAUS.board.surface와 같은 값이다. */
+    --game-board-surface: #1F2328;
     --game-board-ink: #F5F2EA;   /* 15.89 */
     --game-board-red: #F2685E;   /*  5.85 — 면·테두리 전용 */
     --game-board-blue: #6FA8E8;  /*  7.15 */

@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, approach, centerText, clamp, createRandom,
-  fillRoundRect, panel, randRange, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, approach, centerText, clamp, createRandom,
+  drawBar, drawMark, drawShape, randRange, useGameKeys,
 } from '../engine';
+import type { ShapeKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -32,14 +33,23 @@ const CART_SPEED = 430;
 /** 가장 많은 상자와 가장 적은 상자의 차이가 이만큼 벌어지면 아이미의 눈이 흐려진다. */
 const GAP_LIMIT = 4;
 
-type ShapeName = 'triangle' | 'square' | 'circle' | 'star';
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
+
+/*
+ * 카드의 모양.
+ *
+ * 앞서 넷째 모양은 별이었다. 별은 바우하우스의 어휘가 아니고, 뾰족한 끝이 열 개라
+ * 작게 그리면 뭉개진다. 같은 자리를 마름모가 맡는다 — 사각형을 돌린 것이라
+ * 학생이 이미 아는 모양의 변형이고, 작아져도 형태가 남는다.
+ */
+type ShapeName = Extract<ShapeKind, 'triangle' | 'square' | 'circle' | 'diamond'>;
 
 interface Kind {
   id: string;
   name: string;
   shape: ShapeName;
   fill: string;
-  edge: string;
   /** 떨어지는 비율. 일부러 치우쳐 두어야 학생이 '골라 받기'를 하게 된다. */
   weight: number;
 }
@@ -60,9 +70,9 @@ const STAGES: StageConfig[] = [
     title: '모양 세 가지',
     target: 6,
     kinds: [
-      { id: 'tri', name: '세모', shape: 'triangle', fill: PLAY.hero, edge: PLAY.heroEdge, weight: 5.2 },
-      { id: 'squ', name: '네모', shape: 'square', fill: PLAY.info, edge: PLAY.infoEdge, weight: 2.2 },
-      { id: 'cir', name: '동그라미', shape: 'circle', fill: PLAY.goal, edge: PLAY.goalEdge, weight: 1.8 },
+      { id: 'tri', name: '세모', shape: 'triangle', fill: B.yellow, weight: 5.2 },
+      { id: 'squ', name: '네모', shape: 'square', fill: B.blue, weight: 2.2 },
+      { id: 'cir', name: '동그라미', shape: 'circle', fill: B.red, weight: 1.8 },
     ],
   },
   {
@@ -74,10 +84,10 @@ const STAGES: StageConfig[] = [
     title: '모양과 색',
     target: 5,
     kinds: [
-      { id: 'rt', name: '빨간 세모', shape: 'triangle', fill: PLAY.hazard, edge: PLAY.hazardEdge, weight: 5 },
-      { id: 'bt', name: '파란 세모', shape: 'triangle', fill: PLAY.info, edge: PLAY.infoEdge, weight: 2.2 },
-      { id: 'rs', name: '빨간 네모', shape: 'square', fill: PLAY.hazard, edge: PLAY.hazardEdge, weight: 1.9 },
-      { id: 'bs', name: '파란 네모', shape: 'square', fill: PLAY.info, edge: PLAY.infoEdge, weight: 1.6 },
+      { id: 'rt', name: '빨간 세모', shape: 'triangle', fill: B.red, weight: 5 },
+      { id: 'bt', name: '파란 세모', shape: 'triangle', fill: B.blue, weight: 2.2 },
+      { id: 'rs', name: '빨간 네모', shape: 'square', fill: B.red, weight: 1.9 },
+      { id: 'bs', name: '파란 네모', shape: 'square', fill: B.blue, weight: 1.6 },
     ],
   },
   {
@@ -86,10 +96,10 @@ const STAGES: StageConfig[] = [
     title: '모양 네 가지',
     target: 5,
     kinds: [
-      { id: 'tri', name: '세모', shape: 'triangle', fill: PLAY.hero, edge: PLAY.heroEdge, weight: 5.6 },
-      { id: 'squ', name: '네모', shape: 'square', fill: PLAY.info, edge: PLAY.infoEdge, weight: 2.1 },
-      { id: 'cir', name: '동그라미', shape: 'circle', fill: PLAY.goal, edge: PLAY.goalEdge, weight: 1.8 },
-      { id: 'sta', name: '별', shape: 'star', fill: PLAY.extra, edge: PLAY.extraEdge, weight: 1.5 },
+      { id: 'tri', name: '세모', shape: 'triangle', fill: B.yellow, weight: 5.6 },
+      { id: 'squ', name: '네모', shape: 'square', fill: B.blue, weight: 2.1 },
+      { id: 'cir', name: '동그라미', shape: 'circle', fill: B.red, weight: 1.8 },
+      { id: 'dia', name: '마름모', shape: 'diamond', fill: B.grey, weight: 1.5 },
     ],
   },
 ];
@@ -146,49 +156,21 @@ function pickKind(random: () => number, kinds: Kind[]): number {
   return kinds.length - 1;
 }
 
-function starPath(ctx: CanvasRenderingContext2D, x: number, y: number, r: number): void {
-  ctx.beginPath();
-  for (let i = 0; i < 10; i += 1) {
-    const radius = i % 2 === 0 ? r : r * 0.46;
-    const angle = -Math.PI / 2 + (i * Math.PI) / 5;
-    const px = x + Math.cos(angle) * radius;
-    const py = y + Math.sin(angle) * radius;
-    if (i === 0) ctx.moveTo(px, py);
-    else ctx.lineTo(px, py);
-  }
-  ctx.closePath();
-}
-
-/** 카드·상자·아이미의 눈이 모두 같은 그림을 쓰도록 도형 그리기를 한 곳에 둔다. */
-function drawShape(
+/**
+ * 카드·상자·아이미의 눈이 모두 같은 그림을 쓰도록 도형 그리기를 한 곳에 둔다.
+ *
+ * 도형 자체는 엔진이 그리고 여기서는 흐리기만 얹는다. 바닥에 쌓인 카드는 흐려야
+ * 보내 준 카드로 읽히고, 벌점처럼 보이지 않는다.
+ */
+function piece(
   ctx: CanvasRenderingContext2D,
   shape: ShapeName,
   x: number, y: number, r: number,
-  fill: string, edge: string, alpha = 1,
+  fill: string, alpha = 1,
 ): void {
   ctx.save();
   ctx.globalAlpha = alpha;
-  ctx.fillStyle = fill;
-  ctx.strokeStyle = edge;
-  ctx.lineWidth = 3;
-  if (shape === 'circle') {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-  } else if (shape === 'square') {
-    const side = r * 1.72;
-    ctx.beginPath();
-    ctx.rect(x - side / 2, y - side / 2, side, side);
-  } else if (shape === 'triangle') {
-    ctx.beginPath();
-    ctx.moveTo(x, y - r);
-    ctx.lineTo(x + r * 0.94, y + r * 0.74);
-    ctx.lineTo(x - r * 0.94, y + r * 0.74);
-    ctx.closePath();
-  } else {
-    starPath(ctx, x, y, r);
-  }
-  ctx.fill();
-  ctx.stroke();
+  drawShape(ctx, shape, x, y, r * 2, { fill, stroke: B.keyline, width: STROKE.hair });
   ctx.restore();
 }
 
@@ -313,36 +295,38 @@ export default function DataBalanceSortGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     for (let i = 0; i < world.pile.length; i += 1) {
       const item = world.pile[i];
       const kind = kinds[item.kind];
-      drawShape(ctx, kind.shape, item.x, FLOOR_Y - 14 - (i % 3) * 4, 10, kind.fill, kind.edge, 0.4);
+      piece(ctx, kind.shape, item.x, FLOOR_Y - 14 - (i % 3) * 4, 10, kind.fill, 0.4);
     }
 
     for (const card of world.cards) {
       const kind = kinds[card.kind];
-      drawShape(ctx, kind.shape, card.x, card.y, CARD_R, kind.fill, kind.edge);
+      piece(ctx, kind.shape, card.x, card.y, CARD_R, kind.fill);
     }
 
     // 손수레 — 받는 입을 밝게 그려 어디에 닿아야 들어가는지 눈으로 알게 한다.
-    panel(ctx, world.cartX - cartHalf, CART_TOP, cartHalf * 2, 30, BOARD.surface, PLAY.hero, 10);
-    panel(ctx, world.cartX - cartHalf + 6, CART_TOP - 7, cartHalf * 2 - 12, 11, PLAY.hero, PLAY.heroEdge, 5);
-    centerText(ctx, '손수레', world.cartX, CART_TOP + 16, 22, BOARD.ink);
+    drawBar(ctx, world.cartX - cartHalf, CART_TOP, cartHalf * 2, 30,
+      { fill: B.surface, stroke: B.yellow, width: STROKE.base });
+    drawBar(ctx, world.cartX - cartHalf + 6, CART_TOP - 7, cartHalf * 2 - 12, 11,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
+    centerText(ctx, '손수레', world.cartX, CART_TOP + 16, 22, B.ink);
     for (const side of [-1, 1]) {
-      ctx.fillStyle = BOARD.overlay;
-      ctx.strokeStyle = PLAY.heroEdge;
-      ctx.lineWidth = 3;
+      ctx.fillStyle = B.ground;
+      ctx.strokeStyle = B.keyline;
+      ctx.lineWidth = STROKE.hair;
       ctx.beginPath();
       ctx.arc(world.cartX + side * cartHalf * 0.55, CART_TOP + 36, 10, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
     }
     if (world.flash > 0) {
-      ctx.strokeStyle = PLAY.goal;
-      ctx.lineWidth = 4;
+      ctx.strokeStyle = B.blue;
+      ctx.lineWidth = STROKE.base;
       ctx.globalAlpha = world.flash;
       ctx.strokeRect(world.cartX - cartHalf - 5, CART_TOP - 12, cartHalf * 2 + 10, 48);
       ctx.globalAlpha = 1;
@@ -365,40 +349,39 @@ export default function DataBalanceSortGame({ supportLevel }: MiniGameProps) {
       const kind = kinds[i];
       const bx = 24 + i * (boxW + 12);
       const done = world.counts[i] >= stage.target;
-      panel(ctx, bx, BOX_TOP, boxW, 74, BOARD.surface, done ? PLAY.goal : kind.edge, 12);
-      drawShape(ctx, kind.shape, bx + 36, BOX_TOP + 32, 20, kind.fill, kind.edge);
-      centerText(ctx, kind.name, bx + boxW / 2 + 24, BOX_TOP + 20, 22, BOARD.inkDim);
+      drawBar(ctx, bx, BOX_TOP, boxW, 74,
+        { fill: B.surface, stroke: done ? B.blue : B.grey, width: done ? STROKE.base : STROKE.hair });
+      piece(ctx, kind.shape, bx + 36, BOX_TOP + 32, 20, kind.fill);
+      centerText(ctx, kind.name, bx + boxW / 2 + 24, BOX_TOP + 20, 22, B.grey);
       centerText(
         ctx, `${world.counts[i]} / ${stage.target}`,
-        bx + boxW / 2 + 24, BOX_TOP + 46, 26, done ? PLAY.goal : BOARD.ink,
+        bx + boxW / 2 + 24, BOX_TOP + 46, 26, done ? B.blue : B.ink,
       );
-      panel(ctx, bx + 14, BOX_TOP + 60, boxW - 28, 10, BOARD.overlay, BOARD.line, 5);
+      drawBar(ctx, bx + 14, BOX_TOP + 60, boxW - 28, 10,
+        { fill: B.ground, stroke: B.grey, width: STROKE.hair });
       const ratio = clamp(world.counts[i] / stage.target, 0, 1);
       if (ratio > 0) {
-        ctx.fillStyle = done ? PLAY.goal : kind.fill;
-        fillRoundRect(ctx, bx + 16, BOX_TOP + 62, (boxW - 32) * ratio, 6, 3);
+        drawBar(ctx, bx + 16, BOX_TOP + 62, (boxW - 32) * ratio, 6, { fill: done ? B.blue : kind.fill });
       }
-      // 가장 적은 상자에 화살표를 세워 "지금 받을 것"을 글자 없이 알린다.
+      // 가장 적은 상자에 화살표를 세워 지금 받을 것을 글자 없이 알린다.
       if (!done && world.counts[i] === lowest) {
-        centerText(ctx, '▲', bx + boxW / 2, BOX_TOP - 8, 26, PLAY.goal);
+        drawMark(ctx, 'arrow', bx + boxW / 2, BOX_TOP - 14, 26, B.blue, -Math.PI / 2);
       }
     }
 
     // 아이미의 눈 — 상자가 치우치면 여기가 먼저 흐려진다. 이 게임의 유일한 읽을 글이다.
     const blurred = world.warn > 0;
-    panel(ctx, 24, 10, 912, 84, BOARD.overlay, blurred ? PLAY.hazard : PLAY.info, 14);
-    ctx.fillStyle = blurred ? '#334155' : BOARD.ink;
-    ctx.strokeStyle = blurred ? PLAY.hazard : PLAY.info;
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.ellipse(74, 44, 30, 20, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-    ctx.fillStyle = BOARD.bg;
-    ctx.beginPath();
-    ctx.arc(74, 44, blurred ? 8 : 11, 0, Math.PI * 2);
-    ctx.fill();
-    centerText(ctx, '아이미의 눈', 74, 79, 20, BOARD.inkDim);
+    drawBar(ctx, 24, 10, 912, 84,
+      { fill: B.ground, stroke: blurred ? B.red : B.blue, width: STROKE.base });
+    /* 눈은 타원 대신 동그라미 둘이다. 흐려지면 흰자가 회색으로 내려앉아
+       무엇이 달라졌는지 색과 크기가 함께 알린다. */
+    drawShape(ctx, 'circle', 74, 44, 48, {
+      fill: blurred ? B.grey : B.ink,
+      stroke: blurred ? B.red : B.blue,
+      width: STROKE.hair,
+    });
+    drawShape(ctx, 'circle', 74, 44, blurred ? 16 : 22, { fill: B.ground });
+    centerText(ctx, '아이미의 눈', 74, 79, 20, B.grey);
 
     const heavyIndex = world.counts.indexOf(Math.max(...world.counts));
     if (blurred) {
@@ -407,25 +390,25 @@ export default function DataBalanceSortGame({ supportLevel }: MiniGameProps) {
       const heavy = kinds[heavyIndex];
       for (let i = 0; i < 3; i += 1) {
         const jitter = Math.sin(world.time * 6 + i) * 3;
-        drawShape(ctx, heavy.shape, 146 + i * 46 + jitter, 46, 16, heavy.fill, heavy.edge, 0.4);
-        drawShape(ctx, heavy.shape, 146 + i * 46 - jitter, 42, 16, heavy.fill, heavy.edge, 0.4);
+        piece(ctx, heavy.shape, 146 + i * 46 + jitter, 46, 16, heavy.fill, 0.4);
+        piece(ctx, heavy.shape, 146 + i * 46 - jitter, 42, 16, heavy.fill, 0.4);
       }
-      centerText(ctx, `${heavy.name}만 자꾸 보여요`, 630, 46, 28, BOARD.ink);
+      centerText(ctx, `${heavy.name}만 자꾸 보여요`, 630, 46, 28, B.ink);
     } else {
-      kinds.forEach((kind, i) => drawShape(ctx, kind.shape, 146 + i * 46, 44, 16, kind.fill, kind.edge));
-      centerText(ctx, '모든 모양을 알아봅니다', 630, 46, 28, BOARD.ink);
+      kinds.forEach((kind, i) => piece(ctx, kind.shape, 146 + i * 46, 44, 16, kind.fill));
+      centerText(ctx, '모든 모양을 알아봅니다', 630, 46, 28, B.ink);
     }
 
     if (world.warn > 0) {
-      panel(ctx, 24, 100, 912, 12, BOARD.overlay, BOARD.line, 6);
-      ctx.fillStyle = PLAY.hazard;
-      fillRoundRect(ctx, 26, 102, (908 * world.warn) / warnLimit, 8, 4);
+      drawBar(ctx, 24, 100, 912, 12, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
+      drawBar(ctx, 26, 102, (908 * world.warn) / warnLimit, 8, { fill: B.red });
     }
 
     if (world.phase === 'ready' && !world.finished) {
-      panel(ctx, WORLD_W / 2 - 280, 200, 560, 74, BOARD.overlay, PLAY.hero, 16);
-      centerText(ctx, '손수레를 움직이면 카드가 떨어집니다', WORLD_W / 2, 226, 26, BOARD.ink);
-      centerText(ctx, '방향키 ← → 또는 화면 끌기', WORLD_W / 2, 254, 24, BOARD.inkDim);
+      drawBar(ctx, WORLD_W / 2 - 280, 200, 560, 74,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, '손수레를 움직이면 카드가 떨어집니다', WORLD_W / 2, 226, 26, B.ink);
+      centerText(ctx, '방향키 ← → 또는 화면 끌기', WORLD_W / 2, 254, 24, B.grey);
     }
   };
 
@@ -433,16 +416,17 @@ export default function DataBalanceSortGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="배움 상자 골고루"
       instruction={`손수레를 움직여 떨어지는 카드를 받아 보세요. 모양별 배움 상자 ${stage.kinds.length}개에 카드를 ${stage.target}장씩 골고루 채워 봅시다.`}
       progress={{ label: '가득 찬 배움 상자', value: filled, max: stage.kinds.length }}
-      hud={<GameHud timeLeft={hud.sec} timeTotal={totalTime} score={hud.counts.reduce((sum, count) => sum + count, 0)} scoreLabel="받은 카드" />}
+      hud={<GameHud bauhaus timeLeft={hud.sec} timeTotal={totalTime} score={hud.counts.reduce((sum, count) => sum + count, 0)} scoreLabel="받은 카드" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 판으로 바꿨어요.`)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 담기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 담기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">

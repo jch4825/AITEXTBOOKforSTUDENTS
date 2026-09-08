@@ -1,6 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Icon from '../../../../components/Icon';
 import { useSpeak } from '../../../../hooks/useSpeak';
+import { BAUHAUS, BauhausMark, STROKE, drawBar, drawShape } from '../engine';
+
+/**
+ * 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다.
+ *
+ * 이 게임만은 공통 프레임(MiniGameFrame)을 쓰지 않고 제 프레임을 지닌다(사용자 결정).
+ * 그래도 어휘는 같은 것을 쓴다 — 색·모서리·마크가 다른 61개와 같아야 학생이 여기서
+ * 배운 신호를 저기서도 그대로 읽는다.
+ */
+const B = BAUHAUS.board;
 
 interface Balloon {
   id: string;
@@ -176,10 +186,12 @@ export default function NextWordRunnerGame() {
     const width = canvas ? canvas.width : 540;
     const height = canvas ? canvas.height : 280;
 
+    /* 어울림이 큰 낱말일수록 노랑, 작을수록 회색이다. 크기(반지름)와 색이 같은 방향으로
+       움직이므로 색을 구별하지 못해도 큰 것이 더 어울리는 낱말이라는 것은 남는다. */
     const colors = [
-      { bg: '#FDE047', border: '#EAB308' }, // High probability: Amber Gold
-      { bg: '#38BDF8', border: '#0284C7' }, // Mid probability: Sky Blue
-      { bg: '#F472B6', border: '#DB2777' }, // Low probability: Rose Pink
+      { bg: B.yellow, border: B.keyline },
+      { bg: B.blue, border: B.keyline },
+      { bg: B.grey, border: B.keyline },
     ];
 
     const count = stepConfig.balloons.length;
@@ -265,12 +277,12 @@ export default function NextWordRunnerGame() {
     const render = () => {
       time += 0.03;
 
-      // 1. Draw Slate Canvas Background
-      ctx.fillStyle = '#0F172A';
+      // 1. 판 바탕
+      ctx.fillStyle = B.ground;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 2. Draw Moving Floor & Grid
-      ctx.strokeStyle = 'rgba(51, 65, 85, 0.35)';
+      // 2. 흘러가는 격자 — 낱말이 다가온다는 것을 배경의 움직임으로 알린다.
+      ctx.strokeStyle = B.surface;
       ctx.lineWidth = 1.5;
       const gridOffset = (time * 30) % 40;
       for (let x = -gridOffset; x < canvas.width; x += 40) {
@@ -280,9 +292,9 @@ export default function NextWordRunnerGame() {
         ctx.stroke();
       }
 
-      // Track floor line
-      ctx.strokeStyle = '#38BDF8';
-      ctx.lineWidth = 3;
+      // 바닥선
+      ctx.strokeStyle = B.blue;
+      ctx.lineWidth = STROKE.hair;
       ctx.beginPath();
       ctx.moveTo(0, canvas.height - 30);
       ctx.lineTo(canvas.width, canvas.height - 30);
@@ -295,53 +307,25 @@ export default function NextWordRunnerGame() {
       ctx.save();
       ctx.translate(aimiX, aimiY);
 
-      // Aura
-      ctx.beginPath();
-      ctx.arc(0, 0, 30, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.15)';
-      ctx.fill();
+      /* 아이미 — 동그란 몸, 네모난 얼굴 화면, 곧은 더듬이와 노란 알.
+         빛무리도 분사 고리도 두지 않는다. 바우하우스에서 형태는 형태로만 말한다. */
+      drawShape(ctx, 'circle', 0, 0, 48, { fill: B.ink, stroke: B.blue, width: STROKE.hair });
+      drawBar(ctx, -15, -9, 30, 18, { fill: B.ground });
 
-      // Body (Pale Pink White)
-      ctx.beginPath();
-      ctx.arc(0, 0, 24, 0, Math.PI * 2);
-      ctx.fillStyle = '#F8FAFC';
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = '#F472B6';
-      ctx.stroke();
+      // 눈 — 깜박일 때만 납작해진다.
+      const eyeH = Math.sin(time * 3) > 0.96 ? 2 : 9;
+      ctx.fillStyle = B.blue;
+      ctx.fillRect(-9, -eyeH / 2, 6, eyeH);
+      ctx.fillRect(3, -eyeH / 2, 6, eyeH);
 
-      // Face Screen (Dark Navy)
-      ctx.beginPath();
-      ctx.roundRect(-15, -9, 30, 18, 7);
-      ctx.fillStyle = '#090D16';
-      ctx.fill();
-
-      // Glowing Eyes (Cyan LED)
-      ctx.fillStyle = '#38BDF8';
-      const eyeH = Math.sin(time * 3) > 0.96 ? 1 : 4.5;
-      ctx.beginPath();
-      ctx.ellipse(-6, 0, 3, eyeH, 0, 0, Math.PI * 2);
-      ctx.ellipse(6, 0, 3, eyeH, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Antenna & Orb
+      // 더듬이
       ctx.beginPath();
       ctx.moveTo(0, -24);
       ctx.lineTo(0, -33);
-      ctx.strokeStyle = '#94A3B8';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = B.grey;
+      ctx.lineWidth = STROKE.hair;
       ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(0, -35, 4, 0, Math.PI * 2);
-      ctx.fillStyle = '#F59E0B';
-      ctx.fill();
-
-      // Thruster Ring
-      ctx.beginPath();
-      ctx.ellipse(0, 24, 10, 3.5, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.6)';
-      ctx.fill();
+      drawShape(ctx, 'circle', 0, -36, 9, { fill: B.yellow, stroke: B.keyline, width: 1.5 });
 
       ctx.restore();
 
@@ -352,12 +336,10 @@ export default function NextWordRunnerGame() {
         p.y += p.vy;
         p.life += 1;
 
-        const alpha = 1 - p.life / p.maxLife;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        /* 터진 조각은 네모다. 풍선이 원이라 조각이 네모여야 "깨졌다"가 형태로 읽힌다. */
+        ctx.globalAlpha = 1 - p.life / p.maxLife;
         ctx.fillStyle = p.color;
-        ctx.globalAlpha = alpha;
-        ctx.fill();
+        ctx.fillRect(p.x - p.radius, p.y - p.radius, p.radius * 2, p.radius * 2);
         ctx.globalAlpha = 1.0;
       });
 
@@ -376,33 +358,23 @@ export default function NextWordRunnerGame() {
       }
 
       balloonsRef.current.forEach((b) => {
-        // Balloon String
+        // 풍선 줄 — 곧은 선 하나. 흔들리던 곡선을 곧게 폈다.
         ctx.beginPath();
         ctx.moveTo(b.x, b.y + b.radius);
-        ctx.quadraticCurveTo(b.x + Math.sin(time * 2.5) * 5, b.y + b.radius + 14, b.x, b.y + b.radius + 26);
-        ctx.strokeStyle = '#94A3B8';
+        ctx.lineTo(b.x, b.y + b.radius + 26);
+        ctx.strokeStyle = B.grey;
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Balloon Outer Body
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
-        ctx.fillStyle = b.color;
-        ctx.fill();
-        ctx.lineWidth = 3.5;
-        ctx.strokeStyle = b.borderColor;
-        ctx.stroke();
+        drawShape(ctx, 'circle', b.x, b.y, b.radius * 2,
+          { fill: b.color, stroke: b.borderColor, width: STROKE.hair });
 
-        // High Probability Badge (e.g. 95% / 80%)
-        ctx.fillStyle = '#0F172A';
-        ctx.font = 'black 14px sans-serif';
+        ctx.fillStyle = B.ground;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
+        ctx.font = '800 14px "Pretendard", system-ui, sans-serif';
         ctx.fillText(`${b.probability}%`, b.x, b.y - b.radius * 0.42);
-
-        // Word Label inside Balloon
-        ctx.fillStyle = '#0F172A';
-        ctx.font = 'black 15px sans-serif';
+        ctx.font = '800 15px "Pretendard", system-ui, sans-serif';
         ctx.fillText(b.word, b.x, b.y + 5);
       });
 
@@ -443,52 +415,102 @@ export default function NextWordRunnerGame() {
     if (balloon) popBalloon(balloon);
   };
 
+  /* 프레임은 종이, 판은 어두운 면. 다른 61개와 같은 두 겹 구조를 여기서도 지킨다. */
+  const paper: React.CSSProperties = {
+    background: 'var(--game-paper)',
+    border: 'var(--game-line) solid var(--game-ink)',
+    color: 'var(--game-ink)',
+  };
+  const boardPanel: React.CSSProperties = {
+    background: 'var(--game-board)',
+    border: 'var(--game-line) solid var(--game-board-grey)',
+    color: 'var(--game-board-ink)',
+  };
+  const overlay: React.CSSProperties = {
+    background: 'var(--game-board)',
+    color: 'var(--game-board-ink)',
+  };
+
   return (
     <div
-      className="relative flex h-full flex-col justify-between rounded-2xl p-4 md:p-5 text-white depth-overlay overflow-hidden border-2 border-slate-700"
-      style={{ background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)' }}
+      className="relative flex h-full flex-col justify-between gap-2 overflow-hidden p-4 md:p-5"
+      style={{
+        background: 'var(--game-paper)',
+        border: 'var(--game-heavy) solid var(--game-ink)',
+        color: 'var(--game-ink)',
+      }}
     >
-      {/* Top Header */}
-      <div className="flex items-center justify-between gap-2 border-b border-slate-700 pb-3">
+      {/* 머리글 */}
+      <div
+        className="flex items-center justify-between gap-2 pb-3"
+        style={{ borderBottom: 'var(--game-line) solid var(--game-ink)' }}
+      >
         <div className="flex items-center gap-2">
-          <span className="text-xl">🏃‍♂️</span>
-          <div>
-            <h3 className="font-extrabold text-base leading-tight text-amber-300">
-              다음 낱말 이어 말하기 놀이
-            </h3>
-            <p className="text-[14px] text-slate-300 font-medium">{stage.title}</p>
-          </div>
+          <span
+            className="inline-flex items-center gap-1.5 px-3 py-1 text-[14px] font-black"
+            style={{
+              background: 'var(--game-yellow)',
+              border: 'var(--game-line) solid var(--game-keyline)',
+              color: 'var(--game-ink)',
+            }}
+          >
+            <BauhausMark kind="circle" size={14} />
+            다음 낱말 이어 말하기
+          </span>
+          <p className="text-[14px] font-bold" style={{ color: 'var(--game-grey)' }}>
+            {stage.title}
+          </p>
         </div>
         <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={() => setShowHint(!showHint)}
-            className="text-[14px] px-2.5 py-1 rounded-full font-bold bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 hover:bg-indigo-500/50 cursor-pointer"
+            className="flex min-h-11 items-center gap-1.5 px-2.5 text-[14px] font-black"
+            style={paper}
           >
-            💡 힌트
+            <BauhausMark kind="bang" size={16} />
+            힌트
           </button>
           <button
             type="button"
             onClick={() => startStage(currentStageIdx)}
-            className="text-[14px] px-2.5 py-1 rounded-full font-bold bg-slate-800 text-slate-200 border border-slate-600 hover:bg-slate-700 cursor-pointer"
+            className="flex min-h-11 items-center gap-1.5 px-2.5 text-[14px] font-black"
+            style={paper}
           >
-            🔄 다시 시작
+            <BauhausMark kind="retry" size={16} />
+            다시 시작
           </button>
         </div>
       </div>
 
-      {/* Built Sentence Bar above Character */}
-      <div className="my-2 p-3 rounded-xl bg-slate-900/90 border-2 border-amber-400/70 depth-overlay flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="text-lg shrink-0">🤖</span>
-          <p className="text-[15px] sm:text-base font-extrabold text-amber-300 truncate">
-            "{builtSentence}"
+      {/* 아이미가 이어 붙인 문장 */}
+      <div
+        className="flex items-center justify-between gap-2 p-3"
+        style={{
+          background: 'var(--game-board)',
+          border: 'var(--game-line) solid var(--game-board-yellow)',
+        }}
+      >
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="shrink-0" style={{ color: 'var(--game-board-yellow)' }}>
+            <BauhausMark kind="circle" size={18} />
+          </span>
+          <p
+            className="truncate text-[15px] font-black sm:text-base"
+            style={{ color: 'var(--game-board-ink)' }}
+          >
+            “{builtSentence}”
           </p>
         </div>
         <button
           type="button"
           onClick={() => speakNow(builtSentence)}
-          className="p-1.5 rounded-lg bg-amber-400 text-slate-950 font-bold hover:bg-amber-300 cursor-pointer shrink-0 text-[14px] flex items-center gap-1"
+          className="flex min-h-11 shrink-0 items-center gap-1 px-2 text-[14px] font-black"
+          style={{
+            background: 'var(--game-board-yellow)',
+            border: 'var(--game-line) solid var(--game-board-keyline)',
+            color: 'var(--game-board)',
+          }}
           title="문장 소리 들려주기"
         >
           <Icon name="speaker" size={14} />
@@ -496,93 +518,157 @@ export default function NextWordRunnerGame() {
         </button>
       </div>
 
-      {/* Hint Alert */}
       {showHint && (
-        <div className="mb-2 p-2.5 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-200 text-[14px] font-bold leading-relaxed">
-          💡 <strong>놀이 방법:</strong> 오른쪽에서 천천히 다가오는 말풍선 중 더 어울리는 낱말(큰 풍선, 높은 % 수치)을 손으로 눌러 터뜨려 보세요!
+        <div
+          className="flex items-start gap-2 p-2.5 text-[14px] font-bold leading-relaxed"
+          style={paper}
+        >
+          <span className="shrink-0 pt-0.5"><BauhausMark kind="bang" size={16} /></span>
+          <span>
+            <strong>놀이 방법:</strong> 오른쪽에서 천천히 다가오는 말풍선 가운데
+            더 어울리는 낱말을 눌러 터뜨려 보세요. 큰 풍선일수록 어울리는 정도가 높습니다.
+          </span>
         </div>
       )}
 
-      {/* Game Canvas Viewport */}
-      <div className="relative flex-1 min-h-[240px] w-full rounded-xl overflow-hidden border border-slate-700 bg-slate-950 depth-overlay">
+      {/* 놀이판 */}
+      <div className="relative min-h-[240px] w-full flex-1 overflow-hidden" style={boardPanel}>
         <canvas
           ref={canvasRef}
           width={540}
           height={270}
           onClick={handleCanvasClick}
           aria-label="움직이는 말풍선 장면. 아래 낱말 버튼으로도 고를 수 있어요."
-          className="w-full h-full object-cover cursor-pointer"
+          className="h-full w-full cursor-pointer object-cover"
         />
 
-        {/* Start Overlay */}
         {gameState === 'idle' && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center space-y-3 bg-[color:var(--board-overlay)] p-4 text-center">
-            <span className="text-4xl animate-bounce">🎈</span>
-            <h4 className="text-lg font-black text-white">다음 낱말을 이어 문장 만들기</h4>
-            <p className="text-[14px] text-slate-300 max-w-xs font-medium leading-relaxed">
-              아이미에게 다가오는 말풍선 중 가장 어울리는 낱말 풍선을 눌러 터뜨리고, 멋진 문장을 이어 완성해 보세요!
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4 text-center"
+            style={overlay}
+          >
+            <span style={{ color: 'var(--game-board-yellow)' }}>
+              <BauhausMark kind="circle" size={44} />
+            </span>
+            <h4 className="text-lg font-black">다음 낱말을 이어 문장 만들기</h4>
+            <p
+              className="max-w-xs text-[14px] font-medium leading-relaxed"
+              style={{ color: 'var(--game-board-grey)' }}
+            >
+              아이미에게 다가오는 말풍선 가운데 가장 어울리는 낱말을 눌러 터뜨리고,
+              멋진 문장을 이어 완성해 보세요.
             </p>
             <button
               type="button"
               onClick={() => startStage(0)}
-              className="px-6 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-[15px] rounded-xl depth-overlay cursor-pointer transform transition hover:scale-105 active:scale-95"
+              className="flex min-h-12 items-center gap-2 px-6 text-[15px] font-black"
+              style={{
+                background: 'var(--game-board-yellow)',
+                border: 'var(--game-line) solid var(--game-board-keyline)',
+                color: 'var(--game-board)',
+              }}
             >
-              🚀 시작하기
+              <BauhausMark kind="arrow" size={18} />
+              시작하기
             </button>
           </div>
         )}
 
-        {/* Completion & Fact Check Overlay */}
         {gameState === 'completed' && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center space-y-3 bg-[color:var(--board-overlay)] p-4 text-center">
-            <span className="text-4xl animate-bounce">✨🎉</span>
-            <h4 className="text-base sm:text-lg font-black text-amber-300">
-              아이미의 완성된 당당한 문장!
+          <div
+            className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 p-4 text-center"
+            style={overlay}
+          >
+            <span style={{ color: 'var(--game-board-blue)' }}>
+              <BauhausMark kind="check" size={40} />
+            </span>
+            <h4 className="text-base font-black sm:text-lg" style={{ color: 'var(--game-board-yellow)' }}>
+              아이미의 완성된 당당한 문장
             </h4>
-            <p className="text-[15px] font-extrabold text-white bg-slate-800/90 px-4 py-2 rounded-xl border border-amber-400/50 max-w-sm">
-              "{builtSentence}"
+            <p
+              className="max-w-sm px-4 py-2 text-[15px] font-black"
+              style={{
+                border: 'var(--game-line) solid var(--game-board-yellow)',
+                color: 'var(--game-board-ink)',
+              }}
+            >
+              “{builtSentence}”
             </p>
-            <p className="text-[14px] text-slate-300 max-w-xs font-medium leading-relaxed">
-              아이미가 가장 어울리는 다음 낱말들을 이어 당당하게 답을 만들었습니다! 이 대답이 진짜 사실인지 <strong>{stage.factCheckSource}</strong>에서 확인해 볼까요?
+            <p
+              className="max-w-xs text-[14px] font-medium leading-relaxed"
+              style={{ color: 'var(--game-board-grey)' }}
+            >
+              아이미가 가장 어울리는 다음 낱말을 이어 당당하게 답을 만들었습니다.
+              이 대답이 진짜 사실인지 <strong>{stage.factCheckSource}</strong>에서 확인해 볼까요?
             </p>
-
             <button
               type="button"
               onClick={() => setGameState('fact_check')}
-              className="px-5 py-2.5 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 text-slate-950 font-black text-[14px] sm:text-[15px] rounded-xl depth-paper cursor-pointer transform transition hover:scale-105"
+              className="flex min-h-12 items-center gap-2 px-5 text-[14px] font-black sm:text-[15px]"
+              style={{
+                background: 'var(--game-board-blue)',
+                border: 'var(--game-line) solid var(--game-board-blue)',
+                color: 'var(--game-board)',
+              }}
             >
-              🔍 {stage.factCheckSource} 확인하기!
+              <BauhausMark kind="square" size={18} />
+              {stage.factCheckSource} 확인하기
             </button>
           </div>
         )}
 
-        {/* Fact Check Celebration Overlay */}
         {gameState === 'fact_check' && (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center space-y-3 bg-[color:var(--board-overlay)] p-4 text-center">
-            <span className="text-4xl">🌟🎯</span>
-            <h4 className="text-lg font-black text-emerald-400">팩트 체크 완료!</h4>
-            <div className="p-3 rounded-xl bg-slate-900 border border-slate-700 text-[14px] text-left space-y-1.5 max-w-xs">
-              <p className="text-amber-300 font-bold">🤖 아이미의 당당한 문장:</p>
-              <p className="text-slate-200">"{builtSentence}"</p>
-              <p className="text-emerald-400 font-bold mt-2">📋 진짜 {stage.factCheckSource} 정보:</p>
-              <p className="text-slate-200">"{stage.realFact}"</p>
+          <div
+            className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 p-4 text-center"
+            style={overlay}
+          >
+            <span style={{ color: 'var(--game-board-blue)' }}>
+              <BauhausMark kind="square" size={40} />
+            </span>
+            <h4 className="text-lg font-black" style={{ color: 'var(--game-board-blue)' }}>
+              팩트 체크 완료
+            </h4>
+            <div
+              className="max-w-xs space-y-1.5 p-3 text-left text-[14px]"
+              style={{ border: 'var(--game-line) solid var(--game-board-grey)' }}
+            >
+              <p className="font-bold" style={{ color: 'var(--game-board-yellow)' }}>
+                아이미의 당당한 문장
+              </p>
+              <p style={{ color: 'var(--game-board-ink)' }}>“{builtSentence}”</p>
+              <p className="mt-2 font-bold" style={{ color: 'var(--game-board-blue)' }}>
+                진짜 {stage.factCheckSource} 정보
+              </p>
+              <p style={{ color: 'var(--game-board-ink)' }}>“{stage.realFact}”</p>
             </div>
             <div className="flex items-center gap-2 pt-1">
               {currentStageIdx < GAME_STAGES.length - 1 ? (
                 <button
                   type="button"
                   onClick={() => startStage(currentStageIdx + 1)}
-                  className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-[14px] rounded-xl cursor-pointer"
+                  className="flex min-h-12 items-center gap-2 px-4 text-[14px] font-black"
+                  style={{
+                    background: 'var(--game-board-yellow)',
+                    border: 'var(--game-line) solid var(--game-board-keyline)',
+                    color: 'var(--game-board)',
+                  }}
                 >
-                  ▶ 다음 단계 ({GAME_STAGES[currentStageIdx + 1].title.split('·')[0]})
+                  <BauhausMark kind="arrow" size={16} />
+                  다음 단계 ({GAME_STAGES[currentStageIdx + 1].title.split('·')[0]})
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={() => startStage(0)}
-                  className="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-extrabold text-[14px] rounded-xl cursor-pointer"
+                  className="flex min-h-12 items-center gap-2 px-4 text-[14px] font-black"
+                  style={{
+                    background: 'var(--game-board-blue)',
+                    border: 'var(--game-line) solid var(--game-board-blue)',
+                    color: 'var(--game-board)',
+                  }}
                 >
-                  🔄 처음부터 다시 하기
+                  <BauhausMark kind="retry" size={16} />
+                  처음부터 다시 하기
                 </button>
               )}
             </div>
@@ -591,32 +677,52 @@ export default function NextWordRunnerGame() {
       </div>
 
       {gameState === 'playing' && (
-        <div className="mt-2 rounded-xl border border-sky-400/50 bg-sky-950/50 p-2" aria-label="말풍선 선택 대체 버튼">
-          <p className="mb-1 text-[14px] font-black text-sky-200">캔버스를 누르기 어렵다면 낱말 버튼을 사용하세요.</p>
+        <div className="p-2" style={boardPanel} aria-label="말풍선 선택 대체 버튼">
+          <p className="mb-1 text-[14px] font-black" style={{ color: 'var(--game-board-grey)' }}>
+            판을 누르기 어렵다면 아래 낱말 단추를 쓰세요.
+          </p>
           <div className="flex flex-wrap gap-1.5">
             {stage.steps[currentStepIdx]?.balloons.map((balloon) => (
-              <button key={balloon.word} type="button" onClick={() => chooseWordByButton(balloon.word)} className="min-h-11 rounded-lg border-2 border-sky-300 bg-slate-900 px-2.5 text-[14px] font-black text-white">
-                🎈 {balloon.word}
+              <button
+                key={balloon.word}
+                type="button"
+                onClick={() => chooseWordByButton(balloon.word)}
+                className="flex min-h-11 items-center gap-1.5 px-2.5 text-[14px] font-black"
+                style={{
+                  background: 'var(--game-board)',
+                  border: 'var(--game-line) solid var(--game-board-blue)',
+                  color: 'var(--game-board-ink)',
+                }}
+              >
+                <span style={{ color: 'var(--game-board-blue)' }}>
+                  <BauhausMark kind="circle" size={14} />
+                </span>
+                {balloon.word}
               </button>
             ))}
           </div>
         </div>
       )}
 
-      {/* Stage Selector Buttons */}
-      <div className="mt-3 flex items-center justify-center gap-1.5 flex-wrap">
-        {GAME_STAGES.map((s, idx) => (
+      {/* 단계 고르기 — 셋을 붙인 한 덩어리로 둔다. 다른 게임의 난이도 탭과 같은 모양이다. */}
+      <div
+        className="mt-1 flex items-center self-center overflow-hidden"
+        style={{ border: 'var(--game-line) solid var(--game-ink)' }}
+      >
+        {GAME_STAGES.map((item, idx) => (
           <button
-            key={s.id}
+            key={item.id}
             type="button"
             onClick={() => startStage(idx)}
-            className={`text-[14px] font-bold px-3 py-1 rounded-lg border transition cursor-pointer ${
-              idx === currentStageIdx
-                ? 'bg-amber-400 text-slate-950 border-amber-300 font-black'
-                : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
-            }`}
+            aria-pressed={idx === currentStageIdx}
+            className="min-h-11 shrink-0 px-4 text-[14px] font-black transition"
+            style={{
+              background: idx === currentStageIdx ? 'var(--game-blue)' : 'var(--game-paper)',
+              color: idx === currentStageIdx ? 'var(--game-paper)' : 'var(--game-ink)',
+              borderLeft: idx === 0 ? 'none' : 'var(--game-line) solid var(--game-ink)',
+            }}
           >
-            {s.title.split('·')[0]}
+            {item.title.split('·')[0]}
           </button>
         ))}
       </div>

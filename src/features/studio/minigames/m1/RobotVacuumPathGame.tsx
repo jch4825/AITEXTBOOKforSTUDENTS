@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import { useSpeak } from '../../../../hooks/useSpeak';
+import { BauhausMark } from '../engine';
 import type { MiniGameProps } from '../types';
 
 interface Position {
@@ -12,7 +13,6 @@ interface Position {
 interface Obstacle {
   r: number;
   c: number;
-  emoji: string;
   label: string;
 }
 
@@ -45,8 +45,8 @@ const ROOM_LAYOUTS: RoomLayout[] = [
     name: '거실 (소파·테이블 피하기)',
     tab: '1단계',
     obstacles: [
-      { r: 0, c: 1, emoji: '🛋️', label: '소파' },
-      { r: 2, c: 2, emoji: '🪵', label: '테이블' },
+      { r: 0, c: 1, label: '소파' },
+      { r: 2, c: 2, label: '테이블' },
     ],
     solution: [
       { r: 0, c: 0 }, { r: 1, c: 0 }, { r: 2, c: 0 }, { r: 3, c: 0 },
@@ -60,8 +60,8 @@ const ROOM_LAYOUTS: RoomLayout[] = [
     name: '침실 (침대·옷장 피하기)',
     tab: '2단계',
     obstacles: [
-      { r: 0, c: 2, emoji: '🛏️', label: '침대' },
-      { r: 0, c: 3, emoji: '🚪', label: '옷장' },
+      { r: 0, c: 2, label: '침대' },
+      { r: 0, c: 3, label: '옷장' },
     ],
     solution: [
       { r: 0, c: 0 }, { r: 1, c: 0 }, { r: 2, c: 0 }, { r: 3, c: 0 },
@@ -75,8 +75,8 @@ const ROOM_LAYOUTS: RoomLayout[] = [
     name: '아이방 (곰인형·화분 피하기)',
     tab: '3단계',
     obstacles: [
-      { r: 0, c: 1, emoji: '🧸', label: '곰인형' },
-      { r: 2, c: 0, emoji: '🪴', label: '화분' },
+      { r: 0, c: 1, label: '곰인형' },
+      { r: 2, c: 0, label: '화분' },
     ],
     solution: [
       { r: 0, c: 0 }, { r: 1, c: 0 }, { r: 1, c: 1 }, { r: 2, c: 1 },
@@ -87,17 +87,33 @@ const ROOM_LAYOUTS: RoomLayout[] = [
   },
 ];
 
+/**
+ * 청소기.
+ *
+ * 학생이 움직이는 것은 판마다 늘 노랑 동그라미다. 여기서는 그 규칙이 마침 사물의
+ * 생김새와도 맞는다 — 로봇청소기는 실제로 동그랗다. 청소하는 동안에는 테두리가
+ * 돌아 "지금 움직이는 중"을 글자 없이 알린다.
+ */
 function CircularRobotVacuumIcon({ isRunning = false }: { isRunning?: boolean }) {
   return (
-    <div className="relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-cyan-400 bg-gradient-to-tr from-slate-900 via-cyan-950 to-slate-800 depth-paper sm:h-8 sm:w-8">
-      <div className="flex h-2.5 w-2.5 items-center justify-center rounded-full border border-white bg-cyan-400">
-        <div className="h-1 w-1 rounded-full bg-white" />
-      </div>
+    <div
+      className="relative grid h-7 w-7 place-items-center rounded-full sm:h-8 sm:w-8"
+      style={{
+        background: 'var(--game-board-yellow)',
+        border: 'var(--game-line) solid var(--game-board-keyline)',
+      }}
+    >
       <div
-        className={`absolute inset-0 rounded-full border border-dashed border-cyan-300/60 ${isRunning ? 'animate-spin' : ''}`}
-        style={{ animationDuration: '3s' }}
+        className="h-2 w-2 rounded-full"
+        style={{ background: 'var(--game-board)' }}
       />
-      <div className="absolute top-0.5 h-1 w-4 rounded-t-full bg-cyan-300/40" />
+      <div
+        className={`absolute inset-[-5px] rounded-full${isRunning ? ' animate-spin' : ''}`}
+        style={{
+          border: 'var(--game-hair) dashed var(--game-board-yellow)',
+          animationDuration: '3s',
+        }}
+      />
       <span className="sr-only">원형 로봇청소기</span>
     </div>
   );
@@ -221,8 +237,9 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="로봇청소기 한 붓 그리기"
-      instruction="충전소(🔌)에서 출발해 바닥 칸을 차례대로 눌러 청소 길을 만들어 보세요. 장애물을 피해 모든 바닥을 빠짐없이 청소해 봅시다."
+      instruction="파란 네모가 그려진 충전소에서 출발해 바닥 칸을 차례대로 눌러 청소 길을 만들어 보세요. 붉은 세모는 가구이니 피해서 모든 바닥을 빠짐없이 청소해 봅시다."
       progress={{ label: '청소한 바닥', value: path.length, max: totalCleanable }}
       stages={ROOM_LAYOUTS.slice(0, visibleStageCount).map((room) => ({
         id: room.id,
@@ -236,14 +253,14 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
       message={message}
       actions={
         <>
-          <MiniGameButton onClick={retry} disabled={isLocked} emoji="🔄" label="다시 그리기" />
+          <MiniGameButton onClick={retry} disabled={isLocked} mark="retry" label="다시 그리기" />
           {hintAllowed && (
-            <MiniGameButton onClick={handleUseHint} disabled={isLocked} emoji="💡" label="힌트" />
+            <MiniGameButton onClick={handleUseHint} disabled={isLocked} mark="bang" label="힌트" />
           )}
           <MiniGameButton
             onClick={handleStart}
             disabled={isLocked || path.length < 2}
-            emoji="🚀"
+            mark="arrow"
             label={status === 'running' ? '청소 중…' : '청소 출발!'}
             variant="primary"
           />
@@ -251,7 +268,9 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
       }
     >
       <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-2">
-        <p className="text-[14px] font-bold text-slate-300">{currentRoom.name}</p>
+        <p className="text-[14px] font-bold" style={{ color: 'var(--game-board-grey)' }}>
+          {currentRoom.name}
+        </p>
         <div
           ref={gridRef}
           onPointerDown={handlePointerDown}
@@ -259,8 +278,12 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
           onPointerUp={stopDrawing}
           onPointerCancel={stopDrawing}
           onPointerLeave={stopDrawing}
-          style={{ touchAction: 'none' }}
-          className="grid aspect-square w-full max-w-[268px] grid-cols-4 grid-rows-4 gap-2 rounded-2xl border-4 border-slate-600/50 bg-slate-800/90 p-2.5 depth-overlay sm:max-w-[300px]"
+          className="grid aspect-square w-full max-w-[268px] grid-cols-4 grid-rows-4 gap-2 p-2.5 sm:max-w-[300px]"
+          style={{
+            touchAction: 'none',
+            background: 'var(--game-board)',
+            border: 'var(--game-heavy) solid var(--game-board-grey)',
+          }}
         >
           {Array.from({ length: GRID_SIZE }).map((_, r) =>
             Array.from({ length: GRID_SIZE }).map((_, c) => {
@@ -278,10 +301,15 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
                     data-r={r}
                     data-c={c}
                     title={obstacle.label}
-                    className="flex aspect-square h-full w-full select-none flex-col items-center justify-center rounded-xl border-2 border-slate-800 bg-slate-950/90 opacity-90 depth-overlay"
+                    className="flex aspect-square h-full w-full select-none flex-col items-center justify-center gap-0.5"
+                    style={{
+                      background: 'var(--game-board)',
+                      border: 'var(--game-line) solid var(--game-board-red)',
+                      color: 'var(--game-board-red)',
+                    }}
                   >
-                    <span className="pointer-events-none text-xl sm:text-2xl">{obstacle.emoji}</span>
-                    <span className="pointer-events-none mt-0.5 text-[14px] font-bold text-slate-400">
+                    <BauhausMark kind="triangle" size={22} />
+                    <span className="pointer-events-none text-[14px] font-bold">
                       {obstacle.label}
                     </span>
                   </div>
@@ -298,31 +326,33 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
                   disabled={isLocked}
                   onClick={() => tryAddTile(r, c)}
                   aria-label={`${r + 1}행 ${c + 1}열${inPath ? ', 청소함' : ''}`}
-                  className={`relative aspect-square h-full w-full select-none overflow-hidden rounded-xl border-2 transition-colors ${
-                    isRobotHere
-                      ? 'border-amber-400 bg-amber-400/30 ring-2 ring-amber-400/80'
-                      : inPath
-                        ? 'border-cyan-400 bg-cyan-500/30 text-cyan-200'
-                        : 'border-slate-700 bg-slate-900/80 text-slate-500 hover:border-amber-400/60 hover:bg-slate-800'
-                  }`}
+                  className="relative aspect-square h-full w-full select-none overflow-hidden transition-colors"
+                  style={{
+                    /* 지나온 칸은 파랑으로 꽉 찬다. 청소기가 선 칸만 노랑 테두리를 두르고,
+                       아직 밟지 않은 칸은 회색 테두리로 남는다. 색이 아니라 이 세 상태가
+                       각각 다른 굵기와 채움으로 갈린다. */
+                    background: inPath ? 'var(--game-board-blue)' : 'var(--game-board)',
+                    border: `var(--game-line) solid ${
+                      isRobotHere ? 'var(--game-board-yellow)'
+                        : inPath ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
+                    color: inPath ? 'var(--game-board)' : 'var(--game-board-grey)',
+                  }}
                 >
                   <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center p-1">
                     {isRobotHere ? (
                       <CircularRobotVacuumIcon isRunning={status === 'running'} />
                     ) : isStart ? (
-                      <div className="flex flex-col items-center leading-none">
-                        <span className="text-lg sm:text-xl">🔌</span>
-                        <span className="mt-0.5 text-[14px] font-black text-amber-300">충전소</span>
+                      <div
+                        className="flex flex-col items-center gap-0.5 leading-none"
+                        style={{ color: inPath ? 'var(--game-board)' : 'var(--game-board-blue)' }}
+                      >
+                        <BauhausMark kind="square" size={18} />
+                        <span className="text-[14px] font-black">충전소</span>
                       </div>
                     ) : inPath ? (
-                      <div className="flex flex-col items-center leading-none">
-                        <span className="text-[14px] sm:text-[15px]">✨</span>
-                        <span className="mt-0.5 text-[14px] font-bold text-cyan-300">
-                          {pathIdx + 1}
-                        </span>
-                      </div>
+                      <span className="text-[17px] font-black">{pathIdx + 1}</span>
                     ) : (
-                      <span className="text-[14px] opacity-40">🧹</span>
+                      <BauhausMark kind="dot" size={12} />
                     )}
                   </div>
                 </button>

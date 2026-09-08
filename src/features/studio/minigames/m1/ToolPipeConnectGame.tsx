@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { clamp, createRandom, randInt, useGameLoop } from '../engine';
+import { BauhausMark, clamp, createRandom, randInt, useGameLoop } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -33,14 +33,12 @@ interface Cell {
 interface Tool {
   row: number;
   name: string;
-  emoji: string;
 }
 
 interface StageConfig {
   id: string;
   label: string;
   job: string;
-  jobEmoji: string;
   startRow: number;
   tools: Tool[];
   /** tools 중 이 일에 맞는 도구의 배열 위치 */
@@ -54,12 +52,11 @@ const STAGES: StageConfig[] = [
     id: 'summary',
     label: '기본',
     job: '긴 안내문을 짧게 만들기',
-    jobEmoji: '📄',
     startRow: 2,
     tools: [
-      { row: 0, name: '그림 만들기 도구', emoji: '🎨' },
-      { row: 2, name: '요약 도구', emoji: '✂️' },
-      { row: 4, name: '길 찾기 도구', emoji: '🗺️' },
+      { row: 0, name: '그림 만들기 도구' },
+      { row: 2, name: '요약 도구' },
+      { row: 4, name: '길 찾기 도구' },
     ],
     correct: 1,
     path: [[2, 0], [2, 1], [1, 1], [1, 2], [1, 3], [2, 3], [2, 4]],
@@ -68,12 +65,11 @@ const STAGES: StageConfig[] = [
     id: 'translate',
     label: '1단계',
     job: '외국에서 온 편지를 우리말로 읽기',
-    jobEmoji: '✉️',
     startRow: 4,
     tools: [
-      { row: 0, name: '번역 도구', emoji: '🌐' },
-      { row: 2, name: '계산 도구', emoji: '🧮' },
-      { row: 4, name: '노래 만들기 도구', emoji: '🎵' },
+      { row: 0, name: '번역 도구' },
+      { row: 2, name: '계산 도구' },
+      { row: 4, name: '노래 만들기 도구' },
     ],
     correct: 0,
     path: [[4, 0], [3, 0], [3, 1], [2, 1], [2, 2], [1, 2], [1, 3], [0, 3], [0, 4]],
@@ -82,12 +78,11 @@ const STAGES: StageConfig[] = [
     id: 'photo',
     label: '2단계',
     job: '사진 속 글자를 글로 옮기기',
-    jobEmoji: '📷',
     startRow: 0,
     tools: [
-      { row: 0, name: '일정 관리 도구', emoji: '📅' },
-      { row: 2, name: '글자 읽기 도구', emoji: '🔍' },
-      { row: 4, name: '음악 추천 도구', emoji: '🎧' },
+      { row: 0, name: '일정 관리 도구' },
+      { row: 2, name: '글자 읽기 도구' },
+      { row: 4, name: '음악 추천 도구' },
     ],
     correct: 1,
     path: [[0, 0], [0, 1], [1, 1], [1, 2], [2, 2], [2, 3], [3, 3], [3, 4], [2, 4]],
@@ -194,7 +189,9 @@ function flowFrom(grid: Cell[][], startRow: number, tools: Tool[]) {
 
 function PipeGlyph({ cell, wet }: { cell: Cell; wet: boolean }) {
   if (!cell.kind) return null;
-  const stroke = wet ? '#38BDF8' : '#94A3B8';
+  /* 물이 지난 관은 파랑, 아직 마른 관은 회색이다. 굵기는 같아 색만으로 갈리지만,
+     이 판에서는 이어진 길 자체가 형태로 보이므로 색이 유일한 단서가 아니다. */
+  const stroke = wet ? 'var(--game-board-blue)' : 'var(--game-board-grey)';
   const arms = BASE_DIRS[cell.kind];
   return (
     <svg
@@ -203,11 +200,11 @@ function PipeGlyph({ cell, wet }: { cell: Cell; wet: boolean }) {
       style={{ transform: `rotate(${cell.rotation * 90}deg)` }}
       aria-hidden="true"
     >
-      {arms.includes(0) && <line x1="24" y1="24" x2="24" y2="0" stroke={stroke} strokeWidth="10" strokeLinecap="round" />}
-      {arms.includes(1) && <line x1="24" y1="24" x2="48" y2="24" stroke={stroke} strokeWidth="10" strokeLinecap="round" />}
-      {arms.includes(2) && <line x1="24" y1="24" x2="24" y2="48" stroke={stroke} strokeWidth="10" strokeLinecap="round" />}
-      {arms.includes(3) && <line x1="24" y1="24" x2="0" y2="24" stroke={stroke} strokeWidth="10" strokeLinecap="round" />}
-      <circle cx="24" cy="24" r="7" fill={wet ? '#0EA5E9' : '#64748B'} />
+      {arms.includes(0) && <line x1="24" y1="24" x2="24" y2="0" stroke={stroke} strokeWidth="10" strokeLinecap="butt" />}
+      {arms.includes(1) && <line x1="24" y1="24" x2="48" y2="24" stroke={stroke} strokeWidth="10" strokeLinecap="butt" />}
+      {arms.includes(2) && <line x1="24" y1="24" x2="24" y2="48" stroke={stroke} strokeWidth="10" strokeLinecap="butt" />}
+      {arms.includes(3) && <line x1="24" y1="24" x2="0" y2="24" stroke={stroke} strokeWidth="10" strokeLinecap="butt" />}
+      <circle cx="24" cy="24" r="7" fill={stroke} />
     </svg>
   );
 }
@@ -297,6 +294,7 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="도구 관 잇기"
       instruction="연결관을 눌러 알맞게 돌린 뒤, 왼쪽 일에서 오른쪽 도구까지 길을 이어 보세요. 길이 모두 이어졌으면 물 흘리기 단추를 눌러 봅시다."
       progress={{ label: '이어진 관', value: connectedCount, max: stage.path.length }}
@@ -307,14 +305,14 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="다시 놓기" />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} mark="retry" label="다시 놓기" />
           {game.hintAllowed && (
-            <MiniGameButton onClick={hint} disabled={game.isLocked} emoji="💡" label="힌트" />
+            <MiniGameButton onClick={hint} disabled={game.isLocked} mark="bang" label="힌트" />
           )}
           <MiniGameButton
             onClick={start}
             disabled={game.isLocked || !game.playing}
-            emoji="💧"
+            mark="arrow"
             label={game.status === 'running' ? '흐르는 중…' : '물 흘리기'}
             variant="primary"
           />
@@ -324,21 +322,30 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         {/* 하려는 일 — 물이 들어오는 곳 */}
         <div
-          className="flex items-center gap-2 rounded-xl px-2.5 py-1.5"
-          style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8' }}
+          className="flex items-center gap-2 px-2.5 py-1.5"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+            color: 'var(--game-board-blue)',
+          }}
         >
-          <span className="text-[22px]" aria-hidden="true">{stage.jobEmoji}</span>
-          <span className="text-[15px] font-black leading-snug" style={{ color: 'var(--board-ink)' }}>
+          {/* 물이 들어오는 곳은 동그라미, 나가는 도구는 네모다. 두 끝이 다른 모양이라
+              길을 어느 쪽에서 어느 쪽으로 이어야 하는지 색 없이도 읽힌다. */}
+          <BauhausMark kind="circle" size={20} />
+          <span className="text-[15px] font-black leading-snug" style={{ color: 'var(--game-board-ink)' }}>
             {stage.job}
           </span>
-          <span className="ml-auto text-[18px]" aria-hidden="true">💧</span>
+          <BauhausMark kind="arrow" size={20} className="ml-auto" />
         </div>
 
         <div className="flex min-h-0 flex-1 items-stretch gap-2">
           {/* 관 격자 */}
           <div
-            className="grid min-w-0 flex-1 grid-cols-5 grid-rows-5 gap-1 rounded-xl p-1.5"
-            style={{ background: 'var(--board-overlay)', border: '2px solid var(--board-line)' }}
+            className="grid min-w-0 flex-1 grid-cols-5 grid-rows-5 gap-1 p-1.5"
+            style={{
+              background: 'var(--game-board)',
+              border: 'var(--game-line) solid var(--game-board-grey)',
+            }}
           >
             {grid.map((row, r) => row.map((cell, c) => {
               const isWet = wet.includes(`${r}-${c}`);
@@ -349,15 +356,21 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
                   onClick={() => rotate(r, c)}
                   disabled={!cell.kind || game.isLocked}
                   aria-label={`${r + 1}행 ${c + 1}열 관 돌리기`}
-                  className="relative min-h-0 rounded-lg p-0.5 transition-colors disabled:cursor-default"
+                  className="relative min-h-0 p-0.5 transition-colors disabled:cursor-default"
                   style={{
-                    background: isWet ? 'rgba(56, 189, 248, 0.18)' : 'var(--board-surface)',
-                    border: `2px solid ${isWet ? '#38BDF8' : 'rgba(100, 116, 139, 0.5)'}`,
+                    background: 'var(--game-board)',
+                    border: `var(--game-hair) solid ${
+                      isWet ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
                   }}
                 >
                   <PipeGlyph cell={cell} wet={isWet} />
                   {r === stage.startRow && c === 0 && (
-                    <span className="absolute left-0 top-1/2 -translate-y-1/2 text-[15px]" aria-hidden="true">💧</span>
+                    <span
+                      className="absolute left-0 top-1/2 -translate-y-1/2"
+                      style={{ color: 'var(--game-board-blue)' }}
+                    >
+                      <BauhausMark kind="dot" size={14} />
+                    </span>
                   )}
                 </button>
               );
@@ -373,13 +386,15 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
                   key={tool.name}
                   style={{
                     gridRow: tool.row + 1,
-                    background: filled ? 'rgba(56, 189, 248, 0.18)' : 'var(--board-surface)',
-                    border: `2px solid ${filled ? '#38BDF8' : 'var(--board-line)'}`,
+                    background: filled ? 'var(--game-board-blue)' : 'var(--game-board)',
+                    border: `var(--game-line) solid ${
+                      filled ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
+                    color: filled ? 'var(--game-board)' : 'var(--game-board-ink)',
                   }}
-                  className="flex min-h-0 flex-col items-center justify-center rounded-xl p-1 text-center"
+                  className="flex min-h-0 flex-col items-center justify-center gap-0.5 p-1 text-center"
                 >
-                  <span className="text-[18px] leading-none" aria-hidden="true">{tool.emoji}</span>
-                  <span className="text-[14px] font-black leading-tight" style={{ color: 'var(--board-ink)' }}>
+                  <BauhausMark kind="square" size={16} />
+                  <span className="text-[14px] font-black leading-tight">
                     {tool.name}
                   </span>
                 </div>

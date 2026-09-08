@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, shuffle, useCountdown } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, shuffle, useCountdown } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -190,19 +190,20 @@ export default function SummaryDiffGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="같은 말 짝짓기"
       instruction="왼쪽 글을 먼저 누르고, 오른쪽 요약에서 같은 뜻을 가진 말을 찾아 짝지어 보세요. 요약에서 빠진 글은 아래 빠짐 칸으로 옮겨 봅시다."
       progress={{ label: '짝지은 줄', value: matched, max: total }}
-      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
-        <p className="text-[15px] font-black" style={{ color: 'var(--board-ink)' }}>
+        <p className="text-[15px] font-black" style={{ color: 'var(--game-board-ink)' }}>
           {stage.title} · 왼쪽은 원문, 오른쪽은 아이미의 요약입니다
         </p>
 
@@ -216,14 +217,18 @@ export default function SummaryDiffGame({ supportLevel }: MiniGameProps) {
                 disabled={!game.playing || card.done}
                 style={{
                   minHeight: rowMin,
-                  background: card.done ? 'rgba(74, 222, 128, 0.16)'
-                    : held === card.id ? '#38BDF8' : 'var(--board-surface)',
-                  border: `2px solid ${card.done ? '#4ADE80' : '#38BDF8'}`,
-                  color: held === card.id ? '#0F172A' : 'var(--board-ink)',
+                  /* 지금 쥔 줄은 노랑, 짝지은 줄은 파랑으로 꽉 찬다. 학생이 쥔 것은
+                     언제나 노랑이고, 자리를 찾은 것은 언제나 파랑이다. */
+                  background: card.done ? 'var(--game-board-blue)'
+                    : held === card.id ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                  border: `var(--game-line) solid ${
+                    card.done ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
+                  color: card.done || held === card.id ? 'var(--game-board)' : 'var(--game-board-ink)',
                 }}
-                className="rounded-xl px-2 text-left text-[15px] font-black leading-tight transition"
+                className="flex items-center gap-1.5 px-2 text-left text-[15px] font-black leading-tight transition"
               >
-                {card.done ? '✅ ' : ''}{card.text}
+                {card.done && <BauhausMark kind="check" size={16} className="shrink-0" />}
+                {card.text}
               </button>
             ))}
           </div>
@@ -237,13 +242,14 @@ export default function SummaryDiffGame({ supportLevel }: MiniGameProps) {
                 disabled={!game.playing || item.filled}
                 style={{
                   minHeight: rowMin,
-                  background: item.filled ? 'rgba(74, 222, 128, 0.16)' : 'var(--board-overlay)',
-                  border: `2px solid ${item.filled ? '#4ADE80' : '#D6A347'}`,
-                  color: 'var(--board-ink)',
+                  background: item.filled ? 'var(--game-board-blue)' : 'var(--game-board)',
+                  border: 'var(--game-line) solid var(--game-board-blue)',
+                  color: item.filled ? 'var(--game-board)' : 'var(--game-board-ink)',
                 }}
-                className="rounded-xl px-2 text-left text-[15px] font-black leading-tight transition"
+                className="flex items-center gap-1.5 px-2 text-left text-[15px] font-black leading-tight transition"
               >
-                {item.filled ? '✅ ' : ''}{item.text}
+                {item.filled && <BauhausMark kind="check" size={16} className="shrink-0" />}
+                {item.text}
               </button>
             ))}
           </div>
@@ -253,13 +259,20 @@ export default function SummaryDiffGame({ supportLevel }: MiniGameProps) {
           type="button"
           onClick={dropOnMissing}
           disabled={!game.playing}
-          className="min-h-12 rounded-xl px-3 text-[15px] font-black"
-          style={{ background: 'var(--board-overlay)', border: '2px solid #FB7185', color: 'var(--board-ink)' }}
+          className="flex min-h-12 items-center justify-center gap-2 px-3 text-[15px] font-black"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-red)',
+            color: 'var(--game-board-ink)',
+          }}
         >
-          🕳️ 요약에서 빠진 줄은 여기로
+          <span style={{ color: 'var(--game-board-red)' }}>
+            <BauhausMark kind="arrow" size={18} rotate={90} />
+          </span>
+          요약에서 빠진 줄은 여기로
         </button>
 
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
           {note || (held ? '오른쪽에서 같은 말을 찾아 누르세요.' : '왼쪽 원문 줄을 하나 고르세요.')}
         </p>
       </div>

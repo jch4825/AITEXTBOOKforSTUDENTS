@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, pick, shuffle, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
+  pick, shuffle, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m1-l5 · 말 받아쓰기 리듬 (장르 23 · 리듬 액션)
@@ -319,52 +323,59 @@ export default function VoiceRhythmGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     // 받아쓴 문장 띠 — 읽을 글은 이 한 곳에만 둔다.
-    panel(ctx, 16, 8, 928, 96, BOARD.overlay, PLAY.info, 14);
-    centerText(ctx, '받아쓴 문장', 104, 30, 24, BOARD.inkDim);
+    drawBar(ctx, 16, 8, 928, 96, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, '받아쓴 문장', 104, 30, 24, B.grey);
     const count = world.slots.length;
     const slotW = (908 - 6 * (count - 1)) / count;
     world.slots.forEach((slot, index) => {
       const x = 26 + index * (slotW + 6);
-      const fill = slot.state === 'ok' ? '#14532D' : slot.state === 'noise' ? PLAY.hazardEdge : BOARD.surface;
-      const edge = slot.state === 'ok' ? PLAY.goal
-        : slot.state === 'noise' ? PLAY.hazard
-          : slot.state === 'miss' ? PLAY.hero : BOARD.line;
-      panel(ctx, x, 46, slotW, 46, fill, edge, 10);
+      /* 바르게 받아쓴 칸은 파랑으로 꽉 찬다. 소음이 새어 든 칸은 빨강이고, 놓친 칸은
+         테두리만 노랑으로 남아 "여기가 비었다"를 알린다. */
+      const fill = slot.state === 'ok' ? B.blue : slot.state === 'noise' ? B.red : B.surface;
+      const edge = slot.state === 'ok' ? B.blue
+        : slot.state === 'noise' ? B.red
+          : slot.state === 'miss' ? B.yellow : B.grey;
+      drawBar(ctx, x, 46, slotW, 46, { fill, stroke: edge, width: STROKE.base });
       if (slot.text) {
-        centerText(ctx, slot.text, x + slotW / 2, 70, 24, slot.state === 'miss' ? PLAY.hero : BOARD.ink);
+        const ink = slot.state === 'ok' || slot.state === 'noise' ? B.ground
+          : slot.state === 'miss' ? B.yellow : B.ink;
+        centerText(ctx, slot.text, x + slotW / 2, 70, 24, ink);
       }
     });
 
     // 소음 줄이기 스위치
-    centerText(ctx, '소음 줄이기', 110, 126, 26, BOARD.inkDim);
+    centerText(ctx, '소음 줄이기', 110, 126, 26, B.grey);
     SWITCH_BOX.forEach((box, index) => {
       const sw = world.switches[index];
       const on = sw.active > 0;
       const cooling = sw.cool > 0;
-      panel(
-        ctx, box.x, box.y, box.w, box.h,
-        on ? PLAY.infoEdge : BOARD.surface,
-        on ? PLAY.info : cooling ? BOARD.line : PLAY.extra, 14,
-      );
-      centerText(ctx, box.top, box.x + box.w / 2, box.y + 30, 26, BOARD.ink);
-      centerText(ctx, box.bottom, box.x + box.w / 2, box.y + 58, 26, BOARD.ink);
+      drawBar(ctx, box.x, box.y, box.w, box.h, {
+        fill: on ? B.blue : B.surface,
+        stroke: on ? B.blue : cooling ? B.grey : B.ink,
+        width: STROKE.base,
+      });
+      centerText(ctx, box.top, box.x + box.w / 2, box.y + 30, 26, on ? B.ground : B.ink);
+      centerText(ctx, box.bottom, box.x + box.w / 2, box.y + 58, 26, on ? B.ground : B.ink);
       const state = on ? `켜짐 ${Math.ceil(sw.active)}초`
         : cooling ? `${Math.ceil(sw.cool)}초 뒤에` : box.hint;
-      centerText(ctx, state, box.x + box.w / 2, box.y + 88, 24, on ? BOARD.ink : BOARD.inkDim);
+      centerText(ctx, state, box.x + box.w / 2, box.y + 88, 24, on ? B.ground : B.grey);
     });
 
     // 줄 세 개와 판정 구간
     for (let lane = 0; lane < 3; lane += 1) {
-      panel(ctx, LANE_X[lane] - LANE_W / 2 + 4, 116, LANE_W - 8, LINE_Y - 116, BOARD.surface, BOARD.line, 14);
+      drawBar(ctx, LANE_X[lane] - LANE_W / 2 + 4, 116, LANE_W - 8, LINE_Y - 116,
+        { fill: B.surface, stroke: B.grey, width: STROKE.hair });
     }
-    ctx.fillStyle = 'rgba(52, 211, 153, 0.18)';
-    ctx.fillRect(LANE_LEFT, LINE_Y - win, WORLD_W - LANE_LEFT - 16, win * 2);
-    ctx.strokeStyle = PLAY.goal;
-    ctx.lineWidth = 5;
+    /* 판정 띠 — 이 안에 있을 때만 누른 것이 통한다. 반투명한 면을 얹는 대신 굵은
+       노란 테두리로 구간을 두른다. 노랑은 판 위에서 늘 "지금 여기"를 가리킨다. */
+    drawBar(ctx, LANE_LEFT, LINE_Y - win, WORLD_W - LANE_LEFT - 16, win * 2,
+      { stroke: B.yellow, width: STROKE.heavy });
+    ctx.strokeStyle = B.yellow;
+    ctx.lineWidth = STROKE.base;
     ctx.beginPath();
     ctx.moveTo(LANE_LEFT, LINE_Y);
     ctx.lineTo(WORLD_W - 16, LINE_Y);
@@ -372,26 +383,32 @@ export default function VoiceRhythmGame({ supportLevel }: MiniGameProps) {
 
     for (const note of world.notes) {
       if (note.y < SPAWN_Y - 40 || note.y > WORLD_H) continue;
-      panel(
-        ctx, LANE_X[note.lane] - noteW / 2, note.y - noteH / 2, noteW, noteH,
-        note.noise ? PLAY.hazardEdge : PLAY.infoEdge,
-        note.noise ? PLAY.hazard : PLAY.info, 14,
-      );
-      centerText(ctx, note.noise ? `🔊 ${note.word}` : note.word, LANE_X[note.lane], note.y, 26, BOARD.ink);
+      drawBar(ctx, LANE_X[note.lane] - noteW / 2, note.y - noteH / 2, noteW, noteH, {
+        fill: note.noise ? B.red : B.blue,
+        stroke: B.keyline,
+        width: STROKE.base,
+      });
+      /* 소음 칸에는 소리 마크를 함께 그린다. 판 위에서 빨강과 파랑의 밝기가 거의 같아,
+         색만으로는 둘이 같은 회색이 되기 때문이다. */
+      if (note.noise) {
+        drawMark(ctx, 'sound', LANE_X[note.lane] - noteW / 2 + 26, note.y, 26, B.ground);
+      }
+      centerText(ctx, note.word, LANE_X[note.lane] + (note.noise ? 14 : 0), note.y, 26, B.ground);
     }
 
     for (let lane = 0; lane < 3; lane += 1) {
       const lit = world.flash[lane] > 0;
-      panel(
-        ctx, LANE_X[lane] - padW / 2, 440, padW, 68,
-        lit ? PLAY.goalEdge : BOARD.surface, lit ? PLAY.goal : PLAY.info, 14,
-      );
-      centerText(ctx, LANE_KEYS[lane], LANE_X[lane], 474, 34, BOARD.ink);
+      drawBar(ctx, LANE_X[lane] - padW / 2, 440, padW, 68, {
+        fill: lit ? B.yellow : B.surface,
+        stroke: lit ? B.keyline : B.grey,
+        width: STROKE.base,
+      });
+      centerText(ctx, LANE_KEYS[lane], LANE_X[lane], 474, 34, lit ? B.ground : B.ink);
     }
 
     if (world.shake > 0) {
-      ctx.strokeStyle = PLAY.hazard;
-      ctx.lineWidth = 6;
+      ctx.strokeStyle = B.red;
+      ctx.lineWidth = STROKE.heavy;
       ctx.strokeRect(LANE_LEFT, 116, WORLD_W - LANE_LEFT - 16, LINE_Y - 116);
     }
 
@@ -400,25 +417,27 @@ export default function VoiceRhythmGame({ supportLevel }: MiniGameProps) {
       const readyText = world.shake > 0 ? '잠깐 기다려요'
         : world.armed ? (first ? '아무 키나 누르면 시작합니다' : '누르면 다시 시작합니다')
           : '손을 떼었다가 다시 누르세요';
-      panel(ctx, WORLD_W / 2 - 250, 236, 500, 76, BOARD.overlay, PLAY.hero, 16);
-      centerText(ctx, readyText, WORLD_W / 2, 274, 26, BOARD.ink);
+      drawBar(ctx, WORLD_W / 2 - 250, 236, 500, 76,
+        { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+      centerText(ctx, readyText, WORLD_W / 2, 274, 26, B.ink);
     }
   };
 
-  const spoken = view.slots.map((slot) => (slot.state === 'empty' ? '□' : slot.text)).join(' ');
+  const spoken = view.slots.map((slot) => (slot.state === 'empty' ? '○' : slot.text)).join(' ');
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="말 받아쓰기 리듬"
-      instruction="파란 낱말이 초록 선에 닿을 때 알맞은 자리를 눌러 보세요. 빨간 소음은 누르지 않고 지나가게 두면 됩니다."
+      instruction="파란 낱말이 노란 띠 안에 들어왔을 때 알맞은 자리를 눌러 보세요. 소리 표시가 붙은 붉은 칸은 소음이니 누르지 않고 지나가게 두면 됩니다."
       progress={{ label: '바르게 받아쓴 낱말', value: view.ok, max: stage.words.length }}
-      hud={<GameHud lives={view.lives} maxLives={tuning.lives} />}
+      hud={<GameHud bauhaus lives={view.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 받아쓰기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 받아쓰기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div className="game-canvas-fit">
@@ -445,7 +464,7 @@ export default function VoiceRhythmGame({ supportLevel }: MiniGameProps) {
         </div>
       </div>
       {/* 캔버스는 그림이라 낭독기가 읽지 못한다. 지금까지 받아쓴 문장을 글로도 남긴다. */}
-      <p className="text-[15px] font-bold leading-relaxed" style={{ color: 'var(--board-ink)' }}>
+      <p className="text-[15px] font-bold leading-relaxed" style={{ color: 'var(--game-board-ink)' }}>
         지금까지 받아쓴 문장: {spoken}
       </p>
     </MiniGameFrame>

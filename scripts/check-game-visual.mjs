@@ -34,16 +34,33 @@ const PALETTE_FILES = new Set([
  * 전환할 때마다 한 줄씩 추가한다.
  */
 const MIGRATED = new Set([
+  'm1/DataBalanceSortGame.tsx',
+  'm1/JudgmentCratePushGame.tsx',
+  'm1/LensAngleTurnGame.tsx',
+  'm1/NextWordRunnerGame.tsx',
+  'm1/RobotVacuumPathGame.tsx',
   'm1/SongDrumCheckGame.tsx',
+  'm1/SummaryDiffGame.tsx',
+  'm1/ToolPipeConnectGame.tsx',
+  'm1/VoiceRhythmGame.tsx',
   'm4/PoliteWordCrossGame.tsx',
   'm4/UncomfortableDodgeGame.tsx',
 ]);
 
 /*
+ * 전환을 미루는 파일과 그 까닭.
+ *
+ * m1/AiSpotHuntGame — 물건 33개 가운데 18개의 그림이 아직 없다. 여기서 그림 문자는
+ * 장식이 아니라 물건의 정체이고, 고등 학년군은 이름표 없이 그림만 보고 고르므로,
+ * 그림이 들어오기 전에 걷어내면 물건 18개가 빈 동그라미가 된다. 색과 모서리는 이미
+ * 바우하우스로 옮겼고 그림 문자만 남았다.
+ */
+
+/*
  * 래칫 기준선. 2026-09-08 전환 시작 시점의 실측값이다.
  * 전환이 진행되면 이 수치는 내려가기만 해야 한다. 내려가면 여기도 함께 낮춘다.
  */
-const BASELINE = { hex: 455, emoji: 591 };
+const BASELINE = { hex: 394, emoji: 513 };
 
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {

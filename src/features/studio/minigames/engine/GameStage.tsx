@@ -14,6 +14,8 @@ interface Props {
   ariaLabel?: string;
   className?: string;
   style?: React.CSSProperties;
+  /** 바우하우스 어휘로 전환한 게임인가. 모서리를 각지게 두고 면 색을 갈아 끼운다. */
+  bauhaus?: boolean;
   children: React.ReactNode;
 }
 
@@ -27,7 +29,9 @@ interface Props {
  * 좌표는 0~100 비율이다. 픽셀을 쓰면 창 크기에 따라 배치가 무너지지만, 비율이면
  * 1280px에서도 768px에서도 같은 그림이 된다. 자식은 `left: x%`처럼 배치한다.
  */
-export default function GameStage({ onPointer, ariaLabel, className = '', style, children }: Props) {
+export default function GameStage({
+  onPointer, ariaLabel, className = '', style, bauhaus = false, children,
+}: Props) {
   const boxRef = useRef<HTMLDivElement | null>(null);
 
   const emit = (event: React.PointerEvent<HTMLDivElement>, phase: StagePointer['phase']) => {
@@ -56,10 +60,13 @@ export default function GameStage({ onPointer, ariaLabel, className = '', style,
         emit(event, 'up');
       } : undefined}
       onPointerCancel={onPointer ? (event) => emit(event, 'up') : undefined}
-      className={`relative min-h-0 w-full flex-1 overflow-hidden rounded-xl ${className}`}
+      className={`relative min-h-0 w-full flex-1 overflow-hidden${
+        bauhaus ? '' : ' rounded-xl'} ${className}`}
       style={{
-        background: 'var(--board-surface)',
-        border: '2px solid var(--board-line)',
+        background: bauhaus ? 'var(--game-board)' : 'var(--board-surface)',
+        border: bauhaus
+          ? 'var(--game-line) solid var(--game-board-grey)'
+          : '2px solid var(--board-line)',
         touchAction: onPointer ? 'none' : undefined,
         ...style,
       }}
