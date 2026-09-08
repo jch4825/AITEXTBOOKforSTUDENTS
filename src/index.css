@@ -1984,6 +1984,22 @@
     grid-template-columns: 2.2fr 1fr;
     height: clamp(34rem, 78vh, 52rem);
   }
+  /* 접힘 자국도 함께 옮긴다.
+     지면 바탕의 접힘선은 50%에 칠해져 있는데, 이 단계에서는 두 면의 경계가
+     2.2 / (2.2 + 1) = 68.75%로 가 있다. 옮기지 않으면 접힘선이 두 면 사이가 아니라
+     놀이판 한가운데를 세로로 가른다(실측 199px 어긋남). */
+  .lesson-spread--wide-left {
+    background:
+      linear-gradient(
+        90deg,
+        var(--paper-0),
+        var(--paper-1) 68.55%,
+        var(--paper-2) 68.75%,
+        var(--paper-1) 68.95%,
+        var(--paper-0)
+      ),
+      var(--paper-0);
+  }
   .lesson-spread--wide-left .lesson-page {
     min-height: 0;
   }
