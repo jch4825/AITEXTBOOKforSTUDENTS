@@ -2006,6 +2006,13 @@
   .lesson-spread--wide-left .lesson-page-right {
     overflow-y: auto;
   }
+  /* 접힘선은 둘이다. 하나는 지면 바탕의 그러데이션이고, 하나는 판 위에 얹히는
+     `.lesson-gutter` 요소다. 뒤엣것은 z-index 5라 놀이판 위에 그려지므로, 자리를
+     옮기지 않으면 선이 놀이 장면을 세로로 가른다.
+     안쪽 span은 접힘 띠 안에서의 가운데(50%)라 그대로 두고 띠만 옮긴다. */
+  .lesson-spread--wide-left .lesson-gutter {
+    left: 68.75%;
+  }
 }
 .lesson-page-left {
   background: linear-gradient(110deg, color-mix(in srgb, var(--spread-accent) 5%, var(--paper-0)), var(--paper-0) 70%);
