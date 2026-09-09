@@ -192,6 +192,34 @@ for (const file of files) {
   if (rounded.length > 0) {
     errors.push(`${rel}: 둥근 모서리 클래스 ${[...new Set(rounded)].join(', ')} — rounded-full만 허용합니다.`);
   }
+  /*
+   * 16진수만 세면 색이 새는 길이 두 개 남는다.
+   *
+   * 하나는 `rgba(...)`다. 반투명 겹침은 그 자체로 이 어휘가 금하는 것이기도 하다 —
+   * 아래 글자가 흐려져 판단이 서지 않는다. 변하는 투명도가 곧 놀이의 신호인 자리
+   * (돋보기 밖, 노출 과다, 맞았을 때의 번쩍임)는 `globalAlpha`에 팔레트 색을 얹어
+   * 쓴다. 그러면 효과는 남고 색은 한 곳에서만 온다.
+   *
+   * 다른 하나는 Tailwind의 색 클래스다. `bg-slate-800`은 16진수가 아니라서 위 검사를
+   * 그냥 지나쳤고, 실제로 전환을 마쳤다고 올린 파일에 남아 있었다.
+   */
+  const rgba = [...new Set((source.match(/rgba?\([^)]*\)/g) ?? []))];
+  if (rgba.length > 0) {
+    errors.push(`${rel}: rgba() ${rgba.length}종이 남아 있습니다 (${rgba.slice(0, 3).join(', ')}). `
+      + '팔레트 색을 쓰고, 투명도가 꼭 필요하면 globalAlpha로 얹으세요.');
+  }
+  const TW_HUE = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald'
+    + '|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';
+  const tw = [...new Set(
+    source.match(new RegExp(`\\b(?:bg|text|border|ring|from|via|to|fill|stroke)-(?:${TW_HUE})-\\d+`, 'g')) ?? [],
+  )];
+  if (tw.length > 0) {
+    errors.push(`${rel}: Tailwind 색 클래스 ${tw.slice(0, 4).join(', ')} — --game-* 토큰을 쓰세요.`);
+  }
+  /* 그러데이션은 평면 채색과 어긋난다. 점 격자처럼 딱 끊기는 반복 무늬만 예외다. */
+  if (/linear-gradient|conic-gradient|bg-gradient-to-/.test(source)) {
+    errors.push(`${rel}: 그러데이션을 쓰고 있습니다. 면은 한 가지 색으로 평평하게 칠합니다.`);
+  }
   /* 옛 팔레트를 함께 쓰면 두 체계가 섞인다. */
   if (/\bPLAY\.|\bBOARD\./.test(source)) {
     errors.push(`${rel}: 옛 팔레트(PLAY/BOARD)를 아직 쓰고 있습니다. BAUHAUS로 옮기세요.`);

@@ -220,7 +220,8 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
     ctx.strokeRect(3, top + 3, COLS * CELL_W - 6, ROWS * CELL_H - 6);
 
     // 판 눈금
-    ctx.strokeStyle = 'rgba(100, 116, 139, 0.28)';
+    /* 눈금은 바탕보다 한 겹만 뜬다. 뱀과 조각을 읽는 데 방해가 되면 안 된다. */
+    ctx.strokeStyle = B.surface;
     ctx.lineWidth = 1;
     for (let c = 0; c <= COLS; c += 1) {
       ctx.beginPath();

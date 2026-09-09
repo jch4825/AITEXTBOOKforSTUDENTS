@@ -270,8 +270,8 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
 
       for (const gate of stage.gates) {
         const gx = 180 + gate.at * (WORLD_W - 300);
-        ctx.strokeStyle = 'rgba(148, 163, 184, 0.5)';
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = B.grey;
+        ctx.lineWidth = STROKE.hair;
         ctx.beginPath();
         ctx.moveTo(gx, y - 44);
         ctx.lineTo(gx, y + 44);

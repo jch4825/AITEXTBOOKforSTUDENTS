@@ -518,8 +518,13 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
     ctx.translate(5, 4);
     drawScene(ctx, stage, false, art.map.current[stage.id]);
     ctx.restore();
-    ctx.fillStyle = 'rgba(15, 23, 42, 0.55)';
+    /* 돋보기 밖을 덮어 흐리게 만든다. 여기서 반투명은 장식이 아니라 "아직 자세히
+       보지 않은 곳"이라는 놀이의 조건이므로 남긴다. 색만 팔레트에서 가져온다. */
+    ctx.save();
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(PHOTO.x, PHOTO.y, PHOTO.w, PHOTO.h);
+    ctx.restore();
 
     ctx.save();
     ctx.beginPath();
@@ -530,8 +535,8 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
 
     for (const clue of world.clues) {
       if (!clue.found || clue.covered) continue;
-      ctx.fillStyle = 'rgba(251, 113, 133, 0.2)';
-      ctx.fillRect(clue.x - 5, clue.y - 5, clue.w + 10, clue.h + 10);
+      /* 찾은 단서는 붉은 점선 테두리로만 두른다. 면을 덮으면 정작 무엇을 찾았는지
+         보이지 않아, 가릴지 말지 판단할 수 없다. */
       ctx.save();
       ctx.setLineDash([9, 7]);
       ctx.strokeStyle = B.red;

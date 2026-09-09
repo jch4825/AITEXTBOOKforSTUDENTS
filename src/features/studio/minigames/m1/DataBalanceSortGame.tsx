@@ -332,8 +332,8 @@ export default function DataBalanceSortGame({ supportLevel }: MiniGameProps) {
       ctx.globalAlpha = 1;
     }
 
-    ctx.strokeStyle = 'rgba(100, 116, 139, 0.5)';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = B.grey;
+    ctx.lineWidth = STROKE.hair;
     ctx.setLineDash([10, 12]);
     ctx.beginPath();
     ctx.moveTo(24, FLOOR_Y);

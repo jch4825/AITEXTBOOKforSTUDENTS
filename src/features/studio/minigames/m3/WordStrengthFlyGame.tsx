@@ -229,8 +229,8 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
 
     for (let band = 0; band < 3; band += 1) {
       const y = BAND_Y[band];
-      ctx.strokeStyle = 'rgba(100, 116, 139, 0.45)';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = B.grey;
+      ctx.lineWidth = STROKE.hair;
       ctx.setLineDash([10, 12]);
       ctx.beginPath();
       ctx.moveTo(0, y);

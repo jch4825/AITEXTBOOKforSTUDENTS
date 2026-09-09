@@ -337,11 +337,16 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
     centerText(ctx, '가림막', world.clothX, world.clothY, 26, B.ground);
 
     // 밝기 — 어두우면 검게 덮이고 지나치게 밝으면 하얗게 날아간다
+    /* 여기서 투명도는 장식이 아니라 밝기 그 자체다 — 어두우면 검게 덮이고 지나치게
+       밝으면 하얗게 날아간다. 그래서 겹침은 남기고 색만 팔레트에서 가져온다. */
     const over = world.light - 0.5;
-    ctx.fillStyle = over > 0
-      ? `rgba(248, 250, 252, ${Math.min(0.7, over * 1.5)})`
-      : `rgba(2, 6, 23, ${Math.min(0.74, -over * 1.55)})`;
+    ctx.save();
+    ctx.globalAlpha = over > 0
+      ? Math.min(0.7, over * 1.5)
+      : Math.min(0.74, -over * 1.55);
+    ctx.fillStyle = over > 0 ? B.ink : B.ground;
     ctx.fillRect(FRAME.x, FRAME.y, FRAME.w, FRAME.h);
+    ctx.restore();
 
     if (!world.started && !world.finished) {
       drawBar(ctx, FRAME.x + 74, FRAME.y + 268, 432, 52,

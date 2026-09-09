@@ -381,8 +381,13 @@ export default function ClaimShooterGame({ supportLevel }: MiniGameProps) {
     ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, W, H);
     if (w.flash > 0) {
-      ctx.fillStyle = `rgba(251, 113, 133, ${w.flash * 0.4})`;
+      /* 맞았을 때 판 전체가 잠깐 붉어진다. 사라지는 세기가 곧 신호라 투명도를 남기고
+         색만 팔레트에서 가져온다. */
+      ctx.save();
+      ctx.globalAlpha = w.flash * 0.4;
+      ctx.fillStyle = B.red;
       ctx.fillRect(0, 0, W, H);
+      ctx.restore();
     }
 
     // 오늘의 자료 — 왼쪽 위에 붙여 둔다. 견줄 것이 늘 보여야 한다.

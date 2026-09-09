@@ -185,8 +185,8 @@ export default function PriorityDispatchGame({ supportLevel }: MiniGameProps) {
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
     for (const site of sites) {
-      ctx.strokeStyle = 'rgba(100, 116, 139, 0.35)';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = B.grey;
+      ctx.lineWidth = STROKE.hair;
       ctx.setLineDash([8, 8]);
       ctx.beginPath();
       ctx.moveTo(BASE.x, BASE.y);

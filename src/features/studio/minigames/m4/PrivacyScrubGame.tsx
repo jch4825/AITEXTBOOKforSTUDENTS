@@ -405,8 +405,11 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
         ctx.strokeRect(mark.x, mark.y, mark.w, mark.h);
       }
       if (mark.kind === 'need' && mark.warn) {
-        ctx.fillStyle = 'rgba(251, 191, 36, 0.28)';
-        ctx.fillRect(mark.x, mark.y, mark.w, mark.h);
+        /* 남겨야 할 줄이 다칠 뻔했다는 것을 노란 테두리로 알린다. 면을 덮으면
+           그 줄이 무엇이었는지 읽을 수 없어, 왜 남겨야 하는지가 사라진다. */
+        ctx.strokeStyle = B.yellow;
+        ctx.lineWidth = STROKE.base;
+        ctx.strokeRect(mark.x, mark.y, mark.w, mark.h);
       }
     }
 

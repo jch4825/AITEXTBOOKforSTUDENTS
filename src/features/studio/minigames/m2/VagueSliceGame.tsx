@@ -410,8 +410,8 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
     if (world.shake > 0) ctx.translate(Math.sin(world.shake * 44) * 11, Math.cos(world.shake * 37) * 5);
 
     // 칼 높이 안내선 — 키보드로 하는 학생이 어디를 베는지 알아야 한다.
-    ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = B.grey;
+    ctx.lineWidth = STROKE.hair;
     ctx.setLineDash([12, 14]);
     ctx.beginPath();
     ctx.moveTo(0, world.bladeY);

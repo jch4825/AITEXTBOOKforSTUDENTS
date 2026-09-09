@@ -330,8 +330,8 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
       { fill: B.surface, stroke: world.shake > 0 ? B.red : B.grey, width: STROKE.base });
     for (let col = 1; col < COLS; col += 1) {
       const x = COL_X0 + col * COL_W;
-      ctx.strokeStyle = 'rgba(100, 116, 139, 0.55)';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = B.grey;
+      ctx.lineWidth = STROKE.hair;
       ctx.setLineDash([8, 10]);
       ctx.beginPath();
       ctx.moveTo(x, FIELD_TOP);
@@ -340,10 +340,11 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
       ctx.setLineDash([]);
     }
 
-    // 고른 열을 통째로 밝힌다. 블록만 움직이면 어느 이름표로 가는지 한눈에 안 보인다.
+    /* 고른 열을 노란 테두리로 두른다. 블록만 움직이면 어느 이름표로 가는지 한눈에
+       안 보이지만, 면을 반투명하게 덮으면 그 안에 쌓인 낱말이 흐려진다. */
     const aimX = COL_X0 + world.col * COL_W;
-    ctx.fillStyle = 'rgba(251, 191, 36, 0.12)';
-    ctx.fillRect(aimX + 2, FIELD_TOP, COL_W - 4, FLOOR_Y - FIELD_TOP);
+    drawBar(ctx, aimX + 2, FIELD_TOP, COL_W - 4, FLOOR_Y - FIELD_TOP,
+      { stroke: B.yellow, width: STROKE.base });
 
     // 쌓임 한계선
     ctx.strokeStyle = B.red;
@@ -370,8 +371,8 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
     // 내려오는 블록과 착지 자리 안내선
     if (!world.finished) {
       const landTop = FLOOR_Y - world.junk[world.col].length * cellH - cellH;
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.7)';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = B.yellow;
+      ctx.lineWidth = STROKE.hair;
       ctx.setLineDash([6, 10]);
       ctx.beginPath();
       ctx.moveTo(aimX + COL_W / 2, world.y + cellH);
