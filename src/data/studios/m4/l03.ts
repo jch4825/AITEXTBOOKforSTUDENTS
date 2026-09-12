@@ -157,7 +157,7 @@ export const M4_L3_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '포스터 제작 도움 요청 글에 나의 개인정보가 너무 많이 담겨 있어요',
-      description: '도움에 필요한 조건은 남기고 나를 알아볼 수 있는 단서는 가려야 합니다.',
+      description: '진우가 동아리 포스터 제작을 부탁하려고 쓴 글에 자신의 이름, 학교 이름, 매일 혼자 하교하는 시간까지 적어 두었습니다. 포스터 작업에 꼭 필요한 조건만 남기고, 나를 알아볼 수 있는 위험한 개인정보는 스티커로 가려 봅시다.',
       facts: [
         '초안에는 진우의 이름이 있습니다.',
         '학교 이름과 매일 하교하는 시간이 함께 있습니다.',
@@ -194,7 +194,7 @@ export const M4_L3_STUDIO: StudioDefinition = {
     artifact: {
       kind: 'repair-card',
       title: '가리기 전후 안전 요청',
-      prompt: '원래 초안, 가릴 직접·간접 단서, 남길 작업 조건, 고친 요청을 나란히 적어 보세요.',
+      prompt: '원래 초안, 가릴 개인정보와 주변 단서, 남길 작업 조건, 고친 요청을 나란히 적어 보세요.',
     },
     transfer: {
       title: '분실물 문의 고치기',

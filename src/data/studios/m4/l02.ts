@@ -7,7 +7,7 @@ export const M4_L2_STUDIO: StudioDefinition = {
     lessonId: 'm4-l2',
     moduleId: 'm4',
     title: '출처와 날짜를 보고 믿을 만한 자료 고르기',
-    subtitle: '출처와 작성 날짜를 꼼꼼히 살펴보고 더 믿을 만한 자료를 골라봐요.',
+    subtitle: '출처와 작성 날짜를 꼼꼼히 살펴보고 더 믿을 만한 자료를 골라 봐요.',
     format: 'B',
     visualNovel: {
       title: '“체험회가 취소되었대”라는 소문이 돌 때 어떻게 해야 할까요',
@@ -17,7 +17,7 @@ export const M4_L2_STUDIO: StudioDefinition = {
       scenes: [
         {
           id: 'm4-l2-rumor-arrives',
-          label: '누가 쓴지 모르는 글',
+          label: '누가 썼는지 모르는 글',
           imageSrc: '/lessons/story/m4/m4-l2-scene-01.webp',
           alt: '진우가 취소 소문을 빨리 알리려 하고 윤아가 누가 쓴 건지부터 보자고 말리는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 0,
@@ -156,10 +156,10 @@ export const M4_L2_STUDIO: StudioDefinition = {
       ],
     },
     encounter: {
-      title: '취소 소문을 확인도 없이 바로 친구들에게 전해도 될까요',
-      description: '세 자료 중 오늘 체험회를 하는지 확인할 자료를 골라야 합니다.',
+      title: '취소 소문을 확인도 없이 바로 친구들에게 전해도 될까요?',
+      description: '단체 대화방에 “비가 와서 오늘 체험회가 취소되었다”는 캡처 사진이 올라왔습니다. 출처를 알 수 없는 캡처, 지난달 다른 행사 공지, 오늘 학교 홈페이지에 뜬 공지를 비교하여 어떤 소식을 믿어야 할지 골라 봅시다.',
       facts: [
-        '누가 쓴지 모르는 캡처에는 원래 글 주소와 쓴 사람이 없습니다.',
+        '누가 썼는지 모르는 캡처에는 원래 글 주소와 쓴 사람이 없습니다.',
         '지난달 학교 공지는 다른 행사의 우천 취소 내용입니다.',
         '오늘 학교 홈페이지에는 정상 운영 공지가 있습니다.',
         '정상 운영 공지에는 학교 담당 부서와 게시 시간이 있습니다.',
@@ -168,7 +168,7 @@ export const M4_L2_STUDIO: StudioDefinition = {
     firstAttempt: {
       prompt: '가장 먼저 믿을 자료를 골라 보세요.',
       choices: [
-        { id: 'anonymous-capture', emoji: '📱', label: '친구가 보낸, 누가 쓴지 모르는 캡처를 골라요.', reaction: '처음 나온 곳을 아무리 찾아도 보이지 않았습니다.' },
+        { id: 'anonymous-capture', emoji: '📱', label: '친구가 보낸, 누가 썼는지 모르는 캡처를 골라요.', reaction: '처음 나온 곳을 아무리 찾아도 보이지 않았습니다.' },
         { id: 'latest-official', emoji: '🏫', label: '오늘 담당 부서가 게시한 공식 공지를 골라요.', reaction: '윤아: "오늘 날짜, 담당 부서, 원문 링크. 세 가지가 다 있네."' },
         { id: 'old-official', emoji: '📄', label: '학교 이름이 있는 지난달 공지를 골라요.', reaction: '학교 자료였지만 날짜를 보니 다른 행사의 공지였습니다.' },
         { id: 'realistic-photo', emoji: '🖼️', label: '사진이 진짜처럼 잘 나왔으니 캡처를 믿어요.', reaction: '윤아: "사진도 AI로 만들 수 있어. 잘 나왔다고 진짜인 건 아니야."' },
@@ -181,7 +181,7 @@ export const M4_L2_STUDIO: StudioDefinition = {
       description: '각 자료의 원문, 작성 주체, 게시 날짜가 공개됩니다.',
       // 합성 사진 사실은 지원 수준과 무관하게 보이도록 앞쪽에 둔다.
       facts: [
-        '누가 쓴지 모르는 캡처는 원래 글을 찾을 수 없습니다.',
+        '누가 썼는지 모르는 캡처는 원래 글을 찾을 수 없습니다.',
         '캡처에 붙은 사진은 AI로 만든 것이었습니다. 진짜처럼 보여도 처음 나온 곳이 없었습니다.',
         '지난달 공지는 날짜와 행사 이름이 다릅니다.',
         '오늘 공지는 학교 공식 홈페이지 담당 부서가 게시했고 현재 체험회와 이름·날짜가 같습니다.',
@@ -190,7 +190,7 @@ export const M4_L2_STUDIO: StudioDefinition = {
     aiContribution: {
       source: 'prepared',
       role: '세 자료를 같은 기준으로 정리하는 AI',
-      text: '누가 쓴지 모르는 캡처는 처음 나온 곳을 찾을 수 없고, 지난달 공지는 다른 행사입니다. 오늘 학교 담당 부서의 공지가 현재 체험회와 날짜가 같습니다. 저는 사진도 진짜처럼 만들 수 있으니 사진이 잘 나왔다는 이유로 믿지 말아 주세요.',
+      text: '누가 썼는지 모르는 캡처는 처음 나온 곳을 찾을 수 없고, 지난달 공지는 다른 행사입니다. 오늘 학교 담당 부서의 공지가 현재 체험회와 날짜가 같습니다. 저는 사진도 진짜처럼 만들 수 있으니 사진이 잘 나왔다는 이유로 믿지 말아 주세요.',
       question: '공식 자료라는 이유만으로 지난달 공지도 현재 근거가 될 수 있을까요?',
     },
     artifact: {
