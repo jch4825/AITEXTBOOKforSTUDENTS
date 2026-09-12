@@ -34,7 +34,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '인공지능이 추천한 장보기 목록을 집에 이미 있는 물건, 가게 가격표, 정해진 예산, 알레르기 유무와 꼼꼼히 비교하여 빼거나 다른 물건으로 바꾸어 담아야 합니다.',
     wrapUpEasy: 'AI 목록은 초안이에요. 실제 조건은 내가 확인해요.',
-    wrapUpNormal: '목적과 실제 조건을 확인해 장보기 목록을 고치고 최종 구매 여부를 내가 판단했습니다.',
+    wrapUpNormal: '목적과 실제 조건을 꼼꼼히 확인해 장보기 목록을 고치고, 최종 구매 여부를 스스로 판단합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['목록', '예산'], imagePlaceholder: true } }],
   },
   {
@@ -49,7 +49,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '인공지능이 계산해 준 금액을 그대로 믿지 않고, 가격표와 물건 개수를 확인해 계산기로 직접 두드려 보며 거스름돈과 합계를 확인해야 합니다.',
     wrapUpEasy: '돈 계산은 계산기와 영수증으로 다시 확인해요.',
-    wrapUpNormal: '예상값, AI 풀이, 계산기 결과를 비교해 합계와 거스름돈의 오류를 고쳤습니다.',
+    wrapUpNormal: '어림한 금액과 인공지능의 풀이, 계산기 결과를 비교하여 합계와 거스름돈의 오류를 바로잡습니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['거스름돈', '예산', '검산'], imagePlaceholder: true } }],
   },
   {
@@ -64,7 +64,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '인공지능의 길 안내만 믿고 움직이지 말고, 지도에서 출발점과 도착지를 직접 확인하며 길가의 표지판과 안내판을 보며 안전한 길을 찾아가야 합니다.',
     wrapUpEasy: '지도와 표지가 다르면 멈추고 믿을 사람에게 물어요.',
-    wrapUpNormal: 'AI가 만든 길 대신 고정 지도와 현장 표지를 근거로 경로와 도움 요청을 정했습니다.',
+    wrapUpNormal: '인공지능이 만든 길 대신 고정된 연습 지도와 현장 표지판을 바탕으로 안전한 경로를 선택하고 도움을 요청합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['지도', '위치 정보'], imagePlaceholder: true } }],
   },
   {
@@ -79,7 +79,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '버스 번호, 가는 방향, 정류장 표지, 운행 변경 공지를 함께 보고 기다리기·다른 노선·직원 도움 중 안전한 행동을 고릅니다.',
     wrapUpEasy: '교통은 공식 정보와 현장 안내를 먼저 봐요.',
-    wrapUpNormal: 'AI의 일반 안내를 참고하되 공식 공지와 현장 표지로 방향을 확인하고 도움 요청 문장을 만들었습니다.',
+    wrapUpNormal: '인공지능의 일반 안내를 참고하되 공식 공지와 현장 표지로 방향을 확인하고, 알맞은 도움 요청 문장을 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['실시간 정보'], imagePlaceholder: true } }],
   },
   {
@@ -94,7 +94,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '기온·비·바람뿐 아니라 활동 시간과 내가 덥고 춥게 느끼는 정도를 함께 보며 여러 타당한 외출 준비 중 하나를 고릅니다.',
     wrapUpEasy: '공식 예보와 내 감각을 함께 보고 준비해요.',
-    wrapUpNormal: '지역·날짜가 있는 최신 예보를 근거로 활동과 내 감각에 맞는 옷과 준비물을 정했습니다.',
+    wrapUpNormal: '지역과 날짜가 적힌 최신 공식 예보를 바탕으로 오늘 활동과 내 감각에 꼭 맞는 옷과 준비물을 정합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['예보'], imagePlaceholder: true } }],
   },
   {
@@ -109,7 +109,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '불을 쓰지 않는 과일 요거트 컵 계획을 재료, 알레르기, 도구, 성인 도움 카드와 비교하고 안전한 대체 순서를 만듭니다.',
     wrapUpEasy: '음식 계획은 건강과 도구 조건을 사람과 확인해요.',
-    wrapUpNormal: 'AI 조리법을 초안으로 보고 맞지 않는 재료와 단계를 바꾸어 안전 음식 계획을 완성했습니다.',
+    wrapUpNormal: '인공지능 조리법을 초안으로 삼고, 알레르기 유발 재료와 위험한 단계를 바꾸어 안전한 음식 계획을 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['조리법'], imagePlaceholder: true } }],
   },
   {
@@ -124,7 +124,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '마을 활동의 시간 블록을 배치하고 선호, 휴식, 필요한 도움, 걸리는 시간을 확인한 뒤 비로 출발 시간이 바뀌면 계획을 고칩니다.',
     wrapUpEasy: '계획은 내 필요와 바뀐 조건에 맞게 고칠 수 있어요.',
-    wrapUpNormal: '알림을 명령이 아닌 도구로 사용하고 일정과 도움 조건이 달라졌을 때 계획을 다시 조정했습니다.',
+    wrapUpNormal: '알림을 명령이 아닌 도구로 사용하고, 일정과 도움 조건이 달라졌을 때 나에게 맞는 계획으로 다시 조정합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['루틴'], imagePlaceholder: true } }],
   },
   {
@@ -139,7 +139,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '몸 위치, 느낌, 시작 시점, 위급 신호를 말·그림 카드 중 편한 방식으로 조립하고 믿을 만한 어른에게 전달합니다.',
     wrapUpEasy: 'AI보다 사람에게 먼저 알리고 급하면 바로 도움을 받아요.',
-    wrapUpNormal: 'AI에게 진단을 맡기지 않고 관찰한 사실을 표현해 믿을 만한 어른과 전문 도움에 연결했습니다.',
+    wrapUpNormal: '인공지능에게 진단을 맡기지 않고 관찰한 사실을 그림 카드로 표현하여, 믿을 만한 어른과 전문 도움에 연결합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['증상', '응급'], imagePlaceholder: true } }],
   },
   {
@@ -154,7 +154,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '가게와 정류장에서 인사뿐 아니라 물건 위치 묻기, 원하지 않는 권유 거절, 어려운 설명을 다시 요청하는 표현을 연습합니다.',
     wrapUpEasy: '좋은 소통에는 거절과 다시 말해 달라는 표현도 있어요.',
-    wrapUpNormal: '상황과 상대 응답을 살피고 말·글·그림 카드 중 편한 방식으로 자기옹호 표현을 완성했습니다.',
+    wrapUpNormal: '상황과 상대방의 반응을 살피고, 말·글·그림 카드 중 편한 방식으로 내 생각과 마음을 당당하게 표현하는 카드를 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['소통'], imagePlaceholder: true } }],
   },
   {
@@ -169,7 +169,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '마을 직업인을 만나기 전에 질문을 준비하고 실제 자료와 인터뷰 설명을 AI 예상과 비교해 나의 흥미·강점·필요한 도움을 적습니다.',
     wrapUpEasy: '직업은 실제 자료와 사람에게 물어보고 나와 연결해요.',
-    wrapUpNormal: '직업을 하나의 도구나 고정된 모습으로 단정하지 않고 실제 사람의 설명과 개인차를 확인했습니다.',
+    wrapUpNormal: '직업을 하나의 고정된 모습으로 단정하지 않고, 실제 직업인의 이야기와 개인의 개성을 확인하여 나의 꿈과 연결합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['직업', '자동화'], imagePlaceholder: true } }],
   },
   {
@@ -184,7 +184,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '졸업 발표 자기소개를 먼저 쓴 뒤 AI 표현 제안을 쓰거나, 고치거나, 거절하고 개인정보 범위가 다른 교실용과 온라인용 소개를 완성합니다.',
     wrapUpEasy: '자기소개는 내 목소리로 시작하고 공개 범위는 내가 정해요.',
-    wrapUpNormal: 'AI 제안을 그대로 복사하지 않고 내 표현과 개인정보 기준에 맞게 두 가지 자기소개로 고쳤습니다.',
+    wrapUpNormal: '인공지능 제안을 그대로 베끼지 않고 내 표현과 개인정보 보호 기준에 맞게 교실용과 온라인용 두 가지 자기소개로 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['자기소개', '퇴고'], imagePlaceholder: true } }],
   },
   {
@@ -199,7 +199,7 @@ export const M6_LESSONS: LessonContent[] = [
     bodyNormal:
       '장보기, 돈, 길, 교통, 날씨, 건강, 소통 기록을 골라 조건이 바뀌어도 확인하고 고칠 수 있는 하루 계획과 AI 생활 원칙을 완성합니다.',
     wrapUpEasy: 'AI는 초안을 돕고 실제 자료와 사람을 확인해 마지막 선택은 내가 해요.',
-    wrapUpNormal: '열한 가지 생활 기록을 연결해 나의 AI 생활 포트폴리오와 졸업 발표를 완성했습니다.',
+    wrapUpNormal: '열한 가지 생활 기록을 하나로 연결하여 나의 인공지능 생활 포트폴리오와 발표 자료를 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['예산', '위치 정보', '응급'], imagePlaceholder: true } }],
   },
 ];
