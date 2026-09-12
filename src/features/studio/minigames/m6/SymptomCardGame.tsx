@@ -151,13 +151,16 @@ export default function SymptomCardGame({ supportLevel }: MiniGameProps) {
   const worldRef = useRef<World>({
     deck: [], placed: emptyPlaced(), lives: maxLives, wrong: 0, flash: 0, flashCol: -1, finished: false,
   });
-  const [view, setView] = useState({ done: 0, lives: maxLives, ready: false });
+  /* 지금 카드의 글자도 상태로 든다. 캔버스에 그린 글자는 화면 읽기 도구가 못 읽으므로
+     이것이 없으면 무엇을 나눠야 하는지 알 길이 없다. */
+  const [view, setView] = useState({ done: 0, lives: maxLives, ready: false, card: '' });
   const [note, setNote] = useState('카드를 읽고 알맞은 칸을 누르세요.');
 
   useEffect(() => {
     const random = createRandom(game.seed);
+    const deck = shuffle(random, stage.cards);
     worldRef.current = {
-      deck: shuffle(random, stage.cards),
+      deck,
       placed: emptyPlaced(),
       lives: maxLives,
       wrong: 0,
@@ -165,7 +168,7 @@ export default function SymptomCardGame({ supportLevel }: MiniGameProps) {
       flashCol: -1,
       finished: false,
     };
-    setView({ done: 0, lives: maxLives, ready: false });
+    setView({ done: 0, lives: maxLives, ready: false, card: deck[0]?.text ?? '' });
     setNote('카드를 읽고 알맞은 칸을 누르세요.');
   }, [game.round, game.stageIndex, maxLives, stage, game.seed]);
 
@@ -201,7 +204,7 @@ export default function SymptomCardGame({ supportLevel }: MiniGameProps) {
       }
     }
     const done = total - w.deck.length;
-    setView({ done, lives: w.lives, ready: bellReady(w) });
+    setView({ done, lives: w.lives, ready: bellReady(w), card: w.deck[0]?.text ?? '' });
   };
 
   const ringBell = () => {
@@ -322,7 +325,7 @@ export default function SymptomCardGame({ supportLevel }: MiniGameProps) {
             onPointer={(pointer) => {
               if (pointer.phase === 'down') handleTap(pointer.x, pointer.y);
             }}
-            ariaLabel={`아픈 곳을 알리는 카드를 나누는 놀이. 넣은 카드 ${view.done}장, 남은 기회 ${view.lives}개.`}
+            ariaLabel={`아픈 곳을 알리는 카드를 나누는 놀이. 지금 카드는 "${view.card || '없음'}". 넣은 카드 ${view.done}장, 남은 기회 ${view.lives}개.`}
           />
         </div>
       </div>
