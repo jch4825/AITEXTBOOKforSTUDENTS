@@ -95,7 +95,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm6-l3', genre: 4, genreName: '미로 찾기', badge: '지도와 표지 미로', component: 'MapSignMazeGame' },
   { lessonId: 'm6-l4', genre: 30, genreName: '타이밍 액션', badge: '버스 타는 순간', component: 'BusBoardTimingGame' },
   { lessonId: 'm6-l5', genre: 39, genreName: '카드 배틀', badge: '날씨 옷 카드', component: 'WeatherCardGame' },
-  { lessonId: 'm6-l6', genre: 44, genreName: '요리 타이쿤', badge: '안전 요리 주방', component: 'SafeCookingGame' },
+  { lessonId: 'm6-l6', genre: 26, genreName: '벽돌깨기', badge: '위험 단계 깨기', component: 'CookStepBreakGame' },
   { lessonId: 'm6-l7', genre: 45, genreName: '농장 경영', badge: '하루 텃밭', component: 'DayGardenGame' },
   { lessonId: 'm6-l8', genre: 51, genreName: '진료 놀이', badge: '아픈 곳 짚기', component: 'SymptomClinicGame' },
   { lessonId: 'm6-l9', genre: 49, genreName: '손님 안내', badge: '표현 교환대', component: 'ExpressionDeskGame' },

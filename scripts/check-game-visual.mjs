@@ -94,7 +94,7 @@ const MIGRATED = new Set([
   'm6/ExpressionDeskGame.tsx',
   'm6/JobDayRigGame.tsx',
   'm6/MapSignMazeGame.tsx',
-  'm6/SafeCookingGame.tsx',
+  'm6/CookStepBreakGame.tsx',
   'm6/ShoppingStockGame.tsx',
   'm6/SymptomClinicGame.tsx',
   'm6/TwoViewIntroGame.tsx',
