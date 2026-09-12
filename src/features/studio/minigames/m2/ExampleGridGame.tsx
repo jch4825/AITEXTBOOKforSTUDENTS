@@ -219,11 +219,10 @@ export default function ExampleGridGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="예시 지뢰 찾기"
       instruction="칸을 눌러 열면서 숨어 있는 엉뚱한 답을 찾아보세요. 잘못된 예시가 숨어 있는 위험한 칸에는 붉은 세모를 세워 표시해 봅시다."
       progress={{ label: '연 칸', value: opened, max: safeTotal }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

@@ -367,3 +367,27 @@ export function drawLives(
     drawBar(ctx, x + i * (chip + gap), y, chip, chip, { fill: i < lives ? tone : dim });
   }
 }
+
+/**
+ * 가운데 정렬 글자.
+ *
+ * 옛 팔레트 파일에 있던 것을 여기로 옮겼다. 색이 한 곳에서만 오게 되면서 그 파일에
+ * 남을 것이 이 함수뿐이었다.
+ *
+ * 캔버스 글자는 최소 20 가상 단위(화면에서 대략 14px)를 지킨다. 그보다 작으면
+ * 읽히지 않고, 읽히지 않는 글은 견줄 거리가 되지 못한다.
+ */
+export function centerText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number, y: number,
+  size = 24,
+  color: string = BAUHAUS.board.ink,
+  weight = '800',
+): void {
+  ctx.font = `${weight} ${size}px "Pretendard", system-ui, sans-serif`;
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, x, y);
+}

@@ -427,11 +427,10 @@ export default function VoiceRhythmGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="말 받아쓰기 리듬"
       instruction="파란 낱말이 노란 띠 안에 들어왔을 때 알맞은 자리를 눌러 보세요. 소리 표시가 붙은 붉은 칸은 소음이니 누르지 않고 지나가게 두면 됩니다."
       progress={{ label: '바르게 받아쓴 낱말', value: view.ok, max: stage.words.length }}
-      hud={<GameHud bauhaus lives={view.lives} maxLives={tuning.lives} />}
+      hud={<GameHud lives={view.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

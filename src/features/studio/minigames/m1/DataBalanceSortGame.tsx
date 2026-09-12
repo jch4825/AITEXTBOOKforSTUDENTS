@@ -416,11 +416,10 @@ export default function DataBalanceSortGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="배움 상자 골고루"
       instruction={`손수레를 움직여 떨어지는 카드를 받아 보세요. 모양별 배움 상자 ${stage.kinds.length}개에 카드를 ${stage.target}장씩 골고루 채워 봅시다.`}
       progress={{ label: '가득 찬 배움 상자', value: filled, max: stage.kinds.length }}
-      hud={<GameHud bauhaus timeLeft={hud.sec} timeTotal={totalTime} score={hud.counts.reduce((sum, count) => sum + count, 0)} scoreLabel="받은 카드" />}
+      hud={<GameHud timeLeft={hud.sec} timeTotal={totalTime} score={hud.counts.reduce((sum, count) => sum + count, 0)} scoreLabel="받은 카드" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 판으로 바꿨어요.`)}

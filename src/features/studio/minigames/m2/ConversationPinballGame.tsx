@@ -522,11 +522,10 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="대화 핀볼"
       instruction="공을 쏘아 올린 뒤, 날개를 움직여 목적 → 구체 → 근거 → 결정 범퍼를 순서대로 맞춰 보세요. 네 개가 모두 켜지면 문이 열립니다."
       progress={{ label: '순서대로 켠 곳', value: view.lit, max: 4 }}
-      hud={<GameHud bauhaus lives={view.lives} maxLives={tuning.lives} />}
+      hud={<GameHud lives={view.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].topic.join(' ')} 판으로 바꿨어요.`)}

@@ -195,11 +195,10 @@ export default function CoinMergeGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="동전 합치기"
       instruction={`금액이 같은 동전 타일을 밀어 하나로 합치면서, ${stage.goal.toLocaleString()}원 타일을 만들어 보세요.`}
       progress={{ label: '가장 큰 금액', value: best, max: stage.goal }}
-      hud={<GameHud bauhaus score={left} scoreLabel="남은 밀기" />}
+      hud={<GameHud score={left} scoreLabel="남은 밀기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

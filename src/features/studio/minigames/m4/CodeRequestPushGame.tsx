@@ -246,11 +246,10 @@ export default function CodeRequestPushGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="요구 밀어내기"
       instruction="위험한 요구는 붉은 세모입니다. 세모는 판 밖으로 밀어내고, 파란 네모로 그려진 공식 절차만 가운데에 남겨 보세요."
       progress={{ label: '밀어낸 요구', value: hud.pushed, max: dangerTotal }}
-      hud={<GameHud bauhaus timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

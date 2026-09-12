@@ -261,11 +261,10 @@ export default function TaskSplitFactoryGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="과제 분해 공장"
       instruction="큰 일을 작은 단계로 나누어 주는 기계를 알맞게 놓고, 관계없는 일은 걸러내어 차례대로 완성해 보세요."
       progress={{ label: '내보낸 과제', value: shipped, max: stage.need }}
-      hud={<GameHud bauhaus timeLeft={left} timeTotal={seconds} />}
+      hud={<GameHud timeLeft={left} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

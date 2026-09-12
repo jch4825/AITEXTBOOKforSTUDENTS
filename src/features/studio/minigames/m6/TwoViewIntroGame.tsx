@@ -246,11 +246,10 @@ export default function TwoViewIntroGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="두 방향 소개"
       instruction="나를 소개하는 글 조각을 알맞게 넣은 뒤, 내가 볼 때와 다른 사람이 볼 때 모두 마음이 잘 전해지는지 살펴보세요."
       progress={{ label: '채운 자리', value: filled, max: SLOTS.length }}
-      hud={<GameHud bauhaus lives={checks} maxLives={maxChecks} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud lives={checks} maxLives={maxChecks} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

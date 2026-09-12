@@ -267,11 +267,10 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="합계 대포"
       instruction="간식의 전체 금액을 먼저 어림해 본 뒤, 각도와 힘을 맞추어 발사해 보세요. 계산기로 정확한 금액을 확인할 수도 있어요."
       progress={{ label: '쏜 횟수', value: maxShots - shots, max: maxShots }}
-      hud={<GameHud bauhaus lives={shots} maxLives={maxShots} />}
+      hud={<GameHud lives={shots} maxLives={maxShots} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

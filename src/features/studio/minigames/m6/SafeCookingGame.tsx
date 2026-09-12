@@ -244,11 +244,10 @@ export default function SafeCookingGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="안전 요리 주방"
       instruction={`순서에 맞추어 요리 재료와 도구를 골라 보세요. 알레르기를 일으키는 ${stage.allergen} 재료는 빼고, 칼을 쓸 때는 어른의 도움을 받으세요.`}
       progress={{ label: '끝낸 차례', value: Math.min(step, stage.steps.length), max: stage.steps.length }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={left} timeTotal={seconds} />}
+      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={left} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

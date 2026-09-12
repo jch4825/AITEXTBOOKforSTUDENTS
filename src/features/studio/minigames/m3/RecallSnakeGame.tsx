@@ -279,11 +279,10 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="떠올린 순서 뱀"
       instruction="파란 조각을 차례대로 잡아먹어 보아요. 회색 상자를 먼저 먹으면 생명력이 떨어집니다. 붉은 벽에 부딪혀도 떨어집니다."
       progress={{ label: '떠올린 차례', value: hud.index, max: count }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

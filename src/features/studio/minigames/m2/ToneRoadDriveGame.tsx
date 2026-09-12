@@ -414,11 +414,10 @@ export default function ToneRoadDriveGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="말투 도로 운전"
       instruction="도로를 따라 차를 운전하며, 설명문에 꼭 필요한 정보 상자를 모아 보세요."
       progress={{ label: '주운 사실', value: hud.taken, max: FACT_KINDS.length }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} />}
+      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

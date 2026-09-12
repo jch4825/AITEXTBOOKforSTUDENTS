@@ -299,11 +299,10 @@ export default function StepHookSwingGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="단계 재료 모으기"
       instruction="붉은 세모를 피해 미로를 움직이며, 파란 네모로 바뀐 재료를 순서대로 모아 보세요."
       progress={{ label: '모은 단계', value: hud.taken, max: stage.steps.length }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

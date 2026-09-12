@@ -290,11 +290,10 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="레이저로 고르기"
       instruction="자세한 조건을 더할수록 물건의 모습이 또렷해집니다. 내가 찾으려는 물건을 정확히 조준하여 맞춰 보세요."
       progress={{ label: '담은 것', value: hud.got, max: stage.need }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

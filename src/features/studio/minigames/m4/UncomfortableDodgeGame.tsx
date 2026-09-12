@@ -269,11 +269,10 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="불편한 화면 피하기"
       instruction="빨간 도형을 피해 파란 사각형 안으로 들어간 뒤 3초 동안 머물러 보세요."
       progress={{ label: '넘긴 파도', value: hud.wave, max: stage.waves }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} timeLeft={Math.max(0, HOLD_NEED - hud.hold)} timeTotal={HOLD_NEED} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={Math.max(0, HOLD_NEED - hud.hold)} timeTotal={HOLD_NEED} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

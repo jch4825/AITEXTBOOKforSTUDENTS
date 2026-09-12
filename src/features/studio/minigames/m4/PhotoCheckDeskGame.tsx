@@ -646,11 +646,10 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="사진 검사대"
       instruction="돋보기로 사진 구석구석을 살펴보고, 개인정보가 보이는 위험한 곳에 보호 스티커를 붙여 가려 보세요."
       progress={{ label: '가린 곳', value: hud.covered, max: 4 }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={totalTime} />}
+      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={totalTime} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

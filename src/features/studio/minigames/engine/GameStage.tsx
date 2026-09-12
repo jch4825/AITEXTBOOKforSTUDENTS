@@ -14,8 +14,6 @@ interface Props {
   ariaLabel?: string;
   className?: string;
   style?: React.CSSProperties;
-  /** 바우하우스 어휘로 전환한 게임인가. 모서리를 각지게 두고 면 색을 갈아 끼운다. */
-  bauhaus?: boolean;
   children: React.ReactNode;
 }
 
@@ -30,7 +28,7 @@ interface Props {
  * 1280px에서도 768px에서도 같은 그림이 된다. 자식은 `left: x%`처럼 배치한다.
  */
 export default function GameStage({
-  onPointer, ariaLabel, className = '', style, bauhaus = false, children,
+  onPointer, ariaLabel, className = '', style, children,
 }: Props) {
   const boxRef = useRef<HTMLDivElement | null>(null);
 
@@ -60,13 +58,10 @@ export default function GameStage({
         emit(event, 'up');
       } : undefined}
       onPointerCancel={onPointer ? (event) => emit(event, 'up') : undefined}
-      className={`relative min-h-0 w-full flex-1 overflow-hidden${
-        bauhaus ? '' : ' rounded-xl'} ${className}`}
+      className={`relative min-h-0 w-full flex-1 overflow-hidden ${className}`}
       style={{
-        background: bauhaus ? 'var(--game-board)' : 'var(--board-surface)',
-        border: bauhaus
-          ? 'var(--game-line) solid var(--game-board-grey)'
-          : '2px solid var(--board-line)',
+        background: 'var(--game-board)',
+        border: 'var(--game-line) solid var(--game-board-grey)',
         touchAction: onPointer ? 'none' : undefined,
         ...style,
       }}

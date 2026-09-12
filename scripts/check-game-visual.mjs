@@ -5,13 +5,17 @@ import path from 'node:path';
  * 놀이 파트 바우하우스 계약 검사.
  *
  * 게임 62개는 각자 색을 적고 각자 이모지를 골라 써 왔다. 검사를 걸기 전에 세어 보니
- * 임의 색상 83종이 487번, 이모지가 618번 흩어져 있었다. 한 번에 다 바꿀 수 없으므로
- * 이 검사는 두 가지로 나눠 일한다.
+ * 임의 색상 83종이 487번, 이모지가 618번 흩어져 있었다. 전환을 마친 지금은 61개가
+ * 규칙을 온전히 지키고, 놀이 파트에 남은 임의 색상은 0이다.
  *
- *  1. **래칫** — 아직 안 바꾼 파일에서도 색과 이모지가 지금보다 늘지 않게 막는다.
- *     오래 걸리는 전환 중에 다른 작업이 옛 문법을 다시 퍼뜨리는 것을 여기서 끊는다.
- *  2. **전환 완료 파일 검사** — MIGRATED에 올린 파일은 규칙을 온전히 지켜야 한다.
- *     파일을 하나 바꿀 때마다 여기에 이름을 올린다. 목록이 62개가 되면 래칫을 걷어낸다.
+ * 검사는 두 가지로 일한다.
+ *
+ *  1. **전환 완료 파일 검사** — MIGRATED에 올린 파일은 규칙을 온전히 지켜야 한다.
+ *  2. **래칫** — 아직 못 바꾼 파일(m1/AiSpotHuntGame 하나)에서도 색과 이모지가 지금보다
+ *     늘지 않게 막는다. 그 파일의 그림이 들어와 목록이 62개가 되면 래칫을 걷어낸다.
+ *
+ * 검사가 보는 것은 16진수만이 아니다. rgba()와 Tailwind 색 클래스는 16진수가 아니라서
+ * 한동안 조용히 새고 있었다 — 전환을 마쳤다고 올린 파일 열한 개에 rgba가 남아 있었다.
  */
 
 const root = process.cwd();
@@ -110,7 +114,7 @@ const MIGRATED = new Set([
  * 래칫 기준선. 2026-09-08 전환 시작 시점의 실측값이다.
  * 전환이 진행되면 이 수치는 내려가기만 해야 한다. 내려가면 여기도 함께 낮춘다.
  */
-const BASELINE = { hex: 21, emoji: 55 };
+const BASELINE = { hex: 0, emoji: 48 };
 
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -139,33 +143,6 @@ function countEmoji(source) {
   let n = 0;
   for (const ch of source) if (isPictograph(ch)) n += 1;
   return n;
-}
-
-/**
- * 여는 태그의 속성 부분만 잘라 낸다.
- *
- * 정규식 하나로 `<Tag ...>`를 잡으면 `onClick={() => ...}` 안의 `>`에서 끊긴다.
- * 중괄호 깊이를 세어 진짜 태그 끝을 찾는다.
- */
-function openingTags(source, tag) {
-  const found = [];
-  /* 템플릿 리터럴 안에서 `\b`는 백스페이스가 된다. 낱말 경계로 쓰려면 한 번 더 감싼다. */
-  const re = new RegExp(`<${tag}\\b`, 'g');
-  let match = re.exec(source);
-  while (match) {
-    let depth = 0;
-    let attrs = '';
-    for (let i = match.index + match[0].length; i < source.length; i += 1) {
-      const ch = source[i];
-      if (ch === '{') depth += 1;
-      else if (ch === '}') depth -= 1;
-      else if (ch === '>' && depth === 0) break;
-      attrs += ch;
-    }
-    found.push(attrs);
-    match = re.exec(source);
-  }
-  return found;
 }
 
 const errors = [];
@@ -237,18 +214,6 @@ for (const file of files) {
   }
   if (/backdrop-(?:blur|filter)|box-shadow|shadow-(?:sm|md|lg|xl)/.test(source)) {
     errors.push(`${rel}: 그림자와 블러는 쓰지 않습니다.`);
-  }
-  /*
-   * 프레임·판·HUD는 두 어휘를 함께 안고 가는 동안 bauhaus 플래그로 갈래를 고른다.
-   * 플래그를 빠뜨리면 게임 안은 바뀌었는데 남은 기회는 하트, 남은 시간은 모래시계로
-   * 남는다. 실제로 m3-l8에서 그렇게 새 나갔다 — 여러 줄로 쓴 태그를 놓쳤기 때문이다.
-   */
-  for (const tag of ['MiniGameFrame', 'GameHud', 'GameStage']) {
-    for (const attrs of openingTags(source, tag)) {
-      if (!/\bbauhaus\b/.test(attrs)) {
-        errors.push(`${rel}: <${tag}>에 bauhaus가 빠졌습니다. 옛 갈래로 그려집니다.`);
-      }
-    }
   }
 }
 

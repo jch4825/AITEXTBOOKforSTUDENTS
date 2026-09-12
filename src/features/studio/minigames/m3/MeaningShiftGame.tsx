@@ -370,11 +370,10 @@ export default function MeaningShiftGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="뜻 줄 밀기"
       instruction="가장자리 화살표를 누르면 그 줄이 통째로 밀립니다. 같은 뜻을 말한 조각을 셋으로 이어 보세요."
       progress={{ label: '채운 뜻', value: totalFilled, max: totalNeed }}
-      hud={<GameHud bauhaus score={left} scoreLabel="남은 밀기" />}
+      hud={<GameHud score={left} scoreLabel="남은 밀기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

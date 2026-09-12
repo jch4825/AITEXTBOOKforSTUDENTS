@@ -248,11 +248,10 @@ export default function ProblemRigBuildGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="문제 수레 조립"
       instruction="문제에 알맞은 부품 3개를 골라 자동차에 끼운 다음, 시험 주행 단추를 눌러 굴려 보세요."
       progress={{ label: '채운 자리', value: (['now', 'want', 'gap'] as Slot[]).filter((s) => slots[s]).length, max: 3 }}
-      hud={<GameHud bauhaus lives={tries} maxLives={maxTries} />}
+      hud={<GameHud lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

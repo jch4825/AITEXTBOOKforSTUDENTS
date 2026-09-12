@@ -237,7 +237,6 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="로봇청소기 한 붓 그리기"
       instruction="파란 네모가 그려진 충전소에서 출발해 바닥 칸을 차례대로 눌러 청소 길을 만들어 보세요. 붉은 세모는 가구이니 피해서 모든 바닥을 빠짐없이 청소해 봅시다."
       progress={{ label: '청소한 바닥', value: path.length, max: totalCleanable }}

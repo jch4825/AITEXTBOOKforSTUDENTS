@@ -399,11 +399,10 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="가로세로 낱말"
       instruction="아래 글자 조각을 빈칸으로 끌어다 낱말을 완성해 보세요. 조각을 누른 뒤 빈칸을 눌러도 들어갑니다. 가운데 칸의 글자는 가로 낱말과 세로 낱말에 함께 들어갑니다."
       progress={{ label: '맞춘 낱말', value: done.length, max: words.length }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

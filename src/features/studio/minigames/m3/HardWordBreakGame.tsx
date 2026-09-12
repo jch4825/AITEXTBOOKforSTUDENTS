@@ -274,11 +274,10 @@ export default function HardWordBreakGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="어려운 말 벽 깨기"
       instruction="어려운 낱말은 회색 벽돌입니다. 회색만 시원하게 깨뜨려 보세요. 꼭 남겨야 할 사실은 파란 벽돌이니 깨지지 않게 조심합시다."
       progress={{ label: '쉬워진 말', value: hud.broken, max: hardTotal }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

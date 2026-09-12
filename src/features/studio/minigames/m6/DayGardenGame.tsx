@@ -226,11 +226,10 @@ export default function DayGardenGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="하루 텃밭"
       instruction="오늘 할 일을 골라 시간표 칸에 알맞게 넣어 보세요. 너무 무리하지 않도록 중간에 휴식 시간도 꼭 챙겨야 해요."
       progress={{ label: '심은 칸', value: filled, max: rows * COLS }}
-      hud={<GameHud bauhaus lives={wilt} maxLives={maxWilt} score={energy} scoreLabel="힘" timeLeft={left} timeTotal={seconds} />}
+      hud={<GameHud lives={wilt} maxLives={maxWilt} score={energy} scoreLabel="힘" timeLeft={left} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

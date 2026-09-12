@@ -358,11 +358,10 @@ export default function SummaryMatchGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="같은 뜻 세 개"
       instruction="칸을 눌러 자리를 바꾸며 같은 뜻을 가진 말 세 개를 이어 보세요. 요약에 꼭 필요한 핵심 내용이 차곡차곡 채워집니다."
       progress={{ label: '채운 요약', value: totalFilled, max: totalNeeded }}
-      hud={<GameHud bauhaus score={left} scoreLabel="남은 바꾸기" />}
+      hud={<GameHud score={left} scoreLabel="남은 바꾸기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

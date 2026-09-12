@@ -188,11 +188,10 @@ export default function WeatherCardGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="날씨 옷 카드"
       instruction="기상청 날씨 안내에 나온 기온과 강수량을 잘 확인하고, 그 조건에 딱 맞는 옷차림과 준비물 카드를 골라 보세요."
       progress={{ label: '넘긴 예보', value: Math.min(turn, stage.turns.length), max: stage.turns.length }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} />}
+      hud={<GameHud lives={lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

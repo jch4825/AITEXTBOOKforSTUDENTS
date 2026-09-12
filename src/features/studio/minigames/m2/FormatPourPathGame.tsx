@@ -306,11 +306,10 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="형식 틀로 흘리기"
       instruction="알맞은 모양 틀을 골라 통에 붙이고, 길을 그려 미끄럼틀을 만들어 보세요. 구슬이 알맞은 통 안으로 쏙 들어가면 완성됩니다."
       progress={{ label: '보낸 구슬', value: round, max: stage.jobs.length }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} score={Math.round(ink)} scoreLabel="남은 잉크" />}
+      hud={<GameHud lives={lives} maxLives={maxLives} score={Math.round(ink)} scoreLabel="남은 잉크" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

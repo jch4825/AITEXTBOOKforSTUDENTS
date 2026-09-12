@@ -314,11 +314,10 @@ export default function MapSignMazeGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="지도와 표지 미로"
       instruction="왼쪽 지도의 점선만 믿지 말고, 길가의 표지판을 직접 밟아 확인하며 걸어가세요. 공사 중인 붉은 세모 칸은 피해서 안전하게 가야 해요."
       progress={{ label: '확인한 표지', value: hud.signs, max: totalSigns }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

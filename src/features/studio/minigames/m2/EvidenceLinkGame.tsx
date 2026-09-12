@@ -305,11 +305,10 @@ export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="주장과 근거 잇기"
       instruction="위에서 떨어지는 조각을 움직여 한 줄을 빈틈없이 채워 보세요. 줄을 맞추면 학교 공지와 확인을 마친 줄이 되어 사라집니다."
       progress={{ label: '확인한 줄', value: hud.cleared, max: stage.need }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

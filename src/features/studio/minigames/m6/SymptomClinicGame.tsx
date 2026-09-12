@@ -252,12 +252,11 @@ export default function SymptomClinicGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="아픈 곳 짚기"
       instruction="아픈 곳 안에 그려진 모양과 같은 도구를 고른 다음, 동그라미 한가운데를 가만히 짚어 보세요."
       progress={{ label: '적은 알림', value: marked.length, max: stage.spots.length }}
       hud={(
-        <GameHud bauhaus lives={shakes} maxLives={maxShakes} timeLeft={timeLeft} timeTotal={seconds} />
+        <GameHud lives={shakes} maxLives={maxShakes} timeLeft={timeLeft} timeTotal={seconds} />
       )}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}

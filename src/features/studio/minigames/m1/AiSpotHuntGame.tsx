@@ -459,7 +459,6 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="생활 속 AI 찾기"
       instruction="그림 속에서 스스로 보고 듣고 알아보는 인공지능 물건을 찾아 눌러 보세요. 돋보기를 움직여 5개를 모두 찾아봅시다."
       progress={{ label: '찾은 AI', value: foundCount, max: AI_TARGET }}
@@ -497,7 +496,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
       actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 찾기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
-        <GameStage bauhaus ariaLabel={`${stage.scene} 장면에서 AI가 든 물건을 찾는 놀이. 찾은 물건 ${foundCount}개, 남은 기회 ${lives}개.`}>
+        <GameStage ariaLabel={`${stage.scene} 장면에서 AI가 든 물건을 찾는 놀이. 찾은 물건 ${foundCount}개, 남은 기회 ${lives}개.`}>
           {/* 장면 얼개 — 눌리는 것이 아니므로 조작을 받지 않는다 */}
           {stage.decor.map((piece, index) => (
             <div

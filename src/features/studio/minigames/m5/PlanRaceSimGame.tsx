@@ -300,11 +300,10 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="두 방법 시험 경주"
       instruction={`기준에 알맞은 해결 방법을 골라 빈칸에 카드를 ${stage.slots}장씩 채운 다음, 출발 단추를 눌러 보세요.`}
       progress={{ label: '채운 카드', value: lanes[0].length + lanes[1].length, max: stage.slots * 2 }}
-      hud={<GameHud bauhaus lives={tries} maxLives={maxTries} />}
+      hud={<GameHud lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

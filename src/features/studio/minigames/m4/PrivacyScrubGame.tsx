@@ -500,11 +500,10 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="개인정보 지우기"
       instruction="붉은 네모로 둘러진 개인정보를 문질러 지우고, 꼭 필요한 요청 조건은 파란 밑줄이 그어져 있으니 그대로 남겨 보세요."
       progress={{ label: '가린 정보', value: hud.covered, max: privateTotal }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={Math.ceil(totalTime)} />}
+      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={Math.ceil(totalTime)} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title}으로 바꿨어요.`)}

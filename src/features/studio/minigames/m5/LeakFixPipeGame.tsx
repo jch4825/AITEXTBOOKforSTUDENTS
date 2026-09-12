@@ -200,11 +200,10 @@ export default function LeakFixPipeGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="새는 곳 고치기"
       instruction="물이 새는 파이프를 찾아 알맞게 돌려 연결한 뒤, 물을 다시 흘려보내 잘 흐르는지 확인해 보세요."
       progress={{ label: '이어진 칸', value: wet, max: COLS }}
-      hud={<GameHud bauhaus lives={runs} maxLives={maxRuns} score={fixedLog.length} scoreLabel="고친 곳" />}
+      hud={<GameHud lives={runs} maxLives={maxRuns} score={fixedLog.length} scoreLabel="고친 곳" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

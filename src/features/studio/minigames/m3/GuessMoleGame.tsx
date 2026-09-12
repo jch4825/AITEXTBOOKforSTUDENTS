@@ -314,11 +314,10 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="추측만 두드리기"
       instruction="빨간 세모(추측)가 나오면 사라지기 전에 누르세요. 파란 네모(사실)를 잘못 누르면 터집니다."
       progress={{ label: '고친 추측', value: hud.caught, max: GOAL }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

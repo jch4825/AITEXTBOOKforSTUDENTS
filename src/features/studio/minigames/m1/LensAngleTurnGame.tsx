@@ -434,11 +434,10 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="카메라 각도 돌리기"
       instruction={`손잡이를 움직여 밝기와 각도를 맞추고, 가림막을 옆으로 치워 보세요. ${stage.name} 모습이 또렷해지면 인공지능이 알아봅니다.`}
       progress={{ label: '고친 곳', value: view.fixed, max: 3 }}
-      hud={<GameHud bauhaus timeLeft={view.seconds} timeTotal={totalSeconds} />}
+      hud={<GameHud timeLeft={view.seconds} timeTotal={totalSeconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].name} 사진으로 바꿨어요.`)}

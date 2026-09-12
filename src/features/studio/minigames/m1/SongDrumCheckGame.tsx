@@ -324,11 +324,10 @@ export default function SongDrumCheckGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="박자 맞춰 북치기"
       instruction="곡이 노란 띠 안에 들어올 때 알맞은 북을 쳐 보세요. 댄스 타임에 쓸 수 없는 곡은 치지 않고 보냅니다."
       progress={{ label: '고른 곡', value: hud.correct, max: stage.order.length }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

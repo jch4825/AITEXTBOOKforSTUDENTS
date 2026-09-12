@@ -327,11 +327,10 @@ export default function SourceTowerGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="자료 탑 무너뜨리기"
       instruction="탑에 쌓인 자료의 출처와 날짜를 읽어 보세요. 어디서 왔는지 알 수 없거나 너무 오래된 자료만 각도와 힘을 맞추어 무너뜨립니다. 포탄은 줄의 맨 위 자료부터 맞습니다."
       progress={{ label: '치운 자료', value: hud.broken, max: hud.broken + weakLeft }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} score={hud.left} scoreLabel="남은 포탄" />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} score={hud.left} scoreLabel="남은 포탄" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

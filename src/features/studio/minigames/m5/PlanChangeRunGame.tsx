@@ -287,11 +287,10 @@ export default function PlanChangeRunGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="계획 바꿔 달리기"
       instruction="스페이스 키를 눌러 뛰거나 아래 방향키로 웅크려 장애물을 피하세요. 표지판을 지나면 계획이 바뀌니 위의 안내를 잘 살펴보세요."
       progress={{ label: '나아간 길', value: hud.progress, max: 100 }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} score={hud.signs} scoreLabel="지난 표지" />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} score={hud.signs} scoreLabel="지난 표지" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

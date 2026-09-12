@@ -231,11 +231,10 @@ export default function ExpressionDeskGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="표현 교환대"
       instruction="도움을 청하는 손님의 마음을 살피고, 손님이 편안해하는 방법(말·글·그림)에 맞추어 알맞은 표현 카드를 골라 보세요."
       progress={{ label: '응대한 손님', value: served, max: stage.need }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={front?.patience ?? 0} timeTotal={patience} />}
+      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={front?.patience ?? 0} timeTotal={patience} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

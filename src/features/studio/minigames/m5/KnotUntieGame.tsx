@@ -221,11 +221,10 @@ export default function KnotUntieGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="매듭 풀기"
       instruction="매듭이 풀리는 방향을 골라 톡톡 두드려 보세요. 풀기 어려울 때는 힌트 단추를 누르면 도움을 받을 수 있어요."
       progress={{ label: '푼 매듭', value: hud.index, max: stage.count }}
-      hud={<GameHud bauhaus score={hud.power} scoreLabel="내 힘" timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud score={hud.power} scoreLabel="내 힘" timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

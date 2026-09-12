@@ -196,11 +196,10 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="조건표와 대조"
       instruction="완성된 그림에서 조건과 다른 부분을 찾아 누른 뒤, 아래 상자에서 알맞은 물건을 골라 바꾸어 보세요."
       progress={{ label: '고친 곳', value: fixed.length, max: stage.spots.length }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -229,7 +228,6 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
         </div>
 
         <GameStage
-          bauhaus
           ariaLabel={`${stage.title} 완성 사진. 조건표와 어긋난 곳 ${stage.spots.length}군데를 찾습니다.`}
           onPointer={(pointer) => {
             if (pointer.phase !== 'down') return;

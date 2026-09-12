@@ -182,11 +182,10 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="같은 모양 상자 옮기기"
       instruction="상자를 하나 고른 다음, 상자에 그려진 모양과 똑같은 자리를 찾아 눌러 보세요."
       progress={{ label: '옮긴 상자', value: placed, max: stage.items.length }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -211,7 +210,7 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
           {heldCrate ? heldCrate.text : note || '옮길 상자를 고르세요.'}
         </p>
 
-        <GameStage bauhaus ariaLabel={`부탁 상자를 같은 모양 자리로 옮기는 놀이. 옮긴 상자 ${placed}개.`}>
+        <GameStage ariaLabel={`부탁 상자를 같은 모양 자리로 옮기는 놀이. 옮긴 상자 ${placed}개.`}>
           {crates.filter((crate) => !crate.placed).map((crate) => {
             const info = ZONE_INFO[crate.zone];
             const on = held === crate.id;

@@ -269,11 +269,10 @@ export default function BusBoardTimingGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="버스 타는 순간"
       instruction="안내판에 나온 번호와 방향이 같은 버스가 멈추어 문이 열렸을 때 타 보세요. 번호가 다른 버스는 그냥 보내세요."
       progress={{ label: '바르게 탄 차', value: hud.boarded, max: stage.need }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

@@ -205,11 +205,10 @@ export default function ClueMergeGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="단서 합치기"
       instruction="같은 모양의 단서 2개를 합쳐 더 자세한 요청을 만들고, 개인정보 조각은 휴지통에 넣어 버리세요."
       progress={{ label: '키운 단계', value: best, max: stage.goalLevel }}
-      hud={<GameHud bauhaus score={left} scoreLabel="남은 옮기기" />}
+      hud={<GameHud score={left} scoreLabel="남은 옮기기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

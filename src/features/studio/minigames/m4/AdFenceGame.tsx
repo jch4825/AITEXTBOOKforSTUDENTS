@@ -484,13 +484,11 @@ export default function AdFenceGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="광고 구역 두르기"
       instruction="선을 그어 과장된 광고 게시물을 둘러싸 보세요. 지나친 과장 문구에 닿지 않게 조심하며 안전하게 영역을 확보해 봅시다."
       progress={{ label: '찾은 광고 단서', value: Math.min(hud.found, need), max: need }}
       hud={(
         <GameHud
-          bauhaus
           lives={hud.lives}
           maxLives={tuning.lives}
           score={hud.owned}

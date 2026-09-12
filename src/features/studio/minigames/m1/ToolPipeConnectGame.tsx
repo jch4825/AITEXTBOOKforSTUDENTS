@@ -294,7 +294,6 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="도구 관 잇기"
       instruction="연결관을 눌러 알맞게 돌린 뒤, 왼쪽 일에서 오른쪽 도구까지 길을 이어 보세요. 길이 모두 이어졌으면 물 흘리기 단추를 눌러 봅시다."
       progress={{ label: '이어진 관', value: connectedCount, max: stage.path.length }}

@@ -192,7 +192,6 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="조건 맞춰 담기"
       instruction={`장바구니 목록을 살펴보며 알레르기가 있는 ${stage.avoid}와 다 팔린 물건을 빼고, 정해진 금액(${budget.toLocaleString()}원) 안에서 필요한 물건을 골라 담아 보세요.`}
       progress={{
@@ -200,7 +199,7 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
         value: stage.needKinds.filter((kind) => cart.some((id) => itemById(id).kind === kind)).length,
         max: stage.needKinds.length,
       }}
-      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

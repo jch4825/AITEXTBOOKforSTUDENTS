@@ -296,11 +296,10 @@ export default function StoryJumpMapGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="이야기 길 뛰기"
       instruction="이야기의 결말을 먼저 고르고, 그 결말로 이어지는 파란 발판을 밟아 달려가 보세요. 붉은 발판은 다른 결말로 가는 길이라, 밟으면 앞 발판으로 되돌아옵니다."
       progress={{ label: '나아간 길', value: hud.progress, max: 100 }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

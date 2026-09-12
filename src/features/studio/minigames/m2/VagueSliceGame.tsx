@@ -506,11 +506,10 @@ export default function VagueSliceGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="모호한 말 베기"
       instruction="알기 어려운 모호한 말은 회색 구름입니다. 구름만 가볍게 베어 보세요. 꼭 지켜야 할 사실은 파란 자물쇠이니 다치지 않게 그대로 두어야 해요."
       progress={{ label: '벤 모호한 말', value: Math.min(hud.sliced, TARGET_VAGUE), max: TARGET_VAGUE }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} score={keptCount} scoreLabel="지킨 사실" />}
+      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} score={keptCount} scoreLabel="지킨 사실" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

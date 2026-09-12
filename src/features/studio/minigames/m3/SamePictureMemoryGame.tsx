@@ -183,13 +183,11 @@ export default function SamePictureMemoryGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="같은 그림 카드"
       instruction="처음에 잠깐 보여 주는 그림의 자리를 기억했다가 같은 그림 두 장을 찾아 보세요. 헛짚지 않고 이어서 찾으면 금색 도장을 받습니다."
       progress={{ label: '맞춘 쌍', value: clearedPairs, max: stage.pairs }}
       hud={
         <GameHud
-          bauhaus
           lives={tries}
           maxLives={maxTries}
           score={gold}

@@ -445,11 +445,10 @@ export default function ClaimShooterGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="틀린 답 쏘기"
       instruction="웃는 얼굴은 오늘의 자료와 같은 답이니 그대로 지나가게 두세요. 웃지 않는 답만 스페이스나 마우스 왼쪽 단추로 쏘아 보세요. 왼쪽 위 오늘의 자료와 무엇이 다른지 볼 수 있어요."
       progress={{ label: '찾은 다른 답', value: hud.down, max: stage.goal }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

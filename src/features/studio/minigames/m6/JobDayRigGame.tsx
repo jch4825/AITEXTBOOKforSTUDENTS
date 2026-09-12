@@ -257,11 +257,10 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="직업 하루 조립"
       instruction="내가 좋아하는 것, 잘하는 것, 도움이 필요한 것을 알맞게 골라 채운 다음, 하루 일과를 시작해 보세요."
       progress={{ label: '채운 자리', value: (['like', 'strong', 'help'] as Slot[]).filter((s) => slots[s]).length, max: 3 }}
-      hud={<GameHud bauhaus lives={tries} maxLives={maxTries} />}
+      hud={<GameHud lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}

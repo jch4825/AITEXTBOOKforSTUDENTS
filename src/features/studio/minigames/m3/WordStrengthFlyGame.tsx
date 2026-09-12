@@ -287,11 +287,10 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="낱말 세기 비행"
       instruction={`장면에 어울리는 '${stage.word}'의 뜻에 맞추어 알맞은 높이로 날아가 보세요. 화면을 누르면 올라가고 놓으면 내려옵니다.`}
       progress={{ label: '지나간 장면', value: hud.cleared, max: stage.scenes.length }}
-      hud={<GameHud bauhaus lives={hud.lives} maxLives={tuning.lives} />}
+      hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 낱말로 바꿨어요.`)}

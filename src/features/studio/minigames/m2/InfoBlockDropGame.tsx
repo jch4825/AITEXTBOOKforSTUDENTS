@@ -428,11 +428,10 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
-      bauhaus
       badge="정보 블록 쌓기"
       instruction="내려오는 낱말을 읽고 알맞은 이름표 상자로 옮겨 담아 보세요. 필요한 정보와 상관없는 잡동사니를 알맞게 나누어 봅시다."
       progress={{ label: '완성한 부탁', value: hud.lines, max: 3 }}
-      hud={<GameHud bauhaus lives={hud.room} maxLives={maxStack} />}
+      hud={<GameHud lives={hud.room} maxLives={maxStack} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 부탁으로 바꿨어요.`)}
