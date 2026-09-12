@@ -97,7 +97,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm6-l5', genre: 39, genreName: '카드 배틀', badge: '날씨 옷 카드', component: 'WeatherCardGame' },
   { lessonId: 'm6-l6', genre: 26, genreName: '벽돌깨기', badge: '위험 단계 깨기', component: 'CookStepBreakGame' },
   { lessonId: 'm6-l7', genre: 45, genreName: '농장 경영', badge: '하루 텃밭', component: 'DayGardenGame' },
-  { lessonId: 'm6-l8', genre: 51, genreName: '진료 놀이', badge: '아픈 곳 짚기', component: 'SymptomClinicGame' },
+  { lessonId: 'm6-l8', genre: 17, genreName: '분류 매치', badge: '아픈 곳 카드 채우기', component: 'SymptomCardGame' },
   { lessonId: 'm6-l9', genre: 49, genreName: '손님 안내', badge: '표현 교환대', component: 'ExpressionDeskGame' },
   { lessonId: 'm6-l10', genre: 48, genreName: '조립 개조', badge: '직업 하루 조립', component: 'JobDayRigGame' },
   { lessonId: 'm6-l11', genre: 22, genreName: '시점 조작 퍼즐', badge: '두 방향 소개', component: 'TwoViewIntroGame' },

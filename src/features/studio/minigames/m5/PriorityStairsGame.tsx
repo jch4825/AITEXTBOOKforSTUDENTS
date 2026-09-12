@@ -69,10 +69,22 @@ const KIND_LABEL: Record<Kind, string> = {
 };
 /** 게이지가 가득 차기까지의 초. 안전이 가장 빠르다. */
 const KIND_SECONDS: Record<Kind, number> = {
-  safety: 7,
-  deadline: 12,
-  help: 26,
+  safety: 5,
+  deadline: 8,
+  help: 14,
 };
+
+/**
+ * 한쪽을 고르면 반대쪽이 올라서는 눈금.
+ *
+ * 시간만으로 차오르게 했더니 고르는 일이 한가했다. 하나를 고르는 것은 곧 다른 하나를
+ * 미루는 것이므로, 미룬 쪽이 그 자리에서 한 눈금 올라선다. 절반으로, 다시 4분의 3으로,
+ * 그다음 9할로 — 같은 일을 세 번 미루면 터진다. 밀리는 것이 눈에 띄게 보여야 "먼저"라는
+ * 말이 무게를 가진다.
+ */
+const PUSH_STEPS = [0.5, 0.75, 0.9, 1];
+
+const pushed = (fill: number) => PUSH_STEPS.find((step) => step > fill + 0.001) ?? 1;
 
 interface JobSpec {
   label: string;
@@ -180,13 +192,14 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
      되지만, 같은 시도 안에서는 늘 같다. */
   const randomRef = useRef<() => number>(createRandom(game.seed));
 
-  /** 다음 일을 뽑는다. 급한 일 둘이 동시에 차오르면 아무리 잘 골라도 한쪽이 무너지므로,
-      남아 있는 카드가 급하고 많이 찼으면 느린 일을 내보내 숨통을 틔운다. */
+  /** 다음 일을 뽑는다. 반대쪽이 터지기 직전인데 새 카드까지 급하면 아무리 잘 골라도
+      한쪽을 잃는다. 그때만 느린 일을 내보내 숨통을 틔운다 — 눈금이 올라선 판에서는
+      대부분의 카드가 절반을 넘으므로, 기준을 낮게 잡으면 느린 일만 나온다. */
   const dealCard = (world: World, side: number, random: () => number): void => {
     const other = world.cards[1 - side];
     const tight = other !== null
       && other.job.kind !== 'help'
-      && other.fill > 0.45;
+      && other.fill > 0.82;
     const pool = stage.jobs.filter((job) => (tight ? job.kind === 'help' : true));
     const list = pool.length > 0 ? pool : stage.jobs;
     const pick = list[(world.cursor + Math.floor(random() * list.length)) % list.length];
@@ -212,6 +225,11 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
     if (!game.playing || world.finished || !world.cards[side]) return;
     world.climbed += 1;
     dealCard(world, side, randomRef.current);
+
+    // 고른 것은 곧 미룬 것이다. 반대쪽이 그 자리에서 한 눈금 올라선다.
+    const other = world.cards[1 - side];
+    if (other) other.fill = pushed(other.fill);
+
     setView({ climbed: world.climbed, lives: livesRef.current });
     if (world.climbed >= GOAL_STEPS) {
       world.finished = true;
@@ -308,7 +326,7 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="먼저 할 일 계단"
-      instruction="일 카드 두 장 가운데 먼저 할 일을 누르세요. 누른 일이 다음 계단이 되어 한 칸 오릅니다. 고르지 않은 일은 띠가 차오르고, 가득 차면 계단이 무너집니다."
+      instruction="일 카드 두 장 가운데 먼저 할 일을 누르세요. 누른 일이 다음 계단이 되어 한 칸 오릅니다. 고르지 않은 일은 그 자리에서 확 밀리고, 세 번 미루면 띠가 가득 차 계단이 무너집니다."
       progress={{ label: '오른 칸', value: view.climbed, max: GOAL_STEPS }}
       hud={<GameHud lives={view.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
@@ -318,7 +336,7 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       footer={
         <p className="px-1 text-[15px] font-bold" style={{ color: 'var(--game-ink)' }}>
-          {stage.scene} · 빨강 삼각(안전)이 가장 빨리 차오릅니다.
+          {stage.scene} · 빨강 삼각(안전)이 가장 빨리 차오르고, 미룬 일은 고를 때마다 확 밀립니다.
         </p>
       }
       actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
