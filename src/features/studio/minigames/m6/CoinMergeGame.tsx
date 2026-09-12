@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, randInt, useGameKeys, useGameLoop } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, randInt, useGameKeys, useGameLoop } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -114,10 +114,14 @@ function move(grid: Grid, dir: number) {
   return { grid: work, moved };
 }
 
-const COLORS: Record<number, string> = {
-  100: '#475569', 200: '#0369A1', 400: '#0F766E', 800: '#B45309',
-  1600: '#7C3AED', 3200: '#BE123C', 6400: '#0E7490',
-};
+/*
+ * 금액마다 다른 색을 두던 표를 걷었다.
+ *
+ * 일곱 색은 서로 뜻이 없는 색이라 학생이 색과 금액을 따로 외워야 했고, 색을 구별하지
+ * 못하면 아무 도움도 되지 않았다. 금액은 칸에 이미 숫자로 적혀 있으므로 색은 숫자 대신
+ * 역할만 진다 — 지금 판에서 가장 큰 칸은 노랑, 목표에 닿은 칸은 파랑, 나머지는 회색이다.
+ * 셋 다 모양(원·확인 표시·없음)이 함께 갈려 색을 못 가려도 읽힌다.
+ */
 
 export default function CoinMergeGame({ supportLevel }: MiniGameProps) {
   const game = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
@@ -191,10 +195,11 @@ export default function CoinMergeGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="동전 합치기"
       instruction={`금액이 같은 동전 타일을 밀어 하나로 합치면서, ${stage.goal.toLocaleString()}원 타일을 만들어 보세요.`}
       progress={{ label: '가장 큰 금액', value: best, max: stage.goal }}
-      hud={<GameHud score={left} scoreLabel="남은 밀기" />}
+      hud={<GameHud bauhaus score={left} scoreLabel="남은 밀기" />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -202,13 +207,16 @@ export default function CoinMergeGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => push(0)} emoji="⬅️" label="왼쪽" />
-          <MiniGameButton onClick={() => push(2)} emoji="➡️" label="오른쪽" />
-          <MiniGameButton onClick={() => push(1)} emoji="⬆️" label="위" />
-          <MiniGameButton onClick={() => push(3)} emoji="⬇️" label="아래" />
+          {/* 네 방향은 화살표 하나를 돌려 쓴다. 방향마다 다른 그림을 두면 학생이 같은 뜻의
+              그림 넷을 따로 익혀야 한다. */}
+          <MiniGameButton onClick={() => push(0)} mark="arrow" markRotate={180} label="왼쪽" />
+          <MiniGameButton onClick={() => push(2)} mark="arrow" label="오른쪽" />
+          <MiniGameButton onClick={() => push(1)} mark="arrow" markRotate={270} label="위" />
+          <MiniGameButton onClick={() => push(3)} mark="arrow" markRotate={90} label="아래" />
+          {/* 주판 그림을 더하기 표로 바꾼다. 이 버튼이 하는 일이 값을 더해 보는 것이다. */}
           <MiniGameButton
             onClick={() => { setCalcOpen(true); playSound('confirm'); }}
-            emoji="🧮"
+            mark="plus"
             label="계산기"
             variant="primary"
           />
@@ -220,56 +228,89 @@ export default function CoinMergeGame({ supportLevel }: MiniGameProps) {
           {stage.items.map((item) => (
             <span
               key={item.name}
-              className="rounded-lg px-2 py-1 text-[15px] font-black"
-              style={{ background: 'var(--board-surface)', border: '2px solid var(--board-line)', color: 'var(--board-ink)' }}
+              className="px-2 py-1 text-[15px] font-black"
+              style={{
+                background: 'var(--game-board-surface)',
+                border: 'var(--game-line) solid var(--game-board-grey)',
+                color: 'var(--game-board-ink)',
+              }}
             >
               {item.name} {item.price.toLocaleString()}원 × {item.count}
             </span>
           ))}
+          {/* 아이미의 금액과 계산기의 금액은 이 놀이에서 맞대는 두 값이다. 판 위에서
+              빨강과 파랑의 밝기는 거의 같아 색만으로는 갈리지 않으므로, 틀린 쪽은 세모,
+              맞는 쪽은 네모를 함께 진다. 계산기를 눌러 드러난 뒤에는 면을 통째로 뒤집어
+              둘 중 어느 것을 믿어야 하는지 한눈에 보이게 한다. */}
           <span
-            className="rounded-lg px-2 py-1 text-[15px] font-black"
+            className="flex items-center gap-1.5 px-2 py-1 text-[15px] font-black"
             style={{
-              background: 'var(--board-surface)',
-              border: `2px solid ${calcOpen ? '#FB7185' : '#38BDF8'}`,
-              color: 'var(--board-ink)',
+              background: calcOpen ? 'var(--game-board-red)' : 'var(--game-board-surface)',
+              border: `var(--game-line) solid ${
+                calcOpen ? 'var(--game-board-red)' : 'var(--game-board-grey)'}`,
+              color: calcOpen ? 'var(--game-board)' : 'var(--game-board-ink)',
             }}
           >
+            {calcOpen && <BauhausMark kind="triangle" size={14} />}
             아이미 · {stage.aimiSays.toLocaleString()}원{calcOpen ? ' (틀렸어요)' : ''}
           </span>
           {calcOpen && (
             <span
-              className="rounded-lg px-2 py-1 text-[15px] font-black"
-              style={{ background: 'rgba(74, 222, 128, 0.16)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
+              className="flex items-center gap-1.5 px-2 py-1 text-[15px] font-black"
+              style={{
+                background: 'var(--game-board-blue)',
+                border: 'var(--game-line) solid var(--game-board-blue)',
+                color: 'var(--game-board)',
+              }}
             >
+              <BauhausMark kind="square" size={14} />
               계산기 · {realTotal.toLocaleString()}원
             </span>
           )}
         </div>
 
         <div
-          className="grid min-h-0 flex-1 gap-1.5 rounded-xl p-1.5"
+          className="grid min-h-0 flex-1 gap-1.5 p-1.5"
           style={{
             gridTemplateColumns: `repeat(${SIZE}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${SIZE}, minmax(0, 1fr))`,
-            background: 'var(--board-overlay)',
-            border: '2px solid var(--board-line)',
+            /* 판을 담는 틀은 중립 구조물이다. 회색 테두리만 두르고 안쪽을 어둡게 둔다. */
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-grey)',
           }}
         >
-          {grid.map((row, r) => row.map((value, c) => (
-            <div
-              key={`${r}-${c}`}
-              className="flex min-h-0 items-center justify-center rounded-lg text-[17px] font-black"
-              style={{
-                background: value === 0 ? 'rgba(30, 41, 59, 0.6)' : COLORS[value] ?? '#0E7490',
-                border: `2px solid ${value === 0 ? 'rgba(100, 116, 139, 0.35)' : 'var(--board-ink)'}`,
-                color: 'var(--board-ink)',
-              }}
-            >
-              {value === 0 ? '' : value.toLocaleString()}
-            </div>
-          )))}
+          {grid.map((row, r) => row.map((value, c) => {
+            const reached = value >= stage.goal;
+            /* 지금 판에서 가장 큰 칸. 학생이 키워 가는 것이라 노랑 원을 진다.
+               같은 금액이 둘이면 둘 다 노랑인데, 그 둘이 바로 붙여야 할 짝이다. */
+            const growing = value > 0 && value === best && !reached;
+            return (
+              <div
+                key={`${r}-${c}`}
+                className="flex min-h-0 flex-col items-center justify-center gap-0.5 text-[17px] font-black"
+                style={{
+                  /* 목표에 닿은 칸은 면을 파랑으로 뒤집는다. 테두리만 바꾸면 다 왔다는 것이
+                     빈 칸 열다섯 개 사이에서 묻힌다. */
+                  background: reached ? 'var(--game-board-blue)'
+                    : value === 0 ? 'var(--game-board)' : 'var(--game-board-surface)',
+                  border: `${value === 0 ? 'var(--game-hair)' : 'var(--game-line)'} solid ${
+                    reached ? 'var(--game-board-blue)'
+                      : growing ? 'var(--game-board-yellow)' : 'var(--game-board-grey)'}`,
+                  color: reached ? 'var(--game-board)' : 'var(--game-board-ink)',
+                }}
+              >
+                {reached && <BauhausMark kind="check" size={13} />}
+                {growing && (
+                  <span style={{ color: 'var(--game-board-yellow)' }}>
+                    <BauhausMark kind="circle" size={11} />
+                  </span>
+                )}
+                {value === 0 ? '' : value.toLocaleString()}
+              </div>
+            );
+          }))}
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
           {note || (calcOpen ? '계산기와 아이미의 금액이 다릅니다. 계산기 값을 믿으세요.' : '계산기를 눌러 아이미의 금액을 확인해 보세요.')}
         </p>
       </div>

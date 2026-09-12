@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, createRandom, shuffle } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, shuffle } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -19,10 +19,16 @@ type Need = 'warm' | 'rain' | 'wind';
 
 const NEED_LABEL: Record<Need, string> = { warm: '보온', rain: '방수', wind: '바람막이' };
 
+/*
+ * 물건 이름 옆의 그림 문자를 걷었다.
+ *
+ * 이름이 늘 바로 옆에 있어 그림 문자는 뜻을 더하지 않으면서, 기기와 글꼴마다
+ * 다른 모양으로 보이는 값만 치렀다. 실제로 두꺼운 외투와 비옷이 같은 그림을
+ * 물려받아 두 카드가 구별되지 않기도 했다. 카드를 가르는 것은 이름과 숫자다.
+ */
 interface Card {
   id: string;
   name: string;
-  emoji: string;
   warm: number;
   rain: number;
   wind: number;
@@ -56,14 +62,14 @@ const STAGES: StageConfig[] = [
       { forecast: '바람이 셉니다', need: 'wind', amount: 3, aimi: '바람은 금방 그쳐요.' },
     ],
     deck: [
-      { id: 'tee', name: '반팔 티', emoji: '👕', warm: 1, rain: 0, wind: 0 },
-      { id: 'coat', name: '두꺼운 외투', emoji: '🧥', warm: 5, rain: 2, wind: 4 },
-      { id: 'umbrella', name: '우산', emoji: '☂️', warm: 0, rain: 5, wind: 0 },
-      { id: 'raincoat', name: '비옷', emoji: '🧥', warm: 2, rain: 5, wind: 3 },
-      { id: 'scarf', name: '목도리', emoji: '🧣', warm: 4, rain: 0, wind: 2 },
-      { id: 'cap', name: '모자', emoji: '🧢', warm: 1, rain: 1, wind: 3 },
-      { id: 'sandal', name: '샌들', emoji: '🩴', warm: 0, rain: 0, wind: 0 },
-      { id: 'boots', name: '장화', emoji: '👢', warm: 2, rain: 4, wind: 1 },
+      { id: 'tee', name: '반팔 티', warm: 1, rain: 0, wind: 0 },
+      { id: 'coat', name: '두꺼운 외투', warm: 5, rain: 2, wind: 4 },
+      { id: 'umbrella', name: '우산', warm: 0, rain: 5, wind: 0 },
+      { id: 'raincoat', name: '비옷', warm: 2, rain: 5, wind: 3 },
+      { id: 'scarf', name: '목도리', warm: 4, rain: 0, wind: 2 },
+      { id: 'cap', name: '모자', warm: 1, rain: 1, wind: 3 },
+      { id: 'sandal', name: '샌들', warm: 0, rain: 0, wind: 0 },
+      { id: 'boots', name: '장화', warm: 2, rain: 4, wind: 1 },
     ],
   },
   {
@@ -77,14 +83,14 @@ const STAGES: StageConfig[] = [
       { forecast: '저녁에는 서늘해집니다', need: 'warm', amount: 4, aimi: '집에 금방 가니까 괜찮아요.' },
     ],
     deck: [
-      { id: 'tee', name: '반팔 티', emoji: '👕', warm: 1, rain: 0, wind: 1 },
-      { id: 'cap', name: '챙 넓은 모자', emoji: '👒', warm: 0, rain: 1, wind: 5 },
-      { id: 'umbrella', name: '우산', emoji: '☂️', warm: 0, rain: 5, wind: 0 },
-      { id: 'raincoat', name: '얇은 비옷', emoji: '🧥', warm: 1, rain: 5, wind: 2 },
-      { id: 'water', name: '물병', emoji: '🧴', warm: 1, rain: 0, wind: 0 },
-      { id: 'coat', name: '두꺼운 외투', emoji: '🧥', warm: 5, rain: 2, wind: 4 },
-      { id: 'towel', name: '수건', emoji: '🧻', warm: 2, rain: 2, wind: 0 },
-      { id: 'fan', name: '휴대용 부채', emoji: '🪭', warm: 0, rain: 0, wind: 2 },
+      { id: 'tee', name: '반팔 티', warm: 1, rain: 0, wind: 1 },
+      { id: 'cap', name: '챙 넓은 모자', warm: 0, rain: 1, wind: 5 },
+      { id: 'umbrella', name: '우산', warm: 0, rain: 5, wind: 0 },
+      { id: 'raincoat', name: '얇은 비옷', warm: 1, rain: 5, wind: 2 },
+      { id: 'water', name: '물병', warm: 1, rain: 0, wind: 0 },
+      { id: 'coat', name: '두꺼운 외투', warm: 5, rain: 2, wind: 4 },
+      { id: 'towel', name: '수건', warm: 2, rain: 2, wind: 0 },
+      { id: 'fan', name: '휴대용 부채', warm: 0, rain: 0, wind: 2 },
     ],
   },
   {
@@ -100,16 +106,16 @@ const STAGES: StageConfig[] = [
       { forecast: '해가 지면 더 춥습니다', need: 'warm', amount: 4, aimi: '집에 금방 가요.' },
     ],
     deck: [
-      { id: 'coat', name: '두꺼운 외투', emoji: '🧥', warm: 5, rain: 2, wind: 5 },
-      { id: 'scarf', name: '목도리', emoji: '🧣', warm: 5, rain: 0, wind: 3 },
-      { id: 'umbrella', name: '우산', emoji: '☂️', warm: 0, rain: 5, wind: 0 },
-      { id: 'raincoat', name: '비옷', emoji: '🧥', warm: 3, rain: 5, wind: 5 },
-      { id: 'boots', name: '장화', emoji: '👢', warm: 3, rain: 5, wind: 1 },
-      { id: 'gloves', name: '장갑', emoji: '🧤', warm: 4, rain: 1, wind: 4 },
-      { id: 'tee', name: '반팔 티', emoji: '👕', warm: 1, rain: 0, wind: 0 },
-      { id: 'sandal', name: '샌들', emoji: '🩴', warm: 0, rain: 0, wind: 0 },
-      { id: 'cap', name: '모자', emoji: '🧢', warm: 1, rain: 1, wind: 5 },
-      { id: 'sweater', name: '스웨터', emoji: '🧶', warm: 4, rain: 0, wind: 2 },
+      { id: 'coat', name: '두꺼운 외투', warm: 5, rain: 2, wind: 5 },
+      { id: 'scarf', name: '목도리', warm: 5, rain: 0, wind: 3 },
+      { id: 'umbrella', name: '우산', warm: 0, rain: 5, wind: 0 },
+      { id: 'raincoat', name: '비옷', warm: 3, rain: 5, wind: 5 },
+      { id: 'boots', name: '장화', warm: 3, rain: 5, wind: 1 },
+      { id: 'gloves', name: '장갑', warm: 4, rain: 1, wind: 4 },
+      { id: 'tee', name: '반팔 티', warm: 1, rain: 0, wind: 0 },
+      { id: 'sandal', name: '샌들', warm: 0, rain: 0, wind: 0 },
+      { id: 'cap', name: '모자', warm: 1, rain: 1, wind: 5 },
+      { id: 'sweater', name: '스웨터', warm: 4, rain: 0, wind: 2 },
     ],
   },
 ];
@@ -182,33 +188,47 @@ export default function WeatherCardGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="날씨 옷 카드"
       instruction="기상청 날씨 안내에 나온 기온과 강수량을 잘 확인하고, 그 조건에 딱 맞는 옷차림과 준비물 카드를 골라 보세요."
       progress={{ label: '넘긴 예보', value: Math.min(turn, stage.turns.length), max: stage.turns.length }}
-      hud={<GameHud lives={lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div
-          className="rounded-xl px-3 py-2"
-          style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8' }}
+          className="px-3 py-2"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+          }}
         >
-          <p className="text-[17px] font-black" style={{ color: 'var(--board-ink)' }}>
-            📢 공식 예보 · {current.forecast}
+          <p
+            className="flex items-center gap-2 text-[17px] font-black"
+            style={{ color: 'var(--game-board-ink)' }}
+          >
+            <span style={{ color: 'var(--game-board-blue)' }}>
+              <BauhausMark kind="sound" size={17} />
+            </span>
+            공식 예보 · {current.forecast}
           </p>
-          <p className="text-[16px] font-black" style={{ color: '#4ADE80' }}>
+          <p className="text-[16px] font-black" style={{ color: 'var(--game-board-blue)' }}>
             필요한 {NEED_LABEL[current.need]} {required} 이상
           </p>
         </div>
 
         <p
-          className="rounded-xl px-3 py-1.5 text-[15px] font-bold"
-          style={{ background: 'var(--board-overlay)', border: '2px solid #C4B5FD', color: 'var(--board-ink)' }}
+          className="px-3 py-1.5 text-[15px] font-bold"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-grey)',
+            color: 'var(--game-board-ink)',
+          }}
         >
           아이미 · {current.aimi}
         </p>
@@ -220,22 +240,38 @@ export default function WeatherCardGame({ supportLevel }: MiniGameProps) {
               type="button"
               onClick={() => play(card)}
               disabled={!game.playing || done}
-              className="flex min-h-[92px] flex-col items-center justify-center rounded-xl px-1 text-[14px] font-black leading-tight"
+              className="flex min-h-[92px] flex-col items-center justify-center gap-0.5 px-1 text-[14px] font-black leading-tight"
               style={{
-                background: 'var(--board-surface)',
-                border: `2px solid ${card[current.need] >= required ? '#4ADE80' : 'var(--board-line)'}`,
-                color: 'var(--board-ink)',
+                background: 'var(--game-board)',
+                border: `var(--game-line) solid ${
+                  card[current.need] >= required
+                    ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
+                color: 'var(--game-board-ink)',
               }}
             >
-              <span className="text-[24px]" aria-hidden="true">{card.emoji}</span>
+              {/* 오늘 조건을 채우는 카드에만 파란 네모가 선다. 테두리 색과 같은 뜻을
+                  모양으로 한 번 더 얹어, 색을 못 가려도 고를 수 있게 한다. */}
+              <span
+                style={{
+                  color: card[current.need] >= required
+                    ? 'var(--game-board-blue)' : 'var(--game-board-grey)',
+                }}
+              >
+                <BauhausMark
+                  kind={card[current.need] >= required ? 'square' : 'dot'}
+                  size={18}
+                />
+              </span>
               <span>{card.name}</span>
-              <span style={{ color: '#94A3B8' }}>보온 {card.warm} · 방수 {card.rain}</span>
-              <span style={{ color: '#94A3B8' }}>바람막이 {card.wind}</span>
+              <span style={{ color: 'var(--game-board-grey)' }}>
+                보온 {card.warm} · 방수 {card.rain}
+              </span>
+              <span style={{ color: 'var(--game-board-grey)' }}>바람막이 {card.wind}</span>
             </button>
           ))}
         </div>
 
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );

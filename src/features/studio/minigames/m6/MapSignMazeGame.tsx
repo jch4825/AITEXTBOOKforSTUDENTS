@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel, useCountdown, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
+  useCountdown, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m6-l3 · 지도와 표지 미로 (장르 4 · 미로 찾기)
@@ -185,7 +189,8 @@ export default function MapSignMazeGame({ supportLevel }: MiniGameProps) {
         seenSigns.current.push(key);
         w.signs += 1;
         playSound('fill');
-        w.note = '표지판을 확인했어요. 막힌 곳이 지도에 표시됩니다.';
+        /* 지도에 드러나는 공사 구간이 붉은 세모이므로, 무엇을 찾아보라는 말인지 함께 적는다. */
+        w.note = '표지판을 확인했어요. 막힌 곳이 지도에 붉은 세모로 표시됩니다.';
       }
     }
 
@@ -217,28 +222,34 @@ export default function MapSignMazeGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 20, 12, WORLD_W - 40, 46, BOARD.overlay, PLAY.info, 12);
-    centerText(ctx, w.note || '왼쪽은 계획한 지도, 오른쪽은 지금 있는 곳입니다.', WORLD_W / 2, 35, 22, BOARD.ink);
+    drawBar(ctx, 20, 12, WORLD_W - 40, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, w.note || '왼쪽은 계획한 지도, 오른쪽은 지금 있는 곳입니다.', WORLD_W / 2, 35, 22, B.ink);
 
     // 왼쪽 — 계획 지도
     const mapCell = Math.min(mapW / cols, 220 / rows);
     const mx = 24;
     const my = 120;
-    panel(ctx, mx - 8, my - 30, mapW + 16, rows * mapCell + 46, BOARD.surface, PLAY.extra, 10);
-    centerText(ctx, '계획한 지도', mx + mapW / 2, my - 12, 22, BOARD.ink);
+    /* 지도는 판을 두르는 회색 틀이다. 길은 바탕보다 한 겹 뜬 면으로 그리고 벽은 바탕에
+       그대로 잠기게 둔다. 지도에서 읽어야 하는 것은 벽이 아니라 갈 수 있는 길이다. */
+    drawBar(ctx, mx - 8, my - 30, mapW + 16, rows * mapCell + 46,
+      { fill: B.ground, stroke: B.grey, width: STROKE.base });
+    centerText(ctx, '계획한 지도', mx + mapW / 2, my - 12, 22, B.ink);
     for (let r = 0; r < rows; r += 1) {
       for (let c = 0; c < cols; c += 1) {
         const tile = at(c, r);
         const wall = tile === '#';
-        ctx.fillStyle = wall ? '#0B1220' : '#1E293B';
+        ctx.fillStyle = wall ? B.ground : B.surface;
         ctx.fillRect(mx + c * mapCell, my + r * mapCell, mapCell - 1, mapCell - 1);
       }
     }
-    ctx.strokeStyle = PLAY.extra;
-    ctx.lineWidth = 3;
+    /* 계획한 길은 학생이 손에 쥔 것이므로 노랑이다. 점선인 것은 그것이 아직 계획일 뿐,
+       현장에서 확인한 길이 아니라는 뜻이다. */
+    ctx.strokeStyle = B.yellow;
+    ctx.lineWidth = STROKE.hair;
+    ctx.lineCap = 'butt';
     ctx.setLineDash([5, 4]);
     ctx.beginPath();
     stage.planned.forEach(([r, c], index) => {
@@ -252,8 +263,10 @@ export default function MapSignMazeGame({ supportLevel }: MiniGameProps) {
     for (let r = 0; r < rows; r += 1) {
       for (let c = 0; c < cols; c += 1) {
         if (at(c, r) !== 'X' || seenSigns.current.length === 0) continue;
-        ctx.fillStyle = PLAY.hazard;
-        ctx.fillRect(mx + c * mapCell, my + r * mapCell, mapCell - 1, mapCell - 1);
+        /* 현장에서 본 것과 같은 붉은 세모다. 지도와 현장이 같은 모양으로 말해야
+           둘을 견주는 일이 성립한다. */
+        drawShape(ctx, 'triangle', mx + c * mapCell + mapCell / 2, my + r * mapCell + mapCell / 2,
+          mapCell * 0.96, { fill: B.red });
       }
     }
 
@@ -264,40 +277,48 @@ export default function MapSignMazeGame({ supportLevel }: MiniGameProps) {
         const x = originX + c * cell;
         const y = originY + r * cell;
         if (tile === '#') {
-          panel(ctx, x, y, cell, cell, '#0B1220', 'rgba(100, 116, 139, 0.5)', 4);
+          drawBar(ctx, x, y, cell, cell, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
           continue;
         }
-        panel(ctx, x, y, cell, cell, '#1E293B', 'rgba(100, 116, 139, 0.25)', 4);
+        drawBar(ctx, x, y, cell, cell, { fill: B.surface, stroke: B.ground, width: STROKE.hair });
         if (tile === 'X') {
-          panel(ctx, x + 2, y + 2, cell - 4, cell - 4, '#7F1D1D', PLAY.hazard, 6);
-          centerText(ctx, '🚧', x + cell / 2, y + cell / 2, Math.min(24, cell * 0.6), BOARD.ink);
+          /* 공사 구간은 붉은 세모다. 판마다 위험은 늘 붉은 세모이므로 글자를 읽지 않아도 안다. */
+          drawShape(ctx, 'triangle', x + cell / 2, y + cell / 2, cell * 0.74,
+            { fill: B.red, stroke: B.keyline, width: STROKE.hair });
         } else if (tile === '!') {
+          /* 표지판은 읽기 전과 읽은 뒤가 색과 마크로 함께 갈린다. 판 위에서 붉음과 푸름의
+             대비는 1.22라, 색만 뒤집으면 색을 구별하지 못하는 학생에게는 아무 일도 없다. */
           const seen = seenSigns.current.includes(`${r}-${c}`);
-          centerText(ctx, seen ? '✅' : '🪧', x + cell / 2, y + cell / 2, Math.min(24, cell * 0.62), BOARD.ink);
+          drawBar(ctx, x + 3, y + 3, cell - 6, cell - 6, {
+            fill: seen ? B.blue : B.surface,
+            stroke: seen ? B.blue : B.grey,
+            width: STROKE.base,
+          });
+          drawMark(ctx, seen ? 'check' : 'bang', x + cell / 2, y + cell / 2,
+            Math.min(24, cell * 0.5), seen ? B.ground : B.grey);
         } else if (tile === 'E') {
-          panel(ctx, x + 2, y + 2, cell - 4, cell - 4, '#064E3B', PLAY.goal, 6);
-          centerText(ctx, '🏁', x + cell / 2, y + cell / 2, Math.min(24, cell * 0.6), BOARD.ink);
+          /* 도착은 속이 꽉 찬 파랑 사각형 하나뿐이다. 확인한 표지판도 파랑이지만 그쪽은
+             확인 표시를 얹고, 이쪽은 가운데를 비운 과녁이라 둘이 섞이지 않는다. */
+          drawBar(ctx, x + 2, y + 2, cell - 4, cell - 4,
+            { fill: B.blue, stroke: B.keyline, width: STROKE.hair });
+          drawShape(ctx, 'square', x + cell / 2, y + cell / 2, cell * 0.34, { fill: B.ground });
         }
       }
     }
 
     const hx = originX + w.c * cell + cell / 2;
     const hy = originY + w.r * cell + cell / 2;
-    ctx.beginPath();
-    ctx.arc(hx, hy, cell * 0.32, 0, Math.PI * 2);
-    ctx.fillStyle = PLAY.hero;
-    ctx.fill();
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = PLAY.heroEdge;
-    ctx.stroke();
+    drawShape(ctx, 'circle', hx, hy, cell * 0.64,
+      { fill: B.yellow, stroke: B.keyline, width: STROKE.base });
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="지도와 표지 미로"
-      instruction="화면의 안내선만 믿지 말고 길가의 표지판을 직접 확인하며 걸어가세요. 공사 중인 곳은 피해서 안전하게 가야 해요."
+      instruction="왼쪽 지도의 점선만 믿지 말고, 길가의 표지판을 직접 밟아 확인하며 걸어가세요. 공사 중인 붉은 세모 칸은 피해서 안전하게 가야 해요."
       progress={{ label: '확인한 표지', value: hud.signs, max: totalSigns }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} timeLeft={timeLeft} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -305,11 +326,11 @@ export default function MapSignMazeGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: -1 }; }} emoji="⬆️" label="위" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: 1 }; }} emoji="⬇️" label="아래" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: -1, r: 0 }; }} emoji="⬅️" label="왼쪽" />
-          <MiniGameButton onClick={() => { nudgeRef.current = { c: 1, r: 0 }; }} emoji="➡️" label="오른쪽" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" variant="primary" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: -1 }; }} mark="arrow" markRotate={270} label="위" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 0, r: 1 }; }} mark="arrow" markRotate={90} label="아래" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: -1, r: 0 }; }} mark="arrow" markRotate={180} label="왼쪽" />
+          <MiniGameButton onClick={() => { nudgeRef.current = { c: 1, r: 0 }; }} mark="arrow" label="오른쪽" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" variant="primary" />
         </>
       }
     >

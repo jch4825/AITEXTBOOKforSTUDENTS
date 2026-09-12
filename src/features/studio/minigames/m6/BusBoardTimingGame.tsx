@@ -2,16 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, createRandom, panel, pick, useGameKeys,
+  BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar,
+  drawMark, drawShape, pick, useGameKeys,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m6-l4 · 버스 타는 순간 (장르 30 · 타이밍 액션)
  *
  * "번호와 방향을 오늘 공지와 함께 확인한다"를 문 열림 창으로 만든다. 차가 서면
- * 초록 막대가 짧게 지나가고, 그 안에 눌러야 탄다.
+ * 파란 막대가 짧게 줄어들고, 그 막대가 남아 있는 동안에 눌러야 탄다.
  *
  * 그런데 아무 차나 타면 안 된다. 번호와 방향이 공지와 같아야 한다. 눌러야 할지
  * 말아야 할지를 짧은 시간 안에 정하는 것이 이 게임의 판단이다.
@@ -200,7 +204,7 @@ export default function BusBoardTimingGame({ supportLevel }: MiniGameProps) {
               const lives = prev.lives - 1;
               if (lives <= 0 && !finishedRef.current) {
                 finishedRef.current = true;
-                game.fail('맞는 차를 놓쳤어요. 문이 열린 초록 동안에 눌러 봐요.');
+                game.fail('맞는 차를 놓쳤어요. 파란 막대가 줄어드는 동안에 눌러 봐요.');
               }
               return { ...prev, lives };
             });
@@ -215,48 +219,61 @@ export default function BusBoardTimingGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    // 전광판 공지
-    panel(ctx, WORLD_W / 2 - 280, 18, 560, 56, BOARD.overlay, PLAY.hero, 12);
-    centerText(ctx, `📢 ${stage.notice}`, WORLD_W / 2, 46, 26, BOARD.ink);
+    /* 전광판 공지 — 오늘 학생이 손에 쥐고 다니는 값이라 노랑으로 두른다.
+       확성기 그림 문자 자리에는 같은 뜻의 소리 마크를 직접 그린다. */
+    drawBar(ctx, WORLD_W / 2 - 280, 18, 560, 56,
+      { fill: B.ground, stroke: B.yellow, width: STROKE.base });
+    drawMark(ctx, 'sound', WORLD_W / 2 - 238, 46, 30, B.yellow);
+    centerText(ctx, stage.notice, WORLD_W / 2 + 16, 46, 26, B.ink);
 
-    // 정류장
-    ctx.fillStyle = '#1E293B';
-    ctx.fillRect(0, WORLD_H - 92, WORLD_W, 92);
-    panel(ctx, WORLD_W / 2 - 210, WORLD_H - 92, 420, 12, PLAY.info, PLAY.infoEdge, 4);
-    centerText(ctx, '정류장', WORLD_W / 2, WORLD_H - 46, 24, BOARD.inkDim);
+    // 정류장 — 밟고 서 있는 중립 구조물이므로 회색 막대다.
+    drawBar(ctx, 0, WORLD_H - 92, WORLD_W, 92, { fill: B.surface });
+    drawBar(ctx, WORLD_W / 2 - 210, WORLD_H - 92, 420, 12, { fill: B.grey });
+    centerText(ctx, '정류장', WORLD_W / 2, WORLD_H - 46, 24, B.grey);
 
     if (bus) {
       const y = 210;
       const right = bus.number === stage.number && bus.dir === stage.dir;
-      panel(ctx, bus.x, y, 380, 160, '#334155', right ? PLAY.info : PLAY.extra, 16);
-      centerText(ctx, `${bus.number}번`, bus.x + 130, y + 62, 46, BOARD.ink);
-      centerText(ctx, bus.dir, bus.x + 290, y + 62, 32, BOARD.ink);
-      centerText(ctx, '🚌', bus.x + 190, y + 122, 34, BOARD.ink);
+      /* 공지와 맞는 차만 파랑으로 두르고 나머지는 회색 구조물로 둔다. 빨강을 쓰면
+         "타면 안 되는 차"가 도형 없이도 멀리서 읽혀, 번호와 방향을 견주어 보는
+         이 놀이의 판단 자체가 사라진다. 답을 지는 것은 어디까지나 숫자와 방향이다. */
+      drawBar(ctx, bus.x, y, 380, 160, {
+        fill: B.surface,
+        stroke: right ? B.blue : B.grey,
+        width: STROKE.base,
+      });
+      centerText(ctx, `${bus.number}번`, bus.x + 130, y + 62, 46, B.ink);
+      centerText(ctx, bus.dir, bus.x + 290, y + 62, 32, B.ink);
+      /* 버스 그림 문자를 걷어낸 자리다. 네모 몸통 아래에 바퀴 두 개를 붙여
+         "굴러가는 것"으로 읽히게 한다. 글꼴마다 달라지는 그림 대신 도형이 뜻을 진다. */
+      for (const wheelX of [bus.x + 96, bus.x + 284]) {
+        drawShape(ctx, 'circle', wheelX, y + 176, 44,
+          { fill: B.grey, stroke: B.keyline, width: STROKE.hair });
+      }
 
       if (bus.state === 'open') {
         const ratio = clamp(1 - bus.timer / openSeconds, 0, 1);
-        ctx.fillStyle = '#0F172A';
-        ctx.fillRect(bus.x + 30, y + 142, 320, 16);
-        ctx.fillStyle = PLAY.goal;
-        ctx.fillRect(bus.x + 30, y + 142, 320 * ratio, 16);
-        centerText(ctx, '문이 열렸습니다', bus.x + 190, y - 18, 24, PLAY.goal);
+        drawBar(ctx, bus.x + 30, y + 142, 320, 16, { fill: B.ground });
+        drawBar(ctx, bus.x + 30, y + 142, 320 * ratio, 16, { fill: B.blue });
+        centerText(ctx, '문이 열렸습니다', bus.x + 190, y - 18, 24, B.blue);
       }
     } else {
-      centerText(ctx, '다음 차를 기다립니다', WORLD_W / 2, 280, 26, BOARD.inkDim);
+      centerText(ctx, '다음 차를 기다립니다', WORLD_W / 2, 280, 26, B.grey);
     }
 
-    centerText(ctx, '스페이스나 타기 버튼으로 탑니다', WORLD_W / 2, WORLD_H - 16, 20, BOARD.inkDim);
+    centerText(ctx, '스페이스나 타기 버튼으로 탑니다', WORLD_W / 2, WORLD_H - 16, 20, B.grey);
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="버스 타는 순간"
       instruction="안내판에 나온 번호와 방향이 같은 버스가 멈추어 문이 열렸을 때 타 보세요. 번호가 다른 버스는 그냥 보내세요."
       progress={{ label: '바르게 탄 차', value: hud.boarded, max: stage.need }}
-      hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
+      hud={<GameHud bauhaus lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -264,18 +281,28 @@ export default function BusBoardTimingGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={ask} disabled={hud.ask <= 0} emoji="🙋" label={`물어보기 ${hud.ask}`} />
-          <MiniGameButton onClick={board} disabled={!game.playing} emoji="🚌" label="타기" variant="primary" />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시" />
+          {/* 물어보기는 힌트라 주의 마크, 타기는 몸이 옮겨 가는 일이라 화살표를 쓴다. */}
+          <MiniGameButton onClick={ask} disabled={hud.ask <= 0} mark="bang" label={`물어보기 ${hud.ask}`} />
+          <MiniGameButton onClick={board} disabled={!game.playing} mark="arrow" label="타기" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시" />
         </>
       }
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         {hud.peek && (
+          /* 물어봐서 얻은 값이라 노랑으로 두른다 — 지금 학생이 손에 쥔 정보다.
+             물어보기 버튼과 같은 마크를 달아 어디서 온 줄인지 붙여 읽힌다. */
           <p
-            className="rounded-xl px-3 py-1.5 text-[15px] font-black"
-            style={{ background: 'var(--board-surface)', border: '2px solid #4ADE80', color: 'var(--board-ink)' }}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-[15px] font-black"
+            style={{
+              background: 'var(--game-board)',
+              border: 'var(--game-line) solid var(--game-board-yellow)',
+              color: 'var(--game-board-ink)',
+            }}
           >
+            <span style={{ color: 'var(--game-board-yellow)' }}>
+              <BauhausMark kind="bang" size={15} />
+            </span>
             {hud.peek}
           </p>
         )}

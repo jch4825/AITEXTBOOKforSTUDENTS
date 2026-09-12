@@ -2,10 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, dist, panel, useCountdown,
+  BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE,
+  centerText, clamp, dist, drawBar, drawMark, drawShape, useCountdown,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+import type { BauhausMarkKind, ShapeKind } from '../engine';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m6-l8 · 아픈 곳 짚기 (장르 51 · 진료 놀이)
@@ -22,10 +27,20 @@ const WORLD_H = 540;
 
 type Tool = 'thermo' | 'lens' | 'hand';
 
-const TOOL_INFO: Record<Tool, { emoji: string; name: string }> = {
-  thermo: { emoji: '🌡️', name: '체온계' },
-  lens: { emoji: '🔍', name: '돋보기' },
-  hand: { emoji: '🤲', name: '손' },
+/**
+ * 도구는 이름과 도형을 함께 가진다.
+ *
+ * 판 안의 짚을 곳에는 이름을 적을 자리가 없어 어떤 도구를 쓰는지는 모양 하나로만
+ * 전해진다. 그림 문자는 기기와 글꼴마다 다르게 그려져 그 구실을 못 하므로 도형으로
+ * 바꾼다. 판 밖 단추에서 고른 모양을 판 안 짚을 곳에서 다시 만나야 짝이 읽히므로
+ * 캔버스와 DOM이 함께 쓰는 도형만 고른다.
+ */
+type ToolShape = Extract<ShapeKind, BauhausMarkKind>;
+
+const TOOL_INFO: Record<Tool, { name: string; shape: ToolShape }> = {
+  thermo: { name: '체온계', shape: 'bar' },
+  lens: { name: '돋보기', shape: 'circle' },
+  hand: { name: '손', shape: 'semicircle' },
 };
 
 interface Spot {
@@ -164,69 +179,86 @@ export default function SymptomClinicGame({ supportLevel }: MiniGameProps) {
   };
 
   const frame = (ctx: CanvasRenderingContext2D) => {
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    // 몸 그림 — 도형으로만 그린다
-    ctx.fillStyle = '#334155';
-    ctx.strokeStyle = BOARD.line;
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.arc(480, 130, 62, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-    panel(ctx, 410, 196, 140, 190, '#334155', BOARD.line, 24);
-    panel(ctx, 356, 210, 48, 130, '#334155', BOARD.line, 20);
-    panel(ctx, 556, 210, 48, 130, '#334155', BOARD.line, 20);
-    panel(ctx, 424, 386, 48, 120, '#334155', BOARD.line, 18);
-    panel(ctx, 488, 386, 48, 120, '#334155', BOARD.line, 18);
+    /* 몸은 짚을 곳을 얹어 두는 중립 구조물이라 회색 테를 두른 면으로만 그린다.
+       모서리를 둥글리지 않아도 머리는 원, 몸통과 팔다리는 막대라 사람으로 읽힌다. */
+    drawShape(ctx, 'circle', 480, 130, 124, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+    drawBar(ctx, 410, 196, 140, 190, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+    drawBar(ctx, 356, 210, 48, 130, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+    drawBar(ctx, 556, 210, 48, 130, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+    drawBar(ctx, 424, 386, 48, 120, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+    drawBar(ctx, 488, 386, 48, 120, { fill: B.surface, stroke: B.grey, width: STROKE.base });
 
     for (const spot of stage.spots) {
       const done = marked.includes(spot.id);
-      ctx.beginPath();
-      ctx.arc(spot.x, spot.y, spot.r * radiusScale, 0, Math.PI * 2);
-      ctx.strokeStyle = done ? PLAY.goal : PLAY.hazard;
-      ctx.lineWidth = 4;
-      ctx.setLineDash(done ? [] : [8, 6]);
-      ctx.stroke();
+      const radius = spot.r * radiusScale;
+      /* 아직 짚지 않은 곳은 끊긴 붉은 테에 그 곳이 요구하는 도구 모양,
+         짚은 곳은 이어진 파란 테에 확인 표시다. 판 위에서 빨강과 파랑은 밝기가
+         거의 같아 색만으로는 갈리지 않으므로 안쪽 모양이 뜻을 함께 진다. */
+      ctx.setLineDash(done ? [] : [10, 8]);
+      drawShape(ctx, 'circle', spot.x, spot.y, radius * 2, {
+        stroke: done ? B.blue : B.red,
+        width: done ? STROKE.base : STROKE.hair,
+      });
       ctx.setLineDash([]);
-      centerText(ctx, done ? '✅' : TOOL_INFO[spot.tool].emoji, spot.x, spot.y, 26, BOARD.ink);
-      centerText(ctx, spot.part, spot.x, spot.y + spot.r * radiusScale + 18, 20, BOARD.inkDim);
+      if (done) {
+        drawMark(ctx, 'check', spot.x, spot.y, 30, B.blue);
+      } else {
+        drawShape(ctx, TOOL_INFO[spot.tool].shape, spot.x, spot.y, 28, {
+          fill: B.red, stroke: B.keyline, width: STROKE.hair,
+        });
+      }
+      /* 부위 이름은 읽어야 하는 글자라 회색이 아니라 ink로 적는다. 판 위에서 회색은
+         7:1에 못 미쳐 면과 테두리에만 쓴다. */
+      centerText(ctx, spot.part, spot.x, spot.y + radius + 18, 20, B.ink);
     }
 
     // 알림 카드
-    panel(ctx, 640, 90, 300, 240, BOARD.surface, PLAY.info, 14);
-    centerText(ctx, '어른에게 보낼 알림', 790, 118, 22, BOARD.ink);
+    drawBar(ctx, 640, 90, 300, 240, { fill: B.surface, stroke: B.grey, width: STROKE.base });
+    centerText(ctx, '어른에게 보낼 알림', 790, 118, 22, B.ink);
     stage.spots.forEach((spot, index) => {
       const done = marked.includes(spot.id);
       const y = 160 + index * 56;
-      panel(ctx, 660, y - 22, 260, 44, done ? '#064E3B' : BOARD.overlay, done ? PLAY.goal : BOARD.line, 10);
+      /* 채운 칸은 면을 파랑으로 뒤집고 글자를 판 색으로 판다. 반투명 덮개를 얹으면
+         그 위의 긴 문장이 흐려져 무엇을 적었는지 읽히지 않는다. */
+      drawBar(ctx, 660, y - 22, 260, 44, {
+        fill: done ? B.blue : B.ground,
+        stroke: done ? B.blue : B.grey,
+        width: STROKE.hair,
+      });
+      if (done) drawMark(ctx, 'check', 651, y, 14, B.blue);
       centerText(
         ctx,
         done ? `${spot.when} ${spot.part} ${spot.how}` : '아직 비었습니다',
-        790, y, 19, BOARD.ink,
+        790, y, 19, done ? B.ground : B.ink,
       );
     });
 
     const pointer = pointerRef.current;
     if (pointer) {
-      ctx.beginPath();
-      ctx.arc(pointer.x, pointer.y, 12, 0, Math.PI * 2);
-      ctx.strokeStyle = PLAY.hero;
-      ctx.lineWidth = 3;
-      ctx.stroke();
+      /* 손끝은 학생이 움직이는 것이므로 노랑 원이다. */
+      drawShape(ctx, 'circle', pointer.x, pointer.y, 24, { stroke: B.yellow, width: STROKE.hair });
     }
 
-    centerText(ctx, `고른 도구 · ${TOOL_INFO[tool].emoji} ${TOOL_INFO[tool].name}`, 240, 470, 22, BOARD.ink);
-    if (sent) centerText(ctx, '어른에게 보냈습니다', 790, 380, 24, PLAY.goal);
+    /* 지금 쥔 도구도 노랑이다. 짚을 곳의 붉은 도형과 같은 모양일 때가 짚을 때다. */
+    drawShape(ctx, TOOL_INFO[tool].shape, 96, 470, 30, {
+      fill: B.yellow, stroke: B.keyline, width: STROKE.hair,
+    });
+    centerText(ctx, `고른 도구 · ${TOOL_INFO[tool].name}`, 240, 470, 22, B.ink);
+    if (sent) centerText(ctx, '어른에게 보냈습니다', 790, 380, 24, B.blue);
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="아픈 곳 짚기"
-      instruction="몸이 불편한 곳에 꼭 맞는 치료 도구를 고른 다음, 동그라미 한가운데를 가만히 짚어 치료해 보세요."
+      instruction="아픈 곳 안에 그려진 모양과 같은 도구를 고른 다음, 동그라미 한가운데를 가만히 짚어 보세요."
       progress={{ label: '적은 알림', value: marked.length, max: stage.spots.length }}
-      hud={<GameHud lives={shakes} maxLives={maxShakes} timeLeft={timeLeft} timeTotal={seconds} />}
+      hud={(
+        <GameHud bauhaus lives={shakes} maxLives={maxShakes} timeLeft={timeLeft} timeTotal={seconds} />
+      )}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -234,11 +266,11 @@ export default function SymptomClinicGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" />
           <MiniGameButton
             onClick={send}
             disabled={!game.playing || marked.length < stage.spots.length}
-            emoji="📨"
+            mark="arrow"
             label="어른에게 보내기"
             variant="primary"
           />
@@ -254,14 +286,17 @@ export default function SymptomClinicGame({ supportLevel }: MiniGameProps) {
               onClick={() => setTool(key)}
               aria-pressed={tool === key}
               disabled={!game.playing}
-              className="min-h-11 rounded-xl px-3 text-[15px] font-black transition"
+              className="flex min-h-11 items-center gap-1.5 px-3 text-[15px] font-black transition"
               style={{
-                background: tool === key ? '#FBBF24' : 'var(--board-surface)',
-                color: tool === key ? '#3B2100' : 'var(--board-ink)',
-                border: '2px solid #FBBF24',
+                /* 고른 도구는 면이 통째로 노랑으로 뒤집힌다. 테두리만 달라지면
+                   판을 보는 동안 무엇을 쥐고 있는지 놓친다. */
+                background: tool === key ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                color: tool === key ? 'var(--game-board)' : 'var(--game-board-ink)',
+                border: 'var(--game-line) solid var(--game-board-yellow)',
               }}
             >
-              {TOOL_INFO[key].emoji} {TOOL_INFO[key].name}
+              <BauhausMark kind={TOOL_INFO[key].shape} size={15} />
+              {TOOL_INFO[key].name}
             </button>
           ))}
         </div>
@@ -280,7 +315,9 @@ export default function SymptomClinicGame({ supportLevel }: MiniGameProps) {
             />
           </div>
         </div>
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
+          {note}
+        </p>
       </div>
     </MiniGameFrame>
   );

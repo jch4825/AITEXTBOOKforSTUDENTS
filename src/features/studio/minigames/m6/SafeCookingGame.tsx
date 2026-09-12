@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, useGameLoop } from '../engine';
+import { BauhausMark, GameHud, clamp, useGameLoop } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -18,7 +18,6 @@ import type { MiniGameProps } from '../types';
 
 interface Step {
   ingredient: string;
-  emoji: string;
   tool: string;
   seconds: number;
   needAdult: boolean;
@@ -31,7 +30,7 @@ interface StageConfig {
   dish: string;
   allergen: string;
   steps: Step[];
-  extras: { name: string; emoji: string; allergen: boolean }[];
+  extras: { name: string; allergen: boolean }[];
   tools: string[];
   seconds: number;
 }
@@ -46,15 +45,15 @@ const STAGES: StageConfig[] = [
     seconds: 75,
     tools: ['도마', '칼', '전자레인지', '접시'],
     steps: [
-      { ingredient: '식빵', emoji: '🍞', tool: '도마', seconds: 2, needAdult: false },
-      { ingredient: '오이', emoji: '🥒', tool: '칼', seconds: 3, needAdult: true },
-      { ingredient: '달걀', emoji: '🥚', tool: '전자레인지', seconds: 3, needAdult: false },
-      { ingredient: '완성', emoji: '🥪', tool: '접시', seconds: 2, needAdult: false },
+      { ingredient: '식빵', tool: '도마', seconds: 2, needAdult: false },
+      { ingredient: '오이', tool: '칼', seconds: 3, needAdult: true },
+      { ingredient: '달걀', tool: '전자레인지', seconds: 3, needAdult: false },
+      { ingredient: '완성', tool: '접시', seconds: 2, needAdult: false },
     ],
     extras: [
-      { name: '치즈', emoji: '🧀', allergen: true },
-      { name: '버터', emoji: '🧈', allergen: true },
-      { name: '양상추', emoji: '🥬', allergen: false },
+      { name: '치즈', allergen: true },
+      { name: '버터', allergen: true },
+      { name: '양상추', allergen: false },
     ],
   },
   {
@@ -66,16 +65,16 @@ const STAGES: StageConfig[] = [
     seconds: 70,
     tools: ['도마', '칼', '전자레인지', '접시'],
     steps: [
-      { ingredient: '밥', emoji: '🍚', tool: '전자레인지', seconds: 3, needAdult: false },
-      { ingredient: '김', emoji: '🍙', tool: '도마', seconds: 2, needAdult: false },
-      { ingredient: '참치', emoji: '🐟', tool: '도마', seconds: 2, needAdult: false },
-      { ingredient: '당근', emoji: '🥕', tool: '칼', seconds: 3, needAdult: true },
-      { ingredient: '완성', emoji: '🍙', tool: '접시', seconds: 2, needAdult: false },
+      { ingredient: '밥', tool: '전자레인지', seconds: 3, needAdult: false },
+      { ingredient: '김', tool: '도마', seconds: 2, needAdult: false },
+      { ingredient: '참치', tool: '도마', seconds: 2, needAdult: false },
+      { ingredient: '당근', tool: '칼', seconds: 3, needAdult: true },
+      { ingredient: '완성', tool: '접시', seconds: 2, needAdult: false },
     ],
     extras: [
-      { name: '땅콩버터', emoji: '🥜', allergen: true },
-      { name: '견과 토핑', emoji: '🌰', allergen: true },
-      { name: '깨', emoji: '🫘', allergen: false },
+      { name: '땅콩버터', allergen: true },
+      { name: '견과 토핑', allergen: true },
+      { name: '깨', allergen: false },
     ],
   },
   {
@@ -87,17 +86,17 @@ const STAGES: StageConfig[] = [
     seconds: 65,
     tools: ['도마', '칼', '전자레인지', '접시'],
     steps: [
-      { ingredient: '물', emoji: '💧', tool: '전자레인지', seconds: 3, needAdult: false },
-      { ingredient: '된장', emoji: '🥣', tool: '도마', seconds: 2, needAdult: false },
-      { ingredient: '애호박', emoji: '🥒', tool: '칼', seconds: 3, needAdult: true },
-      { ingredient: '두부', emoji: '🧊', tool: '칼', seconds: 3, needAdult: true },
-      { ingredient: '파', emoji: '🌿', tool: '도마', seconds: 2, needAdult: false },
-      { ingredient: '완성', emoji: '🍲', tool: '접시', seconds: 2, needAdult: false },
+      { ingredient: '물', tool: '전자레인지', seconds: 3, needAdult: false },
+      { ingredient: '된장', tool: '도마', seconds: 2, needAdult: false },
+      { ingredient: '애호박', tool: '칼', seconds: 3, needAdult: true },
+      { ingredient: '두부', tool: '칼', seconds: 3, needAdult: true },
+      { ingredient: '파', tool: '도마', seconds: 2, needAdult: false },
+      { ingredient: '완성', tool: '접시', seconds: 2, needAdult: false },
     ],
     extras: [
-      { name: '새우', emoji: '🦐', allergen: true },
-      { name: '새우젓', emoji: '🦐', allergen: true },
-      { name: '버섯', emoji: '🍄', allergen: false },
+      { name: '새우', allergen: true },
+      { name: '새우젓', allergen: true },
+      { name: '버섯', allergen: false },
     ],
   },
 ];
@@ -239,16 +238,17 @@ export default function SafeCookingGame({ supportLevel }: MiniGameProps) {
   };
 
   const allIngredients = [
-    ...stage.steps.map((s) => ({ name: s.ingredient, emoji: s.emoji, allergen: false })),
+    ...stage.steps.map((s) => ({ name: s.ingredient, allergen: false })),
     ...stage.extras,
   ];
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="안전 요리 주방"
       instruction={`순서에 맞추어 요리 재료와 도구를 골라 보세요. 알레르기를 일으키는 ${stage.allergen} 재료는 빼고, 칼을 쓸 때는 어른의 도움을 받으세요.`}
       progress={{ label: '끝낸 차례', value: Math.min(step, stage.steps.length), max: stage.steps.length }}
-      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={left} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={left} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -259,23 +259,33 @@ export default function SafeCookingGame({ supportLevel }: MiniGameProps) {
           <MiniGameButton
             onClick={callAdult}
             disabled={!game.playing || adultCalled}
-            emoji="🙋"
+            mark="bang"
             label={adultWait > 0 ? `기다리는 중 ${Math.ceil(adultWait)}` : adultCalled ? '어른 도착' : '어른 부르기'}
           />
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />
         </>
       }
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div
-          className="rounded-xl px-3 py-1.5"
-          style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8' }}
+          className="px-3 py-1.5"
+          style={{
+            background: 'var(--game-board)',
+            border: 'var(--game-line) solid var(--game-board-blue)',
+          }}
         >
-          <p className="text-[15px] font-black" style={{ color: 'var(--board-ink)' }}>
-            주문서 · {stage.dish} ／ ⚠️ {stage.allergen} 알레르기
+          <p
+            className="flex items-center gap-1.5 text-[15px] font-black"
+            style={{ color: 'var(--game-board-ink)' }}
+          >
+            주문서 · {stage.dish} ·
+            <span style={{ color: 'var(--game-board-red)' }}>
+              <BauhausMark kind="triangle" size={14} />
+            </span>
+            {stage.allergen} 알레르기
           </p>
-          <p className="text-[15px] font-black" style={{ color: '#4ADE80' }}>
-            지금 차례 · {current.emoji} {current.ingredient} → {current.tool}
+          <p className="text-[15px] font-black" style={{ color: 'var(--game-board-blue)' }}>
+            지금 차례 · {current.ingredient} → {current.tool}
             {current.needAdult ? ' (어른과 함께)' : ''}
           </p>
         </div>
@@ -287,14 +297,27 @@ export default function SafeCookingGame({ supportLevel }: MiniGameProps) {
               type="button"
               onClick={() => pick(item.name, item.allergen)}
               disabled={!game.playing || !!cooking}
-              className="min-h-12 rounded-xl px-2.5 text-[15px] font-black transition"
+              className="flex min-h-12 items-center gap-1.5 px-2.5 text-[15px] font-black transition"
               style={{
-                background: picked === item.name ? '#38BDF8' : 'var(--board-surface)',
-                color: picked === item.name ? '#0F172A' : 'var(--board-ink)',
-                border: `2px solid ${item.allergen ? '#FB7185' : '#38BDF8'}`,
+                /* 고른 재료는 노랑(지금 손에 쥔 것), 알레르기 재료는 붉은 테두리에
+                   붉은 세모다. 색만으로 나누지 않는 것은 판 위에서 빨강과 파랑의
+                   밝기가 거의 같기 때문이다. */
+                background: picked === item.name ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                color: picked === item.name ? 'var(--game-board)' : 'var(--game-board-ink)',
+                border: `var(--game-line) solid ${
+                  item.allergen ? 'var(--game-board-red)' : 'var(--game-board-blue)'}`,
               }}
             >
-              {item.emoji} {item.name}
+              {item.allergen && (
+                <span
+                  style={{
+                    color: picked === item.name ? 'var(--game-board)' : 'var(--game-board-red)',
+                  }}
+                >
+                  <BauhausMark kind="triangle" size={14} />
+                </span>
+              )}
+              {item.name}
             </button>
           ))}
         </div>
@@ -306,15 +329,25 @@ export default function SafeCookingGame({ supportLevel }: MiniGameProps) {
               type="button"
               onClick={() => useTool(tool)}
               disabled={!game.playing || !!cooking}
-              className="min-h-12 flex-1 rounded-xl px-2 text-[15px] font-black"
+              className="flex min-h-12 flex-1 items-center justify-center gap-1.5 px-2 text-[15px] font-black"
               style={{
-                background: 'var(--board-overlay)',
-                border: `2px solid ${tool === '칼' && !adultCalled ? '#FB7185' : '#FBBF24'}`,
-                color: 'var(--board-ink)',
+                background: 'var(--game-board)',
+                border: `var(--game-line) solid ${
+                  tool === '칼' && !adultCalled
+                    ? 'var(--game-board-red)' : 'var(--game-board-yellow)'}`,
+                color: 'var(--game-board-ink)',
               }}
             >
-              {tool === '칼' ? '🔪' : tool === '도마' ? '🪵' : tool === '전자레인지' ? '📟' : '🍽️'} {tool}
-              {tool === '칼' && !adultCalled ? ' 🔒' : ''}
+              {tool}
+              {tool === '칼' && !adultCalled && (
+                <span
+                  className="flex items-center gap-1"
+                  style={{ color: 'var(--game-board-red)' }}
+                >
+                  <BauhausMark kind="cross" size={13} />
+                  잠김
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -322,16 +355,22 @@ export default function SafeCookingGame({ supportLevel }: MiniGameProps) {
         {cooking && (
           <span
             className="h-4 w-full overflow-hidden rounded-full"
-            style={{ background: 'var(--board-overlay)', border: '2px solid var(--board-line)' }}
+            style={{
+              background: 'var(--game-board)',
+              border: 'var(--game-hair) solid var(--game-board-grey)',
+            }}
           >
             <span
               className="block h-full rounded-full"
-              style={{ width: `${100 - (cooking.left / cooking.total) * 100}%`, background: '#FBBF24' }}
+              style={{
+                width: `${100 - (cooking.left / cooking.total) * 100}%`,
+                background: 'var(--game-board-yellow)',
+              }}
             />
           </span>
         )}
 
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, useGameLoop } from '../engine';
+import { BauhausMark, GameHud, clamp, useGameLoop } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -17,10 +17,17 @@ import type { MiniGameProps } from '../types';
 
 type Way = 'speak' | 'write' | 'picture';
 
-const WAY_INFO: Record<Way, { emoji: string; name: string }> = {
-  speak: { emoji: '🗣️', name: '말로' },
-  write: { emoji: '✍️', name: '글로' },
-  picture: { emoji: '🖼️', name: '그림 카드로' },
+/*
+ * 방법 이름 옆의 그림 문자를 걷었다.
+ *
+ * 그림 문자는 늘 '말로·글로·그림 카드로' 바로 옆에만 나타나 뜻을 더하지 않으면서,
+ * 기기와 글꼴마다 다른 모양으로 보이는 값만 치렀다. 방법 셋을 가르는 것은 이름이고,
+ * 지금 고른 방법은 아래 단추에서 면과 표시로 알린다.
+ */
+const WAY_INFO: Record<Way, { name: string }> = {
+  speak: { name: '말로' },
+  write: { name: '글로' },
+  picture: { name: '그림 카드로' },
 };
 
 type Kind = 'greet' | 'help' | 'refuse' | 'again';
@@ -224,72 +231,107 @@ export default function ExpressionDeskGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="표현 교환대"
       instruction="도움을 청하는 손님의 마음을 살피고, 손님이 편안해하는 방법(말·글·그림)에 맞추어 알맞은 표현 카드를 골라 보세요."
       progress={{ label: '응대한 손님', value: served, max: stage.need }}
-      hud={<GameHud lives={lives} maxLives={maxLives} timeLeft={front?.patience ?? 0} timeTotal={patience} />}
+      hud={<GameHud bauhaus lives={lives} maxLives={maxLives} timeLeft={front?.patience ?? 0} timeTotal={patience} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
       status={game.status}
       message={game.message}
-      actions={<MiniGameButton onClick={game.retry} emoji="🔄" label="다시 하기" variant="primary" />}
+      actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-2">
         <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-auto">
           {guests.length === 0 && (
-            <p className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>손님을 기다립니다.</p>
+            <p className="text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>손님을 기다립니다.</p>
           )}
-          {guests.map((guest, index) => (
-            <div
-              key={guest.id}
-              className="flex items-center gap-2 rounded-xl px-3 py-2"
-              style={{
-                background: index === 0 ? 'var(--board-surface)' : 'var(--board-overlay)',
-                border: `2px solid ${index === 0 ? '#38BDF8' : 'var(--board-line)'}`,
-              }}
-            >
-              <span className="text-[20px]" aria-hidden="true">🧍</span>
-              <span className="flex-1 text-[15px] font-black leading-tight" style={{ color: 'var(--board-ink)' }}>
-                {guest.situation}
-                <span className="block text-[14px]" style={{ color: '#94A3B8' }}>
-                  편한 방법 · {WAY_INFO[guest.way].emoji} {WAY_INFO[guest.way].name}
-                </span>
-              </span>
-              <span
-                className="h-3 w-20 overflow-hidden rounded-full"
-                style={{ background: '#0F172A', border: '2px solid #64748B' }}
+          {guests.map((guest, index) => {
+            const isFront = index === 0;
+            const urgent = guest.patience / guest.max < 0.3;
+            return (
+              <div
+                key={guest.id}
+                className="flex items-center gap-2 px-3 py-2"
+                style={{
+                  /* 지금 응대할 손님만 뜬 면과 노랑 테두리를 얻고, 기다리는 손님은
+                     회색 구조물로 남는다. 차례는 화살표와 점으로도 갈리므로 색을
+                     가리지 못해도 어느 줄이 내 차례인지 읽힌다. */
+                  background: isFront ? 'var(--game-board-surface)' : 'var(--game-board)',
+                  border: `var(--game-line) solid ${
+                    isFront ? 'var(--game-board-yellow)' : 'var(--game-board-grey)'}`,
+                }}
               >
                 <span
-                  className="block h-full rounded-full"
+                  style={{ color: isFront ? 'var(--game-board-yellow)' : 'var(--game-board-grey)' }}
+                >
+                  <BauhausMark kind={isFront ? 'arrow' : 'dot'} size={18} />
+                </span>
+                <span className="flex-1 text-[15px] font-black leading-tight" style={{ color: 'var(--game-board-ink)' }}>
+                  {guest.situation}
+                  <span className="block text-[14px]" style={{ color: 'var(--game-board-grey)' }}>
+                    편한 방법 · {WAY_INFO[guest.way].name}
+                  </span>
+                </span>
+                {/* 참을성이 바닥나 가는 것은 붉은 세모가 함께 알린다. 막대 색만으로
+                    나누면 색을 구별하지 못하는 학생에게 붉은 막대와 노란 막대가
+                    같은 회색이 된다. */}
+                {urgent && (
+                  <span style={{ color: 'var(--game-board-red)' }}>
+                    <BauhausMark kind="triangle" size={14} />
+                  </span>
+                )}
+                <span
+                  className="h-3 w-20 overflow-hidden"
                   style={{
-                    width: `${clamp((guest.patience / guest.max) * 100, 0, 100)}%`,
-                    background: guest.patience / guest.max < 0.3 ? '#FB7185' : '#4ADE80',
+                    background: 'var(--game-board)',
+                    border: 'var(--game-hair) solid var(--game-board-grey)',
                   }}
-                />
-              </span>
-            </div>
-          ))}
+                >
+                  <span
+                    className="block h-full"
+                    style={{
+                      width: `${clamp((guest.patience / guest.max) * 100, 0, 100)}%`,
+                      /* 초록을 쓰던 자리다. 남은 참을성은 학생이 쥐고 쓰는 값이라 노랑이고,
+                         바닥나 갈 때만 붉어진다. 먼저 읽히는 것은 줄어드는 길이다. */
+                      background: urgent ? 'var(--game-board-red)' : 'var(--game-board-yellow)',
+                    }}
+                  />
+                </span>
+              </div>
+            );
+          })}
         </div>
 
         <div className="flex flex-wrap gap-1.5">
-          {(Object.keys(WAY_INFO) as Way[]).map((key) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setWay(key)}
-              aria-pressed={way === key}
-              disabled={!game.playing}
-              className="min-h-11 rounded-xl px-3 text-[15px] font-black transition"
-              style={{
-                background: way === key ? '#C4B5FD' : 'var(--board-surface)',
-                color: way === key ? '#0F172A' : 'var(--board-ink)',
-                border: '2px solid #C4B5FD',
-              }}
-            >
-              {WAY_INFO[key].emoji} {WAY_INFO[key].name}
-            </button>
-          ))}
+          {(Object.keys(WAY_INFO) as Way[]).map((key) => {
+            const picked = way === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setWay(key)}
+                aria-pressed={picked}
+                disabled={!game.playing}
+                className="flex min-h-11 items-center gap-1.5 px-3 text-[15px] font-black transition"
+                style={{
+                  /* 지금 쥔 방법이므로 노랑이다. 테두리만 바꾸면 셋 가운데 무엇을
+                     들고 있는지 한눈에 들어오지 않아, 고른 것은 면을 통째로 뒤집는다. */
+                  background: picked ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                  color: picked ? 'var(--game-board)' : 'var(--game-board-ink)',
+                  border: `var(--game-line) solid ${
+                    picked ? 'var(--game-board-yellow)' : 'var(--game-board-grey)'}`,
+                }}
+              >
+                {/* 고른 것은 확인 표시, 나머지는 점이다. 자리를 늘 같이 차지하므로
+                    누를 때마다 단추 너비가 흔들리지 않는다. */}
+                <BauhausMark kind={picked ? 'check' : 'dot'} size={14} />
+                {WAY_INFO[key].name}
+              </button>
+            );
+          })}
         </div>
 
         <div className="flex flex-wrap gap-1.5">
@@ -299,15 +341,20 @@ export default function ExpressionDeskGame({ supportLevel }: MiniGameProps) {
               type="button"
               onClick={() => serve(card)}
               disabled={!game.playing}
-              className="min-h-12 flex-1 rounded-xl px-2 text-[15px] font-black"
-              style={{ background: 'var(--board-surface)', border: '2px solid #38BDF8', color: 'var(--board-ink)' }}
+              className="min-h-12 flex-1 px-2 text-[15px] font-black"
+              style={{
+                /* 손님에게 건네는 표현이 이 판의 목표다. 목표는 파랑이다. */
+                background: 'var(--game-board)',
+                border: 'var(--game-line) solid var(--game-board-blue)',
+                color: 'var(--game-board-ink)',
+              }}
             >
               {card.text}
             </button>
           ))}
         </div>
 
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );

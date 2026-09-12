@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BOARD, PLAY, GameCanvas, GameHud, centerText, clamp, panel } from '../engine';
+import {
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar,
+} from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+
+/** 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다. */
+const B = BAUHAUS.board;
 
 /**
  * m6-l10 · 직업 하루 조립 (장르 48 · 조립 개조)
@@ -177,21 +182,27 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = BOARD.bg;
+    ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    panel(ctx, 20, 14, WORLD_W - 40, 42, BOARD.overlay, PLAY.info, 10);
-    centerText(ctx, `${stage.job}의 하루`, WORLD_W / 2, 35, 22, BOARD.ink);
+    drawBar(ctx, 20, 14, WORLD_W - 40, 42, { fill: B.ground, stroke: B.blue, width: STROKE.base });
+    centerText(ctx, `${stage.job}의 하루`, WORLD_W / 2, 35, 22, B.ink);
 
     // 코스
     const y = 330;
-    ctx.fillStyle = '#1E293B';
-    ctx.fillRect(50, y + 34, WORLD_W - 100, 26);
+    /* 길은 중립 구조물이라 회색 막대다. 하루의 마디는 그 위에 얹힌다. */
+    drawBar(ctx, 50, y + 34, WORLD_W - 100, 26, { fill: B.surface, stroke: B.grey, width: STROKE.hair });
     stage.legs.forEach((leg, index) => {
       const x = 70 + (index / (stage.legs.length - 1)) * (WORLD_W - 200);
       const passed = rigRef.current.progress >= index / (stage.legs.length - 1);
-      panel(ctx, x - 58, y - 46, 116, 44, passed ? '#064E3B' : BOARD.surface, passed ? PLAY.goal : BOARD.line, 10);
-      centerText(ctx, leg, x, y - 24, 20, BOARD.ink);
+      /* 지나온 마디는 초록을 들이는 대신 파랑으로 면을 꽉 채우고 글자를 판 색으로 뒤집는다.
+         테두리만 바꾸면 어디까지 왔는지가 멀리서 읽히지 않는다. */
+      drawBar(ctx, x - 58, y - 46, 116, 44, {
+        fill: passed ? B.blue : B.surface,
+        stroke: passed ? B.blue : B.grey,
+        width: STROKE.base,
+      });
+      centerText(ctx, leg, x, y - 24, 20, passed ? B.ground : B.ink);
     });
 
     // 수레
@@ -199,8 +210,9 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
     const rx = 70 + t * (WORLD_W - 200);
     ctx.save();
     ctx.translate(rx, y + 10);
-    panel(ctx, -56, -30, 112, 44, BOARD.surface, PLAY.hero, 10);
-    centerText(ctx, '나', 0, -8, 22, BOARD.ink);
+    /* 학생이 조종하는 수레라 노랑을 두른다. 노랑은 판 위에서 손에 쥔 것을 뜻한다. */
+    drawBar(ctx, -56, -30, 112, 44, { fill: B.surface, stroke: B.yellow, width: STROKE.base });
+    centerText(ctx, '나', 0, -8, 22, B.ink);
     const order: Slot[] = ['like', 'strong', 'help'];
     order.forEach((slot, index) => {
       const part = partById(slots[slot]);
@@ -210,6 +222,7 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
       if (ok) {
         ctx.arc(wx, 22, 15, 0, Math.PI * 2);
       } else {
+        // 모난 바퀴 — 맞지 않는 부품은 굴러가지 않는다
         for (let k = 0; k < 5; k += 1) {
           const a = (k / 5) * Math.PI * 2;
           const px = wx + Math.cos(a) * 16;
@@ -218,28 +231,37 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
         }
         ctx.closePath();
       }
-      ctx.fillStyle = ok ? PLAY.goal : PLAY.hazard;
+      /* 판 위에서 파랑과 빨강의 대비는 1.22라 색만으로는 갈리지 않는다. 맞는 부품은
+         둥근 바퀴, 어긋난 부품은 모난 바퀴로 모양이 먼저 말하고 색이 뒤따른다. */
+      ctx.fillStyle = ok ? B.blue : B.red;
       ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = ok ? PLAY.goalEdge : PLAY.hazardEdge;
+      ctx.lineWidth = STROKE.hair;
+      ctx.strokeStyle = B.keyline;
       ctx.stroke();
     });
     ctx.restore();
 
     order.forEach((slot, index) => {
       const part = partById(slots[slot]);
-      panel(ctx, 60 + index * 290, 90, 270, 90, BOARD.surface, part ? PLAY.info : BOARD.line, 12);
-      centerText(ctx, SLOT_LABEL[slot], 195 + index * 290, 116, 20, BOARD.inkDim);
-      centerText(ctx, part ? part.text : '부품을 넣으세요', 195 + index * 290, 150, 19, BOARD.ink);
+      /* 채운 자리는 파랑 테두리, 빈 자리는 회색 테두리다. 아직 무엇이 남았는지가
+         글자를 읽기 전에 테두리로 보인다. */
+      drawBar(ctx, 60 + index * 290, 90, 270, 90, {
+        fill: B.surface,
+        stroke: part ? B.blue : B.grey,
+        width: STROKE.base,
+      });
+      centerText(ctx, SLOT_LABEL[slot], 195 + index * 290, 116, 20, B.grey);
+      centerText(ctx, part ? part.text : '부품을 넣으세요', 195 + index * 290, 150, 19, B.ink);
     });
   };
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="직업 하루 조립"
       instruction="내가 좋아하는 것, 잘하는 것, 도움이 필요한 것을 알맞게 골라 채운 다음, 하루 일과를 시작해 보세요."
       progress={{ label: '채운 자리', value: (['like', 'strong', 'help'] as Slot[]).filter((s) => slots[s]).length, max: 3 }}
-      hud={<GameHud lives={tries} maxLives={maxTries} />}
+      hud={<GameHud bauhaus lives={tries} maxLives={maxTries} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -247,8 +269,16 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} disabled={game.isLocked} emoji="🔄" label="다시 조립" />
-          <MiniGameButton onClick={drive} disabled={game.isLocked || !ready} emoji="🛻" label="하루 시험" variant="primary" />
+          <MiniGameButton onClick={game.retry} disabled={game.isLocked} mark="retry" label="다시 조립" />
+          {/* 수레 그림 문자를 오른쪽 화살표로 바꾼다. 화살표 하나를 돌려 쓰는 것이
+              놀이 전체의 어휘이고, 여기서는 "앞으로 달린다"를 그대로 뜻한다. */}
+          <MiniGameButton
+            onClick={drive}
+            disabled={game.isLocked || !ready}
+            mark="arrow"
+            label="하루 시험"
+            variant="primary"
+          />
         </>
       }
     >
@@ -258,12 +288,14 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
             const used = (['like', 'strong', 'help'] as Slot[]).some((slot) => slots[slot] === part.id);
             return (
               <div key={part.id} className="flex items-center gap-1">
+                {/* 끼운 부품은 반투명 덮개 대신 면을 파랑으로 뒤집는다. 덮개를 얹으면
+                    아래 글자가 흐려져 어느 부품을 끼웠는지 되레 읽기 어려워진다. */}
                 <span
-                  className="rounded-lg px-2 py-1 text-[14px] font-black"
+                  className="px-2 py-1 text-[14px] font-black"
                   style={{
-                    background: used ? 'rgba(56, 189, 248, 0.2)' : 'var(--board-overlay)',
-                    border: '2px solid var(--board-line)',
-                    color: 'var(--board-ink)',
+                    background: used ? 'var(--game-board-blue)' : 'var(--game-board)',
+                    border: 'var(--game-hair) solid var(--game-board-grey)',
+                    color: used ? 'var(--game-board)' : 'var(--game-board-ink)',
                   }}
                 >
                   {part.text}
@@ -275,8 +307,12 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
                     onClick={() => place(part, slot)}
                     disabled={!game.playing}
                     aria-label={`${part.text}를 ${SLOT_LABEL[slot]} 자리에 넣기`}
-                    className="min-h-8 rounded px-1.5 text-[14px] font-black"
-                    style={{ background: 'var(--board-surface)', border: '2px solid var(--board-line)', color: 'var(--board-ink)' }}
+                    className="min-h-8 px-1.5 text-[14px] font-black"
+                    style={{
+                      background: 'var(--game-board)',
+                      border: 'var(--game-hair) solid var(--game-board-grey)',
+                      color: 'var(--game-board-ink)',
+                    }}
                   >
                     {SLOT_LABEL[slot][0]}
                   </button>
@@ -286,7 +322,9 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
           })}
         </div>
 
-        {note && <p className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>}
+        {note && (
+          <p className="text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
+        )}
 
         <div className="flex min-h-0 flex-1 items-center justify-center">
           <div className="game-canvas-fit">

@@ -84,6 +84,17 @@ const MIGRATED = new Set([
   'm5/ResultCheckDiffGame.tsx',
   'm5/StepFlipGame.tsx',
   'm5/TaskSplitFactoryGame.tsx',
+  'm6/BusBoardTimingGame.tsx',
+  'm6/CoinMergeGame.tsx',
+  'm6/DayGardenGame.tsx',
+  'm6/ExpressionDeskGame.tsx',
+  'm6/JobDayRigGame.tsx',
+  'm6/MapSignMazeGame.tsx',
+  'm6/SafeCookingGame.tsx',
+  'm6/ShoppingStockGame.tsx',
+  'm6/SymptomClinicGame.tsx',
+  'm6/TwoViewIntroGame.tsx',
+  'm6/WeatherCardGame.tsx',
 ]);
 
 /*
@@ -99,7 +110,7 @@ const MIGRATED = new Set([
  * 래칫 기준선. 2026-09-08 전환 시작 시점의 실측값이다.
  * 전환이 진행되면 이 수치는 내려가기만 해야 한다. 내려가면 여기도 함께 낮춘다.
  */
-const BASELINE = { hex: 101, emoji: 212 };
+const BASELINE = { hex: 21, emoji: 55 };
 
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {

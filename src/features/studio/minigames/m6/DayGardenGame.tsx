@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { GameHud, clamp, useGameLoop } from '../engine';
+import { BauhausMark, GameHud, clamp, useGameLoop } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
+import type { BauhausMarkKind } from '../engine';
 
 /**
  * m6-l7 · 하루 텃밭 (장르 45 · 농장 경영)
@@ -19,12 +20,29 @@ const COLS = 4;
 
 type Seed = 'work' | 'move' | 'rest' | 'help';
 
-const SEED_INFO: Record<Seed, { emoji: string; name: string; energy: number }> = {
-  work: { emoji: '📚', name: '공부', energy: -2 },
-  move: { emoji: '🚶', name: '이동', energy: -1 },
-  rest: { emoji: '🛋️', name: '쉼', energy: 3 },
-  help: { emoji: '🤝', name: '도움 받기', energy: 2 },
+/*
+ * 활동 이름 옆의 그림 문자를 걷었다.
+ *
+ * 이름이 늘 바로 붙어 있어 그림 문자는 뜻을 더하지 않으면서, 기기와 글꼴마다 다른
+ * 모양으로 보이는 값만 치렀다. 소파와 악수는 '쉼'과 '도움 받기'라는 낱말을 배우는 데
+ * 오히려 한 겹을 덧대기도 한다.
+ */
+const SEED_INFO: Record<Seed, { name: string; energy: number }> = {
+  work: { name: '공부', energy: -2 },
+  move: { name: '이동', energy: -1 },
+  rest: { name: '쉼', energy: 3 },
+  help: { name: '도움 받기', energy: 2 },
 };
+
+/*
+ * 심은 것의 모양은 힘의 부호를 그대로 따른다.
+ *
+ * 힘을 쓰는 일(공부·이동)은 하루를 채우는 뼈대라 막대, 힘을 채우는 일(쉼·도움 받기)은
+ * 이 판이 넣게 하려는 것이라 사각형이다. 시드는 조건을 가르는 값과 모양을 가르는 값이
+ * 같아야, 칸에 보이는 것과 실제로 시드는 까닭이 어긋나지 않는다. 이름표를 못 읽어도
+ * 막대 셋이 나란히 선 줄은 눈에 걸린다.
+ */
+const seedMark = (key: Seed): BauhausMarkKind => (SEED_INFO[key].energy < 0 ? 'bar' : 'square');
 
 interface StageConfig {
   id: string;
@@ -208,10 +226,11 @@ export default function DayGardenGame({ supportLevel }: MiniGameProps) {
 
   return (
     <MiniGameFrame
+      bauhaus
       badge="하루 텃밭"
       instruction="오늘 할 일을 골라 시간표 칸에 알맞게 넣어 보세요. 너무 무리하지 않도록 중간에 휴식 시간도 꼭 챙겨야 해요."
       progress={{ label: '심은 칸', value: filled, max: rows * COLS }}
-      hud={<GameHud lives={wilt} maxLives={maxWilt} score={energy} scoreLabel="힘" timeLeft={left} timeTotal={seconds} />}
+      hud={<GameHud bauhaus lives={wilt} maxLives={maxWilt} score={energy} scoreLabel="힘" timeLeft={left} timeTotal={seconds} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
       onStageSelect={(index) => game.goToStage(index, STAGES[index].spoken)}
@@ -219,8 +238,8 @@ export default function DayGardenGame({ supportLevel }: MiniGameProps) {
       message={game.message}
       actions={
         <>
-          <MiniGameButton onClick={game.retry} emoji="🔄" label="다시 심기" />
-          <MiniGameButton onClick={finish} disabled={!game.playing} emoji="🌱" label="하루 마치기" variant="primary" />
+          <MiniGameButton onClick={game.retry} mark="retry" label="다시 심기" />
+          <MiniGameButton onClick={finish} disabled={!game.playing} mark="check" label="하루 마치기" variant="primary" />
         </>
       }
     >
@@ -233,17 +252,24 @@ export default function DayGardenGame({ supportLevel }: MiniGameProps) {
               onClick={() => setSeed(key)}
               aria-pressed={seed === key}
               disabled={!game.playing}
-              className="min-h-11 rounded-xl px-2.5 text-[15px] font-black transition"
+              className="flex min-h-11 items-center gap-1.5 px-2.5 text-[15px] font-black transition"
               style={{
-                background: seed === key ? '#4ADE80' : 'var(--board-surface)',
-                color: seed === key ? '#0F172A' : 'var(--board-ink)',
-                border: '2px solid #4ADE80',
+                /* 지금 손에 쥔 것은 노랑 면으로 뒤집는다. 고른 것과 안 고른 것을 테두리
+                   색으로만 가르면, 넷이 나란히 붙어 있는 줄에서 어느 것을 쥐고 있는지
+                   한눈에 잡히지 않는다. 밝기가 통째로 갈리면 색을 못 가려도 읽힌다. */
+                background: seed === key ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                color: seed === key ? 'var(--game-board)' : 'var(--game-board-ink)',
+                border: `var(--game-line) solid ${
+                  seed === key ? 'var(--game-board-yellow)' : 'var(--game-board-grey)'}`,
               }}
             >
-              {SEED_INFO[key].emoji} {SEED_INFO[key].name}
+              {/* 고르는 자리의 모양과 심긴 칸의 모양이 같다. 학생이 무엇을 심었는지
+                  칸을 보고 되짚을 수 있어야 계획을 고칠 수 있다. */}
+              <BauhausMark kind={seedMark(key)} size={14} />
+              {SEED_INFO[key].name}
             </button>
           ))}
-          <span className="text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>
+          <span className="text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>
             해야 할 일 · {stage.quota.map((q) => `${SEED_INFO[q.seed].name} ${q.count}`).join(', ')} · 구역마다 쉼 1
           </span>
         </div>
@@ -252,13 +278,18 @@ export default function DayGardenGame({ supportLevel }: MiniGameProps) {
           {stage.zones.map((zone, r) => (
             <div key={zone} className="flex min-h-0 flex-1 items-stretch gap-1.5">
               <span
-                className="flex w-16 shrink-0 items-center justify-center rounded-xl text-[15px] font-black"
+                className="flex w-16 shrink-0 flex-col items-center justify-center gap-0.5 text-[15px] font-black"
                 style={{
-                  background: eventRow === r ? 'rgba(251, 191, 36, 0.18)' : 'var(--board-surface)',
-                  border: `2px solid ${eventRow === r ? '#FBBF24' : 'var(--board-line)'}`,
-                  color: 'var(--board-ink)',
+                  /* 밀린 구역은 면을 노랑으로 뒤집고 느낌표를 얹는다. 반투명 덮개를
+                     씌우던 자리인데, 그러면 아래 글자가 흐려져 어느 구역을 다시 심어야
+                     하는지가 오히려 덜 읽혔다. */
+                  background: eventRow === r ? 'var(--game-board-yellow)' : 'var(--game-board)',
+                  border: `var(--game-line) solid ${
+                    eventRow === r ? 'var(--game-board-yellow)' : 'var(--game-board-grey)'}`,
+                  color: eventRow === r ? 'var(--game-board)' : 'var(--game-board-ink)',
                 }}
               >
+                {eventRow === r && <BauhausMark kind="bang" size={13} />}
                 {zone}
               </span>
               {grid[r].map((cell, c) => (
@@ -268,16 +299,30 @@ export default function DayGardenGame({ supportLevel }: MiniGameProps) {
                   onClick={() => plant(r, c)}
                   disabled={!game.playing}
                   aria-label={`${zone} ${c + 1}번 칸`}
-                  className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-xl text-[14px] font-black"
+                  className="flex min-h-0 flex-1 flex-col items-center justify-center gap-0.5 text-[14px] font-black"
                   style={{
-                    background: cell.wilted ? 'rgba(251, 113, 133, 0.18)'
-                      : cell.seed ? 'var(--board-surface)' : 'var(--board-overlay)',
-                    border: `2px solid ${cell.wilted ? '#FB7185' : cell.seed ? '#4ADE80' : 'rgba(100, 116, 139, 0.4)'}`,
-                    color: 'var(--board-ink)',
+                    /* 칸의 상태는 테두리가, 심은 것의 종류는 모양이 진다. 시든 칸은
+                       굵은 테두리와 붉은 세모를 함께 얻는다 — 판 위에서 붉은색과 푸른색은
+                       밝기가 거의 같아, 색만으로 가르면 색을 구별하지 못하는 학생에게
+                       시든 칸과 잘 자란 칸이 같은 회색이 된다. */
+                    background: cell.seed && !cell.wilted
+                      ? 'var(--game-board-surface)' : 'var(--game-board)',
+                    border: `${cell.wilted ? 'var(--game-heavy)' : 'var(--game-line)'} solid ${
+                      cell.wilted ? 'var(--game-board-red)'
+                        : cell.seed ? 'var(--game-board-blue)' : 'var(--game-board-grey)'}`,
+                    color: 'var(--game-board-ink)',
                   }}
                 >
-                  <span className="text-[20px]" aria-hidden="true">
-                    {cell.wilted ? '🥀' : cell.seed ? SEED_INFO[cell.seed].emoji : '·'}
+                  <span
+                    style={{
+                      color: cell.wilted ? 'var(--game-board-red)'
+                        : cell.seed ? 'var(--game-board-blue)' : 'var(--game-board-grey)',
+                    }}
+                  >
+                    <BauhausMark
+                      kind={cell.wilted ? 'triangle' : cell.seed ? seedMark(cell.seed) : 'dot'}
+                      size={20}
+                    />
                   </span>
                   {cell.seed && <span>{SEED_INFO[cell.seed].name}</span>}
                 </button>
@@ -286,7 +331,7 @@ export default function DayGardenGame({ supportLevel }: MiniGameProps) {
           ))}
         </div>
 
-        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--board-ink)' }}>{note}</p>
+        <p className="min-h-[22px] text-[15px] font-bold" style={{ color: 'var(--game-board-ink)' }}>{note}</p>
       </div>
     </MiniGameFrame>
   );
