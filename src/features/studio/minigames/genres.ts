@@ -77,8 +77,8 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm4-l10', genre: 35, genreName: '땅따먹기', badge: '광고 구역 두르기', component: 'AdFenceGame' },
 
   // ── M5 · 문제 해결 ───────────────────────────────────────────
-  { lessonId: 'm5-l1', genre: 48, genreName: '조립 개조', badge: '문제 수레 조립', component: 'ProblemRigBuildGame' },
-  { lessonId: 'm5-l2', genre: 52, genreName: '방치형 공장', badge: '과제 분해 공장', component: 'TaskSplitFactoryGame' },
+  { lessonId: 'm5-l1', genre: 35, genreName: '땅따먹기', badge: '지금과 바람 두르기', component: 'GoalGapFenceGame' },
+  { lessonId: 'm5-l2', genre: 25, genreName: '슬라이싱', badge: '큰 일 잘라 나누기', component: 'TaskSliceGame' },
   { lessonId: 'm5-l3', genre: 6, genreName: '경로 그리기', badge: '순서 미끄럼틀', component: 'StepOrderPathGame' },
   { lessonId: 'm5-l4', genre: 2, genreName: '무한 계단', badge: '먼저 할 일 계단', component: 'PriorityStairsGame' },
   { lessonId: 'm5-l5', genre: 37, genreName: '키우기 클리커', badge: '매듭 풀기', component: 'KnotUntieGame' },

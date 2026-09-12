@@ -23,6 +23,7 @@ export { default as BauhausMark } from './BauhausMark';
 /* 캔버스의 MarkKind와 DOM의 MarkKind는 목록이 다르다(DOM 쪽에 도형 이름들이 더 있다).
    같은 이름으로 내보내면 게임 쪽에서 조용히 엉뚱한 쪽을 집으므로 이름을 갈라 둔다. */
 export type { MarkKind as BauhausMarkKind } from './BauhausMark';
+export { josa, particleFor, topicOf, objectOf, subjectOf } from './korean';
 export { tuningFor } from './difficulty';
 export type { GameTuning } from './difficulty';
 export {

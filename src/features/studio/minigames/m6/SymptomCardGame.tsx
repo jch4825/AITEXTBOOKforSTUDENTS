@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, createRandom, drawBar, drawMark, drawShape,
-  shuffle,
+  particleFor, shuffle,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -197,7 +197,7 @@ export default function SymptomCardGame({ supportLevel }: MiniGameProps) {
       // 틀린 카드는 맨 뒤로 보낸다. 같은 카드를 곧바로 다시 만나면 고르기가 아니라
       // 찍기가 되고, 아예 사라지면 그 카드를 판단할 기회가 없어진다.
       w.deck = [...w.deck.slice(1), card];
-      setNote(`"${card.text}"는 ${column.label} 칸이 아니에요. 다시 살펴봐요.`);
+      setNote(`"${card.text}"${particleFor(card.text, '은', '는')} ${column.label} 칸이 아니에요. 다시 살펴봐요.`);
       if (w.lives <= 0) {
         w.finished = true;
         game.fail('카드를 다 넣지 못했어요. 어디가·어떻게·언제부터 셋으로 나누어 봐요.');
