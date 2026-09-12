@@ -77,7 +77,7 @@ const MIGRATED = new Set([
   'm4/SourceTowerGame.tsx',
   'm4/StopTimingGame.tsx',
   'm4/UncomfortableDodgeGame.tsx',
-  'm5/BoothStackBuildGame.tsx',
+  'm5/StepOrderPathGame.tsx',
   'm5/ClueMergeGame.tsx',
   'm5/KnotUntieGame.tsx',
   'm5/LeakFixPipeGame.tsx',
