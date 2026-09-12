@@ -83,7 +83,7 @@ const MIGRATED = new Set([
   'm5/LeakFixPipeGame.tsx',
   'm5/PlanChangeRunGame.tsx',
   'm5/PlanRaceSimGame.tsx',
-  'm5/PriorityDispatchGame.tsx',
+  'm5/PriorityStairsGame.tsx',
   'm5/ProblemRigBuildGame.tsx',
   'm5/ResultCheckDiffGame.tsx',
   'm5/StepFlipGame.tsx',
