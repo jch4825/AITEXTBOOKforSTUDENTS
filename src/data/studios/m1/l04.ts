@@ -103,7 +103,7 @@ export const M1_L4_STUDIO: StudioDefinition = {
         },
         {
           id: 'reveal-original',
-          label: '장면 4 · 어느 답을 믿지?',
+          label: '장면 4 · 어떤 답을 믿어야 할까?',
           imageSrc: '/lessons/story/m1/m1-l4-scene-04.webp',
           alt: '고양이와 여우로 엇갈린 답 앞에서 진우가 학생에게 묻는 장면',
           knowledgeStep: 2,
@@ -166,7 +166,7 @@ export const M1_L4_STUDIO: StudioDefinition = {
       facts: [
         '사진에서 귀와 얼굴 일부만 보입니다.',
         '아이미의 첫 답은 고양이입니다.',
-        '윤아는 사진 조건을 바꾸어 다시 시험할 수 있습니다.',
+        '가린 나뭇잎을 치우거나 스탠드 조명을 밝혀서 사진 조건을 바꾸면 다시 시험해 볼 수 있습니다.',
       ],
     },
     firstAttempt: {

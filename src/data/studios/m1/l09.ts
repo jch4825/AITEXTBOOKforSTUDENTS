@@ -6,7 +6,7 @@ export const M1_L9_STUDIO: StudioDefinition = {
     lessonId: 'm1-l9',
     moduleId: 'm1',
     title: '알맞은 인공지능 도구 고르기',
-    subtitle: '내가 하려는 일에 꼭 맞는 알맞은 인공지능 도구를 골라봐요.',
+    subtitle: '내가 하려는 일에 꼭 맞는 인공지능 도구를 골라 봐요.',
     format: 'D',
     decisionTitle: '아이미와 함께 알맞은 AI 도구를 골라봐요.',
     suggestedQuestions: [
@@ -163,7 +163,7 @@ export const M1_L9_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '한 도구로 모두 만들 수 있을까?',
-      description: '행사 안내 요약, 포스터 이미지, 소개 영상 자막을 가장 익숙한 AI 도구 하나로 모두 만들자는 의견이 나왔습니다.',
+      description: '체험회를 준비하며 안내문 요약, 포스터 그림, 소개 영상 자막을 만들어야 합니다. 진우가 가장 익숙한 글쓰기 AI 하나로 모든 것을 다 만들자고 제안했는데, 과연 한 가지 도구로 다 해결할 수 있을까요?',
       facts: [
         '세 과제는 글, 그림, 소리처럼 입력 자료가 다릅니다.',
         '필요한 결과도 요약문, 이미지, 자막으로 다릅니다.',

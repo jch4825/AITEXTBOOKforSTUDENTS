@@ -6,7 +6,7 @@ export const M1_L5_STUDIO: StudioDefinition = {
     lessonId: 'm1-l5',
     moduleId: 'm1',
     title: '소리를 알아듣는 인공지능',
-    subtitle: '말소리가 글자로 바뀌는 과정을 살펴보고, 나에게 편한 입력 방법을 골라봐요.',
+    subtitle: '말소리가 글자로 바뀌는 과정을 살펴보고, 나에게 편한 입력 방법을 골라 봐요.',
     format: 'C',
     decisionTitle: '아이미와 함께 소음 조건과 입력 방법을 직접 실험해 봐요.',
     suggestedQuestions: [
@@ -164,7 +164,7 @@ export const M1_L5_STUDIO: StudioDefinition = {
       title: '체험회가 채소회 오이로 적혔어요',
       description: '시끄러운 복도에서 진우가 “체험회에 놀러 오세요!”라고 외쳤더니, 아이미의 음성 인식 화면에 “채소회 오이 사세요!”라고 잘못 적혔습니다.',
       facts: [
-        '시끄러운 복도 소음 때문에 말소리가 뭉개졌습니다.',
+        '시끄러운 복도 소음 때문에 말소리가 또렷하게 전달되지 못했습니다.',
         '원래 말한 문장은 "체험회에 놀러 오세요!"입니다.',
         '아이미 화면에는 "채소회 오이 사세요!"라고 적혔습니다.',
       ],

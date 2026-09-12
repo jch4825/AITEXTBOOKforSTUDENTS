@@ -49,7 +49,7 @@ export const M1_L3_STUDIO: StudioDefinition = {
         },
         {
           id: 'smooth-answer',
-          label: '장면 2 · 자신감 뿜뿜 엉뚱 대답!',
+          label: '장면 2 · 자신 있게 내놓은 엉뚱한 답',
           imageSrc: '/lessons/story/m1/m1-l3-scene-02.webp',
           alt: '아이미가 엄청 당당하게 무지개 아이스크림 떡볶이라고 외쳐 윤아가 황당해하는 장면',
           knowledgeStep: 0,
@@ -216,7 +216,7 @@ export const M1_L3_STUDIO: StudioDefinition = {
       supportLevelOnly: 'challenge',
     },
     transfer: {
-      title: '실시간 검색 기능을 가진 AI라면',
+      title: '인터넷 검색 기능이 연결된 AI라면',
       description: '최근 인공지능은 인터넷 검색 기능을 연결하여 실시간 날씨 정보를 직접 찾아보고, 사실에 가까운 정확한 답변을 만들기도 합니다.',
       prompt: '인터넷 검색 기능이 있는 AI가 알려준 정보를 대할 때 어떤 점을 생각해야 할까요?',
       stimuli: [
@@ -232,7 +232,7 @@ export const M1_L3_STUDIO: StudioDefinition = {
         { id: 'check-official-forecast', emoji: '🔍', label: 'AI에 인터넷 검색 기능을 연결하면 최신 정보를 검색하여 사실에 더 가까운 답을 제공할 수 있습니다.', isCorrect: true, reaction: '아이미: "검색을 연결하니 저도 최신 정보를 찾을 수 있어요!"' },
         { id: 'rewrite-with-source', emoji: '📌', label: '검색 기능이 있더라도 기상청 같은 공식 출처를 함께 확인하면 가장 안전하고 바른 정보를 얻습니다.', isCorrect: true, reaction: '윤아: "검색을 해도 공식 출처는 한 번 더 보는 게 좋아."' },
         { id: 'trust-weather-tone', emoji: '❌', label: '검색하는 AI는 절대로 실수하지 않으므로 사람이 직접 확인할 필요가 전혀 없다고 믿습니다.', isCorrect: false, reaction: '아이미: "검색을 해도 저도 가끔 실수해요. 확인은 여전히 필요해요."' },
-        { id: 'ignore-verification', emoji: '🗑️', label: 'AI가 검색을 통해 알려준 최신 정보도 무조건 다 거짓말이라고 전부 무시합니다.', isCorrect: false, reaction: '진우: "검색까지 했는데 다 무시하면… 쓸모 있는 정보도 놓치겠는데?"' },
+        { id: 'ignore-verification', emoji: '🗑️', label: 'AI가 인터넷으로 검색해 알려 준 최신 정보도 무조건 다 거짓말이라며 전부 무시합니다.', isCorrect: false, reaction: '진우: "검색까지 했는데 다 무시하면… 쓸모 있는 정보도 놓치겠는데?"' },
       ],
     },
   };

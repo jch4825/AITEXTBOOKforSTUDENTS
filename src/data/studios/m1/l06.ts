@@ -6,7 +6,7 @@ export const M1_L6_STUDIO: StudioDefinition = {
     lessonId: 'm1-l6',
     moduleId: 'm1',
     title: '인공지능은 많은 자료로 배워요',
-    subtitle: '배움 자료가 골고루 들어있지 않으면 어떤 실수를 하는지 비교해 봐요.',
+    subtitle: '배움 자료가 골고루 들어 있지 않으면 어떤 실수를 하는지 비교해 봐요.',
     format: 'B',
     decisionTitle: '아이미와 함께 학습 자료를 직접 조사해 봐요.',
     suggestedQuestions: [
@@ -164,7 +164,7 @@ export const M1_L6_STUDIO: StudioDefinition = {
       title: '동그라미 과자를 찌그러진 세모라고 불렀어요',
       description: '세모 카드만 주로 배운 AI 앞에 진우가 동그란 과자를 보여주자, AI가 “찌그러진 세모입니다!”라고 엉뚱하게 대답했습니다.',
       facts: [
-        'AI는 세모 카드만 가득 학습했습니다.',
+        'AI는 세모 카드만 모아서 집중적으로 공부했습니다.',
         '새로 보여준 동그란 과자는 배운 적이 거의 없는 모양입니다.',
         'AI는 세모 자료만 주로 배웠기 때문에, 처음 보는 모양도 가장 익숙한 세모로 잘못 판단했습니다.',
       ],
@@ -182,7 +182,7 @@ export const M1_L6_STUDIO: StudioDefinition = {
     },
     supportProfiles: STUDIO_SUPPORT_PROFILES,
     conditionChange: {
-      description: '모양별 수를 맞추고 색, 크기, 방향이 다양한 카드를 더한 뒤 같은 시험을 다시 진행했습니다.',
+      description: '모양별 개수를 맞추고 색, 크기, 방향이 다양한 카드를 골고루 더한 뒤 같은 시험을 다시 해 보았습니다.',
       facts: [
         '세모, 동그라미, 네모 카드의 수가 비슷해졌습니다.',
         '각 모양에 여러 색과 크기의 카드가 포함되었습니다.',
