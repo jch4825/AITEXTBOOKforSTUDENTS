@@ -44,7 +44,7 @@ export const M2_L7_STUDIO: StudioDefinition = {
         },
         {
           id: 'easy-but-missing-facts',
-          label: '장면 2 · 정보 누락',
+          label: '장면 2 · 쏙 빠진 정보',
           imageSrc: '/lessons/story/m2/m2-l7-scene-02.webp',
           alt: '아이미가 쉽게 만들었다고 하고 윤아가 시간과 장소를 되묻는 장면',
           knowledgeStep: 0,
@@ -149,7 +149,7 @@ export const M2_L7_STUDIO: StudioDefinition = {
           core: '좋아진 점, 그대로인 점, 새로 생긴 문제를 같은 기준표에 표시합니다.',
           detail: {
             full: '고치기 전과 고친 후의 글을 나란히 놓고 비교해 봐요.',
-            light: '쉬워졌다는 느낌만 생각하지 말고, 중요한 사실이 남아있는지 확인해야 합니다.',
+            light: '쉬워졌다는 느낌만 생각하지 말고, 중요한 사실이 남아 있는지 확인해야 합니다.',
             challenge: '수정 전과 후의 결과를 나란히 비교해 보면, 글이 얼마나 좋아졌는지뿐만 아니라 빠뜨린 정보가 없는지도 함께 발견할 수 있습니다.',
           },
         },
@@ -157,7 +157,7 @@ export const M2_L7_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '이해하기 쉬워졌지만 장소와 시간이 사라졌어요',
-      description: '진우가 긴 안내를 “더 쉽게” 고쳐 달라고 하자 시간과 장소가 빠진 짧은 안내가 나왔습니다.',
+      description: '진우가 복잡하고 긴 안내문을 “더 쉽게만 고쳐 줘”라고 기준 없이 부탁했더니, 글은 짧아졌지만 행사 시간과 장소가 몽땅 사라져 버렸습니다.',
       facts: [
         '첫 안내의 시간과 장소는 공식 일정과 같습니다.',
         '어려운 단어와 긴 문장은 고쳐야 합니다.',

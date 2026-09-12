@@ -98,7 +98,7 @@ export const M2_L1_STUDIO: StudioDefinition = {
         },
         {
           id: 'repaired-event-request',
-          label: '장면 4 · 이번엔 무엇을 알려주시겠어요?',
+          label: '장면 4 · 이번엔 무엇을 넣어 볼까요?',
           imageSrc: '/lessons/story/m2/m2-l1-scene-04.webp',
           alt: '아이미가 다시 부탁해 달라고 학생에게 묻는 장면',
           knowledgeStep: 2,
@@ -149,7 +149,7 @@ export const M2_L1_STUDIO: StudioDefinition = {
           core: '요청을 고친 뒤 다시 나온 결과를 원래의 공식 일정표와 비교하여 확인해야 합니다.',
           detail: {
             full: '다시 나온 결과도 꼼꼼히 살펴봐요.',
-            light: '대상, 날짜, 준비물 같은 중요한 정보가 실제 안내문과 똑같이 잘 남아있는지 확인해야 합니다.',
+            light: '대상, 날짜, 준비물 같은 중요한 정보가 실제 안내문과 똑같이 잘 남아 있는지 확인해야 합니다.',
             challenge: '요청을 수정했다고 해서 결과가 항상 정확하다고 믿지 말고, 공식적인 원래 자료와 비교하여 사실을 다시 확인해야 합니다.',
           },
         },
@@ -157,7 +157,7 @@ export const M2_L1_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '내일 안내를 알려 달라고 했더니',
-      description: '윤아가 “내일 안내 알려 줘”라고 요청하자 아이미는 지난달 음악회 안내를 보여 주었습니다.',
+      description: '체험회 준비를 위해 윤아가 “내일 안내 알려 줘”라고 짧게 부탁했더니, 아이미가 엉뚱하게도 이미 끝난 지난달 음악회 안내문을 찾아왔습니다.',
       facts: [
         '윤아가 찾는 것은 AI 체험회 준비물 안내입니다.',
         '처음 요청에는 체험회라는 대상이 없습니다.',
