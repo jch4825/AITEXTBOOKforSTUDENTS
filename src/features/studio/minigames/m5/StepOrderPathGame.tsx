@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
@@ -12,42 +12,53 @@ const B = BAUHAUS.board;
 /**
  * m5-l3 · 순서 미끄럼틀 (장르 6 · 경로 그리기)
  *
- * 순서를 세우고 모의 실행으로 검증해 고치는 일이 그리기·굴려 보기·고쳐 그리기 세 박자와
- * 그대로 같다. 그래서 단계를 고르는 퀴즈가 아니라 단계를 잇는 선을 그리게 했다.
+ * 순서를 세우고 모의 실행으로 검증해 고치는 일이 놓기·굴려 보기·바꿔 놓기 세 박자와
+ * 그대로 같다. 그래서 단계를 고르는 퀴즈가 아니라 미끄럼틀을 직접 조립하게 했다.
  *
- * 구슬이 멈춘 자리가 곧 빠뜨린 선행 조건이다. 어디가 틀렸는지 글로 알려 주지 않아도
- * 보이고, 안전 단계를 건너뛴 구슬은 튕겨 나온다. 학습목표의 두 조건(선행·안전)이 모두
- * 판정이 되는 자리다.
+ * 처음에는 발판 다섯을 흩어 놓고 두 번 눌러 선을 잇게 만들었다가 걷어냈다. 누른 발판이
+ * 어디에 있는지가 화면에 남지 않아 "지금 무엇을 고른 상태인가"를 학생이 머리에 들고
+ * 있어야 했고, 자리가 흩어져 있으니 그은 선이 서로 엇갈려 판이 실타래가 됐다.
+ *
+ * 지금은 칸이 왼쪽 위에서 오른쪽 아래로 한 줄로 내려간다. **순서가 곧 읽는 방향이다.**
+ * 카드를 한 번 누르면 다음 빈 칸에 놓이고, 놓인 카드를 누르면 도로 내려온다. 고른 상태를
+ * 기억할 일이 없고 선이 엇갈릴 일도 없다. 학생이 하는 판단은 "이번엔 무엇을 놓지?" 하나뿐이고,
+ * 그 판단을 다섯 번 되풀이하는 것이 곧 순서 세우기다.
+ *
+ * 구슬이 멈춘 칸이 곧 빠뜨린 선행 조건이다. 어디가 틀렸는지 글로 알려 주지 않아도 보이고,
+ * 안전 단계를 건너뛴 구슬은 튕겨 나온다. 학습목표의 두 조건이 모두 판정이 되는 자리다.
  *
  * 같은 장르를 쓰는 m2-l8(형식 틀로 흘리기)과 조작이 다른 자리는 셋이다.
- *  - m2-l8은 잉크를 자원 삼아 자유 곡선 미끄럼틀을 그린다. 여기서는 정해진 발판끼리만
- *    잇는다. 곡선을 그리는 손이 아니라 무엇 다음에 무엇인지 고르는 손이다.
- *  - 자원이 잉크가 아니라 실행 횟수다. 한 번에 잘 그리는 것이 아니라 굴려 보고 막힌
- *    구간만 고쳐 다시 굴리는 되풀이가 이 판의 중심이다.
- *  - m2-l8의 통은 하나뿐이고 여기서는 발판이 다섯이다. m2-l8이 묻는 것은 "어떤 모양인가"
- *    하나지만, 여기서 묻는 것은 다섯 사이의 앞뒤 관계다.
+ *  - m2-l8은 잉크를 자원 삼아 자유 곡선 미끄럼틀을 그린다. 여기서는 미끄럼틀 조각을
+ *    칸에 놓아 잇는다. 손이 그리는 손에서 놓는 손으로 바뀐다.
+ *  - 자원이 잉크가 아니라 실행 횟수다. 한 번에 잘 그리는 것이 아니라 굴려 보고 틀린
+ *    칸만 바꿔 다시 굴리는 되풀이가 이 판의 중심이다.
+ *  - m2-l8의 통은 하나뿐이고 묻는 것도 "어떤 모양인가" 하나다. 여기서 묻는 것은 다섯
+ *    사이의 앞뒤 관계다.
  *
- * 실패해도 그은 선을 지우지 않는다. `game.resume()`이 이를 위해 있다 — 판을 새로 만드는
- * `retry`를 쓰면 고칠 대상 자체가 사라져 "고쳐 다시 굴린다"가 성립하지 않는다.
+ * 실패해도 놓은 카드를 쓸어 내지 않는다. `game.resume()`이 이를 위해 있다 — 판을 새로
+ * 만드는 `retry`를 쓰면 고칠 대상 자체가 사라져 "고쳐 다시 굴린다"가 성립하지 않는다.
  */
 
 const WORLD_W = 960;
 const WORLD_H = 540;
 
-const PAD_W = 214;
-const PAD_H = 70;
-const START = { x: 58, y: 265, r: 36 };
-const GOAL = { x: 852, y: 200, w: 96, h: 130 };
+const SLOT_COUNT = 5;
+/* 칸 너비는 글자가 정한다. 가장 긴 이름이 일곱 자이고 캔버스 글자는 20 가상 단위
+   아래로 내려갈 수 없으므로, 번호 칸까지 더해 200이 하한이다. */
+const SLOT_W = 200;
+const SLOT_H = 58;
+/** 칸은 왼쪽 위에서 오른쪽 아래로 한 칸씩 내려간다. 내려가는 방향이 곧 시간의 방향이다. */
+const slotCenter = (index: number) => ({ x: 140 + index * 130, y: 96 + index * 50 });
 
-/** 발판이 놓이는 다섯 자리. 왼쪽에서 오른쪽으로 늘어놓지 않는다 —
-    자리가 곧 순서라는 오해를 주면 앞뒤를 따질 일이 없어진다. */
-const SLOTS = [
-  { x: 265, y: 100 },
-  { x: 265, y: 440 },
-  { x: 505, y: 265 },
-  { x: 745, y: 100 },
-  { x: 745, y: 440 },
-];
+const TRAY_Y = 462;
+const TRAY_W = 178;
+const TRAY_H = 56;
+const trayCenter = (index: number) => ({ x: 108 + index * 182, y: TRAY_Y });
+
+/* 통은 마지막 칸의 오른쪽 아래다. 계단이 끝나는 자리에 두어야 "여기까지 가면 끝"이
+   길의 모양으로 보인다. 카드 판과는 세로로 갈라 놓아 서로 겹치지 않는다. */
+const BIN = { x: 800, y: 300, w: 78, h: 90 };
+const START = { x: 60, y: 52 };
 
 interface StepSpec {
   id: string;
@@ -56,8 +67,6 @@ interface StepSpec {
   needs: string[];
   /** 안전 때문에 앞서야 하는 단계. 건너뛰면 구슬이 튕겨 나온다. */
   safety?: boolean;
-  /** SLOTS의 몇 번째 자리에 놓을지 */
-  slot: number;
 }
 
 interface StageConfig {
@@ -65,113 +74,72 @@ interface StageConfig {
   label: string;
   spoken: string;
   scene: string;
+  /** 카드가 처음 놓이는 차례. 정답 순서대로 늘어놓지 않는다. */
   steps: StepSpec[];
 }
 
 /*
- * 판 셋은 조작이 같고 상황이 다르다. 세우는 일, 차리는 일, 걷는 일 순서로 놓아
- * 같은 따지기를 세 번 다른 자리에서 해 보게 한다. 특히 2단계는 걷어 내는 일이라
- * 앞뒤가 세우기와 뒤집히는데, 순서를 외운 학생과 이유를 따진 학생이 여기서 갈린다.
+ * 판 셋은 조작이 같고 상황이 다르다. 세우는 일, 차리는 일, 걷는 일 순서로 놓아 같은
+ * 따지기를 세 번 다른 자리에서 해 보게 한다. 특히 2단계는 걷어 내는 일이라 앞뒤가
+ * 세우기와 뒤집히는데, 순서를 외운 학생과 이유를 따진 학생이 여기서 갈린다.
  */
 const STAGES: StageConfig[] = [
   {
     id: 'booth',
     label: '기본',
     scene: '체험회 부스 세우기',
-    spoken: '부스를 세우는 순서를 이어 굴려 봐요.',
+    spoken: '부스를 세우는 순서대로 카드를 놓아 봐요.',
     steps: [
-      { id: 'cable', label: '전원선 깔기', needs: [], safety: true, slot: 3 },
-      { id: 'desk', label: '책상 놓기', needs: ['cable'], slot: 1 },
-      { id: 'laptop', label: '노트북 올리기', needs: ['desk'], slot: 4 },
-      { id: 'sign', label: '안내판 걸기', needs: ['desk'], slot: 0 },
-      { id: 'chair', label: '의자 놓기', needs: ['cable'], slot: 2 },
+      { id: 'sign', label: '안내판 걸기', needs: ['desk'] },
+      { id: 'cable', label: '전원선 깔기', needs: [], safety: true },
+      { id: 'laptop', label: '노트북 올리기', needs: ['desk'] },
+      { id: 'chair', label: '의자 놓기', needs: ['cable'] },
+      { id: 'desk', label: '책상 놓기', needs: ['cable'] },
     ],
   },
   {
     id: 'table',
     label: '1단계',
     scene: '체험 자리 차리기',
-    spoken: '체험 자리를 차리는 순서를 이어 굴려 봐요.',
+    spoken: '체험 자리를 차리는 순서대로 카드를 놓아 봐요.',
     steps: [
-      { id: 'mat', label: '바닥 매트 깔기', needs: [], safety: true, slot: 2 },
-      { id: 'bench', label: '작업대 놓기', needs: ['mat'], slot: 4 },
-      { id: 'box', label: '재료 상자 올리기', needs: ['bench'], slot: 0 },
-      { id: 'name', label: '이름표 붙이기', needs: ['bench'], slot: 3 },
-      { id: 'bin', label: '쓰레기통 두기', needs: ['mat'], slot: 1 },
+      { id: 'box', label: '재료 상자 놓기', needs: ['bench'] },
+      { id: 'name', label: '이름표 붙이기', needs: ['bench'] },
+      { id: 'mat', label: '바닥 매트 깔기', needs: [], safety: true },
+      { id: 'bin', label: '쓰레기통 두기', needs: ['mat'] },
+      { id: 'bench', label: '작업대 놓기', needs: ['mat'] },
     ],
   },
   {
     id: 'pack',
     label: '2단계',
     scene: '마치고 정리하기',
-    spoken: '정리하는 순서를 이어 굴려 봐요.',
+    spoken: '정리하는 순서대로 카드를 놓아 봐요.',
     steps: [
-      { id: 'power', label: '전원 끄기', needs: [], safety: true, slot: 1 },
-      { id: 'laptop', label: '노트북 걷기', needs: ['power'], slot: 3 },
-      { id: 'deco', label: '장식 떼기', needs: [], slot: 0 },
-      { id: 'cable', label: '전원선 걷기', needs: ['power'], slot: 4 },
-      { id: 'desk', label: '책상 접기', needs: ['laptop', 'deco'], slot: 2 },
+      { id: 'desk', label: '책상 접기', needs: ['laptop', 'deco'] },
+      { id: 'cable', label: '전원선 걷기', needs: ['power'] },
+      { id: 'deco', label: '장식 떼기', needs: [] },
+      { id: 'power', label: '전원 끄기', needs: [], safety: true },
+      { id: 'laptop', label: '노트북 걷기', needs: ['power'] },
     ],
   },
 ];
 
-const START_ID = 'start';
-const GOAL_ID = 'goal';
-
-interface NodeBox {
-  id: string;
-  cx: number;
-  cy: number;
-  w: number;
-  h: number;
-}
-
-function nodesOf(stage: StageConfig): NodeBox[] {
-  const pads = stage.steps.map((step) => ({
-    id: step.id,
-    cx: SLOTS[step.slot].x,
-    cy: SLOTS[step.slot].y,
-    w: PAD_W,
-    h: PAD_H,
-  }));
-  return [
-    { id: START_ID, cx: START.x, cy: START.y, w: START.r * 2, h: START.r * 2 },
-    ...pads,
-    { id: GOAL_ID, cx: GOAL.x + GOAL.w / 2, cy: GOAL.y + GOAL.h / 2, w: GOAL.w, h: GOAL.h },
-  ];
-}
-
-/** 출발에서 링크를 따라 걸어 나온 마디 차례. 고리가 생겨도 한 바퀴에서 멈춘다. */
-function chainOf(links: Record<string, string>): string[] {
-  const out = [START_ID];
-  const seen = new Set([START_ID]);
-  let cur = START_ID;
-  while (links[cur] && !seen.has(links[cur])) {
-    cur = links[cur];
-    seen.add(cur);
-    out.push(cur);
-    if (cur === GOAL_ID) break;
-  }
-  return out;
-}
-
-/** edit=선을 고치는 중, roll=굴러가는 중, drop=떨어지는 중, done=통에 들어가 멈춤 */
+/** edit=카드를 놓는 중, roll=굴러가는 중, drop=떨어지는 중, done=통에 들어가 멈춤 */
 type RunPhase = 'edit' | 'roll' | 'drop' | 'done';
 
 interface Runner {
   phase: RunPhase;
-  /** 지금 지나는 구간. chain[leg] → chain[leg + 1] */
+  /** 지금 지나는 구간. 길의 leg번째 마디에서 leg+1번째로 간다. */
   leg: number;
-  /** 구간 안에서의 진행(0~1) */
   t: number;
-  chain: string[];
-  visited: string[];
+  /** 구슬이 지나온 칸 수. 이만큼이 앞 단계로 인정된다. */
+  passed: number;
   x: number;
   y: number;
-  /** 떨어질 때의 낙하 속도 */
   fall: number;
-  /** 구슬이 멈춘 발판. 그 자리를 붉게 짚어 준다. */
-  stuck: string | null;
+  /** 구슬이 멈춘 칸. 그 자리를 붉게 짚어 준다. */
+  stuck: number | null;
 }
 
 export default function StepOrderPathGame({ supportLevel }: MiniGameProps) {
@@ -181,99 +149,81 @@ export default function StepOrderPathGame({ supportLevel }: MiniGameProps) {
 
   /* 지원 수준은 실행 횟수와 구슬 속도로만 나타난다. 단계와 앞뒤 관계는 셋 모두 같다. */
   const maxRuns = tuning.lives;
-  const rollSpeed = 330 * clamp(tuning.speed, 0.7, 1.3);
+  const rollSpeed = 300 * clamp(tuning.speed, 0.7, 1.3);
 
-  const nodes = nodesOf(stage);
-  const stepById = new Map(stage.steps.map((s) => [s.id, s]));
-
-  const [links, setLinks] = useState<Record<string, string>>({});
-  const [order, setOrder] = useState<string[]>([]);
-  const [selected, setSelected] = useState<string | null>(null);
+  /** 칸에 놓인 카드. 값은 stage.steps의 자리번호, 비었으면 -1. */
+  const [slots, setSlots] = useState<number[]>(() => Array(SLOT_COUNT).fill(-1));
   const [runsLeft, setRunsLeft] = useState(maxRuns);
-  const [note, setNote] = useState('발판을 눌러 앞뒤로 이어 보세요.');
+  const [note, setNote] = useState('아래 카드를 눌러 먼저 할 일부터 놓아 보세요.');
 
-  const linksRef = useRef(links);
-  linksRef.current = links;
+  const slotsRef = useRef(slots);
+  slotsRef.current = slots;
 
   const runner = useRef<Runner>({
-    phase: 'edit', leg: 0, t: 0, chain: [], visited: [], x: START.x, y: START.y, fall: 0, stuck: null,
+    phase: 'edit', leg: 0, t: 0, passed: 0, x: START.x, y: START.y, fall: 0, stuck: null,
   });
 
   useEffect(() => {
-    setLinks({});
-    setOrder([]);
-    setSelected(null);
+    setSlots(Array(SLOT_COUNT).fill(-1));
     setRunsLeft(maxRuns);
-    setNote('발판을 눌러 앞뒤로 이어 보세요.');
+    setNote('아래 카드를 눌러 먼저 할 일부터 놓아 보세요.');
     runner.current = {
-      phase: 'edit', leg: 0, t: 0, chain: [], visited: [], x: START.x, y: START.y, fall: 0, stuck: null,
+      phase: 'edit', leg: 0, t: 0, passed: 0, x: START.x, y: START.y, fall: 0, stuck: null,
     };
   }, [game.round, game.stageIndex, maxRuns]);
 
-  const nodeAt = (x: number, y: number) =>
-    nodes.find((n) => Math.abs(x - n.cx) <= n.w / 2 + 6 && Math.abs(y - n.cy) <= n.h / 2 + 6) ?? null;
-
-  const centerOf = useCallback(
-    (id: string) => {
-      const node = nodes.find((n) => n.id === id);
-      return node ? { x: node.cx, y: node.cy } : { x: START.x, y: START.y };
-    },
-    [nodes],
-  );
-
-  /** 발판 잇기. 한 발판에서 나가는 선도, 들어오는 선도 하나씩만 둔다.
-      여러 갈래를 허용하면 "다음은 무엇인가"라는 물음이 흐려진다. */
-  const link = (from: string, to: string) => {
-    /* 이 저장소에는 @types/react가 없어 갱신 함수의 인자가 좁혀지지 않는다.
-       인자 타입을 직접 적어 두지 않으면 값이 unknown으로 새어 나온다. */
-    setLinks((prev: Record<string, string>) => {
-      const next: Record<string, string> = {};
-      for (const key of Object.keys(prev)) {
-        if (key === from) continue;
-        if (prev[key] === to) continue;
-        next[key] = prev[key];
-      }
-      next[from] = to;
-      return next;
-    });
-    setOrder((prev: string[]) => [...prev.filter((k) => k !== from), from]);
+  /** 구슬이 지나는 길. 출발 → 칸 다섯 → 완성 통. */
+  const pathPoint = (leg: number) => {
+    if (leg <= 0) return { x: START.x, y: START.y };
+    if (leg <= SLOT_COUNT) return slotCenter(leg - 1);
+    return { x: BIN.x + BIN.w / 2, y: BIN.y + 34 };
   };
 
-  const undoLink = () => {
-    if (runner.current.phase !== 'edit') return;
-    const last = order[order.length - 1];
-    if (!last) return;
-    setLinks((prev: Record<string, string>) => {
-      const next = { ...prev };
-      delete next[last];
-      return next;
-    });
-    setOrder((prev: string[]) => prev.slice(0, -1));
-    setSelected(null);
-    setNote('마지막에 이은 선을 지웠어요.');
-  };
+  const placedCount = slots.filter((s) => s >= 0).length;
 
-  const startRun = () => {
-    if (runner.current.phase !== 'edit') return;
-    const chain = chainOf(linksRef.current);
-    if (chain.length < 2) {
-      setNote('아직 이은 선이 없어요. 출발에서 발판으로 이어 보세요.');
+  const placeCard = (cardIndex: number) => {
+    if (!game.playing) return;
+    const current = slotsRef.current;
+    if (current.includes(cardIndex)) return;
+    const empty = current.indexOf(-1);
+    if (empty < 0) {
+      setNote('칸이 다 찼어요. 바꾸려면 놓은 카드를 누르세요.');
       return;
     }
-    const from = centerOf(chain[0]);
-    runner.current = {
-      phase: 'roll', leg: 0, t: 0, chain, visited: [], x: from.x, y: from.y, fall: 0, stuck: null,
-    };
-    setSelected(null);
-    game.run('구슬을 굴려 볼게요.');
+    const next = [...current];
+    next[empty] = cardIndex;
+    setSlots(next);
+    // 고치기 시작하면 멈췄던 자리 표시를 거둔다. 고친 뒤에도 붉게 남아 있으면
+    // 아직 틀린 자리인지 지난 자국인지 알 수 없다.
+    runner.current.stuck = null;
+    runner.current.passed = 0;
+    setNote(
+      next.includes(-1)
+        ? `${empty + 1}번 자리에 놓았어요. 다음에 할 일을 고르세요.`
+        : '다 놓았어요. 굴려 보기를 눌러 보세요.',
+    );
   };
 
-  /** 굴리기가 끝났을 때. 실행 횟수가 남으면 그은 선을 그대로 두고 조작만 돌려준다. */
-  const stumble = (message: string, stuckId: string | null) => {
+  const takeBack = (slotIndex: number) => {
+    if (!game.playing) return;
+    const current = slotsRef.current;
+    if (current[slotIndex] < 0) return;
+    /* 가운데 카드를 빼면 뒤엣것을 한 칸씩 당긴다. 빈 칸이 가운데 남으면 다음에 놓은
+       카드가 그리로 들어가 순서가 학생 생각과 어긋난다. */
+    const kept = current.filter((v, i) => v >= 0 && i !== slotIndex);
+    const next = [...kept, ...Array(SLOT_COUNT - kept.length).fill(-1)];
+    setSlots(next);
+    runner.current.stuck = null;
+    runner.current.passed = 0;
+    setNote('카드를 도로 내렸어요.');
+  };
+
+  /** 굴리기가 끝났을 때. 실행 횟수가 남으면 놓은 카드를 그대로 두고 조작만 돌려준다. */
+  const stumble = (message: string, stuckSlot: number | null) => {
     const left = runsLeft - 1;
     setRunsLeft(left);
     runner.current.phase = 'drop';
-    runner.current.stuck = stuckId;
+    runner.current.stuck = stuckSlot;
     if (left <= 0) {
       game.fail(`${message} 실행할 수 있는 횟수를 다 썼어요.`);
     } else {
@@ -282,61 +232,63 @@ export default function StepOrderPathGame({ supportLevel }: MiniGameProps) {
     }
   };
 
+  const startRun = () => {
+    if (runner.current.phase !== 'edit') return;
+    if (slotsRef.current.includes(-1)) {
+      setNote('아직 빈 칸이 있어요. 다섯 칸을 모두 채워 주세요.');
+      return;
+    }
+    runner.current = {
+      phase: 'roll', leg: 0, t: 0, passed: 0, x: START.x, y: START.y, fall: 0, stuck: null,
+    };
+    game.run('구슬을 굴려 볼게요.');
+  };
+
   const frame = (ctx: CanvasRenderingContext2D, dt: number) => {
     const r = runner.current;
+    const placed = slotsRef.current;
 
     if (dt > 0 && r.phase === 'roll') {
-      const fromId = r.chain[r.leg];
-      const toId = r.chain[r.leg + 1];
-      if (!toId) {
-        // 이은 선이 끊긴 자리. 마지막 발판에서 떨어진다.
-        stumble('선이 끊겨 구슬이 멈췄어요. 다음 발판까지 이어 보세요.', fromId);
-      } else {
-        const a = centerOf(fromId);
-        const b = centerOf(toId);
-        const span = Math.max(1, Math.hypot(b.x - a.x, b.y - a.y));
-        r.t = Math.min(1, r.t + (rollSpeed * dt) / span);
-        r.x = a.x + (b.x - a.x) * r.t;
-        r.y = a.y + (b.y - a.y) * r.t;
+      const a = pathPoint(r.leg);
+      const b = pathPoint(r.leg + 1);
+      const span = Math.max(1, Math.hypot(b.x - a.x, b.y - a.y));
+      r.t = Math.min(1, r.t + (rollSpeed * dt) / span);
+      r.x = a.x + (b.x - a.x) * r.t;
+      r.y = a.y + (b.y - a.y) * r.t;
 
-        if (r.t >= 1) {
-          if (toId === GOAL_ID) {
-            if (r.visited.length >= stage.steps.length) {
-              // 통에 들어간 구슬은 통 안에 남는다. 이겼는데 구슬이 사라지면
-              // 무엇을 해냈는지가 화면에서 지워진다.
-              r.phase = 'done';
-              game.succeed('앞 단계가 모두 받쳐 준 순서였어요. 구슬이 완성 통까지 굴러갔어요!');
+      if (r.t >= 1) {
+        const arrived = r.leg; // 방금 도착한 칸의 자리번호
+        if (arrived >= SLOT_COUNT) {
+          r.phase = 'done';
+          game.succeed('앞 단계가 모두 받쳐 준 순서였어요. 구슬이 완성 통까지 굴러갔어요!');
+        } else {
+          const step = stage.steps[placed[arrived]];
+          const before = placed.slice(0, arrived).map((i) => stage.steps[i]?.id);
+          const missing = step.needs.filter((need) => !before.includes(need));
+          if (missing.length > 0) {
+            const blocker = stage.steps.find((s) => s.id === missing[0]);
+            const name = blocker?.label ?? '앞 단계';
+            if (blocker?.safety) {
+              stumble(`${name}를 아직 안 해서 구슬이 튕겨 나왔어요.`, arrived);
             } else {
-              stumble('아직 안 한 단계를 두고 통으로 갔어요. 다섯 발판을 모두 지나야 해요.', null);
+              stumble(`${name}가 아직 없어서 구슬이 떨어졌어요.`, arrived);
             }
           } else {
-            const step = stepById.get(toId);
-            const missing = step ? step.needs.filter((n) => !r.visited.includes(n)) : [];
-            if (missing.length > 0) {
-              const blocker = stepById.get(missing[0]);
-              const blocked = blocker?.label ?? '앞 단계';
-              if (blocker?.safety) {
-                stumble(`${blocked}를 아직 안 해서 구슬이 튕겨 나왔어요.`, toId);
-              } else {
-                stumble(`${blocked}가 아직 없어서 구슬이 떨어졌어요.`, toId);
-              }
-            } else {
-              r.visited = [...r.visited, toId];
-              r.leg += 1;
-              r.t = 0;
-            }
+            r.passed = arrived + 1;
+            r.leg += 1;
+            r.t = 0;
           }
         }
       }
     } else if (dt > 0 && r.phase === 'drop') {
       r.fall += 1400 * dt;
       r.y += r.fall * dt;
-      /* 판 밖으로 나가면 굴리기가 끝난 것이다. 선은 그대로 두고 고칠 수 있게 돌아간다.
-         지나간 자국(visited)은 지우되 멈춘 발판 표시는 남긴다 — 어디를 고쳐야 하는지가
+      /* 판 밖으로 나가면 굴리기가 끝난 것이다. 놓은 카드는 그대로 두고 고칠 수 있게
+         돌아간다. 지나온 자국은 지우되 멈춘 칸 표시는 남긴다 — 어디를 고쳐야 하는지가
          다음 손의 출발점이다. */
       if (r.y > WORLD_H + 60) {
         r.phase = 'edit';
-        r.visited = [];
+        r.passed = 0;
         r.leg = 0;
       }
     }
@@ -344,106 +296,109 @@ export default function StepOrderPathGame({ supportLevel }: MiniGameProps) {
     ctx.fillStyle = B.ground;
     ctx.fillRect(0, 0, WORLD_W, WORLD_H);
 
-    // 그은 선 — 지나간 구간은 파랑, 아직 안 간 구간은 회색이다.
-    const passed = new Set<string>();
-    for (let i = 0; i < r.leg; i += 1) passed.add(`${r.chain[i]}>${r.chain[i + 1]}`);
-    for (const [from, to] of Object.entries(links)) {
-      const a = centerOf(from);
-      const b = centerOf(to);
-      const done = passed.has(`${from}>${to}`);
+    // 출발 표시 — 글자는 동그라미 오른쪽에 둔다. 아래에 두면 1번 칸과 겹친다.
+    drawShape(ctx, 'circle', START.x, START.y, 20, {
+      fill: B.yellow, stroke: B.keyline, width: STROKE.base,
+    });
+    centerText(ctx, '출발', START.x + 46, START.y, 20, B.grey);
+
+    // 칸을 잇는 미끄럼틀 — 지나온 구간은 파랑, 아직 안 간 구간은 회색이다.
+    for (let i = 0; i <= SLOT_COUNT; i += 1) {
+      const a = pathPoint(i);
+      const b = pathPoint(i + 1);
+      const done = i < r.passed || (r.phase === 'done' && i <= SLOT_COUNT);
       ctx.strokeStyle = done ? B.blue : B.grey;
       ctx.lineWidth = done ? STROKE.heavy : STROKE.base;
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(b.x, b.y);
       ctx.stroke();
-      // 어느 쪽으로 가는 선인지 화살표 하나를 돌려 쓴다.
-      const angle = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
-      drawMark(ctx, 'arrow', (a.x + b.x) / 2, (a.y + b.y) / 2, 22, done ? B.blue : B.grey, angle);
     }
 
-    // 출발
-    drawShape(ctx, 'circle', START.x, START.y, START.r, {
-      fill: B.yellow, stroke: B.keyline, width: STROKE.base,
-    });
-    centerText(ctx, '출발', START.x, START.y, 20, B.keyline);
-
-    // 발판
-    for (const step of stage.steps) {
-      const slot = SLOTS[step.slot];
-      const done = r.visited.includes(step.id);
-      const stuck = r.stuck === step.id;
-      const chosen = selected === step.id;
-      drawBar(ctx, slot.x - PAD_W / 2, slot.y - PAD_H / 2, PAD_W, PAD_H, {
-        fill: done ? B.blue : B.surface,
-        stroke: stuck ? B.red : (chosen ? B.yellow : B.keyline),
-        width: stuck || chosen ? STROKE.heavy : STROKE.base,
+    // 칸 다섯
+    for (let i = 0; i < SLOT_COUNT; i += 1) {
+      const c = slotCenter(i);
+      const cardIndex = placed[i];
+      const step = cardIndex >= 0 ? stage.steps[cardIndex] : null;
+      const stuck = r.stuck === i;
+      const done = i < r.passed;
+      drawBar(ctx, c.x - SLOT_W / 2, c.y - SLOT_H / 2, SLOT_W, SLOT_H, {
+        fill: step ? (done ? B.blue : B.surface) : B.ground,
+        stroke: stuck ? B.red : (step ? B.keyline : B.grey),
+        width: stuck ? STROKE.heavy : STROKE.base,
       });
-      centerText(ctx, step.label, slot.x, slot.y + 4, 22, done ? B.ground : B.ink);
-      /* 안전 때문에 앞서야 하는 단계는 빨강 삼각을 단다. 색만으로 나누면 판 위에서
-         빨강과 파랑의 대비가 1.22라 구별되지 않는다. */
-      if (step.safety) {
-        drawShape(ctx, 'triangle', slot.x - PAD_W / 2 + 24, slot.y - PAD_H / 2 + 20, 13, {
-          fill: B.red, stroke: B.keyline, width: 1,
-        });
+      // 자리 번호는 늘 보인다. 몇 번째로 할 일인지가 칸의 정체다.
+      centerText(ctx, `${i + 1}`, c.x - SLOT_W / 2 + 24, c.y, 22, step && done ? B.ground : B.grey);
+      if (step) {
+        centerText(ctx, step.label, c.x + 18, c.y, 21, done ? B.ground : B.ink);
+        /* 안전 때문에 앞서야 하는 단계는 빨강 삼각을 단다. 색만으로 나누면 판 위에서
+           빨강과 파랑의 대비가 1.22라 구별되지 않는다. */
+        if (step.safety) {
+          drawShape(ctx, 'triangle', c.x + SLOT_W / 2 - 18, c.y - SLOT_H / 2 + 16, 11, {
+            fill: B.red, stroke: B.keyline, width: 1,
+          });
+        }
       }
-      if (stuck) drawMark(ctx, 'bang', slot.x + PAD_W / 2 - 24, slot.y - PAD_H / 2 + 20, 20, B.red);
+      if (stuck) drawMark(ctx, 'bang', c.x + SLOT_W / 2 - 18, c.y + SLOT_H / 2 - 16, 20, B.red);
     }
 
     // 완성 통
-    drawBar(ctx, GOAL.x, GOAL.y, GOAL.w, GOAL.h, {
+    drawBar(ctx, BIN.x, BIN.y, BIN.w, BIN.h, {
       fill: B.surface, stroke: B.blue, width: STROKE.heavy,
     });
-    drawShape(ctx, 'square', GOAL.x + GOAL.w / 2, GOAL.y + 40, 22, {
+    drawShape(ctx, 'square', BIN.x + BIN.w / 2, BIN.y + 30, 20, {
       fill: B.blue, stroke: B.keyline, width: 1,
     });
-    centerText(ctx, '완성', GOAL.x + GOAL.w / 2, GOAL.y + GOAL.h - 34, 20, B.ink);
+    centerText(ctx, '완성', BIN.x + BIN.w / 2, BIN.y + BIN.h - 24, 20, B.ink);
+
+    // 아직 안 놓은 카드 — 놓인 카드는 자리를 비워 둔다.
+    for (let i = 0; i < stage.steps.length; i += 1) {
+      if (placed.includes(i)) continue;
+      const c = trayCenter(i);
+      const step = stage.steps[i];
+      drawBar(ctx, c.x - TRAY_W / 2, c.y - TRAY_H / 2, TRAY_W, TRAY_H, {
+        fill: B.surface, stroke: B.yellow, width: STROKE.base,
+      });
+      centerText(ctx, step.label, c.x, c.y, 21, B.ink);
+      if (step.safety) {
+        drawShape(ctx, 'triangle', c.x + TRAY_W / 2 - 18, c.y - TRAY_H / 2 + 15, 11, {
+          fill: B.red, stroke: B.keyline, width: 1,
+        });
+      }
+    }
 
     // 구슬
     if (r.phase !== 'edit') {
-      drawShape(ctx, 'circle', r.x, r.y, 16, { fill: B.yellow, stroke: B.keyline, width: STROKE.hair });
+      drawShape(ctx, 'circle', r.x, r.y, 16, {
+        fill: B.yellow, stroke: B.keyline, width: STROKE.hair,
+      });
     }
   };
 
-  const handlePointer = (x: number, y: number) => {
+  const handleTap = (x: number, y: number) => {
     if (!game.playing) return;
-    const hit = nodeAt(x, y);
-    if (!hit) {
-      setSelected(null);
-      return;
-    }
-    if (selected === null) {
-      if (hit.id === GOAL_ID) {
-        setNote('완성 통은 마지막에 이어요. 먼저 발판을 고르세요.');
+    for (let i = 0; i < SLOT_COUNT; i += 1) {
+      const c = slotCenter(i);
+      if (Math.abs(x - c.x) <= SLOT_W / 2 && Math.abs(y - c.y) <= SLOT_H / 2) {
+        takeBack(i);
         return;
       }
-      setSelected(hit.id);
-      setNote('이어질 다음 발판을 누르세요.');
-      return;
     }
-    if (selected === hit.id) {
-      setSelected(null);
-      return;
+    for (let i = 0; i < stage.steps.length; i += 1) {
+      if (slotsRef.current.includes(i)) continue;
+      const c = trayCenter(i);
+      if (Math.abs(x - c.x) <= TRAY_W / 2 && Math.abs(y - c.y) <= TRAY_H / 2) {
+        placeCard(i);
+        return;
+      }
     }
-    if (hit.id === START_ID) {
-      setNote('출발로는 이을 수 없어요. 출발에서 나가는 선만 있어요.');
-      return;
-    }
-    link(selected, hit.id);
-    setSelected(null);
-    // 고치기 시작하면 멈췄던 자리 표시를 거둔다. 고친 뒤에도 붉게 남아 있으면
-    // 아직 틀린 자리인지 지난 자국인지 알 수 없다.
-    runner.current.stuck = null;
-    setNote('이었어요. 다 이으면 굴려 보세요.');
   };
-
-  const linkedCount = Object.keys(links).length;
 
   return (
     <MiniGameFrame
       badge="순서 미끄럼틀"
-      instruction="발판을 두 번 눌러 앞뒤로 이어 보세요. 다 이으면 굴려 보기를 눌러 구슬이 끝까지 가는지 봅니다. 빨강 삼각이 붙은 발판은 안전 때문에 먼저 해야 합니다."
-      progress={{ label: '이은 선', value: linkedCount, max: stage.steps.length + 1 }}
+      instruction="아래 카드를 눌러 먼저 할 일부터 1번 칸에 놓아 보세요. 다섯 칸을 채우면 굴려 보기를 눌러 구슬이 끝까지 가는지 봅니다. 빨강 삼각이 붙은 일은 안전 때문에 먼저 해야 합니다."
+      progress={{ label: '놓은 단계', value: placedCount, max: SLOT_COUNT }}
       hud={<GameHud lives={runsLeft} maxLives={maxRuns} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
       activeStageIndex={game.stageIndex}
@@ -464,12 +419,6 @@ export default function StepOrderPathGame({ supportLevel }: MiniGameProps) {
             label="굴려 보기"
             variant="primary"
           />
-          <MiniGameButton
-            onClick={undoLink}
-            disabled={!game.playing || order.length === 0}
-            mark="cross"
-            label="선 지우기"
-          />
           <MiniGameButton onClick={game.retry} mark="retry" label="처음부터" />
         </>
       }
@@ -482,9 +431,9 @@ export default function StepOrderPathGame({ supportLevel }: MiniGameProps) {
             height={WORLD_H}
             onFrame={frame}
             onPointer={(pointer) => {
-              if (pointer.phase === 'down') handlePointer(pointer.x, pointer.y);
+              if (pointer.phase === 'down') handleTap(pointer.x, pointer.y);
             }}
-            ariaLabel={`설치 단계를 순서대로 잇는 놀이. 이은 선 ${linkedCount}개, 남은 실행 ${runsLeft}번.`}
+            ariaLabel={`설치 순서를 놓는 놀이. 놓은 단계 ${placedCount}개, 남은 실행 ${runsLeft}번.`}
           />
         </div>
       </div>
