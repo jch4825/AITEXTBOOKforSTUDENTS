@@ -6,7 +6,7 @@ export const M3_L6_STUDIO: StudioDefinition = {
     lessonId: 'm3-l6',
     moduleId: 'm3',
     title: '계산 결과는 직접 확인하기',
-    subtitle: '간식 금액을 먼저 예상하고, 계산기로 두드려 틀린 부분을 찾아봐요.',
+    subtitle: '간식 금액을 먼저 예상하고, 계산기로 두드려 틀린 부분을 찾아 봐요.',
     format: 'B',
     visualNovel: {
       title: '간식 합계가 두 가지로 나왔어요',
@@ -156,7 +156,7 @@ export const M3_L6_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '간식비 합계는 5,600원일까요, 6,600원일까요',
-      description: '간식 가격표와 수량, AI 풀이, 계산기 결과를 비교해 최종 합계를 판단합니다.',
+      description: '전시회 손님들에게 줄 음료와 과자 값을 계산하던 중, 아이미가 풀이 단계마다 숫자를 다르게 적어 합계가 5,600원인지 6,600원인지 헷갈리게 되었습니다. 계산기로 한 줄씩 두드려 틀린 줄을 찾아봅시다.',
       facts: [
         '음료는 1,500원이고 두 개가 필요합니다.',
         '과자는 1,200원이고 세 개가 필요합니다.',

@@ -157,7 +157,7 @@ export const M3_L3_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '이해하기 쉬워졌지만 중요한 재료가 사라졌어요',
-      description: '광합성의 어려운 원문과 아이미의 첫 쉬운 비유를 비교해 꼭 남을 사실을 정합니다.',
+      description: '식물이 햇빛을 받아 양분을 만드는 광합성 과정을 아이미에게 쉽게 설명해 달라고 했더니, “식물이 햇빛을 먹는다”라며 물과 이산화탄소 같은 중요한 핵심 재료를 쏙 빼놓았습니다.',
       facts: [
         '원문에는 햇빛, 물, 이산화탄소, 양분이 있습니다.',
         '첫 쉬운 설명은 “햇빛을 먹고 밥을 만든다”입니다.',
@@ -194,7 +194,7 @@ export const M3_L3_STUDIO: StudioDefinition = {
     artifact: {
       kind: 'repair-card',
       title: '정확성을 지킨 쉬운 설명 카드',
-      prompt: '원문 핵심, 첫 비유의 누락, 고친 쉬운 설명, 내 확인 문장을 한 카드에 적어 보세요.',
+      prompt: '원문의 핵심 사실, 첫 비유에서 빠진 내용, 고친 쉬운 설명, 내가 확인한 문장을 한 카드에 적어 보세요.',
     },
     transfer: {
       title: '물의 순환을 쉽게 설명하기',

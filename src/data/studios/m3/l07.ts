@@ -71,7 +71,7 @@ export const M3_L7_STUDIO: StudioDefinition = {
         },
         {
           id: 'm3-l7-ai-summary',
-          label: '누락 근거 찾기',
+          label: '빠진 내용 찾기',
           imageSrc: '/lessons/story/m3/m3-l7-scene-03.webp',
           alt: '아이미의 세 문장 요약을 보고 윤아가 10분 전 도착 이야기가 어디 갔는지 묻는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,
@@ -157,7 +157,7 @@ export const M3_L7_STUDIO: StudioDefinition = {
     },
     encounter: {
       title: '세 문장으로 요약되었지만 중요한 준비 시간이 빠져 있어요',
-      description: '방문자용 긴 설명문에서 핵심을 먼저 고르고 AI 요약을 원문 근거와 비교합니다.',
+      description: '배움 전시회 방문자를 위한 여덟 문장의 긴 설명문이 있습니다. 꼭 필요한 핵심을 먼저 표시해 두고, 아이미의 세 문장 요약에서 빠진 준비 시간 정보를 찾아 다시 채워 봅시다.',
       facts: [
         '전시는 2층 배움실에서 열립니다.',
         '방문자는 질문 만들기와 그림 설명 체험을 합니다.',
@@ -195,7 +195,7 @@ export const M3_L7_STUDIO: StudioDefinition = {
     artifact: {
       kind: 'repair-card',
       title: '근거가 연결된 3문장 요약',
-      prompt: '핵심 세 가지, AI 요약의 누락, 원문 근거 번호, 고친 세 문장을 정리해 보세요.',
+      prompt: '핵심 세 가지, AI 요약에서 빠진 내용, 원문 근거 번호, 고친 세 문장을 정리해 보세요.',
     },
     transfer: {
       title: '학급 안내문 요약하기',
