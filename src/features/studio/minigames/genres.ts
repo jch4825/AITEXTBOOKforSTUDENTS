@@ -82,7 +82,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm5-l3', genre: 6, genreName: '경로 그리기', badge: '순서 미끄럼틀', component: 'StepOrderPathGame' },
   { lessonId: 'm5-l4', genre: 2, genreName: '무한 계단', badge: '먼저 할 일 계단', component: 'PriorityStairsGame' },
   { lessonId: 'm5-l5', genre: 21, genreName: '정돈 클리닝', badge: '필요한 만큼만 긁기', component: 'HintScratchGame' },
-  { lessonId: 'm5-l6', genre: 20, genreName: '지뢰 찾기', badge: '보낼 단서 칸 열기', component: 'ClueGridGame' },
+  { lessonId: 'm5-l6', genre: 24, genreName: '탄막 피하기', badge: '표지 모아 보내기', component: 'ClueCarryDodgeGame' },
   { lessonId: 'm5-l7', genre: 7, genreName: '중력 반전', badge: '한 단계씩 뒤집기', component: 'StepFlipGame' },
   { lessonId: 'm5-l8', genre: 12, genreName: '틀린 그림 찾기', badge: '조건표와 대조', component: 'ResultCheckDiffGame' },
   { lessonId: 'm5-l9', genre: 38, genreName: '오토배틀러', badge: '두 방법 시험 경주', component: 'PlanRaceSimGame' },
