@@ -160,6 +160,19 @@ function lessonPhrase(source: WorksheetLessonSource, stage: CanonicalStage | und
   );
 }
 
+/**
+ * "생활에서 써요" 칸의 물음.
+ *
+ * 상황 설명은 대개 이미 완성된 문장이다(52개 차시 가운데 34개는 물음표, 18개는 마침표로 끝난다).
+ * 예전에는 그 뒤에 "에 배운 내용을…"을 바로 붙여 "어떻게 하겠어요?에 배운 내용을 어떻게 써 볼까요?"
+ * 같은 문장이 인쇄됐다. 끝맺음을 보고 이어 쓴다. 이미 물음이면 또 묻지 않는다.
+ */
+function transferQuestion(topic: string): string {
+  if (/[?？]$/.test(topic)) return `${topic} 오늘 배운 내용을 떠올려 답해 보세요.`;
+  if (/[.!。]$/.test(topic)) return `${topic} 오늘 배운 내용을 이 상황에 어떻게 써 볼까요?`;
+  return `${topic} 상황에서 오늘 배운 내용을 어떻게 써 볼까요?`;
+}
+
 function lessonStages(source: WorksheetLessonSource): CanonicalStage[] {
   return source.canonical?.stages ?? [];
 }
@@ -215,12 +228,12 @@ function starterBlocksForLevel(level: WorksheetLevel, source: WorksheetLessonSou
     source.studio?.transfer.prompt
       || source.studio?.transfer.description
       || source.portfolio?.transferPrompt
-      || stagePrompt(secondOptionStage, `알맞은 카드를 ${phrase}와 연결해 보세요.`),
+      || stagePrompt(secondOptionStage, `알맞은 카드를 골라 붙여 보세요: ${phrase}`),
   );
   const transferInstruction = cleanText(
     source.studio?.transfer.prompt
       || source.portfolio?.transferPrompt
-      || `${transferTopic}에 배운 내용을 어떻게 써 볼까요?`,
+      || transferQuestion(transferTopic),
   );
 
   if (level === 'high') {
