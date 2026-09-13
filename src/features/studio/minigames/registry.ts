@@ -75,9 +75,9 @@ export const MINI_GAME_REGISTRY: Record<string, ReturnType<typeof lazy>> = {
   'm6-l4': lazy(() => import('./m6/BusBoardTimingGame')),
   'm6-l5': lazy(() => import('./m6/WeatherCrossGame')),
   'm6-l6': lazy(() => import('./m6/CookStepBreakGame')),
-  'm6-l7': lazy(() => import('./m6/DayGardenGame')),
+  'm6-l7': lazy(() => import('./m6/DayPlanJumpGame')),
   'm6-l8': lazy(() => import('./m6/SymptomCardGame')),
-  'm6-l9': lazy(() => import('./m6/ExpressionDeskGame')),
+  'm6-l9': lazy(() => import('./m6/ExpressionPushGame')),
   'm6-l10': lazy(() => import('./m6/JobDayRigGame')),
   'm6-l11': lazy(() => import('./m6/TwoViewIntroGame')),
 };
