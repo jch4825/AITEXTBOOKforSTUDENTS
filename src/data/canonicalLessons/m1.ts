@@ -215,8 +215,6 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm1-l2-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l2-story-01.webp', alt: '세 도구 관찰', required: true, purpose: '스토리 컷 1' },
-      { id: 'm1-l2-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l2-story-02.webp', alt: '기능 표 완성', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '기기 전체가 아니라 입력되는 정보와 동작 방식을 보면 AI 기능인지 알 수 있습니다.',
   },
@@ -298,7 +296,6 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm1-l3-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l3-story-01.webp', alt: '문장을 만드는 아이미', required: true, purpose: '스토리 컷 1' },
       { id: 'm1-l3-story-02', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l3-story-02.webp', alt: '공지와 답 대조', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: 'AI는 그럴듯한 문장을 이어 만들지만, 중요한 날짜와 사실은 사람이 직접 확인해야 합니다.',
@@ -504,8 +501,6 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm1-l5-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l5-story-01.webp', alt: '녹음하는 진우', required: true, purpose: '스토리 컷 1' },
-      { id: 'm1-l5-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l5-story-02.webp', alt: '여러 입력 방법 활용', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '음성 인식은 주변 소음의 영향을 받으므로 필요할 때 글자나 그림 카드 입력을 함께 사용합니다.',
   },
@@ -590,8 +585,6 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm1-l6-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l6-story-01.webp', alt: '치우친 카드 묶음', required: true, purpose: '스토리 컷 1' },
-      { id: 'm1-l6-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l6-story-02.webp', alt: '보완된 카드 묶음', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: 'AI는 배우는 자료의 다양성에 따라 결과가 달라지므로 골고루 다양한 자료가 필요합니다.',
   },
@@ -671,8 +664,6 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm1-l7-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l7-story-01.webp', alt: '긴 안내문 확인', required: true, purpose: '스토리 컷 1' },
-      { id: 'm1-l7-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l7-story-02.webp', alt: '빠진 장소 발견', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: 'AI의 요약과 번역은 매우 빠르지만 중요한 사실이 빠질 수 있으므로 원문 확인이 필요합니다.',
   },
@@ -771,8 +762,6 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm1-l8-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l8-story-01.webp', alt: '여러 부탁 카드', required: true, purpose: '스토리 컷 1' },
-      { id: 'm1-l8-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l8-story-02.webp', alt: '사실과 판단 구분표', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '사실은 근거로 확인하고, AI의 판단은 사람이 검토하며, 중요한 최종 결정은 사람이 책임집니다.',
   },
@@ -859,8 +848,6 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm1-l9-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l9-story-01.webp', alt: '세 작업 살펴보기', required: true, purpose: '스토리 컷 1' },
-      { id: 'm1-l9-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m1-l9-story-02.webp', alt: '도구 조합 보드', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '원하는 결과물과 필요한 입력 종류를 보면 내 작업에 꼭 맞는 AI 도구를 고를 수 있습니다.',
   },

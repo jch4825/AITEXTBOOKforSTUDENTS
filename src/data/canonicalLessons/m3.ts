@@ -195,8 +195,6 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm3-l2-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l2-story-01.webp', alt: '모르는 낱말 선택', required: true, purpose: '스토리 컷 1' },
-      { id: 'm3-l2-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l2-story-02.webp', alt: '완성된 낱말 카드', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: 'AI 설명과 국어사전을 함께 대조하면 모르는 낱말의 정확한 뜻을 내 말로 이해할 수 있습니다.',
   },
@@ -276,8 +274,6 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm3-l3-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l3-story-01.webp', alt: '복잡한 설명 앞 고민', required: true, purpose: '스토리 컷 1' },
-      { id: 'm3-l3-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l3-story-02.webp', alt: '핵심 지킨 설명 완성', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '쉬운 설명은 핵심 사실을 빼는 것이 아니라, 중요한 사실을 지키며 풀어 쓰는 것입니다.',
   },
@@ -359,8 +355,6 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm3-l4-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l4-story-01.webp', alt: '상황 예문 비교', required: true, purpose: '스토리 컷 1' },
-      { id: 'm3-l4-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l4-story-02.webp', alt: '전시 카드에 내 문장 붙이기', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '낱말은 단순 뜻뿐만 아니라 문맥에 어울리는 문장으로 써봐야 내 지식이 됩니다.',
   },
@@ -566,8 +560,6 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm3-l6-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l6-story-01.webp', alt: '가격표와 계산기 비교', required: true, purpose: '스토리 컷 1' },
-      { id: 'm3-l6-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l6-story-02.webp', alt: '오류 풀이 수정', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '정확한 수치 계산은 계산기를 기본 도구로 사용하고 AI 풀이는 대조 확인합니다.',
   },
@@ -649,8 +641,6 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm3-l7-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l7-story-01.webp', alt: '긴 글 앞 고민', required: true, purpose: '스토리 컷 1' },
-      { id: 'm3-l7-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l7-story-02.webp', alt: '세 문장 안내판 완성', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '좋은 요약은 세부 내용은 줄이고 주제와 가장 중요한 정보 3가지를 정확히 남기는 것입니다.',
   },
@@ -732,8 +722,6 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm3-l8-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l8-story-01.webp', alt: '정답이 먼저 보임', required: true, purpose: '스토리 컷 1' },
-      { id: 'm3-l8-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l8-story-02.webp', alt: '완성된 퀴즈 부스', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '퀴즈는 정답을 가리고 스스로 먼저 생각해본 뒤 이유를 확인할 때 공부가 가장 잘 됩니다.',
   },
@@ -921,8 +909,6 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm3-l10-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l10-story-01.webp', alt: '기록 썸네일 선택', required: true, purpose: '스토리 컷 1' },
-      { id: 'm3-l10-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l10-story-02.webp', alt: '자기 말로 설명 복습', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '복습은 요약을 읽기만 하는 것이 아니라, 보지 않고 내 말로 직접 설명해볼 때 진짜 공부가 됩니다.',
   },
@@ -1011,9 +997,6 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm3-l11-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l11-story-01.webp', alt: '새 친구의 질문', required: true, purpose: '스토리 컷 1' },
-      { id: 'm3-l11-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l11-story-02.webp', alt: '도구 서랍 정리', required: true, purpose: '스토리 컷 2' },
-      { id: 'm3-l11-story-03', kind: 'story', renderAs: 'image', src: '/lessons/extra/m3-l11-story-03.webp', alt: '도구함 전시 발표', required: true, purpose: '스토리 컷 3' },
     ],
     wrapUp: 'AI는 공부를 도와주는 훌륭한 도우미이지만, 진짜 지식과 생각의 주인은 언제나 나 자신입니다.',
   },

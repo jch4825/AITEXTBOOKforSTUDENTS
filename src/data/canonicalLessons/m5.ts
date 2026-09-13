@@ -200,8 +200,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l2-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l5-story-01.webp', alt: '출처 지도', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l2-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l2-story-02.webp', alt: '출처 스티커 붙이기', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '조사할 때는 한 가지 정보원에 의존하지 않고 공식 문서와 직접 관찰을 함께 교차 확인해야 합니다.',
   },
@@ -282,8 +280,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l3-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l3-story-01.webp', alt: '하이라이트 치기', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l3-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l3-story-02.webp', alt: '조사 기록표 작성', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '자료 정리는 전체 통복사가 아닌, 핵심 사실을 발췌해 출처와 함께 남기는 과정입니다.',
   },
@@ -363,8 +359,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l4-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l4-story-01.webp', alt: '두 자료 어긋남', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l4-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l4-story-02.webp', alt: '공식 안내판 확인', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '조사 자료 간 차이가 있을 때는 작성 주체와 최신성을 따져 공식 원본을 기준으로 잡아야 합니다.',
   },
@@ -450,8 +444,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l5-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l5-story-01.webp', alt: '사실과 의견 조각', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l5-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l5-story-02.webp', alt: '완성된 결론 단락', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '좋은 보고서는 조사된 객관적 사실 위에 내 생각과 대안 주장을 더해 완성해야 합니다.',
   },
@@ -631,8 +623,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l7-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l7-story-01.webp', alt: '복잡 문장 앞 고민', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l7-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l7-story-02.webp', alt: '다듬은 문장판', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '보고서 문장은 한 문장에 하나의 생각을 담아 짧고 명확하게 고쳐 써야 전달력이 높아집니다.',
   },
@@ -719,8 +709,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l8-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l8-story-01.webp', alt: '발표 패널 조립', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l8-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l8-story-02.webp', alt: '완성 레이아웃', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '발표 자료는 듣는 이가 멀리서도 한눈에 알아볼 수 있도록 요약, 표, 그림을 보기 좋게 정돈해야 합니다.',
   },
@@ -802,8 +790,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l9-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l9-story-01.webp', alt: '출처 스티커 붙이기', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l9-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l9-story-02.webp', alt: '출처 완성 보고서', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '참고한 자료의 출처와 AI 활용 범위를 솔직하게 밝히는 것이 탐구의 기본 윤리입니다.',
   },
@@ -884,8 +870,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l10-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l10-story-01.webp', alt: '친구 메모 읽기', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l10-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l10-story-02.webp', alt: '표를 반영한 개선본', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '친구 피드백은 내 보고서를 더욱 이해하기 쉽게 만들어 주는 소중한 도움입니다.',
   },
@@ -1077,9 +1061,6 @@ export const M5_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm5-l12-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l12-story-01.webp', alt: '발표 무대 등장', required: true, purpose: '스토리 컷 1' },
-      { id: 'm5-l12-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l12-story-02.webp', alt: '자신있게 근거 답변', required: true, purpose: '스토리 컷 2' },
-      { id: 'm5-l12-story-03', kind: 'story', renderAs: 'image', src: '/lessons/extra/m5-l12-story-03.webp', alt: '칭찬 스티커 가득한 보드', required: true, purpose: '스토리 컷 3' },
     ],
     wrapUp: '스스로 조사하고 검증한 지식을 나누는 발표회는 진짜 배움을 완성하는 시간입니다.',
   },

@@ -7,7 +7,7 @@
 - `public/lessons/story/m1` ~ `m6`: 스튜디오 이야기 248장
 - `public/lessons/story/module-close`: 단원 마무리 이야기 18장
 - `public/lessons/remodel`: 현재 차시 활동에서 사용하는 장면·아이콘
-- `public/lessons/extra`: remodel에서 옮긴 보조 이야기 컷(모듈 폴더 없이 한 폴더)
+- `public/lessons/extra`: remodel에서 옮긴 이야기 컷. 코드 어디에서도 참조하지 않는다
 - `public/characters`: 캐릭터 SVG
 - `public/images`: 활동에서 직접 참조하는 보조 이미지
 

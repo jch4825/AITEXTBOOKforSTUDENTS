@@ -208,8 +208,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l2-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l2-story-01.webp', alt: '3단계 동선 배치', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l2-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l2-story-02.webp', alt: '안내 표지판 세우기', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '체험 순서와 분명한 안내 표지판이 있으면 방문자가 쉽고 안전하게 부스에 참여할 수 있습니다.',
   },
@@ -291,8 +289,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l3-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l3-story-01.webp', alt: '대표작 고르기', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l3-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l3-story-02.webp', alt: '성장 게시판 붙이기', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '대표 결과물 전시판은 완성된 모습뿐 아니라 내가 어떻게 배우고 성장했는지 보여 주는 자리입니다.',
   },
@@ -376,8 +372,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l4-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l4-story-01.webp', alt: '타이머 연습', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l4-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l4-story-02.webp', alt: '4단계 대본 완성', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '1분 설명 대본은 주제, AI 도움, 사람의 확인, 배운 점 4단계를 명확히 담아야 알차게 전달됩니다.',
   },
@@ -460,8 +454,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l5-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l5-story-01.webp', alt: '수칙 문장 정하기', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l5-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l5-story-02.webp', alt: '안전 약속판 완성', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '안전 수칙은 방문자와 진행자 모두가 기분 좋고 안전하게 전시회를 즐기기 위한 약속입니다.',
   },
@@ -558,10 +550,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l6-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l6-story-01.webp', alt: '역할 교대 리허설', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l6-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l6-story-02.webp', alt: '설명 지연 발생', required: true, purpose: '스토리 컷 2' },
-      { id: 'm6-l6-story-03', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l6-story-03.webp', alt: '대본 3문장 단축', required: true, purpose: '스토리 컷 3' },
-      { id: 'm6-l6-story-04', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l6-story-04.webp', alt: '원활해진 리허설 성공', required: true, purpose: '스토리 컷 4' },
     ],
     wrapUp: '리허설은 실제 방문자를 맞이하기 전 설명 시간과 동선에 막힘이 없는지 점검하는 필수 과정입니다.',
   },
@@ -644,8 +632,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l7-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l7-story-01.webp', alt: '질문 카드 들기', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l7-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l7-story-02.webp', alt: '근거 답변 카드', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '방문자 예상 질문 대비는 내가 조사한 확인 근거와 출처를 다시금 점검해 신뢰도를 높여 줍니다.',
   },
@@ -732,8 +718,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l8-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l8-story-01.webp', alt: '테이블 요소 배치', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l8-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l8-story-02.webp', alt: '완성된 부스 레이아웃', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '부스 배치는 방문자의 시선과 이동 동선을 고려해 한눈에 들어오도록 정돈해야 합니다.',
   },
@@ -815,8 +799,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l9-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l9-story-01.webp', alt: '방명록 디자인', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l9-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l9-story-02.webp', alt: '방명록 거치대 세팅', required: true, purpose: '스토리 컷 2' },
     ],
     wrapUp: '방명록은 전시회 배움을 확인하고 다음 성장을 이끄는 소중한 피드백 창구입니다.',
   },
@@ -1103,9 +1085,6 @@ export const M6_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       },
     },
     assets: [
-      { id: 'm6-l12-story-01', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l12-story-01.webp', alt: '포트폴리오 북 완성', required: true, purpose: '스토리 컷 1' },
-      { id: 'm6-l12-story-02', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l12-story-02.webp', alt: '수료증 전달', required: true, purpose: '스토리 컷 2' },
-      { id: 'm6-l12-story-03', kind: 'story', renderAs: 'image', src: '/lessons/extra/m6-l12-story-03.webp', alt: '기념사진 폭죽 축하', required: true, purpose: '스토리 컷 3' },
     ],
     wrapUp: '68차시의 배움을 바탕으로 스스로 생각하고 검증하며 성장하는 주체적인 디지털 리더가 되었습니다.',
   },
