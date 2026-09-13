@@ -225,7 +225,7 @@ function checkModule(label, config) {
       throw new Error('M5 must not reuse retired lesson images');
     }
     requireToken(studio, '실제 조리가 아닌', 'M5 card-only food safety wording missing');
-    requireToken(studio, '다른 도구로 한 번 더 확인', 'M5 independent verification wording missing');
+    requireToken(studio, '독립적으로 검증', 'M5 independent verification wording missing');
   }
   if (label === 'M6') {
     if ((studio.match(/imageSrc: '\/lessons\/story\/m6\/m6-l\d+-scene-\d{2}\.webp'/g) ?? []).length !== 44) {
@@ -234,7 +234,7 @@ function checkModule(label, config) {
     if (studio.includes('/AITEXTBOOKforSTUDENTS/lessons/m6-l')) {
       throw new Error('M6 must not reuse retired lesson images');
     }
-    requireToken(studio, '수업용 연습 화면', 'M6 transit simulation disclosure missing');
+    requireToken(studio, '교실용 연습 자료', 'M6 transit simulation disclosure missing');
     requireToken(studio, '실시간 길 안내', 'M6 live-route disclaimer missing');
   }
 
