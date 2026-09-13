@@ -7,7 +7,7 @@
 - `public/lessons/story/m1` ~ `m6`: 스튜디오 이야기 248장
 - `public/lessons/story/module-close`: 단원 마무리 이야기 18장
 - `public/lessons/remodel`: 현재 차시 활동에서 사용하는 장면·아이콘
-- `public/lessons/extra`: remodel에서 옮긴 이야기 컷. 코드 어디에서도 참조하지 않는다
+- `public/lessons/extra`: remodel에서 옮긴 옛 이야기 컷. 22장만 교사 학습지 상 수준 셋째 칸의 보조 그림으로 쓴다(`src/features/teacher/worksheet/extraIllustrations.ts`). 나머지는 참조하지 않는다
 - `public/characters`: 캐릭터 SVG
 - `public/images`: 활동에서 직접 참조하는 보조 이미지
 

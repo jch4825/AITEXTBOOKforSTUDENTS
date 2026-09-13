@@ -106,7 +106,7 @@ body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .worksheet-image img { display: block; width: 100%; max-height: 52mm; object-fit: contain; border: 1px solid #dedbe3; border-radius: 3mm; }
 .worksheet-image figcaption { margin-top: 1.5mm; color: #777; font-size: 8pt; text-align: center; }
 .worksheet-reference-image { width: min(46mm, 100%); margin: 0 auto 2mm; }
-.worksheet-reference-image img { display: block; width: 100%; max-height: 20mm; object-fit: cover; border: 1px solid #dedbe3; border-radius: 3mm; }
+.worksheet-reference-image img { display: block; width: 100%; max-height: 26mm; object-fit: contain; border: 1px solid #dedbe3; border-radius: 3mm; }
 .worksheet-reference-image figcaption { margin-top: 1.5mm; color: #777; font-size: 7pt; text-align: center; }
 .worksheet-block-divider { padding: 0; border: 0; }
 .worksheet-block-divider hr { border: 0; border-top: 1px dashed #aaa39b; }
@@ -115,7 +115,7 @@ body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .worksheet-page.is-compact .worksheet-block { margin-bottom: 2mm; padding: 2.5mm; }
 .worksheet-page.is-compact .worksheet-answer-lines { gap: 2mm; }
 .worksheet-page.is-compact .worksheet-options li { padding: 1.5mm 2.5mm; }
-.worksheet-page.is-compact .worksheet-reference-image img { max-height: 16mm; }
+.worksheet-page.is-compact .worksheet-reference-image img { max-height: 20mm; }
 .worksheet-page.is-compact-2 .worksheet-block { margin-bottom: 1.5mm; padding: 2mm; }
 .worksheet-page.is-compact-2 .worksheet-meta span { font-size: 14pt; }
 .worksheet-page.is-compact-2 .worksheet-paste-targets span { min-height: 11mm; }

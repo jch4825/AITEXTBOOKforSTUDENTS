@@ -10,6 +10,7 @@ import type { StudioDefinition } from '../../studio/types';
 import type { LessonId } from '../../../types';
 import { themeFor } from '../../../utils/moduleThemes';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
+import { worksheetExtraIllustration } from './extraIllustrations';
 import { worksheetPagesForVariant, worksheetVariantWithPages, type LessonWorksheet, type WorksheetBlock, type WorksheetBlockKind, type WorksheetIllustration, type WorksheetLevel, type WorksheetVariant } from './types';
 
 const LEVELS: Record<WorksheetLevel, Omit<WorksheetVariant, 'blocks'>> = {
@@ -139,6 +140,11 @@ interface WorksheetLessonSource {
   title: string;
   objective: string;
   illustration?: WorksheetIllustration;
+  /**
+   * 상 수준 셋째 칸(생활에서 써요)에 넣는 보조 그림. 첫 칸의 이야기 첫 장면과 다른 컷이다.
+   * 중·하 수준의 셋째 칸은 오려 붙이는 카드 칸이라 그림까지 넣으면 A4 기준선을 넘는다.
+   */
+  extraIllustration?: WorksheetIllustration;
   studio?: StudioDefinition;
   portfolio?: ModulePortfolioDefinition;
   canonical?: CanonicalLessonDesign;
@@ -244,6 +250,7 @@ function starterBlocksForLevel(level: WorksheetLevel, source: WorksheetLessonSou
         instruction: transferInstruction,
         lineCount: 1,
         fontSize: 15,
+        image: source.extraIllustration,
       },
     ];
   }
@@ -331,10 +338,15 @@ function collectLessonSource(lessonId: LessonId): WorksheetLessonSource {
       (canonical?.assets ?? []).find(asset => asset.kind === 'story' && asset.renderAs === 'image' && asset.src)
         ?? (canonical?.assets ?? []).find(asset => asset.renderAs === 'image' && asset.src),
     );
+  const extra = worksheetExtraIllustration(lessonId);
+  const extraIllustration = extra
+    ? { src: publicAssetUrl(extra.src), alt: cleanText(extra.alt), caption: cleanText(extra.caption) }
+    : undefined;
   return {
     title,
     objective,
     illustration,
+    extraIllustration,
     studio,
     portfolio,
     canonical: studio || portfolio ? undefined : canonical,
