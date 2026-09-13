@@ -99,7 +99,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm6-l7', genre: 1, genreName: '횡스크롤 점프맵', badge: '하루 길 달리기', component: 'DayPlanJumpGame' },
   { lessonId: 'm6-l8', genre: 17, genreName: '분류 매치', badge: '아픈 곳 카드 채우기', component: 'SymptomCardGame' },
   { lessonId: 'm6-l9', genre: 33, genreName: '밀쳐내기', badge: '말 건네 보내기', component: 'ExpressionPushGame' },
-  { lessonId: 'm6-l10', genre: 48, genreName: '조립 개조', badge: '직업 하루 조립', component: 'JobDayRigGame' },
+  { lessonId: 'm6-l10', genre: 42, genreName: '카드 짝맞추기', badge: '세 줄 카드 맞추기', component: 'JobCompareCardGame' },
   { lessonId: 'm6-l11', genre: 22, genreName: '시점 조작 퍼즐', badge: '두 방향 소개', component: 'TwoViewIntroGame' },
 ];
 

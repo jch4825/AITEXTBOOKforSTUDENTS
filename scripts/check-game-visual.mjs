@@ -92,7 +92,7 @@ const MIGRATED = new Set([
   'm6/CoinMergeGame.tsx',
   'm6/DayPlanJumpGame.tsx',
   'm6/ExpressionPushGame.tsx',
-  'm6/JobDayRigGame.tsx',
+  'm6/JobCompareCardGame.tsx',
   'm6/MapSignMazeGame.tsx',
   'm6/CookStepBreakGame.tsx',
   'm6/ShoppingStockGame.tsx',
