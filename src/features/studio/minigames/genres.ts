@@ -85,7 +85,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm5-l6', genre: 24, genreName: '탄막 피하기', badge: '표지 모아 보내기', component: 'ClueCarryDodgeGame' },
   { lessonId: 'm5-l7', genre: 7, genreName: '중력 반전', badge: '한 단계씩 뒤집기', component: 'StepFlipGame' },
   { lessonId: 'm5-l8', genre: 12, genreName: '틀린 그림 찾기', badge: '조건표와 대조', component: 'ResultCheckDiffGame' },
-  { lessonId: 'm5-l9', genre: 38, genreName: '오토배틀러', badge: '두 방법 시험 경주', component: 'PlanRaceSimGame' },
+  { lessonId: 'm5-l9', genre: 31, genreName: '스티어링', badge: '세 갈래 길 달리기', component: 'ThreeWayDriveGame' },
   { lessonId: 'm5-l10', genre: 16, genreName: '파이프 연결', badge: '새는 곳 고치기', component: 'LeakFixPipeGame' },
   { lessonId: 'm5-l11', genre: 3, genreName: '무한 달리기', badge: '계획 바꿔 달리기', component: 'PlanChangeRunGame' },
 
@@ -94,7 +94,7 @@ export const GENRE_ASSIGNMENTS: GenreAssignment[] = [
   { lessonId: 'm6-l2', genre: 15, genreName: '숫자 합치기', badge: '동전 합치기', component: 'CoinMergeGame' },
   { lessonId: 'm6-l3', genre: 4, genreName: '미로 찾기', badge: '지도와 표지 미로', component: 'MapSignMazeGame' },
   { lessonId: 'm6-l4', genre: 30, genreName: '타이밍 액션', badge: '버스 타는 순간', component: 'BusBoardTimingGame' },
-  { lessonId: 'm6-l5', genre: 39, genreName: '카드 배틀', badge: '날씨 옷 카드', component: 'WeatherCardGame' },
+  { lessonId: 'm6-l5', genre: 43, genreName: '가로세로 낱말', badge: '가로세로 준비물', component: 'WeatherCrossGame' },
   { lessonId: 'm6-l6', genre: 26, genreName: '벽돌깨기', badge: '위험 단계 깨기', component: 'CookStepBreakGame' },
   { lessonId: 'm6-l7', genre: 45, genreName: '농장 경영', badge: '하루 텃밭', component: 'DayGardenGame' },
   { lessonId: 'm6-l8', genre: 17, genreName: '분류 매치', badge: '아픈 곳 카드 채우기', component: 'SymptomCardGame' },

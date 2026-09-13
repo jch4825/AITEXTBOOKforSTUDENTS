@@ -82,7 +82,7 @@ const MIGRATED = new Set([
   'm5/HintScratchGame.tsx',
   'm5/LeakFixPipeGame.tsx',
   'm5/PlanChangeRunGame.tsx',
-  'm5/PlanRaceSimGame.tsx',
+  'm5/ThreeWayDriveGame.tsx',
   'm5/PriorityStairsGame.tsx',
   'm5/GoalGapFenceGame.tsx',
   'm5/ResultCheckDiffGame.tsx',
@@ -98,7 +98,7 @@ const MIGRATED = new Set([
   'm6/ShoppingStockGame.tsx',
   'm6/SymptomCardGame.tsx',
   'm6/TwoViewIntroGame.tsx',
-  'm6/WeatherCardGame.tsx',
+  'm6/WeatherCrossGame.tsx',
 ]);
 
 /*
