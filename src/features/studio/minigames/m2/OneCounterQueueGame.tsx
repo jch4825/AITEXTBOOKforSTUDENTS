@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, dist, drawBar, drawMark,
-  drawShape, randRange, shuffle,
+  drawShape, randRange, shuffle, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -213,8 +213,7 @@ export default function OneCounterQueueGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     drawBar(ctx, 16, 14, WORLD_W - 32, 48, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(ctx, `묶음 부탁 · ${stage.bundle}`, WORLD_W / 2, 38, 22, B.ink);

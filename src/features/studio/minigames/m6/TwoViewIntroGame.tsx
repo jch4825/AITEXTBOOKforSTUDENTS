@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE,
-  centerText, clamp, drawBar, drawShape, useCountdown,
+  centerText, clamp, drawBar, drawShape, useCountdown, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -178,8 +178,7 @@ export default function TwoViewIntroGame({ supportLevel }: MiniGameProps) {
     }
     const t = angleRef.current;
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     /*
      * 두 창 — 시점이 돌면서 한쪽이 앞으로 나온다.

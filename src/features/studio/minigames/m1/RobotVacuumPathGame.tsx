@@ -304,7 +304,7 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
                     style={{
                       background: 'var(--game-board)',
                       border: 'var(--game-line) solid var(--game-board-red)',
-                      color: 'var(--game-board-red)',
+                      color: 'var(--game-board-red-ink)',
                     }}
                   >
                     <BauhausMark kind="triangle" size={22} />

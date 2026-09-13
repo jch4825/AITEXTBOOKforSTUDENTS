@@ -228,7 +228,7 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
               color: 'var(--game-board-ink)',
             }}
           >
-            <span style={{ color: 'var(--game-board-red)' }}>
+            <span style={{ color: 'var(--game-board-red-ink)' }}>
               <BauhausMark kind="triangle" size={15} />
             </span>
             {stage.avoid} 알레르기
@@ -274,7 +274,7 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
                 }}
               >
                 {bad && (
-                  <span style={{ color: 'var(--game-board-red)' }}>
+                  <span style={{ color: 'var(--game-board-red-ink)' }}>
                     <BauhausMark kind="triangle" size={15} />
                   </span>
                 )}
@@ -290,7 +290,7 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
                 {inCart && (
                   <span
                     className="flex items-center gap-1"
-                    style={{ color: 'var(--game-board-blue)' }}
+                    style={{ color: 'var(--game-board-blue-ink)' }}
                   >
                     <BauhausMark kind="check" size={13} />
                     담김

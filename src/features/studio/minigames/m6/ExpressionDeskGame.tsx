@@ -278,7 +278,7 @@ export default function ExpressionDeskGame({ supportLevel }: MiniGameProps) {
                     나누면 색을 구별하지 못하는 학생에게 붉은 막대와 노란 막대가
                     같은 회색이 된다. */}
                 {urgent && (
-                  <span style={{ color: 'var(--game-board-red)' }}>
+                  <span style={{ color: 'var(--game-board-red-ink)' }}>
                     <BauhausMark kind="triangle" size={14} />
                   </span>
                 )}

@@ -125,17 +125,48 @@
     --game-yellow: #E8B400;   /*  1.70 — 면 전용, 윤곽선 필수 */
     --game-grey: #4C5157;     /*  7.10 */
     --game-keyline: #1A1A1A;
-    /* 놀이판(어두운 면) 쪽 같은 어휘. DOM으로 그리는 게임이 판 안에서 쓴다. */
-    --game-board: #16181C;
-    /* 바탕보다 한 겹 뜬 구조물 면(길·띠·장면 얼개). 글자를 얹지 않으므로 대비를
-       요구하지 않는다. 캔버스 쪽 BAUHAUS.board.surface와 같은 값이다. */
-    --game-board-surface: #1F2328;
-    --game-board-ink: #F5F2EA;   /* 15.89 */
-    --game-board-red: #F2685E;   /*  5.85 — 면·테두리 전용 */
-    --game-board-blue: #6FA8E8;  /*  7.15 */
-    --game-board-yellow: #F5C518;/* 10.90 */
-    --game-board-grey: #8A8F98;  /*  5.47 — 면·테두리 전용 */
-    --game-board-keyline: #F5F2EA;
+    /* 놀이판(어두운 면) 쪽 같은 어휘. 캔버스 쪽 engine/bauhaus.ts의 BAUHAUS.board와 같은 값이다.
+
+       2026-09-13 레퍼런스("FORM & COLOR: Bauhaus Arcade")를 따라 다시 잡았다. 앞의 값은
+       대비를 맞추느라 명도를 끌어올려 색이 물 빠진 파스텔이 됐고, 판 전체가 흐릿했다.
+       이번에는 **면에 칠하는 색과 글자에 쓰는 색을 나눈다.** 면은 레퍼런스의 짙은 원색을
+       거의 그대로 쓰고, 그 위의 경계는 밝은 윤곽선이, 판 위 글자는 따로 둔 밝은 색이 맡는다.
+       괄호 안은 #161616 판 위에서 계산한 대비비다. */
+    --game-board: #161616;
+    /* 놀이 프레임의 바깥 틀. 판보다 한 겹 더 어둡다. */
+    --game-board-shell: #121212;
+    /* 바탕보다 한 겹 뜬 구조물 면(길·띠·장면 얼개·패널). */
+    --game-board-surface: #1F1F1F;
+    --game-board-high: #242424;
+    /* 패널 테두리와 칸 나눔 줄. 장식선이라 대비를 요구하지 않는다. */
+    --game-board-line: #404040;
+    --game-board-ink: #F5F3F0;     /* 16.34 */
+    /* 보조 글자. 앞의 회색(5.47)은 면 전용이었는데 실제로는 글자에 예순 곳 넘게 쓰였다.
+       글자로 써도 되도록 7:1을 넘겼다. */
+    --game-board-grey: #A8A29E;    /*  7.18 */
+    --game-board-muted: #A8A29E;
+    --game-board-red: #D90429;     /*  3.45 — 면·테두리 전용. 흰 글자 5.25 */
+    --game-board-blue: #2B5CF0;    /*  3.35 — 면·테두리 전용. 흰 글자 5.40 */
+    --game-board-yellow: #FFD000;  /* 12.30 — 검정 글자 12.73 */
+    /* 판 위에 글자로 쓰는 빨강·파랑. 레퍼런스의 짙은 원색은 글자로는 읽히지 않는다. */
+    --game-board-red-ink: #FF8A80; /*  7.93 */
+    --game-board-blue-ink: #8FB0FF;/*  8.46 */
+    --game-board-keyline: #F5F3F0;
+    /*
+     * 놀이의 깊이 신호 — 번지지 않는 검정 판을 비스듬히 민다.
+     *
+     * 교과서 본문은 종이의 그림자와 스티커의 립을 쓰지만, 놀이는 레퍼런스처럼 흐림 없는
+     * 딱딱한 어긋남 하나를 쓴다. 판 조각을 한 장 더 오려 뒤에 받친 것과 같아 평면성을
+     * 해치지 않는다. 한 요소에 이 넷 가운데 하나만 쓴다. 누르면 판이 제자리로 내려앉는다.
+     */
+    --game-shadow: #000000;
+    --game-lift-1: 1px 1px 0 0 var(--game-shadow);
+    --game-lift-2: 2px 2px 0 0 var(--game-shadow);
+    --game-lift-3: 3px 3px 0 0 var(--game-shadow);
+    --game-lift-4: 4px 4px 0 0 var(--game-shadow);
+    /* 숫자와 로마자는 Space Grotesk, 한글은 Pretendard가 받는다. 레퍼런스의 기하학적인
+       숫자꼴이 판의 인상을 많이 만든다. */
+    --game-font-display: "Space Grotesk", "Pretendard Variable", "Pretendard", system-ui, sans-serif;
     /* 받은 그림이 인쇄된 바탕. 팔레트 색이 아니라 자산의 성질이다.
        카드·물건 그림은 흰 바탕 위에 그려져 있어, 면을 흰색으로 맞춰야 네모난
        바탕이 사라지고 스티커처럼 앉는다. 그림을 다시 그리는 날 함께 옮긴다. */
@@ -492,6 +523,54 @@
     margin-inline: auto;
     aspect-ratio: 16 / 9;
     max-width: min(1120px, 104vh);
+    /* 캔버스를 감싼 칸이 남은 높이를 알려 주면, 그 높이를 넘지 않는 너비로 줄인다.
+       창 높이(vh)로만 막았더니 머리띠와 진행 줄이 붙은 판에서는 캔버스가 판을 몇 px 넘어
+       판 오른쪽에 스크롤바가 떴다. 컨테이너 단위를 모르는 브라우저는 윗줄 값을 쓴다. */
+    max-width: min(1120px, 100cqw, calc(100cqh * 16 / 9));
+  }
+
+  /* ── 놀이 프레임 ─────────────────────────────────────────────
+     레퍼런스를 따라 놀이 프레임 전체를 어두운 틀로 둔다. 몇몇 게임은 종이 틀을 전제로
+     종이 토큰(--game-ink 등)을 안내 띠에 직접 쓰고 있어, 틀 안에서만 그 토큰을 판의 값으로
+     갈아 끼운다. 그러지 않으면 검정 글자가 검정 틀 위에 앉아 사라진다. */
+  [data-minigame-frame] {
+    --game-paper: var(--game-board-surface);
+    --game-ink: var(--game-board-ink);
+    --game-red: var(--game-board-red-ink);
+    --game-blue: var(--game-board-blue-ink);
+    --game-yellow: var(--game-board-yellow);
+    --game-grey: var(--game-board-muted);
+    --game-keyline: var(--game-board-keyline);
+    font-family: "Pretendard Variable", "Pretendard", system-ui, sans-serif;
+  }
+  .game-lift-1 { box-shadow: var(--game-lift-1); }
+  .game-lift-2 { box-shadow: var(--game-lift-2); }
+  .game-lift-3 { box-shadow: var(--game-lift-3); }
+  .game-lift-4 { box-shadow: var(--game-lift-4); }
+  /* 누르면 받친 판 위로 내려앉는다. 레퍼런스의 촉감이 대부분 여기서 나온다. */
+  .game-press { transition: transform 60ms linear; }
+  .game-press:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .game-press { transition: none; }
+  }
+  /* 판의 제도 격자. 32px 칸마다 가는 줄, 교차점마다 점 하나. 반투명으로 흐리게 하지 않고
+     바탕보다 한 단 밝은 불투명한 색으로 긋는다. */
+  .game-grid {
+    background-color: var(--game-board);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M32 0H0V32' fill='none' stroke='%23242424' stroke-width='1'/%3E%3Crect width='2' height='2' fill='%233A3A3A'/%3E%3C/svg%3E");
+  }
+  .game-display {
+    font-family: var(--game-font-display);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  /* 머리띠 글자. 레퍼런스는 10~12px이지만 이 교재의 글자 바닥은 14px이다. */
+  .game-label {
+    font-family: var(--game-font-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1.15;
   }
   .board-spotlight-mask { box-shadow: var(--board-mask-strong); }
   .board-spotlight-mask.is-soft { box-shadow: var(--board-mask-soft); }
@@ -3848,4 +3927,23 @@
 .interactive-border-floor {
   border-width: var(--interactive-border-width);
   border-style: solid;
+}
+
+/*
+ * 캔버스 칸의 크기 컨테이너 — 반드시 @layer 밖에 둔다.
+ *
+ * 게임 마흔네 개가 캔버스를 같은 flex 칸(min-h-0 flex-1)으로 감싼다. 그 칸을 크기 컨테이너로
+ * 삼으면 .game-canvas-fit이 남은 높이(cqh)를 넘지 않는 너비로 줄어, 넓은 화면에서 캔버스가
+ * 판을 넘쳐 스크롤바가 뜨던 일이 없어진다.
+ *
+ * 다만 크기 컨테이너는 내용으로 높이를 늘리지 않는다. 태블릿 폭에서는 교과서 쪽이 놀이에
+ * 373px만 주어 판이 69px, 캔버스 칸이 0px이 되었고 캔버스가 통째로 사라졌다. 그래서 칸에
+ * 270px(캔버스 480x270)의 바닥을 둔다. 그보다 좁은 자리에서는 예전처럼 판이 스크롤된다.
+ *
+ * min-h-0 유틸리티가 이 바닥을 지우지 않도록 레이어 밖에 선언한다. Tailwind v4의 유틸리티
+ * 레이어는 선택자가 아무리 구체적이어도 components 레이어를 이긴다.
+ */
+div:has(> .game-canvas-fit) {
+  container-type: size;
+  min-height: 270px;
 }

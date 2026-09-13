@@ -58,14 +58,25 @@ export default function GameStage({
         emit(event, 'up');
       } : undefined}
       onPointerCancel={onPointer ? (event) => emit(event, 'up') : undefined}
-      className={`relative min-h-0 w-full flex-1 overflow-hidden ${className}`}
+      className={`game-grid relative min-h-0 w-full flex-1 overflow-hidden ${className}`}
       style={{
-        background: 'var(--game-board)',
-        border: 'var(--game-line) solid var(--game-board-grey)',
+        border: 'var(--game-hair) solid var(--game-board-line)',
         touchAction: onPointer ? 'none' : undefined,
         ...style,
       }}
     >
+      {/* 제도지 귀퉁이 꺾쇠. 캔버스 게임은 paintBoard가 같은 표시를 그린다. 판 위 조각보다
+          먼저 깔려 조작을 가리지 않고, 화면 낭독기에는 읽히지 않는다. */}
+      {(['left-1.5 top-1.5 border-l-2 border-t-2', 'right-1.5 top-1.5 border-r-2 border-t-2',
+        'bottom-1.5 left-1.5 border-b-2 border-l-2', 'bottom-1.5 right-1.5 border-b-2 border-r-2'] as const)
+        .map((corner) => (
+          <span
+            key={corner}
+            aria-hidden="true"
+            className={`pointer-events-none absolute h-4 w-4 ${corner}`}
+            style={{ borderColor: 'var(--game-board-muted)' }}
+          />
+        ))}
       {children}
     </div>
   );

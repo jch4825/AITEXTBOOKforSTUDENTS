@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, drawBar, drawMark, drawShape, particleFor,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, drawBar, drawMark, drawShape, particleFor, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -267,8 +267,7 @@ export default function GoalGapFenceGame({ supportLevel }: MiniGameProps) {
     const w = worldRef.current;
     if (dt > 0 && w.flash > 0) w.flash = Math.max(0, w.flash - dt);
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     const phase = PHASES[Math.min(w.phase, PHASES.length - 1)];
     centerText(ctx, phase.title, WORLD_W / 2, 34, 26, B.ink);

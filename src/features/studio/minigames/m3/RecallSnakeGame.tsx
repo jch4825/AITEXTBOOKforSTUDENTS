@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, shuffle,
-  useGameKeys,
+  useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -203,8 +203,7 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 지금까지 떠올린 차례
     const recalled = w.pieces.filter((p) => p.eaten).map((p) => p.text).join(' → ');

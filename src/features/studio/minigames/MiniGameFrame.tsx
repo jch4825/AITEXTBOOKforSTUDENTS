@@ -15,7 +15,6 @@ const STAGE_LABELS: Record<string, string> = {
   '기본': '연습',
   '1단계': '기본',
   '2단계': '도전',
-  '3단계': '확장',
 };
 
 interface Props {
@@ -52,11 +51,17 @@ interface Props {
  * 미니게임 공통 셸.
  *
  * 놀이는 교과서 본문과 다른 문법을 쓴다 — 바우하우스의 원·사각형·삼각형, 평면 채색,
- * 각진 모서리, 그림자 없음. 어휘가 통째로 바뀌는 것이 "이제 놀이 시간"이라는 신호다.
- * 바깥 프레임은 종이, 가운데 플레이 보드만 어두운 면으로 둔다.
+ * 각진 모서리. 어휘가 통째로 바뀌는 것이 "이제 놀이 시간"이라는 신호다.
  *
- * 62개를 옮기는 동안에는 이 셸이 옛 어휘와 새 어휘를 `bauhaus` 플래그로 함께 안고
- * 있었다. 전환이 끝나 플래그와 옛 갈래를 걷어냈다.
+ * 2026-09-13 레퍼런스("FORM & COLOR: Bauhaus Arcade")를 따라 틀 전체를 어두운 면으로
+ * 바꿨다. 앞의 틀은 종이 바탕에 검정 판 하나라 판이 휑하게 떠 보였고, 글자 위계도 없었다.
+ * 레퍼런스에서 가져온 것은 넷이다.
+ *  - 위계: 두꺼운 이름 → 작은 딱지 이름 → 큰 숫자
+ *  - 제도지 같은 판: 격자, 귀퉁이 꺾쇠
+ *  - 딱딱한 어긋남 하나로 만든 깊이, 누르면 내려앉는 버튼
+ *  - 칸으로 나뉜 진행 막대
+ * 가져오지 않은 것도 있다. 10px 로마자 설명 글(이 교재의 글자 바닥은 14px이고, 뜻 없는
+ * 로마자는 이 학생들에게 소음이다), 번지는 빛, 반투명 면.
  */
 export default function MiniGameFrame({
   badge,
@@ -88,132 +93,125 @@ export default function MiniGameFrame({
   return (
     <div
       data-minigame-frame
-      className="flex h-full min-h-0 flex-col gap-2 overflow-hidden p-3 sm:p-3.5"
+      className="game-lift-4 flex h-full min-h-0 flex-col gap-2.5 overflow-hidden p-3 sm:p-3.5"
       style={{
-        background: 'var(--game-paper)',
-        border: 'var(--game-heavy) solid var(--game-ink)',
-        color: 'var(--game-ink)',
+        background: 'var(--game-board-shell)',
+        border: 'var(--game-hair) solid var(--game-board-line)',
+        color: 'var(--game-board-ink)',
       }}
     >
-      {/* 이름표 + 난이도 + 진행 수치.
-          난이도를 따로 한 줄에 두었더니 그 줄만 60px 남짓을 먹어 놀이판이 그만큼 눌렸다.
-          셋은 모두 "이 판이 무엇인지" 알리는 머리글이라 한 줄에 모은다. */}
-      <div className="flex flex-wrap items-center gap-2">
-        <span
-          className="inline-flex items-center gap-1.5 px-3 py-1 text-[14px] font-black"
-          style={{
-            /* 종이 위 노랑은 대비가 1.70이라 도형의 최소 3:1에도 못 미친다.
-               검정 윤곽선이 경계를 대신 만든다. */
-            background: 'var(--game-yellow)',
-            border: 'var(--game-line) solid var(--game-keyline)',
-            color: 'var(--game-ink)',
-          }}
-        >
-          <BauhausMark kind="square" size={14} />
+      {/* 머리글 — 표식·이름표·난이도·읽어주기를 반드시 한 줄(44px)에 둔다. 머리글 높이가
+          곧 캔버스 크기를 깎는다.
+
+          레퍼런스처럼 "BAUHAUS" 윗줄을 이름 위에 얹었더니 두 줄이 되어, 틀 폭이 560px인
+          차시에서 머리글이 114px, 캔버스가 11% 작아졌다. 이름 옆으로 옮기자 이번에는 좁은
+          틀에서 게임 이름이 "표지 모아 보…"로 잘렸다. 장식 글자 때문에 이름이 잘리면 안
+          되므로 윗줄은 뺐다. 바우하우스라는 표시는 왼쪽 표식 상자가 맡는다. */}
+      <div className="flex items-center gap-2.5">
+        <GameLogo />
+        <span className="game-display min-w-0 truncate text-[22px] font-bold leading-tight">
           {badge}
         </span>
 
-        {/* 난이도 — 세 칸을 붙인 길쭉한 한 덩어리로 둔다. 낱개 버튼 셋보다 높이를 덜 쓰고,
-            지금 어느 칸에 서 있는지도 한눈에 읽힌다. */}
-        {stages && stages.length > 1 && (
-          <div
-            role="group"
-            aria-label="난이도 고르기"
-            className="flex shrink-0 items-center overflow-hidden"
-            style={{ border: 'var(--game-line) solid var(--game-ink)' }}
+        <div className="ml-auto flex items-center gap-2">
+          {stages && stages.length > 1 && (
+            <div
+              role="group"
+              aria-label="난이도 고르기"
+              className="game-lift-2 flex shrink-0 items-stretch"
+              style={{ border: 'var(--game-hair) solid var(--game-board-line)' }}
+            >
+              {stages.map((stage, index) => {
+                const active = index === activeStageIndex;
+                const stageLabel = STAGE_LABELS[stage.label] ?? stage.label;
+                return (
+                  <button
+                    key={stage.id}
+                    type="button"
+                    onClick={() => onStageSelect?.(index)}
+                    aria-pressed={active}
+                    // 손가락으로 누르는 칸이므로 최소 44px 높이를 지킨다.
+                    className="game-display flex min-h-11 shrink-0 items-center px-3 text-[15px] font-bold"
+                    style={{
+                      background: active ? 'var(--game-board-yellow)' : 'var(--game-board-surface)',
+                      color: active ? 'var(--game-board-shell)' : 'var(--game-board-ink)',
+                      borderLeft: index === 0 ? 'none' : 'var(--game-hair) solid var(--game-board-line)',
+                    }}
+                  >
+                    {stageLabel}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => speakNow(instruction)}
+            aria-label="설명 읽어주기"
+            className="game-lift-2 game-press relative grid h-11 w-11 shrink-0 place-items-center"
+            style={{
+              background: 'var(--game-board-surface)',
+              border: 'var(--game-hair) solid var(--game-board-line)',
+              color: 'var(--game-board-ink)',
+            }}
           >
-            {stages.map((stage, index) => {
-              const active = index === activeStageIndex;
-              const stageLabel = STAGE_LABELS[stage.label] ?? stage.label;
-              return (
-                <button
-                  key={stage.id}
-                  type="button"
-                  onClick={() => onStageSelect?.(index)}
-                  aria-pressed={active}
-                  // 손가락으로 누르는 칸이므로 최소 44px 높이를 지킨다.
-                  className="min-h-11 shrink-0 px-4 text-[14px] font-black transition"
-                  style={{
-                    background: active ? 'var(--game-blue)' : 'var(--game-paper)',
-                    color: active ? 'var(--game-paper)' : 'var(--game-ink)',
-                    borderLeft: index === 0 ? 'none' : 'var(--game-line) solid var(--game-ink)',
-                  }}
-                >
-                  {stageLabel}
-                </button>
-              );
-            })}
-          </div>
-        )}
+            <BauhausMark kind="sound" size={22} />
+            {/* 레퍼런스의 소리 단추에 붙은 두 점. 장식이라 뜻을 싣지 않는다. */}
+            <span aria-hidden="true" className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full"
+              style={{ background: 'var(--game-board-yellow)' }} />
+            <span aria-hidden="true" className="absolute bottom-1 left-1 h-1.5 w-1.5 rounded-full"
+              style={{ background: 'var(--game-board-blue)' }} />
+          </button>
+        </div>
       </div>
 
-      {/* 안내 문장 + 읽어주기 */}
-      <div className="flex items-start gap-2">
-        <p
-          className="flex-1 text-[17px] font-bold leading-relaxed sm:text-[19px]"
-          style={{ color: 'var(--game-ink)' }}
-        >
+      {/* 안내 문장. 앞의 노랑 사각은 "읽을 것은 여기"라는 자리 표시다. */}
+      <div className="flex items-start gap-2.5">
+        <span aria-hidden="true" className="mt-[9px] h-2.5 w-2.5 shrink-0" style={{ background: 'var(--game-board-yellow)' }} />
+        <p className="flex-1 text-[17px] font-bold leading-relaxed sm:text-[18px]" style={{ color: 'var(--game-board-ink)' }}>
           {instruction}
         </p>
-        <button
-          type="button"
-          onClick={() => speakNow(instruction)}
-          aria-label="설명 읽어주기"
-          className="grid h-11 w-11 shrink-0 place-items-center transition"
-          style={{
-            background: 'var(--game-paper)',
-            border: 'var(--game-line) solid var(--game-ink)',
-            color: 'var(--game-ink)',
-          }}
-        >
-          <BauhausMark kind="sound" size={22} />
-        </button>
       </div>
 
-      {/* 플레이 보드 — 유일한 다크 영역 */}
+      {/* 플레이 보드. 격자는 캔버스(paintBoard)와 DOM 판(GameStage)이 제 좌표로 긋는다.
+          바깥 판에도 격자를 깔았더니 캔버스가 높이에 맞춰 줄어든 옆자리에서 크기가 다른
+          두 격자가 나란히 보였다. */}
       <div
-        className="mini-game-board relative flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-2.5 sm:p-3"
+        className="mini-game-board game-lift-4 relative flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-2.5 sm:p-3"
         style={{
           background: 'var(--game-board)',
-          border: 'var(--game-line) solid var(--game-ink)',
+          border: 'var(--game-hair) solid var(--game-board-line)',
           color: 'var(--game-board-ink)',
         }}
       >
-        {/* 남은 기회·시간과 진행 수치는 한 줄에 둔다.
-            진행 수치를 이름표 줄에 두었더니, 이름이 긴 차시에서는 난이도 탭에 밀려 줄이
-            접히고 그만큼 놀이판이 눌렸다. 셋 다 "지금 판이 어떤 상태인가"를 알리는 값이라
-            판 안에 함께 두는 편이 찾기도 쉽다. */}
+        {/* 남은 기회·시간과 진행 수치는 한 줄에 둔다. 셋 다 "지금 판이 어떤 상태인가"를
+            알리는 값이라 판 안에 함께 두는 편이 찾기도 쉽다. */}
         {(hud || progress) && (
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             {hud && <div className="min-w-0 flex-1">{hud}</div>}
-            {progress && (
-              <span
-                className="shrink-0 text-[15px] font-black"
-                style={{ color: 'var(--game-board-grey)' }}
-              >
-                {progress.label}{' '}
-                <strong className="text-[18px]" style={{ color: 'var(--game-board-ink)' }}>
-                  {progress.value}
-                </strong>
-                {' / '}
-                {progress.max}
-              </span>
-            )}
+            {progress && <ProgressMeter {...progress} />}
           </div>
         )}
         {children}
       </div>
 
-      {/* 성공·실패 배너 — 보드 안의 움직임이 1차 피드백이고 이 문구는 보조다 */}
+      {/* 성공·실패 알림 — 보드 안의 움직임이 1차 피드백이고 이 문구는 보조다.
+          잘했을 때는 레퍼런스의 "PERFECT!"처럼 조금 기울인 노랑 딱지로 튀어나오고,
+          다시 해 볼 때는 벌처럼 보이지 않게 기울이지 않은 차분한 면에 둔다. */}
       {message && (status === 'success' || status === 'fail') && (
         <div
           role="status"
-          className="flex items-center justify-center gap-2 px-3 py-2 text-center text-[16px] font-black leading-relaxed sm:text-[17px]"
-          style={{
-            background: 'var(--game-paper)',
-            color: status === 'success' ? 'var(--game-blue)' : 'var(--game-red)',
-            border: `var(--game-heavy) solid ${
-              status === 'success' ? 'var(--game-blue)' : 'var(--game-red)'}`,
+          className={`${status === 'success' ? 'game-lift-3' : 'game-lift-2'} flex items-center justify-center gap-2.5 px-4 py-2.5 text-center text-[16px] font-bold leading-relaxed sm:text-[17px]`}
+          style={status === 'success' ? {
+            background: 'var(--game-board-yellow)',
+            color: 'var(--game-board-shell)',
+            border: 'var(--game-hair) solid var(--game-shadow)',
+            transform: 'rotate(-0.8deg)',
+          } : {
+            background: 'var(--game-board-surface)',
+            color: 'var(--game-board-ink)',
+            border: 'var(--game-hair) solid var(--game-board-line)',
+            borderLeft: 'var(--game-heavy) solid var(--game-board-red)',
           }}
         >
           {/* 잘됐다는 확인 표시, 다시 해 보자는 되돌리기 표시. 색과 모양이 함께 간다. */}
@@ -224,7 +222,63 @@ export default function MiniGameFrame({
 
       {footer}
 
-      {actions && <div className="flex items-center gap-1.5">{actions}</div>}
+      {actions && <div className="flex items-stretch gap-2.5 pb-1 pr-1">{actions}</div>}
+    </div>
+  );
+}
+
+/**
+ * 바우하우스 표식. 레퍼런스의 삼각·사각·원 석 점 표식 자리다.
+ *
+ * 레퍼런스는 칸딘스키의 짝(노랑 삼각·빨강 사각·파랑 원)을 쓰지만, 이 교재의 판에서는
+ * 노랑 원이 "나", 파랑 사각이 "목표", 빨강 삼각이 "위험"이다. 표식이 다른 짝을 보여 주면
+ * 학생이 판에서 익힌 뜻과 어긋나므로 판의 짝을 그대로 쓴다.
+ */
+function GameLogo() {
+  return (
+    <span
+      aria-hidden="true"
+      className="game-lift-1 inline-flex h-11 shrink-0 items-center gap-0.5 px-1.5"
+      style={{ background: 'var(--game-board)', border: 'var(--game-hair) solid var(--game-board-line)' }}
+    >
+      <span style={{ color: 'var(--game-board-red)' }}><BauhausMark kind="triangle" size={16} /></span>
+      <span style={{ color: 'var(--game-board-blue)' }}><BauhausMark kind="square" size={16} /></span>
+      <span style={{ color: 'var(--game-board-yellow)' }}><BauhausMark kind="circle" size={16} /></span>
+    </span>
+  );
+}
+
+/**
+ * 진행 막대. 이어진 띠가 아니라 셀 수 있는 칸으로 보여 준다.
+ *
+ * 숫자를 못 읽는 학생도 칸은 센다. 칸이 열여섯을 넘으면 칸이 너무 잘아지므로 열 칸에
+ * 비율로 채운다. 숫자는 레퍼런스처럼 크게, 분모는 작게 둔다.
+ */
+function ProgressMeter({ label, value, max }: Progress) {
+  const safeMax = Math.max(1, max);
+  const shown = Math.max(0, Math.min(value, safeMax));
+  const cells = safeMax <= 16 ? safeMax : 10;
+  const filled = safeMax <= 16 ? shown : Math.round((shown / safeMax) * 10);
+  return (
+    <div className="flex shrink-0 items-center gap-2.5">
+      <span className="game-label" style={{ color: 'var(--game-board-muted)' }}>{label}</span>
+      <span aria-hidden="true" className="flex items-center gap-[3px]">
+        {Array.from({ length: cells }).map((_, index) => (
+          <span
+            key={index}
+            className="block h-3.5"
+            style={{
+              width: cells > 10 ? 8 : 12,
+              background: index < filled ? 'var(--game-board-yellow)' : 'var(--game-board-high)',
+              border: index < filled ? 'none' : '1px solid var(--game-board-line)',
+            }}
+          />
+        ))}
+      </span>
+      <span className="game-display flex items-baseline gap-0.5 font-bold" aria-label={`${label} ${shown} / ${safeMax}`}>
+        <strong className="text-[24px] leading-none" style={{ color: 'var(--game-board-ink)' }}>{shown}</strong>
+        <span className="text-[15px]" style={{ color: 'var(--game-board-muted)' }}>/{safeMax}</span>
+      </span>
     </div>
   );
 }
@@ -246,7 +300,12 @@ interface ButtonProps {
   variant?: 'primary' | 'quiet';
 }
 
-/** 미니게임 하단 조작 버튼. 터치 목표를 44px 이상으로 유지한다. */
+/**
+ * 미니게임 하단 조작 버튼. 터치 목표를 44px 이상으로 유지한다.
+ *
+ * 레퍼런스의 큰 조작 판처럼 한 가지 색으로 칠한 면에 딱딱한 어긋남을 받치고, 누르면
+ * 그 위로 내려앉는다. 주된 동작은 노랑 면, 나머지는 어두운 면이다.
+ */
 export function MiniGameButton({
   onClick,
   disabled = false,
@@ -261,15 +320,24 @@ export function MiniGameButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex min-h-12 flex-1 items-center justify-center gap-1.5 px-1 py-1 text-[14px] font-black leading-tight transition disabled:opacity-45 sm:text-[15px]"
+      className={`${primary ? 'game-lift-3' : 'game-lift-2'} game-press relative flex min-h-12 flex-1 items-center justify-center gap-2 px-2 py-1.5 text-[15px] font-bold leading-tight disabled:opacity-45 sm:text-[16px]`}
       style={{
-        background: primary ? 'var(--game-blue)' : 'var(--game-paper)',
-        color: primary ? 'var(--game-paper)' : 'var(--game-ink)',
-        border: `var(--game-line) solid ${primary ? 'var(--game-blue)' : 'var(--game-ink)'}`,
+        background: primary ? 'var(--game-board-yellow)' : 'var(--game-board-surface)',
+        color: primary ? 'var(--game-board-shell)' : 'var(--game-board-ink)',
+        border: `var(--game-hair) solid ${primary ? 'var(--game-shadow)' : 'var(--game-board-line)'}`,
       }}
     >
       <BauhausMark kind={mark} size={20} rotate={markRotate} />
       {label}
+      {/* 레퍼런스 조작 판의 오른쪽 위 접힌 귀. 장식이라 뜻을 싣지 않는다. */}
+      <span
+        aria-hidden="true"
+        className="absolute right-0 top-0 h-3 w-3"
+        style={{
+          borderBottom: `1px solid ${primary ? 'var(--game-board-shell)' : 'var(--game-board-line)'}`,
+          borderLeft: `1px solid ${primary ? 'var(--game-board-shell)' : 'var(--game-board-line)'}`,
+        }}
+      />
     </button>
   );
 }

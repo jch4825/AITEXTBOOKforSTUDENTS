@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
-  useGameKeys,
+  useGameKeys, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -224,8 +224,7 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     for (let band = 0; band < 3; band += 1) {
       const y = BAND_Y[band];

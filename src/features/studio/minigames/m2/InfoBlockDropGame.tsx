@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, pick,
-  useGameKeys,
+  useGameKeys, paintBoard,
 } from '../engine';
 import { useSpeak } from '../../../../hooks/useSpeak';
 import type { MiniGameProps } from '../types';
@@ -304,8 +304,7 @@ export default function InfoBlockDropGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 지금 부탁 띠 — 읽을 글은 여기 한 곳에만 크게 둔다.
     drawBar(ctx, 20, 8, 920, 62,

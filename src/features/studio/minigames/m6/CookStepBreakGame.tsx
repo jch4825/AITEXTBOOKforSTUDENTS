@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
-  drawShape, useGameKeys,
+  drawShape, useGameKeys, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -460,8 +460,7 @@ export default function CookStepBreakGame({ supportLevel }: MiniGameProps) {
     const active = activeIndex(w.rows);
     const won = active < 0;
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     /* 조리 판의 양쪽 벽. 뜻이 없는 구조물이라 회색 막대다. */
     drawBar(ctx, FIELD_L - 8, WALL_TOP - 12, 8, WORLD_H - WALL_TOP + 12, { fill: B.grey });

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape, useGameKeys,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -255,8 +255,7 @@ export default function SongDrumCheckGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     drawBar(ctx, 20, 14, WORLD_W - 40, 44, { fill: B.ground, stroke: B.grey, width: STROKE.hair });
     centerText(ctx, '아이미가 만든 댄스 타임 곡 목록', WORLD_W / 2, 36, 24, B.ink);

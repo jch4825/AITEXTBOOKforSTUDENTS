@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawShape,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar,
+  drawPanel, drawPop, drawSegments, drawShape, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -172,7 +173,12 @@ interface World {
   /** 무너진 직후의 흔들림. 어느 쪽이 무너졌는지 잠깐 붉게 남긴다. */
   shake: number;
   shakeSide: number;
+  /** 한 칸 올랐을 때·무너졌을 때 잠깐 튀어나오는 딱지 */
+  pop: { text: string; up: boolean; t: number } | null;
 }
+
+/** 칭찬 딱지가 떠 있는 시간(초) */
+const POP_TIME = 0.75;
 
 export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
   const game = useMiniGameStage({ supportLevel, stageCount: STAGES.length });
@@ -184,7 +190,7 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
   const maxLives = tuning.lives;
 
   const worldRef = useRef<World>({
-    cards: [null, null], climbed: 0, cursor: 0, finished: false, shake: 0, shakeSide: -1,
+    cards: [null, null], climbed: 0, cursor: 0, finished: false, shake: 0, shakeSide: -1, pop: null,
   });
   const [view, setView] = useState({ climbed: 0, lives: maxLives });
   const livesRef = useRef(maxLives);
@@ -210,7 +216,7 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
   useEffect(() => {
     const random = createRandom(game.seed);
     const world: World = {
-      cards: [null, null], climbed: 0, cursor: 0, finished: false, shake: 0, shakeSide: -1,
+      cards: [null, null], climbed: 0, cursor: 0, finished: false, shake: 0, shakeSide: -1, pop: null,
     };
     dealCard(world, 0, random);
     dealCard(world, 1, random);
@@ -224,6 +230,7 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
     const world = worldRef.current;
     if (!game.playing || world.finished || !world.cards[side]) return;
     world.climbed += 1;
+    world.pop = { text: '한 칸!', up: true, t: POP_TIME };
     dealCard(world, side, randomRef.current);
 
     // 고른 것은 곧 미룬 것이다. 반대쪽이 그 자리에서 한 눈금 올라선다.
@@ -240,6 +247,11 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
   const frame = (ctx: CanvasRenderingContext2D, dt: number) => {
     const w = worldRef.current;
 
+    if (dt > 0 && w.pop) {
+      w.pop.t -= dt;
+      if (w.pop.t <= 0) w.pop = null;
+    }
+
     if (dt > 0 && !w.finished) {
       if (w.shake > 0) w.shake = Math.max(0, w.shake - dt);
       for (let side = 0; side < 2; side += 1) {
@@ -252,6 +264,7 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
           livesRef.current -= 1;
           w.shake = 0.6;
           w.shakeSide = side;
+          w.pop = { text: '와르르', up: false, t: POP_TIME };
           dealCard(w, side, randomRef.current);
           setView({ climbed: w.climbed, lives: livesRef.current });
           if (livesRef.current <= 0) {
@@ -262,54 +275,65 @@ export default function PriorityStairsGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
-    // 계단 — 오른 칸은 파랑, 남은 칸은 회색 윤곽이다.
+    /* 계단 — 오른 칸은 떠 있는 파랑 판, 남은 칸은 점선으로 그린 빈자리다.
+       레퍼런스의 판정 띠처럼 "아직 오를 자리"가 윤곽으로 먼저 보이면 남은 거리를 센다. */
     for (let i = 0; i < GOAL_STEPS; i += 1) {
       const box = stepBox(i);
-      const climbed = i < w.climbed;
-      drawBar(ctx, box.x, box.y, box.w, box.h, {
-        fill: climbed ? B.blue : B.ground,
-        stroke: climbed ? B.blue : B.grey,
-        width: STROKE.hair,
-      });
+      if (i < w.climbed) {
+        drawBar(ctx, box.x, box.y, box.w, box.h, { fill: B.blue, stroke: B.keyline, width: 2, lift: 4 });
+      } else {
+        ctx.save();
+        ctx.setLineDash([6, 5]);
+        drawBar(ctx, box.x, box.y, box.w, box.h, { stroke: B.line, width: 2 });
+        ctx.restore();
+      }
     }
     // 학생이 선 자리 — 조종하는 것은 노랑 원이다.
     const here = stepBox(Math.min(w.climbed, GOAL_STEPS - 1));
-    drawShape(ctx, 'circle', here.x + here.w / 2, here.y - 20, 18, {
-      fill: B.yellow, stroke: B.keyline, width: STROKE.base,
+    drawShape(ctx, 'circle', here.x + here.w / 2, here.y - 22, 30, {
+      fill: B.yellow, stroke: B.keyline, width: STROKE.hair, lift: 3,
     });
-    centerText(ctx, `${w.climbed} / ${GOAL_STEPS}`, WORLD_W - 92, 512, 22, B.grey);
 
-    // 일 카드 둘
+    // 일 카드 둘 — 머리띠 패널
     for (let side = 0; side < 2; side += 1) {
       const card = w.cards[side];
       if (!card) continue;
       const x = cardX(side);
+      const kind = card.job.kind;
+      const tone = KIND_COLOR[kind];
       const shaking = w.shake > 0 && w.shakeSide === side;
-      drawBar(ctx, x, CARD_Y, CARD_W, CARD_H, {
-        fill: B.surface,
-        stroke: shaking ? B.red : B.keyline,
-        width: shaking ? STROKE.heavy : STROKE.base,
+      drawPanel(ctx, x, CARD_Y, CARD_W, CARD_H, {
+        header: `0${side + 1} · ${KIND_LABEL[kind]}`,
+        accent: tone,
+        /* 무너진 쪽은 받친 판이 빠져 내려앉는다. 붉은 테두리와 함께 "여기서 터졌다"를 알린다. */
+        lift: shaking ? 0 : 5,
       });
-      // 기준 도형과 이름표
-      drawShape(ctx, KIND_SHAPE[card.job.kind], x + 44, CARD_Y + 44, 22, {
-        fill: KIND_COLOR[card.job.kind], stroke: B.keyline, width: 1,
+      if (shaking) {
+        drawBar(ctx, x, CARD_Y, CARD_W, CARD_H, { stroke: B.red, width: STROKE.heavy });
+      }
+      // 기준 도형 — 머리띠 오른쪽 끝에 떠 있는 조각으로 단다
+      drawShape(ctx, KIND_SHAPE[kind], x + CARD_W - 30, CARD_Y + 20, 22, {
+        fill: tone, stroke: B.keyline, width: 2, lift: 2,
       });
-      centerText(ctx, KIND_LABEL[card.job.kind], x + 44, CARD_Y + 82, 20, B.grey);
-      centerText(ctx, card.job.label, x + CARD_W / 2 + 24, CARD_Y + 52, 24, B.ink);
+      centerText(ctx, card.job.label, x + CARD_W / 2, CARD_Y + 78, 26, B.ink);
 
-      // 미룬 만큼 차오르는 띠
-      const barX = x + 26;
-      const barW = CARD_W - 52;
-      drawBar(ctx, barX, CARD_Y + 116, barW, 30, {
-        fill: B.ground, stroke: B.grey, width: STROKE.hair,
+      /* 미룬 만큼 차오르는 게이지를 열 칸으로 가른다. 한쪽을 고를 때마다 반대쪽이
+         절반·4분의 3·9할로 올라서는 것이 칸 단위로 보인다. */
+      drawSegments(ctx, x + 22, CARD_Y + 110, CARD_W - 44, 28, card.fill * 10, 10, { fill: tone });
+      centerText(ctx, '누르면 이 일을 먼저 합니다', x + CARD_W / 2, CARD_Y + 166, 20, B.grey);
+    }
+
+    // 칭찬 딱지 — 올랐을 때는 노랑, 무너졌을 때는 빨강. 잠깐 커졌다가 사라진다.
+    if (w.pop) {
+      const grow = Math.min(1, (POP_TIME - w.pop.t) * 8);
+      drawPop(ctx, w.pop.text, Math.min(here.x + 90, WORLD_W - 120), Math.max(here.y - 80, 270), {
+        fill: w.pop.up ? B.yellow : B.red,
+        ink: w.pop.up ? B.ground : B.ink,
+        rotate: w.pop.up ? -0.06 : 0.05,
+        scale: 0.8 + grow * 0.2,
       });
-      drawBar(ctx, barX, CARD_Y + 116, Math.max(2, barW * Math.min(1, card.fill)), 30, {
-        fill: KIND_COLOR[card.job.kind], stroke: B.keyline, width: 1,
-      });
-      centerText(ctx, '누르면 이 일을 먼저 합니다', x + CARD_W / 2, CARD_Y + 168, 20, B.grey);
     }
   };
 

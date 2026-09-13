@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
-  useGameKeys,
+  useGameKeys, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -232,8 +232,7 @@ export default function HardWordBreakGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 아래에 만들어지는 쉬운 설명
     const easyText = w.bricks.filter((b) => b.broken).slice(-5).map((b) => b.easy).join(' · ');

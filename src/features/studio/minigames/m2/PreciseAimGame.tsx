@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
-  drawShape, randRange, useGameKeys,
+  drawShape, randRange, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -245,8 +245,7 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     drawBar(ctx, WORLD_W / 2 - 250, 12, 500, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(ctx, `골라 담을 것 · ${stage.goal}`, WORLD_W / 2, 36, 24, B.ink);

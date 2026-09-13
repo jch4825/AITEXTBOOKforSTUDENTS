@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
-  drawShape, pick, useGameKeys,
+  drawShape, pick, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -196,8 +196,7 @@ export default function QuestionClimbGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     /* 계단은 학생을 화면 한가운데 두고 세상이 흘러 내려오는 방식으로 그린다.
        칸의 절대 자리를 그대로 쓰면 좌우 이동이 계속 쌓여, 열 칸쯤 오른 뒤에는 계단과

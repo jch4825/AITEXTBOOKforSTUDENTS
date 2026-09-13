@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
-  drawShape, randInt, toRadians, useGameKeys,
+  drawShape, randInt, toRadians, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -201,8 +201,7 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 땅과 금액 눈금
     ctx.fillStyle = B.surface;
@@ -255,7 +254,7 @@ export default function SumCannonGame({ supportLevel }: MiniGameProps) {
     centerText(ctx, '아이미의 풀이', 255, 34, 22, B.grey);
     basket.lines.forEach((text, index) => {
       const wrong = calcOpen && index === basket.wrongLine;
-      centerText(ctx, text, 255, 62 + index * 30, 22, wrong ? B.red : B.ink);
+      centerText(ctx, text, 255, 62 + index * 30, 22, wrong ? B.redInk : B.ink);
     });
 
     centerText(ctx, `각도 ${Math.round(angle)}도 · 힘 ${Math.round(power)}`, WORLD_W - 170, 34, 22, B.ink);

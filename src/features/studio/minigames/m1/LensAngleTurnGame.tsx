@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, approach, centerText, clamp, drawBar, drawCover,
-  drawMark, drawShape, useGameImages, useGameKeys,
+  drawMark, drawShape, useGameImages, useGameKeys, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -293,8 +293,7 @@ export default function LensAngleTurnGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 빛 손잡이
     centerText(ctx, '어두움', 66, LIGHT_Y, 22, B.grey);

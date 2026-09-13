@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BauhausMark, GameHud, GameStage, clamp, createRandom, shuffle, useCountdown } from '../engine';
+import { BauhausMark, GameHud, GameStage, clamp, createRandom, shuffle, useCountdown, inkFor
+} from '../engine';
 import type { BauhausMarkKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -203,7 +204,7 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
           }}
         >
           {heldCrate && (
-            <span className="shrink-0" style={{ color: ZONE_INFO[heldCrate.zone].color }}>
+            <span className="shrink-0" style={{ color: inkFor(ZONE_INFO[heldCrate.zone].color) }}>
               <BauhausMark kind={ZONE_INFO[heldCrate.zone].mark} size={18} />
             </span>
           )}

@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawShape,
-  shuffle, toRadians, useGameKeys,
+  shuffle, toRadians, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -277,8 +277,7 @@ export default function SourceTowerGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, W, H);
+    paintBoard(ctx, W, H);
 
     drawBar(ctx, 20, 14, W - 40, 44, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(ctx, `${stage.title} · 믿기 어려운 자료만 무너뜨려요`, W / 2, 37, 22, B.ink);

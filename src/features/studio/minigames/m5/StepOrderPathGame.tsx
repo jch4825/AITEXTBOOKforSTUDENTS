@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -293,8 +293,7 @@ export default function StepOrderPathGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 출발 표시 — 글자는 동그라미 오른쪽에 둔다. 아래에 두면 1번 칸과 겹친다.
     drawShape(ctx, 'circle', START.x, START.y, 20, {

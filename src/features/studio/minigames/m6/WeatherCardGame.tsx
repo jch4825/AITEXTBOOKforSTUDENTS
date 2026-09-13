@@ -211,12 +211,12 @@ export default function WeatherCardGame({ supportLevel }: MiniGameProps) {
             className="flex items-center gap-2 text-[17px] font-black"
             style={{ color: 'var(--game-board-ink)' }}
           >
-            <span style={{ color: 'var(--game-board-blue)' }}>
+            <span style={{ color: 'var(--game-board-blue-ink)' }}>
               <BauhausMark kind="sound" size={17} />
             </span>
             공식 예보 · {current.forecast}
           </p>
-          <p className="text-[16px] font-black" style={{ color: 'var(--game-board-blue)' }}>
+          <p className="text-[16px] font-black" style={{ color: 'var(--game-board-blue-ink)' }}>
             필요한 {NEED_LABEL[current.need]} {required} 이상
           </p>
         </div>

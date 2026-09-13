@@ -240,7 +240,7 @@ export default function LeakFixPipeGame({ supportLevel }: MiniGameProps) {
             style={{
               background: 'var(--game-board)',
               border: 'var(--game-line) solid var(--game-board-blue)',
-              color: 'var(--game-board-blue)',
+              color: 'var(--game-board-blue-ink)',
             }}
             aria-hidden="true"
           >

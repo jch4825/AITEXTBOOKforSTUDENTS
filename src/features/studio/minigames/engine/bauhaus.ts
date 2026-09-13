@@ -42,18 +42,37 @@ export const BAUHAUS = {
     /** 도형을 두르는 선. 종이 위에서는 검정이다. */
     keyline: '#1A1A1A',
   },
-  /** 놀이판 — 유일한 어두운 면 */
+  /**
+   * 놀이판 — 어두운 면.
+   *
+   * 2026-09-13 레퍼런스("FORM & COLOR: Bauhaus Arcade")를 따라 다시 잡았다. 앞의 값은 대비를
+   * 맞추느라 명도를 끌어올려 원색이 물 빠진 파스텔이 됐다. 이번에는 **면에 칠하는 색과
+   * 글자에 쓰는 색을 나눈다.** red·blue는 면 전용이고, 판 위 글자는 redInk·blueInk가 맡는다.
+   * 괄호 안은 ground(#161616) 위 대비비다. 같은 값이 index.css의 --game-board-*에 있다.
+   */
   board: {
-    ground: '#16181C',
-    /** 바탕보다 한 겹 뜬 구조물 면(길·띠·판). 글자를 얹지 않으므로 대비를 요구하지 않는다. */
-    surface: '#1F2328',
-    ink: '#F5F2EA',
-    red: '#F2685E',
-    blue: '#6FA8E8',
-    yellow: '#F5C518',
-    grey: '#8A8F98',
+    ground: '#161616',
+    /** 바탕보다 한 겹 뜬 구조물 면(길·띠·패널) */
+    surface: '#1F1F1F',
+    high: '#242424',
+    /** 패널 테두리·칸 나눔 줄. 장식선이라 대비를 요구하지 않는다. */
+    line: '#404040',
+    /** 제도 격자 줄과 교차점 */
+    grid: '#242424',
+    gridDot: '#3A3A3A',
+    ink: '#F5F3F0', // 16.34
+    /** 보조 글자. 앞의 회색(5.47)은 면 전용이었는데 글자에 예순 곳 넘게 쓰였다. */
+    grey: '#A8A29E', // 7.18
+    red: '#D90429', // 3.45 — 면 전용, 흰 글자 5.25
+    blue: '#2B5CF0', // 3.35 — 면 전용, 흰 글자 5.40
+    yellow: '#FFD000', // 12.30 — 검정 글자 12.73
+    /** 판 위에 글자로 쓰는 빨강·파랑 */
+    redInk: '#FF8A80', // 7.93
+    blueInk: '#8FB0FF', // 8.46
     /** 어두운 판에서는 검정 선이 보이지 않으므로 밝은 선으로 두른다. */
-    keyline: '#F5F2EA',
+    keyline: '#F5F3F0',
+    /** 떠 있는 판을 받치는 검정. lift가 쓴다. */
+    shadow: '#000000',
   },
 } as const;
 
@@ -95,6 +114,13 @@ export type ShapeKind =
   | 'triangle' | 'semicircle' | 'quarter' | 'diamond' | 'cross';
 
 interface ShapeOptions {
+  /**
+   * 떠 있는 높이(가상 단위). 같은 모양을 검정으로 이만큼 비스듬히 밀어 먼저 깐다.
+   *
+   * 레퍼런스의 촉감은 흐림 없는 딱딱한 어긋남에서 나온다. 그림자처럼 번지지 않아
+   * 평면을 해치지 않는다. 한 요소에 하나만 쓴다. 3~6이면 충분하다.
+   */
+  lift?: number;
   /** 채울 색. 없으면 칠하지 않는다. */
   fill?: string;
   /** 두를 색. 종이 위 노랑에는 반드시 있어야 한다. */
@@ -191,7 +217,13 @@ export function drawShape(
   size: number,
   options: ShapeOptions = {},
 ): void {
-  const { fill, stroke, width = STROKE.base, rotate = 0, thickness = 0.24 } = options;
+  const { fill, stroke, width = STROKE.base, rotate = 0, thickness = 0.24, lift = 0 } = options;
+
+  if (lift > 0 && kind !== 'ring' && kind !== 'cross') {
+    shapePath(ctx, kind, cx + lift, cy + lift, size, rotate);
+    ctx.fillStyle = BAUHAUS.board.shadow;
+    ctx.fill();
+  }
 
   if (kind === 'ring') {
     ctx.beginPath();
@@ -234,7 +266,11 @@ export function drawBar(
   x: number, y: number, w: number, h: number,
   options: ShapeOptions = {},
 ): void {
-  const { fill, stroke, width = STROKE.base } = options;
+  const { fill, stroke, width = STROKE.base, lift = 0 } = options;
+  if (lift > 0) {
+    ctx.fillStyle = BAUHAUS.board.shadow;
+    ctx.fillRect(x + lift, y + lift, w, h);
+  }
   ctx.beginPath();
   ctx.rect(x, y, w, h);
   if (fill) { ctx.fillStyle = fill; ctx.fill(); }
@@ -385,9 +421,184 @@ export function centerText(
   color: string = BAUHAUS.board.ink,
   weight = '800',
 ): void {
-  ctx.font = `${weight} ${size}px "Pretendard", system-ui, sans-serif`;
+  /* 숫자·로마자는 Space Grotesk, 한글은 Pretendard가 받는다. 글꼴이 늦게 들어와도
+     판은 매 프레임 다시 그리므로 곧 제 모양으로 바뀐다. */
+  ctx.font = `${weight} ${size}px ${CANVAS_FONT}`;
   ctx.fillStyle = color;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(text, x, y);
+}
+
+/* ── 레퍼런스에서 가져온 판의 세부 ─────────────────────────────────────── */
+
+/** 캔버스 글꼴. 숫자·로마자는 Space Grotesk, 한글은 Pretendard가 받는다. */
+export const CANVAS_FONT = '"Space Grotesk", "Pretendard Variable", "Pretendard", system-ui, sans-serif';
+
+/**
+ * 판 바탕을 칠한다 — 바탕색, 제도 격자, 네 귀퉁이 꺾쇠.
+ *
+ * 게임마다 `ctx.fillRect(0, 0, W, H)`로 검정만 칠하던 자리를 대신한다. 레퍼런스의 판은
+ * 빈 검정이 아니라 제도지다. 40 단위마다 가는 줄, 80 단위(격자 한 칸) 교차점마다 점을
+ * 찍어, 판이 이 교재의 12칸 격자 위에 있다는 것을 드러낸다.
+ *
+ * 줄은 반투명으로 흐리게 하지 않고 바탕보다 한 단 밝은 불투명한 색으로 긋는다.
+ * 놀이 조각보다 먼저 그려지므로 조각을 가리지 않는다.
+ */
+export function paintBoard(
+  ctx: CanvasRenderingContext2D,
+  w = 960,
+  h = 540,
+): void {
+  const B = BAUHAUS.board;
+  ctx.fillStyle = B.ground;
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.fillStyle = B.grid;
+  for (let x = 40; x < w; x += 40) ctx.fillRect(x, 0, 1, h);
+  for (let y = 40; y < h; y += 40) ctx.fillRect(0, y, w, 1);
+  ctx.fillStyle = B.gridDot;
+  for (let x = GRID; x < w; x += GRID) {
+    for (let y = GRID; y < h; y += GRID) ctx.fillRect(x - 2, y - 2, 4, 4);
+  }
+
+  /* 귀퉁이 꺾쇠. 판의 끝이 어디인지 알려 주는 제도 표시다. */
+  const arm = 18;
+  const inset = 8;
+  ctx.fillStyle = B.grey;
+  const corners: Array<[number, number, number, number]> = [
+    [inset, inset, 1, 1], [w - inset, inset, -1, 1],
+    [inset, h - inset, 1, -1], [w - inset, h - inset, -1, -1],
+  ];
+  for (const [cx, cy, dx, dy] of corners) {
+    ctx.fillRect(dx > 0 ? cx : cx - arm, dy > 0 ? cy : cy - 2, arm, 2);
+    ctx.fillRect(dx > 0 ? cx : cx - 2, dy > 0 ? cy : cy - arm, 2, arm);
+  }
+}
+
+/**
+ * 떠 있는 패널. 머리띠가 있으면 위쪽에 사각 표식과 이름을 적고 줄로 가른다.
+ *
+ * 레퍼런스의 카드는 모두 이 모양이다 — 면, 테두리, 딱딱한 어긋남 하나, 그리고 머리띠.
+ * 머리띠 글자는 캔버스 바닥인 20 단위를 지킨다.
+ */
+export function drawPanel(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number, w: number, h: number,
+  options: { fill?: string; stroke?: string; lift?: number; header?: string; accent?: string } = {},
+): void {
+  const B = BAUHAUS.board;
+  const { fill = B.surface, stroke = B.line, lift = 4, header, accent = B.yellow } = options;
+  drawBar(ctx, x, y, w, h, { fill, stroke, width: STROKE.hair, lift });
+  if (header) {
+    ctx.fillStyle = accent;
+    ctx.fillRect(x + 14, y + 15, 10, 10);
+    ctx.font = `700 20px ${CANVAS_FONT}`;
+    ctx.fillStyle = B.grey;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(header, x + 32, y + 20);
+    ctx.fillStyle = B.line;
+    ctx.fillRect(x + 1, y + 38, w - 2, 2);
+  }
+}
+
+/**
+ * 꼬리표. 한 가지 색으로 칠한 작은 사각 딱지에 짧은 글을 얹는다.
+ *
+ * 레퍼런스의 "FEVER ACTIVE", "NEW RECORD!" 자리다. 검정 테두리와 어긋남을 함께 줘서 판
+ * 위에 붙인 딱지처럼 보이게 한다. 글자는 20 단위 바닥을 지킨다.
+ */
+export function drawTag(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  x: number, y: number,
+  options: { fill?: string; ink?: string; size?: number; align?: 'left' | 'center' | 'right' } = {},
+): { w: number; h: number } {
+  const B = BAUHAUS.board;
+  const { fill = B.yellow, ink = B.ground, size = 20, align = 'left' } = options;
+  ctx.font = `700 ${size}px ${CANVAS_FONT}`;
+  const w = Math.ceil(ctx.measureText(text).width) + 20;
+  const h = size + 12;
+  const left = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+  drawBar(ctx, left, y - h / 2, w, h, { fill, stroke: B.shadow, width: 2, lift: 2 });
+  ctx.fillStyle = ink;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, left + w / 2, y + 1);
+  return { w, h };
+}
+
+/**
+ * 칸으로 나뉜 막대. 진행·게이지를 이어진 띠가 아니라 셀 수 있는 칸으로 보여 준다.
+ *
+ * 숫자를 못 읽는 학생도 칸은 센다. 레퍼런스의 박자 막대와 조화도 막대가 이 모양이다.
+ */
+export function drawSegments(
+  ctx: CanvasRenderingContext2D,
+  x: number, y: number, w: number, h: number,
+  value: number, total: number,
+  options: { fill?: string; empty?: string; gap?: number } = {},
+): void {
+  const B = BAUHAUS.board;
+  const { fill = B.yellow, empty = B.high, gap = 4 } = options;
+  const count = Math.max(1, Math.round(total));
+  const cell = (w - gap * (count - 1)) / count;
+  const filled = Math.min(count, Math.max(0, value));
+  for (let i = 0; i < count; i += 1) {
+    const left = x + i * (cell + gap);
+    drawBar(ctx, left, y, cell, h, { fill: empty });
+    if (i < Math.floor(filled)) {
+      drawBar(ctx, left, y, cell, h, { fill });
+    } else if (i < filled) {
+      /* 칸 하나가 차오르는 중이면 그 칸만 부분을 칠한다. */
+      drawBar(ctx, left, y, cell * (filled - i), h, { fill });
+    }
+  }
+}
+
+/**
+ * 비어 있는 자리의 윤곽. 무엇이 들어올 자리인지 점선으로 그린다.
+ *
+ * 레퍼런스의 판정 띠에 놓인 점선 도형 자리다. 반투명 면을 깔지 않고 선만 긋는다.
+ */
+export function drawGhost(
+  ctx: CanvasRenderingContext2D,
+  kind: ShapeKind,
+  cx: number, cy: number, size: number,
+  color: string,
+): void {
+  ctx.save();
+  ctx.setLineDash([8, 6]);
+  drawShape(ctx, kind, cx, cy, size, { stroke: color, width: STROKE.hair });
+  ctx.restore();
+}
+
+/**
+ * 튀어나오는 칭찬 딱지. 조금 기울인 큰 딱지로 "잘했다"를 순간에 알린다.
+ *
+ * 레퍼런스의 "PERFECT!" 자리다. 기울기는 3도 안팎으로만 준다 — 판의 배치는 격자에
+ * 맞추지만, 순간의 신호는 격자에서 살짝 벗어나야 눈에 띈다.
+ */
+export function drawPop(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  cx: number, cy: number,
+  options: { fill?: string; ink?: string; size?: number; rotate?: number; scale?: number } = {},
+): void {
+  const B = BAUHAUS.board;
+  const { fill = B.yellow, ink = B.ground, size = 30, rotate = -0.05, scale = 1 } = options;
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(rotate);
+  ctx.scale(scale, scale);
+  ctx.font = `800 ${size}px ${CANVAS_FONT}`;
+  const w = Math.ceil(ctx.measureText(text).width) + 36;
+  const h = size + 22;
+  drawBar(ctx, -w / 2, -h / 2, w, h, { fill, stroke: B.keyline, width: STROKE.hair, lift: 4 });
+  ctx.fillStyle = ink;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, 0, 2);
+  ctx.restore();
 }

@@ -265,7 +265,7 @@ export default function SummaryDiffGame({ supportLevel }: MiniGameProps) {
             color: 'var(--game-board-ink)',
           }}
         >
-          <span style={{ color: 'var(--game-board-red)' }}>
+          <span style={{ color: 'var(--game-board-red-ink)' }}>
             <BauhausMark kind="arrow" size={18} rotate={90} />
           </span>
           요약에서 빠진 줄은 여기로

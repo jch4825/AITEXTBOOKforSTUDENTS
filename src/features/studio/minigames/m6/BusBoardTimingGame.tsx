@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar,
-  drawMark, drawShape, pick, useGameKeys,
+  drawMark, drawShape, pick, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -219,8 +219,7 @@ export default function BusBoardTimingGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     /* 전광판 공지 — 오늘 학생이 손에 쥐고 다니는 값이라 노랑으로 두른다.
        확성기 그림 문자 자리에는 같은 뜻의 소리 마크를 직접 그린다. */
@@ -258,7 +257,7 @@ export default function BusBoardTimingGame({ supportLevel }: MiniGameProps) {
         const ratio = clamp(1 - bus.timer / openSeconds, 0, 1);
         drawBar(ctx, bus.x + 30, y + 142, 320, 16, { fill: B.ground });
         drawBar(ctx, bus.x + 30, y + 142, 320 * ratio, 16, { fill: B.blue });
-        centerText(ctx, '문이 열렸습니다', bus.x + 190, y - 18, 24, B.blue);
+        centerText(ctx, '문이 열렸습니다', bus.x + 190, y - 18, 24, B.blueInk);
       }
     } else {
       centerText(ctx, '다음 차를 기다립니다', WORLD_W / 2, 280, 26, B.grey);

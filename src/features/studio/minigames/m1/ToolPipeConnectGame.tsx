@@ -325,7 +325,7 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
           style={{
             background: 'var(--game-board)',
             border: 'var(--game-line) solid var(--game-board-blue)',
-            color: 'var(--game-board-blue)',
+            color: 'var(--game-board-blue-ink)',
           }}
         >
           {/* 물이 들어오는 곳은 동그라미, 나가는 도구는 네모다. 두 끝이 다른 모양이라
@@ -366,7 +366,7 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
                   {r === stage.startRow && c === 0 && (
                     <span
                       className="absolute left-0 top-1/2 -translate-y-1/2"
-                      style={{ color: 'var(--game-board-blue)' }}
+                      style={{ color: 'var(--game-board-blue-ink)' }}
                     >
                       <BauhausMark kind="dot" size={14} />
                     </span>

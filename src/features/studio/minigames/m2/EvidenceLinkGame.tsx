@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, randInt,
-  useGameKeys,
+  useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -259,8 +259,7 @@ export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     drawBar(ctx, 14, 16, WORLD_W - 28, 42, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(ctx, stage.notice, WORLD_W / 2, 37, 21, B.ink);
@@ -293,14 +292,14 @@ export default function EvidenceLinkGame({ supportLevel }: MiniGameProps) {
     drawBar(ctx, 18, 100, 250, 120, { fill: B.surface, stroke: B.blue, width: STROKE.base });
     centerText(ctx, '지금 주장', 143, 126, 20, B.grey);
     centerText(ctx, w.piece?.claim ?? '준비 중', 143, 160, 21, B.ink);
-    centerText(ctx, `지운 줄 ${w.cleared} / ${stage.need}`, 143, 196, 21, B.blue);
+    centerText(ctx, `지운 줄 ${w.cleared} / ${stage.need}`, 143, 196, 21, B.blueInk);
 
     if (w.phase === 'ready' && !w.finished) {
       drawBar(ctx, 18, 246, 250, 88, { fill: B.ground, stroke: B.yellow, width: STROKE.base });
       centerText(ctx, '방향키나 아래 버튼을', 143, 276, 21, B.ink);
       centerText(ctx, '누르면 시작합니다', 143, 304, 21, B.ink);
     }
-    if (w.banner) centerText(ctx, w.banner, 143, 370, 20, B.blue);
+    if (w.banner) centerText(ctx, w.banner, 143, 370, 20, B.blueInk);
   };
 
   return (

@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, circleHit, clamp,
-  createRandom, dist, drawBar, drawShape, randRange, useGameKeys,
+  createRandom, dist, drawBar, drawShape, randRange, useGameKeys, paintBoard,
 } from '../engine';
 import type { ShapeKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
@@ -233,8 +233,7 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
       }
     }
 
-    ctx.fillStyle = BAUHAUS.board.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     /* 안전지대는 파랑 사각형이다. 바우하우스 어휘에서 목표의 자리다. */
     drawShape(ctx, 'square', w.safeX, w.safeY, safeR * 2, {
@@ -242,7 +241,7 @@ export default function UncomfortableDodgeGame({ supportLevel }: MiniGameProps) 
     });
     /* 이름표는 사각형 위에 올린다. 안쪽에 맞추려면 글자를 20 단위 아래로 줄여야 하는데
        캔버스 글자의 하한이 20 단위라(engine/palette.ts) 안에 넣을 수 없다. */
-    centerText(ctx, '믿을 만한 어른', w.safeX, w.safeY - safeR - 26, 22, BAUHAUS.board.blue);
+    centerText(ctx, '믿을 만한 어른', w.safeX, w.safeY - safeR - 26, 22, BAUHAUS.board.blueInk);
     centerText(ctx, `${Math.max(0, HOLD_NEED - w.hold).toFixed(1)}초`, w.safeX, w.safeY, 30, BAUHAUS.board.ground);
 
     for (const shard of w.shards) {

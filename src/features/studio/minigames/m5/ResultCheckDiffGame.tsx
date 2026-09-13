@@ -219,7 +219,7 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
                 color: 'var(--game-board-ink)',
               }}
             >
-              <span style={{ color: 'var(--game-board-blue)' }}>
+              <span style={{ color: 'var(--game-board-blue-ink)' }}>
                 <BauhausMark kind="square" size={12} />
               </span>
               {cond.text}

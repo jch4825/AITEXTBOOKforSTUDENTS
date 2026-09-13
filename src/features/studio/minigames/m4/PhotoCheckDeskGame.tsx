@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, dist, drawBar, drawCover, drawMark,
-  drawShape, pointInRect, useGameImages, useGameKeys,
+  drawShape, pointInRect, useGameImages, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { GameArt } from '../engine';
@@ -499,8 +499,7 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, W, H);
+    paintBoard(ctx, W, H);
 
     const line = world.noticeT > 0 && world.notice ? world.notice : stage.title;
     drawBar(ctx, TOP.x, TOP.y, TOP.w, TOP.h, { fill: B.ground, stroke: world.noticeT > 0 ? B.yellow : B.blue, width: STROKE.base });

@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
-  particleFor,
+  particleFor, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -208,8 +208,7 @@ export default function TaskSliceGame({ supportLevel }: MiniGameProps) {
       w.trail = w.trail.filter((point) => point.life > 0);
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 완성 사진의 빈칸
     centerText(ctx, '완성 사진', WORLD_W / 2, 18, 20, B.grey);

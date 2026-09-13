@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, dist, drawBar, drawShape, useCountdown,
-  useGameKeys,
+  useGameKeys, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -204,8 +204,7 @@ export default function CodeRequestPushGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     drawShape(ctx, 'circle', CX, CY, boardR * 2,
       { fill: B.surface, stroke: B.grey, width: STROKE.base });
@@ -217,7 +216,7 @@ export default function CodeRequestPushGame({ supportLevel }: MiniGameProps) {
     ctx.setLineDash([10, 8]);
     ctx.stroke();
     ctx.setLineDash([]);
-    centerText(ctx, '안전한 자리', CX, CY - SAFE_R + 20, 20, B.blue);
+    centerText(ctx, '안전한 자리', CX, CY - SAFE_R + 20, 20, B.blueInk);
 
     for (const ball of ballsRef.current) {
       if (ball.out) continue;

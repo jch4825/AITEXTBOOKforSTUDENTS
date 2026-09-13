@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, createRandom, drawBar, drawMark, drawShape,
-  particleFor, shuffle,
+  particleFor, shuffle, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -222,8 +222,7 @@ export default function SymptomCardGame({ supportLevel }: MiniGameProps) {
     const w = worldRef.current;
     if (dt > 0 && w.flash > 0) w.flash = Math.max(0, w.flash - dt);
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 지금 보는 카드
     const card = w.deck[0];
@@ -279,8 +278,8 @@ export default function SymptomCardGame({ supportLevel }: MiniGameProps) {
       width: ready ? STROKE.heavy : STROKE.base,
     });
     centerText(ctx, '선생님께 알리기', BELL.x + BELL.w / 2, BELL.y + BELL.h / 2, 22,
-      ready ? B.keyline : B.grey);
-    if (ready) drawMark(ctx, 'bang', BELL.x + 28, BELL.y + BELL.h / 2, 22, B.keyline);
+      ready ? B.ground : B.grey);
+    if (ready) drawMark(ctx, 'bang', BELL.x + 28, BELL.y + BELL.h / 2, 22, B.ground);
   };
 
   const handleTap = (x: number, y: number) => {

@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BauhausMark, GameHud, clamp, createRandom, randInt } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, randInt, inkFor
+} from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -432,7 +433,7 @@ export default function MeaningShiftGame({ supportLevel }: MiniGameProps) {
                     <span className="text-[14px] font-black leading-tight">{word.phrases[cell.phrase]}</span>
                     {/* 낱말 이름은 충분한 지원·중학에서만 붙인다. 고등은 풀이만 읽고 찾는다. */}
                     {game.hintAllowed && (
-                      <span className="text-[14px] font-bold leading-tight" style={{ color: word.color }}>
+                      <span className="text-[14px] font-bold leading-tight" style={{ color: popping ? 'var(--game-board-ink)' : inkFor(word.color) }}>
                         {word.name}
                       </span>
                     )}

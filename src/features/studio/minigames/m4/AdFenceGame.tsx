@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
-  drawShape, randInt, useGameKeys,
+  drawShape, randInt, useGameKeys, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 import type { ShapeKind } from '../engine';
@@ -404,8 +404,7 @@ export default function AdFenceGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     drawBar(ctx, 12, 8, 936, 62, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(ctx, stage.title, 316, 26, 28, B.ink);

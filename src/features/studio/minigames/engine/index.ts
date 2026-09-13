@@ -17,6 +17,7 @@ export type { GameImages, GameArt } from './useGameImages';
 export {
   BAUHAUS, ROLE, STROKE, GRID, snap,
   shapePath, drawShape, drawBar, drawMark, drawLives, centerText,
+  CANVAS_FONT, paintBoard, drawPanel, drawTag, drawSegments, drawGhost, drawPop,
 } from './bauhaus';
 export type { ShapeKind, MarkKind } from './bauhaus';
 export { default as BauhausMark } from './BauhausMark';
@@ -24,6 +25,7 @@ export { default as BauhausMark } from './BauhausMark';
    같은 이름으로 내보내면 게임 쪽에서 조용히 엉뚱한 쪽을 집으므로 이름을 갈라 둔다. */
 export type { MarkKind as BauhausMarkKind } from './BauhausMark';
 export { josa, particleFor, topicOf, objectOf, subjectOf } from './korean';
+export { inkFor } from './tone';
 export { tuningFor } from './difficulty';
 export type { GameTuning } from './difficulty';
 export {

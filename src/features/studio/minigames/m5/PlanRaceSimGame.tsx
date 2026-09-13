@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -256,8 +256,7 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
       redraw((n) => n + 1);
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     drawBar(ctx, 20, 12, WORLD_W - 40, 46, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(ctx, `오늘의 기준 · ${CRITERION_LABEL[stage.criterion]}이 가장 중요합니다`, WORLD_W / 2, 35, 24, B.ink);
@@ -290,7 +289,7 @@ export default function PlanRaceSimGame({ supportLevel }: MiniGameProps) {
       const stat = sums(lanes[index]);
       centerText(ctx, `시간 ${stat.time} · 안전 ${stat.safe} · 도움 ${stat.help}`, WORLD_W - 160, y, 20, B.grey);
       if (racer.stopped && racer.stopGate >= 0) {
-        centerText(ctx, `${stage.gates[racer.stopGate].name}에서 멈췄어요`, rx + 10, y - 66, 20, B.red);
+        centerText(ctx, `${stage.gates[racer.stopGate].name}에서 멈췄어요`, rx + 10, y - 66, 20, B.redInk);
       }
     });
 

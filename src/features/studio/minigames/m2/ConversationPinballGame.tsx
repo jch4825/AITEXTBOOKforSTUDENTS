@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, approach, centerText, clamp, drawBar, drawMark, drawShape,
-  useGameKeys,
+  useGameKeys, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -398,8 +398,7 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
     }
 
     // ── 그리기 ────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, W, H);
+    paintBoard(ctx, W, H);
 
     // 읽을 글은 위쪽 띠 한 곳에만 크게 둔다.
     drawBar(ctx, 12, 8, 936, 56,
@@ -445,7 +444,7 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
       stroke: open ? B.blue : B.keyline,
       width: STROKE.base,
     });
-    centerText(ctx, '사용', gate[0] - 18, gate[1], 26, open ? B.blue : B.ground);
+    centerText(ctx, '사용', gate[0] - 18, gate[1], 26, open ? B.blueInk : B.ground);
     drawMark(ctx, open ? 'check' : 'cross', gate[0] + 26, gate[1], 24, open ? B.blue : B.ground);
 
     for (let i = 0; i < 4; i += 1) {
@@ -499,7 +498,7 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
     centerText(ctx, stage.topic[1], 832, 184, 26, B.ink);
     drawBar(ctx, 730, 220, 204, 66,
       { fill: B.ground, stroke: open ? B.blue : B.grey, width: STROKE.base });
-    centerText(ctx, open ? '문 열림' : '문 닫힘', 832, 253, 26, open ? B.blue : B.grey);
+    centerText(ctx, open ? '문 열림' : '문 닫힘', 832, 253, 26, open ? B.blueInk : B.grey);
     centerText(ctx, '판 기울기', 832, 322, 24, B.grey);
     centerText(ctx, stage.tiltDrift < 0 ? '왼쪽' : (stage.tiltDrift > 0 ? '오른쪽' : '가운데'), 832, 358, 26, B.ink);
     if (stage.tiltDrift !== 0) {

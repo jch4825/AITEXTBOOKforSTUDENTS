@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, circleHit, clamp, createRandom, dist,
-  drawBar, drawShape, randRange, useGameKeys,
+  drawBar, drawShape, randRange, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -296,8 +296,7 @@ export default function ClueCarryDodgeGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     /* 복도 바닥 줄. m4-l6과 겉그림이 같아 보이지 않게 하는 장치이자, 삼각형이 어느 줄을
        다니는지 미리 알려 주는 표시다. */

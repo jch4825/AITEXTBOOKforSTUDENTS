@@ -579,7 +579,7 @@ export default function NextWordRunnerGame() {
             className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 p-4 text-center"
             style={overlay}
           >
-            <span style={{ color: 'var(--game-board-blue)' }}>
+            <span style={{ color: 'var(--game-board-blue-ink)' }}>
               <BauhausMark kind="check" size={40} />
             </span>
             <h4 className="text-base font-black sm:text-lg" style={{ color: 'var(--game-board-yellow)' }}>
@@ -622,10 +622,10 @@ export default function NextWordRunnerGame() {
             className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 p-4 text-center"
             style={overlay}
           >
-            <span style={{ color: 'var(--game-board-blue)' }}>
+            <span style={{ color: 'var(--game-board-blue-ink)' }}>
               <BauhausMark kind="square" size={40} />
             </span>
-            <h4 className="text-lg font-black" style={{ color: 'var(--game-board-blue)' }}>
+            <h4 className="text-lg font-black" style={{ color: 'var(--game-board-blue-ink)' }}>
               팩트 체크 완료
             </h4>
             <div
@@ -636,7 +636,7 @@ export default function NextWordRunnerGame() {
                 아이미의 당당한 문장
               </p>
               <p style={{ color: 'var(--game-board-ink)' }}>“{builtSentence}”</p>
-              <p className="mt-2 font-bold" style={{ color: 'var(--game-board-blue)' }}>
+              <p className="mt-2 font-bold" style={{ color: 'var(--game-board-blue-ink)' }}>
                 진짜 {stage.factCheckSource} 정보
               </p>
               <p style={{ color: 'var(--game-board-ink)' }}>“{stage.realFact}”</p>
@@ -694,7 +694,7 @@ export default function NextWordRunnerGame() {
                   color: 'var(--game-board-ink)',
                 }}
               >
-                <span style={{ color: 'var(--game-board-blue)' }}>
+                <span style={{ color: 'var(--game-board-blue-ink)' }}>
                   <BauhausMark kind="circle" size={14} />
                 </span>
                 {balloon.word}

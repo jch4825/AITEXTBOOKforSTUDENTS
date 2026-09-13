@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawShape,
-  randInt, useGameKeys,
+  randInt, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -378,8 +378,7 @@ export default function ClaimShooterGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, W, H);
+    paintBoard(ctx, W, H);
     if (w.flash > 0) {
       /* 맞았을 때 판 전체가 잠깐 붉어진다. 사라지는 세기가 곧 신호라 투명도를 남기고
          색만 팔레트에서 가져온다. */

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -182,8 +182,7 @@ export default function JobDayRigGame({ supportLevel }: MiniGameProps) {
       }
     }
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     drawBar(ctx, 20, 14, WORLD_W - 40, 42, { fill: B.ground, stroke: B.blue, width: STROKE.base });
     centerText(ctx, `${stage.job}의 하루`, WORLD_W / 2, 35, 22, B.ink);

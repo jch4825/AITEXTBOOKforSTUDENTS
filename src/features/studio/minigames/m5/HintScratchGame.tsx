@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape, particleFor,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape, particleFor, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -270,8 +270,7 @@ export default function HintScratchGame({ supportLevel }: MiniGameProps) {
     if (dt > 0 && w.flash > 0) w.flash = Math.max(0, w.flash - dt);
     const problem = stage.problems[Math.min(w.index, stage.problems.length - 1)];
 
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     // 막힌 자리
     drawBar(ctx, 48, 18, 864, 64, { fill: B.surface, stroke: B.yellow, width: STROKE.base });

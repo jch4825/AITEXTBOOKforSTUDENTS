@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, approach, centerText, clamp, createRandom,
-  drawBar, drawMark, drawShape, randRange, useGameKeys,
+  drawBar, drawMark, drawShape, randRange, useGameKeys, paintBoard,
 } from '../engine';
 import type { ShapeKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
@@ -295,8 +295,7 @@ export default function DataBalanceSortGame({ supportLevel }: MiniGameProps) {
     }
 
     // ── 그리기 ─────────────────────────────────────────────
-    ctx.fillStyle = B.ground;
-    ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+    paintBoard(ctx, WORLD_W, WORLD_H);
 
     for (let i = 0; i < world.pile.length; i += 1) {
       const item = world.pile[i];
