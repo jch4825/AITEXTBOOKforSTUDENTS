@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Icon from './Icon';
-import { PECS_COMMON, PECS_BY_MODULE, PECS_LABELS } from '../data/pecs';
+import { PECS_BY_MODULE, PECS_LABELS } from '../data/pecs';
 import type { ModuleId } from '../types';
 
 interface Props {
@@ -12,8 +12,8 @@ interface Props {
  * 인쇄하므로 브라우저 인쇄 미리보기가 정상 동작한다(display:none 요소를 인쇄하면 이미지가
  * 디코딩되지 않아 미리보기가 비는 문제를 피한다). 카드 이미지에 단어가 인쇄돼 있어 이미지만 낸다.
  */
-function printCard(name: string, label: string) {
-  const url = `${window.location.origin}${import.meta.env.BASE_URL}lessons/pecs/${name}.webp`;
+function printCard(moduleId: ModuleId, name: string, label: string) {
+  const url = `${window.location.origin}${import.meta.env.BASE_URL}lessons/pecs/${moduleId}/${name}.webp`;
   const iframe = document.createElement('iframe');
   iframe.setAttribute('aria-hidden', 'true');
   iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;';
@@ -49,9 +49,8 @@ function printCard(name: string, label: string) {
  */
 export default function PecsBoard({ moduleId }: Props) {
   const [expanded, setExpanded] = useState<string | null>(null);
-  const moduleWords = PECS_BY_MODULE[moduleId].filter((w) => !PECS_COMMON.includes(w));
-  const words = [...PECS_COMMON, ...moduleWords];
-  const src = (w: string) => `${import.meta.env.BASE_URL}lessons/pecs/${w}.webp`;
+  const words = PECS_BY_MODULE[moduleId] ?? [];
+  const src = (w: string) => `${import.meta.env.BASE_URL}lessons/pecs/${moduleId}/${w}.webp`;
 
   if (expanded) {
     const label = PECS_LABELS[expanded] ?? expanded;
@@ -63,7 +62,7 @@ export default function PecsBoard({ moduleId }: Props) {
             className="btn btn-ghost h-9 px-2 text-sm md:h-12 md:px-4 md:text-base"
           ><Icon name="chevron-left" size={18} /> 목록</button>
           <button
-            onClick={() => printCard(expanded, label)}
+            onClick={() => printCard(moduleId, expanded, label)}
             className="btn btn-secondary h-9 px-3 text-sm md:h-12 md:px-4 md:text-base"
             aria-label={`${label} 카드 인쇄`}
           ><Icon name="printer" size={18} /> 인쇄</button>
