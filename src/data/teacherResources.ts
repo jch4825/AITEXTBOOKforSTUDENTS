@@ -1,4 +1,5 @@
 import type { LessonId } from '../types';
+import { LESSON_VIDEO, lessonVideoWatchUrl } from './lessonVideos';
 
 /**
  * 차시별 교사 참고 자료 링크.
@@ -387,13 +388,12 @@ const LESSON_TOOLS: Partial<Record<LessonId, Array<{ tool: ToolKey; description:
   'm6-l11': [{ tool: 'privacy', description: '자기소개에 넣어도 되는 정보와 아닌 정보를 공식 안내로 가릅니다.' }],
 };
 
-/** 선생님이 직접 만들어 올린 차시 영상. 채널명은 유튜브 oEmbed로 확인한 값이다. */
-const LESSON_VIDEO: Partial<Record<LessonId, { id: string; title: string }>> = {
-  'm1-l1': { id: 'iQ8A8ruR26g', title: 'AI를 이해하는 가장 쉬운 안내서' },
-  'm1-l2': { id: '4Xh7K4irvck', title: '기계와 AI는 어떻게 다를까' },
-  'm1-l3': { id: 'whi2UuA9-0k', title: 'AI는 어떻게 답을 만들까' },
-};
-
+/**
+ * 선생님이 직접 만들어 올린 차시 영상은 학생 화면과 같은 목록(lessonVideos.ts)을 쓴다.
+ * 영상 아이디를 이 파일에 따로 두면 영상을 바꿀 때 한쪽만 고쳐진다.
+ * 채널명은 유튜브 oEmbed로 확인한 값이고, 영상은 도구 링크와 따로 확인했으므로 날짜도 따로 둔다.
+ */
+const VIDEO_CHECKED = '2026-10-03';
 const OWN_CHANNEL = '00학번ㅏ';
 
 export function getTeacherResources(lessonId: LessonId): TeacherLink[] {
@@ -404,11 +404,11 @@ export function getTeacherResources(lessonId: LessonId): TeacherLink[] {
     links.push({
       kind: 'video',
       label: video.title,
-      url: `https://www.youtube.com/watch?v=${video.id}`,
+      url: lessonVideoWatchUrl(video),
       source: OWN_CHANNEL,
-      description: '이 차시를 위해 만든 영상입니다. 도입이나 정리에 활용하세요.',
+      description: '이 차시를 위해 만든 영상입니다. 학생 화면의 "오늘의 개념 정리"에도 같은 영상이 들어 있습니다. 도입이나 정리에 크게 틀어 주세요.',
       fallback: '영상 없이 이야기 장면을 함께 읽고 핵심을 정리합니다.',
-      checkedAt: CHECKED,
+      checkedAt: VIDEO_CHECKED,
     });
   }
 

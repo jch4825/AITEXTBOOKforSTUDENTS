@@ -60,10 +60,20 @@ assertEqual(closeM1?.scenarioTitle, '아이미 사용 설명서', 'm1-l11 교사
 // 단축 주소는 무엇을 여는지 교사가 알 수 없어 check:teacher-resources 가 금지한다.
 // 여기서는 계약의 원래 취지만 지킨다 — 차시마다 자기 영상이 하나 있고,
 // 한 차시의 영상이 다른 차시로 새지 않는다.
+// 영상 아이디는 학생 화면과 같은 목록(src/data/lessonVideos.ts)이 원천이다. 여기에 일부러 한 번 더
+// 적어 둔다 — 목록에서 읽어 비교하면 차시와 영상이 뒤바뀌어도(l3과 l9) 통과하기 때문이다.
+// 영상 제목 끝의 차시 표기(m1-l3)와 맞춰 적는다. 영상을 바꾸면 두 곳을 함께 고친다.
 const LESSON_VIDEO_IDS = {
-  'm1-l1': 'iQ8A8ruR26g',
-  'm1-l2': '4Xh7K4irvck',
-  'm1-l3': 'whi2UuA9-0k',
+  'm1-l1': 'MI8HGNZe7ys',
+  'm1-l2': 'pZYW1Ca6Wls',
+  'm1-l3': 'hm36W4KuAoA',
+  'm1-l4': 'cXfUVJpDyUY',
+  'm1-l5': '47CPpUy9jfk',
+  'm1-l6': 'rmRsDodvscw',
+  'm1-l7': 'M17Kia7F0fA',
+  'm1-l8': 'nmJVEEGj-zE',
+  'm1-l9': 'fONX8CGR8Vs',
+  'm1-l10': 'Df5fGdiCLrs',
 };
 
 for (const [lessonId, videoId] of Object.entries(LESSON_VIDEO_IDS)) {
@@ -88,11 +98,18 @@ for (const [lessonId, videoId] of Object.entries(LESSON_VIDEO_IDS)) {
   );
 }
 
-assertEqual(
-  (teacherResourcesModule.getTeacherResources?.('m1-l4') ?? []).filter((link) => link.kind === 'video').length,
-  0,
-  'm1-l3 전용 영상이 다른 차시에 노출되면 안 된다',
-);
+// 영상이 없는 차시에는 다른 차시의 영상이 새어 나오면 안 된다.
+// 영상이 있는 차시 목록은 하드코딩하지 않고 단일 원천에서 읽어, 영상이 늘어도 검사가 거짓으로 실패하지 않게 한다.
+const lessonsWithVideo = new Set(Object.keys(teacherResourcesModule.LESSON_VIDEO ?? {}));
+const lessonsWithoutVideo = rows.map((row) => row.lessonId).filter((lessonId) => !lessonsWithVideo.has(lessonId));
+assert(lessonsWithoutVideo.length > 0, '영상이 없는 차시가 하나도 없어 영상 누수 검사를 할 수 없다');
+for (const lessonId of lessonsWithoutVideo) {
+  assertEqual(
+    (teacherResourcesModule.getTeacherResources?.(lessonId) ?? []).filter((link) => link.kind === 'video').length,
+    0,
+    `${lessonId} 에는 영상이 배정되지 않았으므로 다른 차시의 영상이 노출되면 안 된다`,
+  );
+}
 
 const worksheetM1L3 = worksheetModule.buildLessonWorksheet('m1-l3');
 assertEqual(worksheetM1L3.lessonTitle, 'AI는 어떻게 답을 만들까?', 'm1-l3 활동지는 현재 스튜디오 제목을 사용해야 한다');

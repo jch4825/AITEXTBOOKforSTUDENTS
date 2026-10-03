@@ -26,6 +26,8 @@ const TOOLS: { id: ToolId; label: string; icon: IconName }[] = [
 /**
  * 교사 자료는 외부 사이트로 나가는 링크라 교사 모드에서만 연다.
  * 학생이 수업 도중 통제할 수 없는 광고나 관련 영상 추천을 만나지 않게 하기 위해서다.
+ * 학생에게 보이는 도움 영상은 이 도크가 아니라 정리 노트의 LessonVideoCard가 맡는다
+ * (누르기 전에는 외부 요청이 없고, 끝나면 플레이어를 떼어 추천이 뜨지 않게 한다).
  */
 const TEACHER_ONLY_TOOLS = new Set<ToolId>(['resources']);
 
