@@ -69,14 +69,17 @@ export default function StudioExplanationPanel({ lesson, hard, supportLevel, acc
           </div>
           {paragraphs.map((paragraph) => <p key={paragraph} className="leading-relaxed">{paragraph}</p>)}
           {terms.length > 0 && (
-            <dl className="grid gap-2 sm:grid-cols-2">
-              {terms.map((term) => (
-                <div key={term.term} className="rounded-lg bg-[color:var(--editorial-paper)] p-3">
-                  <dt className="font-bold" style={{ color: accent }}>{term.term}</dt>
-                  <dd className="text-sm leading-relaxed">{term.definition}</dd>
-                </div>
-              ))}
-            </dl>
+            // 두 칸은 창 폭(sm:)이 아니라 이 면의 폭으로 가른다. 면이 좁으면 한 칸씩 쌓아 낱말 풀이가 좁은 칸에 갇히지 않게 한다.
+            <div className="@container">
+              <dl className="grid gap-2 @md:grid-cols-2">
+                {terms.map((term) => (
+                  <div key={term.term} className="rounded-lg bg-[color:var(--editorial-paper)] p-3">
+                    <dt className="font-bold" style={{ color: accent }}>{term.term}</dt>
+                    <dd className="text-sm leading-relaxed">{term.definition}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
           )}
           {methods.length > 0 && (
             <ol className="list-decimal space-y-1 pl-6">

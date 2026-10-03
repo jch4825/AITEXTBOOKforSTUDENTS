@@ -59,8 +59,10 @@
     /* 상단 도구 스티커 색 — 모듈 강조색과 같은 채도 대역에서 고른다.
        학생이 다섯 개를 색으로 구분하되 종이 위에서 튀지 않아야 한다.
        채도가 높은 캔디 팔레트를 여기에 직접 적지 않는다. */
+    --chrome-tools: #3F6B3F;        /* 교실 도구 — 풀빛 */
     --chrome-dictionary: #A44943;   /* 사전 — 따뜻한 벽돌 */
     --chrome-fontsize: #76516F;     /* 글자 크기 — 자두 */
+    --chrome-sound: #55606E;        /* 소리 — 석판색. 끄고 켜는 조작이라 가장 조용한 색 */
     --chrome-support-full: #2F7773; /* 충분한 지원 — 청록 */
     --chrome-support-normal: #416AA8; /* 보통 — 기본 파랑 */
     --chrome-support-challenge: #93601E; /* 도전적 — 황토 */
@@ -227,6 +229,16 @@
     font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     color: var(--fg);
     line-height: var(--leading);
+  }
+
+  /* 한글은 낱말(어절) 단위로 줄을 바꾼다.
+     기본값(normal)은 글자 사이 어디서나 줄을 끊어 `그대/로 쓰/기`처럼 낱말 모양을 깨뜨린다.
+     글을 읽는 데 힘이 드는 학생과, 그림 카드에 인쇄된 낱말을 화면 낱말과 짝지어 읽는 학생이
+     가장 먼저 걸리는 곳이라 전역으로 막는다. overflow-wrap: anywhere를 함께 두어, 낱말 하나가
+     칸보다 넓을 때만 그 안에서 끊고 플렉스·그리드 칸이 낱말 폭 때문에 넘치지 않게 한다. */
+  html {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
 
   /* 본문 기본 텍스트 크기 — rem이므로 루트 스케일을 따라간다 */
@@ -579,7 +591,7 @@
 @media print {
   .teacher-hub-chrome,
   .comic-frame-footer,
-  .classroom-dock {
+  .mobile-teacher-tools-backdrop {
     display: none !important;
   }
 
@@ -1227,6 +1239,8 @@
 }
 
 .mobile-teacher-tools-backdrop {
+  display: flex;
+  align-items: flex-end;
   background: rgba(24, 30, 42, 0.52);
 }
 
@@ -1306,17 +1320,40 @@
   background: var(--paper-0);
 }
 
+/* 교실 도구 시트는 이름과 달리 모든 폭에서 쓴다(mobile- 접두는 모바일에서 먼저 만든 흔적이다).
+   태블릿·데스크톱에서는 상단 바 아래 오른쪽에 팝오버로 뜬다. 예전의 떠 있는 도크는 스크롤하는
+   본문 위에 겹쳐 대사 한 줄이나 판단 단추를 가렸다. 시트는 열 때만 뜬다.
+   본문을 흐리지 않는다 — 교사는 본문을 보면서 타이머·그림 카드를 쓴다. */
+@media (min-width: 768px) {
+  .mobile-teacher-tools-backdrop {
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: calc(64px + 0.5rem) 1.5rem 0 0;
+    background: transparent;
+  }
+
+  .mobile-teacher-tools-sheet {
+    width: min(40rem, 100%);
+    max-height: calc(100dvh - 64px - 1.5rem);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+
+  .mobile-teacher-tools-grid {
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  }
+
+  .mobile-teacher-tools-grid > button:last-child {
+    grid-column: auto;
+  }
+}
+
 @media (min-width: 768px) {
   .lesson-topbar {
     height: 64px;
     min-height: 64px;
     padding: 0;
   }
-}
-
-.classroom-dock {
-  bottom: var(--ai-lesson-footer-height, 3.5rem);
-  max-width: calc(100% - 1rem);
 }
 
 /* 전체화면 판서 팔레트 — 데스크톱은 한 줄, 모바일은 기능별로 읽히는 도구판 */
@@ -3667,6 +3704,8 @@
   --chrome-tint: var(--accent);
   --surface-edge: color-mix(in srgb, var(--chrome-tint) 45%, var(--paper-2));
   display: inline-flex;
+  flex-shrink: 0;
+  white-space: nowrap;
   align-items: center;
   gap: 0.5rem;
   min-height: 2.75rem;
@@ -3946,4 +3985,432 @@
 div:has(> .game-canvas-fit) {
   container-type: size;
   min-height: 270px;
+}
+
+/*
+ * 낮은 창 — 높이 820px 이하의 태블릿·노트북(1366×768 노트북의 실제 뷰포트는 약 657px이다).
+ *
+ * 고정된 머리·꼬리(상단 바 64px, 하단 바 62px)에 더해, 본문 위아래 여백과 모든 화면에서 같은 글을
+ * 되풀이하는 부제·배지, 이야기 화면의 시즌 태그가 낮은 창에서 본문 높이의 절반 가까이를 먹었다.
+ * 그 결과 이야기의 「다음 이야기 보기」가 접힌 아래로 밀렸다(1366×657에서 201px 넘침).
+ *
+ * 없어도 학습이 성립하는 것(부제·배지·시즌 태그)만 숨기고 여백을 줄인다. 장면 제목, 그림, 대사,
+ * 조작줄은 그대로 둔다. 이야기 무대의 크기 계산(--scenario-stacked-room)은 건드리지 않는다.
+ * 그 문턱(50rem)은 대사가 상자를 넘치는 칸 수를 실측해 정한 값이다.
+ */
+@media (min-width: 768px) and (max-height: 820px), (min-width: 768px) and (max-width: 1023px) {
+  .micro-lesson-frame main {
+    padding-block: 0.75rem;
+  }
+
+  .studio-frame-subtitle,
+  .studio-frame-badge,
+  .studio-editorial-scenario .visual-novel-season-tag {
+    display: none;
+  }
+
+  .studio-editorial-scenario.lesson-spread--full .lesson-page {
+    padding-block: 0.9rem;
+  }
+}
+
+/* 아주 낮은 창(700px 이하)에서는 장면 제목도 줄인다. 대사·그림·조작줄이 먼저다.
+   1366×657에서 위 압축만으로 33px가 남아 「다음 이야기 보기」의 아랫부분이 잘렸다. */
+@media (min-width: 768px) and (max-height: 700px) {
+  .studio-editorial-scenario .visual-novel-story-page > .visual-novel-page-heading {
+    display: none;
+  }
+}
+
+/* 놀이 단계의 오른쪽 면(성찰 기록)은 2.2:1에서 폭이 약 280px이다. 면 안쪽 여백(최대 2rem)과 안쪽
+   상자 여백(p-7)이 겹쳐 글이 들어갈 자리가 140px쯤 남아 제목이 두세 글자씩 끊겼다.
+   놀이판을 줄이는 대신 이 면의 여백과 제목 글자를 줄인다. */
+@media (min-width: 1024px) {
+  .lesson-spread--wide-left .lesson-page-right {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .lesson-spread--wide-left .lesson-page-right > div {
+    padding: 0.4rem;
+  }
+
+  .lesson-spread--wide-left .lesson-page-right h2 {
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+
+  .lesson-spread--wide-left .lesson-page-right .studio-fact-card {
+    padding: 0.6rem 0.7rem;
+  }
+}
+
+/* ───────── 읽기 지원 (data/readingSupport.ts) ─────────
+ * 글을 못 읽는 학생도 핵심 학습을 마치게 하는 길의 화면 부품이다. 읽기 지원 단원에서만 쓴다.
+ * 색은 새로 들이지 않는다. 단원 강조색은 테두리에만 쓰고, 글자와 "읽는 중" 면은 잉크 색으로 한다.
+ * 모듈 강조색 위에 종이색 글자를 얹으면 7:1이 보장되지 않기 때문이다. */
+
+/* 듣기 단추 — 글 옆에 붙는 44px 이상의 둥근 조작. 읽는 동안에는 잉크 색 면으로 뒤집혀 "멈추기"가 된다. */
+.listen-button {
+  --listen-accent: var(--accent);
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid var(--listen-accent);
+  border-radius: 999px;
+  background: var(--paper-0);
+  color: var(--brand-ink);
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.listen-button:hover {
+  background: var(--paper-1);
+}
+
+.listen-button:focus-visible {
+  outline: 3px solid var(--brand-ink);
+  outline-offset: 3px;
+}
+
+.listen-button[data-speaking='true'] {
+  border-color: var(--brand-ink);
+  background: var(--brand-ink);
+  color: var(--paper-0);
+}
+
+/* 모두 듣기 — 아이콘과 글자를 함께 두는 알약형. 글자 크기 설정을 따라 커진다. */
+.listen-button--wide {
+  width: auto;
+  padding: 0 1.1rem 0 0.85rem;
+  font-size: calc(0.95rem + var(--font-bump));
+}
+
+/* 선택지 한 줄 = 고르는 카드 + 듣기 단추. 단추는 카드 안이 아니라 곁에 둔다.
+   카드를 누르면 고르고, 단추를 누르면 듣는다. 둘이 한 단추면 듣다가 답이 정해진다. */
+.reading-choice-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.reading-choice-row > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 휴대전화 폭(767px 이하)에서는 선택지 줄 폭이 250px 안팎이라 듣기 단추를 곁에 두면 글 칸이
+   100px로 줄어 한 줄에 두세 글자씩 끊긴다(390px 실측). 단추를 카드 안쪽 오른쪽 아래로 옮기고
+   그만큼 카드 아래 여백을 늘린다. 단추는 여전히 카드 단추와 다른 요소라 누르면 듣기만 한다. */
+@media (max-width: 767px) {
+  .reading-choice-row {
+    position: relative;
+    display: block;
+  }
+
+  .reading-choice-row > :first-child {
+    width: 100%;
+    align-items: flex-start;
+    padding-bottom: 3.7rem;
+  }
+
+  .reading-choice-row > .listen-button {
+    position: absolute;
+    right: 0.7rem;
+    bottom: 0.7rem;
+  }
+}
+
+/* 지금 읽어 주는 카드. 반투명 덮개 대신 잉크색 윤곽으로 표시한다(소리와 카드를 눈으로 잇는 표시). */
+.reading-choice-row > [data-reading='true'] {
+  outline: 4px solid var(--brand-ink);
+  outline-offset: 3px;
+}
+
+/* 그림 카드 방식 — 선택지를 그림 카드로 그린다(data/choiceCards/). 카드 한 장 = 선택지 하나.
+   글을 못 읽는 학생은 긴 문장 넷 대신 그림 넷을 보고, 뜻은 듣기 단추로 듣는다. 카드는 칸 폭을 따라 한 줄에
+   서고(8.5rem 이상), 휴대전화 폭에서는 두 장씩 선다. 듣기 단추는 카드 단추의 곁(오른쪽 위 귀퉁이에 걸침)에
+   둔다 — 카드 안에 넣으면 듣다가 답이 정해진다. 면은 선택 카드(surface-choice) 하나이고 깊이 신호는 두지 않는다. */
+.aac-grid-box {
+  container: aac-grid / inline-size;
+}
+
+.aac-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem 0.7rem;
+  padding-top: 0.9rem;
+}
+
+/* 스튜디오 오른쪽 면은 노트북에서 320~360px이라 카드 셋을 한 줄(17rem 이상)에 세운다. 두 줄로 쌓으면 셋째
+   카드가 접힌 아래로 밀린다. 그보다 좁은 칸(휴대전화, 글자 크게)은 한 줄에 둘이다. 셋을 좁은 칸에
+   욱여넣으면 카드 글자가 넉 줄 다섯 줄로 끊긴다(390px·125% 실측). 넷은 두 줄씩 서고, 넓은 칸(34rem 이상)에서는 한 줄이다.
+   기준은 rem이라 글자 크기 설정을 따라 같이 움직인다. */
+@container aac-grid (min-width: 17rem) {
+  .aac-grid[data-count='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container aac-grid (min-width: 34rem) {
+  .aac-grid[data-count='4'] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.aac-card-wrap {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.aac-card-wrap > .listen-button {
+  position: absolute;
+  top: -0.9rem;
+  right: -0.5rem;
+  z-index: 2;
+}
+
+.aac-card {
+  --aac-accent: var(--accent);
+  --aac-art: 4.5rem;
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+  padding: 0.7rem 0.35rem 0.75rem;
+  border-radius: var(--r-md);
+  text-align: center;
+  font-weight: 800;
+  line-height: 1.25;
+  word-break: keep-all;
+  cursor: pointer;
+}
+
+/* 한 줄에 셋이 서는 좁은 칸: 그림을 한 단계 줄여 카드가 높아지지 않게 한다. 넓은 칸에서는 그림을 키운다. */
+@container aac-grid (min-width: 17rem) {
+  .aac-grid[data-count='3'] .aac-card {
+    --aac-art: 4rem;
+  }
+}
+
+@container aac-grid (min-width: 34rem) {
+  .aac-card,
+  .aac-grid[data-count='3'] .aac-card {
+    --aac-art: 5.5rem;
+  }
+}
+
+.aac-card:hover {
+  background: var(--paper-1);
+}
+
+.aac-card:focus-visible {
+  outline: 3px solid var(--brand-ink);
+  outline-offset: 3px;
+}
+
+/* 고른 카드: 테두리를 굵게 하고 왼쪽 위에 표시 그림을 단다. 테두리가 굵어진 만큼 안쪽 여백을 줄여 글이 밀리지 않는다.
+   맞고 틀림은 테두리 색 하나로 알리지 않고 표시 그림(✓ / 다시)으로 함께 알린다. */
+.aac-card[aria-pressed='true'] {
+  padding: calc(0.7rem - 2px) calc(0.35rem - 2px) calc(0.75rem - 2px);
+  border-width: 4px;
+  border-color: var(--aac-accent);
+  background: var(--paper-1);
+}
+
+.aac-card[data-verdict='right'] {
+  border-color: var(--ok);
+}
+
+.aac-card[data-verdict='wrong'] {
+  border-color: var(--warn);
+}
+
+/* 지금 읽어 주는 카드(소리와 카드를 눈으로 잇는 잉크색 윤곽). */
+.aac-card-wrap > [data-reading='true'] {
+  outline: 4px solid var(--brand-ink);
+  outline-offset: 3px;
+}
+
+/* 표현 방식 탭(그림이 붙은 것)은 좁은 칸(30rem 미만)에서 고른 탭만 글자를 보인다. 나머지는 그림만 남고
+   이름은 aria-label·title이 맡는다. 다섯 탭의 글자가 석 줄(약 130px)을 먹으면 선택지가 접힌 아래로 밀린다. */
+.answer-tabs-box {
+  container: answer-tabs / inline-size;
+}
+
+@container answer-tabs (max-width: 30rem) {
+  .answer-tab[aria-selected='false'] .answer-tab-label {
+    display: none;
+  }
+}
+
+.aac-card-art {
+  width: var(--aac-art);
+  height: var(--aac-art);
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  object-fit: contain;
+}
+
+.aac-card-emoji {
+  display: flex;
+  width: var(--aac-art);
+  height: var(--aac-art);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--aac-art) * 0.62);
+  line-height: 1;
+}
+
+.aac-card-label {
+  min-width: 0;
+  font-size: 1.05rem;
+}
+
+.aac-card-mark {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  display: flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--brand-ink);
+  color: var(--paper-0);
+}
+
+/* 낮은 창(높이 780px 이하): 카드 그림을 한 단계 줄여 카드 한 줄이 접힌 아래로 밀리지 않게 한다. 카드 글자는 줄이지 않는다. */
+@media (min-width: 768px) and (max-height: 780px) {
+  .aac-card,
+  .aac-grid[data-count='3'] .aac-card {
+    --aac-art: 3.6rem;
+  }
+}
+
+/* 판단 카드 — 그림 카드(그림 + 인쇄 글자) 한 장이 단추다. 세로 카드라 좁아도 세 장이 한 줄에 선다.
+   가로 막대로 쌓으면 세 장이 290px을 먹어 1366×657처럼 낮은 창에서 판단 단추가 접힌 아래로 밀렸다.
+   그림 크기만 이 줄을 감싼 칸의 폭(@container)에 맞춰 키운다. */
+.decision-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.25rem;
+  padding: 0.4rem 0.25rem 0.45rem;
+  border: 2px solid var(--editorial-line);
+  border-radius: var(--r-md);
+  background: #fff;
+  color: var(--brand-ink);
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.decision-card-art {
+  width: 100%;
+  max-width: 3.6rem;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--r-sm);
+  object-fit: contain;
+}
+
+.decision-card-label {
+  min-width: 0;
+}
+
+@container (min-width: 32rem) {
+  .decision-card {
+    gap: 0.45rem;
+    padding: 0.55rem 0.5rem 0.65rem;
+    font-size: 1.05rem;
+  }
+
+  .decision-card-art {
+    max-width: 7.25rem;
+  }
+}
+
+/* 모바일 학습 메뉴 안의 소리 칩은 글자가 있어야 어떤 단추인지 안다. 상단 바에서는 좁은 폭에서
+   아이콘만 두려고 글자에 hidden을 걸었는데, 메뉴 안에서는 그 글자를 다시 보인다. */
+.mobile-lesson-settings .chrome-sticker > span:last-child {
+  display: inline;
+}
+
+/* 낮은 창(높이 820px 이하)의 조작 면. 오른쪽 면은 면 안쪽 여백(약 35px)과 안쪽 상자 여백(p-7, 약 31px)이
+   겹쳐 첫 글자가 67px 아래에서 시작한다. 1366×657(본문 530px)에서 판단 단계의 그림 카드 석 장이
+   그 때문에 접힌 아래로 밀렸다. 위아래 여백을 한 겹 분량으로 줄이고, 의견 인용문의 줄 간격을
+   조인다. 놀이 지면(wide-left)은 이미 위에서 따로 줄여 두어 구체성이 더 높은 그 규칙이 이긴다. */
+@media (min-width: 768px) and (max-height: 820px) {
+  .studio-editorial .lesson-page-right {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .studio-editorial .lesson-page-right > div {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .studio-decision-copy {
+    line-height: 1.4;
+  }
+}
+
+/* 낮은 창(780px 이하). 1366×657은 본문이 530px, 1280×720은 593px, 1024×768은 641px뿐이라 판단 단계가 한 화면에 들어오지 않았다.
+   차시마다 AI 의견의 줄 수가 달라 석 장이 28~57px씩 잘렸다(62차시 실측: 대부분). 위에서부터 줄인다.
+   ① 머리글: 단계 이름과 차시 제목을 두 줄에서 한 줄로(약 38px). 제목은 모든 단계에서 같다.
+   ② 오른쪽(조작) 면 위아래 여백을 한 겹 더 줄인다.
+   ③ 의견 인용 상자의 여백과 글 크기를 줄인다. 글자 크기 설정(크게)을 켜면 그만큼 다시 커진다.
+   ④ 판단 카드의 그림을 한 단계 더 줄인다. 카드의 글자는 줄이지 않는다. */
+@media (min-width: 768px) and (max-height: 780px) {
+  .studio-frame-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.75rem;
+  }
+
+  .studio-frame-heading h1 {
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .studio-editorial .lesson-page-right {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .studio-editorial .lesson-page-right > div {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .studio-editorial .lesson-page-right .studio-margin-note {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .studio-decision-copy {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .decision-card-art {
+    max-width: 3.2rem;
+  }
 }

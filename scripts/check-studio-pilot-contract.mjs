@@ -15,7 +15,12 @@ for (const lessonId of ['m5-l1', 'm5-l6', 'm5-l11']) {
 for (const mode of ['choice', 'text', 'speech', 'draw']) {
   if (!sharedSource.includes(`'${mode}'`)) throw new Error(`missing expression mode: ${mode}`);
 }
-if (sharedSource.includes("'aac'")) throw new Error('studio expression modes must not expose AAC without dedicated cards');
+// 그림 카드('aac')는 전용 카드가 있어야 표현 목록에 둘 수 있다. 차시마다 카드가 다 있는지는
+// check:choice-cards가, 카드 없는 차시에서 걸러 내는지는 아래 어댑터 검사가 맡는다.
+const dedicatedCardsPath = 'src/data/choiceCards/index.ts';
+if (sharedSource.includes("'aac'") && !fs.existsSync(dedicatedCardsPath)) {
+  throw new Error('studio expression modes must not expose AAC without dedicated cards');
+}
 for (const artifact of ['review-sheet', 'repair-card', 'workflow-plan']) {
   if (!source.includes(`kind: '${artifact}'`)) throw new Error(`missing artifact kind: ${artifact}`);
 }
@@ -69,6 +74,9 @@ for (const token of ['AI의 안내 사례', '<DrawPad', "onExpression({ mode: 'd
 }
 if (!expressionSource.includes('ExpressionInput')) throw new Error('existing multimodal input must be reused');
 if (expressionSource.includes('useEffect')) throw new Error('expression adapter must not auto-trigger effects');
+if (sharedSource.includes("'aac'") && !expressionSource.includes("'aac'")) {
+  throw new Error('expression adapter must drop AAC for lessons without dedicated cards');
+}
 
 const framePath = 'src/components/MicroLessonFrame.tsx';
 const editorialPath = 'src/features/studio/components/EditorialStudioFrame.tsx';

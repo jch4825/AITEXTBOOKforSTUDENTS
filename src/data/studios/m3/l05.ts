@@ -167,9 +167,9 @@ export const M3_L5_STUDIO: StudioDefinition = {
     firstAttempt: {
       prompt: '작은 로봇 이야기의 결말을 AI 제안보다 먼저 골라 보세요.',
       choices: [
-        { id: 'find-umbrella', emoji: '☂️', label: '친구와 우산을 찾아 함께 돌아가요.' },
-        { id: 'mystery-map', emoji: '🗺️', label: '신기한 학교 지도를 발견해요.' },
-        { id: 'own-ending', emoji: '✍️', label: '내가 생각한 다른 결말을 만들어요.' },
+        { id: 'find-umbrella', emoji: '☂️', label: '친구와 우산을 찾아 함께 돌아가요.', reaction: '작은 로봇과 친구가 우산 하나를 나누어 쓰고 돌아가는 따뜻한 결말이 그려졌습니다.' },
+        { id: 'mystery-map', emoji: '🗺️', label: '신기한 학교 지도를 발견해요.', reaction: '아이미: "지도를 따라가면 새 이야기가 열리겠네요. 무섭지 않게만 이어 가면 돼요!"' },
+        { id: 'own-ending', emoji: '✍️', label: '내가 생각한 다른 결말을 만들어요.', reaction: '윤아: "네가 직접 지은 결말이라니 멋지다! 나중에 AI 제안이랑도 견줘 보자."' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: '원하는 분위기와 결말에 꼭 들어갈 일을 표현해 보세요.',
@@ -208,9 +208,9 @@ export const M3_L5_STUDIO: StudioDefinition = {
         },
       ],
       choices: [
-        { id: 'joyful-version', emoji: '🌈', label: '즐겁고 따뜻한 이야기로 바꿔요.' },
-        { id: 'curious-version', emoji: '✨', label: '신기하고 궁금한 이야기로 바꿔요.' },
-        { id: 'quiet-version', emoji: '🌙', label: '조용하고 편안한 이야기로 바꿔요.' },
+        { id: 'joyful-version', emoji: '🌈', label: '즐겁고 따뜻한 이야기로 바꿔요.', reaction: '비 오는 학교가 웃음소리와 따뜻한 빛으로 가득 찬 이야기가 되었습니다.' },
+        { id: 'curious-version', emoji: '✨', label: '신기하고 궁금한 이야기로 바꿔요.', reaction: '작은 로봇이 "저건 뭘까?" 하고 두리번거리는 신기하고 궁금한 이야기가 되었습니다.' },
+        { id: 'quiet-version', emoji: '🌙', label: '조용하고 편안한 이야기로 바꿔요.', reaction: '빗소리만 들리는 조용하고 편안한 이야기가 되었습니다.' },
       ],
     },
     safetyNote: '수업용 이야기 제안은 창작 재료입니다. 불편하거나 무서운 제안은 거절하고 내 생각에 맞게 바꿀 수 있습니다.',

@@ -256,6 +256,7 @@ async function measure(cdp) {
       progress: box('.comic-cut-progress'),
       next: box('.comic-footer-next'),
       dock: box('.classroom-dock'),
+      toolsTrigger: box('[data-teacher-tools-trigger]'),
       menuButton: box('.mobile-topbar-menu'),
       dictionaryButton: box('.mobile-topbar-dictionary'),
       horizontalOverflow: document.documentElement.scrollWidth > innerWidth,
@@ -396,9 +397,32 @@ try {
   await setViewport(cdp, 1280, 900);
   const desktop = await measure(cdp);
   console.log(JSON.stringify({ normal, large, debug, desktop }, null, 2));
-  assert.ok(desktop.dock && desktop.dock.display !== 'none' && desktop.dock.height > 0, '데스크톱에서는 교사 도크가 유지되어야 합니다.');
+  // 교실 도구는 본문 위에 떠 있는 도크가 아니라 상단 바의 단추가 여는 시트다.
+  // 떠 있는 도크는 스크롤하는 본문 위에 겹쳐 이야기 대사와 판단 단추를 가렸다.
+  assert.equal(desktop.dock, null, '데스크톱에서 본문 위에 떠 있는 교사 도크가 다시 생기면 안 됩니다.');
+  assert.ok(
+    desktop.toolsTrigger && desktop.toolsTrigger.display !== 'none' && desktop.toolsTrigger.height >= 44
+      && desktop.header && desktop.toolsTrigger.bottom <= desktop.header.bottom,
+    '데스크톱 상단 바에 교실 도구 단추가 있어야 합니다.',
+  );
   assert.ok(desktop.mobileHeader && desktop.mobileHeader.display === 'none', '데스크톱에서는 모바일 상단을 숨겨야 합니다.');
   assert.equal(desktop.horizontalOverflow, false, '1280px에서 가로 스크롤이 생기면 안 됩니다.');
+
+  await evaluate(cdp, `document.querySelector('[data-teacher-tools-trigger]')?.click()`);
+  await waitForSelector(cdp, '.mobile-teacher-tools-sheet');
+  const popover = await evaluate(cdp, `(() => {
+    const sheet = document.querySelector('.mobile-teacher-tools-sheet').getBoundingClientRect();
+    const header = document.querySelector('.micro-lesson-frame > header').getBoundingClientRect();
+    return {
+      top: sheet.top, right: sheet.right, bottom: sheet.bottom, headerBottom: header.bottom,
+      viewportWidth: innerWidth, viewportHeight: innerHeight,
+      labels: [...document.querySelectorAll('.mobile-teacher-tools-sheet [data-tool-id]')].map((element) => element.textContent.trim()),
+    };
+  })()`);
+  assert.ok(popover.top >= popover.headerBottom, '데스크톱 교실 도구 팝오버는 상단 바 아래에 떠야 합니다.');
+  assert.ok(popover.right <= popover.viewportWidth && popover.bottom <= popover.viewportHeight, '데스크톱 교실 도구 팝오버가 화면 밖으로 넘치면 안 됩니다.');
+  assert.deepEqual(popover.labels, ['판서', '타이머', '그림 카드', '학습지'], '데스크톱 교실 도구 팝오버도 학생 모드에서 네 도구를 제공해야 합니다.');
+  await evaluate(cdp, `document.querySelector('[aria-label="교사 도구 닫기"]')?.click()`);
 
   console.log('mobile learning layout contract passed');
 } finally {

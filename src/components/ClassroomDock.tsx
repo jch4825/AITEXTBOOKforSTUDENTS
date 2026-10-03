@@ -31,33 +31,37 @@ const TOOLS: { id: ToolId; label: string; icon: IconName }[] = [
  */
 const TEACHER_ONLY_TOOLS = new Set<ToolId>(['resources']);
 
-const DOCK_COLLAPSED_KEY = 'ai-students-dock-collapsed';
-
 interface Props {
   lessonId: LessonId;
-  mobileOpen?: boolean;
-  onMobileClose?: () => void;
+  /** 도구 시트를 열었는지. 데스크톱은 상단 바 아래 팝오버, 모바일은 아래 시트로 같은 시트가 뜬다. */
+  open: boolean;
+  onClose: () => void;
   onTimerLabelChange?: (label: string | null) => void;
 }
 
 /**
- * 교실 도구 도크 — 차시 화면 한정, 전부 공개(게이팅 없음).
- * 이전/다음 푸터 바의 중앙 위에 사각으로 붙는다(호버링 X → 본문 버튼과 겹치지 않음).
- * 접기/펼치기 토글(선택은 기기에 기억). §2~3 설계 참고.
+ * 교실 도구 — 판서·타이머·그림 카드·학습지·교사 자료. 차시 화면 한정, 전부 공개(게이팅 없음).
+ *
+ * 예전에는 푸터 위에 떠 있는 도크였다. 흐름 밖(absolute)이라 스크롤하는 본문 위에 겹쳐
+ * 이야기 대사 한 줄이나 `그대로 쓰기` 단추를 가렸다(1366×657·1024×768 실측).
+ * 가리지 않게 본문 아래에 여백을 잡으면 낮은 화면(657px)에서 본문 높이의 약 12%를 잃는다.
+ * 그래서 상단 바의 "도구" 단추가 여는 시트로 옮겼다. 시트는 연 동안에만 뜨고 본문 위에
+ * 상시 떠 있지 않다. 모바일은 처음부터 같은 시트(메뉴 → 교사 도구)를 쓰고 있었다.
  */
 export default function ClassroomDock({
   lessonId,
-  mobileOpen = false,
-  onMobileClose,
+  open: sheetOpen,
+  onClose,
   onTimerLabelChange,
 }: Props) {
   const [open, setOpen] = useState<ToolId | null>(null);
-  const [collapsed, setCollapsed] = useState<boolean>(
-    () => { try { return localStorage.getItem(DOCK_COLLAPSED_KEY) === '1'; } catch { return false; } },
-  );
   const [timerRemaining, setTimerRemaining] = useState<number | null>(null);
   const [timerRunning, setTimerRunning] = useState(false);
   const intervalRef = useRef<number | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  // onClose는 부모가 렌더마다 새로 만든다. 효과의 의존성에 넣으면 시트가 열린 동안 포커스를 계속 되돌린다.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   const moduleId = moduleIdFromLessonId(lessonId) ?? 'm1';
   const theme = themeFor(moduleId);
@@ -85,6 +89,25 @@ export default function ClassroomDock({
     onTimerLabelChange?.(timerRemaining === null ? null : formatTime(timerRemaining));
   }, [onTimerLabelChange, timerRemaining]);
 
+  // 시트가 열리면 닫기 단추로 포커스를 옮기고 Esc로 닫는다. 키보드·스위치 사용자가 시트 밖에 남지 않게 한다.
+  useEffect(() => {
+    if (!sheetOpen) return;
+    closeButtonRef.current?.focus();
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') dismiss();
+    }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [sheetOpen]);
+
+  /** 시트를 닫고 포커스를 연 단추로 돌려준다. 판서·학습지처럼 다른 면을 여는 경우에는 쓰지 않는다. */
+  function dismiss() {
+    onCloseRef.current();
+    window.setTimeout(() => {
+      document.querySelector<HTMLElement>('[data-teacher-tools-trigger]')?.focus();
+    }, 0);
+  }
+
   function startTimer(minutes: number) {
     setTimerRemaining(minutes * 60);
     setTimerRunning(true);
@@ -98,20 +121,10 @@ export default function ClassroomDock({
     setTimerRunning(false);
   }
 
-  function toggle(id: ToolId) {
+  function chooseTool(id: ToolId) {
     setOpen((cur) => (cur === id ? null : id));
-  }
-
-  function openFromMobile(id: ToolId) {
-    setOpen((cur) => (cur === id ? null : id));
-    if (id === 'draw' || id === 'worksheet') onMobileClose?.();
-  }
-
-  function toggleCollapsed() {
-    const next = !collapsed;
-    setCollapsed(next);
-    try { localStorage.setItem(DOCK_COLLAPSED_KEY, next ? '1' : '0'); } catch { /* ignore */ }
-    if (next) setOpen(null); // 접을 때 열린 패널 닫기
+    // 판서와 학습지는 화면 전체를 쓰는 면이라 시트를 닫고 연다.
+    if (id === 'draw' || id === 'worksheet') onCloseRef.current();
   }
 
   const panelTool = open && open !== 'draw' ? (open as PanelId) : null;
@@ -176,79 +189,8 @@ export default function ClassroomDock({
 
   return (
     <>
-      {/* 이전/다음 바(footer) 중앙 위에 붙는 도구 바.
-          absolute + 프레임(relative, h-dvh)에 앵커 — 흐름에서 빠져 사이드바가 푸터까지 이어지고,
-          fixed와 달리 프레임 기준이라 모바일 주소창 변화에도 점핑·사라짐이 없다.
-          실제 푸터 높이는 MicroLessonFrame에서 측정한 CSS 변수로 맞춘다. */}
-      <div className="classroom-dock absolute left-1/2 -translate-x-1/2 z-30 hidden md:flex flex-col items-center gap-2 pointer-events-none">
-        {!collapsed && panelTool && panelTool !== 'worksheet' && (
-          <div
-            className="rounded-[var(--r-md)] overflow-hidden pointer-events-auto max-h-[60vh] overflow-y-auto"
-            style={{ background: 'var(--paper-0)', boxShadow: 'var(--surface-a4-elevation)', border: '2px solid var(--border)' }}
-          >
-            <div className="flex justify-end p-1">
-              <button
-                onClick={() => setOpen(null)}
-                aria-label="패널 닫기"
-                className="h-8 w-8 rounded-[var(--r-sm)] hover:bg-[color:var(--paper-2)] flex items-center justify-center"
-              ><Icon name="close" size={16} /></button>
-            </div>
-            <div className="px-1 pb-2">{panelContent}</div>
-          </div>
-        )}
-
-        {/* 사각 도구 바 — 위 모서리만 둥글게, 아래는 footer에 붙는 느낌 */}
-        <div
-          className="pointer-events-auto flex items-center gap-1 px-1.5 py-1 rounded-t-[var(--r-md)] border border-b-0"
-          style={{ background: 'var(--paper-0)', boxShadow: 'var(--surface-a4-elevation)', borderColor: 'var(--border)' }}
-        >
-          {collapsed ? (
-            <button
-              onClick={toggleCollapsed}
-              aria-label="교사 도구 펼치기"
-              aria-expanded={false}
-              title="교사 도구 펼치기"
-              className="h-10 px-3 inline-flex items-center gap-1.5 rounded-[var(--r-sm)] text-sm font-semibold hover:bg-[color:var(--paper-2)]"
-              style={{ color: 'var(--muted)' }}
-            >
-              <Icon name="pen" size={16} /> 교사 도구 <Icon name="chevron-up" size={16} />
-              {timerChip}
-            </button>
-          ) : (
-            <>
-              {visibleTools.map((tool) => (
-                <button
-                  key={tool.id}
-                  onClick={() => toggle(tool.id)}
-                  aria-label={tool.label}
-                  aria-pressed={open === tool.id}
-                  title={tool.label}
-                  className="h-11 w-11 rounded-full flex items-center justify-center"
-                  style={{
-                    background: open === tool.id ? theme.accentSoft : 'transparent',
-                    color: open === tool.id ? theme.accent : 'var(--ink-1)',
-                  }}
-                ><Icon name={tool.icon} size={22} /></button>
-              ))}
-              {open !== 'timer' && timerChip}
-              <span className="w-px h-6 mx-0.5 shrink-0" style={{ background: 'var(--border)' }} aria-hidden />
-              <button
-                onClick={toggleCollapsed}
-                aria-label="교사 도구 접기"
-                aria-expanded
-                title="교사 도구 접기"
-                className="h-11 w-9 rounded-[var(--r-sm)] flex items-center justify-center hover:bg-[color:var(--paper-2)]"
-                style={{ color: 'var(--muted)' }}
-              ><Icon name="chevron-down" size={20} /></button>
-            </>
-          )}
-        </div>
-      </div>
-      {mobileOpen && (
-        <div
-          className="mobile-teacher-tools-backdrop fixed inset-0 z-[60] flex items-end md:hidden"
-          onClick={onMobileClose}
-        >
+      {sheetOpen && (
+        <div className="mobile-teacher-tools-backdrop fixed inset-0 z-[60]" onClick={dismiss}>
           <section
             className="mobile-teacher-tools-sheet"
             role="dialog"
@@ -261,7 +203,7 @@ export default function ClassroomDock({
                 <strong>교사 도구</strong>
                 {timerChip}
               </div>
-              <button type="button" onClick={onMobileClose} aria-label="교사 도구 닫기">
+              <button ref={closeButtonRef} type="button" onClick={dismiss} aria-label="교사 도구 닫기">
                 <Icon name="close" size={22} />
               </button>
             </div>
@@ -272,7 +214,7 @@ export default function ClassroomDock({
                   type="button"
                   data-tool-id={tool.id}
                   aria-pressed={open === tool.id}
-                  onClick={() => openFromMobile(tool.id)}
+                  onClick={() => chooseTool(tool.id)}
                   style={{
                     background: open === tool.id ? theme.accentSoft : 'var(--paper-1)',
                     color: open === tool.id ? theme.accent : 'var(--ink-1)',

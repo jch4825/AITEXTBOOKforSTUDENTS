@@ -12,6 +12,7 @@ import LinkedStandardsGuide from './LinkedStandardsGuide';
 import TeacherCurriculumGuide from './TeacherCurriculumGuide';
 import TeacherDataManagement from './TeacherDataManagement';
 import TeacherOnboarding from './TeacherOnboarding';
+import TeacherAnswerModeSetting from './TeacherAnswerModeSetting';
 import TeacherOperationGuide from './TeacherOperationGuide';
 import TeacherSoundSetting from './TeacherSoundSetting';
 import { loadTeacherRecordingSettings } from './recordingSettings';
@@ -135,6 +136,7 @@ export default function TeacherHub({ onExit }: Props) {
               </div>
             </section>
             <TeacherSoundSetting />
+            <TeacherAnswerModeSetting />
             <TeacherOperationGuide />
           </>
         )}

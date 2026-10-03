@@ -1,3 +1,5 @@
+import { useId } from 'react';
+import ListenButton from '../../../components/controls/ListenButton';
 import SpeakerDialogue from './SpeakerDialogue';
 import type { StudioChoice, StudioExpression } from '../types';
 
@@ -6,6 +8,8 @@ interface Props {
   expression: StudioExpression | undefined;
   accent: string;
   dictionaryTerms: string[];
+  /** 읽기 지원 단원이면 반응 대사에 듣기 단추를 단다. 고르는 일이 조용해서 이 대사가 곧 피드백이다. */
+  readingSupport?: boolean;
 }
 
 /**
@@ -20,7 +24,9 @@ export default function ChoiceReactionPanel({
   expression,
   accent,
   dictionaryTerms,
+  readingSupport = false,
 }: Props) {
+  const listenId = useId();
   const picked = choices.filter(
     (choice) => choice.reaction && expression?.choiceIds?.includes(choice.id),
   );
@@ -35,7 +41,19 @@ export default function ChoiceReactionPanel({
       style={{ borderColor: accent, background: 'var(--editorial-paper)' }}
       aria-live="polite"
     >
-      <p className="studio-kicker mb-2" style={{ color: accent }}>그때 무슨 일이 일어났을까요</p>
+      {readingSupport ? (
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <p className="studio-kicker" style={{ color: accent }}>그때 무슨 일이 일어났을까요</p>
+          <ListenButton
+            text={picked.map((choice) => choice.reaction as string).join(' ')}
+            speakKey={`${listenId}:reaction`}
+            label="그때 일어난 일 듣기"
+            accent={accent}
+          />
+        </div>
+      ) : (
+        <p className="studio-kicker mb-2" style={{ color: accent }}>그때 무슨 일이 일어났을까요</p>
+      )}
       <div className="space-y-2.5">
         {picked.map((choice) => (
           <div key={choice.id}>

@@ -3,6 +3,7 @@ import MicroLessonFrame from '../../components/MicroLessonFrame';
 import ScreentoneBackdrop from '../../components/lesson/ScreentoneBackdrop';
 import { useProgress } from '../../context/ProgressContext';
 import type { ModulePortfolioDefinition } from '../../data/modulePortfolios/types';
+import { moduleHasReadingSupport } from '../../data/readingSupport';
 import { getStudioDefinition } from '../../data/studios';
 import type { LessonId } from '../../types';
 import { themeFor } from '../../utils/moduleThemes';
@@ -26,7 +27,7 @@ const CRITERIA = [
   '조건이 달라졌을 때 방법을 조정했습니다.',
 ];
 
-const NEXT_MODES: ExpressionMode[] = ['choice', 'text', 'speech'];
+const NEXT_MODES: ExpressionMode[] = ['choice', 'aac', 'text', 'speech'];
 
 function expressionText(record: StudioEvidenceV2, field: 'firstAttempt' | 'finalExpression' | 'transferExpression'): string {
   const value = record[field];
@@ -318,6 +319,8 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
               prompt={definition.transferPrompt ?? '다른 문제가 생기면 어떤 방법을 다시 써 보겠습니까?'}
               accent={theme.accent}
               onChange={setNextMethod}
+              readingSupport={moduleHasReadingSupport(definition.moduleId)}
+              lessonId={definition.lessonId}
             />
           </section>
 

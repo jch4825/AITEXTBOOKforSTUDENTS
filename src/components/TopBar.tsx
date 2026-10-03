@@ -1,6 +1,8 @@
 import FontSizeToggle from './controls/FontSizeToggle';
 import DifficultyToggle from './controls/DifficultyToggle';
 import DictionaryTrigger from './controls/DictionaryTrigger';
+import ToolsTrigger from './controls/ToolsTrigger';
+import SoundToggle from './controls/SoundToggle';
 import Icon from './Icon';
 
 interface Props {
@@ -10,6 +12,8 @@ interface Props {
   onOpenNav?: () => void; // 모바일 차례 드로어 열기
   mobileTimerLabel?: string | null;
   onOpenTeacherTools?: () => void;
+  /** 읽기 지원 단원이면 학생이 쓰는 소리 칩을 둔다(data/readingSupport.ts). */
+  readingSupport?: boolean;
 }
 
 export default function TopBar({
@@ -19,6 +23,7 @@ export default function TopBar({
   onOpenNav,
   mobileTimerLabel,
   onOpenTeacherTools,
+  readingSupport = false,
 }: Props) {
   return (
     <header className="lesson-topbar shrink-0 border-b border-[color:var(--border)] bg-[color:var(--paper-0)]">
@@ -49,12 +54,24 @@ export default function TopBar({
       <div className="lesson-topbar-desktop hidden md:flex h-full w-full items-center gap-4 px-6">
         <button
           onClick={onGoHome}
-          className="inline-flex items-center min-h-11 px-2 -ml-2 rounded-[var(--r-sm)] text-lg font-bold hover:bg-[color:var(--paper-2)]"
+          className="inline-flex shrink-0 items-center whitespace-nowrap min-h-11 px-2 -ml-2 rounded-[var(--r-sm)] text-lg font-bold hover:bg-[color:var(--paper-2)]"
           style={{ color: 'var(--accent)' }}
           aria-label="처음 화면으로"
         ><Icon name="home" size={22} /><span> AI 교과서</span></button>
-        <span className="text-base text-[color:var(--muted)] truncate" aria-label="현재 위치">{crumb}</span>
-        <div className="ml-auto flex items-center gap-2">
+        {/* 폭이 모자라면 줄어드는 것은 위치 표시뿐이다. 단추는 줄어들지도 줄바꿈하지도 않는다. */}
+        <span className="min-w-0 text-base text-[color:var(--muted)] truncate" aria-label="현재 위치">{crumb}</span>
+        <div className="ml-auto flex shrink-0 items-center gap-2">
+          {mobileTimerLabel && (
+            <button
+              type="button"
+              onClick={onOpenTeacherTools}
+              className="mobile-timer-chip"
+              aria-label={`타이머 ${mobileTimerLabel}. 교사 도구 열기`}
+            ><Icon name="timer" size={16} /><span>{mobileTimerLabel}</span></button>
+          )}
+          {/* 교실 도구는 예전에 본문 위에 떠 있는 도크였다. 본문을 가리지 않도록 상단 바의 단추가 여는 시트로 옮겼다. */}
+          <ToolsTrigger onClick={() => onOpenTeacherTools?.()} />
+          {readingSupport ? <SoundToggle /> : null}
           <FontSizeToggle />
           <DifficultyToggle />
           <DictionaryTrigger onClick={onOpenDictionary} />

@@ -21,7 +21,8 @@ export const STUDIO_SUPPORT_PROFILES = {
   },
 } satisfies StudioDefinition['supportProfiles'];
 
-export const STUDIO_EXPRESSION_MODES = ['choice', 'text', 'speech', 'draw'] as const;
+// 'aac'(그림 카드)는 선택지를 그림 카드로 그리는 방식이다. 카드가 있는 차시에서만 보인다(data/choiceCards/).
+export const STUDIO_EXPRESSION_MODES = ['choice', 'aac', 'text', 'speech', 'draw'] as const;
 
 // 장면 텍스트를 지원 수준별 사본으로 만드는 공용 헬퍼. 분할 전에는 각 모듈 파일에 중복 정의되어 있었다.
 // 한 칸짜리 각본을 만든다. 아직 대사 칸으로 다시 쓰지 않은 차시가 이 헬퍼를 쓴다.
