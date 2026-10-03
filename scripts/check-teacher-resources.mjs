@@ -89,12 +89,22 @@ if (online) {
     const endpoint = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${video.id}&format=json`;
     try {
       const response = await fetch(endpoint);
-      if (!response.ok) { failures.push(`${lessonId}: 영상 ${video.id} 없음/비공개 (HTTP ${response.status})`); continue; }
+      // 학생 화면이 이 영상을 임베드하므로 임베드 금지도 같은 응답(401)으로 잡힌다.
+      if (!response.ok) { failures.push(`${lessonId}: 영상 ${video.id} 없음/비공개/임베드 금지 (HTTP ${response.status})`); continue; }
       const data = await response.json();
       assert(
         data.author_name === '00학번ㅏ',
         `${lessonId}: 영상 ${video.id} 의 채널이 ${data.author_name} 로 바뀌었다 — 다른 영상일 수 있다`,
       );
+      // 제목 끝에 차시 표기(m1-l7, m1 l6)가 있으면 배정된 차시와 같아야 한다. 영상이 뒤바뀐 배정을 잡는다.
+      // 표기가 없는 제목은 규칙을 모르는 것이므로 건너뛴다.
+      const coded = /m(\d+)[-\s]l(\d+)\s*$/i.exec(String(data.title ?? '').trim());
+      if (coded) {
+        assert(
+          `m${coded[1]}-l${coded[2]}` === lessonId,
+          `${lessonId}: 영상 ${video.id} 의 제목은 m${coded[1]}-l${coded[2]} 용이다 — 차시가 뒤바뀌었다`,
+        );
+      }
     } catch (error) {
       failures.push(`${lessonId}: 영상 확인 실패 ${String(error.message).slice(0, 40)}`);
     }

@@ -15,7 +15,7 @@ export type IconName =
   | 'menu' | 'close' | 'chevron-left' | 'chevron-right' | 'chevron-up' | 'chevron-down'
   | 'chat' | 'check' | 'bulb' | 'rocket' | 'sparkles' | 'refresh'
   | 'star' | 'circle' | 'cross' | 'warning' | 'think' | 'hourglass'
-  | 'pen' | 'timer' | 'printer' | 'cards' | 'link' | 'eraser';
+  | 'pen' | 'timer' | 'printer' | 'cards' | 'link' | 'eraser' | 'play';
 
 interface Props {
   name: IconName;
@@ -196,4 +196,5 @@ const GLYPHS: Record<IconName, (p: GlyphProps) => JSX.Element> = {
       <path d="m5 11 9 9" />
     </>
   ),
+  play: () => <path d="M8 5.5v13L19 12z" fill="currentColor" />,
 };

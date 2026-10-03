@@ -49,6 +49,11 @@
   검사는 `npm run check:visual-novel-story`와 `npm run check:support-gradient`입니다.
 - PECS·AAC 라벨은 카드 이미지에 인쇄된 글자와 어체까지 일치시킵니다. 인쇄된 낱말과
   화면 낱말을 짝지어 읽는 것이 이 도구의 사용법이므로 한쪽만 바꾸지 않습니다.
+- 차시 도움 영상(`src/data/lessonVideos.ts`)은 선택 자료입니다. 학생 화면에서는 정리 노트의 카드를
+  눌러야 비로소 플레이어를 붙이고(누르기 전에는 외부 요청이 없습니다) 쿠키를 심지 않는
+  `youtube-nocookie.com`만 씁니다. 못 봐도 다음 단계로 넘어가 핵심 학습이 끝까지 완료되어야 하고,
+  영상이 끝나면 플레이어를 떼어 끝 화면의 추천 영상이 학생에게 뜨지 않게 합니다.
+  `npm run check:lesson-videos`가 이를 강제합니다.
 - 한국어 파일은 UTF-8, TypeScript는 strict 설정을 유지합니다.
 
 ## 현재 단일 진실 원천
@@ -67,6 +72,9 @@ npm run check:standards-integrity
 npm run check:highschool-tasks`가 강제합니다.
 - 정식 콘텐츠와 성취기준: `src/data/canonicalLessons/`, `src/data/aiAchievementStandards.ts`
 - 학생 사전: `src/data/studentDictionary.ts`
+- 차시 도움 영상: `src/data/lessonVideos.ts` — 선생님이 올린 해설 영상. 학생 정리 노트
+  (`LessonVideoCard`)와 교사 자료(`teacherResources.ts`)가 이 목록 하나를 함께 쓴다. 영상을 더할
+  때는 이 표에 한 줄을 추가하고 `npm run check:teacher-resources -- --online`으로 열리는지 본다.
 - 단원별 핵심 내용: `src/data/moduleCoreContents.ts` — 한 단원이 어떤 내용을 어떤 차시 묶음으로
   다루는지 밝힌다. 차시 범위는 실제 차시와 맞아야 하며 `npm run check:curriculum-document`가
   강제한다.
@@ -227,6 +235,7 @@ npm run check:objectives
 npm run check:curriculum-document
 npm run check:grade-band-guard
 npm run check:game-visual
+npm run check:lesson-videos
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.
