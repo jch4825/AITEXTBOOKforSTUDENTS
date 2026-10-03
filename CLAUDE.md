@@ -54,6 +54,14 @@
   `youtube-nocookie.com`만 씁니다. 못 봐도 다음 단계로 넘어가 핵심 학습이 끝까지 완료되어야 하고,
   영상이 끝나면 플레이어를 떼어 끝 화면의 추천 영상이 학생에게 뜨지 않게 합니다.
   `npm run check:lesson-videos`가 이를 강제합니다.
+- 읽기 지원(`src/data/readingSupport.ts`)은 글을 못 읽는 학생도 핵심 학습을 끝까지 마치게 하는 길입니다.
+  켜진 단원(2026-10 시범으로 1단원)에서는 ① 선택지·반응 대사·AI 의견마다 듣기 단추가 있고 물음 옆
+  단추가 물음과 선택지를 차례로 읽으며, ② 카드를 고르는 일은 소리 없이 하고(고를 때 읽는 일은 교사가
+  켠 교실만, 기본 꺼짐) 반응 대사가 곧 피드백이며, ③ 판단 단추 셋은 그림 카드(화면 글자는 PECS_LABELS
+  하나에서 나옵니다), ④ 상단 바에 학생이 쓰는 소리 칩이 있습니다. 듣기와 고르기는 서로 다른 요소여야
+  하고(듣다가 답이 정해지면 안 됩니다), 듣기 단추는 소리 설정과 상관없이 늘 읽습니다. 소리 칩은 저절로
+  나는 소리만 끕니다. 읽는 글은 `toSpeechText`로 기호를 풀어 씁니다(화면 글은 그대로). 단원을 더할 때는
+  목록에 더하고 `npm run check:reading-support`를 돌립니다. 모든 선택지에 반응 대사가 있어야 통과합니다.
 - 한국어 파일은 UTF-8, TypeScript는 strict 설정을 유지합니다.
 
 ## 현재 단일 진실 원천
@@ -75,6 +83,9 @@ npm run check:highschool-tasks`가 강제합니다.
 - 차시 도움 영상: `src/data/lessonVideos.ts` — 선생님이 올린 해설 영상. 학생 정리 노트
   (`LessonVideoCard`)와 교사 자료(`teacherResources.ts`)가 이 목록 하나를 함께 쓴다. 영상을 더할
   때는 이 표에 한 줄을 추가하고 `npm run check:teacher-resources -- --online`으로 열리는지 본다.
+- 읽기 지원 단원: `src/data/readingSupport.ts` — 듣기 단추·판단 카드·소리 칩을 함께 켜고 끄는 단원
+  목록 하나. 켜는 일은 이 목록에 단원을 더하는 한 줄이다. 판단 카드 그림은 `public/lessons/pecs/{단원}/`의
+  `use_as_is`·`fix_and_use`·`dont_use`를 쓴다(`src/features/studio/decisionCards.ts`).
 - 단원별 핵심 내용: `src/data/moduleCoreContents.ts` — 한 단원이 어떤 내용을 어떤 차시 묶음으로
   다루는지 밝힌다. 차시 범위는 실제 차시와 맞아야 하며 `npm run check:curriculum-document`가
   강제한다.
@@ -236,6 +247,7 @@ npm run check:curriculum-document
 npm run check:grade-band-guard
 npm run check:game-visual
 npm run check:lesson-videos
+npm run check:reading-support
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.

@@ -8,6 +8,8 @@ import Icon from './Icon';
 import ClassroomDock from './ClassroomDock';
 import FontSizeToggle from './controls/FontSizeToggle';
 import DifficultyToggle from './controls/DifficultyToggle';
+import SoundToggle from './controls/SoundToggle';
+import { hasReadingSupport } from '../data/readingSupport';
 import type { LessonId } from '../types';
 import { formatDebugPageId, isDebugMode, type DebugSubPage } from '../utils/debugMode';
 import { stopSpeaking } from '../utils/tts';
@@ -43,6 +45,8 @@ export default function MicroLessonFrame({
   const [toolsOpen, setToolsOpen] = useState(false);
   // 타이머가 도는 동안 상단 바에 남는 남은 시간. 모바일뿐 아니라 데스크톱 상단 바도 쓴다.
   const [mobileTimerLabel, setMobileTimerLabel] = useState<string | null>(null);
+  // 읽기 지원 단원이면 상단 바와 모바일 메뉴에 학생용 소리 칩을 둔다.
+  const readingSupport = hasReadingSupport(lessonId);
   const footerRef = useRef<HTMLElement | null>(null);
   // 데스크톱 사이드바 접기(집중 모드) — 선택을 기기에 기억한다.
   // 태블릿은 본문 폭을 먼저 확보하도록 새로 열 때 기본 접힘으로 시작한다.
@@ -126,6 +130,7 @@ export default function MicroLessonFrame({
         onOpenNav={() => setNavOpen(true)}
         mobileTimerLabel={mobileTimerLabel}
         onOpenTeacherTools={() => setToolsOpen(true)}
+        readingSupport={readingSupport}
       />
       <div className="flex flex-1 min-h-0">
         {/* PC: 접을 수 있는 사이드바 (localStorage: ai-students-sidebar-collapsed) / 모바일: ☰ 드로어 */}
@@ -191,6 +196,7 @@ export default function MicroLessonFrame({
                   className="mobile-lesson-menu-action"
                 ><Icon name="pen" size={20} /> 교사 도구</button>
                 <div className="mobile-lesson-settings" aria-label="학습 설정">
+                  {readingSupport ? <SoundToggle /> : null}
                   <FontSizeToggle />
                   <DifficultyToggle />
                 </div>

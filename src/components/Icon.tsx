@@ -15,7 +15,8 @@ export type IconName =
   | 'menu' | 'close' | 'chevron-left' | 'chevron-right' | 'chevron-up' | 'chevron-down'
   | 'chat' | 'check' | 'bulb' | 'rocket' | 'sparkles' | 'refresh'
   | 'star' | 'circle' | 'cross' | 'warning' | 'think' | 'hourglass'
-  | 'pen' | 'timer' | 'printer' | 'cards' | 'link' | 'eraser' | 'play';
+  | 'pen' | 'timer' | 'printer' | 'cards' | 'link' | 'eraser' | 'play'
+  | 'stop' | 'speaker-off';
 
 interface Props {
   name: IconName;
@@ -197,4 +198,13 @@ const GLYPHS: Record<IconName, (p: GlyphProps) => JSX.Element> = {
     </>
   ),
   play: () => <path d="M8 5.5v13L19 12z" fill="currentColor" />,
+  // 읽어 주는 중에 단추가 "멈추기"로 바뀔 때 쓴다.
+  stop: () => <rect x="6.5" y="6.5" width="11" height="11" rx="2" fill="currentColor" stroke="none" />,
+  // 소리 칩이 꺼진 상태. 스피커 옆의 ×로 "소리가 없다"를 그림 하나로 알린다.
+  'speaker-off': () => (
+    <>
+      <path d="M4 9v6h3.5L13 19V5L7.5 9H4z" fill="currentColor" stroke="none" />
+      <path d="M16.5 9.5l5 5M21.5 9.5l-5 5" />
+    </>
+  ),
 };

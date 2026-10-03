@@ -8,6 +8,8 @@ interface Props {
   prompt: string;
   accent: string;
   onChange: (value: StudioExpression) => void;
+  /** 읽기 지원 단원이면 선택지마다 듣기 단추를 단다(data/readingSupport.ts). */
+  readingSupport?: boolean;
 }
 
 export default function StudioExpressionInput({
@@ -17,6 +19,7 @@ export default function StudioExpressionInput({
   prompt,
   accent,
   onChange,
+  readingSupport = false,
 }: Props) {
   return (
     <ExpressionInput
@@ -26,6 +29,7 @@ export default function StudioExpressionInput({
       prompt={prompt}
       accent={accent}
       onChange={onChange}
+      readingSupport={readingSupport}
     />
   );
 }

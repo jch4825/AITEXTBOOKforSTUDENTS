@@ -13,6 +13,7 @@ const DEFAULT_SETTINGS: SettingsState = {
   gradeBand: 'normal',
   fontSize: 'normal',
   ttsEnabled: true,
+  autoRead: false,
   soundEnabled: true,
 };
 
@@ -59,8 +60,10 @@ export function loadSettings(): SettingsState {
       : parsed?.fontSize === 'large' ? 'large'
       : 'normal';
     const ttsEnabled = parsed?.ttsEnabled !== false;
+    // 저절로 읽는 소리는 켠다고 명시한 기기에서만 난다. 옛 설정(autoRead 없음)은 꺼짐이다.
+    const autoRead = parsed?.autoRead === true;
     const soundEnabled = parsed?.soundEnabled !== false;
-    return { difficulty, gradeBand, fontSize, ttsEnabled, soundEnabled };
+    return { difficulty, gradeBand, fontSize, ttsEnabled, autoRead, soundEnabled };
   } catch {
     return DEFAULT_SETTINGS;
   }

@@ -59,6 +59,7 @@
     "check:highschool-tasks": "node scripts/check-highschool-tasks.mjs",
     "check:teacher-resources": "node scripts/check-teacher-resources.mjs",
     "check:lesson-videos": "node scripts/check-lesson-videos.mjs",
+    "check:reading-support": "node scripts/check-reading-support.mjs",
     "check:curriculum-document": "node scripts/check-curriculum-document.mjs"
   },
   "dependencies": {

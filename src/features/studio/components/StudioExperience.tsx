@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '../../../components/Icon';
 import MicButton from '../../../components/MicButton';
+import ListenButton from '../../../components/controls/ListenButton';
 import { useSpeak } from '../../../hooks/useSpeak';
+import { hasReadingSupport } from '../../../data/readingSupport';
+import { PECS_LABELS } from '../../../data/pecs';
+import { DECISION_CARD_IDS, decisionCardSrc, prefetchDecisionCards } from '../decisionCards';
 import type { HardLessonContent, LessonContent } from '../../../types';
 import AiDecisionPanel from './AiDecisionPanel';
 import ArtifactCanvas from './ArtifactCanvas';
@@ -146,6 +150,11 @@ export default function StudioExperience({
   behavior,
 }: Props) {
   const { speakNow } = useSpeak();
+  // 읽기 지원 단원이면 선택지·반응·AI 의견에 듣기 단추를 달고, 판단 단추를 그림 카드로 그린다.
+  const readingSupport = hasReadingSupport(definition.lessonId);
+  useEffect(() => {
+    if (readingSupport) prefetchDecisionCards(definition.moduleId);
+  }, [readingSupport, definition.moduleId]);
   // 놀이는 태블릿·PC 크기에서만 연다. 휴대전화에서는 놀이 자리에 안내가 대신 들어간다.
   const miniGamePlayable = useMiniGamePlayable();
   const [studentName, setStudentName] = useState('');
@@ -516,18 +525,32 @@ export default function StudioExperience({
           prompt={definition.firstAttempt.prompt}
           accent={accent}
           onChange={(value) => dispatch({ type: 'set-first-attempt', value })}
+          readingSupport={readingSupport}
         />
         <ChoiceReactionPanel
           choices={firstChoices}
           expression={state.firstAttempt}
           accent={accent}
           dictionaryTerms={allDictTerms}
+          readingSupport={readingSupport}
         />
-        <label className="block">
-          <span className="mb-2 block text-sm font-bold text-[color:var(--muted)]">
-            {definition.firstAttempt.reasonPrompt} (자유롭게 작성)
-          </span>
+        {/* 듣기 단추는 label 밖에 둔다. label 안에 있으면 입력칸의 이름에 "물음 듣기"가 섞여 읽힌다. */}
+        <div>
+          <div className="mb-2 flex items-start justify-between gap-2">
+            <label htmlFor="studio-reason-input" className="text-sm font-bold text-[color:var(--muted)]">
+              {definition.firstAttempt.reasonPrompt} (자유롭게 작성)
+            </label>
+            {readingSupport ? (
+              <ListenButton
+                text={definition.firstAttempt.reasonPrompt}
+                speakKey="first-attempt:reason"
+                label="물음 듣기"
+                accent={accent}
+              />
+            ) : null}
+          </div>
           <input
+            id="studio-reason-input"
             value={state.reason ?? ''}
             onChange={(event) => dispatch({ type: 'set-reason', value: event.target.value })}
             maxLength={300}
@@ -535,7 +558,7 @@ export default function StudioExperience({
             className="min-h-12 w-full rounded-xl border-2 px-4"
             style={{ borderColor: 'var(--editorial-line)', background: 'var(--editorial-paper)' }}
           />
-        </label>
+        </div>
       </div>
     );
   } else if (state.stage === 'condition-change') {
@@ -569,8 +592,11 @@ export default function StudioExperience({
     );
   } else if (state.stage === 'decision') {
     const decisionText = state.aiDecisionText ?? definition.aiContribution.text;
+    const decisionSummary = state.aiDecision
+      ? AI_DECISION_SUMMARY[state.aiDecision]
+      : '세 가지 중 하나를 골라 내 판단을 남겨 보세요.';
     right = (
-      <div className="space-y-5 p-5 md:p-7">
+      <div className={`${readingSupport ? 'space-y-3' : 'space-y-5'} p-5 md:p-7`}>
         <div>
           <span className="studio-kicker" style={{ color: accent }}>5단계 · 나의 판단</span>
           <h2 className="text-xl font-extrabold">아이미의 의견을 어떻게 할까요?</h2>
@@ -625,12 +651,27 @@ export default function StudioExperience({
             </div>
           ) : (
             <>
-              <p
-                className={`studio-decision-copy mt-1 text-base font-semibold leading-relaxed${state.aiDecision === 'reject' ? ' is-discarded' : ''}`}
-                aria-label={state.aiDecision === 'reject' ? `쓰지 않기로 한 AI 의견: ${decisionText}` : undefined}
-              >
-                {decisionText}
-              </p>
+              {/* 판단할 의견을 귀로 먼저 만난다. 물음과 의견, 지금 상태를 알리는 말(고르라는 안내나 고른
+                  뒤의 결과)을 이어서 읽는다. 알림 줄에 따로 단추를 달면 낮은 창에서 한 줄이 더 접힌 아래로
+                  밀리므로 한 단추가 다 읽는다. 단추를 float으로 띄워 글이 단추 곁에서만 좁아지고 그 아래로는
+                  전체 폭을 쓰게 한다. 나란히 놓으면 글이 한 줄 더 늘어 판단 카드가 밀린다. */}
+              <div className={readingSupport ? 'flow-root' : undefined}>
+                {readingSupport ? (
+                  <ListenButton
+                    text={`아이미의 의견을 어떻게 할까요? ${decisionText} ${decisionSummary}`}
+                    speakKey="decision:opinion"
+                    label="물음과 아이미의 의견 듣기"
+                    accent={accent}
+                    className="float-right mb-1 ml-3"
+                  />
+                ) : null}
+                <p
+                  className={`studio-decision-copy mt-1 text-base font-semibold leading-relaxed${state.aiDecision === 'reject' ? ' is-discarded' : ''}`}
+                  aria-label={state.aiDecision === 'reject' ? `쓰지 않기로 한 AI 의견: ${decisionText}` : undefined}
+                >
+                  {decisionText}
+                </p>
+              </div>
               {state.aiDecision === 'modify' ? (
                 <button
                   type="button"
@@ -652,7 +693,9 @@ export default function StudioExperience({
             400px 안팎이라 세 칸이면 한 칸이 100px이 되어 `그대로 쓰기`가 세 줄로 끊겼다.
             좁으면 한 줄씩 쌓고, 세 칸이 낱말 하나씩 한 줄에 들어갈 만큼 넓을 때만 나란히 놓는다. */}
         <div className="@container">
-          <div role="group" aria-label="AI 의견 판단 고르기" className="grid gap-2 @lg:grid-cols-3">
+          {/* 그림 카드는 세로 카드라 좁아도 세 장이 한 줄에 선다(한 장 높이 ≈ 110px). 가로 막대로
+              쌓으면 세 장이 290px을 먹어 낮은 창에서 판단 단추가 접힌 아래로 밀린다. */}
+          <div role="group" aria-label="AI 의견 판단 고르기" className={`grid gap-2 ${readingSupport ? 'grid-cols-3' : '@lg:grid-cols-3'}`}>
             {AI_DECISION_CHOICES.map((choice) => {
               const selected = state.aiDecision === choice.id;
               return (
@@ -671,7 +714,9 @@ export default function StudioExperience({
                     setIsEditingDecisionText(false);
                   }}
                   aria-pressed={selected}
-                  className="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-3 text-base font-extrabold transition-all hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className={readingSupport
+                    ? 'decision-card cursor-pointer transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
+                    : 'flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-3 text-base font-extrabold transition-all hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'}
                   style={{
                     borderColor: selected ? accent : 'var(--editorial-line)',
                     background: selected ? 'var(--editorial-paper)' : 'white',
@@ -680,8 +725,26 @@ export default function StudioExperience({
                     borderWidth: selected ? 4 : 2,
                   }}
                 >
-                  <span aria-hidden="true">{choice.emoji}</span>
-                  {choice.label}
+                  {readingSupport ? (
+                    <>
+                      {/* 그림 카드 한 장이 곧 단추다. 카드에 인쇄된 글자와 화면 글자는 PECS_LABELS 하나에서 나온다. */}
+                      <img
+                        src={decisionCardSrc(definition.moduleId, choice.id)}
+                        alt=""
+                        width={120}
+                        height={120}
+                        decoding="async"
+                        draggable={false}
+                        className="decision-card-art"
+                      />
+                      <span className="decision-card-label">{PECS_LABELS[DECISION_CARD_IDS[choice.id]] ?? choice.label}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span aria-hidden="true">{choice.emoji}</span>
+                      {choice.label}
+                    </>
+                  )}
                 </button>
               );
             })}
@@ -689,9 +752,7 @@ export default function StudioExperience({
         </div>
 
         <p role="status" className="text-sm font-bold" style={{ color: 'var(--muted)' }}>
-          {state.aiDecision
-            ? AI_DECISION_SUMMARY[state.aiDecision]
-            : '세 가지 중 하나를 골라 내 판단을 남겨 보세요.'}
+          {decisionSummary}
         </p>
 
         {/* 실시간 AI는 교사가 연결했을 때만 얹는 확장이다. 연결이 없어도 위 판단만으로 5단계가 끝난다. */}
@@ -738,10 +799,20 @@ export default function StudioExperience({
       : null;
     right = (
       <div className="space-y-5 p-5 md:p-7">
-        <div>
-          <p className="studio-kicker" style={{ color: secondary }}>탐구 기록 남기기</p>
-          <h2 className="mt-1 text-xl font-extrabold">이번 차시의 탐구 기록을 완성해요</h2>
-          <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">{definition.artifact.prompt}</p>
+        <div className={readingSupport ? 'flex items-start justify-between gap-3' : undefined}>
+          <div>
+            <p className="studio-kicker" style={{ color: secondary }}>탐구 기록 남기기</p>
+            <h2 className="mt-1 text-xl font-extrabold">이번 차시의 탐구 기록을 완성해요</h2>
+            <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">{definition.artifact.prompt}</p>
+          </div>
+          {readingSupport ? (
+            <ListenButton
+              text={`이번 차시의 탐구 기록을 완성해요. ${definition.artifact.prompt}`}
+              speakKey="artifact:prompt"
+              label="기록 안내 듣기"
+              accent={accent}
+            />
+          ) : null}
         </div>
         <div className="studio-artifact-sheet space-y-2">
           <div className="flex items-center justify-between gap-2">
@@ -847,12 +918,14 @@ export default function StudioExperience({
           prompt={definition.transfer.prompt || `나만의 표현으로 ${definition.transfer.title} 상황을 친구에게 설명해 봐요.`}
           accent={accent}
           onChange={(value) => dispatch({ type: 'set-transfer', value })}
+          readingSupport={readingSupport}
         />
         <ChoiceReactionPanel
           choices={transferChoices}
           expression={state.transferExpression}
           accent={accent}
           dictionaryTerms={allDictTerms}
+          readingSupport={readingSupport}
         />
         {/* 고등 학년군만 한 단계 더. 중학과 고등의 차이를 텍스트 밀도가 아니라 수행으로 만든다. */}
         {state.supportLevel === 'challenge' && highSchoolTask ? (
