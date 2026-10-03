@@ -1,6 +1,11 @@
-import { useId } from 'react';
+import { useId, useMemo, useState } from 'react';
 import Icon from '../../../components/Icon';
+import AacChoiceGrid from '../../../components/mission/blocks/AacChoiceGrid';
+import AnswerModeTabs from '../../../components/mission/blocks/AnswerModeTabs';
+import { MODE_LABELS } from '../../../components/mission/blocks/ExpressionInput';
 import ListenButton, { ListenAllButton } from '../../../components/controls/ListenButton';
+import { useSettings } from '../../../context/SettingsContext';
+import { getChoiceCardSet } from '../../../data/choiceCards';
 import { useSpeak } from '../../../hooks/useSpeak';
 import { useSpeakingState } from '../../../hooks/useSpeakingState';
 import ChoiceReactionPanel from './ChoiceReactionPanel';
@@ -26,7 +31,7 @@ interface Props {
  * 배경 설명 없이 실전 판단을 먼저 겪게 한다. 여기서 고른 답은 **기록하지 않는다** —
  * 세션 메모리에만 두었다가 마지막 전이 단계에서 "처음 골랐던 답"으로 되비춰 성장을
  * 눈으로 보게 하는 용도다. 틀려도 벌점·타이머·부정 효과음이 없고 즉시 다시 고를 수 있다
- * (02-CHARACTERS §3 정서 안전).
+ * (02-CHARACTERS §3 정서 안전). 그림 카드로 고르는 일도 같다 — 카드를 썼다는 사실도 남기지 않는다.
  */
 export default function ColdOpenView({
   definition,
@@ -39,10 +44,18 @@ export default function ColdOpenView({
 }: Props) {
   const { speakNow } = useSpeak();
   const { key: speakingKey } = useSpeakingState();
+  const { answerMode } = useSettings();
   // 소리의 이름이 다른 목록과 겹치지 않게 한다.
   const listId = useId();
   const { transfer } = definition;
   const prompt = transfer.prompt || `${transfer.title} 상황에서 어떻게 하겠어요?`;
+  // 이 먼저 해 보기의 선택지도 그림 카드로 답할 수 있다(스튜디오의 첫 생각·적용과 같은 방식).
+  const cardSet = useMemo(
+    () => (readingSupport ? getChoiceCardSet(definition.lessonId) : undefined),
+    [readingSupport, definition.lessonId],
+  );
+  const [answerView, setAnswerView] = useState<'choice' | 'aac'>(answerMode === 'aac' && cardSet ? 'aac' : 'choice');
+  const showCards = answerView === 'aac' && Boolean(cardSet);
 
   const left = (
     <div className="flex h-full flex-col justify-between rounded-2xl p-5 md:p-7">
@@ -104,44 +117,67 @@ export default function ColdOpenView({
         ) : null}
       </div>
 
-      <div role="group" aria-label="첫 판단 고르기" className="grid gap-2.5">
-        {transfer.choices.map((choice, index) => {
-          const selected = picked === choice.id;
-          const card = (
-            <button
-              key={choice.id}
-              type="button"
-              onClick={() => onPick(choice.id)}
-              aria-pressed={selected}
-              data-reading={readingSupport && speakingKey === `${listId}:${choice.id}` ? 'true' : undefined}
-              className="flex min-h-14 cursor-pointer items-start gap-3 rounded-xl border-2 px-4 py-3 text-left text-base font-bold transition-all hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              style={{
-                borderColor: selected ? accent : 'var(--editorial-line)',
-                background: selected ? 'var(--editorial-paper)' : 'white',
-                color: 'var(--brand-ink)',
-                outlineColor: accent,
-                borderWidth: selected ? 4 : 2,
-              }}
-            >
-              <span aria-hidden className="text-xl leading-none">{choice.emoji}</span>
-              <span className="leading-snug">{choice.label}</span>
-            </button>
-          );
-          if (!readingSupport) return card;
-          // 듣기 단추는 카드 곁에 둔다. 카드 안에 넣으면 듣다가 답이 정해진다.
-          return (
-            <div key={choice.id} className="reading-choice-row">
-              {card}
-              <ListenButton
-                text={choice.label}
-                speakKey={`${listId}:${choice.id}`}
-                label={`${index + 1}번 카드 듣기`}
-                accent={accent}
-              />
-            </div>
-          );
-        })}
-      </div>
+      {cardSet ? (
+        <AnswerModeTabs
+          modes={['choice', 'aac']}
+          active={answerView}
+          labels={MODE_LABELS}
+          accent={accent}
+          onSelect={(mode) => setAnswerView(mode === 'aac' ? 'aac' : 'choice')}
+          withIcons
+        />
+      ) : null}
+
+      {showCards && cardSet ? (
+        <AacChoiceGrid
+          choices={transfer.choices}
+          cardSet={cardSet}
+          selectedIds={picked ? [picked] : []}
+          accent={accent}
+          listId={listId}
+          speakingKey={speakingKey}
+          onSelect={(id) => onPick(id)}
+        />
+      ) : (
+        <div role="group" aria-label="첫 판단 고르기" className="grid gap-2.5">
+          {transfer.choices.map((choice, index) => {
+            const selected = picked === choice.id;
+            const card = (
+              <button
+                key={choice.id}
+                type="button"
+                onClick={() => onPick(choice.id)}
+                aria-pressed={selected}
+                data-reading={readingSupport && speakingKey === `${listId}:${choice.id}` ? 'true' : undefined}
+                className="flex min-h-14 cursor-pointer items-start gap-3 rounded-xl border-2 px-4 py-3 text-left text-base font-bold transition-all hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                style={{
+                  borderColor: selected ? accent : 'var(--editorial-line)',
+                  background: selected ? 'var(--editorial-paper)' : 'white',
+                  color: 'var(--brand-ink)',
+                  outlineColor: accent,
+                  borderWidth: selected ? 4 : 2,
+                }}
+              >
+                <span aria-hidden className="text-xl leading-none">{choice.emoji}</span>
+                <span className="leading-snug">{choice.label}</span>
+              </button>
+            );
+            if (!readingSupport) return card;
+            // 듣기 단추는 카드 곁에 둔다. 카드 안에 넣으면 듣다가 답이 정해진다.
+            return (
+              <div key={choice.id} className="reading-choice-row">
+                {card}
+                <ListenButton
+                  text={choice.label}
+                  speakKey={`${listId}:${choice.id}`}
+                  label={`${index + 1}번 카드 듣기`}
+                  accent={accent}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <ChoiceReactionPanel
         choices={transfer.choices}

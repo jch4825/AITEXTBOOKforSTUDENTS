@@ -48,6 +48,12 @@ export interface SettingsState {
    * 응답이라 기본이 켜짐이고, 선택지를 고르는 동안의 말소리는 기본이 꺼짐이어야 한다.
    */
   autoRead: boolean;
+  /**
+   * 선택지에 답하는 기본 화면. 'aac'이면 읽기 지원 단원에서 선택지를 그림 카드로 먼저 연다
+   * (data/choiceCards/). 글을 못 읽는 학생은 '문장 고르기' 탭을 글자로 찾을 수 없어서, 그 기기를
+   * 쓰는 교사가 미리 그림 카드로 열어 둔다. 학생은 탭으로 언제든 바꿀 수 있다. 기본은 문장 고르기다.
+   */
+  answerMode: 'choice' | 'aac';
   /** 스튜디오 효과음. 읽어 주기(ttsEnabled)와 별개 토글이다(05-ENGINE-SPEC §7). */
   soundEnabled: boolean;
 }

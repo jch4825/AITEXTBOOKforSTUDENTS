@@ -1,6 +1,8 @@
 import React, { useEffect, useId, useState } from 'react';
 import type { DrawBlock, GeneralizationExpression, GeneralizationExpressionMode } from '../../../types';
 import DrawPad from './DrawPad';
+import AacChoiceGrid from './AacChoiceGrid';
+import AnswerModeTabs from './AnswerModeTabs';
 import MicButton from '../../MicButton';
 import Icon from '../../Icon';
 import Burst from '../../games/Burst';
@@ -10,6 +12,7 @@ import { useSpeakingState } from '../../../hooks/useSpeakingState';
 import { useSettings } from '../../../context/SettingsContext';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
+import type { ChoiceCardSet } from '../../../data/choiceCards';
 import { playSound } from '../../../utils/sound';
 
 interface ChoiceItem {
@@ -33,9 +36,14 @@ interface Props {
    * 듣기와 고르기는 서로 다른 단추다.
    */
   readingSupport?: boolean;
+  /**
+   * 이 차시의 선택지 그림 카드(data/choiceCards/). 있고 읽기 지원 단원이면 '그림 카드' 방식에서
+   * 선택지를 그림 카드로 그린다. 없으면 그 방식은 문장 고르기와 같은 문장을 보여 주던 옛 모습 그대로다.
+   */
+  cardSet?: ChoiceCardSet;
 }
 
-const MODE_LABELS: Record<GeneralizationExpressionMode, string> = {
+export const MODE_LABELS: Record<GeneralizationExpressionMode, string> = {
   choice: '문장 고르기',
   aac: '그림 카드',
   text: '글로 쓰기',
@@ -51,16 +59,21 @@ export default function ExpressionInput({
   accent,
   onChange,
   readingSupport = false,
+  cardSet,
 }: Props) {
   const { speakNow, speak } = useSpeak();
-  const { autoRead } = useSettings();
+  const { autoRead, answerMode } = useSettings();
   const { key: speakingKey } = useSpeakingState();
   // 같은 화면에 선택지 목록이 둘 이상일 수 있어(첫 생각·적용) 소리의 이름이 겹치지 않게 한다.
   const listId = useId();
-  const [selectedMode, setSelectedMode] = useState<GeneralizationExpressionMode>(value?.mode ?? expressionModes[0] ?? 'choice');
+  // 교사가 이 기기를 그림 카드로 열어 두었으면(글을 못 읽는 학생은 탭의 글자를 찾지 못한다) 처음부터 카드로 연다.
+  const cardsReady = readingSupport && Boolean(cardSet);
+  const preferredMode = answerMode === 'aac' && cardsReady && expressionModes.includes('aac') ? 'aac' : undefined;
+  const [selectedMode, setSelectedMode] = useState<GeneralizationExpressionMode>(value?.mode ?? preferredMode ?? expressionModes[0] ?? 'choice');
   const activeMode = selectedMode;
   // 선택지가 화면에 보이는 표현 방식인가. 글·말·그림 방식에서는 선택지를 읽어 주지 않는다.
   const choicesShown = activeMode === 'choice' || activeMode === 'aac';
+  const showCards = activeMode === 'aac' && cardsReady;
   const drawBlock: DrawBlock = { kind: 'draw', id: 'generalization-expression', prompt: '내 생각을 그림으로 표현해 보십시오.' };
 
   useEffect(() => {
@@ -116,26 +129,29 @@ export default function ExpressionInput({
       </div>
 
       {expressionModes.length > 1 && (
-        <div className="flex flex-wrap gap-2" role="tablist" aria-label="생각을 표현하는 방법">
-          {expressionModes.map((mode) => (
-            <button
-              type="button"
-              key={mode}
-              role="tab"
-              aria-selected={activeMode === mode}
-              onClick={() => selectMode(mode)}
-              className="px-3 py-2 rounded-[var(--r-pill)] border-2 text-sm font-bold cursor-pointer"
-              style={{
-                borderColor: activeMode === mode ? accent : 'var(--line)',
-                background: activeMode === mode ? 'var(--paper-1)' : 'var(--paper-0)',
-                color: activeMode === mode ? accent : 'var(--muted)',
-              }}
-            >{MODE_LABELS[mode]}</button>
-          ))}
-        </div>
+        <AnswerModeTabs
+          modes={expressionModes}
+          active={activeMode}
+          labels={MODE_LABELS}
+          accent={accent}
+          onSelect={selectMode}
+          withIcons={readingSupport}
+        />
       )}
 
-      {choicesShown && (
+      {showCards && cardSet && (
+        <AacChoiceGrid
+          choices={choices}
+          cardSet={cardSet}
+          selectedIds={value?.choiceIds ?? []}
+          accent={accent}
+          listId={listId}
+          speakingKey={speakingKey}
+          onSelect={selectChoice}
+        />
+      )}
+
+      {choicesShown && !showCards && (
         <div className={activeMode === 'choice' ? "grid grid-cols-1 gap-3" : "grid grid-cols-1 sm:grid-cols-2 gap-3"}>
           {choices.map((choice, index) => {
             const selected = value?.choiceIds?.includes(choice.id) ?? false;

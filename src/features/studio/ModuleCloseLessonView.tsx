@@ -27,7 +27,7 @@ const CRITERIA = [
   '조건이 달라졌을 때 방법을 조정했습니다.',
 ];
 
-const NEXT_MODES: ExpressionMode[] = ['choice', 'text', 'speech'];
+const NEXT_MODES: ExpressionMode[] = ['choice', 'aac', 'text', 'speech'];
 
 function expressionText(record: StudioEvidenceV2, field: 'firstAttempt' | 'finalExpression' | 'transferExpression'): string {
   const value = record[field];
@@ -320,6 +320,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
               accent={theme.accent}
               onChange={setNextMethod}
               readingSupport={moduleHasReadingSupport(definition.moduleId)}
+              lessonId={definition.lessonId}
             />
           </section>
 

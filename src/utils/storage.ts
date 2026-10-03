@@ -14,6 +14,7 @@ const DEFAULT_SETTINGS: SettingsState = {
   fontSize: 'normal',
   ttsEnabled: true,
   autoRead: false,
+  answerMode: 'choice',
   soundEnabled: true,
 };
 
@@ -62,8 +63,10 @@ export function loadSettings(): SettingsState {
     const ttsEnabled = parsed?.ttsEnabled !== false;
     // 저절로 읽는 소리는 켠다고 명시한 기기에서만 난다. 옛 설정(autoRead 없음)은 꺼짐이다.
     const autoRead = parsed?.autoRead === true;
+    // 그림 카드로 여는 것은 교사가 고른 기기만이다. 옛 설정과 알 수 없는 값은 문장 고르기다.
+    const answerMode: SettingsState['answerMode'] = parsed?.answerMode === 'aac' ? 'aac' : 'choice';
     const soundEnabled = parsed?.soundEnabled !== false;
-    return { difficulty, gradeBand, fontSize, ttsEnabled, autoRead, soundEnabled };
+    return { difficulty, gradeBand, fontSize, ttsEnabled, autoRead, answerMode, soundEnabled };
   } catch {
     return DEFAULT_SETTINGS;
   }

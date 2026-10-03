@@ -62,6 +62,15 @@
   하고(듣다가 답이 정해지면 안 됩니다), 듣기 단추는 소리 설정과 상관없이 늘 읽습니다. 소리 칩은 저절로
   나는 소리만 끕니다. 읽는 글은 `toSpeechText`로 기호를 풀어 씁니다(화면 글은 그대로). 단원을 더할 때는
   목록에 더하고 `npm run check:reading-support`를 돌립니다. 모든 선택지에 반응 대사가 있어야 통과합니다.
+- 그림 카드 방식(`src/data/choiceCards/`)은 읽기 지원의 둘째 길입니다. 선택지(스튜디오의 첫 생각·적용, 단원 마무리의
+  다음 방법) 하나에 카드 하나를 두어 글을 못 읽는 학생이 그림과 듣기로 고릅니다. 카드를 고르는 일은 선택지를
+  고르는 일과 같아 기록되는 것은 선택지 id뿐이고(방식은 `mode: 'aac'`와 사용한 지원 `aac-cards`로만 남습니다),
+  카드의 짧은 글은 상징이며 듣기 단추는 선택지 문장 전체를 읽습니다. 같은 행동에는 단원이 달라도 같은 그림 카드를
+  씁니다(`use_as_is`는 어디서나 AI 말을 확인 없이 받는 것). 그림 카드 판의 카드를 쓰면 화면 글자는 인쇄된 낱말
+  (PECS_LABELS)과 같아야 하고, 그림 카드 판에 있는 낱말을 이모지 카드의 글자로 따로 쓰지 않습니다. 이모지 카드는
+  알맞은 그림 카드가 생기면 바꿉니다. 처음 열리는 화면은 교사가 기기마다 `SettingsState.answerMode`(기본 문장 고르기)로
+  정하고, 학생은 그림이 붙은 탭으로 언제든 바꿉니다. 먼저 해 보기의 답은 원래 기록하지 않으므로 카드를 썼다는
+  사실도 남기지 않습니다. `npm run check:choice-cards`가 이를 강제합니다.
 - 한국어 파일은 UTF-8, TypeScript는 strict 설정을 유지합니다.
 
 ## 현재 단일 진실 원천
@@ -86,6 +95,8 @@ npm run check:highschool-tasks`가 강제합니다.
 - 읽기 지원 단원: `src/data/readingSupport.ts` — 듣기 단추·판단 카드·소리 칩을 함께 켜고 끄는 단원
   목록 하나. 켜는 일은 이 목록에 단원을 더하는 한 줄이다. 판단 카드 그림은 `public/lessons/pecs/{단원}/`의
   `use_as_is`·`fix_and_use`·`dont_use`를 쓴다(`src/features/studio/decisionCards.ts`).
+- 선택지 그림 카드: `src/data/choiceCards/` — 선택지 id → 카드(짧은 글 + 그림 카드 판의 카드 또는 이모지). 선택지를
+  더하거나 id를 바꾸면 여기도 한 장 고친다. `npm run check:choice-cards`가 빠진 카드와 남은 카드를 막는다.
 - 단원별 핵심 내용: `src/data/moduleCoreContents.ts` — 한 단원이 어떤 내용을 어떤 차시 묶음으로
   다루는지 밝힌다. 차시 범위는 실제 차시와 맞아야 하며 `npm run check:curriculum-document`가
   강제한다.
@@ -248,6 +259,7 @@ npm run check:grade-band-guard
 npm run check:game-visual
 npm run check:lesson-videos
 npm run check:reading-support
+npm run check:choice-cards
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.

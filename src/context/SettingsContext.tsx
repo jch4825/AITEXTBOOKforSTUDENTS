@@ -8,6 +8,7 @@ interface SettingsContextValue extends SettingsState {
   setFontSize: (f: FontSize) => void;
   setTTSEnabled: (v: boolean) => void;
   setAutoRead: (v: boolean) => void;
+  setAnswerMode: (v: SettingsState['answerMode']) => void;
   setSoundEnabled: (v: boolean) => void;
 }
 
@@ -43,14 +44,15 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const setFontSize = useCallback((f: FontSize) => setState(s => ({ ...s, fontSize: f })), []);
   const setTTSEnabled = useCallback((v: boolean) => setState(s => ({ ...s, ttsEnabled: v })), []);
   const setAutoRead = useCallback((v: boolean) => setState(s => ({ ...s, autoRead: v })), []);
+  const setAnswerMode = useCallback((v: SettingsState['answerMode']) => setState(s => ({ ...s, answerMode: v })), []);
   const setSoundEnabled = useCallback((v: boolean) => {
     setState(s => ({ ...s, soundEnabled: v }));
     if (v) primeSounds();
   }, []);
 
   const value = useMemo<SettingsContextValue>(
-    () => ({ ...state, setDifficulty, setFontSize, setTTSEnabled, setAutoRead, setSoundEnabled }),
-    [state, setDifficulty, setFontSize, setTTSEnabled, setAutoRead, setSoundEnabled],
+    () => ({ ...state, setDifficulty, setFontSize, setTTSEnabled, setAutoRead, setAnswerMode, setSoundEnabled }),
+    [state, setDifficulty, setFontSize, setTTSEnabled, setAutoRead, setAnswerMode, setSoundEnabled],
   );
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;

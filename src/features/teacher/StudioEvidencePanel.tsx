@@ -34,6 +34,11 @@ const DECISION_LABELS = {
   reject: '사용하지 않음',
 } as const;
 
+/** 과정 기록의 '사용한 지원'에 남는 이름 가운데 교사가 바로 알아볼 수 있게 풀어 쓰는 것. 나머지는 그대로 보인다. */
+const SUPPORT_MODE_LABELS: Record<string, string> = {
+  'aac-cards': '그림 카드로 답함',
+};
+
 function expressionText(expression: StudioExpression | undefined, choices: StudioChoice[] | undefined): string {
   return formatPersistedStudioExpression(expression, choices) ?? '기록 없음';
 }
@@ -185,7 +190,7 @@ export default function StudioEvidencePanel({ mode }: Props) {
                     <div className="studio-fact-card"><dt className="font-bold">AI와 비교</dt><dd>{record.aiSource === 'prepared' ? '준비된 AI 예시' : '실제 AI'} · {record.aiDecision ? DECISION_LABELS[record.aiDecision] : '기록 없음'}</dd></div>
                     <div className="studio-fact-card"><dt className="font-bold">최종 판단</dt><dd>{final}</dd></div>
                     <div className="studio-fact-card"><dt className="font-bold">새 상황에 적용</dt><dd>{transfer}</dd></div>
-                    <div className="studio-fact-card"><dt className="font-bold">사용한 지원</dt><dd>{record.supportModesUsed.join(', ') || '추가 지원 기록 없음'}</dd></div>
+                    <div className="studio-fact-card"><dt className="font-bold">사용한 지원</dt><dd>{record.supportModesUsed.map((id) => SUPPORT_MODE_LABELS[id] ?? id).join(', ') || '추가 지원 기록 없음'}</dd></div>
                     <div className="studio-fact-card"><dt className="font-bold">관찰 요약</dt><dd>{observationSummary(record.observation)}</dd></div>
                   </dl>
                   <ObservationEditor record={record} />

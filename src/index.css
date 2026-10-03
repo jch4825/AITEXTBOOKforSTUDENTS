@@ -4131,6 +4131,174 @@ div:has(> .game-canvas-fit) {
   outline-offset: 3px;
 }
 
+/* 그림 카드 방식 — 선택지를 그림 카드로 그린다(data/choiceCards/). 카드 한 장 = 선택지 하나.
+   글을 못 읽는 학생은 긴 문장 넷 대신 그림 넷을 보고, 뜻은 듣기 단추로 듣는다. 카드는 칸 폭을 따라 한 줄에
+   서고(8.5rem 이상), 휴대전화 폭에서는 두 장씩 선다. 듣기 단추는 카드 단추의 곁(오른쪽 위 귀퉁이에 걸침)에
+   둔다 — 카드 안에 넣으면 듣다가 답이 정해진다. 면은 선택 카드(surface-choice) 하나이고 깊이 신호는 두지 않는다. */
+.aac-grid-box {
+  container: aac-grid / inline-size;
+}
+
+.aac-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem 0.7rem;
+  padding-top: 0.9rem;
+}
+
+/* 스튜디오 오른쪽 면은 노트북에서 320~360px이라 카드 셋을 한 줄(17rem 이상)에 세운다. 두 줄로 쌓으면 셋째
+   카드가 접힌 아래로 밀린다. 그보다 좁은 칸(휴대전화, 글자 크게)은 한 줄에 둘이다. 셋을 좁은 칸에
+   욱여넣으면 카드 글자가 넉 줄 다섯 줄로 끊긴다(390px·125% 실측). 넷은 두 줄씩 서고, 넓은 칸(34rem 이상)에서는 한 줄이다.
+   기준은 rem이라 글자 크기 설정을 따라 같이 움직인다. */
+@container aac-grid (min-width: 17rem) {
+  .aac-grid[data-count='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@container aac-grid (min-width: 34rem) {
+  .aac-grid[data-count='4'] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.aac-card-wrap {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.aac-card-wrap > .listen-button {
+  position: absolute;
+  top: -0.9rem;
+  right: -0.5rem;
+  z-index: 2;
+}
+
+.aac-card {
+  --aac-accent: var(--accent);
+  --aac-art: 4.5rem;
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+  padding: 0.7rem 0.35rem 0.75rem;
+  border-radius: var(--r-md);
+  text-align: center;
+  font-weight: 800;
+  line-height: 1.25;
+  word-break: keep-all;
+  cursor: pointer;
+}
+
+/* 한 줄에 셋이 서는 좁은 칸: 그림을 한 단계 줄여 카드가 높아지지 않게 한다. 넓은 칸에서는 그림을 키운다. */
+@container aac-grid (min-width: 17rem) {
+  .aac-grid[data-count='3'] .aac-card {
+    --aac-art: 4rem;
+  }
+}
+
+@container aac-grid (min-width: 34rem) {
+  .aac-card,
+  .aac-grid[data-count='3'] .aac-card {
+    --aac-art: 5.5rem;
+  }
+}
+
+.aac-card:hover {
+  background: var(--paper-1);
+}
+
+.aac-card:focus-visible {
+  outline: 3px solid var(--brand-ink);
+  outline-offset: 3px;
+}
+
+/* 고른 카드: 테두리를 굵게 하고 왼쪽 위에 표시 그림을 단다. 테두리가 굵어진 만큼 안쪽 여백을 줄여 글이 밀리지 않는다.
+   맞고 틀림은 테두리 색 하나로 알리지 않고 표시 그림(✓ / 다시)으로 함께 알린다. */
+.aac-card[aria-pressed='true'] {
+  padding: calc(0.7rem - 2px) calc(0.35rem - 2px) calc(0.75rem - 2px);
+  border-width: 4px;
+  border-color: var(--aac-accent);
+  background: var(--paper-1);
+}
+
+.aac-card[data-verdict='right'] {
+  border-color: var(--ok);
+}
+
+.aac-card[data-verdict='wrong'] {
+  border-color: var(--warn);
+}
+
+/* 지금 읽어 주는 카드(소리와 카드를 눈으로 잇는 잉크색 윤곽). */
+.aac-card-wrap > [data-reading='true'] {
+  outline: 4px solid var(--brand-ink);
+  outline-offset: 3px;
+}
+
+/* 표현 방식 탭(그림이 붙은 것)은 좁은 칸(30rem 미만)에서 고른 탭만 글자를 보인다. 나머지는 그림만 남고
+   이름은 aria-label·title이 맡는다. 다섯 탭의 글자가 석 줄(약 130px)을 먹으면 선택지가 접힌 아래로 밀린다. */
+.answer-tabs-box {
+  container: answer-tabs / inline-size;
+}
+
+@container answer-tabs (max-width: 30rem) {
+  .answer-tab[aria-selected='false'] .answer-tab-label {
+    display: none;
+  }
+}
+
+.aac-card-art {
+  width: var(--aac-art);
+  height: var(--aac-art);
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  object-fit: contain;
+}
+
+.aac-card-emoji {
+  display: flex;
+  width: var(--aac-art);
+  height: var(--aac-art);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(var(--aac-art) * 0.62);
+  line-height: 1;
+}
+
+.aac-card-label {
+  min-width: 0;
+  font-size: 1.05rem;
+}
+
+.aac-card-mark {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  display: flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--brand-ink);
+  color: var(--paper-0);
+}
+
+/* 낮은 창(높이 780px 이하): 카드 그림을 한 단계 줄여 카드 한 줄이 접힌 아래로 밀리지 않게 한다. 카드 글자는 줄이지 않는다. */
+@media (min-width: 768px) and (max-height: 780px) {
+  .aac-card,
+  .aac-grid[data-count='3'] .aac-card {
+    --aac-art: 3.6rem;
+  }
+}
+
 /* 판단 카드 — 그림 카드(그림 + 인쇄 글자) 한 장이 단추다. 세로 카드라 좁아도 세 장이 한 줄에 선다.
    가로 막대로 쌓으면 세 장이 290px을 먹어 1366×657처럼 낮은 창에서 판단 단추가 접힌 아래로 밀렸다.
    그림 크기만 이 줄을 감싼 칸의 폭(@container)에 맞춰 키운다. */

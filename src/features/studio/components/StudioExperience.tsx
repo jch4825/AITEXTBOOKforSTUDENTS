@@ -3,6 +3,8 @@ import Icon from '../../../components/Icon';
 import MicButton from '../../../components/MicButton';
 import ListenButton from '../../../components/controls/ListenButton';
 import { useSpeak } from '../../../hooks/useSpeak';
+import { useSettings } from '../../../context/SettingsContext';
+import { getChoiceCardSet, prefetchChoiceCards } from '../../../data/choiceCards';
 import { hasReadingSupport } from '../../../data/readingSupport';
 import { PECS_LABELS } from '../../../data/pecs';
 import { DECISION_CARD_IDS, decisionCardSrc, prefetchDecisionCards } from '../decisionCards';
@@ -155,6 +157,15 @@ export default function StudioExperience({
   useEffect(() => {
     if (readingSupport) prefetchDecisionCards(definition.moduleId);
   }, [readingSupport, definition.moduleId]);
+  // 교사가 이 기기를 그림 카드로 열어 둔 교실은 선택지 카드 그림(한 장 300KB 안팎)을 미리 받아 둔다.
+  const { answerMode } = useSettings();
+  useEffect(() => {
+    if (readingSupport && answerMode === 'aac') prefetchChoiceCards(getChoiceCardSet(definition.lessonId));
+  }, [readingSupport, answerMode, definition.lessonId]);
+  // 그림 카드로 답했다는 사실을 과정 기록의 '사용한 지원'에 남긴다. 교사가 어느 방식으로 답했는지 본다.
+  const recordCardUse = (value: StudioExpression) => {
+    if (value.mode === 'aac' && value.choiceIds?.length) dispatch({ type: 'record-support-mode', value: 'aac-cards' });
+  };
   // 놀이는 태블릿·PC 크기에서만 연다. 휴대전화에서는 놀이 자리에 안내가 대신 들어간다.
   const miniGamePlayable = useMiniGamePlayable();
   const [studentName, setStudentName] = useState('');
@@ -525,8 +536,12 @@ export default function StudioExperience({
           modes={definition.firstAttempt.modes}
           prompt={definition.firstAttempt.prompt}
           accent={accent}
-          onChange={(value) => dispatch({ type: 'set-first-attempt', value })}
+          onChange={(value) => {
+            dispatch({ type: 'set-first-attempt', value });
+            recordCardUse(value);
+          }}
           readingSupport={readingSupport}
+          lessonId={definition.lessonId}
         />
         <ChoiceReactionPanel
           choices={firstChoices}
@@ -918,8 +933,12 @@ export default function StudioExperience({
           modes={definition.firstAttempt.modes}
           prompt={definition.transfer.prompt || `나만의 표현으로 ${definition.transfer.title} 상황을 친구에게 설명해 봐요.`}
           accent={accent}
-          onChange={(value) => dispatch({ type: 'set-transfer', value })}
+          onChange={(value) => {
+            dispatch({ type: 'set-transfer', value });
+            recordCardUse(value);
+          }}
           readingSupport={readingSupport}
+          lessonId={definition.lessonId}
         />
         <ChoiceReactionPanel
           choices={transferChoices}

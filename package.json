@@ -60,6 +60,7 @@
     "check:teacher-resources": "node scripts/check-teacher-resources.mjs",
     "check:lesson-videos": "node scripts/check-lesson-videos.mjs",
     "check:reading-support": "node scripts/check-reading-support.mjs",
+    "check:choice-cards": "node scripts/check-choice-cards.mjs",
     "check:curriculum-document": "node scripts/check-curriculum-document.mjs"
   },
   "dependencies": {
