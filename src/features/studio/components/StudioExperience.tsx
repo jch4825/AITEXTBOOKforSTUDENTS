@@ -648,39 +648,44 @@ export default function StudioExperience({
           )}
         </section>
 
-        <div role="group" aria-label="AI 의견 판단 고르기" className="grid gap-2 sm:grid-cols-3">
-          {AI_DECISION_CHOICES.map((choice) => {
-            const selected = state.aiDecision === choice.id;
-            return (
-              <button
-                key={choice.id}
-                type="button"
-                onClick={() => {
-                  playSound('confirm');
-                  dispatch({ type: 'set-ai-decision', value: choice.id });
-                  if (choice.id === 'modify' && !state.aiDecisionText) {
-                    dispatch({ type: 'set-ai-decision-text', value: definition.aiContribution.text });
-                  }
-                  if (choice.id === 'accept') {
-                    dispatch({ type: 'set-ai-decision-text', value: definition.aiContribution.text });
-                  }
-                  setIsEditingDecisionText(false);
-                }}
-                aria-pressed={selected}
-                className="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-3 text-base font-extrabold transition-all hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                style={{
-                  borderColor: selected ? accent : 'var(--editorial-line)',
-                  background: selected ? 'var(--editorial-paper)' : 'white',
-                  color: selected ? accent : 'var(--brand-ink)',
-                  outlineColor: accent,
-                  borderWidth: selected ? 4 : 2,
-                }}
-              >
-                <span aria-hidden="true">{choice.emoji}</span>
-                {choice.label}
-              </button>
-            );
-          })}
+        {/* 열 수는 창 폭(sm:)이 아니라 이 면의 폭으로 가른다. 차례를 펼친 1280px 창에서도 오른쪽 면은
+            400px 안팎이라 세 칸이면 한 칸이 100px이 되어 `그대로 쓰기`가 세 줄로 끊겼다.
+            좁으면 한 줄씩 쌓고, 세 칸이 낱말 하나씩 한 줄에 들어갈 만큼 넓을 때만 나란히 놓는다. */}
+        <div className="@container">
+          <div role="group" aria-label="AI 의견 판단 고르기" className="grid gap-2 @lg:grid-cols-3">
+            {AI_DECISION_CHOICES.map((choice) => {
+              const selected = state.aiDecision === choice.id;
+              return (
+                <button
+                  key={choice.id}
+                  type="button"
+                  onClick={() => {
+                    playSound('confirm');
+                    dispatch({ type: 'set-ai-decision', value: choice.id });
+                    if (choice.id === 'modify' && !state.aiDecisionText) {
+                      dispatch({ type: 'set-ai-decision-text', value: definition.aiContribution.text });
+                    }
+                    if (choice.id === 'accept') {
+                      dispatch({ type: 'set-ai-decision-text', value: definition.aiContribution.text });
+                    }
+                    setIsEditingDecisionText(false);
+                  }}
+                  aria-pressed={selected}
+                  className="flex min-h-14 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 px-3 text-base font-extrabold transition-all hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                  style={{
+                    borderColor: selected ? accent : 'var(--editorial-line)',
+                    background: selected ? 'var(--editorial-paper)' : 'white',
+                    color: selected ? accent : 'var(--brand-ink)',
+                    outlineColor: accent,
+                    borderWidth: selected ? 4 : 2,
+                  }}
+                >
+                  <span aria-hidden="true">{choice.emoji}</span>
+                  {choice.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <p role="status" className="text-sm font-bold" style={{ color: 'var(--muted)' }}>
@@ -864,15 +869,15 @@ export default function StudioExperience({
         </div>
         <dl className="grid gap-3">
           <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
-            <dt className="font-extrabold text-sm" style={{ color: accent }}>1. 처음 내 생각 (P02)</dt>
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>1. 처음 내 생각</dt>
             <dd>{renderExpressionDetail(state.firstAttempt, definition.firstAttempt.choices, accent)}</dd>
           </div>
           <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
-            <dt className="font-extrabold text-sm" style={{ color: accent }}>2. 실시간 AI 아이미와 대화 & 내 판단 (P04-P05)</dt>
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>2. 실시간 AI 아이미와 대화 & 내 판단</dt>
             <dd>{renderExpressionDetail(state.finalExpression, definition.firstAttempt.choices, accent)}</dd>
           </div>
           <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
-            <dt className="font-extrabold text-sm" style={{ color: accent }}>3. 나의 탐구 성찰 기록 (P06)</dt>
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>3. 나의 탐구 성찰 기록</dt>
             <dd>
               {state.artifactSummary && state.artifactSummary.trim() ? (
                 <p className="font-extrabold text-sm text-slate-800 whitespace-pre-wrap leading-relaxed mt-1">
@@ -884,7 +889,7 @@ export default function StudioExperience({
             </dd>
           </div>
           <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
-            <dt className="font-extrabold text-sm" style={{ color: accent }}>4. {definition.transfer.title} (P07)</dt>
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>4. {definition.transfer.title}</dt>
             <dd>{renderExpressionDetail(state.transferExpression, definition.transfer.choices, accent)}</dd>
           </div>
         </dl>
@@ -914,6 +919,13 @@ export default function StudioExperience({
         /* 놀이가 실제로 열리는 단계에서만 왼쪽 면을 넓힌다. 판이 안 열리는 화면 크기나
            놀이가 없는 차시에서는 지면이 반반으로 남는다. */
         spreadClassName={isCompleteStage && miniGamePlayable ? 'lesson-spread--wide-left' : undefined}
+        /* 첫 생각·AI 비교·판단·결과물 단계의 왼쪽 면은 직전에 읽은 이야기나 조건 변화 단계의 상황을
+           되풀이한다. 세로 태블릿처럼 두 면이 쌓이는 창에서 그 반복이 1,000px을 차지해 판단 단추가
+           그 아래로 밀렸으므로, 쌓일 때는 조작 면을 먼저 놓는다. 왼쪽이 새로 읽을 상황인 조건 변화·
+           전이와, 왼쪽이 인물의 질문인 대화 주도형(D)의 첫 생각은 그대로 둔다. */
+        taskFirstWhenStacked={
+          ['first-attempt', 'ai-compare', 'decision', 'artifact'].includes(state.stage) && !showDialogueAside
+        }
       />
       <InquiryCertificateModal
         isOpen={showCertificateModal}

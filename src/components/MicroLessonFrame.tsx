@@ -40,7 +40,8 @@ export default function MicroLessonFrame({
   const [dictOpen, setDictOpen] = useState(false);
   const [dictQuery, setDictQuery] = useState<string | null>(null);
   const [navOpen, setNavOpen] = useState(false);
-  const [mobileTeacherOpen, setMobileTeacherOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
+  // 타이머가 도는 동안 상단 바에 남는 남은 시간. 모바일뿐 아니라 데스크톱 상단 바도 쓴다.
   const [mobileTimerLabel, setMobileTimerLabel] = useState<string | null>(null);
   const footerRef = useRef<HTMLElement | null>(null);
   // 데스크톱 사이드바 접기(집중 모드) — 선택을 기기에 기억한다.
@@ -117,7 +118,6 @@ export default function MicroLessonFrame({
   return (
     // h-dvh 고정 — 푸터(다음/이전)가 항상 보이고, 본문·사이드바가 각자 내부 스크롤된다.
     // dvh(동적 뷰포트): 모바일 주소창이 보여도 푸터가 화면 밖으로 밀리지 않는다(vh는 밀림).
-    // relative: 교사 도구 도크(absolute)의 앵커 — 프레임 기준이라 모바일에서도 안 흔들린다.
     <div className="micro-lesson-frame h-dvh flex flex-col relative">
       <TopBar
         crumb={crumb}
@@ -125,7 +125,7 @@ export default function MicroLessonFrame({
         onGoHome={onGoHome}
         onOpenNav={() => setNavOpen(true)}
         mobileTimerLabel={mobileTimerLabel}
-        onOpenTeacherTools={() => setMobileTeacherOpen(true)}
+        onOpenTeacherTools={() => setToolsOpen(true)}
       />
       <div className="flex flex-1 min-h-0">
         {/* PC: 접을 수 있는 사이드바 (localStorage: ai-students-sidebar-collapsed) / 모바일: ☰ 드로어 */}
@@ -187,7 +187,7 @@ export default function MicroLessonFrame({
                 <button
                   type="button"
                   data-mobile-teacher-tools
-                  onClick={() => { setNavOpen(false); setMobileTeacherOpen(true); }}
+                  onClick={() => { setNavOpen(false); setToolsOpen(true); }}
                   className="mobile-lesson-menu-action"
                 ><Icon name="pen" size={20} /> 교사 도구</button>
                 <div className="mobile-lesson-settings" aria-label="학습 설정">
@@ -204,9 +204,9 @@ export default function MicroLessonFrame({
             </div>
           </div>
         )}
-        {/* 모바일에서는 교사 도구를 메뉴 시트로 옮겨 본문 위에 상시 떠 있는 여백을 없앤다.
-            데스크톱 도크는 흐름 밖에 있으므로 md:pb-16으로 마지막 콘텐츠를 보호한다. */}
-        <main className="flex-1 min-w-0 p-4 md:px-8 md:py-8 md:pb-16 overflow-y-auto" data-open-term={undefined}>
+        {/* 교사 도구는 본문 위에 떠 있지 않고 상단 바의 단추가 여는 시트다. 그래서 본문 아래에
+            도구 몫의 여백을 따로 잡지 않는다. */}
+        <main className="flex-1 min-w-0 p-4 md:px-8 md:py-8 overflow-y-auto" data-open-term={undefined}>
           {/* expose openTerm to children via a custom event */}
           <div onClickCapture={(e) => {
             const target = e.target as HTMLElement;
@@ -228,8 +228,8 @@ export default function MicroLessonFrame({
       </div>
       <ClassroomDock
         lessonId={lessonId}
-        mobileOpen={mobileTeacherOpen}
-        onMobileClose={() => setMobileTeacherOpen(false)}
+        open={toolsOpen}
+        onClose={() => setToolsOpen(false)}
         onTimerLabelChange={setMobileTimerLabel}
       />
       <footer ref={footerRef} className="comic-frame-footer h-14 shrink-0 px-3 md:px-6 flex items-center justify-between gap-2">

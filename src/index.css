@@ -59,6 +59,7 @@
     /* 상단 도구 스티커 색 — 모듈 강조색과 같은 채도 대역에서 고른다.
        학생이 다섯 개를 색으로 구분하되 종이 위에서 튀지 않아야 한다.
        채도가 높은 캔디 팔레트를 여기에 직접 적지 않는다. */
+    --chrome-tools: #3F6B3F;        /* 교실 도구 — 풀빛 */
     --chrome-dictionary: #A44943;   /* 사전 — 따뜻한 벽돌 */
     --chrome-fontsize: #76516F;     /* 글자 크기 — 자두 */
     --chrome-support-full: #2F7773; /* 충분한 지원 — 청록 */
@@ -227,6 +228,16 @@
     font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
     color: var(--fg);
     line-height: var(--leading);
+  }
+
+  /* 한글은 낱말(어절) 단위로 줄을 바꾼다.
+     기본값(normal)은 글자 사이 어디서나 줄을 끊어 `그대/로 쓰/기`처럼 낱말 모양을 깨뜨린다.
+     글을 읽는 데 힘이 드는 학생과, 그림 카드에 인쇄된 낱말을 화면 낱말과 짝지어 읽는 학생이
+     가장 먼저 걸리는 곳이라 전역으로 막는다. overflow-wrap: anywhere를 함께 두어, 낱말 하나가
+     칸보다 넓을 때만 그 안에서 끊고 플렉스·그리드 칸이 낱말 폭 때문에 넘치지 않게 한다. */
+  html {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
 
   /* 본문 기본 텍스트 크기 — rem이므로 루트 스케일을 따라간다 */
@@ -579,7 +590,7 @@
 @media print {
   .teacher-hub-chrome,
   .comic-frame-footer,
-  .classroom-dock {
+  .mobile-teacher-tools-backdrop {
     display: none !important;
   }
 
@@ -1227,6 +1238,8 @@
 }
 
 .mobile-teacher-tools-backdrop {
+  display: flex;
+  align-items: flex-end;
   background: rgba(24, 30, 42, 0.52);
 }
 
@@ -1306,17 +1319,40 @@
   background: var(--paper-0);
 }
 
+/* 교실 도구 시트는 이름과 달리 모든 폭에서 쓴다(mobile- 접두는 모바일에서 먼저 만든 흔적이다).
+   태블릿·데스크톱에서는 상단 바 아래 오른쪽에 팝오버로 뜬다. 예전의 떠 있는 도크는 스크롤하는
+   본문 위에 겹쳐 대사 한 줄이나 판단 단추를 가렸다. 시트는 열 때만 뜬다.
+   본문을 흐리지 않는다 — 교사는 본문을 보면서 타이머·그림 카드를 쓴다. */
+@media (min-width: 768px) {
+  .mobile-teacher-tools-backdrop {
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: calc(64px + 0.5rem) 1.5rem 0 0;
+    background: transparent;
+  }
+
+  .mobile-teacher-tools-sheet {
+    width: min(40rem, 100%);
+    max-height: calc(100dvh - 64px - 1.5rem);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+
+  .mobile-teacher-tools-grid {
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  }
+
+  .mobile-teacher-tools-grid > button:last-child {
+    grid-column: auto;
+  }
+}
+
 @media (min-width: 768px) {
   .lesson-topbar {
     height: 64px;
     min-height: 64px;
     padding: 0;
   }
-}
-
-.classroom-dock {
-  bottom: var(--ai-lesson-footer-height, 3.5rem);
-  max-width: calc(100% - 1rem);
 }
 
 /* 전체화면 판서 팔레트 — 데스크톱은 한 줄, 모바일은 기능별로 읽히는 도구판 */
@@ -3667,6 +3703,8 @@
   --chrome-tint: var(--accent);
   --surface-edge: color-mix(in srgb, var(--chrome-tint) 45%, var(--paper-2));
   display: inline-flex;
+  flex-shrink: 0;
+  white-space: nowrap;
   align-items: center;
   gap: 0.5rem;
   min-height: 2.75rem;
@@ -3946,4 +3984,61 @@
 div:has(> .game-canvas-fit) {
   container-type: size;
   min-height: 270px;
+}
+
+/*
+ * 낮은 창 — 높이 820px 이하의 태블릿·노트북(1366×768 노트북의 실제 뷰포트는 약 657px이다).
+ *
+ * 고정된 머리·꼬리(상단 바 64px, 하단 바 62px)에 더해, 본문 위아래 여백과 모든 화면에서 같은 글을
+ * 되풀이하는 부제·배지, 이야기 화면의 시즌 태그가 낮은 창에서 본문 높이의 절반 가까이를 먹었다.
+ * 그 결과 이야기의 「다음 이야기 보기」가 접힌 아래로 밀렸다(1366×657에서 201px 넘침).
+ *
+ * 없어도 학습이 성립하는 것(부제·배지·시즌 태그)만 숨기고 여백을 줄인다. 장면 제목, 그림, 대사,
+ * 조작줄은 그대로 둔다. 이야기 무대의 크기 계산(--scenario-stacked-room)은 건드리지 않는다.
+ * 그 문턱(50rem)은 대사가 상자를 넘치는 칸 수를 실측해 정한 값이다.
+ */
+@media (min-width: 768px) and (max-height: 820px), (min-width: 768px) and (max-width: 1023px) {
+  .micro-lesson-frame main {
+    padding-block: 0.75rem;
+  }
+
+  .studio-frame-subtitle,
+  .studio-frame-badge,
+  .studio-editorial-scenario .visual-novel-season-tag {
+    display: none;
+  }
+
+  .studio-editorial-scenario.lesson-spread--full .lesson-page {
+    padding-block: 0.9rem;
+  }
+}
+
+/* 아주 낮은 창(700px 이하)에서는 장면 제목도 줄인다. 대사·그림·조작줄이 먼저다.
+   1366×657에서 위 압축만으로 33px가 남아 「다음 이야기 보기」의 아랫부분이 잘렸다. */
+@media (min-width: 768px) and (max-height: 700px) {
+  .studio-editorial-scenario .visual-novel-story-page > .visual-novel-page-heading {
+    display: none;
+  }
+}
+
+/* 놀이 단계의 오른쪽 면(성찰 기록)은 2.2:1에서 폭이 약 280px이다. 면 안쪽 여백(최대 2rem)과 안쪽
+   상자 여백(p-7)이 겹쳐 글이 들어갈 자리가 140px쯤 남아 제목이 두세 글자씩 끊겼다.
+   놀이판을 줄이는 대신 이 면의 여백과 제목 글자를 줄인다. */
+@media (min-width: 1024px) {
+  .lesson-spread--wide-left .lesson-page-right {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .lesson-spread--wide-left .lesson-page-right > div {
+    padding: 0.4rem;
+  }
+
+  .lesson-spread--wide-left .lesson-page-right h2 {
+    font-size: 1.05rem;
+    line-height: 1.4;
+  }
+
+  .lesson-spread--wide-left .lesson-page-right .studio-fact-card {
+    padding: 0.6rem 0.7rem;
+  }
 }

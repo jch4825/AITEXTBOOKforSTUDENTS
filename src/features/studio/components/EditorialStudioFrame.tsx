@@ -16,6 +16,12 @@ interface Props {
   spreadClassName?: string;
   /** 지면과 제목을 같은 읽기 폭으로 묶을 때 쓰는 프레임 클래스. */
   frameClassName?: string;
+  /**
+   * 좁은 창에서 두 면이 위아래로 쌓일 때 오른쪽(조작) 면을 먼저 놓는다.
+   * 왼쪽이 앞 단계에서 이미 읽은 상황의 반복일 때만 쓴다. 세로 태블릿에서 반복되는 상황
+   * 1,000px을 지나야 판단 단추가 나왔다.
+   */
+  taskFirstWhenStacked?: boolean;
 }
 
 export const STAGE_LABELS: Record<StudioStage, string> = {
@@ -39,6 +45,7 @@ export default function EditorialStudioFrame({
   viewLabel,
   spreadClassName,
   frameClassName,
+  taskFirstWhenStacked,
 }: Props) {
   const label = viewLabel ?? STAGE_LABELS[stage];
   return (
@@ -52,10 +59,11 @@ export default function EditorialStudioFrame({
           <h1 className="text-2xl font-extrabold leading-tight md:text-3xl" style={{ color: accent }}>
             {definition.title}
           </h1>
-          <p className="mt-1 text-base text-[color:var(--muted)]">{definition.subtitle}</p>
+          {/* 낮은 창에서는 부제와 배지를 숨긴다(index.css 「낮은 창」). 모든 화면에서 같은 글이 반복된다. */}
+          <p className="studio-frame-subtitle mt-1 text-base text-[color:var(--muted)]">{definition.subtitle}</p>
         </div>
         <span
-          className="rounded-full px-3 py-1 text-sm font-bold"
+          className="studio-frame-badge rounded-full px-3 py-1 text-sm font-bold"
           style={{ color: accent, background: 'var(--editorial-quiet)' }}
         >
           생생한 이야기로 만나기
@@ -68,6 +76,7 @@ export default function EditorialStudioFrame({
         label={`${definition.title} · ${label}`}
         accent={accent}
         className={`studio-editorial ${spreadClassName ?? ''}`}
+        taskFirstWhenStacked={taskFirstWhenStacked}
       />
     </article>
   );

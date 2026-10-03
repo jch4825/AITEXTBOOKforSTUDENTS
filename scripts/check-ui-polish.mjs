@@ -134,13 +134,28 @@ if (!indexHtml.includes('interactive-widget=resizes-content')) {
   throw new Error('Viewport meta must set interactive-widget=resizes-content so the on-screen keyboard shrinks the layout viewport with the lesson frame.');
 }
 
+// 교실 도구는 본문 위에 떠 있지 않는다.
+// 예전에는 푸터 높이에 absolute로 붙인 도크였다. 스크롤하는 본문 위에 겹쳐 이야기 대사 한 줄과
+// `그대로 쓰기` 단추를 가렸다(1366×657, 1024×768 실측). 그렇다고 본문 아래에 도크 몫의 여백을 잡으면
+// 낮은 화면에서 본문 높이의 12%를 잃는다. 그래서 상단 바의 "도구" 단추가 여는 시트로 옮겼고,
+// 시트는 모든 폭에서 같은 것을 쓴다(데스크톱은 상단 바 아래 팝오버, 모바일은 아래 시트).
+const topBar = readFileSync(new URL('../src/components/TopBar.tsx', import.meta.url), 'utf8');
+const toolsTrigger = readFileSync(new URL('../src/components/controls/ToolsTrigger.tsx', import.meta.url), 'utf8');
 if (
-  !classroomDock.includes('classroom-dock absolute')
-  || classroomDock.includes('bottom-14')
-  || !css.includes('.classroom-dock')
-  || !css.includes('bottom: var(--ai-lesson-footer-height, 3.5rem)')
+  classroomDock.includes('classroom-dock')
+  || css.includes('.classroom-dock')
+  || /mobile-teacher-tools-backdrop[^>]*md:hidden/.test(classroomDock)
+  || frame.includes('md:pb-16')
 ) {
-  throw new Error('Classroom dock must be anchored to the measured footer height.');
+  throw new Error('Classroom tools must not float over the lesson body or hide on desktop; use the top-bar trigger and the shared tools sheet.');
+}
+if (
+  !topBar.includes('<ToolsTrigger')
+  || !toolsTrigger.includes('data-teacher-tools-trigger')
+  || !classroomDock.includes('mobile-teacher-tools-sheet')
+  || !/@media \(min-width: 768px\)\s*\{\s*\.mobile-teacher-tools-backdrop\s*\{[^}]*align-items:\s*flex-start;/.test(css)
+) {
+  throw new Error('Desktop must open the classroom tools sheet from the top-bar trigger as a popover under the top bar.');
 }
 
 if (!document.includes('favicon.svg')) {
