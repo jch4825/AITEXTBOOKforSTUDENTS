@@ -11,8 +11,9 @@ type VoiceCheck =
 
 const TEST_SENTENCE = '안녕하세요. 소리가 잘 들리나요? 이 목소리로 학생에게 글을 읽어 줍니다.';
 
-/** 읽기 지원이 켜진 단원 이름. 예) "1단원". */
+/** 읽기 지원이 켜진 단원을 말로 옮긴다. 여섯 단원이 모두 켜져 있으면 "모든 단원". */
 function readingSupportModuleNames(): string {
+  if (READING_SUPPORT_MODULES.length >= 6) return '모든 단원';
   return READING_SUPPORT_MODULES.map((id) => `${Number(id.slice(1))}단원`).join(', ');
 }
 
@@ -86,7 +87,7 @@ export default function TeacherSoundSetting() {
 
       <h3 className="mt-8 text-xl font-extrabold">읽어 주기</h3>
       <p className="mt-3 leading-relaxed">
-        {readingSupportModuleNames()}에서는 글을 못 읽는 학생도 들으며 답할 수 있습니다. 선택지, 선택한 뒤의
+        {readingSupportModuleNames()}에서 글을 못 읽는 학생도 들으며 답할 수 있습니다. 선택지, 선택한 뒤의
         반응, AI 의견마다 듣기 단추가 있고, 선택지는 &lsquo;모두 듣기&rsquo;로 차례대로 들을 수 있습니다.
         듣기 단추는 학생이 누를 때만 읽습니다. 학생 화면 상단의 소리 칩을 누르면 저절로 나는
         소리가 한 번에 꺼지지만 듣기 단추는 그대로 읽어 줍니다.

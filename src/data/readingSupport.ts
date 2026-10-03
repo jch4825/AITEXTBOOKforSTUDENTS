@@ -10,11 +10,11 @@ import { moduleIdFromLessonId } from './modules';
  *  2. 판단 단계의 세 단추가 그림 카드(그림 + 인쇄 글자)다.
  *  3. 상단 바에 학생이 직접 쓰는 소리 칩이 있다.
  *
- * 2026-10 시범으로 1단원만 켠다. 이 목록 한 줄이 위 세 가지를 함께 켜고 끈다.
- * 다른 단원을 켤 때는 이 목록에 더하고 `npm run check:reading-support`를 돌린다.
- * 그 단원 그림 카드 판에 판단 카드 셋이 있어야 검사가 통과한다.
+ * 이 목록 한 줄이 위 세 가지를 함께 켜고 끈다. 2026-10 1단원 시범을 거쳐 여섯 단원 모두 켰다.
+ * 단원을 더하거나 뺄 때는 이 목록을 고치고 `npm run check:reading-support`를 돌린다.
+ * 그 단원 그림 카드 판에 판단 카드 셋이 있고, 모든 선택지에 반응 대사가 있어야 검사가 통과한다.
  */
-export const READING_SUPPORT_MODULES: readonly ModuleId[] = ['m1'];
+export const READING_SUPPORT_MODULES: readonly ModuleId[] = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
 
 export function moduleHasReadingSupport(moduleId: ModuleId | null | undefined): boolean {
   return moduleId != null && READING_SUPPORT_MODULES.includes(moduleId);

@@ -218,6 +218,7 @@ export default function StudioExperience({
         dictionaryTerms={allDictTerms}
         picked={coldOpenChoiceId}
         onPick={setColdOpenChoiceId}
+        readingSupport={readingSupport}
       />
     );
   }

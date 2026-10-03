@@ -2,7 +2,6 @@ import { useEffect, type CSSProperties } from 'react';
 import { useSpeak } from '../../hooks/useSpeak';
 import { useSpeakingState } from '../../hooks/useSpeakingState';
 import { getSpeakingState, speakSequence, stopSpeaking, type SequenceItem } from '../../utils/tts';
-import { toSpeechText } from '../../utils/speechText';
 import Icon from '../Icon';
 
 interface ListenProps {
@@ -43,7 +42,7 @@ export default function ListenButton({ text, speakKey, label = '듣기', accent,
       style={{ '--listen-accent': accent } as CSSProperties}
       onClick={() => {
         if (speaking) stopSpeaking();
-        else speakNow(toSpeechText(text), { key: speakKey });
+        else speakNow(text, { key: speakKey });
       }}
       aria-label={name}
       title={name}
@@ -95,7 +94,7 @@ export function ListenAllButton({
           return;
         }
         speakSequence(
-          items.map((item) => ({ key: item.key, text: toSpeechText(item.text) })),
+          items,
           { group },
         );
       }}

@@ -1,5 +1,8 @@
+import { useId } from 'react';
 import Icon from '../../../components/Icon';
+import ListenButton, { ListenAllButton } from '../../../components/controls/ListenButton';
 import { useSpeak } from '../../../hooks/useSpeak';
+import { useSpeakingState } from '../../../hooks/useSpeakingState';
 import ChoiceReactionPanel from './ChoiceReactionPanel';
 import EditorialStudioFrame from './EditorialStudioFrame';
 import PreparedStimulusPanel from './PreparedStimulusPanel';
@@ -13,6 +16,8 @@ interface Props {
   /** 세션 메모리에만 남는 첫 판단. 저장하지 않는다. */
   picked: string | null;
   onPick: (choiceId: string) => void;
+  /** 읽기 지원 단원이면 선택지마다 듣기 단추를 단다(data/readingSupport.ts). 고르는 일은 원래 조용하다. */
+  readingSupport?: boolean;
 }
 
 /**
@@ -30,8 +35,12 @@ export default function ColdOpenView({
   dictionaryTerms,
   picked,
   onPick,
+  readingSupport = false,
 }: Props) {
   const { speakNow } = useSpeak();
+  const { key: speakingKey } = useSpeakingState();
+  // 소리의 이름이 다른 목록과 겹치지 않게 한다.
+  const listId = useId();
   const { transfer } = definition;
   const prompt = transfer.prompt || `${transfer.title} 상황에서 어떻게 하겠어요?`;
 
@@ -75,20 +84,36 @@ export default function ColdOpenView({
 
   const right = (
     <div className="space-y-5 p-5 md:p-7">
-      <div>
-        <p className="studio-kicker" style={{ color: accent }}>지금이라면 어떻게 할까요</p>
-        <h2 className="mt-1 text-xl font-extrabold">{prompt}</h2>
+      <div className={readingSupport ? 'flex items-start justify-between gap-3' : undefined}>
+        <div>
+          <p className="studio-kicker" style={{ color: accent }}>지금이라면 어떻게 할까요</p>
+          <h2 className="mt-1 text-xl font-extrabold">{prompt}</h2>
+        </div>
+        {/* 물음 옆 단추 하나가 물음과 선택지를 차례로 읽는다. 읽는 카드는 윤곽으로 따라간다. */}
+        {readingSupport ? (
+          <ListenAllButton
+            compact
+            group={`${listId}:all`}
+            accent={accent}
+            label="물음과 선택지 모두 듣기"
+            items={[
+              { key: `${listId}:prompt`, text: prompt },
+              ...transfer.choices.map((choice) => ({ key: `${listId}:${choice.id}`, text: choice.label })),
+            ]}
+          />
+        ) : null}
       </div>
 
       <div role="group" aria-label="첫 판단 고르기" className="grid gap-2.5">
-        {transfer.choices.map((choice) => {
+        {transfer.choices.map((choice, index) => {
           const selected = picked === choice.id;
-          return (
+          const card = (
             <button
               key={choice.id}
               type="button"
               onClick={() => onPick(choice.id)}
               aria-pressed={selected}
+              data-reading={readingSupport && speakingKey === `${listId}:${choice.id}` ? 'true' : undefined}
               className="flex min-h-14 cursor-pointer items-start gap-3 rounded-xl border-2 px-4 py-3 text-left text-base font-bold transition-all hover:scale-[1.01] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
               style={{
                 borderColor: selected ? accent : 'var(--editorial-line)',
@@ -102,6 +127,19 @@ export default function ColdOpenView({
               <span className="leading-snug">{choice.label}</span>
             </button>
           );
+          if (!readingSupport) return card;
+          // 듣기 단추는 카드 곁에 둔다. 카드 안에 넣으면 듣다가 답이 정해진다.
+          return (
+            <div key={choice.id} className="reading-choice-row">
+              {card}
+              <ListenButton
+                text={choice.label}
+                speakKey={`${listId}:${choice.id}`}
+                label={`${index + 1}번 카드 듣기`}
+                accent={accent}
+              />
+            </div>
+          );
         })}
       </div>
 
@@ -110,6 +148,7 @@ export default function ColdOpenView({
         expression={picked ? { mode: 'choice', choiceIds: [picked] } : undefined}
         accent={accent}
         dictionaryTerms={dictionaryTerms}
+        readingSupport={readingSupport}
       />
     </div>
   );

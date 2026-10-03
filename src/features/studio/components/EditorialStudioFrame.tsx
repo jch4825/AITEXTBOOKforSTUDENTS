@@ -54,7 +54,7 @@ export default function EditorialStudioFrame({
       style={{ '--accent': accent, '--studio-secondary': secondary } as CSSProperties}
     >
       <header className="flex flex-wrap items-end justify-between gap-3 px-1">
-        <div>
+        <div className="studio-frame-heading">
           <p className="studio-kicker" style={{ color: secondary }}>{label}</p>
           <h1 className="text-2xl font-extrabold leading-tight md:text-3xl" style={{ color: accent }}>
             {definition.title}

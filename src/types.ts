@@ -36,12 +36,16 @@ export interface SettingsState {
   /** 표지에서 고른 학년군. difficulty가 easy일 때도 유지된다. */
   gradeBand: GradeBand;
   fontSize: FontSize;
-  /** 읽기 지원이 없는 단원이 저절로 읽어 주는 소리의 토글. 듣기 단추는 이 값과 상관없이 읽는다. */
+  /**
+   * 사전을 열 때 뜻을 읽어 주는 일, 놀이의 소리 안내 같은 `useSpeak().speak`의 자동 소리 토글.
+   * 듣기 단추(`speakNow`)는 이 값과 상관없이 읽는다.
+   */
   ttsEnabled: boolean;
   /**
-   * 읽기 지원 단원(`data/readingSupport.ts`)에서 카드를 고를 때 그 글을 소리 내어 읽어 주는가.
+   * 카드를 고를 때 그 글을 소리 내어 읽어 주는가(`data/readingSupport.ts`의 읽기 지원 단원).
    * 기본은 꺼짐이다. 여러 대를 함께 쓰는 교실에서 저절로 나는 말소리는 소음이 되므로 교사가 켠다.
-   * 단원이 모두 읽기 지원을 쓰게 되면 ttsEnabled와 하나로 합친다.
+   * ttsEnabled와 합치지 않은 까닭: 사전·놀이의 자동 소리는 학생이 직접 단어나 판을 건드린 뒤에 나는
+   * 응답이라 기본이 켜짐이고, 선택지를 고르는 동안의 말소리는 기본이 꺼짐이어야 한다.
    */
   autoRead: boolean;
   /** 스튜디오 효과음. 읽어 주기(ttsEnabled)와 별개 토글이다(05-ENGINE-SPEC §7). */

@@ -4126,7 +4126,7 @@ div:has(> .game-canvas-fit) {
 }
 
 /* 지금 읽어 주는 카드. 반투명 덮개 대신 잉크색 윤곽으로 표시한다(소리와 카드를 눈으로 잇는 표시). */
-.reading-choice-row .surface-choice[data-reading='true'] {
+.reading-choice-row > [data-reading='true'] {
   outline: 4px solid var(--brand-ink);
   outline-offset: 3px;
 }
@@ -4203,8 +4203,45 @@ div:has(> .game-canvas-fit) {
   }
 }
 
-/* 아주 낮은 창(700px 이하)에서는 판단 카드의 그림을 한 단계 더 줄인다. 글자는 줄이지 않는다. */
-@media (min-width: 768px) and (max-height: 700px) {
+/* 낮은 창(780px 이하). 1366×657은 본문이 530px, 1280×720은 593px, 1024×768은 641px뿐이라 판단 단계가 한 화면에 들어오지 않았다.
+   차시마다 AI 의견의 줄 수가 달라 석 장이 28~57px씩 잘렸다(62차시 실측: 대부분). 위에서부터 줄인다.
+   ① 머리글: 단계 이름과 차시 제목을 두 줄에서 한 줄로(약 38px). 제목은 모든 단계에서 같다.
+   ② 오른쪽(조작) 면 위아래 여백을 한 겹 더 줄인다.
+   ③ 의견 인용 상자의 여백과 글 크기를 줄인다. 글자 크기 설정(크게)을 켜면 그만큼 다시 커진다.
+   ④ 판단 카드의 그림을 한 단계 더 줄인다. 카드의 글자는 줄이지 않는다. */
+@media (min-width: 768px) and (max-height: 780px) {
+  .studio-frame-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.75rem;
+  }
+
+  .studio-frame-heading h1 {
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .studio-editorial .lesson-page-right {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .studio-editorial .lesson-page-right > div {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .studio-editorial .lesson-page-right .studio-margin-note {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .studio-decision-copy {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
   .decision-card-art {
     max-width: 3.2rem;
   }

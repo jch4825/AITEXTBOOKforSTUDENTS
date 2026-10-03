@@ -11,7 +11,6 @@ import { useSettings } from '../../../context/SettingsContext';
 import { wrapDictionaryTerms } from '../../../views/lessonTextUtils';
 import { STUDENT_DICTIONARY } from '../../../data/studentDictionary';
 import { playSound } from '../../../utils/sound';
-import { toSpeechText } from '../../../utils/speechText';
 
 interface ChoiceItem {
   id: string;
@@ -79,7 +78,7 @@ export default function ExpressionInput({
     if (readingSupport) {
       // 읽기 지원 단원은 고르는 일이 조용하다. 듣고 싶으면 듣기 단추를 누르고, 교사가
       // 자동 읽기를 켠 교실에서만 고를 때 그 글을 읽어 준다.
-      if (autoRead) speakNow(toSpeechText(label), { key: `${listId}:${id}` });
+      if (autoRead) speakNow(label, { key: `${listId}:${id}` });
     } else {
       speak(label);
     }

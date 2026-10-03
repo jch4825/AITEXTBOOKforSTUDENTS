@@ -47,6 +47,7 @@ const studios = await loadBundled('src/data/studios/index.ts');
 const roles = await loadBundled('src/data/lessonRoles.ts');
 const speechText = await loadBundled('src/utils/speechText.ts');
 const decisionCards = await loadBundled('src/features/studio/decisionCards.ts');
+const portfolios = await loadBundled('src/data/modulePortfolios/index.ts');
 
 // ───── 1. 데이터 ─────
 const modules = support.READING_SUPPORT_MODULES;
@@ -63,6 +64,17 @@ for (const decision of ['accept', 'modify', 'reject']) {
     pecs.PECS_LABELS[cardId] === screenLabels[decision],
     `판단 단추 "${screenLabels[decision]}" 와 카드 ${cardId}에 인쇄된 글자 "${pecs.PECS_LABELS[cardId]}" 가 다르다 — 한쪽만 바꾸지 않는다`,
   );
+}
+
+/** 읽는 글에서 풀어 쓰지 못한 기호가 남지 않았는지 본다. */
+function assertSpeakable(where, text) {
+  if (!text?.trim()) return;
+  const spoken = speechText.toSpeechText(text);
+  assert(spoken.length > 0, `${where}: 읽을 글이 비었다`);
+  assert(!/[·ㆍ×÷]/.test(spoken), `${where}: 읽을 글에 기호가 남았다: ${spoken}`);
+  assert(!/(^|[^A-Za-z0-9])AI(?![A-Za-z0-9])/.test(spoken), `${where}: 읽을 글에 영문 AI가 남았다: ${spoken}`);
+  assert(!/\d\s*-\s*\d/.test(spoken), `${where}: 읽을 글에 숫자 사이 하이픈이 남았다: ${spoken}`);
+  assert(!/D-day/i.test(spoken), `${where}: 읽을 글에 D-day가 남았다: ${spoken}`);
 }
 
 let choiceCount = 0;
@@ -86,6 +98,11 @@ for (const moduleId of modules) {
     const studio = studios.getStudioDefinition(lessonId);
     assert(studio, `${lessonId}: 스튜디오 정의가 없다`);
     if (!studio) continue;
+    assertSpeakable(`${lessonId} 첫 생각 물음`, studio.firstAttempt.prompt);
+    assertSpeakable(`${lessonId} 이유 물음`, studio.firstAttempt.reasonPrompt);
+    assertSpeakable(`${lessonId} AI 의견`, studio.aiContribution.text);
+    assertSpeakable(`${lessonId} 결과물 안내`, studio.artifact.prompt);
+    assertSpeakable(`${lessonId} 적용 물음`, studio.transfer.prompt);
     for (const [where, choices] of [['첫 생각', studio.firstAttempt.choices], ['적용', studio.transfer.choices]]) {
       const ids = new Set();
       for (const choice of choices) {
@@ -97,15 +114,26 @@ for (const moduleId of modules) {
           choice.reaction?.trim(),
           `${lessonId} ${where}: 선택지 ${choice.id}에 반응이 없다 — 읽기 지원 단원은 고르는 일이 조용해서 반응이 곧 피드백이다`,
         );
-        const spoken = speechText.toSpeechText(choice.label);
-        assert(spoken.length > 0, `${lessonId} ${where}: 선택지 ${choice.id} 의 읽을 글이 비었다`);
-        assert(!/[·ㆍ×÷]/.test(spoken), `${lessonId} ${where}: 선택지 ${choice.id} 의 읽을 글에 기호가 남았다: ${spoken}`);
-        assert(
-          !/(^|[^A-Za-z0-9])AI(?![A-Za-z0-9])/.test(spoken),
-          `${lessonId} ${where}: 선택지 ${choice.id} 의 읽을 글에 영문 AI가 남았다: ${spoken}`,
-        );
+        assertSpeakable(`${lessonId} ${where} 선택지 ${choice.id}`, choice.label);
+        assertSpeakable(`${lessonId} ${where} 반응 ${choice.id}`, choice.reaction);
       }
     }
+  }
+
+  // 단원 마무리의 선택지도 같은 선택지 목록(ExpressionInput)을 쓴다.
+  const portfolio = portfolios.getModulePortfolioDefinition(
+    roles.MODULE_CLOSE_LESSON_IDS.find((id) => support.hasReadingSupport(id) && id.startsWith(`${moduleId}-`)),
+  );
+  assert(portfolio, `${moduleId}: 단원 마무리 정의가 없다`);
+  if (portfolio) {
+    const ids = new Set();
+    for (const choice of portfolio.nextChoices) {
+      choiceCount += 1;
+      assert(!ids.has(choice.id), `${portfolio.lessonId}: 선택지 id ${choice.id} 가 겹친다`);
+      ids.add(choice.id);
+      assertSpeakable(`${portfolio.lessonId} 선택지 ${choice.id}`, choice.label);
+    }
+    assertSpeakable(`${portfolio.lessonId} 적용 물음`, portfolio.transferPrompt);
   }
 }
 // 목록에 없는 단원은 꺼져 있어야 한다(어느 단원을 켜 두었든 같은 규칙이다).
@@ -128,6 +156,9 @@ const samples = [
   ['전체÷인원', '전체 나누기 인원'],
   ['AIMI와 KAI와 AI2', 'AIMI와 KAI와 AI2'],
   ['  두  칸   띄움 ', '두 칸 띄움'],
+  ['10000-6600을 계산기에 입력해요', '10000 빼기 6600을 계산기에 입력해요'],
+  ['D-day까지 준비해요', '디데이까지 준비해요'],
+  ['4,000원보다 작아요', '4,000원보다 작아요'],
 ];
 for (const [input, expected] of samples) {
   const actual = speechText.toSpeechText(input);
@@ -298,6 +329,21 @@ assert(/reading-choice-row/.test(expression), 'ExpressionInput: 선택지 줄(re
 const cardBlock = expression.slice(expression.indexOf('const card = ('), expression.indexOf('if (!readingSupport) return card;'));
 assert(cardBlock.length > 0 && !/<ListenButton\b/.test(cardBlock), 'ExpressionInput: 듣기 단추가 카드 단추 안에 들어갔다');
 
+// 형식 C의 "먼저 해 보기"도 선택지를 고른다. 같은 규칙(듣기 단추 곁에, 고르기는 조용히, 반응에 듣기)을 지킨다.
+const coldOpen = stripComments(read('src/features/studio/components/ColdOpenView.tsx'));
+assert(
+  /readingSupport/.test(coldOpen) && /<ListenButton\b/.test(coldOpen) && /<ListenAllButton\b/.test(coldOpen) && /reading-choice-row/.test(coldOpen),
+  'ColdOpenView: 먼저 해 보기의 선택지에 듣기 단추와 물음·선택지 모두 듣기가 있어야 한다',
+);
+assert(
+  /<ChoiceReactionPanel[\s\S]*?readingSupport=\{readingSupport\}/.test(coldOpen),
+  'ColdOpenView: 반응 대사에도 읽기 지원을 넘겨야 한다',
+);
+const coldCard = coldOpen.slice(coldOpen.indexOf('const card = ('), coldOpen.indexOf('if (!readingSupport) return card;'));
+assert(coldCard.length > 0 && !/<ListenButton\b/.test(coldCard), 'ColdOpenView: 듣기 단추가 카드 단추 안에 들어갔다');
+// 카드 단추(클릭 처리 포함) 안에서는 어떤 말소리도 내지 않는다. 고르는 일은 조용해야 한다.
+assert(coldCard.length > 0 && !/\bspeak(Now)?\(/.test(coldCard), 'ColdOpenView: 카드를 고르는 일은 조용해야 한다');
+
 const reaction = read('src/features/studio/components/ChoiceReactionPanel.tsx');
 assert(/readingSupport/.test(reaction) && /<ListenButton\b/.test(reaction), 'ChoiceReactionPanel: 반응 대사의 듣기 단추가 없다');
 
@@ -312,6 +358,10 @@ assert(
   'StudioExperience: 반응 패널 둘에 readingSupport를 넘겨야 한다',
 );
 assert(/decision-card/.test(studioSource) && /PECS_LABELS\[DECISION_CARD_IDS\[choice\.id\]\]/.test(studioSource), 'StudioExperience: 판단 단추의 그림 카드와 글자가 PECS_LABELS에서 나오지 않는다');
+assert(
+  /<ColdOpenView[\s\S]*?readingSupport=\{readingSupport\}/.test(studioSource),
+  'StudioExperience: 먼저 해 보기(ColdOpenView)에도 readingSupport를 넘겨야 한다',
+);
 assert(/speakKey="decision:opinion"/.test(studioSource), 'StudioExperience: 판단할 AI 의견의 듣기 단추가 없다');
 assert(/speakKey="artifact:prompt"/.test(studioSource), 'StudioExperience: 결과물 안내의 듣기 단추가 없다');
 
@@ -340,6 +390,10 @@ assert(
 );
 
 const tts = stripComments(read('src/utils/tts.ts'));
+assert(
+  (tts.match(/stripForSpeech\(toSpeechText\(/g) ?? []).length >= 2,
+  'tts: 모든 읽기(speak·speakSequence)는 toSpeechText로 기호를 풀어 쓴 뒤 읽어야 한다',
+);
 assert(
   (tts.match(/\+\+sequenceToken/g) ?? []).length >= 2 && /sequenceToken \+= 1/.test(tts),
   'tts: 새 소리(speak·speakSequence)와 멈춤(stopSpeaking)이 차례 읽기를 끊어야 한다(sequenceToken)',

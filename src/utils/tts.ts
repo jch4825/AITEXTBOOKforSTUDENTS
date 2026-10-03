@@ -1,3 +1,5 @@
+import { toSpeechText } from './speechText';
+
 /** Strip markdown-ish syntax so TTS doesn't read backticks/asterisks aloud. */
 export function stripForSpeech(text: string): string {
   return text
@@ -222,7 +224,7 @@ function playPieces(
 export function speak(text: string, opts?: SpeakOptions) {
   if (!supported()) return;
   const token = ++sequenceToken;
-  const chunks = splitForSpeech(stripForSpeech(text));
+  const chunks = splitForSpeech(stripForSpeech(toSpeechText(text)));
   playPieces(
     chunks.map((chunk, index) => ({ text: chunk, key: opts?.key ?? null, last: index === chunks.length - 1 })),
     token,
@@ -244,7 +246,7 @@ export function speakSequence(
   if (!supported() || items.length === 0) return;
   const token = ++sequenceToken;
   const pieces = items.flatMap((item) => {
-    const chunks = splitForSpeech(stripForSpeech(item.text));
+    const chunks = splitForSpeech(stripForSpeech(toSpeechText(item.text)));
     return chunks.map((chunk, index) => ({ text: chunk, key: item.key, last: index === chunks.length - 1 }));
   });
   if (pieces.length === 0) return;
