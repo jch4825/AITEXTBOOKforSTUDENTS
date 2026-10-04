@@ -6,6 +6,28 @@
  */
 
 const STORAGE_KEY = 'ai-students-gemini-key';
+const CHANGE_EVENT = 'ai-students-api-key-changed';
+
+function notifyKeyChanged(): void {
+  if (typeof window !== 'undefined') window.dispatchEvent(new Event(CHANGE_EVENT));
+}
+
+/**
+ * 키가 저장되거나 지워지면 알려 준다(같은 쪽은 직접, 다른 탭은 storage 이벤트).
+ * 상단 바의 인공지능 연결 표시가 교사가 키를 넣고 빼는 순간 바로 바뀌게 한다.
+ */
+export function subscribeApiKey(onChange: () => void): () => void {
+  if (typeof window === 'undefined') return () => undefined;
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === null || event.key === STORAGE_KEY) onChange();
+  };
+  window.addEventListener(CHANGE_EVENT, onChange);
+  window.addEventListener('storage', onStorage);
+  return () => {
+    window.removeEventListener(CHANGE_EVENT, onChange);
+    window.removeEventListener('storage', onStorage);
+  };
+}
 
 export function getApiKey(): string | null {
   const envKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -24,10 +46,12 @@ export function setApiKey(key: string): void {
     return;
   }
   localStorage.setItem(STORAGE_KEY, trimmed);
+  notifyKeyChanged();
 }
 
 export function clearApiKey(): void {
   localStorage.removeItem(STORAGE_KEY);
+  notifyKeyChanged();
 }
 
 export function hasApiKey(): boolean {

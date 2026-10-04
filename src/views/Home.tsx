@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Button from '../components/Button';
+import AiStatus from '../components/controls/AiStatus';
 import ModuleIcon from '../components/ModuleIcon';
 import { useProgress } from '../context/ProgressContext';
 import { useSettings } from '../context/SettingsContext';
@@ -88,6 +89,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
             좁은 화면에서는 안내 문구만 접고 링크는 남긴다.
           */}
           <div className="flex items-center gap-2">
+            <AiStatus />
             <span className="hidden px-4 py-2 text-sm font-bold text-[color:var(--brand-ink)] md:inline">학생 학습 화면</span>
             <a
               className="min-h-11 rounded-[var(--r-sm)] border-2 border-[color:var(--brand-ink)] px-4 py-2 text-sm font-semibold whitespace-nowrap text-[color:var(--brand-ink)] transition-colors hover:bg-[color:var(--paper-2)]"

@@ -7,6 +7,7 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "tsc --noEmit && vite build",
     "test:gemini": "node --test tests/unit/gemini.test.mjs",
+    "test:dictionary-ai": "node --test tests/unit/dictionaryAi.test.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
@@ -62,6 +63,7 @@
     "check:reading-support": "node scripts/check-reading-support.mjs",
     "check:choice-cards": "node scripts/check-choice-cards.mjs",
     "check:worksheet-picture": "node scripts/check-worksheet-picture.mjs",
+    "check:dictionary": "node scripts/check-dictionary.mjs",
     "check:curriculum-document": "node scripts/check-curriculum-document.mjs"
   },
   "dependencies": {

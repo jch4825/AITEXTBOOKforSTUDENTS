@@ -19,6 +19,18 @@ export interface DictionaryEntry {
   shortExplanation: string;
   example?: string;
   ttsVersion?: string;
+  /**
+   * 하다·되다·시키다·받다를 붙여 서술어로도 쓰는 낱말(확인 → 확인합니다, 안전 → 안전한).
+   * 본문에서 이런 서술어는 어절 전체에 밑줄을 친다. `-하다`로 끝나는 올림말은 따로 적지 않아도 된다.
+   * 서술어로 쓰면 뜻이 달라지는 낱말(지도 → 지도하다)에는 켜지 않는다.
+   */
+  verbal?: boolean;
+  /**
+   * 이 낱말이 사전의 뜻과 다른 뜻으로 쓰인 구절. 이 구절 안에서는 밑줄을 치지 않는다
+   * (예: 컴퓨터 프로그램이 아니라 행사의 "문화 프로그램"). 구절에는 그 낱말이 들어 있어야 한다.
+   * 뜻풀이를 넓혀서 둘 다 맞게 할 수 있으면 그렇게 하고, 그러기 어려운 드문 자리에만 쓴다.
+   */
+  notIn?: string[];
 }
 
 export interface ScenarioResponse {
