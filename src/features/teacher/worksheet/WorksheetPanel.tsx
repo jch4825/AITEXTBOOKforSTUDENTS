@@ -1,9 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ChangeEvent, type CSSProperties, type RefObject } from 'react';
 import Icon from '../../../components/Icon';
 import { buildLessonWorksheet, mergeWorksheetDraft, worksheetStorageKey } from './buildWorksheet';
-import { downloadWorksheetHtml, printWorksheet } from './worksheetHtml';
+import PictureBlockEditor from './PictureBlockEditor';
+import { isPictureBlock, pictureBlockHtml, WORKSHEET_PICTURE_CSS, WORKSHEET_PICTURE_PREVIEW_CSS } from './pictureBlocks';
+import { isTeacherSessionActive } from '../../../utils/teacherMode';
+import { downloadWorksheetHtml, printWorksheet, worksheetHasAnswers } from './worksheetHtml';
 import type { LessonId } from '../../../types';
-import { worksheetPagesForVariant, worksheetVariantWithPages, type LessonWorksheet, type WorksheetBlock, type WorksheetBlockKind, type WorksheetIllustration, type WorksheetLevel, type WorksheetPage, type WorksheetVariant } from './types';
+import { worksheetPagesForVariant, worksheetVariantWithPages, type LessonWorksheet, type WorksheetBlock, type WorksheetBlockKind, type WorksheetCard, type WorksheetIllustration, type WorksheetLevel, type WorksheetPage, type WorksheetVariant } from './types';
 
 interface Props {
   lessonId: LessonId;
@@ -28,6 +31,9 @@ const FORMAT_CATALOG: Array<{ kind: WorksheetBlockKind; label: string; descripti
   { kind: 'draw', label: '그림 그리기형', description: '자유롭게 그리는 칸', glyph: '✎' },
   { kind: 'image', label: '이미지 상자', description: '파일·주소로 그림 넣기', glyph: '▧' },
   { kind: 'divider', label: '구분선', description: '내용을 나누는 선', glyph: '—' },
+  { kind: 'picture-choice', label: '그림 고르기', description: '그림 카드 세 장에 ○ 하기', glyph: '◎' },
+  { kind: 'word-trace', label: '낱말·문장 따라 쓰기', description: '그림 카드와 큰 글자 덧쓰기, 빈칸 채우기', glyph: 'ㄱ' },
+  { kind: 'picture-sort', label: '그림 붙이기판', description: '카드를 오려 칸에 붙이기', glyph: '▦' },
 ];
 
 const FONT_SIZES = [12, 14, 16, 18, 22, 26, 32];
@@ -75,7 +81,38 @@ function defaultBlock(kind: WorksheetBlockKind, worksheet: LessonWorksheet): Wor
     case 'draw': return { ...base, title: '그림 그리기형', instruction: '떠오른 장면이나 생각을 그림으로 보여 주세요.', fontSize: 15 };
     case 'image': return { ...base, title: '이미지 상자', image: worksheet.illustration, fontSize: 14 };
     case 'divider': return { ...base, title: '구분선' };
+    case 'picture-choice': return {
+      ...base,
+      title: '1. 골라요',
+      text: '마음에 드는 그림에 ○ 해요',
+      instruction: '알맞은 그림을 골라요.',
+      image: worksheet.illustration,
+      pictureCards: [1, 2, 3].map(number => newCard(`카드 ${number}`)),
+    };
+    case 'word-trace': return {
+      ...base,
+      title: '2. 따라 써요',
+      text: '연한 글자를 따라 쓰고, 아래 줄에도 써요',
+      traceText: '낱말',
+      lineCount: 2,
+      pictureCards: [newCard('낱말')],
+    };
+    case 'picture-sort': return {
+      ...base,
+      title: '3. 붙여요',
+      text: '오려서 알맞은 칸에 붙여요',
+      instruction: '카드를 오려서 알맞은 칸에 붙여요.',
+      zones: [{ id: 'yes', label: '맞아요', mark: 'o' }, { id: 'no', label: '아니에요', mark: 'x' }],
+      pictureCards: [newCard('카드 1', 'yes'), newCard('카드 2', 'no'), newCard('카드 3', 'no')],
+    };
   }
+}
+
+function newCard(label: string, zone?: string): WorksheetCard {
+  const random = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `${Date.now()}-${Math.round(Math.random() * 100000)}`;
+  return { id: `card-${random}`, label, emoji: '⭐', zone };
 }
 
 function updateBlock(worksheet: LessonWorksheet, level: WorksheetLevel, blockId: string, patch: Partial<WorksheetBlock>): LessonWorksheet {
@@ -209,7 +246,7 @@ function WorksheetBlockPreview({
   const blockLabel = FORMAT_CATALOG.find(item => item.kind === block.kind)?.label ?? '포맷';
   const blockStyle = { '--block-font-size': `${block.fontSize ?? 15}px`, '--block-color': safeColor(block.color), fontFamily: FONT_FAMILIES[block.fontFamily ?? 'sans'], textAlign: block.align ?? 'left' } as CSSProperties;
   return (
-    <article className={`teacher-worksheet-preview-block teacher-worksheet-preview-block-${block.kind}`} style={blockStyle}>
+    <article className={`teacher-worksheet-preview-block teacher-worksheet-preview-block-${block.kind}${isPictureBlock(block) ? ' teacher-worksheet-preview-block-picture' : ''}`} style={blockStyle}>
       <div className="teacher-worksheet-preview-block-actions" aria-label={`${blockLabel} 조작`}>
         <span className="teacher-worksheet-preview-kind">{blockLabel}</span>
         <div>
@@ -217,6 +254,7 @@ function WorksheetBlockPreview({
         </div>
       </div>
       <div className="teacher-worksheet-preview-block-content">
+        {isPictureBlock(block) && <div className="ws-zoom" dangerouslySetInnerHTML={{ __html: pictureBlockHtml(block) }} />}
         {block.kind === 'heading' && <h1>{block.text || '제목을 입력하세요.'}</h1>}
         {block.kind === 'text' && <p className="teacher-worksheet-preview-text">{block.text || '문구를 입력하세요.'}</p>}
         {(block.kind === 'short-answer' || block.kind === 'sentence') && <>
@@ -297,8 +335,9 @@ function EditableBlock({
           <button type="button" aria-label={`${blockLabel} 삭제`} onClick={onRemove}>×</button>
         </div>
       </div>
-      <BlockStyleToolbar block={block} onChange={patch} />
+      {!isPictureBlock(block) && <BlockStyleToolbar block={block} onChange={patch} />}
       <div className="teacher-worksheet-canvas-block-body">
+        {isPictureBlock(block) && <PictureBlockEditor block={block} moduleId={worksheet.moduleId} lessonId={worksheet.lessonId} onChange={patch} />}
         {(block.kind === 'heading' || block.kind === 'text') && (
           <InputField label={block.kind === 'heading' ? '제목' : '문구'} value={block.text ?? ''} multiline={block.kind === 'text'} onChange={(value) => patch({ text: value })} />
         )}
@@ -339,7 +378,7 @@ function EditableBlock({
             <button type="button" className="teacher-worksheet-array-add" onClick={() => patch({ cards: [...(block.cards ?? []), `카드 ${(block.cards?.length ?? 0) + 1}`] })}>+ 카드 추가</button>
           </div>
         )}
-        {(block.kind === 'image' || block.image) && <ImageEditor block={block} onChange={patch} />}
+        {(block.kind === 'image' || (block.image && !isPictureBlock(block))) && <ImageEditor block={block} onChange={patch} />}
         {block.kind === 'divider' && <p className="teacher-worksheet-divider-help">학습지 내용을 나누는 선입니다. 별도 문구 없이 인쇄됩니다.</p>}
       </div>
     </article>
@@ -401,6 +440,7 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
     setEditingBlockId(null);
   }
   const [level, setLevel] = useState<WorksheetLevel>('high');
+  const [saving, setSaving] = useState(false);
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [showPalette, setShowPalette] = useState(false);
   const sheetRef = useRef<HTMLDivElement | null>(null);
@@ -412,6 +452,18 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
   const activePageIndex = Math.max(0, pages.findIndex(page => page.id === activePageId));
   const activePage = pages[activePageIndex] ?? pages[0];
   const editingBlock = activePage.blocks.find(block => block.id === editingBlockId);
+  // 학습지 창은 학생 화면의 교실 도구에서도 열리지만, 정답은 교사 모드에서만 내 준다.
+  const hasAnswers = worksheetHasAnswers(variant) && isTeacherSessionActive();
+
+  /** 저장하는 HTML에는 그림을 파일 안에 넣는다. 읽는 데 잠깐 걸리므로 그동안 단추를 막는다. */
+  async function saveHtml() {
+    setSaving(true);
+    try {
+      await downloadWorksheetHtml(worksheet, variant);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   useEffect(() => {
     try { localStorage.setItem(worksheetStorageKey(lessonId), JSON.stringify(worksheet)); } catch { /* 저장소가 막힌 환경에서도 편집은 계속한다. */ }
@@ -498,7 +550,15 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
       const index = blocks.findIndex(block => block.id === blockId);
       if (index < 0) return current;
       const original = blocks[index];
-      blocks.splice(index + 1, 0, { ...original, id: newBlockId(original.kind), image: original.image ? { ...original.image } : undefined, options: original.options ? [...original.options] : undefined, cards: original.cards ? [...original.cards] : undefined });
+      blocks.splice(index + 1, 0, {
+        ...original,
+        id: newBlockId(original.kind),
+        image: original.image ? { ...original.image } : undefined,
+        options: original.options ? [...original.options] : undefined,
+        cards: original.cards ? [...original.cards] : undefined,
+        pictureCards: original.pictureCards?.map(card => ({ ...card, id: newCard(card.label).id })),
+        zones: original.zones?.map(zone => ({ ...zone })),
+      });
       return replacePages(current, level, currentPages.map((page, index) => index === pageIndex ? { ...page, blocks } : page));
     });
   }
@@ -516,6 +576,8 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
   return (
     <div className="teacher-worksheet-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
       <section className="teacher-worksheet-modal" role="dialog" aria-modal="true" aria-labelledby="teacher-worksheet-title">
+        {/* 그림 블록은 인쇄본과 같은 HTML·CSS 한 벌로 미리보기를 그린다(pictureBlocks.ts). */}
+        <style>{WORKSHEET_PICTURE_CSS + WORKSHEET_PICTURE_PREVIEW_CSS}</style>
         <header className="teacher-worksheet-modal-header">
           <div>
             <p className="teacher-worksheet-kicker">교사 도구 · A4 학습지 편집기</p>
@@ -529,10 +591,20 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
           {LEVEL_ORDER.map(candidate => <button key={candidate} role="tab" aria-selected={level === candidate} className={level === candidate ? 'is-active' : ''} onClick={() => { setLevel(candidate); setActivePageId(null); setEditingBlockId(null); }}>{LEVEL_DESCRIPTIONS[candidate]}</button>)}
         </div>
 
+        {(level === 'low' || level === 'middle') && variant.template && (
+          <p className="teacher-worksheet-level-note">
+            {level === 'low'
+              ? '하 수준은 그림 카드 위주의 두 장입니다. 앞장은 보고 고르고 낱말을 따라 쓰는 면, 뒷장은 오려서 붙이는 면이에요.'
+              : '중 수준은 그림 카드에 짧은 글쓰기를 더한 두 장입니다. 앞장은 보고 고른 뒤 문장을 덧쓰고 빈칸을 채우는 면, 뒷장은 오려서 붙이고 칸 이름을 덧쓰는 면이에요.'}
+            {hasAnswers ? ' 학생에게는 인쇄본을, 선생님은 정답지(알맞은 카드와 읽어 줄 문장)를 쓰세요.' : ''}
+          </p>
+        )}
+
         <div className="teacher-worksheet-actions">
           <button className="teacher-worksheet-action teacher-worksheet-action-secondary" aria-expanded={showPalette} onClick={() => setShowPalette(current => !current)}><Icon name="pen" size={18} /> {showPalette ? '포맷 닫기' : '포맷 추가'}</button>
           <button className="teacher-worksheet-action teacher-worksheet-action-secondary" onClick={rebuildFromLesson}><Icon name="refresh" size={18} /> 수업 내용으로 다시 만들기</button>
-          <button className="teacher-worksheet-action teacher-worksheet-action-secondary" onClick={() => downloadWorksheetHtml(worksheet, variant)}><Icon name="link" size={18} /> HTML 저장</button>
+          <button className="teacher-worksheet-action teacher-worksheet-action-secondary" disabled={saving} onClick={saveHtml}><Icon name="link" size={18} /> {saving ? '그림을 담는 중…' : 'HTML 저장'}</button>
+          {hasAnswers && <button className="teacher-worksheet-action teacher-worksheet-action-secondary" onClick={() => printWorksheet(worksheet, variant, { answers: true })}><Icon name="check" size={18} /> 정답지 인쇄</button>}
           <button className="teacher-worksheet-action teacher-worksheet-action-primary" onClick={() => printWorksheet(worksheet, variant)}><Icon name="printer" size={18} /> 인쇄 미리보기 / 인쇄</button>
         </div>
 
