@@ -34,6 +34,7 @@ const FORMAT_CATALOG: Array<{ kind: WorksheetBlockKind; label: string; descripti
   { kind: 'picture-choice', label: '그림 고르기', description: '그림 카드 세 장에 ○ 하기', glyph: '◎' },
   { kind: 'word-trace', label: '낱말·문장 따라 쓰기', description: '그림 카드와 큰 글자 덧쓰기, 빈칸 채우기', glyph: 'ㄱ' },
   { kind: 'picture-sort', label: '그림 붙이기판', description: '카드를 오려 칸에 붙이기', glyph: '▦' },
+  { kind: 'picture-paste', label: '흐린 그림에 붙이기', description: '같은 카드를 오려 흐린 그림 위에 붙이기(틀릴 수 없어요)', glyph: '▣' },
 ];
 
 const FONT_SIZES = [12, 14, 16, 18, 22, 26, 32];
@@ -96,6 +97,13 @@ function defaultBlock(kind: WorksheetBlockKind, worksheet: LessonWorksheet): Wor
       traceText: '낱말',
       lineCount: 2,
       pictureCards: [newCard('낱말')],
+    };
+    case 'picture-paste': return {
+      ...base,
+      title: '1. 붙여요',
+      text: '흐린 그림과 같은 카드를 붙여요',
+      image: worksheet.illustration,
+      pictureCards: [newCard('카드 1')],
     };
     case 'picture-sort': return {
       ...base,
@@ -594,8 +602,8 @@ export default function WorksheetPanel({ lessonId, onClose }: Props) {
         {(level === 'low' || level === 'middle') && variant.template && (
           <p className="teacher-worksheet-level-note">
             {level === 'low'
-              ? '하 수준은 그림 카드 위주의 두 장입니다. 앞장은 보고 고르고 낱말을 따라 쓰는 면, 뒷장은 오려서 붙이는 면이에요.'
-              : '중 수준은 그림 카드에 짧은 글쓰기를 더한 두 장입니다. 앞장은 보고 고른 뒤 문장을 덧쓰고 빈칸을 채우는 면, 뒷장은 오려서 붙이고 칸 이름을 덧쓰는 면이에요.'}
+              ? '하 수준은 틀릴 수 없는 그림 카드 활동입니다. 앞장은 알맞은 카드를 오려 흐린 그림 위에 붙이고 낱말을 따라 쓰는 면, 뒷장은 상황에 맞는 카드를 흐린 그림 위에 붙이는 면이에요. 오릴 카드는 모두 알맞은 카드입니다.'
+              : '중 수준은 읽기가 한 걸음 더 들어간 두 장입니다. 앞장은 보고 고른 뒤 문장을 덧쓰고 빈칸을 채우는 면, 뒷장은 흐린 낱말을 덧쓰고 같은 낱말의 카드를 찾아 붙이는 면이에요.'}
             {hasAnswers ? ' 학생에게는 인쇄본을, 선생님은 정답지(알맞은 카드와 읽어 줄 문장)를 쓰세요.' : ''}
           </p>
         )}

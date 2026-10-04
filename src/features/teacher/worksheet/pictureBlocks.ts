@@ -11,7 +11,7 @@ import type { WorksheetBlock, WorksheetBlockKind, WorksheetCard, WorksheetZone }
  * 쓰이므로 글자 크기를 mm로 박아 두면 한쪽이 깨진다.
  */
 
-export const PICTURE_BLOCK_KINDS: readonly WorksheetBlockKind[] = ['picture-choice', 'word-trace', 'picture-sort'];
+export const PICTURE_BLOCK_KINDS: readonly WorksheetBlockKind[] = ['picture-choice', 'word-trace', 'picture-sort', 'picture-paste'];
 
 export function isPictureBlock(block: Pick<WorksheetBlock, 'kind'>): boolean {
   return PICTURE_BLOCK_KINDS.includes(block.kind);
@@ -59,6 +59,21 @@ export function choiceCardSize(count: number, override?: number): number {
   const n = Math.max(1, count);
   const size = (INNER_WIDTH - 5 * (n - 1)) / n;
   return Math.max(MIN_CARD, Math.min(62, Math.floor(size)));
+}
+
+/**
+ * 흐린 그림에 붙이기 카드 한 변(mm). 오리고 붙이는 손이 편하게 한 장이면 아주 크게, 둘·셋이면 한 줄에 들어가는 크기로 한다.
+ * 쪽에 따라 쓰기 칸이 함께 놓이는 경우(`compact`)에는 쪽 높이를 지키는 선에서 줄인다. 어느 쪽이든 48mm 아래로는 내려가지 않는다.
+ */
+export function pasteCardSize(count: number, override?: number, compact = false, cue: 'picture' | 'word' = 'picture'): number {
+  if (override) return clampCardSize(override);
+  const n = Math.max(1, count);
+  // 낱말 단서는 자리 위에 따라 쓸 낱말 줄(약 20mm)이 더 들어가므로 쪽 높이를 지키려고 카드를 조금 줄인다.
+  const cap = compact
+    ? (n === 1 ? 58 : n === 2 ? 50 : 48)
+    : cue === 'word' ? (n === 1 ? 62 : n === 2 ? 56 : 52) : (n === 1 ? 68 : n === 2 ? 62 : 54);
+  const bound = (INNER_WIDTH - SLOT_GAP * (n - 1)) / n;
+  return Math.max(MIN_CARD, Math.min(cap, Math.floor(bound)));
 }
 
 /** 교사가 정한 카드 한 변(mm)은 너무 작거나 한 줄보다 커지지 않게 막는다. */
@@ -196,6 +211,8 @@ function traceHtml(block: WorksheetBlock, options: PictureHtmlOptions): string {
   const rowHtml = Array.from({ length: rows }, (_, index) => {
     if (index === 0) return `<div class="ws-trace-row"><span style="font-size:${fmt(size)}mm">${escapeHtml(word)}</span></div>`;
     if (index === 1 && blank) return blankRowHtml(word, blank, size, options.answers);
+    // 같은 글자를 더 연하게 이어 보여 준다(본보기를 서서히 거두는 덧쓰기). 비워 둔 줄이 없어 쓰다 틀릴 일이 없다.
+    if (block.traceRepeat && !blank) return `<div class="ws-trace-row"><span class="is-fade" style="font-size:${fmt(size)}mm">${escapeHtml(word)}</span></div>`;
     return '<div class="ws-trace-row"></div>';
   }).join('');
   const instruction = block.instruction ? `<p class="ws-ask ws-ask-small">${escapeHtml(block.instruction)}</p>` : '';
@@ -236,14 +253,83 @@ function sortHtml(block: WorksheetBlock, options: PictureHtmlOptions): string {
     const caption = `<b${block.traceZones ? ' class="is-trace"' : ''}>${escapeHtml(zone.label)}</b>`;
     return `<div class="ws-zone"><div class="ws-zone-head${zone.card ? ' has-card' : ''}">${markHtml(zone)}${caption}</div><div class="ws-slots">${slots}</div></div>`;
   }).join('');
-  const cut = options.answers
-    ? ''
-    : `<div class="ws-cut"><span class="ws-cut-head">✂ 점선을 따라 오려요</span><div class="ws-cut-cards">${cards.map((card) => `<div class="ws-cut-item">${cardHtml(card, grade)}</div>`).join('')}</div></div>`;
+  const cut = options.answers ? '' : cutStripHtml(cards, grade);
   const tag = options.answers ? '<span class="ws-answer-tag">정답지</span>' : '';
   return `<div class="ws-box" style="--s:${fmt(size)}mm">${headHtml(block.title, '3. 붙여요', block.text)}${tag}${situationHtml(block)}<div class="ws-zones">${zoneHtml}</div>${cut}</div>`;
 }
 
+/** 오릴 카드 띠. `alignEnd`면 오른쪽 끝에 붙여, 위의 오른쪽 흐린 자리 바로 아래에 오게 한다. */
+function cutStripHtml(cards: readonly WorksheetCard[], grade: number, alignEnd = false): string {
+  const items = cards.map((card) => `<div class="ws-cut-item">${cardHtml(card, grade)}</div>`).join('');
+  return `<div class="ws-cut"><span class="ws-cut-head">✂ 점선을 따라 오려요</span><div class="ws-cut-cards${alignEnd ? ' is-end' : ''}">${items}</div></div>`;
+}
+
+/**
+ * 오릴 카드를 늘어놓는 순서. 그림 단서는 카드를 자리와 같은 순서로 두어 흐린 그림 바로 아래 카드가 짝이 되게 한다(무오류).
+ * 낱말 단서는 한 칸씩 돌려 어느 카드도 제 자리 바로 아래에 오지 않게 한다 — 낱말을 읽어야 짝을 찾는다.
+ */
+export function pasteCutOrder<T>(items: readonly T[], cue: 'picture' | 'word' = 'picture'): T[] {
+  if (cue !== 'word' || items.length < 2) return [...items];
+  return [...items.slice(1), items[0]];
+}
+
+/**
+ * 붙이기(하·중 수준). 오릴 카드는 붙일 카드뿐이다 — 알맞지 않은 카드를 올리지 않고 맞다·아니다를 가르는 칸도 없다.
+ * 붙일 자리가 보여 주는 단서가 수준마다 다르다.
+ *  - 하(`pasteCue: 'picture'`) 틀릴 수 없는 활동: 카드가 붙을 자리에 그 카드와 똑같은 그림이 흐리게 그려져 있어
+ *    같은 그림을 찾아 겹쳐 붙이기만 하면 된다. 오릴 카드는 자리와 같은 순서·같은 위치에 둔다.
+ *  - 중(`pasteCue: 'word'`) 덧쓰고 붙이기: 자리 위에 카드에 쓰인 낱말이 연한 글자로 있어 덧쓰고, 같은 낱말의 카드를 찾아
+ *    붙인다. 오릴 카드는 순서를 섞어 낱말을 읽고 짝을 찾게 한다.
+ * 카드가 한 장이면 장면 옆에 큰 자리를 두고(상황 → 해야 할 일), 둘 이상이면 장면 아래에 자리를 한 줄로 놓는다.
+ * 정답지에서는 자리에 진짜 카드가 붙은 모습을 보여 준다.
+ */
+function pasteHtml(block: WorksheetBlock, options: PictureHtmlOptions): string {
+  const cards = block.pictureCards ?? [];
+  const compact = Boolean(block.compact);
+  const cue = block.pasteCue === 'word' ? 'word' : 'picture';
+  const size = pasteCardSize(cards.length, block.cardSize, compact, cue);
+  const grade = rowGrade(cards);
+  const blankCount = Math.max(0, Math.min(2, Math.round(block.blankSlots ?? 0)));
+  const slotCount = blankCount > 0 ? blankCount : cards.length;
+  const blankCell = '<div class="ws-paste-cell"><b class="ws-slot-cap">내가 고른 카드</b><div class="ws-slot"><span>붙여요</span></div></div>';
+  const cell = (card: WorksheetCard): string => {
+    const caption = card.slotLabel ? `<b class="ws-slot-cap">${escapeHtml(card.slotLabel)}</b>` : '';
+    if (cue === 'word') {
+      const frame = options.answers
+        ? `<div class="ws-slot is-filled">${cardHtml(card, grade)}</div>`
+        : '<div class="ws-slot"><span>붙여요</span></div>';
+      return `<div class="ws-paste-cell">${caption}<div class="ws-cue">${escapeHtml(card.label)}</div>${frame}</div>`;
+    }
+    const slot = options.answers
+      ? `<div class="ws-slot is-filled">${cardHtml(card, grade)}</div>`
+      : `<div class="ws-slot is-ghost">${cardHtml(card, grade)}</div>`;
+    return `<div class="ws-paste-cell">${caption}${slot}</div>`;
+  };
+  const note = block.instruction ? `<p class="ws-paste-note">${escapeHtml(block.instruction)}</p>` : '';
+  const scene = block.image?.src
+    ? `<figure class="ws-scene"><img src="${escapeHtml(block.image.src)}" alt="${escapeHtml(block.image.alt)}"></figure>`
+    : '';
+  const tag = options.answers ? '<span class="ws-answer-tag">정답지</span>' : '';
+  // 자리마다 짝이 정해진 그림 단서는 위의 자리 바로 아래에 놓고, 낱말 단서와 빈 자리에는 어느 위치든 둘 수 있으므로 가운데에 모은다.
+  const aligned = blankCount === 0 && cue === 'picture' && (slotCount === 1 || (slotCount === 2 && compact));
+  const cut = options.answers || cards.length === 0 ? '' : cutStripHtml(blankCount > 0 ? cards : pasteCutOrder(cards, cue), grade, aligned);
+  const slotCells = blankCount > 0 ? Array.from({ length: blankCount }, () => blankCell).join('') : cards.map(cell).join('');
+  let body: string;
+  if (slotCount === 1 || (slotCount === 2 && compact)) {
+    // 한 자리면 장면 옆에 큰 자리를 두고 화살표로 상황 → 해야 할 일을 잇는다. 쪽이 좁으면(`compact`) 두 자리도 한 줄에 모은다.
+    const arrow = slotCount === 1 ? '<span class="ws-arrow" aria-hidden="true"></span>' : '';
+    body = `<div class="ws-paste-side is-${slotCount}${compact ? ' is-compact' : ''}"><div class="ws-paste-scene">${scene}${note}</div>${arrow}${slotCells}</div>`;
+  } else {
+    const situation = scene || note ? `<div class="ws-situation is-paste${scene ? ' has-scene' : ''}${compact ? '' : ' is-wide'}">${scene}${note}</div>` : '';
+    body = `${situation}<div class="ws-paste-row">${slotCells}</div>`;
+  }
+  return `<div class="ws-box" style="--s:${fmt(size)}mm">${headHtml(block.title, '1. 붙여요', block.text)}${tag}${body}${cut}</div>`;
+}
+
 function noteVerdict(card: WorksheetCard, block: WorksheetBlock): string {
+  if (block.kind === 'picture-paste') {
+    return card.slotLabel ? `<span class="ws-verdict is-yes">${escapeHtml(card.slotLabel)} 자리</span>` : '';
+  }
   if (block.kind === 'picture-choice') {
     if (card.suitable === true) return '<span class="ws-verdict is-yes">○ 알맞아요</span>';
     if (card.suitable === false) return '<span class="ws-verdict is-no">✕ 알맞지 않아요</span>';
@@ -269,12 +355,21 @@ export function teacherNotesHtml(blocks: readonly WorksheetBlock[]): string {
     // 한두 줄짜리 얇은 상자로 둔다. 교사용 안내 쪽은 카드 여섯 장의 읽어 줄 문장만으로도 쪽이 거의 차므로 머리줄을 따로 달지 않는다.
     return `<div class="ws-box ws-notes ws-notes-trace"><p class="ws-note-line"><b>${escapeHtml(block.title)}</b>따라 쓸 문장: ${answered} 표시한 낱말이 빈칸의 정답이에요.</p></div>`;
   });
-  const sections = blocks.filter((block) => block.kind === 'picture-choice' || block.kind === 'picture-sort').map((block) => {
+  let pasteGuideShown = false;
+  const sections = blocks.filter((block) => block.kind === 'picture-choice' || block.kind === 'picture-sort' || block.kind === 'picture-paste').map((block) => {
     const cards = block.pictureCards ?? [];
-    const decided = cards.some((card) => card.suitable !== undefined || card.zone);
+    const isPaste = block.kind === 'picture-paste';
+    const openPaste = isPaste && Boolean(block.blankSlots);
+    const decided = (isPaste && !openPaste) || cards.some((card) => card.suitable !== undefined || card.zone);
+    // 흐린 그림에 붙이기는 활동 방법을 처음 한 번만 적는다.
+    const pasteGuide = isPaste && !openPaste && !pasteGuideShown
+      ? (pasteGuideShown = true, block.pasteCue === 'word'
+        ? '<p class="ws-open-note">자리 위의 연한 낱말을 덧쓰게 하고, 같은 낱말이 쓰인 카드를 찾아 오려 붙이게 해요. 오릴 카드는 모두 알맞은 카드이고 순서만 섞여 있어요. 붙이면서 낱말을 함께 읽어 주세요.</p>'
+        : '<p class="ws-open-note">흐린 그림과 같은 카드를 찾아 오려 붙이게 해요. 오릴 카드는 모두 알맞은 카드라서 틀릴 수 없어요. 붙이면서 카드 이름을 함께 말해 주세요.</p>')
+      : '';
     const items = cards.map((card) => `<li class="ws-note"><div class="ws-note-pic">${cardHtml(card)}</div><div class="ws-note-text"><b>${escapeHtml(card.label)}</b>${noteVerdict(card, block)}${card.say ? `<p>${escapeHtml(card.say)}</p>` : ''}</div></li>`).join('');
     const open = decided ? '' : '<p class="ws-open-note">정해진 답이 없는 열린 선택이에요. 고른 까닭을 말해 보게 해요.</p>';
-    return `<div class="ws-box ws-notes">${headHtml(block.title, '교사용 안내')}${block.instruction ? `<p class="ws-ask ws-ask-small">${escapeHtml(block.instruction)}</p>` : ''}${open}<ul class="ws-note-list">${items}</ul></div>`;
+    return `<div class="ws-box ws-notes">${headHtml(block.title, '교사용 안내')}${block.instruction ? `<p class="ws-ask ws-ask-small">${escapeHtml(block.instruction)}</p>` : ''}${pasteGuide}${open}<ul class="ws-note-list">${items}</ul></div>`;
   });
   return [...traceNotes, ...sections].map((section) => `<section class="worksheet-block worksheet-block-picture">${section}</section>`).join('');
 }
@@ -285,6 +380,7 @@ export function pictureBlockHtml(block: WorksheetBlock, options: PictureHtmlOpti
     case 'picture-choice': return choiceHtml(block, options);
     case 'word-trace': return traceHtml(block, options);
     case 'picture-sort': return sortHtml(block, options);
+    case 'picture-paste': return pasteHtml(block, options);
     default: return '';
   }
 }
@@ -325,8 +421,9 @@ export const WORKSHEET_PICTURE_CSS = `
 .ws-box .ws-trace { display: flex; align-items: center; gap: 5mm; }
 .ws-box .ws-trace-pic { flex: none; --cs: 38mm; }
 .ws-box .ws-trace-rows { display: grid; min-width: 0; flex: 1; gap: 2mm; }
-.ws-box .ws-trace-row { display: flex; align-items: flex-end; height: 27mm; padding: 0 2mm; border-bottom: 0.6mm solid #8d867d; background: linear-gradient(to bottom, transparent calc(50% - 0.15mm), #e4ded5 calc(50% - 0.15mm), #e4ded5 calc(50% + 0.15mm), transparent calc(50% + 0.15mm)); }
+.ws-box .ws-trace-row { display: flex; align-items: flex-end; height: 24mm; padding: 0 2mm; border-bottom: 0.6mm solid #8d867d; background: linear-gradient(to bottom, transparent calc(50% - 0.15mm), #e4ded5 calc(50% - 0.15mm), #e4ded5 calc(50% + 0.15mm), transparent calc(50% + 0.15mm)); }
 .ws-box .ws-trace-rows.is-sentence .ws-trace-row { height: 22mm; }
+.ws-box .ws-trace-row span.is-fade { color: #d9d3ca; }
 .ws-box .ws-trace-row span { color: #b5aea4; font-weight: 900; line-height: 1.1; letter-spacing: 0.05em; white-space: nowrap; }
 .ws-box .ws-gap { display: inline-flex; flex: none; align-items: center; justify-content: center; height: 15mm; margin: 0 1.5mm 2mm; border: 0.6mm dashed #6a645d; border-radius: 2.5mm; background: #fffefb; color: #2d2a26; font-weight: 900; line-height: 1; }
 .ws-box .ws-gap.is-answer { border-style: solid; border-color: #2e7d4f; color: #2e7d4f; }
@@ -352,6 +449,25 @@ export const WORKSHEET_PICTURE_CSS = `
 .ws-box .ws-cut-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: ${SLOT_GAP}mm; }
 .ws-box .ws-cut-item { flex: none; width: var(--s); height: var(--s); padding: ${CUT_PAD}mm; border: 0.55mm dashed #3b3631; border-radius: 4mm; background: #fff; }
 .ws-box .ws-cut-item .ws-card { width: 100%; }
+.ws-box .ws-paste-side { display: grid; align-items: center; gap: 3mm; }
+.ws-box .ws-paste-side.is-0 { grid-template-columns: minmax(0, 1fr); }
+.ws-box .ws-paste-side.is-1 { grid-template-columns: minmax(0, 1fr) 9mm var(--s); }
+.ws-box .ws-paste-side.is-1.is-compact { grid-template-columns: 80mm minmax(0, 1fr) var(--s); }
+.ws-box .ws-paste-side.is-2 { grid-template-columns: minmax(0, 1fr) var(--s) var(--s); }
+.ws-box .ws-paste-scene { min-width: 0; }
+.ws-box .ws-paste-note { margin: 2mm 0 0; color: #4a4540; font-size: 4.8mm; font-weight: 700; line-height: 1.45; word-break: keep-all; overflow-wrap: anywhere; }
+.ws-box .ws-situation.is-paste { grid-template-columns: minmax(0, 1fr); }
+.ws-box .ws-situation.is-paste.has-scene { grid-template-columns: 84mm minmax(0, 1fr); }
+.ws-box .ws-situation.is-paste.has-scene.is-wide { grid-template-columns: 100mm minmax(0, 1fr); }
+.ws-box .ws-situation.is-paste .ws-paste-note { margin: 0; font-size: 5.2mm; }
+.ws-box .ws-arrow { justify-self: center; width: 0; height: 0; border-top: 6mm solid transparent; border-bottom: 6mm solid transparent; border-left: 8mm solid #8d867d; }
+.ws-box .ws-paste-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 0 ${SLOT_GAP}mm; }
+.ws-box .ws-paste-cell { display: flex; flex-direction: column; align-items: center; gap: 1.5mm; }
+.ws-box .ws-cue { display: flex; width: var(--s); height: 19mm; align-items: flex-end; justify-content: center; padding: 0 1mm 1mm; border-bottom: 0.6mm solid #8d867d; color: #b5aea4; font-size: 7.5mm; font-weight: 900; line-height: 1.15; letter-spacing: 0.05em; text-align: center; word-break: keep-all; overflow-wrap: anywhere; }
+.ws-box .ws-slot-cap { color: #26396b; font-size: 5.2mm; font-weight: 900; line-height: 1.2; text-align: center; word-break: keep-all; }
+.ws-box .ws-slot.is-ghost { border-color: #b9b1a8; --cs: calc(var(--s) - ${fmt(CUT_PAD * 2 + 1)}mm); }
+.ws-box .ws-slot.is-ghost .ws-card { opacity: 0.34; }
+.ws-box .ws-cut-cards.is-end { justify-content: flex-end; }
 .ws-box .ws-note-list { display: grid; gap: 2mm; margin: 0; padding: 0; list-style: none; }
 .ws-box .ws-note { display: flex; align-items: center; gap: 4mm; }
 .ws-box .ws-note-pic { flex: none; --cs: 18mm; }

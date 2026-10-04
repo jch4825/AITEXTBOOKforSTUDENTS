@@ -13,14 +13,17 @@ import { publicAssetUrl } from '../../../utils/publicAssetUrl';
 import type { StudioChoice, StudioDefinition } from '../../studio/types';
 import type { WorksheetBlock, WorksheetCard, WorksheetIllustration, WorksheetPage, WorksheetZone } from './types';
 
-/**
- * 그림 카드 학습지(하·중 수준)의 기본 구성의 판.
- * 저장해 둔 편집본의 `template`이 이 값과 다르면 옛 글자 위주 구성이므로 새 구성으로 갈아 끼운다.
- */
-export const PICTURE_TEMPLATE = 'picture-v1';
-
-/** 그림 카드 학습지를 쓰는 수준. 하는 낱말 따라 쓰기, 중은 문장 덧쓰기와 빈칸 채우기를 더한다. */
+/** 그림 카드 학습지를 쓰는 수준. 하는 틀릴 수 없는 붙이기와 낱말 따라 쓰기, 중은 고르기·분류에 문장 덧쓰기와 빈칸 채우기를 더한다. */
 export type PictureLevel = 'low' | 'middle';
+
+/**
+ * 수준마다 기본 구성의 판.
+ * 저장해 둔 편집본의 `template`이 그 수준의 값과 다르면 옛 구성이므로 그 수준만 새 구성으로 갈아 끼운다.
+ * 한 수준의 구성을 새로 짜면 그 수준의 값만 올린다.
+ *  - 하: v1 고르기와 맞아요·아니에요 분류 → v2 흐린 그림에 붙이기(무오류) → v3 따라 쓰기 둘째 줄도 연한 글자로 덧쓰기.
+ *  - 중: v1 고르기와 맞아요·아니에요 분류 → v2 낱말 단서 붙이기(앞장의 고르기와 덧쓰기는 그대로).
+ */
+export const PICTURE_TEMPLATES: Record<PictureLevel, string> = { low: 'picture-v3', middle: 'picture-v2' };
 
 /** 한 장에 올리는 카드 수. 고르기·붙이기 모두 세 장이면 카드를 한 변 50mm 이상으로 키울 수 있다. */
 export const PICTURE_CARD_COUNT = 3;
@@ -164,29 +167,144 @@ function chooseHint(rightCount: number): string {
   return `알맞은 그림 ${COUNT_WORD[rightCount] ?? rightCount} 장에 ○ 해요`;
 }
 
+const LOW_PASTE_HINT = '흐린 그림과 같은 카드를 붙여요';
+const LOW_ORDER_HINT = '흐린 그림 위에 순서대로 붙여요';
+const MID_PASTE_HINT = '흐린 낱말을 덧쓰고, 같은 낱말의 카드를 붙여요';
+const MID_ORDER_HINT = '흐린 낱말을 덧쓰고, 순서에 맞게 붙여요';
+const FREE_HINT = '마음에 드는 그림 한 장을 붙여요';
+
+/** 붙이기 카드: 알맞다·아니다를 가르지 않으므로 정답 표시(`suitable`·`zone`)를 떼고 그림과 읽어 줄 말만 남긴다. */
+function plainCard(card: WorksheetCard, slotLabel?: string): WorksheetCard {
+  const plain: WorksheetCard = { id: card.id, label: card.label, src: card.src, emoji: card.emoji, printed: card.printed, say: card.say };
+  return slotLabel ? { ...plain, slotLabel } : plain;
+}
+
 /**
- * 그림 카드 학습지 두 장: 1장은 보고 고르고 쓰는 면, 2장은 오려 붙이는 면. 구성이 없는 차시는 undefined.
+ * 물음 문장(‘…했어요. 어떻게 할까요?’)에서 물음을 떼고 상황만 남긴다.
+ * 붙이기에는 물을 것이 없다(붙일 카드가 흐린 자리로 이미 정해져 있다). 상황 글은 읽어 주는 사람을 위해 장면 곁에 작게 둔다.
+ */
+export function situationNote(text: string): string {
+  const sentences = text.match(/[^.?!]+[.?!]+/g) ?? [text];
+  return sentences.filter(sentence => !sentence.trim().endsWith('?')).join('').trim();
+}
+
+/**
+ * 뒷장에 붙일 알맞은 카드. 칸이 정해진 목록(순서·분류)은 칸 순서대로 모든 카드를 자리 이름과 함께, ○·✕ 목록은 ○에 들어갈
+ * 카드만 올린다. 알맞지 않은 카드는 어느 수준에도 올리지 않는다. 비어 있으면 정해진 답이 없는 열린 선택이다.
+ */
+function pasteCardsOf(spec: PictureWorksheetSpec, moduleId: ModuleId, transferAll: readonly WorksheetCard[]): WorksheetCard[] {
+  if (spec.transfer.zones) {
+    return zonesFor(spec.transfer, moduleId, true).flatMap(zone => {
+      const card = transferAll.find(item => item.zone === zone.id);
+      return card ? [plainCard(card, zone.label)] : [];
+    });
+  }
+  return transferAll.filter(card => card.zone === YES_ZONE.id).map(card => plainCard(card));
+}
+
+const isOrdered = (cards: readonly WorksheetCard[]): boolean => cards.some(card => card.slotLabel && /^[①②③④⑤]/.test(card.slotLabel));
+
+/**
+ * 하 수준 두 장 — 무오류 학습이 바탕이다. 틀릴 수 있는 활동(고르기, 맞아요·아니에요 분류)을 두지 않는다.
+ *  - 1. 붙여요: 첫 생각의 알맞은 카드만 오려, 장면 옆의 같은 그림(흐린 자리) 위에 붙인다.
+ *  - 2. 따라 써요: 핵심 낱말을 큰 글자 위에 덧쓴다. 둘째 줄도 같은 글자를 더 연하게 보여 주어 비워 둔 줄이 없다.
+ *  - 3. 붙여요: 적용 상황의 알맞은 카드만 오려 흐린 자리 위에 붙인다. 순서·분류 차시는 카드마다 자리 이름이 붙는다.
+ * 오릴 카드는 붙일 카드뿐이고 알맞지 않은 카드는 어디에도 올리지 않는다. 정해진 답이 없는 열린 선택은 어느 카드를
+ * 붙여도 알맞으므로, 마음에 드는 한 장을 빈 자리에 붙이는 활동으로 둔다.
+ */
+function buildLowPages(spec: PictureWorksheetSpec, source: PictureSource): WorksheetPage[] {
+  const set = getChoiceCardSet(source.lessonId);
+  const firstAll = listCards(spec.first, choicesOf(source, 'first'), set, source.moduleId, 'choose');
+  const transferAll = listCards(spec.transfer, choicesOf(source, 'transfer'), set, source.moduleId, 'sort');
+  const wordPicture = resolvePicture(spec.wordPic, source.moduleId);
+
+  const firstRight = firstAll.filter(card => card.suitable === true);
+  const first: WorksheetBlock = firstRight.length > 0
+    ? {
+      id: 'low-first',
+      kind: 'picture-paste',
+      title: '1. 붙여요',
+      text: LOW_PASTE_HINT,
+      instruction: situationNote(spec.ask) || undefined,
+      image: sceneFor(source, spec.scene ?? 2),
+      compact: true,
+      pictureCards: firstRight.map(card => plainCard(card)),
+    }
+    : {
+      id: 'low-first',
+      kind: 'picture-paste',
+      title: '1. 붙여요',
+      text: FREE_HINT,
+      instruction: spec.ask,
+      image: sceneFor(source, spec.scene ?? 2),
+      blankSlots: 1,
+      compact: true,
+      pictureCards: firstAll.map(card => plainCard(card)),
+    };
+
+  const trace: WorksheetBlock = {
+    id: 'low-trace',
+    kind: 'word-trace',
+    title: '2. 따라 써요',
+    text: '연한 글자를 따라 써요',
+    traceText: spec.word,
+    traceRepeat: true,
+    lineCount: 2,
+    pictureCards: [{ id: 'word', ...wordPicture, label: spec.word }],
+  };
+
+  const secondCards = pasteCardsOf(spec, source.moduleId, transferAll);
+  const second: WorksheetBlock = secondCards.length > 0
+    ? {
+      id: 'low-second',
+      kind: 'picture-paste',
+      title: '3. 붙여요',
+      text: isOrdered(secondCards) ? LOW_ORDER_HINT : LOW_PASTE_HINT,
+      instruction: situationNote(spec.situation) || undefined,
+      image: transferScene(source),
+      pictureCards: secondCards,
+    }
+    : {
+      id: 'low-second',
+      kind: 'picture-paste',
+      title: '3. 붙여요',
+      text: FREE_HINT,
+      instruction: spec.situation,
+      image: transferScene(source),
+      blankSlots: 1,
+      pictureCards: transferAll.map(card => plainCard(card)),
+    };
+
+  return [
+    { id: 'low-page-1', blocks: [first, trace] },
+    { id: 'low-page-2', blocks: [second] },
+  ];
+}
+
+/**
+ * 그림 카드 학습지 두 장. 구성이 없는 차시는 undefined.
  *
- * 하와 중은 같은 카드와 물음을 쓰고 아래만 다르다.
- *  - 2. 쓰기: 하는 핵심 낱말 하나를 따라 쓴다. 중은 핵심 문장을 따라 쓰고(첫 줄), 둘째 줄에서는 그 문장의 핵심 낱말만
- *    빈칸으로 둔 채 직접 쓴다(덧쓰기 → 채워 쓰기). 그림 카드의 낱말이 쓸 낱말의 본보기다.
- *  - 3. 붙이기: 중은 칸 이름도 연한 글자로 그려 덧쓰게 한다.
+ * 하는 무오류 붙이기(buildLowPages)다. 중은 하의 한 단계 위로, 본보기를 그림에서 글자로 바꾸고 판단을 앞장에 둔다.
+ *  - 1. 골라요: 첫 생각 선택지 세 장 가운데 알맞은 카드에 ○ 한다(정해진 답이 없으면 마음에 드는 카드).
+ *  - 2. 덧써요: 핵심 문장을 따라 쓰고(첫 줄), 둘째 줄에서는 그 문장의 핵심 낱말만 빈칸으로 둔 채 직접 쓴다.
+ *    그림 카드의 낱말이 쓸 낱말의 본보기다.
+ *  - 3. 붙여요: 적용 상황의 알맞은 카드만 오려 붙인다. 자리마다 카드에 쓰인 낱말이 연한 글자로 있어 덧쓰고, 같은 낱말의
+ *    카드를 찾아 붙인다(오릴 카드는 순서가 섞여 있다). ○ 맞아요 / ✕ 아니에요 분류는 없다 — 그림이 추상적이고 물음에 정보가
+ *    적어 글을 읽어도 가르기 어려웠다.
  */
 export function buildPicturePages(level: PictureLevel, source: PictureSource): WorksheetPage[] | undefined {
   const spec: PictureWorksheetSpec | undefined = PICTURE_WORKSHEET_SPECS[source.lessonId];
   if (!spec) return undefined;
+  if (level === 'low') return buildLowPages(spec, source);
   const set = getChoiceCardSet(source.lessonId);
   const seed = hash(source.lessonId);
 
   const chooseCards = rotate(listCards(spec.first, choicesOf(source, 'first'), set, source.moduleId, 'choose'), seed % 3);
-  const sortCards = rotate(listCards(spec.transfer, choicesOf(source, 'transfer'), set, source.moduleId, 'sort'), (seed >>> 3) % 3);
-  const hasRight = sortCards.some(card => card.zone);
+  const transferAll = listCards(spec.transfer, choicesOf(source, 'transfer'), set, source.moduleId, 'sort');
   const wordPicture = resolvePicture(spec.wordPic, source.moduleId);
 
-  const middle = level === 'middle';
-  const prefix = middle ? 'mid' : 'low';
   const choose: WorksheetBlock = {
-    id: `${prefix}-choose`,
+    id: 'mid-choose',
     kind: 'picture-choice',
     title: '1. 골라요',
     text: chooseHint(chooseCards.filter(card => card.suitable).length),
@@ -194,41 +312,40 @@ export function buildPicturePages(level: PictureLevel, source: PictureSource): W
     image: sceneFor(source, spec.scene ?? 2),
     pictureCards: chooseCards,
   };
-  const trace: WorksheetBlock = middle
+  const trace: WorksheetBlock = {
+    id: 'mid-trace',
+    kind: 'word-trace',
+    title: '2. 덧써요',
+    text: '연한 글자를 따라 쓰고, 빈칸에 낱말을 써요',
+    traceText: spec.sentence,
+    traceBlank: spec.word,
+    lineCount: 2,
+    pictureCards: [{ id: 'word', ...wordPicture, label: spec.word }],
+  };
+  const secondCards = pasteCardsOf(spec, source.moduleId, transferAll);
+  const second: WorksheetBlock = secondCards.length > 0
     ? {
-      id: `${prefix}-trace`,
-      kind: 'word-trace',
-      title: '2. 덧써요',
-      text: '연한 글자를 따라 쓰고, 빈칸에 낱말을 써요',
-      traceText: spec.sentence,
-      traceBlank: spec.word,
-      lineCount: 2,
-      pictureCards: [{ id: 'word', ...wordPicture, label: spec.word }],
+      id: 'mid-second',
+      kind: 'picture-paste',
+      title: '3. 붙여요',
+      text: isOrdered(secondCards) ? MID_ORDER_HINT : MID_PASTE_HINT,
+      instruction: situationNote(spec.situation) || undefined,
+      image: transferScene(source),
+      pasteCue: 'word',
+      pictureCards: secondCards,
     }
     : {
-      id: `${prefix}-trace`,
-      kind: 'word-trace',
-      title: '2. 따라 써요',
-      text: '연한 글자를 따라 쓰고, 아래 줄에도 써요',
-      traceText: spec.word,
-      lineCount: 2,
-      pictureCards: [{ id: 'word', ...wordPicture, label: spec.word }],
+      id: 'mid-second',
+      kind: 'picture-paste',
+      title: '3. 붙여요',
+      text: FREE_HINT,
+      instruction: spec.situation,
+      image: transferScene(source),
+      blankSlots: 1,
+      pictureCards: transferAll.map(card => plainCard(card)),
     };
-  const sortHint = spec.transfer.hint ?? (hasRight ? '오려서 알맞은 칸에 붙여요' : '마음에 드는 그림 한 장을 붙여요');
-  const sort: WorksheetBlock = {
-    id: `${prefix}-sort`,
-    kind: 'picture-sort',
-    title: '3. 붙여요',
-    // 중은 칸 이름도 덧쓴다(‘…붙여요’로 끝나는 안내를 ‘…붙이고, 칸 이름을 덧써요’로 잇는다).
-    text: middle ? sortHint.replace(/붙여요$/, '붙이고, 칸 이름을 덧써요') : sortHint,
-    instruction: spec.situation,
-    image: transferScene(source),
-    zones: zonesFor(spec.transfer, source.moduleId, hasRight),
-    pictureCards: sortCards,
-    traceZones: middle ? true : undefined,
-  };
   return [
-    { id: `${prefix}-page-1`, blocks: [choose, trace] },
-    { id: `${prefix}-page-2`, blocks: [sort] },
+    { id: 'mid-page-1', blocks: [choose, trace] },
+    { id: 'mid-page-2', blocks: [second] },
   ];
 }
