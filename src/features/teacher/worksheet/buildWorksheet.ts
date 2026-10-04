@@ -7,10 +7,11 @@ import type { ModulePortfolioDefinition } from '../../../data/modulePortfolios/t
 import { getModule } from '../../../data/modules';
 import { getStudioDefinition } from '../../../data/studios';
 import type { StudioDefinition } from '../../studio/types';
-import type { LessonId } from '../../../types';
+import type { LessonId, ModuleId } from '../../../types';
 import { themeFor } from '../../../utils/moduleThemes';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
 import { worksheetExtraIllustration } from './extraIllustrations';
+import { buildPicturePages, PICTURE_TEMPLATE, type PictureLevel } from './pictureLevels';
 import { worksheetPagesForVariant, worksheetVariantWithPages, type LessonWorksheet, type WorksheetBlock, type WorksheetBlockKind, type WorksheetIllustration, type WorksheetLevel, type WorksheetVariant } from './types';
 
 const LEVELS: Record<WorksheetLevel, Omit<WorksheetVariant, 'blocks'>> = {
@@ -30,6 +31,9 @@ const BLOCK_KINDS: WorksheetBlockKind[] = [
   'draw',
   'image',
   'divider',
+  'picture-choice',
+  'word-trace',
+  'picture-sort',
 ];
 
 function cleanText(value: string | undefined | null): string {
@@ -142,7 +146,7 @@ interface WorksheetLessonSource {
   illustration?: WorksheetIllustration;
   /**
    * 상 수준 셋째 칸(생활에서 써요)에 넣는 보조 그림. 첫 칸의 이야기 첫 장면과 다른 컷이다.
-   * 중·하 수준의 셋째 칸은 오려 붙이는 카드 칸이라 그림까지 넣으면 A4 기준선을 넘는다.
+   * 중·하 수준은 그림 카드 판(pictureLevels.ts)이 쪽마다 장면 그림을 따로 쓰므로 이 보조 그림을 쓰지 않는다.
    */
   extraIllustration?: WorksheetIllustration;
   studio?: StudioDefinition;
@@ -366,6 +370,15 @@ function collectLessonSource(lessonId: LessonId): WorksheetLessonSource {
   };
 }
 
+/**
+ * 하·중 수준: 그림 카드 판(두 장)이 기본이다. 구성이 없는 차시만 옛 글자 위주 구성으로 돌아간다.
+ */
+function pictureVariant(level: PictureLevel, lessonId: LessonId, moduleId: ModuleId, source: WorksheetLessonSource): WorksheetVariant {
+  const pages = buildPicturePages(level, { lessonId, moduleId, title: source.title, studio: source.studio, portfolio: source.portfolio });
+  if (!pages) return { ...LEVELS[level], blocks: starterBlocksForLevel(level, source) };
+  return worksheetVariantWithPages({ ...LEVELS[level], template: PICTURE_TEMPLATE, blocks: [] }, pages);
+}
+
 export function buildLessonWorksheet(lessonId: LessonId): LessonWorksheet {
   const source = collectLessonSource(lessonId);
   const canonical = getCanonicalLesson(lessonId);
@@ -383,8 +396,8 @@ export function buildLessonWorksheet(lessonId: LessonId): LessonWorksheet {
     illustration: source.illustration,
     variants: {
       high: { ...LEVELS.high, blocks: starterBlocksForLevel('high', source) },
-      middle: { ...LEVELS.middle, blocks: starterBlocksForLevel('middle', source) },
-      low: { ...LEVELS.low, blocks: starterBlocksForLevel('low', source) },
+      middle: pictureVariant('middle', lessonId, moduleId, source),
+      low: pictureVariant('low', lessonId, moduleId, source),
     },
   };
 }
@@ -418,10 +431,14 @@ export function mergeWorksheetDraft(base: LessonWorksheet, saved: unknown): Less
   const mergedVariants = { ...base.variants };
   (['high', 'middle', 'low'] as const).forEach(level => {
     const savedVariant = variants[level];
-    if (isWorksheetVariant(savedVariant)) {
+    // 기본 구성의 판이 바뀐 수준은 옛 저장본을 버리고 새 구성을 쓴다(옛 하·중 수준은 글자 위주였다).
+    const staleTemplate = base.variants[level].template !== undefined && (savedVariant as Partial<WorksheetVariant> | undefined)?.template !== base.variants[level].template;
+    if (isWorksheetVariant(savedVariant) && !staleTemplate) {
       const savedPages = worksheetPagesForVariant(savedVariant);
       const savedBlocks = savedPages.flatMap(page => page.blocks);
-      const isOldStarter = savedBlocks.length <= 2
+      // 옛 시작 틀(제목·문구 두 칸뿐인 저장본)을 새로 채우는 길이다. 판 표시가 있는 수준(하·중)은 첫 칸이 제목이 아니므로 건너뛴다.
+      const isOldStarter = base.variants[level].template === undefined
+        && savedBlocks.length <= 2
         && savedBlocks.every(block => block.kind === 'heading' || block.kind === 'text');
       const basePages = worksheetPagesForVariant(base.variants[level]);
       const pages = isOldStarter

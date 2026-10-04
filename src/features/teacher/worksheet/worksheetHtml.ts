@@ -1,3 +1,4 @@
+import { isPictureBlock, pictureBlockHtml, teacherNotesHtml, WORKSHEET_PICTURE_CSS, type PictureHtmlOptions } from './pictureBlocks';
 import { worksheetPagesForVariant, type LessonWorksheet, type WorksheetBlock, type WorksheetIllustration, type WorksheetVariant } from './types';
 
 function escapeHtml(value: string): string {
@@ -41,7 +42,8 @@ function answerLines(count: number): string {
   return `<div class="worksheet-answer-lines" aria-hidden="true">${Array.from({ length: Math.max(1, Math.min(8, count)) }, () => '<i></i>').join('')}</div>`;
 }
 
-function blockHtml(block: WorksheetBlock): string {
+function blockHtml(block: WorksheetBlock, options: PictureHtmlOptions = {}): string {
+  if (isPictureBlock(block)) return `<section class="worksheet-block worksheet-block-picture">${pictureBlockHtml(block, options)}</section>`;
   const style = blockStyle(block);
   const title = escapeHtml(block.title ?? '');
   const instruction = escapeHtml(block.instruction ?? '');
@@ -62,16 +64,32 @@ function blockHtml(block: WorksheetBlock): string {
   return '<div class="worksheet-block worksheet-block-divider"><hr></div>';
 }
 
-export function buildWorksheetHtml(worksheet: LessonWorksheet, variant: WorksheetVariant): string {
+export type WorksheetHtmlOptions = PictureHtmlOptions;
+
+/**
+ * 정답지로 낼 내용이 있는 학습지인가. 그림 고르기·붙이기에서 알맞은 카드나 칸을 정해 두었거나,
+ * 카드마다 교사가 읽어 줄 문장이 있는 경우다(정해진 답이 없는 열린 선택도 읽어 줄 문장은 정답지에 나온다).
+ */
+export function worksheetHasAnswers(variant: WorksheetVariant): boolean {
+  return worksheetPagesForVariant(variant).some(page => page.blocks.some(block => isPictureBlock(block)
+    && (block.pictureCards ?? []).some(card => card.suitable === true || Boolean(card.zone) || Boolean(card.say))));
+}
+
+export function buildWorksheetHtml(worksheet: LessonWorksheet, variant: WorksheetVariant, options: WorksheetHtmlOptions = {}): string {
   const title = escapeHtml(worksheet.lessonTitle);
   const moduleTitle = escapeHtml(worksheet.moduleTitle);
-  const variantLabel = escapeHtml(`${variant.label} · ${variant.subtitle}`);
+  const variantLabel = escapeHtml(`${variant.label} · ${variant.subtitle}${options.answers ? ' · 정답지' : ''}`);
   const pages = worksheetPagesForVariant(variant);
   const pageHtml = pages.map((page, pageIndex) => {
-    const blocks = page.blocks.map(blockHtml).join('');
+    const blocks = page.blocks.map(block => blockHtml(block, options)).join('');
     const pageLabel = escapeHtml(`${variantLabel} · ${pageIndex + 1}/${pages.length}`);
     return `<main class="worksheet-page" data-page="${pageIndex + 1}"><header class="worksheet-meta"><strong>${moduleTitle}</strong><span>${title}</span><small>${pageLabel}</small></header>${blocks}<div class="worksheet-page-guide">A4 한 장 기준선</div><footer class="worksheet-footer"><span>이름: ____________________</span><span>${escapeHtml(worksheet.lessonId)} · ${pageIndex + 1}/${pages.length}</span></footer></main>`;
   }).join('');
+  // 정답지에는 카드마다 교사가 읽어 줄 문장과 정답을 적은 마지막 장이 붙는다.
+  const notes = options.answers ? teacherNotesHtml(pages.flatMap(page => page.blocks)) : '';
+  const notesPage = notes
+    ? `<main class="worksheet-page" data-page="notes"><header class="worksheet-meta"><strong>${moduleTitle}</strong><span>${title}</span><small>${variantLabel} · 교사용 안내</small></header>${notes}<div class="worksheet-page-guide">A4 한 장 기준선</div><footer class="worksheet-footer"><span>교사용 · 학생에게 나누어 주지 않아요</span><span>${escapeHtml(worksheet.lessonId)}</span></footer></main>`
+    : '';
   return `<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} · ${variantLabel}</title>
 <style>
@@ -82,8 +100,8 @@ body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .worksheet-page { position: relative; width: 210mm; min-height: 297mm; margin: 12mm auto; padding: 11mm 15mm 16mm; background: #fffdf9; border: 1px solid #dedbe3; overflow: visible; }
 .worksheet-page + .worksheet-page { break-before: page; }
 .worksheet-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 5mm; padding-bottom: 3mm; margin-bottom: 4mm; border-bottom: 3px solid #66509a; color: #66509a; }
-.worksheet-meta strong { font-size: 11pt; }
-.worksheet-meta span { min-width: 0; color: #2d2a26; font-size: 16pt; font-weight: 800; overflow-wrap: anywhere; }
+.worksheet-meta strong { font-size: 11pt; word-break: keep-all; }
+.worksheet-meta span { min-width: 0; color: #2d2a26; font-size: 16pt; font-weight: 800; word-break: keep-all; overflow-wrap: anywhere; }
 .worksheet-meta small { color: #777; font-size: 8pt; white-space: nowrap; }
 .worksheet-block { break-inside: avoid; margin: 0 0 3mm; padding: 3mm; border: 1.5px solid #dedbe3; border-radius: 3mm; overflow-wrap: anywhere; }
 .worksheet-block-heading { padding: 0 0 3mm; border-width: 0 0 1.5px; border-radius: 0; }
@@ -121,8 +139,9 @@ body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 .worksheet-page.is-compact-2 .worksheet-paste-targets span { min-height: 11mm; }
 .worksheet-page.is-compact-2 .worksheet-cut-cards span { min-height: 9.5mm; }
 .worksheet-page.is-compact-2 .worksheet-draw-area { min-height: 44mm; }
+${WORKSHEET_PICTURE_CSS}
 @media print { html, body { background: #fff; } .worksheet-page { width: 210mm; min-height: 297mm; margin: 0; border: 0; } .worksheet-page + .worksheet-page { break-before: page; } }
-</style></head><body>${pageHtml}
+</style></head><body>${pageHtml}${notesPage}
 <script>
 (function () {
   // A4 한 장 높이를 실제 픽셀로 잰다. 기기와 글꼴에 따라 달라지므로 상수로 두지 않는다.
@@ -154,27 +173,71 @@ body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 </script></body></html>`;
 }
 
-export function downloadWorksheetHtml(worksheet: LessonWorksheet, variant: WorksheetVariant): void {
-  const html = buildWorksheetHtml(worksheet, variant);
+/** 저장하는 HTML 안에 넣을 그림의 가장 긴 변(px). 가장 큰 카드(62mm)를 300dpi로 뽑아도 모자라지 않는 크기다. */
+const EMBED_MAX_SIDE = 800;
+const EMBED_WEBP_QUALITY = 0.9;
+
+/**
+ * 인쇄본의 그림을 파일 안에 넣는다.
+ *
+ * 그림 주소는 `/AITEXTBOOKforSTUDENTS/lessons/...`처럼 사이트 안의 경로라서, 저장한 HTML 파일을 내려받아
+ * 열면(file://) 그림이 모두 빈 칸이 된다. 그림이 곧 학습지인 하·중 수준에서는 치명적이라, 저장할 때
+ * 그림을 읽어 data 주소로 바꿔 넣는다. 그림 카드 한 장이 원본 400KB 안팎이라 가로세로 800px 안으로 줄여 WebP로 넣는다
+ * (둥근 모서리의 투명한 부분이 남도록 알파를 지키고, WebP를 만들 수 없는 브라우저에서는 PNG로 넣는다).
+ * 읽지 못한 그림은 원래 주소를 그대로 둔다(인쇄 창에서는 사이트 안에서 열리므로 보인다).
+ */
+export async function embedWorksheetImages(html: string): Promise<string> {
+  const sources = [...new Set([...html.matchAll(/<img[^>]*?\ssrc="([^"]+)"/g)].map(match => match[1]))]
+    .filter(src => !src.startsWith('data:'));
+  const embedded = new Map<string, string>();
+  await Promise.all(sources.map(async (escaped) => {
+    const src = escaped.replaceAll('&amp;', '&');
+    try {
+      const response = await fetch(src);
+      if (!response.ok) return;
+      const bitmap = await createImageBitmap(await response.blob());
+      const scale = Math.min(1, EMBED_MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      const context = canvas.getContext('2d');
+      if (!context) return;
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      bitmap.close();
+      const webp = canvas.toDataURL('image/webp', EMBED_WEBP_QUALITY);
+      embedded.set(escaped, webp.startsWith('data:image/webp') ? webp : canvas.toDataURL('image/png'));
+    } catch {
+      // 읽지 못한 그림은 원래 주소를 그대로 둔다.
+    }
+  }));
+  if (embedded.size === 0) return html;
+  return html.replace(/(<img[^>]*?\ssrc=")([^"]+)(")/g, (whole, head: string, src: string, tail: string) => {
+    const data = embedded.get(src);
+    return data ? `${head}${data}${tail}` : whole;
+  });
+}
+
+export async function downloadWorksheetHtml(worksheet: LessonWorksheet, variant: WorksheetVariant, options: WorksheetHtmlOptions = {}): Promise<void> {
+  const html = await embedWorksheetImages(buildWorksheetHtml(worksheet, variant, options));
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = `${worksheet.lessonId}-${variant.level}-학습지.html`;
+  anchor.download = `${worksheet.lessonId}-${variant.level}-${options.answers ? '정답지' : '학습지'}.html`;
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-export function printWorksheet(worksheet: LessonWorksheet, variant: WorksheetVariant): void {
+export function printWorksheet(worksheet: LessonWorksheet, variant: WorksheetVariant, options: WorksheetHtmlOptions = {}): void {
   const printWindow = window.open('', '_blank');
   if (!printWindow) {
     window.alert('인쇄 창을 열 수 없습니다. 브라우저의 팝업 차단을 해제해 주세요.');
     return;
   }
   printWindow.document.open();
-  printWindow.document.write(buildWorksheetHtml(worksheet, variant));
+  printWindow.document.write(buildWorksheetHtml(worksheet, variant, options));
   printWindow.document.close();
   const print = () => { printWindow.focus(); printWindow.print(); };
   if (printWindow.document.readyState === 'complete') window.setTimeout(print, 160);

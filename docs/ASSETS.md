@@ -7,9 +7,11 @@
 - `public/lessons/story/m1` ~ `m6`: 스튜디오 이야기 248장
 - `public/lessons/story/module-close`: 단원 마무리 이야기 18장
 - `public/lessons/remodel`: 현재 차시 활동에서 사용하는 장면·아이콘
-- `public/lessons/extra`: remodel에서 옮긴 옛 이야기 컷. 22장만 교사 학습지 상 수준 셋째 칸의 보조 그림으로 쓴다(`src/features/teacher/worksheet/extraIllustrations.ts`). 나머지는 참조하지 않는다
+- `public/lessons/extra`: remodel에서 옮긴 옛 이야기 컷. 22장은 교사 학습지 상 수준 셋째 칸의 보조 그림으로 쓰고(`src/features/teacher/worksheet/extraIllustrations.ts`), 차시마다 겹치지 않는 49장은 학습지 편집기의 그림 고르기에서 장면 그림이나 카드 그림으로 고를 수 있다(`src/data/lessonExtraCuts.ts`)
+- `public/lessons/pecs/m1` ~ `m6`: 단원별 그림 카드 판 176장(낱말이 그림에 인쇄돼 있다). 선택지 그림 카드(`src/data/choiceCards/`)와 하·중 수준 학습지가 쓴다. 폴더 바로 아래의 127장은 옛 그림 카드로 `src/data/legacyPecs.ts`에 이름을 모아 두었다
 - `public/characters`: 캐릭터 SVG
 - `public/images`: 활동에서 직접 참조하는 보조 이미지
+  - `public/images/games`: 놀이에서 쓰는 한 장짜리 그림. 학습지 편집기의 그림 고르기에서 카드 그림으로 고를 수 있다(`src/data/gameIllustrations.ts`)
 
 스토리 이미지는 총 266개이며 데이터의 `imageSrc`와 일대일로 연결됩니다.
 

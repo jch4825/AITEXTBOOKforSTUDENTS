@@ -71,6 +71,18 @@
   알맞은 그림 카드가 생기면 바꿉니다. 처음 열리는 화면은 교사가 기기마다 `SettingsState.answerMode`(기본 문장 고르기)로
   정하고, 학생은 그림이 붙은 탭으로 언제든 바꿉니다. 먼저 해 보기의 답은 원래 기록하지 않으므로 카드를 썼다는
   사실도 남기지 않습니다. `npm run check:choice-cards`가 이를 강제합니다.
+- 교사 도구 A4 학습지(`src/features/teacher/worksheet/`)의 **하·중 수준은 글이 아니라 그림 카드가 중심**입니다. 둘 다 두 장으로
+  앞장은 `1 골라요`(첫 생각 선택지 세 장에 ○)와 쓰기 칸, 뒷장은 `3 붙여요`(적용 선택지 세 장을 오려 칸에 붙이기)입니다.
+  카드·물음·정답은 두 수준이 같고 쓰기 칸만 다릅니다. 하는 `2 따라 써요`(핵심 낱말 하나와 그림 카드), 중은 `2 덧써요`(핵심
+  문장을 덧쓰고, 둘째 줄에서는 핵심 낱말만 빈칸으로 둔 채 직접 쓰기)이며 뒷장의 칸 이름도 연한 글자로 덧씁니다. 중의 빈칸은
+  학생용 인쇄본에서 비어 있고 정답지에서만 낱말이 보입니다. 카드는 `data/choiceCards/`의 선택지 그림 카드를 그대로 쓰고(학생
+  화면에서 만난 그림과 낱말이 종이에서도 같아야 합니다), 한 변은 48mm 이상, 한 쪽에 보이는 글자는 170자 이내, 물음은 해요체
+  44자 이내입니다. 중이 덧쓰는 문장은 해요체 18자 이내이고 빈칸 낱말은 문장에 한 번만 나오며 그림 카드의 낱말과 같습니다.
+  예전에는 선택지 문장 30~60자를 보기로 싣고 60자 문장을 "낱말"로 따라 쓰게 했으며 오릴 카드는 11mm 높이의 글자 띠였습니다.
+  인쇄본과 화면 미리보기는 `pictureBlocks.ts`의 같은 HTML·CSS 한 벌을 씁니다(크기는 실제 mm). 저장한 편집본은
+  `template` 표시가 기본 구성과 다르면 그 수준만 새 구성으로 갈아 끼웁니다. 정답지(알맞은 카드와 카드마다 교사가 읽어 줄 문장)는
+  교사 모드에서만 단추가 보이고, 학생에게 나누어 주지 않는 교사용 안내 쪽이 하나 더 붙습니다. 이 쪽도 A4 한 장에 들어가야
+  합니다. `npm run check:worksheet-picture`가 이를 강제합니다. 쪽에 다 들어가는지는 브라우저에서만 잴 수 있습니다.
 - 한국어 파일은 UTF-8, TypeScript는 strict 설정을 유지합니다.
 
 ## 현재 단일 진실 원천
@@ -103,6 +115,12 @@ npm run check:highschool-tasks`가 강제합니다.
 - 교수·학습 및 평가의 방향과 방법: `src/data/curriculumTeachingAssessment.ts` — 기본 교육과정의
   (가)(나)(다)… 항목 서술 형식을 따르되 내용은 이 저장소의 제품 계약에서 가져온다.
 - 교사용 실제 운영 설명: `src/features/teacher/TeacherOperationGuide.tsx`
+- 하·중 수준 학습지 구성: `src/data/pictureWorksheets.ts` — 68차시 각각의 물음·핵심 낱말·핵심 문장(중이 덧씀)·알맞은 카드.
+  두 수준의 두 장을 짓는 곳은 `src/features/teacher/worksheet/pictureLevels.ts`(`buildPicturePages`) 하나입니다. 스튜디오
+  2~6단원의 선택지에는 `isCorrect`가 없어(반응 대사가 결과를 말해 줍니다) 알맞은 카드는 여기서 따로 정합니다. 학생 화면의 정답
+  판정에는 쓰이지 않고 정답지(교사용)에만 나옵니다. 선택지를 더하거나 id를 바꾸면 여기도 고칩니다.
+  핵심 문장의 낱말이 바뀌면 `word`(빈칸·그림 카드 낱말)와 `sentence`를 함께 고칩니다.
+  옛 그림 카드 127장의 이름은 `src/data/legacyPecs.ts`에 있고 학습지 편집기의 그림 고르기에서 씁니다.
 - 교육과정 원문 참고자료: `docs/reference/2022-special-education-curriculum.pdf`
 
 없는 차시 ID는 임의 데모로 대체하지 않고 `ComingSoonLesson`을 표시합니다.
@@ -122,6 +140,7 @@ src/
 │  │  ├─ formats/                  포맷 A~E별 화면 순서 선언(기록 단계는 불변)
 │  │  └─ speakerLine.ts            각본 속 `진우: "..."` 표기 → 화자 말풍선 파서
 │  └─ teacher/                     운영 허브, 기록, 성취기준, 백업, AI 연결
+│     └─ worksheet/                A4 학습지 상·중·하(하·중 수준은 pictureLevels.ts + pictureBlocks.ts)
 ├─ data/
 │  ├─ studios/                     62개 스튜디오 데이터
 │  ├─ modulePortfolios/            6개 단원 마무리 데이터
@@ -260,6 +279,7 @@ npm run check:game-visual
 npm run check:lesson-videos
 npm run check:reading-support
 npm run check:choice-cards
+npm run check:worksheet-picture
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.

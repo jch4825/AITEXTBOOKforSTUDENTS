@@ -727,6 +727,7 @@
 
 .teacher-worksheet-level-tabs button.is-active { border-color: var(--accent); background: var(--paper-2); color: var(--accent); }
 
+.teacher-worksheet-level-note { margin: 0; padding: 0.55rem 1.25rem 0; color: var(--muted); font-size: 0.8rem; line-height: 1.5; }
 .teacher-worksheet-actions { display: flex; justify-content: flex-end; gap: 0.55rem; padding: 0.7rem 1.25rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .teacher-worksheet-action { display: inline-flex; min-height: 2.75rem; align-items: center; gap: 0.45rem; padding: 0.45rem 0.85rem; border: 1.5px solid var(--accent); border-radius: var(--r-pill); font-size: 0.86rem; font-weight: 800; }
 .teacher-worksheet-action-secondary { background: var(--paper-0); color: var(--accent); }
@@ -815,8 +816,9 @@
   .teacher-worksheet-modal { max-height: none; border-radius: 0; }
   .teacher-worksheet-modal-header { padding: 0.8rem 0.85rem 0.7rem; }
   .teacher-worksheet-level-tabs, .teacher-worksheet-actions { padding-inline: 0.85rem; }
-  .teacher-worksheet-actions { justify-content: stretch; }
-  .teacher-worksheet-action { flex: 1; justify-content: center; padding-inline: 0.45rem; font-size: 0.78rem; }
+  /* 단추가 다섯 개라 한 줄에 두면 글자가 한 자씩 세로로 쌓인다. 두 개씩 줄을 나누고 낱말 중간에서 끊지 않는다. */
+  .teacher-worksheet-actions { flex-wrap: wrap; justify-content: stretch; }
+  .teacher-worksheet-action { flex: 1 1 calc(50% - 0.3rem); justify-content: center; padding-inline: 0.45rem; font-size: 0.78rem; text-align: center; word-break: keep-all; }
   .teacher-worksheet-editor { padding-inline: 0.85rem; }
   .teacher-worksheet-preview-panel { padding-inline: 0.55rem; }
   .teacher-worksheet-preview-heading { display: block; }
@@ -890,6 +892,52 @@
 .teacher-worksheet-cut-preview span { display: inline-flex; min-width: 3rem; min-height: 2rem; align-items: center; justify-content: center; padding: 0.3rem; border: 1px dashed var(--block-color); border-radius: 0.35rem; background: var(--paper-0); }
 .teacher-worksheet-draw-preview { display: grid; min-height: 5rem; place-items: center; border: 2px dashed var(--block-color); border-radius: 0.45rem; background: repeating-linear-gradient(0deg, var(--paper-0), var(--paper-0) 1rem, var(--paper-1) 1.05rem, var(--paper-0) 1.1rem); color: var(--muted); }
 .teacher-worksheet-empty-canvas { display: grid; min-height: 22rem; place-items: center; border: 2px dashed var(--border); border-radius: 0.7rem; color: var(--muted); font-size: 0.85rem; text-align: center; }
+
+/* 그림 블록(하·중 수준 학습지) — 미리보기가 인쇄본과 같은 조각(.ws-box)을 그대로 보여 주므로 바깥 틀과 안쪽 여백을 걷어 낸다. */
+.teacher-worksheet-preview-block-picture { padding: 0; border: 0; border-radius: 0; background: transparent; }
+.teacher-worksheet-preview-block-picture .teacher-worksheet-preview-block-content { padding-top: 0; }
+.teacher-worksheet-preview-block-picture .teacher-worksheet-preview-block-actions { top: calc(0.5rem * var(--worksheet-scale)); right: calc(0.7rem * var(--worksheet-scale)); left: auto; }
+/* 수정 단추가 머리줄 안내를 가리지 않게 머리줄 오른쪽을 비워 둔다. */
+.teacher-worksheet-preview-block-picture .ws-box .ws-head { padding-right: max(calc(3.4rem * var(--worksheet-scale)), 2.8rem); }
+
+/* 그림 블록 편집기 */
+.teacher-worksheet-pic-editor { display: grid; gap: 0.5rem; }
+.teacher-worksheet-pic-label { color: var(--ink-2); font-size: 0.68rem; font-weight: 800; }
+.teacher-worksheet-pic-note { margin: 0; color: var(--ink-2); font-size: 0.72rem; font-weight: 700; line-height: 1.45; }
+.teacher-worksheet-pic-scene { display: grid; gap: 0.3rem; }
+.teacher-worksheet-pic-cards { display: grid; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.teacher-worksheet-pic-card { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr) auto; gap: 0.45rem; align-items: start; padding: 0.45rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--paper-1); }
+.teacher-worksheet-pic-card > .teacher-worksheet-pic-picker { grid-column: 1 / -1; }
+.teacher-worksheet-pic-thumb { display: block; width: 3.4rem; height: 3.4rem; object-fit: contain; border-radius: 0.35rem; background: var(--paper-2); }
+.teacher-worksheet-pic-thumb-emoji { display: grid; place-items: center; font-size: 2rem; line-height: 1; }
+.teacher-worksheet-pic-card-fields { display: grid; gap: 0.3rem; min-width: 0; }
+.teacher-worksheet-pic-card-fields input, .teacher-worksheet-pic-card-fields select, .teacher-worksheet-pic-zone-row input, .teacher-worksheet-pic-zone-row select { width: 100%; min-width: 0; min-height: 1.9rem; padding: 0.25rem 0.4rem; border: 1.5px solid color-mix(in srgb, var(--accent) 38%, var(--border)); border-radius: 0.4rem; background: var(--paper-0); color: var(--ink-1); font-size: 0.74rem; }
+.teacher-worksheet-pic-card-fields input[readonly] { background: var(--paper-2); color: var(--muted); }
+.teacher-worksheet-pic-check { display: flex; align-items: center; gap: 0.35rem; color: var(--ink-2); font-size: 0.72rem; font-weight: 800; }
+.teacher-worksheet-pic-check input { width: auto; min-height: 0; }
+.teacher-worksheet-pic-check select { width: auto; }
+.teacher-worksheet-pic-card-actions { display: grid; grid-template-columns: repeat(2, 2.2rem); gap: 0.2rem; }
+.teacher-worksheet-pic-card-actions button { min-height: 1.9rem; border: 1px solid var(--border); border-radius: 0.35rem; background: var(--paper-0); color: var(--ink-2); font-size: 0.72rem; font-weight: 800; }
+.teacher-worksheet-pic-card-actions button:disabled { opacity: 0.35; cursor: not-allowed; }
+.teacher-worksheet-pic-zone-row { grid-template-columns: minmax(0, 1fr) 6.2rem auto; }
+.teacher-worksheet-pic-picker { display: grid; gap: 0.45rem; padding: 0.55rem; border: 1px dashed var(--accent); border-radius: 0.5rem; background: var(--paper-0); }
+.teacher-worksheet-pic-picker-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 0.5rem; }
+.teacher-worksheet-pic-picker-head .teacher-worksheet-block-field { flex: 1; margin-bottom: 0; }
+.teacher-worksheet-pic-picker-head select { min-height: 2rem; padding: 0.25rem 0.4rem; border: 1.5px solid color-mix(in srgb, var(--accent) 38%, var(--border)); border-radius: 0.4rem; background: var(--paper-0); color: var(--ink-1); font-size: 0.74rem; }
+.teacher-worksheet-pic-picker-head > button { min-height: 2rem; padding: 0.2rem 0.6rem; border: 1px solid var(--border); border-radius: 0.4rem; background: var(--paper-1); color: var(--ink-2); font-size: 0.72rem; font-weight: 800; }
+.teacher-worksheet-pic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(4.4rem, 1fr)); gap: 0.35rem; max-height: 14rem; overflow-y: auto; }
+.teacher-worksheet-pic-grid button { display: grid; gap: 0.15rem; justify-items: center; padding: 0.25rem; border: 1px solid var(--border); border-radius: 0.4rem; background: var(--paper-1); color: var(--ink-2); font-size: 0.62rem; font-weight: 700; line-height: 1.2; }
+.teacher-worksheet-pic-grid button:hover { border-color: var(--accent); }
+.teacher-worksheet-pic-grid img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.teacher-worksheet-pic-emoji-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(2.2rem, 1fr)); gap: 0.25rem; }
+.teacher-worksheet-pic-emoji-grid button { min-height: 2.2rem; border: 1px solid var(--border); border-radius: 0.4rem; background: var(--paper-1); font-size: 1.3rem; }
+.teacher-worksheet-pic-emoji-grid button:hover { border-color: var(--accent); }
+.teacher-worksheet-pic-scene-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.teacher-worksheet-pic-lesson { display: grid; gap: 0.5rem; }
+.teacher-worksheet-pic-lesson h4 { margin: 0 0 0.25rem; color: var(--ink-2); font-size: 0.7rem; font-weight: 850; }
+.teacher-worksheet-pic-grid-wide { grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr)); }
+.teacher-worksheet-pic-grid-wide img { aspect-ratio: 16 / 9; object-fit: cover; border-radius: 0.3rem; }
+.teacher-worksheet-pic-problem { margin: 0; color: var(--warn); font-size: 0.72rem; font-weight: 800; }
 
 @media (max-width: 860px) {
   .teacher-worksheet-workspace { display: flex; flex-direction: column; overflow-y: auto; }
