@@ -192,7 +192,7 @@ function CardRow({ card, index, count, mode, zones, moduleId, lessonId, onChange
   card: WorksheetCard;
   index: number;
   count: number;
-  mode: 'choice' | 'sort' | 'single';
+  mode: 'choice' | 'sort' | 'single' | 'paste';
   zones: WorksheetZone[];
   moduleId: ModuleId;
   lessonId: LessonId;
@@ -219,6 +219,9 @@ function CardRow({ card, index, count, mode, zones, moduleId, lessonId, onChange
             <input type="checkbox" checked={card.suitable === true} onChange={event => onChange({ suitable: event.target.checked })} />
             알맞은 카드
           </label>
+        )}
+        {mode === 'paste' && (
+          <input aria-label={`${name} 자리 이름`} value={card.slotLabel ?? ''} placeholder="자리 이름 (선택, 예: ① 먼저)" onChange={event => onChange({ slotLabel: event.target.value || undefined })} />
         )}
         {mode === 'sort' && (
           <label className="teacher-worksheet-pic-check">
@@ -296,7 +299,7 @@ function TextField({ label, value, onChange, multiline = false }: { label: strin
   );
 }
 
-/** 그림 고르기·낱말(문장) 따라 쓰기·그림 붙이기판의 편집 화면. */
+/** 그림 고르기·낱말(문장) 따라 쓰기·그림 붙이기판·흐린 그림에 붙이기의 편집 화면. */
 export default function PictureBlockEditor({ block, moduleId, lessonId, onChange }: {
   block: WorksheetBlock;
   moduleId: ModuleId;
@@ -308,7 +311,8 @@ export default function PictureBlockEditor({ block, moduleId, lessonId, onChange
   const zones = block.zones ?? [];
   const isTrace = block.kind === 'word-trace';
   const isSort = block.kind === 'picture-sort';
-  const mode: 'choice' | 'sort' | 'single' = isSort ? 'sort' : 'choice';
+  const isPaste = block.kind === 'picture-paste';
+  const mode: 'choice' | 'sort' | 'single' | 'paste' = isSort ? 'sort' : isPaste ? 'paste' : 'choice';
   const blankMissing = isTrace && !!block.traceBlank && !(block.traceText ?? '').includes(block.traceBlank);
 
   const setCards = (next: WorksheetCard[]) => onChange({ pictureCards: block.kind === 'picture-choice' ? normalizeSuitable(next) : next });
@@ -330,13 +334,19 @@ export default function PictureBlockEditor({ block, moduleId, lessonId, onChange
     <div className="teacher-worksheet-pic-editor">
       <TextField label="제목" value={block.title ?? ''} onChange={value => onChange({ title: value })} />
       <TextField label="머리줄 안내 (제목 오른쪽의 짧은 말)" value={block.text ?? ''} onChange={value => onChange({ text: value })} />
-      {!isTrace && <TextField label="물음 (학생에게 읽어 주는 한두 문장)" value={block.instruction ?? ''} multiline onChange={value => onChange({ instruction: value })} />}
+      {!isTrace && <TextField label={isPaste ? '상황 글 (장면 옆에 작게 나와요, 읽어 주는 사람이 봐요)' : '물음 (학생에게 읽어 주는 한두 문장)'} value={block.instruction ?? ''} multiline onChange={value => onChange({ instruction: value || undefined })} />}
 
       {isTrace && (
         <>
           <TextField label="따라 쓸 낱말 또는 문장" value={block.traceText ?? ''} onChange={value => onChange({ traceText: value })} />
           <TextField label="빈칸으로 둘 낱말 (문장 속 낱말, 비우면 따라 쓰기만 해요)" value={block.traceBlank ?? ''} onChange={value => onChange({ traceBlank: value || undefined })} />
           {blankMissing && <p className="teacher-worksheet-pic-note" role="status">따라 쓸 글에 “{block.traceBlank}”이(가) 없어서 빈칸이 만들어지지 않아요. 글에 있는 낱말을 그대로 적어 주세요.</p>}
+          {!block.traceBlank && (
+            <label className="teacher-worksheet-pic-check">
+              <input type="checkbox" checked={block.traceRepeat === true} onChange={event => onChange({ traceRepeat: event.target.checked || undefined })} />
+              아래 줄도 더 연한 글자로 보여 줘요 (덧쓰기만 하면 돼요)
+            </label>
+          )}
           <label className="teacher-worksheet-block-field teacher-worksheet-line-count">
             <span>쓰는 줄 수</span>
             <input type="number" min={1} max={4} value={block.lineCount ?? 2} onChange={event => onChange({ lineCount: Math.max(1, Math.min(4, Number(event.target.value) || 2)) })} />
@@ -354,6 +364,23 @@ export default function PictureBlockEditor({ block, moduleId, lessonId, onChange
       )}
 
       {!isTrace && <SceneField block={block} lessonId={lessonId} onChange={onChange} />}
+
+      {isPaste && (
+        <label className="teacher-worksheet-block-field">
+          <span>자리에 보이는 단서</span>
+          <select aria-label="자리에 보이는 단서" value={block.pasteCue === 'word' ? 'word' : 'picture'} onChange={event => onChange({ pasteCue: event.target.value === 'word' ? 'word' : undefined })}>
+            <option value="picture">흐린 그림 — 같은 그림을 찾아 붙여요 (하)</option>
+            <option value="word">연한 낱말 — 덧쓰고 같은 낱말의 카드를 붙여요 (중)</option>
+          </select>
+        </label>
+      )}
+
+      {isPaste && (
+        <label className="teacher-worksheet-block-field teacher-worksheet-line-count">
+          <span>빈 자리 수 (0이면 카드마다 자리가 생겨요. 정해진 답이 없을 때만 1~2)</span>
+          <input type="number" min={0} max={2} value={block.blankSlots ?? 0} onChange={event => onChange({ blankSlots: Math.max(0, Math.min(2, Number(event.target.value) || 0)) || undefined })} />
+        </label>
+      )}
 
       {isSort && (
         <div className="teacher-worksheet-array-editor">
@@ -378,7 +405,7 @@ export default function PictureBlockEditor({ block, moduleId, lessonId, onChange
       )}
 
       <div className="teacher-worksheet-array-editor">
-        <span>{isTrace ? '그림 카드' : '카드'}</span>
+        <span>{isTrace ? '그림 카드' : isPaste ? '붙일 카드 (흐린 그림과 오릴 카드가 같아요. 알맞은 카드만 올려요)' : '카드'}</span>
         <ul className="teacher-worksheet-pic-cards">
           {cards.map((card, index) => (
             <CardRow

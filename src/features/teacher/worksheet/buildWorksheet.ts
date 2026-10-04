@@ -11,7 +11,7 @@ import type { LessonId, ModuleId } from '../../../types';
 import { themeFor } from '../../../utils/moduleThemes';
 import { publicAssetUrl } from '../../../utils/publicAssetUrl';
 import { worksheetExtraIllustration } from './extraIllustrations';
-import { buildPicturePages, PICTURE_TEMPLATE, type PictureLevel } from './pictureLevels';
+import { buildPicturePages, PICTURE_TEMPLATES, type PictureLevel } from './pictureLevels';
 import { worksheetPagesForVariant, worksheetVariantWithPages, type LessonWorksheet, type WorksheetBlock, type WorksheetBlockKind, type WorksheetIllustration, type WorksheetLevel, type WorksheetVariant } from './types';
 
 const LEVELS: Record<WorksheetLevel, Omit<WorksheetVariant, 'blocks'>> = {
@@ -34,6 +34,7 @@ const BLOCK_KINDS: WorksheetBlockKind[] = [
   'picture-choice',
   'word-trace',
   'picture-sort',
+  'picture-paste',
 ];
 
 function cleanText(value: string | undefined | null): string {
@@ -376,7 +377,7 @@ function collectLessonSource(lessonId: LessonId): WorksheetLessonSource {
 function pictureVariant(level: PictureLevel, lessonId: LessonId, moduleId: ModuleId, source: WorksheetLessonSource): WorksheetVariant {
   const pages = buildPicturePages(level, { lessonId, moduleId, title: source.title, studio: source.studio, portfolio: source.portfolio });
   if (!pages) return { ...LEVELS[level], blocks: starterBlocksForLevel(level, source) };
-  return worksheetVariantWithPages({ ...LEVELS[level], template: PICTURE_TEMPLATE, blocks: [] }, pages);
+  return worksheetVariantWithPages({ ...LEVELS[level], template: PICTURE_TEMPLATES[level], blocks: [] }, pages);
 }
 
 export function buildLessonWorksheet(lessonId: LessonId): LessonWorksheet {
