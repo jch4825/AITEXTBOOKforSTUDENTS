@@ -1,4 +1,5 @@
 import type { DictionaryEntry } from '../types';
+import { createDictionaryMatcher } from '../utils/dictionaryMatch';
 
 export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
@@ -15,6 +16,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '안전',
+    verbal: true,
     shortExplanation: '다치지 않고, 나쁜 일이 안 생기는 것입니다.',
   },
   {
@@ -24,15 +26,17 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '연습',
+    verbal: true,
     shortExplanation: '여러 번 해보면서 잘 하게 되는 것입니다.',
   },
   {
     term: '도움',
+    verbal: true,
     shortExplanation: '잘 못하는 걸 누가 같이 해주는 것입니다.',
   },
   {
     term: '기계',
-    shortExplanation: '사람이 정해준 순서대로만 똑같이 움직이는 도구',
+    shortExplanation: '사람이 정해준 순서대로만 똑같이 움직이는 도구입니다.',
     example: '토스터, 선풍기, 세탁기 같은 것들입니다.',
     ttsVersion: '기계는 사람이 정해준 순서대로만 똑같이 움직이는 도구입니다.',
   },
@@ -43,17 +47,18 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '감지',
+    verbal: true,
     shortExplanation: '센서가 주변의 빛, 소리, 사람의 움직임을 알아차리는 것입니다.',
     example: '자동문 센서가 사람의 다가옴을 감지합니다.',
   },
   {
     term: '넣기',
-    shortExplanation: '버튼을 누르거나 글자를 입력하여 기기에 정보나 명령을 전달하는 일입니다.',
+    shortExplanation: '어떤 것을 안에 집어넣는 일입니다. 기기에는 버튼을 누르거나 글자를 쳐서 정보나 명령을 넣습니다.',
     example: '버튼을 누르거나 화면을 눌러 명령을 넣습니다.',
   },
   {
     term: '기준',
-    shortExplanation: '어떤 판단이나 분류를 할 때 바르게 비교하고 결정하는 중심 규칙입니다.',
+    shortExplanation: '무엇이 맞는지 따져 볼 때 맞대어 보는 약속입니다.',
     example: '입력과 결과를 살펴보는 것이 AI인지 판단하는 기준이 됩니다.',
   },
   {
@@ -69,16 +74,19 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '작동',
+    verbal: true,
     shortExplanation: '기계나 프로그램이 명령을 받아 움직이고 일하는 것입니다.',
     example: '버튼을 누르면 선풍기가 바람을 내며 작동합니다.',
   },
   {
     term: '기록',
-    shortExplanation: '이전에 사용했던 내용이나 노래, 결과를 남겨 두는 정보입니다.',
+    verbal: true,
+    shortExplanation: '있었던 일이나 한 일을 적어 남기는 것, 또는 그렇게 남긴 내용입니다.',
     example: '내가 들은 노래 기록을 보고 음악 추천 앱이 비슷한 노래를 찾습니다.',
   },
   {
     term: '인식',
+    verbal: true,
     shortExplanation: '보거나 듣고 "이게 뭔지" 알아보는 것입니다.',
     example: 'AI가 사진 속 강아지를 보고 "강아지"라고 알아보는 것입니다.',
   },
@@ -95,11 +103,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '학습',
+    verbal: true,
     shortExplanation: '보고 들으면서 배우는 것입니다.',
     example: 'AI도 많은 예시를 보면서 학습합니다.',
   },
   {
     term: '번역',
+    verbal: true,
     shortExplanation: '한 나라의 말을 다른 나라의 말로 알아듣기 쉽게 바꿔주는 것입니다.',
     example: '영어 "Hello"를 한국어 "안녕"으로 바꿔주는 것입니다.',
     ttsVersion: '번역은 한 나라 말을 다른 나라 말로 바꿔주는 것입니다.',
@@ -114,12 +124,14 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '프로그램',
     aliases: ['소프트웨어'],
+    notIn: ['안내와 프로그램', '문화 프로그램'],
     shortExplanation: '컴퓨터가 할 일을 알려주는 순서와 규칙이 담긴 명령 모음입니다.',
     example: '게임 앱이나 번역 앱은 모두 프로그램입니다.',
     ttsVersion: '프로그램은 컴퓨터가 어떤 순서로 일할지 알려주는 명령 모음입니다.',
   },
   {
     term: '의사결정',
+    verbal: true,
     aliases: ['결정'],
     shortExplanation: '여러 가지 선택지 중에서 무엇을 할지 스스로 생각하여 정하는 것입니다.',
     example: '오늘 어떤 공부를 먼저 할지 정하는 것이 의사결정입니다.',
@@ -127,13 +139,15 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '입력',
-    aliases: ['입력받다', '넣어주기'],
+    verbal: true,
+    aliases: ['넣어주기'],
     shortExplanation: '컴퓨터나 AI에게 글, 소리, 사진 같은 자료나 명령을 넣어주는 것입니다.',
     example: '마이크로 말하거나 자판으로 글을 치는 것이 입력입니다.',
     ttsVersion: '입력은 컴퓨터나 인공지능에게 글이나 소리를 넣어주는 것입니다.',
   },
   {
     term: '수행',
+    verbal: true,
     aliases: ['실행', '해내다'],
     shortExplanation: '맡은 일이나 명령을 실제로 처리하여 해내는 것입니다.',
     example: 'AI가 번역이나 추천 요청을 받아 결과를 만드는 것이 수행입니다.',
@@ -141,7 +155,8 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '범주',
-    aliases: ['종류', '분류'],
+    verbal: true,
+    aliases: ['종류'],
     shortExplanation: '비슷한 성격을 가진 것들끼리 모아놓은 종류나 묶음입니다.',
     example: '사과와 바나나는 "과일"이라는 범주에 속합니다.',
     ttsVersion: '범주는 비슷한 것들끼리 묶어 놓은 종류나 분류입니다.',
@@ -149,13 +164,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '신호',
     aliases: ['입력 신호'],
-    shortExplanation: '정보나 명령을 전달하기 위해 보내는 소리, 빛, 전기 같은 알림입니다.',
-    example: '버튼을 누르거나 마이크에 말할 때 전기 신호가 전달됩니다.',
-    ttsVersion: '신호는 정보나 명령을 전달하기 위해 보내는 소리나 빛, 전기 알림입니다.',
+    shortExplanation: '무언가를 알리려고 보내는 표시나 알림입니다.',
+    example: '선풍기는 버튼을 누른 신호를 받습니다. 몸이 두근거리는 것도 멈추라는 신호일 수 있습니다.',
+    ttsVersion: '신호는 무언가를 알리려고 보내는 표시나 알림입니다.',
   },
   {
     term: '구조',
-    aliases: ['짜임새', '틀'],
+    aliases: ['짜임새'],
     shortExplanation: '여러 부분이 서로 어떻게 연결되고 이루어져 있는지 나타내는 짜임새입니다.',
     example: '글이나 그림이 입력, 과정, 결과로 이어지는 틀이 구조입니다.',
     ttsVersion: '구조는 여러 부분이 어떻게 짜여 있는지 나타내는 틀입니다.',
@@ -168,19 +183,17 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '프롬프트',
-    aliases: ['질문하기'],
     shortExplanation: 'AI한테 던지는 질문이나 부탁입니다.',
     example: '"짧게 설명해 주십시오" 도 프롬프트입니다.',
     ttsVersion: '프롬프트는 AI한테 던지는 질문이나 부탁입니다.',
   },
   {
     term: '역할',
-    shortExplanation: '"이렇게 대해 주십시오" 하고 정해주는 성격입니다.',
-    example: '"친구처럼 말해 주십시오"라고 하면 AI가 편한 말투로 답합니다.',
+    shortExplanation: '맡아서 하는 일이나 자리입니다.',
+    example: '"친구처럼 말해 주십시오"라고 하면 AI가 친구 역할로 편한 말투로 답합니다.',
   },
   {
     term: '예시',
-    aliases: ['보기'],
     shortExplanation: '"이런 식으로 해 주십시오" 하고 보여주는 견본입니다.',
     example: '한 문장을 먼저 보여주면 AI가 비슷하게 만들어줍니다.',
   },
@@ -191,6 +204,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '부탁',
+    verbal: true,
     shortExplanation: '"이렇게 해 주십시오" 하고 예의 있게 말하는 것입니다.',
   },
   // ─── 모듈 3 (AI랑 같이 배우기) 어휘 ───
@@ -210,16 +224,19 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '설명',
+    verbal: true,
     shortExplanation: '알기 쉽게 풀어서 말해주는 것입니다.',
     example: '"쉽게 설명해 주십시오" 하고 부탁할 수 있습니다.',
   },
   {
     term: '계산',
+    verbal: true,
     shortExplanation: '수를 더하거나 빼서 답을 구하는 것입니다.',
     example: '1000원 더하기 1000원은 2000원 — 이게 계산입니다.',
   },
   {
     term: '요약',
+    verbal: true,
     shortExplanation: '긴 글을 중요한 것만 남겨 짧게 만드는 것입니다.',
     example: '"두 줄로 요약해 주십시오" 하고 부탁할 수 있습니다.',
     ttsVersion: '요약은 긴 글을 짧게 정리하는 것입니다.',
@@ -231,11 +248,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '복습',
+    verbal: true,
     shortExplanation: '배운 것을 한 번 더 보는 것입니다. 복습하면 오래 기억납니다.',
   },
   // ─── 모듈 4 (AI 안전하게 쓰기) 어휘 ───
   {
     term: '확인',
+    verbal: true,
     shortExplanation: '맞는지 한 번 더 살펴보는 것입니다.',
     example: 'AI의 답이 맞는지 선생님께 확인합니다.',
   },
@@ -263,8 +282,8 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   // ─── 모듈 5 (AI로 문제해결하기) 어휘 ───
   {
     term: '문제',
-    shortExplanation: '해결하고 싶은 일입니다.',
-    example: '"길을 모릅니다"도 하나의 문제입니다.',
+    shortExplanation: '풀거나 해결해야 하는 일입니다. 퀴즈에서는 답을 찾으려고 내는 물음입니다.',
+    example: '"길을 모릅니다"도 하나의 문제입니다. "2 더하기 3은?"은 퀴즈 문제입니다.',
   },
   {
     term: '순서',
@@ -279,7 +298,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   // ─── 모듈 6 (AI랑 일상생활) 어휘 ───
   {
     term: '목록',
-    shortExplanation: '살 것이나 할 일을 차례로 적은 종이입니다.',
+    shortExplanation: '여러 가지를 차례로 늘어놓아 적은 것입니다.',
     example: '마트 가기 전에 장보기 목록을 만듭니다.',
   },
   {
@@ -290,17 +309,21 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '계획',
+    verbal: true,
     shortExplanation: '무엇을 언제 할지 미리 정하는 것입니다.',
     example: '"숙제 먼저, 놀이는 나중에"도 계획입니다.',
   },
   {
     term: '직업',
+    // 직업인은 직업을 가진 사람이라는 다른 낱말이다.
+    notIn: ['직업인'],
     shortExplanation: '어른이 되어 하는 일입니다.',
     example: '요리사, 운전기사, 농부가 다 직업입니다.',
   },
   {
     term: '소개',
-    shortExplanation: '나나 다른 것을 알려주는 말입니다.',
+    verbal: true,
+    shortExplanation: '나 자신이나 다른 것을 알려 주는 말입니다.',
     example: '"저는 그림 그리기를 좋아합니다"가 자기소개입니다.',
   },
   // ─── 생활 속 기기·활동 어휘 ───
@@ -327,6 +350,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '검색',
+    verbal: true,
     shortExplanation: '궁금한 것을 찾아보는 것입니다.',
     example: '"기린"을 검색하면 기린에 대한 글이 나옵니다.',
   },
@@ -334,7 +358,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '지도',
     aliases: ['지도 앱'],
     shortExplanation: '길과 장소를 보여주는 그림입니다.',
-    example: '지도 앱에 물어보면 가는 길을 알려 주십시오.',
+    example: '지도 앱에 물어보면 가는 길을 알려 줍니다.',
   },
   {
     term: '반대말',
@@ -378,11 +402,15 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '음성 인식',
+    aliases: ['음성인식'],
+    verbal: true,
     shortExplanation: 'AI가 사람의 말소리를 듣고 글자로 바꾸는 것입니다.',
     example: '"알람 맞춰줘"라고 말하면 AI가 그 말을 알아듣습니다.',
   },
   {
     term: '이미지 인식',
+    aliases: ['이미지인식'],
+    verbal: true,
     shortExplanation: 'AI가 사진이나 그림을 보고 무엇인지 알아내는 것입니다.',
     example: '사진을 보여주면 AI가 "이건 고양이입니다"라고 답합니다.',
   },
@@ -393,16 +421,19 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '자동화',
-    shortExplanation: '사람이 정해준 순서대로만 똑같이 움직이는 것.',
+    verbal: true,
+    shortExplanation: '사람이 정해준 순서대로만 똑같이 움직이는 것입니다.',
     example: '세탁기는 버튼을 누르면 항상 같은 순서로 빨래를 합니다.',
   },
   {
     term: '예측',
+    verbal: true,
     shortExplanation: 'AI가 다음에 올 말을 미리 짐작해서 고르는 것입니다.',
     example: '"오늘 날씨가" 다음에 "좋습니다" 같은 말을 고릅니다.',
   },
   {
     term: '훈련',
+    verbal: true,
     shortExplanation: 'AI가 자료를 반복해서 보며 더 잘하게 되는 과정입니다.',
     example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞힙니다.',
   },
@@ -440,6 +471,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '자료',
+    aliases: ['원자료'],
     shortExplanation: '배우거나 알아볼 때 쓰는 정보입니다.',
     example: 'AI는 아주 많은 자료를 보고 배웁니다.',
   },
@@ -465,6 +497,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '오인식',
+    verbal: true,
     shortExplanation: 'AI가 잘못 알아보는 것입니다.',
     example: '고양이를 강아지로 잘못 아는 게 오인식입니다.',
   },
@@ -475,13 +508,14 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '판단',
+    verbal: true,
     shortExplanation: '무엇이 맞는지 스스로 정하는 것입니다.',
     example: '마지막 판단은 내가 합니다.',
   },
   {
     term: '규칙',
-    shortExplanation: '지켜야 할 정해진 약속입니다.',
-    example: 'AI는 정해진 규칙대로 계산합니다.',
+    shortExplanation: '지켜야 하는 정해진 약속입니다. 여러 자료에서 되풀이되는 같은 모습도 규칙입니다.',
+    example: '"교실에서는 걷습니다"는 지켜야 할 규칙입니다. AI는 자료에서 되풀이되는 규칙을 찾아 배웁니다.',
   },
   {
     term: '도구',
@@ -490,18 +524,21 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '편향',
+    verbal: true,
     shortExplanation: 'AI가 배운 자료가 한쪽으로 치우쳐서, 답도 치우치는 것입니다.',
     example: '한 종류 사진만 배우면 다른 것은 잘 못 알아봅니다.',
   },
   // ─── 모듈 2 어려움(hard) 콘텐츠 신규 어휘 ───
   {
     term: '지시',
+    verbal: true,
     shortExplanation: '뭘 해달라고 정확하게 시키는 말입니다.',
     example: '"이름 세 개를 알려 주십시오"가 지시입니다.',
   },
   {
     term: '간결',
-    shortExplanation: '한 번에 하나만 부탁하는 것입니다.',
+    verbal: true,
+    shortExplanation: '말을 짧고 분명하게 하는 것입니다. 한 번에 하나만 부탁하면 간결해집니다.',
     example: '여러 개를 한꺼번에 시키지 않고 하나씩 물어봅니다.',
   },
   {
@@ -511,11 +548,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '예시 제시',
+    verbal: true,
     shortExplanation: '원하는 답 모양을 먼저 보여주는 것입니다.',
     example: '"이런 식으로 해 주십시오: 강아지가 뛰습니다"처럼입니다.',
   },
   {
     term: '역할 지정',
+    verbal: true,
     shortExplanation: 'AI한테 "너는 ~라고 하자" 하고 역할을 정해주는 것입니다.',
     example: '"친절한 요리 선생님이라고 하자"라고 하면 그 말투로 답합니다.',
   },
@@ -531,11 +570,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '형식 지정',
+    verbal: true,
     shortExplanation: '답을 어떤 길이나 모양으로 받을지 미리 정하는 것입니다.',
     example: '"세 줄로", "표로"처럼 정해서 부탁합니다.',
   },
   {
     term: '검증',
+    verbal: true,
     shortExplanation: '답이 맞는지 확인하는 것입니다.',
     example: '이상한 답이 있으면 책이나 어른한테 확인합니다.',
   },
@@ -551,7 +592,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '대상',
-    shortExplanation: '누구나 무엇을 말하는지 가리키는 말입니다.',
+    shortExplanation: '어떤 일을 누구에게, 또는 무엇에게 하는지 가리키는 말입니다.',
     example: '친구에게 쓰는 글이면 대상은 친구입니다.',
   },
   {
@@ -561,12 +602,14 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '검토',
+    verbal: true,
     shortExplanation: '다시 살펴보는 것입니다.',
     example: 'AI 답에 빠진 말이 있는지 다시 봅니다.',
   },
   {
     term: '주장',
-    shortExplanation: '맞는지 확인할 수 있는 말입니다.',
+    verbal: true,
+    shortExplanation: '내 생각이 옳다고 내세워 말하는 것입니다.',
     example: '"행사는 5시에 끝납니다"는 확인할 주장입니다.',
   },
   {
@@ -601,6 +644,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '애매',
+    verbal: true,
     shortExplanation: '무슨 뜻인지 정확히 알기 어려운 것입니다.',
     example: '"그거 좀 해 주십시오"는 애매해서 AI가 헷갈렸습니다.',
   },
@@ -622,11 +666,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   // ─── 모듈 3 어려움(hard) 콘텐츠 신규 어휘 ───
   {
     term: '정의',
+    verbal: true,
     shortExplanation: '어떤 말의 뜻을 콕 집어 설명한 문장입니다.',
     example: '"친구"의 정의는 "가깝게 지내며 정을 나누는 사람"입니다.',
   },
   {
     term: '난이도 조절',
+    verbal: true,
     shortExplanation: '내 수준에 맞게 설명을 쉽거나 어렵게 바꾸는 것입니다.',
     example: '"10살도 알아듣게 설명해 주십시오"라고 하면 더 쉬워집니다.',
   },
@@ -637,11 +683,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '창작',
+    verbal: true,
     shortExplanation: '새로운 이야기를 스스로 지어내는 것입니다.',
     example: '없던 이야기를 처음 만드는 것도 창작입니다.',
   },
   {
     term: '검산',
+    verbal: true,
     shortExplanation: '계산을 다시 한번 해서 확인하는 것입니다.',
     example: '계산기로 검산하면 실수를 찾을 수 있습니다.',
   },
@@ -652,16 +700,19 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '문제 생성',
+    verbal: true,
     shortExplanation: 'AI한테 문제를 만들어 달라고 부탁하는 것입니다.',
     example: '"동물 퀴즈 세 개 내줘" 하면 AI가 문제를 만들어줍니다.',
   },
   {
     term: '이미지 설명',
+    verbal: true,
     shortExplanation: '그림을 보고 무엇인지 글로 설명하는 것입니다.',
     example: '강아지 사진을 보여주면 AI가 "갈색 강아지가 앉아 있습니다"라고 말합니다.',
   },
   {
     term: '표절',
+    verbal: true,
     shortExplanation: '다른 사람이나 AI가 쓴 글을 그대로 베껴서 내 것처럼 내는 것입니다. 하면 안 됩니다.',
     example: 'AI가 써준 글을 그대로 숙제로 내면 표절입니다. 내 말로 다시 써야 합니다.',
     ttsVersion: '표절은 남이 쓴 글을 그대로 베껴서 내 것처럼 내는 것입니다. 숙제는 내가 직접 써야 합니다.',
@@ -684,6 +735,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '비교',
+    verbal: true,
     shortExplanation: '두 가지를 나란히 놓고 같은지 다른지 살펴보는 것입니다.',
     example: 'AI의 설명과 사전 뜻을 비교해서 확인합니다.',
   },
@@ -699,11 +751,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '비유',
+    verbal: true,
     shortExplanation: '어려운 것을 비슷한 것에 빗대어 말하는 방법입니다.',
     example: '심장을 펌프에 빗대어 설명하는 것이 비유입니다.',
   },
   {
     term: '제안',
+    verbal: true,
     shortExplanation: '이렇게 해 보자고 내는 생각입니다.',
     example: 'AI가 결말을 하나 제안했습니다.',
   },
@@ -714,6 +768,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '예상',
+    verbal: true,
     shortExplanation: '어떻게 될지 미리 생각해 보는 것입니다.',
     example: '계산하기 전에 대략 얼마일지 예상합니다.',
   },
@@ -724,31 +779,37 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '누락',
+    verbal: true,
     shortExplanation: '있어야 할 것이 빠진 것입니다.',
     example: '요약에서 준비물이 빠졌다면 누락입니다.',
   },
   {
     term: '회상',
+    verbal: true,
     shortExplanation: '배운 것을 보지 않고 떠올리는 것입니다.',
     example: '카드를 보기 전에 먼저 기억나는 말을 해 봅니다.',
   },
   {
     term: '피드백',
+    verbal: true,
     shortExplanation: '더 잘할 수 있게 알려 주는 말입니다.',
     example: '틀린 까닭을 알려 주는 말도 피드백입니다.',
   },
   {
     term: '해설',
+    verbal: true,
     shortExplanation: '답이나 까닭을 풀어서 알려 주는 말입니다.',
     example: '퀴즈를 푼 뒤 해설을 읽습니다.',
   },
   {
     term: '추측',
+    verbal: true,
     shortExplanation: '확실히 모르지만 그럴 것 같다고 생각하는 것입니다.',
     example: '사진만 보고 기분을 말하는 것은 추측일 수 있습니다.',
   },
   {
     term: '자기 설명',
+    verbal: true,
     shortExplanation: '내가 이해한 것을 내 말로 다시 말하는 것입니다.',
     example: '낱말 뜻을 내 말로 설명합니다.',
   },
@@ -760,6 +821,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '사실 확인',
+    verbal: true,
     shortExplanation: '정보가 진짜인지 여러 방법으로 알아보는 것입니다.',
     example: '같은 내용을 책에서도 찾아보는 게 사실 확인입니다.',
   },
@@ -787,17 +849,20 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '신고',
+    verbal: true,
     shortExplanation: '나쁜 내용을 어른에게 알리는 것입니다.',
     example: '이상한 화면을 캡처해서 선생님께 보여주는 것도 신고입니다.',
     ttsVersion: '신고는 나쁜 내용을 어른에게 알리는 것입니다. 알리는 건 용감한 행동입니다.',
   },
   {
     term: '과의존',
+    verbal: true,
     shortExplanation: '스마트폰이나 AI를 너무 자주, 너무 오래 의지하게 되는 것입니다.',
     example: '자기 전까지 계속 화면을 보는 것도 과의존의 신호입니다.',
   },
   {
     term: '도움 요청',
+    verbal: true,
     shortExplanation: '혼자 해결하기 어려운 일을 어른에게 말하는 것입니다.',
     example: '"모르는 사람이 만나자고 합니다"라고 말하는 것도 도움 요청입니다.',
     ttsVersion: '도움 요청은 어른에게 말하는 것입니다. 도움을 요청하는 건 용감한 행동입니다.',
@@ -810,6 +875,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   // ─── 단원 4 기본 콘텐츠 개념어 확충 ───
   {
     term: '설계',
+    verbal: true,
     shortExplanation: '어떤 목적에 맞게 미리 짜 놓는 것입니다.',
     example: '추천 화면은 계속 보게 만들도록 설계되어 있습니다.',
   },
@@ -830,11 +896,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '캡처',
+    verbal: true,
     shortExplanation: '화면에 보이는 것을 사진처럼 저장하는 것입니다.',
     example: '이상한 화면을 캡처해서 어른에게 보여줍니다.',
   },
   {
     term: '표시',
+    verbal: true,
     shortExplanation: '무엇인지 알 수 있게 붙여 놓은 글자나 그림입니다.',
     example: '광고에는 작게 "광고"라는 표시가 붙어 있습니다.',
   },
@@ -851,7 +919,8 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '분해',
-    shortExplanation: '큰 문제를 작은 일들로 나누는 것입니다.',
+    verbal: true,
+    shortExplanation: '한 덩어리를 작은 부분들로 나누는 것입니다.',
     example: '"방 정리하기"를 "장난감 정리", "책 정리", "옷 정리"로 나눴습니다.',
   },
   {
@@ -866,6 +935,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '명확화',
+    verbal: true,
     shortExplanation: '뜻을 더 분명하게 다시 말하는 것입니다.',
     example: '"그거 알려 주십시오" 대신 "라면 끓이는 순서를 알려 주십시오"라고 다시 말합니다.',
   },
@@ -876,6 +946,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '평가',
+    verbal: true,
     shortExplanation: '결과가 좋은지 따져보는 것입니다.',
     example: '방을 정리한 뒤 정말 깨끗해졌는지 따져보는 게 평가입니다.',
   },
@@ -891,6 +962,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '수정',
+    verbal: true,
     shortExplanation: '틀린 곳을 고치는 것입니다.',
     example: '거꾸로 적은 순서를 바로 고치는 게 수정입니다.',
   },
@@ -929,6 +1001,8 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '예보',
+    aliases: ['일기예보'],
+    verbal: true,
     shortExplanation: '날씨가 어떨지 미리 알려주는 것입니다.',
     example: '"내일은 비가 온대요"가 날씨 예보입니다.',
   },
@@ -955,16 +1029,20 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '소통',
+    aliases: ['의사소통'],
+    verbal: true,
     shortExplanation: '서로 마음과 뜻을 주고받는 것입니다.',
     example: '고마운 마음을 말로 전하는 것도 소통입니다.',
   },
   {
     term: '자기소개',
+    verbal: true,
     shortExplanation: '나를 남에게 알리는 말입니다.',
     example: '"저는 그림 그리기를 좋아합니다"가 자기소개입니다.',
   },
   {
     term: '퇴고',
+    verbal: true,
     shortExplanation: '쓴 글을 다시 고치는 것입니다.',
     example: 'AI한테 고칠 점을 물어보고 내가 직접 고칩니다.',
   },
@@ -991,11 +1069,13 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '진찰',
+    verbal: true,
     shortExplanation: '의사가 아픈 곳을 살펴보는 것입니다.',
     example: '진짜 진찰은 AI가 아니라 병원에서 받습니다.',
   },
   {
     term: '치료',
+    verbal: true,
     shortExplanation: '아픈 곳을 낫게 하는 것입니다.',
     example: '병원에서 치료를 받아야 나을 수 있습니다.',
   },
@@ -1011,7 +1091,6 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '방대하다',
-    aliases: ['방대한'],
     shortExplanation: '아주 많고 넓은 것입니다.',
     example: '인공지능은 방대한 자료를 공부해서 똑똑해집니다.',
   },
@@ -1022,6 +1101,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '추론',
+    verbal: true,
     shortExplanation: '알고 있는 것을 바탕으로 새로운 답을 생각해 내는 것입니다.',
     example: '인공지능은 추론을 통해 처음 보는 문제도 풀 수 있습니다.',
   },
@@ -1032,6 +1112,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '기화',
+    verbal: true,
     shortExplanation: '액체가 기체로 변하는 현상입니다.',
     example: '땀이 마르면서 기화되면 우리 몸이 시원해집니다.',
   },
@@ -1042,25 +1123,22 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '대처하다',
-    aliases: ['대처', '대처하지'],
     shortExplanation: '어려운 일이나 문제를 해결하기 위해 알맞게 행동하는 것입니다.',
     example: 'AI가 갑자기 멈추었을 때 당황하지 않고 대처해야 합니다.',
   },
   {
     term: '유연하다',
-    aliases: ['유연하고', '유연한'],
     shortExplanation: '상황에 맞춰 부드럽고 융통성 있게 행동하는 것입니다.',
     example: '인공지능은 새로운 상황에 유연하게 대답할 수 있습니다.',
   },
   {
     term: '복잡하다',
-    aliases: ['복잡한', '복잡하지'],
     shortExplanation: '여러 가지가 얽혀 있어 이해하기 어렵고 어지러운 것입니다.',
     example: '길이 복잡해서 지도를 보고 찾아가야 합니다.',
   },
   {
     term: '모방',
-    aliases: ['모방하여', '모방한'],
+    verbal: true,
     shortExplanation: '다른 것의 모습이나 행동을 그대로 흉내 내어 따라 하는 것입니다.',
     example: '인공지능은 사람의 생각하는 방식을 모방해서 행동합니다.',
   },
@@ -1071,6 +1149,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '인지',
+    verbal: true,
     shortExplanation: '무언가를 보고, 듣고, 생각해서 알아차리거나 이해하는 것입니다.',
     example: '사람은 오감을 통해 주변 세상을 인지합니다.',
   },
@@ -1084,18 +1163,57 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     shortExplanation: '빵이나 고기를 구울 때 겉이 갈색으로 변하며 맛있는 냄새와 맛이 나게 되는 화학 현상입니다.',
     example: '식빵이 갈색으로 노릇노릇해지는 것은 마이야르 반응 때문입니다.',
   },
+  // ─── 사전 전수 조사에서 더한 낱말 ───
+  {
+    term: '분류',
+    verbal: true,
+    shortExplanation: '비슷한 것끼리 모아서 종류별로 나누는 것입니다.',
+    example: '사과와 바나나를 과일끼리 모으는 것이 분류입니다.',
+  },
+  {
+    term: '결과물',
+    shortExplanation: '일을 마친 뒤에 만들어져 나온 글이나 그림 같은 것입니다.',
+    example: 'AI에게 포스터를 부탁하면 포스터 그림이 결과물로 나옵니다.',
+  },
+  {
+    term: '설명서',
+    shortExplanation: '물건이나 도구를 어떻게 쓰는지 알려 주는 글입니다.',
+    example: '세탁기 설명서에는 버튼을 누르는 순서가 적혀 있습니다.',
+  },
+  {
+    term: '도움망',
+    aliases: ['개인 도움망'],
+    shortExplanation: '어렵거나 위험할 때 연락할 사람들을 미리 정해 둔 것입니다.',
+    example: '선생님, 보호자, 학교 도움 선생님을 차례로 적어 두는 것이 도움망입니다.',
+  },
+  {
+    term: '계산대',
+    shortExplanation: '마트에서 물건값을 내는 곳입니다.',
+    example: '물건을 고른 뒤 계산대에서 돈을 내고 영수증을 받습니다.',
+  },
 ];
 
-function normalize(term: string): string {
-  return term.trim().toLowerCase().normalize('NFKC');
-}
+/**
+ * 본문에서 밑줄을 치지 않는 낱말. 사전에서 직접 찾아보는 일에는 영향이 없다.
+ * 예전부터 밑줄에서 빼 온 낱말이고, 밑줄 엔진이 어절 단위가 된 지금도 밑줄을 늘리지 않으려고 그대로 둔다.
+ * (인공지능의 별칭 AI는 지금까지처럼 밑줄이 그대로 남는다.)
+ * - 인공지능·기계: 이 교재 어디에나 나와서 모든 자리에 치면 밑줄이 글을 덮는다.
+ * - 인지·표: 맞는지·사실인지, 시간표·비교표처럼 흔한 말 속에 자주 들어 있는 짧은 낱말이다.
+ */
+export const DICTIONARY_UNDERLINE_EXCLUDED_KEYS = ['인공지능', '인지', '표', '기계'] as const;
 
+/** 앞에 숫자가 붙어도 한 낱말로 보는 것(1단계, 4요소). */
+export const DICTIONARY_NUMERAL_KEYS = ['단계', '요소'] as const;
+
+export const STUDENT_DICTIONARY_MATCHER = createDictionaryMatcher(STUDENT_DICTIONARY, {
+  excludedKeys: DICTIONARY_UNDERLINE_EXCLUDED_KEYS,
+  numeralKeys: DICTIONARY_NUMERAL_KEYS,
+});
+
+/**
+ * 학생이 사전에 쳐 넣었거나 밑줄을 눌러 열린 낱말에 맞는 항목을 찾는다.
+ * 올림말·별칭과 같거나, 조사·서술어가 붙은 어절 하나(확인을, 확인합니다)가 통째로 맞으면 찾는다.
+ */
 export function findDictionaryEntry(query: string): DictionaryEntry | null {
-  const q = normalize(query);
-  if (!q) return null;
-  for (const entry of STUDENT_DICTIONARY) {
-    if (normalize(entry.term) === q) return entry;
-    if (entry.aliases?.some(a => normalize(a) === q)) return entry;
-  }
-  return null;
+  return STUDENT_DICTIONARY_MATCHER.lookup(query);
 }

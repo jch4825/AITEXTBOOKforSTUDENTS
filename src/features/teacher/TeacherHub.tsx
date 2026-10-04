@@ -1,5 +1,6 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
 import Button from '../../components/Button';
+import AiStatus from '../../components/controls/AiStatus';
 import GeneralizationRecordsPanel from '../../components/mission/GeneralizationRecordsPanel';
 import { clearStudioEvidence } from '../studio/evidenceStorage';
 import { clearGeneralizationRecords } from '../../utils/generalizationStorage';
@@ -80,7 +81,8 @@ export default function TeacherHub({ onExit }: Props) {
           <p className="studio-kicker text-[color:var(--accent)]">교사용</p>
           <h1 className="text-2xl font-extrabold">수업 운영 허브</h1>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <AiStatus />
           <Button variant="secondary" onClick={onExit}>학생 화면으로</Button>
           <button onClick={handleClearEvidence} className="btn border-red-300 bg-[color:var(--paper-0)] px-4 text-red-700">과정기록 삭제</button>
         </div>

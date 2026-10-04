@@ -8,6 +8,7 @@ import ComicPanel from '../components/ComicPanel';
 import SeasonMap from '../components/SeasonMap';
 import Icon from '../components/Icon';
 import Button from '../components/Button';
+import AiStatus from '../components/controls/AiStatus';
 import type { LessonId, ModuleId } from '../types';
 import { pickResumeLesson } from '../utils/lessonResume';
 
@@ -42,7 +43,10 @@ export default function ContentsView({ onPickLesson, onGoHome }: Props) {
   return <main className="min-h-screen comic-contents">
     <header className="comic-contents-header">
       <button onClick={onGoHome} className="comic-home-link" aria-label="처음 화면으로"><Icon name="home" size={21} /> AI 교과서</button>
-      <span className="comic-header-caption">인공지능 활용 · V1.0</span>
+      <div className="flex items-center gap-3">
+        <span className="comic-header-caption">인공지능 활용 · V1.0</span>
+        <AiStatus />
+      </div>
     </header>
     <div className="comic-contents-inner mx-auto px-4 md:px-8 py-6 md:py-10">
       <ComicPanel accent={activeTheme.accent} className="comic-resume" label="이어서 배우기">

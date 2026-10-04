@@ -3,6 +3,7 @@ import DifficultyToggle from './controls/DifficultyToggle';
 import DictionaryTrigger from './controls/DictionaryTrigger';
 import ToolsTrigger from './controls/ToolsTrigger';
 import SoundToggle from './controls/SoundToggle';
+import AiStatus from './controls/AiStatus';
 import Icon from './Icon';
 
 interface Props {
@@ -43,6 +44,7 @@ export default function TopBar({
             aria-label={`타이머 ${mobileTimerLabel}. 교사 도구 열기`}
           ><Icon name="timer" size={16} /><span>{mobileTimerLabel}</span></button>
         )}
+        <AiStatus />
         <button
           type="button"
           onClick={onOpenDictionary}
@@ -51,16 +53,20 @@ export default function TopBar({
         ><Icon name="book" size={22} /></button>
       </div>
 
-      <div className="lesson-topbar-desktop hidden md:flex h-full w-full items-center gap-4 px-6">
+      <div className="lesson-topbar-desktop hidden md:flex h-full w-full items-center gap-4 px-4 lg:px-6">
+        {/* 좁은 태블릿 폭(1024 미만)에서는 글자를 감추고 집 모양만 둔다. 인공지능 연결 표시까지 넣어도
+            글자 크기 125%에서 오른쪽 단추가 화면 밖으로 밀리지 않게 하려는 것이다. */}
         <button
           onClick={onGoHome}
-          className="inline-flex shrink-0 items-center whitespace-nowrap min-h-11 px-2 -ml-2 rounded-[var(--r-sm)] text-lg font-bold hover:bg-[color:var(--paper-2)]"
+          className="inline-flex shrink-0 items-center justify-center whitespace-nowrap min-h-11 min-w-11 px-2 -ml-2 rounded-[var(--r-sm)] text-lg font-bold hover:bg-[color:var(--paper-2)]"
           style={{ color: 'var(--accent)' }}
           aria-label="처음 화면으로"
-        ><Icon name="home" size={22} /><span> AI 교과서</span></button>
+          title="처음 화면으로"
+        ><Icon name="home" size={22} /><span className="hidden lg:inline"> AI 교과서</span></button>
         {/* 폭이 모자라면 줄어드는 것은 위치 표시뿐이다. 단추는 줄어들지도 줄바꿈하지도 않는다. */}
         <span className="min-w-0 text-base text-[color:var(--muted)] truncate" aria-label="현재 위치">{crumb}</span>
         <div className="ml-auto flex shrink-0 items-center gap-2">
+          <AiStatus />
           {mobileTimerLabel && (
             <button
               type="button"

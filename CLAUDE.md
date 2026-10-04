@@ -71,6 +71,22 @@
   알맞은 그림 카드가 생기면 바꿉니다. 처음 열리는 화면은 교사가 기기마다 `SettingsState.answerMode`(기본 문장 고르기)로
   정하고, 학생은 그림이 붙은 탭으로 언제든 바꿉니다. 먼저 해 보기의 답은 원래 기록하지 않으므로 카드를 썼다는
   사실도 남기지 않습니다. `npm run check:choice-cards`가 이를 강제합니다.
+- 쉬운 사전(`src/data/studentDictionary.ts`)은 **AI 없이도 밑줄 낱말로 제 몫을 하고**, AI는 사전에 없는 낱말을 학생이 사전 칸에
+  직접 써서 찾을 때만 보탭니다.
+  - 밑줄은 어절 하나를 통째로 칩니다(엔진은 `src/utils/dictionaryMatch.ts`). 다른 낱말의 한 조각(계산대의 계산, 무조건의 조건,
+    장보기의 보기, 틀렸다의 틀)에는 치지 않고, 서술어는 한가운데서 끊지 않고 어절 끝까지 칩니다(확인합니다). 조사는 떼고 낱말에만
+    칩니다(확인을 → 확인). 하다·되다·받다를 붙여 서술어로 쓰는 낱말은 항목에 `verbal: true`로 밝히고, 서술어로 쓰면 뜻이 달라지는
+    낱말(지도 → 지도하다)에는 켜지 않습니다. 학생에게 필요한 합성어는 별칭이나 새 항목으로 올리고(일기예보, 결과물, 도움망, 계산대),
+    다른 뜻으로 쓰인 구절에는 `notIn`으로 밑줄을 거둡니다.
+  - 뜻풀이는 그 낱말이 교재에서 쓰이는 모든 뜻을 덮어야 하고 한 단원의 용례에만 맞추지 않습니다(신호는 기계가 받는 신호와 몸이 보내는
+    경고 신호, 문제는 풀어야 할 일과 퀴즈의 물음). 항목·별칭을 더하거나 고친 뒤에는 `npm run check:dictionary`로 교재 본문 전체를
+    훑습니다(조각 밑줄·끊긴 서술어가 0건이어야 합니다).
+  - AI 풀이(`src/utils/dictionaryAi.ts`)는 이 앱의 기존 연결 하나, 곧 교사가 직접 넣은 Gemini 키(`utils/apiKey.ts`)와 `askGemini`만 씁니다.
+    키가 없으면 열리지 않습니다. 학생이 사전 칸에 쓴 글이 사전에 없을 때 찾기 단추나 엔터를 눌러야 부르고, 낱말 하나(20자·세 마디 이내,
+    4자리 이상 숫자·메일·주소는 거름)만 보내며, 학생 화면에 키·모델·기술 오류를 내지 않고 "AI가 만든 설명"임을 밝힙니다. 실패하면
+    선생님께 물어보라고만 안내합니다. `npm run test:dictionary-ai`.
+- 상단 바(차시 화면·표지·목차·교사 허브)에는 **인공지능 연결됨/연결 안됨** 표시(`AiStatus`)가 있습니다. 교사가 키를 넣거나 빼면 바로
+  바뀌고, 키·모델·기술 오류는 보이지 않으며, 좁은 폭에서는 'AI 연결됨'으로 줄어듭니다.
 - 교사 도구 A4 학습지(`src/features/teacher/worksheet/`)의 **하·중 수준은 글이 아니라 그림 카드가 중심**이고, **하 수준은
   무오류 학습이 바탕**입니다. 둘 다 두 장으로 앞장은 쓰기 칸이 있는 면, 뒷장은 오려 붙이는 면입니다. 카드는 `data/choiceCards/`의
   선택지 그림 카드를 그대로 쓰고(학생 화면에서 만난 그림과 낱말이 종이에서도 같아야 합니다), 오리는 카드는 한 변 48mm 이상,
@@ -112,7 +128,8 @@
 npm run check:standards-integrity
 npm run check:highschool-tasks`가 강제합니다.
 - 정식 콘텐츠와 성취기준: `src/data/canonicalLessons/`, `src/data/aiAchievementStandards.ts`
-- 학생 사전: `src/data/studentDictionary.ts`
+- 학생 사전: `src/data/studentDictionary.ts` — 항목·별칭·`verbal`·`notIn`, 본문에서 밑줄을 치지 않는 낱말 목록. 밑줄 자리를 정하는 엔진은
+  `src/utils/dictionaryMatch.ts`, 사전에 없는 낱말의 AI 풀이는 `src/utils/dictionaryAi.ts`. 항목을 더하거나 고치면 `check:dictionary`를 돌린다.
 - 차시 도움 영상: `src/data/lessonVideos.ts` — 선생님이 올린 해설 영상. 학생 정리 노트
   (`LessonVideoCard`)와 교사 자료(`teacherResources.ts`)가 이 목록 하나를 함께 쓴다. 영상을 더할
   때는 이 표에 한 줄을 추가하고 `npm run check:teacher-resources -- --online`으로 열리는지 본다.
@@ -162,7 +179,9 @@ src/
 └─ utils/
    ├─ publicAssetUrl.ts            GitHub Pages public 경로 보정
    ├─ storage.ts                   학생 진도/설정
-   ├─ gemini.ts, apiKey.ts         교사 관리 AI 연결
+   ├─ gemini.ts, apiKey.ts         교사 관리 AI 연결(Gemini). 상단 바의 연결 표시도 여기서 읽는다
+   ├─ dictionaryMatch.ts           사전 낱말의 밑줄 자리(어절 단위)
+   ├─ dictionaryAi.ts              사전에 없는 낱말의 AI 풀이
    └─ tts.ts, stt.ts               Web Speech API
 ```
 
@@ -292,6 +311,8 @@ npm run check:lesson-videos
 npm run check:reading-support
 npm run check:choice-cards
 npm run check:worksheet-picture
+npm run check:dictionary
+npm run test:dictionary-ai
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.

@@ -66,6 +66,8 @@
     --chrome-support-full: #2F7773; /* 충분한 지원 — 청록 */
     --chrome-support-normal: #416AA8; /* 보통 — 기본 파랑 */
     --chrome-support-challenge: #93601E; /* 도전적 — 황토 */
+    --chrome-ai-on: #2D7048;        /* 인공지능 연결됨 — 짙은 초록. 채운 점 */
+    --chrome-ai-off: #5E6573;       /* 인공지능 연결 안됨 — 석판 회색. 속 빈 점 */
 
     /* 타이포그래피 (Pretendard Variable) — 요청하신 1포인트 축소 (+2pt / 18px 기준) */
     /* 읽는 글은 --font-bump 만큼 키운다. 조작 요소(버튼·입력)는 원래 크기를 지킨다. */
@@ -1229,6 +1231,49 @@
   font-size: calc(0.72rem + var(--font-bump));
   font-weight: 850;
   font-variant-numeric: tabular-nums;
+}
+
+/* 상단 바의 인공지능 연결 표시. 누르는 단추가 아니라 상태 표시라서 립·호버 없이 조용한 알약으로 둔다.
+   색만으로 구분하지 않도록 연결됨은 채운 점, 연결 안됨은 속 빈 점으로 모양도 다르다. */
+.ai-status {
+  display: inline-flex;
+  min-height: 2.25rem;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper-1);
+  color: var(--brand-ink);
+  font-size: calc(0.76rem + var(--font-bump));
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.ai-status-dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: 0 0 auto;
+  border: 2px solid var(--chrome-ai-off);
+  border-radius: 999px;
+  background: transparent;
+}
+
+.ai-status.is-on .ai-status-dot {
+  border-color: var(--chrome-ai-on);
+  background: var(--chrome-ai-on);
+}
+
+@media (max-width: 767px) {
+  .ai-status {
+    min-height: 36px;
+    padding: 0 0.5rem;
+    gap: 0.3rem;
+    font-size: calc(0.7rem + var(--font-bump));
+  }
 }
 
 .mobile-lesson-menu-action {
