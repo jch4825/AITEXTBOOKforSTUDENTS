@@ -57,3 +57,20 @@ npm run check:dictionary
 ## 보안
 
 학생 정보와 API 키를 어떻게 다루는지, 취약점을 어떻게 알리는지는 `SECURITY.md`에 적었습니다.
+
+## 라이선스
+
+이 저장소의 교재 본문·그림·코드는 [CC BY-NC-SA 4.0](LICENSE)으로 공개합니다.
+
+- 저작자를 밝혀야 합니다.
+- 영리 목적으로 쓸 수 없습니다.
+- 고쳐서 공유할 때는 같은 라이선스(CC BY-NC-SA 4.0)를 적용해야 합니다.
+
+쉬운 설명은 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko 에 있습니다.
+출처 표시 예: 「AI 교과서 — 발달장애 학생을 위한 AI 학습」, jch4825, https://github.com/jch4825/AITEXTBOOKforSTUDENTS, CC BY-NC-SA 4.0
+
+### 이 라이선스에 포함되지 않는 것
+
+- **`public/sounds/`의 효과음**: 저장소 소유자가 구매한 개별 상업 라이선스 자료입니다. 이 프로젝트 안에서만 쓰며, 꺼내 쓰거나 다시 배포하거나 다른 곳에 쓸 수 없습니다.
+- `docs/reference/`의 교육과정 원문: 교육부 자료입니다.
+- 외부 라이브러리와 글꼴: 각각의 라이선스를 따릅니다.
