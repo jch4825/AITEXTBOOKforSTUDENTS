@@ -10,7 +10,7 @@ export const M1_L6_STUDIO: StudioDefinition = {
     format: 'B',
     decisionTitle: '아이미와 함께 학습 자료를 직접 조사해 봐요.',
     suggestedQuestions: [
-      '인공지능이 학습한 자료가 한 쪽으로 치우치면?',
+      '인공지능이 학습한 자료가 한쪽으로 치우치면?',
       '학습 데이터에 오류가 많으면 AI 대답은 어떻게 돼?',
       'AI가 한쪽으로 치우쳐 배우면 왜 위험해?',
     ],

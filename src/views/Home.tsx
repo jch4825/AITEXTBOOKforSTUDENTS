@@ -121,8 +121,8 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
             </h1>
             <p className="max-w-lg text-xl leading-relaxed text-[color:var(--ink-2)]">
               {isResume
-                ? '아이미와 친구들이 다시 공부할 준비를 마쳤습니다! 이어서 모험을 떠나 보겠습니까?'
-                : '진우, 윤아랑 같이 AI 도우미 아이미를 만나 여러 가지 신기한 도구와 인공지능의 지식을 배웁니다.'}
+                ? '아이미와 친구들이 다시 공부할 준비를 마쳤어요! 이어서 모험을 떠나 볼까요?'
+                : '진우, 윤아와 함께 AI 도우미 아이미를 만나 여러 가지 신기한 도구와 인공지능을 배웁니다.'}
             </p>
 
             <div className="pt-2" role="group" aria-label="학년군 고르기">
@@ -185,7 +185,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
                   기본 중·고
                 </span>
                 <p className="mt-2 text-2xl font-black">인공지능 활용(기본교육과정)</p>
-                <p className="mt-1 text-xs">미래 사회와 동반성장하는 첫 단추</p>
+                <p className="mt-1 text-xs">미래 사회와 함께 자라는 첫걸음</p>
               </figcaption>
             </figure>
           </div>
@@ -194,7 +194,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
         <section id="features" className="space-y-8">
           <div className="mx-auto max-w-xl space-y-2 text-center">
             <h2 className="text-3xl font-extrabold text-[color:var(--brand-ink)]">내 속도로 배우는 인공지능 학습서</h2>
-            <p className="text-sm text-[color:var(--ink-2)]">발달장애학생들을 위한 첫 인공지능 수업 자료</p>
+            <p className="text-sm text-[color:var(--ink-2)]">발달장애 학생을 위한 첫 인공지능 수업 자료</p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -246,7 +246,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
         <section id="progress" className="space-y-8">
           <div className="space-y-2 text-center">
             <h2 className="text-3xl font-extrabold text-[color:var(--brand-ink)]">나의 학습 성장 기록</h2>
-            <p className="text-sm text-[color:var(--ink-2)]">그동안 진우와 윤아랑 함께 쌓아온 아름다운 배움의 길입니다.</p>
+            <p className="text-sm text-[color:var(--ink-2)]">그동안 진우, 윤아와 함께 쌓아 온 배움의 길입니다.</p>
           </div>
 
           <div className="surface-paper mx-auto max-w-3xl rounded-[var(--r-md)] p-8 md:p-10">
@@ -272,7 +272,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
               <div className="space-y-2 py-2 md:border-x-2 md:border-[color:var(--line)]">
                 <div className="text-3xl font-black text-[color:var(--brand-ink)]">{isResume ? '학습 중' : '시작 단계'}</div>
                 <div className="text-xs font-bold uppercase tracking-wider text-[color:var(--ink-1)]">나의 학습 상태</div>
-                <p className="text-xs text-[color:var(--ink-2)]">아이미가 대기하고 있습니다</p>
+                <p className="text-xs text-[color:var(--ink-2)]">아이미가 기다리고 있어요</p>
               </div>
 
               <div className="space-y-2">
@@ -297,7 +297,7 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
           <div className="flex flex-wrap justify-center gap-4 text-xs text-[color:var(--ink-2)]">
             <span>접근성 기능 제공</span>
             <span>학습 기록은 이 기기에 저장됩니다</span>
-            <span>도움이 필요하면 선생님께 알려 주십시오</span>
+            <span>도움이 필요하면 선생님께 알려 주세요</span>
           </div>
         </div>
       </footer>

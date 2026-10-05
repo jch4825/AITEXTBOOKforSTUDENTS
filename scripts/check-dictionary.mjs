@@ -13,6 +13,9 @@
  *  4. AI 풀이: 사전 화면은 사전에 없는 낱말에만 AI를 부르고, 학생 화면에 키·모델·기술 오류를 보이지 않으며,
  *     AI가 지은 풀이임을 밝힌다. (낱말 걸러내기·답 읽기는 tests/unit/dictionaryAi.test.mjs가 지킨다.)
  *  5. 인공지능 연결 표시: 상단 바에 연결됨/연결 안됨이 있고, 교사가 키를 넣고 빼면 바로 따라가며, 키·모델은 보이지 않는다.
+ *  6. 인공지능 정의: AI가 무엇인지는 사전(`AI_DEFINITION`)에서 한 번 정하고, 정의를 말하는 글(차시 본문·개념 카드·
+ *     정식 콘텐츠)은 그것을 그대로 쓴다. 사람처럼 생각하고 배우는 존재로 말하는 정의와, 센서 자동문과 가려지지 않는
+ *     "스스로 보고 듣고 알아본다"는 기준이 코드 어디에도 다시 생기지 않는다.
  */
 import fs from 'node:fs';
 import { build } from 'esbuild';
@@ -296,6 +299,62 @@ assert(topBarSource.split('<AiStatus />').length - 1 >= 2, '차시 화면 상단
 for (const file of ['src/views/Home.tsx', 'src/views/ContentsView.tsx', 'src/features/teacher/TeacherHub.tsx']) {
   assert(fs.readFileSync(file, 'utf8').includes('<AiStatus />'), `상단 영역에 연결 표시가 있다: ${file}`);
 }
+
+/* ── 6. 인공지능 정의: 사전 한 곳에서 정하고 나머지가 따른다 ─────────────────── */
+const { AI_DEFINITION } = mod;
+assert(Boolean(AI_DEFINITION), '사전에 인공지능 정의(AI_DEFINITION)가 있어야 한다');
+if (AI_DEFINITION) {
+  const easyText = `${AI_DEFINITION.whatEasy} ${AI_DEFINITION.does.easy}`;
+  const normalText = `${AI_DEFINITION.what} ${AI_DEFINITION.does.normal}`;
+  const challengeText = `${AI_DEFINITION.what} ${AI_DEFINITION.does.challenge}`;
+
+  const aiEntry = dictionary.find((entry) => entry.term === '인공지능');
+  assert(aiEntry?.shortExplanation === AI_DEFINITION.gloss, '사전의 인공지능 항목은 AI_DEFINITION.gloss를 그대로 쓴다');
+
+  // 정의가 말해야 하는 셋. 수준마다 길이와 낱말은 달라도 이 셋이 빠지면 정의가 아니다.
+  for (const [level, text] of [['사전', AI_DEFINITION.gloss], ['충분한 지원', easyText], ['중학', normalText], ['고등', challengeText]]) {
+    assert(text.includes('사람이 만든 프로그램'), `AI 정의(${level})는 사람이 만든 프로그램이라고 말한다`);
+    assert(/비슷한 점|규칙/.test(text), `AI 정의(${level})는 자료에서 비슷한 점·규칙을 찾는다고 말한다`);
+    assert(/번역/.test(text) && /추천/.test(text) && /분류/.test(text), `AI 정의(${level})는 번역·추천·분류를 든다`);
+  }
+
+  // 1단원 1차시(AI의 뜻)의 글은 이 정의를 그대로 쓴다. 따로 쓴 정의가 다시 생기면 여기서 걸린다.
+  const lesson1 = content.lessons.find((lesson) => lesson.id === 'm1-l1');
+  const cards = content.studios['m1-l1']?.visualNovel?.knowledge ?? [];
+  const hard1 = content.hard['m1-l1'];
+  const canonical1 = content.canonical.find((entry) => entry.lessonId === 'm1-l1');
+  assert(cards[0]?.core === AI_DEFINITION.what, 'm1-l1 개념 카드 1의 core는 정의의 첫 문장이다');
+  assert(cards[0]?.detail?.full === easyText, 'm1-l1 개념 카드 1의 충분한 지원 글은 정의(쉬움)다');
+  assert(cards[0]?.detail?.light === AI_DEFINITION.does.normal, 'm1-l1 개념 카드 1의 중학 글은 정의(보통)의 둘째 문장이다');
+  assert(cards[0]?.detail?.challenge === AI_DEFINITION.does.challenge, 'm1-l1 개념 카드 1의 고등 글은 정의(어려움)의 둘째 문장이다');
+  assert(/비슷한 점/.test(cards[1]?.flow?.process ?? ''), 'm1-l1 입력→처리→출력의 처리는 배운 자료와 비슷한 점 찾기다(학습과 추론을 섞지 않는다)');
+  assert(lesson1?.bodyEasy === easyText && lesson1?.wrapUpEasy === easyText, 'm1-l1 본문·정리(충분한 지원)는 정의(쉬움)다');
+  assert(lesson1?.bodyNormal?.startsWith(normalText) && lesson1?.wrapUpNormal === normalText, 'm1-l1 본문·정리(중학)는 정의(보통)다');
+  assert(hard1?.concept?.[0] === challengeText && hard1?.wrapUpHard?.startsWith(AI_DEFINITION.what), 'm1-l1 고등 글은 정의(어려움)다');
+  assert(canonical1?.wrapUp === normalText, 'm1-l1 정식 콘텐츠의 정리는 정의(보통)다');
+}
+
+// 사람처럼 생각하고 배우는 존재로 말하는 정의와, 센서 자동문과 가려지지 않는 "스스로 보고 듣고" 기준.
+// "AI는 사람처럼 말해도 마음이 없다"처럼 부정하는 글은 걸리지 않도록 정의 자리의 서술만 본다.
+const PERSONIFYING_DEFINITION = [
+  [/사람처럼\s*(스스로\s*)?(생각|학습|배우|배워|판단)/, '사람처럼 생각하고 배우고 판단한다는 정의'],
+  [/스스로\s*(보고|듣고|배우고\s*생각)/, '스스로 보고 듣고 알아본다는 기준'],
+  [/생각하는\s*방식을\s*(비슷하게|모방)/, '사람이 생각하는 방식을 따라 한다는 정의'],
+];
+const stripSourceComments = (source) => source.replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, ' ')).replace(/\/\/[^\n]*/g, '');
+const personified = [];
+for (const entry of fs.readdirSync('src', { recursive: true })) {
+  const file = `src/${String(entry).replace(/\\/g, '/')}`;
+  if (!/\.(ts|tsx)$/.test(file)) continue;
+  stripSourceComments(fs.readFileSync(file, 'utf8')).split('\n').forEach((line, index) => {
+    // 학생이 아이미에게 묻는 질문("컴퓨터는 사람처럼 생각할 수 있어?")은 정의가 아니다.
+    if (/[?？]/.test(line)) return;
+    for (const [pattern, label] of PERSONIFYING_DEFINITION) {
+      if (pattern.test(line)) personified.push(`${file}:${index + 1} ${label} — ${line.trim().slice(0, 70)}`);
+    }
+  });
+}
+assert(personified.length === 0, `인공지능을 사람처럼 말하는 정의가 있다 (${personified.length}건) — AI_DEFINITION을 쓴다\n    ${show(personified)}`);
 
 if (failures.length) {
   console.error('쉬운 사전 계약 위반');

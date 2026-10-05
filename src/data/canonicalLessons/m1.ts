@@ -1,5 +1,6 @@
 import type { CanonicalLessonDesign } from './types';
 import { STANDARD_CODES } from './shared';
+import { AI_DEFINITION } from '../studentDictionary';
 
 export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
   // ============================================================
@@ -13,7 +14,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '아이미와 처음 만난 날',
     masterObjective: 'AI(인공지능)의 뜻과 할 수 있는 일을 찾아요.',
     standards: [STANDARD_CODES.SPEC_AI_01],
-    coreConcepts: ['AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하여 문제 해결을 돕는 기술이며, 입력을 받아 다양한 결과와 도움을 줄 수 있다.'],
+    coreConcepts: ['AI(인공지능)는 사람이 만든 프로그램이며, 많은 자료에서 비슷한 점을 찾아 입력에 맞는 번역·추천·분류 같은 결과와 도움을 줄 수 있다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'aimi', 'minjun'],
       location: '동아리방',
@@ -39,7 +40,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         },
         assetIds: ['m1-l1-story-01'],
         support: {
-          full: { hint: '인공지능은 사람처럼 생각하고 배워서 문제 해결을 도와주는 프로그램이에요.' },
+          full: { hint: `${AI_DEFINITION.whatEasy} ${AI_DEFINITION.does.easy}` },
         },
       },
       {
@@ -94,7 +95,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           prompt: 'AI(인공지능)는 어떤 도구인가요?',
           modes: ['choice', 'text'],
           choiceCards: [
-            { id: 'def1', label: '사람처럼 생각하고 배워서 번역과 추천을 도와줘요', emoji: '💡' },
+            { id: 'def1', label: '많은 자료에서 비슷한 점을 찾아 번역과 추천을 도와줘요', emoji: '💡' },
             { id: 'def2', label: '많은 자료에서 비슷한 점을 찾아 필요한 답과 결과를 보여 주는 프로그램이에요', emoji: '🔍' },
           ],
         },
@@ -129,7 +130,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       { id: 'm1-l1-story-04', kind: 'story', renderAs: 'image', src: '/lessons/remodel/m1/m1-l1-story-04.webp', alt: '자기 정의 발표', required: true, purpose: '스토리 컷 4' },
       { id: 'm1-l1-concept-01', kind: 'concept', renderAs: 'html', alt: '입력 -> AI -> 결과 개념도', required: false, purpose: '개념도' },
     ],
-    wrapUp: 'AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하는 기술로, 입력된 정보로 번역·추천·분류 같은 일을 해냅니다.',
+    wrapUp: `${AI_DEFINITION.what} ${AI_DEFINITION.does.normal}`,
   },
 
   // ============================================================

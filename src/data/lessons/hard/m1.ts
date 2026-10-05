@@ -1,10 +1,11 @@
 import type { HardLessonContent, LessonId } from '../../../types';
+import { AI_DEFINITION } from '../../studentDictionary';
 
 /** 1단원 도전적 지원: 목표와 사건은 보통과 같고 비교할 증거와 예외 조건만 늘린다. */
 export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
   'm1-l1': {
     concept: [
-      'AI(인공지능)는 사람이 만든 프로그램입니다. 말, 글, 사진을 받아 배운 자료와 비슷한 점을 찾습니다.',
+      `${AI_DEFINITION.what} ${AI_DEFINITION.does.challenge}`,
       '번역, 음악 추천, 사진 분류는 AI가 도울 수 있는 일입니다. 무엇을 넣었고 무엇이 나왔는지 보면 AI인지 살펴볼 수 있습니다.',
     ],
     terms: [
@@ -17,7 +18,7 @@ export const HARD_M1: Partial<Record<LessonId, HardLessonContent>> = {
       'AI(인공지능)의 뜻과 할 수 있는 일을 합쳐 쉬운 말로 소개합니다.',
     ],
     limits: 'AI가 사람처럼 말하더라도 스스로 목적과 책임을 정하는 존재로 설명하지 않습니다.',
-    wrapUpHard: 'AI(인공지능)는 사람이 만든 프로그램입니다. 입력과 결과를 보며 번역·추천·분류 같은 일을 도울 수 있는지 확인합니다.',
+    wrapUpHard: `${AI_DEFINITION.what} 입력과 결과를 보며 번역·추천·분류 같은 일을 도울 수 있는지 확인합니다.`,
   },
   'm1-l2': {
     concept: [

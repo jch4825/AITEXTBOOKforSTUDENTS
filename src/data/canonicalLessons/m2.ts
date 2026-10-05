@@ -215,7 +215,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     number: 3,
     role: 'guided',
     title: '대상을 정확히 말해요',
-    masterObjective: '오늘은 `그거`, `아무거나` 대신 이름·종류·개수를 넣고 결과가 달라지는지 비교해 봐요.',
+    masterObjective: '오늘은 "그거", "아무거나" 대신 이름·종류·개수를 넣고 결과가 달라지는지 비교해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_01],
     coreConcepts: ['구체적인 대상과 조건은 원하는 결과의 범위를 좁힌다.'],
     canonicalScenario: {
@@ -577,7 +577,7 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '부족한 점을 다시 말해요',
     masterObjective: '오늘은 첫 답에서 부족한 점을 찾아 중요한 사실을 지키며 다시 요청해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_01],
-    coreConcepts: ['반복 개선은 `마음에 안 들어`가 아니라 기준과 부족한 점을 구체적으로 말하는 과정이다.'],
+    coreConcepts: ['반복 개선은 "마음에 안 들어"가 아니라 기준과 부족한 점을 구체적으로 말하는 과정이다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'aimi'],
       location: '동아리방',
@@ -743,13 +743,13 @@ export const M2_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     title: '다시 묻기와 확인하기는 달라요',
     masterObjective: '오늘은 AI 답의 주장 하나를 골라 학교 공지나 믿을 수 있는 자료와 비교해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_02],
-    coreConcepts: ['같은 AI에게 `정말이야?`라고 묻는 것은 다른 자료로 확인한 것이 아니다.'],
+    coreConcepts: ['같은 AI에게 "정말이야?"라고 묻는 것은 다른 자료로 확인한 것이 아니다.'],
     canonicalScenario: {
       characters: ['jinwoo', 'yuna', 'minjun'],
       location: '동아리방',
       purpose: '아이미의 체험회 종료 시간 답이 맞는지 독립된 학교 공식 공지 자료로 확인하기',
       mismatch: '아이미에게 "너 정말 확실해?"라고 물었더니 "네, 확실합니다"라고 거침없이 거짓 대답함',
-      evidence: ['아이미의 자신 있는 대답', '최신 학교 공식 공지문', '누가 쓴지 모르는 인터넷 글'],
+      evidence: ['아이미의 자신 있는 대답', '최신 학교 공식 공지문', '누가 썼는지 모르는 인터넷 글'],
       resolution: '같은 AI에게 다시 묻는 대신 학교 공식 공지와 대조하여 진짜 대답을 확인 함',
     },
     stages: [

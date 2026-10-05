@@ -18,6 +18,17 @@ function hasFinalConsonant(word: string): boolean {
   return (code - 0xac00) % 28 !== 0;
 }
 
+/** 마지막 글자가 받침 없는 글자이거나 ㄹ 받침인가. "(으)로"에서 "로"를 쓰는 자리다. */
+function takesRo(word: string): boolean {
+  const last = word.trim().slice(-1);
+  if (!last) return true;
+  const code = last.charCodeAt(0);
+  if (code < 0xac00 || code > 0xd7a3) return true;
+  /* (코드 - 가) % 28이 8이면 ㄹ 받침이다. */
+  const final = (code - 0xac00) % 28;
+  return final === 0 || final === 8;
+}
+
 /**
  * 조사만 돌려준다.
  *
@@ -49,3 +60,14 @@ export const objectOf = (word: string) => josa(word, '을', '를');
 
 /** 주격 조사. "무엇이 / 무엇가" */
 export const subjectOf = (word: string) => josa(word, '이', '가');
+
+/** 함께 조사. "무엇과 / 무엇와" */
+export const withOf = (word: string) => josa(word, '과', '와');
+
+/**
+ * 방향·수단 조사. "무엇으로 / 무엇로"
+ *
+ * 받침이 없을 때만 "로"를 쓰는 것이 아니다. ㄹ 받침 뒤에서도 "로"다("거실로", "글로").
+ * 은/을/이처럼 받침 유무만 보면 이 경우가 틀린다.
+ */
+export const viaOf = (word: string) => word + (takesRo(word) ? '로' : '으로');

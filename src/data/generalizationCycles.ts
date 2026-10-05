@@ -142,7 +142,7 @@ export const GENERALIZATION_CYCLES: Record<ModuleId, GeneralizationCycleContent>
       finalChoices: [
         { id: 'condition', emoji: '📏', label: '대상과 길이를 먼저 말합니다' },
         { id: 'example', emoji: '💡', label: '예시를 보여 주고 부탁합니다' },
-        { id: 'retry', emoji: '🔄', label: '빠진 조건을 넣어 다시 물습니다' },
+        { id: 'retry', emoji: '🔄', label: '빠진 조건을 넣어 다시 묻습니다' },
       ],
       reasonCards: [
         { id: 'clear', emoji: '📌', label: '조건을 더 분명히 했습니다' },
@@ -155,7 +155,7 @@ export const GENERALIZATION_CYCLES: Record<ModuleId, GeneralizationCycleContent>
         choices: [
           { id: 'ask', emoji: '📏', label: '문장 수와 읽는 사람을 말합니다' },
           { id: 'example', emoji: '💡', label: '비슷한 안내문 예시를 보여 줍니다' },
-          { id: 'retry', emoji: '🔄', label: '빠진 조건을 넣어 다시 물습니다' },
+          { id: 'retry', emoji: '🔄', label: '빠진 조건을 넣어 다시 묻습니다' },
         ],
       },
       expressionModes: [...EXPRESSION_MODES],
@@ -216,7 +216,7 @@ export const GENERALIZATION_CYCLES: Record<ModuleId, GeneralizationCycleContent>
         question: '내가 먼저 해 본 과정과 AI의 설명이 같습니까?',
       },
       finalChoices: [
-        { id: 'hint', emoji: '💡', label: '힌트를 받아 내가 먼저 풀습니다' },
+        { id: 'hint', emoji: '💡', label: '힌트를 받아 내가 먼저 풉니다' },
         { id: 'example', emoji: '🧩', label: '한 단계씩 설명을 부탁합니다' },
         { id: 'adult', emoji: '👩‍🏫', label: '어른과 풀이를 함께 확인합니다' },
       ],

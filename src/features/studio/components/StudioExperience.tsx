@@ -288,18 +288,18 @@ export default function StudioExperience({
             </h2>
           </div>
 
-          {/* Story 1: 조건 변화 탐구 (로봇청소기) */}
+          {/* 1: 조건 변화 */}
           <div className="space-y-2 rounded-2xl border-2 bg-[color:var(--paper-1)] p-4" style={{ borderColor: accent }}>
             <div className="flex items-center gap-2 text-sm font-extrabold text-[color:var(--brand-ink)]">
               <span className="text-lg">🤖</span>
-              <span>1. 로봇청소기와 센서·AI 기능 탐구</span>
+              <span>1. 조건이 달라졌을 때</span>
             </div>
             <p className="text-xs font-medium leading-relaxed text-[color:var(--ink-2)]">
               {definition.conditionChange.description}
             </p>
           </div>
 
-          {/* Story 2: 새로운 상황 적용 (스마트 조명) */}
+          {/* 2: 새로운 상황 적용 */}
           <div className="space-y-2 rounded-2xl border-2 bg-[color:var(--paper-1)] p-4" style={{ borderColor: accent }}>
             <div className="flex items-center gap-2 text-sm font-extrabold text-[color:var(--brand-ink)]">
               <span className="text-lg">💡</span>
@@ -522,7 +522,7 @@ export default function StudioExperience({
           <p className="studio-kicker" style={{ color: accent }}>먼저 장면을 살펴봅니다</p>
           <h2 className="mt-1 text-xl font-extrabold">아직 방법을 배우기 전입니다</h2>
           <p className="mt-3 leading-relaxed">
-            다음 화면에서 지금 떠오르는 첫 생각을 표현합니다. 지원 수준은 위의 네비게이션에서 조절할 수 있습니다.
+            다음 화면에서 지금 떠오르는 첫 생각을 표현합니다. 지원 수준은 화면 위쪽에서 바꿀 수 있습니다.
           </p>
         </div>
       </div>
@@ -787,7 +787,7 @@ export default function StudioExperience({
                 })()}
               </h3>
               <p className="mt-1 text-sm text-[color:var(--muted)] font-medium">
-                인공지능(Gemini)에게 궁금한 점을 물어보고, 음성이나 사진/파일을 전달하며 답변을 탐구해 봐요.
+                인공지능에게 궁금한 점을 물어보고, 음성이나 사진을 보내며 답을 살펴봐요.
               </p>
             </div>
             <LiveGeminiInteraction
@@ -966,7 +966,7 @@ export default function StudioExperience({
             <dd>{renderExpressionDetail(state.firstAttempt, definition.firstAttempt.choices, accent)}</dd>
           </div>
           <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">
-            <dt className="font-extrabold text-sm" style={{ color: accent }}>2. 실시간 AI 아이미와 대화 & 내 판단</dt>
+            <dt className="font-extrabold text-sm" style={{ color: accent }}>2. 실시간 AI 아이미와 대화 · 내 판단</dt>
             <dd>{renderExpressionDetail(state.finalExpression, definition.firstAttempt.choices, accent)}</dd>
           </div>
           <div className="studio-fact-card p-4 rounded-2xl border border-slate-200 bg-white depth-paper space-y-1">

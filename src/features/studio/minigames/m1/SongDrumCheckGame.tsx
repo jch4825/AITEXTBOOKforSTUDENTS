@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape, useGameKeys, paintBoard,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape, objectOf, topicOf, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -186,10 +186,10 @@ export default function SongDrumCheckGame({ supportLevel }: MiniGameProps) {
       w.lives -= 1;
       playSound('select');
       w.note = target.song.kind === 'skip'
-        ? `${target.song.tag}는 댄스 타임에 쓸 수 없어요. 치지 말고 보내 주세요.`
+        ? `${topicOf(target.song.tag)} 댄스 타임에 쓸 수 없어요. 치지 말고 보내 주세요.`
         : target.song.kind === 'use'
-          ? `${target.song.title}는 그대로 쓸 수 있어요. 초록 북입니다.`
-          : `${target.song.title}는 고쳐 써야 해요. 주황 북입니다.`;
+          ? `${topicOf(target.song.title)} 그대로 쓸 수 있어요. 초록 북입니다.`
+          : `${topicOf(target.song.title)} 고쳐 써야 해요. 주황 북입니다.`;
     }
     settle(w);
   };
@@ -239,12 +239,12 @@ export default function SongDrumCheckGame({ supportLevel }: MiniGameProps) {
             card.mark = 1.1;
             w.correct += 1;
             playSound('fill');
-            w.note = `${card.song.tag}는 쓰지 않고 보냈어요.`;
+            w.note = `${topicOf(card.song.tag)} 쓰지 않고 보냈어요.`;
           } else {
             card.state = 'wrong';
             card.mark = 1.1;
             w.lives -= 1;
-            w.note = `${card.song.title}를 놓쳤어요. 띠 안에 있을 때 쳐 보세요.`;
+            w.note = `${objectOf(card.song.title)} 놓쳤어요. 띠 안에 있을 때 쳐 보세요.`;
           }
         }
       }

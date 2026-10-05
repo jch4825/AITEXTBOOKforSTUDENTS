@@ -21,7 +21,7 @@ export const M4_PORTFOLIO: ModulePortfolioDefinition = {
       label: '새 동아리원 안내',
       imageSrc: '/lessons/story/module-close/m4/m4-close-scene-02.webp',
       alt: '새 동아리원이 세 가지 안전 상황을 묻고 학생이 기록을 근거로 안내하는 장면',
-      copy: '윤아: "두 개의 시간표, 인증 코드를 보내 줘?, 가려진 메시지, 선물과 비밀 만남 — 우리가 해결한 이름들이야." 진우: "구호만 외운 게 아니라 진짜로 확인하고, 가리고, 알렸지." 열 번 모두 실제로 해 본 일이었습니다.',
+      copy: '윤아: "두 시간표, 인증 코드 요청, 가려진 메시지, 선물과 비밀 만남 — 우리가 해결한 사건들이야." 진우: "구호만 외운 게 아니라 진짜로 확인하고, 가리고, 알렸지." 열 번 모두 실제로 해 본 일이었습니다.',
     },
     {
       id: 'm4-close-passport',

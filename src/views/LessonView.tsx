@@ -355,7 +355,7 @@ function ComingSoonLesson({ lessonId, onGoHome, onPickLesson }: ComingSoonProps)
           곧 열립니다!
         </h1>
         <p className="text-lg text-[color:var(--muted)] mb-8">
-          이 차시는 아직 준비 중입니다. 첫 번째 차시부터 시작해 보십시오.
+          이 차시는 아직 준비 중이에요. 첫 번째 차시부터 시작해 보세요.
         </p>
         <Button size="lg" accent={theme.accent} onClick={() => onPickLesson('m1-l1')}>
           <Icon name="rocket" size={24} /> 첫 차시로 가기

@@ -37,6 +37,10 @@ export interface GeminiSuccess {
   attemptLog: string[];         // per-model attempt outcome (for teacher diagnostics)
 }
 
+/** 인공지능이 연결되지 않았을 때 학생에게 보여 주는 말. 연결은 교사가 하므로 선생님께 알리게 한다. */
+export const AI_NOT_CONNECTED_MESSAGE =
+  '인공지능이 아직 연결되지 않아서 이 활동은 지금 할 수 없어요. 선생님께 알려 주세요.';
+
 export class GeminiError extends Error {
   readonly kind: 'no-key' | 'timeout' | 'all-models-failed' | 'blocked' | 'cancelled';
   readonly technicalDetail: string;
@@ -76,7 +80,7 @@ export async function askGemini(
   if (!apiKey) {
     throw new GeminiError(
       'no-key',
-      '인공지능이 연결되지 않아서 이 페이지 활동은 수행하기 어려우니 다음에 활용해보세요.',
+      AI_NOT_CONNECTED_MESSAGE,
       'No Gemini API key set in localStorage (teacher must enter one in TeacherView).',
     );
   }
@@ -102,7 +106,7 @@ export async function askGemini(
       if (raw.promptFeedback?.blockReason) {
         throw new GeminiError(
           'blocked',
-          '이 질문에는 답하기 어렵습니다. 다른 질문을 해 주십시오.',
+          '이 질문에는 대답하기 어려워요. 다른 질문을 해 보세요.',
           `Blocked by upstream safety: ${raw.promptFeedback.blockReason}`,
         );
       }
@@ -134,7 +138,7 @@ export async function askGemini(
 
   throw new GeminiError(
     'all-models-failed',
-    '인공지능 응답을 불러오는 중 잠시 지연이 발생했어요. 질문 카드나 전송 버튼을 한 번 더 눌러보세요!',
+    '인공지능이 대답하는 데 시간이 걸리고 있어요. 질문 카드나 전송 버튼을 한 번 더 눌러 보세요!',
     `All ${MODEL_FALLBACK.length} models failed:\n${attemptLog.join('\n')}`,
   );
 }

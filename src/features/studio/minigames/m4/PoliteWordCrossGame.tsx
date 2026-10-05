@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BauhausMark, GameHud, clamp, createRandom, shuffle, useCountdown } from '../engine';
+import { BauhausMark, GameHud, clamp, createRandom, shuffle, subjectOf, useCountdown, withOf } from '../engine';
 import { useSpeak } from '../../../../hooks/useSpeak';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -444,8 +444,12 @@ export default function PoliteWordCrossGame({ supportLevel }: MiniGameProps) {
               const lit = focus !== null && info.words.includes(focus);
               const across = words[info.words.find((w) => words[w].dir === 'across') ?? info.words[0]];
               const down = info.words.map((w) => words[w]).find((w) => w.dir === 'down');
-              const label = `${info.words.map((w) => words[w].word).join('과 ')}가 지나가는 칸, ${
-                letter ? `${letter}이(가) 들어 있음` : '비어 있음'
+              const names = info.words.map((w) => words[w].word);
+              const crossing = names
+                .map((name, i) => (i < names.length - 1 ? withOf(name) : subjectOf(name)))
+                .join(' ');
+              const label = `${crossing} 지나가는 칸, ${
+                letter ? `${subjectOf(letter)} 들어 있음` : '비어 있음'
               }`;
 
               return (

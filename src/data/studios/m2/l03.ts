@@ -11,7 +11,7 @@ export const M2_L3_STUDIO: StudioDefinition = {
     format: 'D',
     visualNovel: {
       title: '체험회 놀이가 너무 어려워요',
-      objective: '`그거`, `아무거나` 대신 이름·종류·개수를 넣어 부탁하고, 아이미의 답이 어떻게 달라지는지 비교해요.',
+      objective: '"그거", "아무거나" 대신 이름·종류·개수를 넣어 부탁하고, 아이미의 답이 어떻게 달라지는지 비교해요.',
       seasonTag: '[부탁의 달인 · 3화] 아무거나의 함정',
       nextEpisodeHook: '다음 시간 — 말로만 설명해서는 원하는 모양을 얻기 어려울 때!',
       scenes: [
@@ -127,7 +127,7 @@ export const M2_L3_STUDIO: StudioDefinition = {
       knowledge: [
         {
           title: '모호한 말을 구체적으로 바꿔요',
-          core: '`그거`, `아무거나` 대신 대상의 이름, 종류, 개수를 말합니다.',
+          core: '"그거", "아무거나" 대신 대상의 이름, 종류, 개수를 말합니다.',
           detail: {
             full: '원하는 대상이 무엇인지 정확하게 말해요.',
             light: '대상을 구체적으로 표현하면 AI가 찾아볼 답변의 범위가 좁아져 알맞은 결과를 얻을 수 있습니다.',

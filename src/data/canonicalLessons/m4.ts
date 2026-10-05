@@ -117,9 +117,9 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     canonicalScenario: {
       characters: ['yuna', 'aimi'],
       location: '동아리방',
-      purpose: '체험회 취소 소문이 담긴, 누가 쓴지 모르는 글과 최신 학교 공식 공지를 비교하여 진짜 정보 고르기',
-      mismatch: '누가 쓴지 모르는 글의 소문 때문에 많은 학생들이 헷갈림',
-      evidence: ['누가 쓴지 모르는 인터넷 글', '오래된 공지', '최신 학교 공식 공지'],
+      purpose: '체험회 취소 소문이 담긴, 누가 썼는지 모르는 글과 최신 학교 공식 공지를 비교하여 진짜 정보 고르기',
+      mismatch: '누가 썼는지 모르는 글의 소문 때문에 많은 학생들이 헷갈림',
+      evidence: ['누가 썼는지 모르는 인터넷 글', '오래된 공지', '최신 학교 공식 공지'],
       resolution: '작성 출처와 작성 날짜를 확인하여 최신 학교 공식 공지를 선택함',
     },
     stages: [
@@ -132,7 +132,7 @@ export const M4_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
           id: 'act-s1',
           kind: 'compare',
           prompt: '가장 믿을 만한 자료 조건(공식 자료인지, 최신 자료인지)에 맞는 자료를 골라보세요.',
-          left: { title: '누가 쓴지 모르는 인터넷 소문 글', content: '출처: 알 수 없음 / 날짜: 어제 (체험회 취소됨!)' },
+          left: { title: '누가 썼는지 모르는 인터넷 소문 글', content: '출처: 알 수 없음 / 날짜: 어제 (체험회 취소됨!)' },
           right: { title: '최신 학교 공식 공지', content: '출처: 학교장 / 날짜: 오늘 (정상 진행)' },
           criteria: [{ id: 'source-trust', label: '공식 출처와 최신 작성 날짜 확인' }],
         },

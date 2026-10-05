@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BauhausMark, GameHud, clamp, useCountdown } from '../engine';
+import { BauhausMark, GameHud, clamp, objectOf, subjectOf, topicOf, useCountdown, withOf } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -140,12 +140,12 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
     const list: string[] = [];
     for (const id of cart) {
       const item = itemById(id);
-      if (item.allergen === stage.avoid) list.push(`${item.name}에는 ${stage.avoid}가 들어 있습니다`);
-      if (item.stock === 0) list.push(`${item.name}은 품절입니다`);
+      if (item.allergen === stage.avoid) list.push(`${item.name}에는 ${subjectOf(stage.avoid)} 들어 있습니다`);
+      if (item.stock === 0) list.push(`${topicOf(item.name)} 품절입니다`);
     }
     if (total > budget) list.push(`예산보다 ${(total - budget).toLocaleString()}원 많습니다`);
     for (const kind of stage.needKinds) {
-      if (!cart.some((id) => itemById(id).kind === kind)) list.push(`${kind}가 빠졌습니다`);
+      if (!cart.some((id) => itemById(id).kind === kind)) list.push(`${subjectOf(kind)} 빠졌습니다`);
     }
     return list;
   };
@@ -155,19 +155,19 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
     if (cart.includes(item.id)) {
       playSound('select');
       setCart((prev) => prev.filter((id) => id !== item.id));
-      setNote(`${item.name}을 뺐어요.`);
+      setNote(`${objectOf(item.name)} 뺐어요.`);
       return;
     }
     if (item.stock === 0) {
-      setNote(`${item.name}은 품절이라 담을 수 없어요. 같은 종류의 다른 것을 찾아보세요.`);
+      setNote(`${topicOf(item.name)} 품절이라 담을 수 없어요. 같은 종류의 다른 것을 찾아보세요.`);
       return;
     }
     playSound('select');
     setCart((prev) => [...prev, item.id]);
     if (item.allergen === stage.avoid) {
-      setNote(`${item.name}에는 ${stage.avoid}가 들어 있어요. 다시 확인해 보세요.`);
+      setNote(`${item.name}에는 ${subjectOf(stage.avoid)} 들어 있어요. 다시 확인해 보세요.`);
     } else {
-      setNote(`${item.name}을 담았어요.`);
+      setNote(`${objectOf(item.name)} 담았어요.`);
     }
   };
 
@@ -193,7 +193,7 @@ export default function ShoppingStockGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="조건 맞춰 담기"
-      instruction={`장바구니 목록을 살펴보며 알레르기가 있는 ${stage.avoid}와 다 팔린 물건을 빼고, 정해진 금액(${budget.toLocaleString()}원) 안에서 필요한 물건을 골라 담아 보세요.`}
+      instruction={`장바구니 목록을 살펴보며 알레르기가 있는 ${withOf(stage.avoid)} 다 팔린 물건을 빼고, 정해진 금액(${budget.toLocaleString()}원) 안에서 필요한 물건을 골라 담아 보세요.`}
       progress={{
         label: '갖춘 종류',
         value: stage.needKinds.filter((kind) => cart.some((id) => itemById(id).kind === kind)).length,

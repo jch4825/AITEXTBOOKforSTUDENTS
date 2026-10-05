@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, dist, drawBar, drawMark,
-  drawShape, randRange, shuffle, paintBoard,
+  drawShape, particleFor, randRange, shuffle, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -167,7 +167,7 @@ export default function OneCounterQueueGame({ supportLevel }: MiniGameProps) {
 
     playSound('confirm');
     w.popping = { id: hit.id, left: popSeconds };
-    setHud((prev) => ({ ...prev, note: `"${hit.text}"를 보내는 중입니다.` }));
+    setHud((prev) => ({ ...prev, note: `"${hit.text}"${particleFor(hit.text, '을', '를')} 보내는 중입니다.` }));
   };
 
   const frame = (ctx: CanvasRenderingContext2D, dt: number) => {

@@ -194,7 +194,7 @@ export const M1_L10_STUDIO: StudioDefinition = {
       source: 'prepared',
       role: '수업용 AI 응답 · 실제 AI 연결 아님',
       text: '조용한 분위기와 공식 목록이라는 조건을 반영해 새 목록을 만들었습니다. 그래도 각 곡이 실제 조건에 맞는지는 사람이 확인해 주세요.',
-      question: '첫 결과와 수정 결과 중 무엇을 사용하고, 무엇을 고치거나 거절하겠습니까?',
+      question: '첫 결과와 수정 결과 중 무엇을 사용하고, 무엇을 고치거나 거절할까요?',
     },
     artifact: {
       kind: 'action-card',

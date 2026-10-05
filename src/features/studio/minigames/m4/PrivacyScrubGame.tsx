@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape,
-  useGameKeys, paintBoard,
+  useGameKeys, paintBoard, viaOf,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -505,7 +505,7 @@ export default function PrivacyScrubGame({ supportLevel }: MiniGameProps) {
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} timeLeft={hud.time} timeTotal={Math.ceil(totalTime)} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
-      onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title}으로 바꿨어요.`)}
+      onStageSelect={(index) => game.goToStage(index, `${viaOf(STAGES[index].title)} 바꿨어요.`)}
       status={game.status}
       message={game.message}
       actions={

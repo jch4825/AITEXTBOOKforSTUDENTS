@@ -74,7 +74,7 @@ export default function ExpressionInput({
   // 선택지가 화면에 보이는 표현 방식인가. 글·말·그림 방식에서는 선택지를 읽어 주지 않는다.
   const choicesShown = activeMode === 'choice' || activeMode === 'aac';
   const showCards = activeMode === 'aac' && cardsReady;
-  const drawBlock: DrawBlock = { kind: 'draw', id: 'generalization-expression', prompt: '내 생각을 그림으로 표현해 보십시오.' };
+  const drawBlock: DrawBlock = { kind: 'draw', id: 'generalization-expression', prompt: '내 생각을 그림으로 표현해 보세요.' };
 
   useEffect(() => {
     if (value?.mode && expressionModes.includes(value.mode)) setSelectedMode(value.mode);
@@ -237,7 +237,7 @@ export default function ExpressionInput({
           <input
             value={value?.text ?? ''}
             onChange={(event) => onChange({ mode: activeMode, text: event.target.value })}
-            placeholder="내 생각을 짧게 적어 보십시오"
+            placeholder="내 생각을 짧게 적어 보세요"
             aria-label="내 생각"
             className="flex-1 min-w-0 min-h-13 px-4 rounded-[var(--r-md)] border-2 text-lg font-semibold"
             style={{ borderColor: accent, background: 'var(--paper-0)' }}

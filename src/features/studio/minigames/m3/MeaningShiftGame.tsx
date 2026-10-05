@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BauhausMark, GameHud, clamp, createRandom, randInt, inkFor
+import { BauhausMark, GameHud, clamp, createRandom, randInt, inkFor, topicOf
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -342,7 +342,7 @@ export default function MeaningShiftGame({ supportLevel }: MiniGameProps) {
     }
     const useless = gained.every((value) => value === 0);
     setNote(useless
-      ? `${stage.filler.name}은 오늘 알아볼 낱말이 아니에요. 오른쪽 뜻 칸에 있는 낱말을 찾아 보세요.`
+      ? `${topicOf(stage.filler.name)} 오늘 알아볼 낱말이 아니에요. 오른쪽 뜻 칸에 있는 낱말을 찾아 보세요.`
       : '뜻 칸이 채워졌어요.');
   };
 

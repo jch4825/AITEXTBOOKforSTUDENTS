@@ -188,7 +188,7 @@ export const M2_L4_STUDIO: StudioDefinition = {
       source: 'prepared',
       role: '아이미의 예시 검토',
       text: '형식이 보기 좋아도 날짜가 틀린 예시는 사용하지 않는 편이 좋아요. 확인된 내용으로 한 줄 예시를 새로 만든 뒤 요청에 넣어 주세요.',
-      question: '아이미의 제안대로 예시를 고칠 때 어떤 사실을 잠가 둘까요?',
+      question: '아이미의 제안대로 예시를 고칠 때, 바꾸지 않고 지켜야 할 사실은 무엇일까요?',
     },
     artifact: {
       kind: 'choice-board',

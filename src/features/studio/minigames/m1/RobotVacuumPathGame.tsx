@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import { useSpeak } from '../../../../hooks/useSpeak';
-import { BauhausMark } from '../engine';
+import { BauhausMark, viaOf } from '../engine';
 import type { MiniGameProps } from '../types';
 
 interface Position {
@@ -246,7 +246,7 @@ export default function RobotVacuumPathGame({ supportLevel }: MiniGameProps) {
       }))}
       activeStageIndex={stageIndex}
       onStageSelect={(index) =>
-        goToStage(index, `${ROOM_LAYOUTS[index].name}으로 바꿨어요. 구석구석 청소해 봐요.`)
+        goToStage(index, `${viaOf(ROOM_LAYOUTS[index].name.replace(/\s*\(.*\)$/, ''))} 바꿨어요. 구석구석 청소해 봐요.`)
       }
       status={status}
       message={message}

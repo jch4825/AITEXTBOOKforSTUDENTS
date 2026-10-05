@@ -9,6 +9,8 @@
     "test:gemini": "node --test tests/unit/gemini.test.mjs",
     "test:dictionary-ai": "node --test tests/unit/dictionaryAi.test.mjs",
     "test:next-word-balloons": "node --test tests/unit/nextWordBalloons.test.mjs",
+    "test:korean": "node --test tests/unit/korean.test.mjs",
+    "test:concept-notes": "node --test tests/unit/conceptNotes.test.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",

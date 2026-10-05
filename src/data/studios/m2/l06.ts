@@ -188,7 +188,7 @@ export const M2_L6_STUDIO: StudioDefinition = {
       source: 'prepared',
       role: '아이미의 단계 설계 제안',
       text: '먼저 장소와 일정을 확인하고, 그 결과로 필요한 물건과 수량을 정한 뒤, 마지막에 맡은 사람과 빠진 준비물을 점검하는 세 단계 요청으로 나누면 좋아요.',
-      question: '아이미의 단계 사이에 어떤 중간 확인을 넣겠습니까?',
+      question: '아이미의 단계 사이에 어떤 중간 확인을 넣을까요?',
     },
     artifact: {
       kind: 'workflow-plan',

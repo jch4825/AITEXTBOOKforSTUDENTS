@@ -1,13 +1,40 @@
 import type { DictionaryEntry } from '../types';
 import { createDictionaryMatcher } from '../utils/dictionaryMatch';
 
+/**
+ * 이 교재가 인공지능을 말하는 단 하나의 정의.
+ *
+ * AI가 무엇인지 말하는 글(차시 본문·정리·개념 카드·정식 콘텐츠·사전)은 이것을 그대로 가져다 쓰거나
+ * 이것과 어긋나지 않게만 쓴다. 글마다 정의가 달라서, 같은 화면에서 "사람처럼 생각하고 배워서"가
+ * "아이미는 마음이 없어요"와 부딪히고, "스스로 보고 듣고 알아보는 기계"가 센서 자동문(AI가 아니다)과
+ * 가려지지 않은 적이 있다. `check:dictionary`가 이 정의를 지키는지, 사람처럼 생각하고 배우는 존재로
+ * 말하는 정의가 다시 생기지 않는지 막는다.
+ *
+ * 말하는 것은 셋이다. ① 사람이 만든 프로그램이다 ② 많은 자료에서 비슷한 점을 찾는다 ③ 그것으로
+ * 번역·추천·분류 같은 결과를 만든다. 생각하거나 느끼는 존재로 말하지 않는다. 지원 수준마다
+ * 길이와 낱말만 다르고 뜻은 같다.
+ */
+export const AI_DEFINITION = {
+  /** 첫 문장. 수준과 상관없이 같은 뜻이다(충분한 지원만 해요체). */
+  what: 'AI(인공지능)는 사람이 만든 프로그램입니다.',
+  whatEasy: 'AI(인공지능)는 사람이 만든 프로그램이에요.',
+  /** 둘째 문장. 무엇을 하는 프로그램인가. */
+  does: {
+    easy: '많은 자료에서 비슷한 점을 찾아 번역, 추천, 분류를 도와줘요.',
+    normal: '말, 글, 사진을 받아 배운 자료와 비슷한 점을 찾고, 번역, 추천, 분류 같은 결과를 만듭니다.',
+    challenge: '입력한 말, 글, 사진을 학습한 자료의 규칙과 비교하여 번역, 추천, 분류 같은 결과를 만들고, 그 결과는 사람이 확인하고 판단합니다.',
+  },
+  /** 사전 항목 '인공지능'의 풀이. */
+  gloss: '사람이 만든 프로그램입니다. 많은 자료에서 비슷한 점을 찾아 번역, 추천, 분류 같은 일을 도와줍니다.',
+} as const;
+
 export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '인공지능',
     aliases: ['AI'],
-    shortExplanation: '많은 자료에서 비슷한 점을 찾아 답을 만드는 프로그램입니다.',
+    shortExplanation: AI_DEFINITION.gloss,
     example: '"오늘 날씨 어때?"라고 물으면 자료를 바탕으로 답을 만듭니다.',
-    ttsVersion: '인공지능은 많은 자료에서 비슷한 점을 찾아 답을 만드는 프로그램입니다.',
+    ttsVersion: `인공지능은 ${AI_DEFINITION.gloss}`,
   },
   {
     term: '컴퓨터',
@@ -27,7 +54,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '연습',
     verbal: true,
-    shortExplanation: '여러 번 해보면서 잘 하게 되는 것입니다.',
+    shortExplanation: '여러 번 해 보면서 잘하게 되는 것입니다.',
   },
   {
     term: '도움',
@@ -42,7 +69,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '센서',
-    shortExplanation: '사람처럼 빛, 소리, 온도의 변화나 다가옴을 알아채는 기계 부품입니다.',
+    shortExplanation: '빛, 소리, 온도의 변화나 다가오는 움직임을 알아내는 기계 부품입니다.',
     example: '자동문에 달린 센서가 다가오는 사람을 감지합니다.',
   },
   {
@@ -87,8 +114,8 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '인식',
     verbal: true,
-    shortExplanation: '보거나 듣고 "이게 뭔지" 알아보는 것입니다.',
-    example: 'AI가 사진 속 강아지를 보고 "강아지"라고 알아보는 것입니다.',
+    shortExplanation: '사진이나 소리를 받아 "이게 뭔지" 알아내는 것입니다.',
+    example: 'AI가 사진 속 강아지를 받아 "강아지"라고 알아내는 것입니다.',
   },
   {
     term: '음성',
@@ -105,7 +132,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '학습',
     verbal: true,
     shortExplanation: '보고 들으면서 배우는 것입니다.',
-    example: 'AI도 많은 예시를 보면서 학습합니다.',
+    example: 'AI의 학습은 이해하는 것이 아니라, 많은 예시에서 비슷한 점을 찾아 두는 것입니다.',
   },
   {
     term: '번역',
@@ -117,9 +144,9 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '데이터',
     aliases: ['정보 모음'],
-    shortExplanation: '컴퓨터나 AI가 공부하고 판단하는 데 쓰이는 숫자, 글, 사진 같은 정보 모음입니다.',
-    example: 'AI가 동물 사진 1,000장을 보고 분류하는 법을 배울 때 그 사진들이 데이터입니다.',
-    ttsVersion: '데이터는 컴퓨터나 인공지능이 배우고 판단하는 데 쓰는 사진, 글, 숫자 같은 자료입니다.',
+    shortExplanation: '컴퓨터나 AI가 규칙을 찾고 결과를 만드는 데 쓰이는 숫자, 글, 사진 같은 정보 모음입니다.',
+    example: 'AI가 동물 사진 1,000장에서 고양이와 강아지의 차이를 찾을 때 그 사진들이 데이터입니다.',
+    ttsVersion: '데이터는 컴퓨터나 인공지능이 규칙을 찾고 결과를 만드는 데 쓰는 사진, 글, 숫자 같은 자료입니다.',
   },
   {
     term: '프로그램',
@@ -184,28 +211,28 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '프롬프트',
     shortExplanation: 'AI한테 던지는 질문이나 부탁입니다.',
-    example: '"짧게 설명해 주십시오" 도 프롬프트입니다.',
+    example: '"짧게 설명해 주세요"도 프롬프트입니다.',
     ttsVersion: '프롬프트는 AI한테 던지는 질문이나 부탁입니다.',
   },
   {
     term: '역할',
     shortExplanation: '맡아서 하는 일이나 자리입니다.',
-    example: '"친구처럼 말해 주십시오"라고 하면 AI가 친구 역할로 편한 말투로 답합니다.',
+    example: '"친구처럼 말해 주세요"라고 하면 AI가 친구 역할로 편한 말투로 답합니다.',
   },
   {
     term: '예시',
-    shortExplanation: '"이런 식으로 해 주십시오" 하고 보여주는 견본입니다.',
+    shortExplanation: '"이런 식으로 해 주세요" 하고 보여주는 견본입니다.',
     example: '한 문장을 먼저 보여주면 AI가 비슷하게 만들어줍니다.',
   },
   {
     term: '단계',
     shortExplanation: '큰 일을 작게 나눈 한 조각입니다.',
-    example: '"1단계, 2단계로 알려 주십시오"라고 물어봅니다.',
+    example: '"1단계, 2단계로 알려 주세요"라고 물어봅니다.',
   },
   {
     term: '부탁',
     verbal: true,
-    shortExplanation: '"이렇게 해 주십시오" 하고 예의 있게 말하는 것입니다.',
+    shortExplanation: '"이렇게 해 주세요" 하고 예의 있게 말하는 것입니다.',
   },
   // ─── 모듈 3 (AI랑 같이 배우기) 어휘 ───
   {
@@ -226,7 +253,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '설명',
     verbal: true,
     shortExplanation: '알기 쉽게 풀어서 말해주는 것입니다.',
-    example: '"쉽게 설명해 주십시오" 하고 부탁할 수 있습니다.',
+    example: '"쉽게 설명해 주세요" 하고 부탁할 수 있습니다.',
   },
   {
     term: '계산',
@@ -238,7 +265,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '요약',
     verbal: true,
     shortExplanation: '긴 글을 중요한 것만 남겨 짧게 만드는 것입니다.',
-    example: '"두 줄로 요약해 주십시오" 하고 부탁할 수 있습니다.',
+    example: '"두 줄로 요약해 주세요" 하고 부탁할 수 있습니다.',
     ttsVersion: '요약은 긴 글을 짧게 정리하는 것입니다.',
   },
   {
@@ -341,7 +368,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '마이크',
     shortExplanation: '내 목소리를 컴퓨터에 들려주는 기계입니다.',
-    example: '마이크 버튼을 누르고 말하면 AI가 들습니다.',
+    example: '마이크 버튼을 누르고 말하면 AI가 내 말소리를 글자로 바꿉니다.',
   },
   {
     term: '인터넷',
@@ -397,21 +424,21 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   },
   {
     term: '학습 데이터',
-    shortExplanation: 'AI가 배우려고 미리 모아 놓은 아주 많은 자료 묶음입니다.',
+    shortExplanation: 'AI가 규칙을 찾을 수 있게 미리 모아 놓은 아주 많은 자료 묶음입니다.',
     example: '강아지 사진을 아주 많이 모으면 학습 데이터가 됩니다.',
   },
   {
     term: '음성 인식',
     aliases: ['음성인식'],
     verbal: true,
-    shortExplanation: 'AI가 사람의 말소리를 듣고 글자로 바꾸는 것입니다.',
-    example: '"알람 맞춰줘"라고 말하면 AI가 그 말을 알아듣습니다.',
+    shortExplanation: 'AI가 사람의 말소리를 받아 글자로 바꾸는 것입니다.',
+    example: '"알람 맞춰줘"라고 말하면 AI가 그 말소리를 글자로 바꿔 알람을 맞춥니다.',
   },
   {
     term: '이미지 인식',
     aliases: ['이미지인식'],
     verbal: true,
-    shortExplanation: 'AI가 사진이나 그림을 보고 무엇인지 알아내는 것입니다.',
+    shortExplanation: 'AI가 사진이나 그림을 받아 무엇인지 알아내는 것입니다.',
     example: '사진을 보여주면 AI가 "이건 고양이입니다"라고 답합니다.',
   },
   {
@@ -435,7 +462,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '훈련',
     verbal: true,
     shortExplanation: 'AI가 자료를 반복해서 보며 더 잘하게 되는 과정입니다.',
-    example: '사진을 더 많이 훈련할수록 AI가 더 정확히 알아맞힙니다.',
+    example: '사진으로 더 많이 훈련할수록 AI가 더 정확히 알아맞힙니다.',
   },
   {
     term: '패턴',
@@ -488,7 +515,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '이미지',
     shortExplanation: '눈으로 보는 사진이나 그림입니다.',
-    example: 'AI가 이미지를 보고 무엇인지 알아봅니다.',
+    example: 'AI가 이미지를 받아 무엇인지 알아냅니다.',
   },
   {
     term: '원리',
@@ -499,7 +526,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '오인식',
     verbal: true,
     shortExplanation: 'AI가 잘못 알아보는 것입니다.',
-    example: '고양이를 강아지로 잘못 아는 게 오인식입니다.',
+    example: '고양이를 강아지로 잘못 알아내는 것이 오인식입니다.',
   },
   {
     term: '가능성',
@@ -533,7 +560,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '지시',
     verbal: true,
     shortExplanation: '뭘 해달라고 정확하게 시키는 말입니다.',
-    example: '"이름 세 개를 알려 주십시오"가 지시입니다.',
+    example: '"이름 세 개를 알려 주세요"가 지시입니다.',
   },
   {
     term: '간결',
@@ -550,7 +577,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '예시 제시',
     verbal: true,
     shortExplanation: '원하는 답 모양을 먼저 보여주는 것입니다.',
-    example: '"이런 식으로 해 주십시오: 강아지가 뛰습니다"처럼입니다.',
+    example: '"이런 식으로 해 주세요: 강아지가 뛰어요"처럼 보여 주는 것입니다.',
   },
   {
     term: '역할 지정',
@@ -566,7 +593,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '반복 개선',
     shortExplanation: '답을 보고 다시 고쳐서 물어보는 것입니다.',
-    example: '"너무 길어요. 짧게 다시 해 주십시오"라고 다시 부탁합니다.',
+    example: '"너무 길어요. 짧게 다시 해 주세요"라고 다시 부탁합니다.',
   },
   {
     term: '형식 지정',
@@ -646,12 +673,12 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '애매',
     verbal: true,
     shortExplanation: '무슨 뜻인지 정확히 알기 어려운 것입니다.',
-    example: '"그거 좀 해 주십시오"는 애매해서 AI가 헷갈렸습니다.',
+    example: '"그거 좀 해 주세요"는 애매해서 AI가 헷갈렸습니다.',
   },
   {
     term: '분위기',
     shortExplanation: '말이나 글에서 느껴지는 느낌입니다.',
-    example: '"친절하게 말해 주십시오"라고 하면 부드러운 분위기가 됩니다.',
+    example: '"친절하게 말해 주세요"라고 하면 부드러운 분위기가 됩니다.',
   },
   {
     term: '흐름',
@@ -661,7 +688,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '말투',
     shortExplanation: '말을 할 때 나오는 느낌이나 버릇입니다.',
-    example: '"친구처럼 말해 주십시오"라고 하면 편안한 말투로 답합니다.',
+    example: '"친구처럼 말해 주세요"라고 하면 편안한 말투로 답합니다.',
   },
   // ─── 모듈 3 어려움(hard) 콘텐츠 신규 어휘 ───
   {
@@ -674,7 +701,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '난이도 조절',
     verbal: true,
     shortExplanation: '내 수준에 맞게 설명을 쉽거나 어렵게 바꾸는 것입니다.',
-    example: '"10살도 알아듣게 설명해 주십시오"라고 하면 더 쉬워집니다.',
+    example: '"10살도 알아듣게 설명해 주세요"라고 하면 더 쉬워집니다.',
   },
   {
     term: '예문',
@@ -937,12 +964,12 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '명확화',
     verbal: true,
     shortExplanation: '뜻을 더 분명하게 다시 말하는 것입니다.',
-    example: '"그거 알려 주십시오" 대신 "라면 끓이는 순서를 알려 주십시오"라고 다시 말합니다.',
+    example: '"그거 알려 주세요" 대신 "라면 끓이는 순서를 알려 주세요"라고 다시 말합니다.',
   },
   {
     term: '단계별 지시',
     shortExplanation: '한 번에 하나씩 순서대로 시키는 것입니다.',
-    example: '"먼저 1단계만 알려 주십시오, 끝나면 다음 단계 알려 주십시오"라고 부탁합니다.',
+    example: '"먼저 1단계만 알려 주세요, 끝나면 다음 단계 알려 주세요"라고 부탁합니다.',
   },
   {
     term: '평가',
@@ -1087,12 +1114,12 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '의견',
     shortExplanation: '어떤 것에 대한 생각입니다.',
-    example: 'AI의 의견을 참고해서 내가 직접 고칩니다.',
+    example: 'AI의 제안을 참고해서 내가 직접 고칩니다.',
   },
   {
     term: '방대하다',
     shortExplanation: '아주 많고 넓은 것입니다.',
-    example: '인공지능은 방대한 자료를 공부해서 똑똑해집니다.',
+    example: '인공지능은 방대한 자료에서 비슷한 점을 찾아 더 정확해집니다.',
   },
   {
     term: '예외',
@@ -1102,8 +1129,8 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
   {
     term: '추론',
     verbal: true,
-    shortExplanation: '알고 있는 것을 바탕으로 새로운 답을 생각해 내는 것입니다.',
-    example: '인공지능은 추론을 통해 처음 보는 문제도 풀 수 있습니다.',
+    shortExplanation: '알고 있는 것을 바탕으로 새로운 답을 이끌어 내는 것입니다.',
+    example: '인공지능은 배운 자료와 비슷한 점을 찾아 처음 보는 문제에도 답을 만듭니다.',
   },
   {
     term: '열역학',
@@ -1140,7 +1167,7 @@ export const STUDENT_DICTIONARY: DictionaryEntry[] = [
     term: '모방',
     verbal: true,
     shortExplanation: '다른 것의 모습이나 행동을 그대로 흉내 내어 따라 하는 것입니다.',
-    example: '인공지능은 사람의 생각하는 방식을 모방해서 행동합니다.',
+    example: '인공지능은 사람이 쓴 글을 많이 모아 사람의 말투를 모방합니다.',
   },
   {
     term: '알고리즘',
