@@ -244,9 +244,6 @@ if (/\bgoal\s*:/.test(hardInterface)) {
 const lessonView = read('src/views/LessonView.tsx');
 const studioPanel = read('src/features/studio/components/StudioExplanationPanel.tsx');
 const teacherPanel = read('src/features/teacher/LegacyTeacherPanels.tsx');
-if (!lessonView.includes('const goalText = lesson.objective;')) {
-  throw new Error('LessonView must use lesson.objective as the single goal');
-}
 if (!studioPanel.includes('const goal = lesson.objective;')) {
   throw new Error('StudioExplanationPanel must use lesson.objective as the single goal');
 }

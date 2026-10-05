@@ -2,8 +2,6 @@ import { existsSync, readFileSync } from 'node:fs';
 
 const home = readFileSync(new URL('../src/views/Home.tsx', import.meta.url), 'utf8');
 const sidebar = readFileSync(new URL('../src/components/SidebarTree.tsx', import.meta.url), 'utf8');
-const matching = readFileSync(new URL('../src/components/games/Matching.tsx', import.meta.url), 'utf8');
-const sequence = readFileSync(new URL('../src/components/games/Sequence.tsx', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../src/index.css', import.meta.url), 'utf8');
 const document = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
@@ -11,9 +9,6 @@ if (home.includes('trailCanvasRef')) throw new Error('Mouse trail must be remove
 if (!home.includes('prefers-reduced-motion')) throw new Error('Home must respect reduced motion.');
 if (sidebar.includes('인공지능 API 활용 포함') || !sidebar.includes('h-11 w-11')) {
   throw new Error('Sidebar student wording or target size regressed.');
-}
-if (!matching.includes('sm:grid-cols-2') || !sequence.includes('sm:grid-cols-2')) {
-  throw new Error('Game choices must stack below the small breakpoint.');
 }
 
 if (home.includes('href="#home"') || home.includes('href="#accessibility"') || home.includes('href="#privacy"') || home.includes('href="#support"')) {
@@ -32,12 +27,9 @@ if (!existsSync(new URL('../src/components/SeasonMap.tsx', import.meta.url)) || 
   throw new Error('Contents must use the season map navigation.');
 }
 
+// 차시 화면은 스튜디오(62)와 단원 마무리(6)뿐이다. 예전 단계형 렌더러(EpisodeHeroSpread·ActivitySpread·
+// EpisodeEnding·MissionStep·games/*)는 쓰는 차시가 없어 없앴으므로, 그 부품을 요구하던 검사도 함께 뺐다.
 const lessonView = readFileSync(new URL('../src/views/LessonView.tsx', import.meta.url), 'utf8');
-for (const marker of ['EpisodeHeroSpread', 'ActivitySpread', 'EpisodeEnding', 'ScreentoneBackdrop']) {
-  if (!lessonView.includes(marker)) {
-    throw new Error(`LessonView must use ${marker}.`);
-  }
-}
 if (lessonView.includes('ComicPanel')) {
   throw new Error('LessonView must not use ComicPanel.');
 }
@@ -57,38 +49,8 @@ if (lessonSpread.includes('lg:grid-cols-[7fr_5fr]') || lessonSpread.includes('lg
   throw new Error('LessonSpread must not use the old asymmetric 7:5 / 5:7 column grid.');
 }
 
-if (!existsSync(new URL('../src/components/lesson/EpisodeHeroSpread.tsx', import.meta.url))) {
-  throw new Error('EpisodeHeroSpread component must exist.');
-}
-const heroSpread = readFileSync(new URL('../src/components/lesson/EpisodeHeroSpread.tsx', import.meta.url), 'utf8');
-if (!heroSpread.includes('spread-hero-image')) {
-  throw new Error('EpisodeHeroSpread must contain the spread-hero-image identifier.');
-}
-
-if (!existsSync(new URL('../src/components/lesson/ActivitySpread.tsx', import.meta.url))) {
-  throw new Error('ActivitySpread component must exist.');
-}
-
-const activityFiles = [
-  '../src/components/games/OXGame.tsx',
-  '../src/components/games/CardPick.tsx',
-  '../src/components/games/Matching.tsx',
-  '../src/components/games/Sequence.tsx',
-];
-for (const activityFile of activityFiles) {
-  const source = readFileSync(new URL(activityFile, import.meta.url), 'utf8');
-  if (!source.includes('<ActivitySpread') || source.includes('card3d')) {
-    throw new Error(`${activityFile} must use ActivitySpread without legacy card3d styling.`);
-  }
-}
-
-const realAi = readFileSync(new URL('../src/components/RealAIStep.tsx', import.meta.url), 'utf8');
-const mission = readFileSync(new URL('../src/components/mission/MissionStep.tsx', import.meta.url), 'utf8');
-if (!realAi.includes('<ActivitySpread') || !mission.includes('<LessonSpread')) {
-  throw new Error('AI and mission activities must use the spread hierarchy.');
-}
-
-if (!existsSync(new URL('../src/components/lesson/ScreentoneBackdrop.tsx', import.meta.url)) || !lessonView.includes('<ScreentoneBackdrop')) {
+const studioView = readFileSync(new URL('../src/features/studio/StudioLessonView.tsx', import.meta.url), 'utf8');
+if (!existsSync(new URL('../src/components/lesson/ScreentoneBackdrop.tsx', import.meta.url)) || !studioView.includes('<ScreentoneBackdrop')) {
   throw new Error('Lesson screens must use the module screentone backdrop.');
 }
 
@@ -104,10 +66,6 @@ if (screentoneBackdrop.includes('min-h-screen') || screentoneBackdrop.includes('
 }
 if (!screentoneBackdrop.includes('min-h-full')) {
   throw new Error('Screentone backdrop must fill its parent with min-h-full.');
-}
-
-if (!existsSync(new URL('../src/components/lesson/EpisodeEnding.tsx', import.meta.url)) || !lessonView.includes('<EpisodeEnding')) {
-  throw new Error('Wrap-up must use EpisodeEnding.');
 }
 
 const frame = readFileSync(new URL('../src/components/MicroLessonFrame.tsx', import.meta.url), 'utf8');
@@ -177,55 +135,12 @@ if (
   throw new Error('Contents must avoid star progress and nested card-like lesson cuts.');
 }
 
-
-const ox = readFileSync(new URL('../src/components/games/OXGame.tsx', import.meta.url), 'utf8');
-if (!ox.includes('grid-cols-1 sm:grid-cols-2')) {
-  throw new Error('OX choices must stack below the small breakpoint.');
-}
-
-const phoneFrame = readFileSync(new URL('../src/components/PhoneFrame.tsx', import.meta.url), 'utf8');
 const micButton = readFileSync(new URL('../src/components/MicButton.tsx', import.meta.url), 'utf8');
-if (!realAi.includes('aiGlow: true') || !phoneFrame.includes('msg.aiGlow')) {
-  throw new Error('Only a successful real-AI reply must carry the Aimi signature glow.');
-}
-if (
-  !phoneFrame.includes('prefers-reduced-motion: reduce')
-  || !phoneFrame.includes('motion-safe:animate-bounce')
-) {
-  throw new Error('Phone chat motion must respect reduced-motion preferences.');
-}
-if (
-  !realAi.includes('h-13 px-3')
-  || !realAi.includes('h-13 w-13')
-  || !micButton.includes('h-13 w-13')
-) {
-  throw new Error('Core real-AI input controls must keep 52px touch targets.');
-}
-
-if (!mission.includes('lg:max-h-[50vh] lg:overflow-y-auto')) {
-  throw new Error('Mission content must use the page scroll instead of a nested mobile scroller.');
-}
-
-if (!heroSpread.includes('lessons/png/webtoon/')) {
-  throw new Error('EpisodeHeroSpread must fall back from WebP to the webtoon PNG original.');
+if (!micButton.includes('h-13 w-13')) {
+  throw new Error('Mic button must keep its 52px touch target.');
 }
 
 const screentone = readFileSync(new URL('../src/components/lesson/ScreentoneBackdrop.tsx', import.meta.url), 'utf8');
 if (!screentone.includes("'--accent': accent")) {
   throw new Error('Lesson screentone must publish the current module accent to nested activities.');
-}
-
-const ending = readFileSync(new URL('../src/components/lesson/EpisodeEnding.tsx', import.meta.url), 'utf8');
-if (!ending.includes('motion-safe:animate-[spin_60s_linear_infinite]')) {
-  throw new Error('Episode ending decoration must stop when reduced motion is requested.');
-}
-
-
-if (
-  heroSpread.includes('reverseLayout')
-  || heroSpread.includes('reverse={')
-  || !heroSpread.includes('left={leftPage}')
-  || !heroSpread.includes('right={rightPage}')
-) {
-  throw new Error('Hero page order must stay fixed as image-left and text-right.');
 }

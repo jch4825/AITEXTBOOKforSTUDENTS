@@ -2239,129 +2239,6 @@
 .lesson-gutter {
   display: none;
 }
-.spread-art-page,
-.spread-copy-page {
-  width: 100%;
-  height: 100%;
-}
-.spread-art-page {
-  min-height: clamp(24rem, 48vh, 36rem);
-  display: grid;
-  place-items: center;
-}
-.spread-art-field {
-  position: relative;
-  width: min(100%, 34rem);
-  min-height: clamp(22rem, 47vh, 34rem);
-  display: grid;
-  place-items: center;
-  padding: clamp(0.7rem, 2vw, 1.1rem);
-  border: 1.5px solid color-mix(in srgb, var(--hero-accent) 26%, var(--line));
-  border-radius: 18px 8px 18px 8px;
-  background:
-    linear-gradient(145deg, color-mix(in srgb, var(--hero-accent) 14%, var(--paper-0)), var(--paper-0) 68%),
-    var(--paper-0);
-  overflow: hidden;
-}
-.spread-art-mark {
-  position: absolute;
-  pointer-events: none;
-  border: 1px solid color-mix(in srgb, var(--hero-accent) 22%, transparent);
-  opacity: 0.55;
-}
-.spread-art-mark-one {
-  width: 42%;
-  aspect-ratio: 1;
-  top: -14%;
-  right: -10%;
-  transform: rotate(18deg);
-}
-.spread-art-mark-two {
-  width: 24%;
-  aspect-ratio: 1 / 1.35;
-  left: -6%;
-  bottom: 8%;
-  border-radius: 999px;
-}
-.spread-hero-image-large {
-  position: relative;
-  z-index: 1;
-  width: min(100%, 32rem);
-  height: min(31rem, 100%);
-  min-height: clamp(19rem, 42vh, 31rem);
-  display: grid;
-  place-items: center;
-}
-.spread-hero-characters {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: end;
-  gap: 0;
-  margin-inline: auto;
-}
-.spread-hero-characters > span + span {
-  margin-left: -1.25rem;
-}
-.spread-copy-page {
-  position: relative;
-  padding: clamp(0.25rem, 1.4vw, 1rem) clamp(0.25rem, 1.8vw, 1.5rem);
-}
-.spread-copy-page::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 8rem;
-  height: 8rem;
-  border-right: 1px solid color-mix(in srgb, var(--hero-accent) 18%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--hero-accent) 18%, transparent);
-  opacity: 0.45;
-  pointer-events: none;
-}
-.spread-copy-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.55rem;
-  margin-bottom: 0.75rem;
-}
-.spread-episode-chip {
-  min-height: 1.8rem;
-  display: inline-flex;
-  align-items: center;
-  border-radius: var(--r-sm);
-  padding: 0.15rem 0.55rem;
-  font-size: calc(0.78rem + var(--font-bump));
-  font-weight: 900;
-}
-.spread-copy-title {
-  margin: 0 0 1rem;
-  font-weight: 900;
-  line-height: 1.28;
-}
-.spread-goal-slot .lesson-goal-card {
-  margin-block: 0 1rem;
-}
-.spread-copy-body {
-  display: grid;
-  gap: 1rem;
-  max-width: 34rem;
-}
-.spread-story-intro {
-  margin: 0;
-  padding-left: 0.9rem;
-  border-left: 3px solid var(--hero-accent);
-  color: var(--ink-2);
-}
-.spread-body-slot {
-  margin-top: 0.2rem;
-}
-.lesson-goal-card {
-  box-shadow: none;
-}
-
 @media (min-width: 1024px) {
   .lesson-gutter {
     display: block;
@@ -2410,16 +2287,6 @@
   .lesson-page-right {
     border-top: 1px solid var(--line);
   }
-  .spread-art-page {
-    min-height: 0;
-  }
-  .spread-art-field {
-    min-height: 0;
-  }
-  .spread-hero-image-large {
-    min-height: 0;
-    height: min(62vw, 28rem);
-  }
 }
 
 @media (max-width: 767px) {
@@ -2452,23 +2319,6 @@
   }
   .lesson-page {
     padding: 0.9rem;
-  }
-  .spread-art-field {
-    width: 100%;
-    padding: 0.55rem;
-    border-radius: 14px 6px 14px 6px;
-  }
-  .spread-hero-image-large {
-    height: min(78vw, 20rem);
-  }
-  .spread-copy-page {
-    padding: 0.2rem 0.1rem 0.4rem;
-  }
-  .spread-copy-title {
-    font-size: calc(clamp(1.45rem, 8vw, 2rem) + var(--font-bump));
-  }
-  .spread-story-intro {
-    font-size: calc(1.05rem + var(--font-bump));
   }
 }
 @media (min-width: 1024px) {

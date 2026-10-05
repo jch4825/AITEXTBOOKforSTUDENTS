@@ -23,7 +23,6 @@ const CSS_FILES = ['src/index.css', 'src/App.css'];
 const RUNTIME_INJECTED = {
   '--episode-accent': '단원 카드가 단원별 강조색을 주입',
   '--episode-soft': '단원 카드가 단원별 배경색을 주입',
-  '--hero-accent': '단원 표지가 강조색을 주입',
   '--block-color': '교사 학습지 블록이 글자색을 주입',
   '--block-font-size': '교사 학습지 블록이 글자 크기를 주입',
   '--worksheet-accent': '교사 학습지 A4 면이 강조색을 주입',
