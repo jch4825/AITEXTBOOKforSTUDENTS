@@ -122,7 +122,7 @@ export const M6_LESSONS: LessonContent[] = [
     standards: [LIFE_STANDARD],
     bodyEasy: '할 일과 쉼, 도움 시간을 함께 넣어 나에게 맞는 계획을 만들어요.',
     bodyNormal:
-      '마을 활동의 시간 블록을 배치하고 선호, 휴식, 필요한 도움, 걸리는 시간을 확인한 뒤 비로 출발 시간이 바뀌면 계획을 고칩니다.',
+      '마을 활동의 시간 블록을 배치하고 선호, 휴식, 필요한 도움, 걸리는 시간을 확인한 뒤 비 때문에 출발 시간이 바뀌면 계획을 고칩니다.',
     wrapUpEasy: '계획은 내 필요와 바뀐 조건에 맞게 고칠 수 있어요.',
     wrapUpNormal: '알림을 명령이 아닌 도구로 사용하고, 일정과 도움 조건이 달라졌을 때 나에게 맞는 계획으로 다시 조정합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['루틴'], imagePlaceholder: true } }],

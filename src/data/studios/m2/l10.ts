@@ -98,7 +98,7 @@ export const M2_L10_STUDIO: StudioDefinition = {
         },
         {
           id: 'present-final-decision',
-          label: '장면 4 · 당신의 첫 부탁을 들려주세요',
+          label: '장면 4 · 여러분의 첫 부탁을 들려주세요',
           imageSrc: '/lessons/story/m2/m2-l10-scene-04.webp',
           alt: '아이미가 준비됐다며 첫 부탁을 청하는 장면',
           knowledgeStep: 2,

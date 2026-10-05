@@ -32,13 +32,13 @@ type AiState =
 function failureMessage(reason: DictionaryAiFailure, word: string): string {
   switch (reason) {
     case 'invalid-word':
-      return '낱말 하나만 써 보십시오.';
+      return '낱말 하나만 써 보세요.';
     case 'unknown-word':
-      return `아이미도 "${word}"는 잘 모르겠습니다. 선생님께 물어봅니다!`;
+      return `아이미도 "${word}"의 뜻은 잘 몰라요. 선생님께 물어보세요!`;
     case 'unsafe':
-      return '이 말은 사전으로 찾기 어렵습니다. 선생님께 물어봅니다!';
+      return '이 말은 사전으로 찾기 어려워요. 선생님께 물어보세요!';
     default:
-      return '지금은 아이미가 뜻을 찾지 못했습니다. 잠시 뒤에 다시 해 보거나 선생님께 물어봅니다!';
+      return '지금은 아이미가 뜻을 찾지 못했어요. 잠시 뒤에 다시 해 보거나 선생님께 물어보세요!';
   }
 }
 
@@ -114,7 +114,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
       >
         <input
           type="search"
-          placeholder="단어를 검색해 보십시오"
+          placeholder="찾고 싶은 낱말을 써 보세요"
           aria-label="찾을 단어"
           value={query ?? ''}
           onChange={(e) => onSearch(e.target.value)}
@@ -133,17 +133,17 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
             <CharacterAvatar character="aimi" expression="curious" size={80} />
           </div>
           <p className="text-[color:var(--muted)]">
-            궁금한 단어가 있습니까?
+            궁금한 단어가 있나요?
             <br />
             본문의 <span className="dict-term">밑줄 친 단어</span>를 누르면
             <br />
-            아이미가 뜻을 알려 줍니다.
+            아이미가 뜻을 알려 줘요.
           </p>
           {aiReady && (
             <p className="text-[color:var(--muted)] mt-3">
               밑줄이 없는 말은 위 칸에 써서
               <br />
-              아이미에게 물어볼 수도 있습니다.
+              아이미에게 물어볼 수도 있어요.
             </p>
           )}
         </div>
@@ -154,7 +154,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
           <div className="flex justify-center mb-3" aria-hidden>
             <CharacterAvatar character="aimi" expression="thinking" size={80} />
           </div>
-          <p className="text-[color:var(--muted)]">"{query}"는 아직 사전에 없습니다.{aiReady ? '' : ' 선생님께 물어봅니다!'}</p>
+          <p className="text-[color:var(--muted)]">"{query}" 낱말은 아직 사전에 없어요.{aiReady ? '' : ' 선생님께 물어보세요!'}</p>
           {aiReady && (
             <Button onClick={() => void askAi()} className="mt-4">
               <Icon name="chat" size={20} /> 아이미에게 물어보기
@@ -169,7 +169,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
             <div className="flex justify-center mb-3" aria-hidden>
               <CharacterAvatar character="aimi" expression="thinking" size={80} />
             </div>
-            <p className="text-[color:var(--muted)]">아이미가 "{ai.word}"의 뜻을 찾고 있습니다…</p>
+            <p className="text-[color:var(--muted)]">아이미가 "{ai.word}"의 뜻을 찾고 있어요…</p>
           </div>
         )}
 
@@ -201,10 +201,10 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
               </div>
             )}
             <p className="t-label mt-4" style={{ color: 'var(--muted)' }}>
-              AI가 만든 설명이라 틀릴 수 있습니다. 선생님과 함께 확인해 봅니다.
+              AI가 만든 설명이라 틀릴 수 있어요. 선생님과 함께 확인해 봐요.
             </p>
             <Button onClick={() => speakNow(ai.result.meaning)} className="mt-4">
-              <Icon name="speaker" size={20} /> 다시 들려줘
+              <Icon name="speaker" size={20} /> 다시 듣기
             </Button>
           </article>
         )}
@@ -221,7 +221,7 @@ export default function DictionaryPanel({ open, query, onClose, onSearch }: Prop
             </div>
           )}
           <Button onClick={() => speakNow(entry.ttsVersion ?? entry.shortExplanation)} className="mt-4">
-            <Icon name="speaker" size={20} /> 다시 들려줘
+            <Icon name="speaker" size={20} /> 다시 듣기
           </Button>
         </article>
       )}

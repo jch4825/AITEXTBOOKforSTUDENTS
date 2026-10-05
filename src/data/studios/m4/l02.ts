@@ -46,7 +46,7 @@ export const M4_L2_STUDIO: StudioDefinition = {
           id: 'm4-l2-three-sources',
           label: '세 자료',
           imageSrc: '/lessons/story/m4/m4-l2-scene-02.webp',
-          alt: '누가 쓴지 모르는 캡처 지난달 공지 오늘 학교 공지가 나란히 놓인 장면을 위한 빈 이미지 자리',
+          alt: '누가 썼는지 모르는 캡처 지난달 공지 오늘 학교 공지가 나란히 놓인 장면을 위한 빈 이미지 자리',
           knowledgeStep: 1,
           copy: sceneBeats(
             [

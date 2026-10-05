@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
-import { BauhausMark, clamp, createRandom, randInt, useGameLoop } from '../engine';
+import { BauhausMark, clamp, createRandom, randInt, useGameLoop, viaOf } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
 
@@ -266,7 +266,7 @@ export default function ToolPipeConnectGame({ supportLevel }: MiniGameProps) {
     if (flow.reachedTools.includes(stage.correct)) {
       game.succeed(`${stage.tools[stage.correct].name}까지 길이 이어졌어요. 일에 맞는 도구로 물이 흘렀습니다!`);
     } else if (flow.reachedTools.length > 0) {
-      game.fail(`${stage.tools[flow.reachedTools[0]].name}으로 흘렀어요. 이 일에 맞는 도구로 길을 다시 이어 봐요.`);
+      game.fail(`${viaOf(stage.tools[flow.reachedTools[0]].name)} 흘렀어요. 이 일에 맞는 도구로 길을 다시 이어 봐요.`);
     } else {
       game.fail('길이 중간에 끊겼어요. 끊긴 관을 눌러 돌려 봐요.');
     }

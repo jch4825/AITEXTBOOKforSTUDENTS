@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, dist, drawBar, drawShape, useGameKeys, paintBoard,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, dist, drawBar, drawShape, objectOf, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -202,7 +202,7 @@ export default function StepHookSwingGame({ supportLevel }: MiniGameProps) {
             playSound('fill');
             if (w.taken >= stage.steps.length) {
               w.finished = true;
-              game.succeed(`${stage.goal}을 작은 단계로 나눠 순서대로 모두 모았어요!`);
+              game.succeed(`${objectOf(stage.goal)} 작은 단계로 나눠 순서대로 모두 모았어요!`);
             }
           }
         }

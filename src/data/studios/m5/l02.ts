@@ -11,7 +11,7 @@ export const M5_L2_STUDIO: StudioDefinition = {
     format: 'B',
     visualNovel: {
       title: '“부스를 설치하라”는 막연하고 큰 일 앞에서',
-      objective: '`부스 설치`라는 큰 일을 작은 과제로 나누고, 아이미의 목록에서 빠진 과제와 필요 없는 과제를 찾아 고쳐요.',
+      objective: '"부스 설치"라는 큰 일을 작은 과제로 나누고, 아이미의 목록에서 빠진 과제와 필요 없는 과제를 찾아 고쳐요.',
       seasonTag: '[체험회 D-6 · 2화] 너무 큰 일',
       nextEpisodeHook: '다음 시간 — 장식을 먼저 붙였다가 전원선이 막혀버렸어요!',
       scenes: [

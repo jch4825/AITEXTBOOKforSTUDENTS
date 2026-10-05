@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape, paintBoard,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawShape, objectOf, paintBoard, particleFor,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -206,7 +206,7 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
     }
     setNote(
       inBin
-        ? `'${picked}'은 이 할 일과 맞지 않아요. 형식을 다시 골라 보세요.`
+        ? `'${picked}'${particleFor(picked, '은', '는')} 이 할 일과 맞지 않아요. 형식을 다시 골라 보세요.`
         : '통에 들어가지 않았어요. 미끄럼틀을 고쳐 다시 쏟아 보세요.',
     );
     ballRef.current = null;
@@ -368,7 +368,7 @@ export default function FormatPourPathGame({ supportLevel }: MiniGameProps) {
                 setInk((value) => Math.max(0, value - len));
                 drawRef.current = { x: pointer.x, y: pointer.y };
               }}
-              ariaLabel={`${job.label}을 알맞은 형식 통으로 보내는 놀이. 보낸 구슬 ${round}개, 남은 기회 ${lives}개.`}
+              ariaLabel={`${objectOf(job.label)} 알맞은 형식 통으로 보내는 놀이. 보낸 구슬 ${round}개, 남은 기회 ${lives}개.`}
             />
           </div>
         </div>

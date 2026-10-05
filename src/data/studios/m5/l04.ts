@@ -135,7 +135,7 @@ export const M5_L4_STUDIO: StudioDefinition = {
           },
         },
         {
-          title: '복수의 타당한 순서가 있어요',
+          title: '맞는 순서가 여러 가지 있어요',
           core: '조건과 역할에 따라 한 가지 이상 좋은 순서가 가능합니다.',
           detail: {
             full: '어떤 이유로 그 작업을 먼저 선택했는지 분명히 설명할 수 있는 순서를 정해요.',

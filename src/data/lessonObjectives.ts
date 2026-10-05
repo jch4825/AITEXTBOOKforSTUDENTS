@@ -162,7 +162,7 @@ export const LESSON_OBJECTIVES: LessonObjective[] = [
   {
     lessonId: 'm2-l3',
     studentMission:
-      '`그거`, `아무거나` 대신 이름·종류·개수를 넣어 부탁하고, 아이미의 답이 어떻게 달라지는지 비교해요.',
+      '"그거", "아무거나" 대신 이름·종류·개수를 넣어 부탁하고, 아이미의 답이 어떻게 달라지는지 비교해요.',
     teacherObjective:
       '모호어를 구체 조건(대상·인원·시간·공간)으로 바꿔 재요청하고, 전후 결과를 조건표로 비교할 수 있다.',
     aiRole:
@@ -481,7 +481,7 @@ export const LESSON_OBJECTIVES: LessonObjective[] = [
   {
     lessonId: 'm5-l2',
     studentMission:
-      '`부스 설치`라는 큰 일을 작은 과제로 나누고, 아이미의 목록에서 빠진 과제와 필요 없는 과제를 찾아 고쳐요.',
+      '"부스 설치"라는 큰 일을 작은 과제로 나누고, 아이미의 목록에서 빠진 과제와 필요 없는 과제를 찾아 고쳐요.',
     teacherObjective:
       '완성 모습을 근거로 과제를 분해하고 목록의 누락·중복· 불필요를 점검할 수 있다.',
     aiRole:

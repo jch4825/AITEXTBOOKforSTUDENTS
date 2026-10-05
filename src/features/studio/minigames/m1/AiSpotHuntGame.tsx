@@ -18,8 +18,8 @@ import type { MiniGameProps } from '../types';
  * "AI인지 아닌지를 물건 하나하나에 직접 대 보는 일"이 되어야 한다. 그래서 보기 넷 중
  * 하나를 고르게 하지 않고, 생활 장면에 물건을 흩어 놓고 학생이 눈으로 훑어 골라내게 했다.
  *
- * 판단 기준은 하나다 — 스스로 보고 듣고 알아보는가. 그냥 기계를 누르면 그 물건이 흔들리며
- * "누르면 그대로 도는 기계"라는 쪽지가 뜬다. 틀린 것도 설명이 붙는 한 번의 학습이 된다.
+ * 판단 기준은 하나다 — 사진이나 소리, 말을 받아 알아내거나 골라 주는가(AI_DEFINITION). 그냥 기계를 누르면 그 물건이 흔들리며
+ * "정해진 대로만 움직이는 기계"라는 쪽지가 뜬다. 틀린 것도 설명이 붙는 한 번의 학습이 된다.
  * 찾아낸 물건에는 이름표와 "무엇을 도와주는지" 한 줄이 붙어, 마지막에 학생이 소개할
  * 문장 다섯 개가 판 위에 그대로 남는다.
  */
@@ -126,7 +126,7 @@ const STAGES: StageConfig[] = [
       { name: '얼굴 잠금', emoji: '🔐', help: '얼굴을 알아보고 문을 열어 줘요.' },
       { name: '말하는 스피커', emoji: '🔊', help: '말을 알아듣고 불을 켜 줘요.' },
       { name: '번역 앱', emoji: '📷', help: '사진 속 글자를 읽어서 알려 줘요.' },
-      { name: '청소 로봇', emoji: '🤖', help: '스스로 길을 찾아 청소해 줘요.' },
+      { name: '청소 로봇', emoji: '🤖', help: '주변을 살펴 길을 찾아 청소해 줘요.' },
     ],
     plain: [
       { name: '선풍기', emoji: '🌀', help: '' },
@@ -155,7 +155,7 @@ const STAGES: StageConfig[] = [
       { name: '얼굴 사물함', emoji: '🔐', help: '얼굴을 알아보고 사물함을 열어 줘요.' },
       { name: '말 듣는 스피커', emoji: '🔊', help: '말을 알아듣고 물음에 답해 줘요.' },
       { name: '번역 앱', emoji: '📷', help: '사진 속 글자를 읽어서 옮겨 줘요.' },
-      { name: '청소 로봇', emoji: '🤖', help: '스스로 길을 찾아 교실을 치워 줘요.' },
+      { name: '청소 로봇', emoji: '🤖', help: '주변을 살펴 길을 찾아 교실을 치워 줘요.' },
     ],
     plain: [
       { name: '선풍기', emoji: '🌀', help: '' },
@@ -186,7 +186,7 @@ const STAGES: StageConfig[] = [
       { name: '얼굴 도어록', emoji: '🔐', help: '얼굴을 알아보고 현관을 열어 줘요.' },
       { name: '말 듣는 안내기', emoji: '🗣️', help: '말을 알아듣고 가는 길을 알려 줘요.' },
       { name: '번역 앱', emoji: '📷', help: '간판 글자를 읽어서 우리말로 바꿔 줘요.' },
-      { name: '배달 로봇', emoji: '🤖', help: '스스로 길을 찾아 짐을 옮겨 줘요.' },
+      { name: '배달 로봇', emoji: '🤖', help: '주변을 살펴 길을 찾아 짐을 옮겨 줘요.' },
     ],
     plain: [
       { name: '신호등', emoji: '🚦', help: '' },
@@ -296,7 +296,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
   const [lives, setLives] = useState(tuning.lives);
   const [foundCount, setFoundCount] = useState(0);
   const [note, setNote] = useState<{ text: string; tone: 'info' | 'good' | 'warn' }>({
-    text: 'AI는 스스로 보고 듣고 알아보는 기계예요.',
+    text: 'AI는 사진이나 소리, 말을 받아 알아내거나 골라 주는 프로그램이에요.',
     tone: 'info',
   });
 
@@ -310,7 +310,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
     setPhase('ready');
     setLives(tuning.lives);
     setFoundCount(0);
-    setNote({ text: 'AI는 스스로 보고 듣고 알아보는 기계예요.', tone: 'info' });
+    setNote({ text: 'AI는 사진이나 소리, 말을 받아 알아내거나 골라 주는 프로그램이에요.', tone: 'info' });
   }, [game.round, game.stageIndex, stage, tuning, game.seed]);
 
   const timeLeft = useCountdown(
@@ -320,7 +320,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
     () => {
       if (finishedRef.current) return;
       finishedRef.current = true;
-      game.fail('시간이 다 됐어요. 스스로 보고 듣고 알아보는 물건부터 찾아보세요.');
+      game.fail('시간이 다 됐어요. 사진이나 소리, 말을 받아 알아내거나 골라 주는 물건부터 찾아보세요.');
     },
   );
 
@@ -341,7 +341,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
       setNote({ text: `${item.name} — ${item.help}`, tone: 'good' });
       if (next >= AI_TARGET) {
         finishedRef.current = true;
-        game.succeed('AI가 든 물건 다섯 개를 모두 찾았어요. AI는 스스로 알아보고 도와주는 기계예요.');
+        game.succeed('AI가 든 물건 다섯 개를 모두 찾았어요. AI는 사진이나 소리, 말을 받아 알아내거나 골라 주는 프로그램이에요.');
       }
       return;
     }
@@ -349,7 +349,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
     item.shake = 0.7;
     playSound('select');
     setNote({
-      text: `${item.name} — 이건 누르면 그대로 도는 기계예요. 스스로 알아보지는 않아요.`,
+      text: `${item.name} — 이건 정해진 대로만 움직이는 기계예요. 사진이나 소리, 말을 받아 알아내지는 않아요.`,
       tone: 'warn',
     });
     const left = livesRef.current - 1;
@@ -357,7 +357,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
     setLives(Math.max(0, left));
     if (left <= 0) {
       finishedRef.current = true;
-      game.fail('기회를 다 썼어요. 스스로 보고 듣고 골라 주는 물건인지 먼저 살펴보세요.');
+      game.fail('기회를 다 썼어요. 사진이나 소리, 말을 받아 알아내거나 골라 주는 물건인지 먼저 살펴보세요.');
     }
   };
 
@@ -460,7 +460,7 @@ export default function AiSpotHuntGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="생활 속 AI 찾기"
-      instruction="그림 속에서 스스로 보고 듣고 알아보는 인공지능 물건을 찾아 눌러 보세요. 돋보기를 움직여 5개를 모두 찾아봅시다."
+      instruction="그림 속에서 사진이나 소리, 말을 받아 알아내거나 골라 주는 인공지능 물건을 찾아 눌러 보세요. 돋보기를 움직여 5개를 모두 찾아봅시다."
       progress={{ label: '찾은 AI', value: foundCount, max: AI_TARGET }}
       hud={(
         <GameHud

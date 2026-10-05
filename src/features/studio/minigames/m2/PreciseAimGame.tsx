@@ -3,7 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
   BAUHAUS, BauhausMark, GameCanvas, GameHud, STROKE, centerText, clamp, createRandom, drawBar, drawMark,
-  drawShape, randRange, useGameKeys, paintBoard,
+  drawShape, objectOf, randRange, subjectOf, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -191,7 +191,7 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
       setHud({ got: w.got, lives: w.lives });
       if (w.lives <= 0) {
         w.finished = true;
-        game.fail(`${stage.goal}이 아닌 것을 쐈어요. 말 조각을 붙여 또렷하게 만든 다음 쏴 봐요.`);
+        game.fail(`${subjectOf(stage.goal)} 아닌 것을 쐈어요. 말 조각을 붙여 또렷하게 만든 다음 쏴 봐요.`);
       }
     }
   };
@@ -238,7 +238,7 @@ export default function PreciseAimGame({ supportLevel }: MiniGameProps) {
           setHud({ got: w.got, lives: w.lives });
           if (w.lives <= 0 && !w.finished) {
             w.finished = true;
-            game.fail(`${stage.goal}을 놓쳤어요. 말 조각을 붙여 또렷하게 만든 다음 쏴 봐요.`);
+            game.fail(`${objectOf(stage.goal)} 놓쳤어요. 말 조각을 붙여 또렷하게 만든 다음 쏴 봐요.`);
           }
         }
         w.items = w.items.filter((item) => !item.hit || item.y < WORLD_H + 120);

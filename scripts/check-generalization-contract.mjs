@@ -7,7 +7,6 @@ const types = readFileSync(resolve(root, 'src/types.ts'), 'utf8');
 
 for (const file of [
   'src/utils/generalizationStorage.ts',
-  'src/components/mission/useGeneralizationCycle.ts',
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`missing ${file}`);
 }
@@ -16,18 +15,8 @@ for (const marker of ['JudgmentPreviewBlock', 'JudgmentMainBlock', 'Generalizati
   if (!types.includes(marker)) throw new Error(`missing type marker: ${marker}`);
 }
 
-const previewPath = resolve(root, 'src/components/mission/blocks/JudgmentPreview.tsx');
-if (!existsSync(previewPath)) throw new Error('missing JudgmentPreview.tsx');
-const preview = readFileSync(previewPath, 'utf8');
-if (!preview.includes('첫 생각을 저장했습니다')) throw new Error('preview must defer feedback');
-if (preview.includes('정답이에요')) throw new Error('preview must not mark answers correct');
-
-const mainPath = resolve(root, 'src/components/mission/blocks/JudgmentMain.tsx');
-if (!existsSync(mainPath)) throw new Error('missing JudgmentMain.tsx');
-const main = readFileSync(mainPath, 'utf8');
-for (const marker of ['중요한 정보를 찾습니다', '아이미의 다른 생각', '받아들이겠습니까', '내 생각을 유지하겠습니까', '새 장면']) {
-  if (!main.includes(marker)) throw new Error(`missing main phase: ${marker}`);
-}
+// 예전 단계형 렌더러의 판단 블록(JudgmentPreview·JudgmentMain)과 useGeneralizationCycle은 쓰는 차시가 없어
+// 없앴다. 일반화 과제는 스튜디오의 전이 단계와 단원 마무리가 맡는다.
 
 const lessonPairs = [
   ['m1', 'm1-l6', 'm1-l11'],

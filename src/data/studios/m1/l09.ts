@@ -10,7 +10,7 @@ export const M1_L9_STUDIO: StudioDefinition = {
     format: 'D',
     decisionTitle: '아이미와 함께 알맞은 AI 도구를 골라봐요.',
     suggestedQuestions: [
-      '글쓰기를 잘 하는 인공지능은?',
+      '글쓰기를 잘하는 인공지능은?',
       '노래를 잘 만드는 인공지능은?',
       '영상을 잘 만드는 인공지능은?',
       '컴퓨터 프로그램을 잘하는 인공지능은?',

@@ -106,7 +106,7 @@ if (!lessonViewSource.includes('markCompleted(definition.lessonId)')) throw new 
 
 const rootLessonViewPath = 'src/views/LessonView.tsx';
 const rootLessonView = fs.readFileSync(rootLessonViewPath, 'utf8');
-for (const token of ['getStudioDefinition', '<StudioLessonView', 'if (studioDefinition)', '<ImplementedLesson']) {
+for (const token of ['getStudioDefinition', '<StudioLessonView', 'if (studioDefinition)', '<ComingSoonLesson']) {
   if (!rootLessonView.includes(token)) throw new Error(`safe studio routing is missing: ${token}`);
 }
 if (rootLessonView.includes("getLessonRole(lessonId) === 'studio'")) {

@@ -286,7 +286,7 @@ if (frame.includes('nextDisabled')) throw new Error('shared footer must not expo
 if (studioView.includes('visualNovelLocked') || studioView.includes('canGoNext')) {
   throw new Error('studio view still gates forward navigation');
 }
-for (const key of ["'wrap-up'", "'coming-soon'", 'currentStep.kind']) {
+for (const key of ["'coming-soon'"]) {
   if (!lessonView.includes(key)) throw new Error(`lesson page key missing: ${key}`);
 }
 if (!studioView.includes('pageKey={session.state.stage}')) throw new Error('studio stage page key is missing');

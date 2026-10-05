@@ -162,7 +162,7 @@ export const M3_LESSONS: LessonContent[] = [
     objective: '오늘은 공부할 때 AI에게 맡길 일과 내가 직접 할 일을 정해 나의 공부 도구함을 완성해 봐요.',
     standards: [SEARCH_STANDARD, SHARE_STANDARD],
     bodyEasy: '열 번의 공부 기록에서 도구를 골라 AI가 도울 일과 내가 할 일을 정해요.',
-    bodyNormal: '열 번의 공부 기록에서 질문, 설명, 연습에 도움 되는 도구를 고르고, 원래 자료 확인하기, 내 말로 고쳐 쓰기, 스스로 제출할 생각은 직접 만들기 규칙을 정리합니다.',
+    bodyNormal: '열 번의 공부 기록에서 질문, 설명, 연습에 도움 되는 도구를 고르고, 원래 자료 확인하기, 내 말로 고쳐 쓰기, 제출할 생각은 직접 만들기 같은 규칙을 정리합니다.',
     wrapUpEasy: 'AI 도움과 내가 직접 할 일을 나눈 공부 도우미 도구함을 만들었어요.',
     wrapUpNormal: 'AI가 도울 범위와 학생이 직접 생각하고 표현할 범위, 결과를 확인할 근거를 연결해 나의 공부 도우미 도구함을 완성합니다.',
     steps: [{ kind: 'text', data: { dictionaryTerms: ['도우미', '표절', '확인'], imagePlaceholder: true } }],

@@ -13,7 +13,7 @@ const BAD_TERMS: RegExp[] = [
   /porn|explicit sex/i,
 ];
 
-const FALLBACK_TEXT = '다시 말해주겠습니다. 다른 질문 해 보십시오.';
+const FALLBACK_TEXT = '이 대답은 보여 줄 수 없어요. 다른 질문을 해 보세요.';
 
 export interface FilterResult {
   safe: boolean;

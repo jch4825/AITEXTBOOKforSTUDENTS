@@ -1,4 +1,5 @@
 import type { StudioDefinition } from '../../../features/studio/types';
+import { AI_DEFINITION } from '../../studentDictionary';
 import { STUDIO_EXPRESSION_MODES, STUDIO_SUPPORT_PROFILES, sceneBeats } from '../shared';
 
 export const M1_L1_STUDIO: StudioDefinition = {
@@ -29,9 +30,9 @@ export const M1_L1_STUDIO: StudioDefinition = {
           copy: sceneBeats(
             [
               [
-                '목요일 방과 후, 진우는 설레는 마음으로 새로 문을 연 AI 동아리방 문을 활짝 열고 들어섰습니다.',
-                '목요일 방과 후, 진우와 윤아는 오늘 특별한 새 인공지능 도우미를 만난다는 기대감을 가득 안고, 새로 문을 연 AI 동아리방 문을 활짝 열었습니다.',
-                '목요일 방과 후, 진우와 윤아는 오늘 특별한 새 인공지능 도우미를 만난다는 민준 선생님의 말씀을 떠올리며, 설레는 마음으로 새로 문을 연 AI 동아리방 문을 활짝 열었습니다.',
+                '목요일 방과 후, 진우는 설레는 마음으로 새로 생긴 AI 동아리방 문을 활짝 열고 들어섰습니다.',
+                '목요일 방과 후, 진우와 윤아는 오늘 특별한 새 인공지능 도우미를 만난다는 기대감을 가득 안고, 새로 생긴 AI 동아리방 문을 활짝 열었습니다.',
+                '목요일 방과 후, 진우와 윤아는 오늘 특별한 새 인공지능 도우미를 만난다는 민준 선생님의 말씀을 떠올리며, 설레는 마음으로 새로 생긴 AI 동아리방 문을 활짝 열었습니다.',
               ],
               [
                 '동아리방 안에는 분홍빛 귀여운 AI 로봇이 서서 반갑게 손을 흔들고 있었습니다. 진우: "우아! 진짜 AI 로봇이 교실에 있네!"',
@@ -93,7 +94,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
                 '칠판 모니터에 외국어 번역 앱, 좋아하는 노래를 골라 주는 음악 추천 앱, 사진 속 식물 찾기 화면이 떴습니다. 진우: "어? 저 세 가지 도구는 나도 평소에 매일 재미있게 쓰던 건데!"',
               ],
               [
-                '윤아: "외국어를 바꾸고, 노래를 권하고, 사진을 찾아내는 이 세 가지 앱에는 어떤 공통점이 숨어 있을까?"',
+                '윤아: "외국어를 우리말로 바꾸고, 노래를 권하고, 사진을 찾아내는 이 세 가지 앱에는 어떤 공통점이 숨어 있을까?"',
                 '윤아가 화면을 유심히 들여다보았습니다. 윤아: "외국어를 우리말로 바꾸고, 노래를 골라 권하고, 사진을 알아채는 이 세 가지 앱에는 어떤 공통점이 숨어 있을까?"',
                 '윤아가 턱을 괴고 화면을 유심히 들여다보았습니다. 윤아: "외국어를 우리말로 척척 바꾸고, 노래를 골라 권하고, 사진을 알아채는 이 세 가지 친숙한 앱에는 어떤 놀라운 공통점이 숨어 있을까?"',
               ],
@@ -132,11 +133,11 @@ export const M1_L1_STUDIO: StudioDefinition = {
       knowledge: [
         {
           title: 'AI(인공지능)의 뜻',
-          core: 'AI(인공지능)는 사람처럼 학습하고 판단하여 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
+          core: AI_DEFINITION.what,
           detail: {
-            full: 'AI(인공지능)는 사람처럼 생각하고 배워서 여러 가지 일을 도와주는 프로그램이에요.',
-            light: 'AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하여, 우리가 필요한 번역·추천·분류 같은 일을 도와주는 기술입니다.',
-            challenge: '인공지능(AI)은 사람의 생각하는 방식을 비슷하게 만들어 내어, 데이터 학습과 판단으로 다양한 문제 해결과 의사결정을 지원하는 기술을 뜻합니다.',
+            full: `${AI_DEFINITION.whatEasy} ${AI_DEFINITION.does.easy}`,
+            light: AI_DEFINITION.does.normal,
+            challenge: AI_DEFINITION.does.challenge,
           },
         },
         {
@@ -147,7 +148,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
             light: '어떤 정보를 입력하느냐에 따라 AI가 만들어 내는 결과와 도와줄 수 있는 내용이 달라집니다.',
             challenge: '입력하는 정보의 종류와 상태에 따라 AI가 파악할 수 있는 정보의 범위와 처리 결과가 달라집니다.',
           },
-          flow: { input: '말·글·사진', process: '자료에서 규칙 찾기', output: '번역·추천·분류' },
+          flow: { input: '말·글·사진', process: '배운 자료와 비슷한 점 찾기', output: '번역·추천·분류' },
         },
         {
           title: '아이미는 마음이 없어요',
@@ -164,10 +165,10 @@ export const M1_L1_STUDIO: StudioDefinition = {
       title: '아이미의 어려운 자기소개',
       description: '로봇 아이미가 어려운 기술 용어로 인사했습니다. 윤아와 함께 인공지능(AI)이란 무엇인지 알아보고, 번역하기·음악 추천받기·사진 찾기처럼 우리 생활 속에서 AI가 해 주는 일들을 찾아봅시다.',
       facts: [
-        '인공지능(AI)은 컴퓨터가 사람처럼 스스로 배우고 생각하여 여러 가지 문제 해결을 돕는 기술입니다.',
+        `${AI_DEFINITION.what} ${AI_DEFINITION.does.normal}`,
         'AI는 말, 글, 사진 같은 입력을 받아 일을 처리할 수 있습니다.',
         'AI는 사람처럼 말해도 마음이나 기분은 없습니다.',
-        'AI는 번역, 추천, 분류 같은 다양한 결과를 만들어 도와줍니다.',
+        'AI는 번역, 추천, 분류 같은 다양한 결과를 만들어 우리를 도와줍니다.',
       ],
     },
     firstAttempt: {
@@ -176,7 +177,7 @@ export const M1_L1_STUDIO: StudioDefinition = {
         { id: 'tool-with-input', emoji: '🛠️', label: '많은 자료에서 비슷한 점을 찾아 번역, 추천, 분류를 돕는 기술이라고 소개합니다.', isCorrect: true, reaction: '아이미: "네! 저는 자료에서 비슷한 점을 찾아 돕는 도구예요. 정확해요!"' },
         { id: 'magic-friend', emoji: '🪄', label: '모든 것을 알고 마음도 나누는 마법 친구라고 소개합니다.', isCorrect: false, reaction: '아이미: "음… 저는 모르는 것도 많고 마음도 없어요. 친구가 아니라 도우미랍니다."' },
         { id: 'just-machine', emoji: '⚙️', label: '전기로 움직이는 기계는 모두 AI라고 소개합니다.', isCorrect: false, reaction: '윤아가 선풍기를 가리키며 고개를 갸웃했습니다. "이것도 전기로 움직이는데… AI인가?"' },
-        { id: 'human-like-helper', emoji: '🤖', label: '대화를 나누며 어려운 문제를 함께 해결해 나가는 든든한 도우미라고 덧붙입니다.', isCorrect: true, reaction: '아이미: "맞아요! 저는 함께 생각을 다듬는 도구예요!"' },
+        { id: 'human-like-helper', emoji: '🤖', label: '사람이 어려운 문제를 풀 때 도와주는 도구라고 덧붙입니다.', isCorrect: true, reaction: '아이미: "맞아요! 저는 사람이 생각을 다듬을 때 쓰는 도구예요!"' },
       ],
       modes: [...STUDIO_EXPRESSION_MODES],
       reasonPrompt: 'AI(인공지능)의 뜻과 할 수 있는 일 중 꼭 말하고 싶은 내용은 무엇인가요?',

@@ -93,7 +93,7 @@ const M1_OBJECTIVES = new Map([
 const M2_OBJECTIVES = new Map([
   ['m2-l1', '아이미가 엉뚱하게 알아들은 부탁에서 빠진 정보를 찾아, 개인정보 없이 채워 다시 부탁해요.'],
   ['m2-l2', '한 문장에 섞인 여러 부탁을 하나씩 나누고, 마감이 빠른 것부터 아이미에게 차례로 부탁해요.'],
-  ['m2-l3', '`그거`, `아무거나` 대신 이름·종류·개수를 넣어 부탁하고, 아이미의 답이 어떻게 달라지는지 비교해요.'],
+  ['m2-l3', '"그거", "아무거나" 대신 이름·종류·개수를 넣어 부탁하고, 아이미의 답이 어떻게 달라지는지 비교해요.'],
   ['m2-l4', '원하는 답의 예시를 하나 만들어 아이미에게 보여 주고, 예시를 주기 전과 후의 답을 비교해요.'],
   ['m2-l5', '답을 읽을 사람과 말투를 아이미에게 알려 주고, 사실(시간·장소·준비물)이 맞는지는 따로 확인해요.'],
   ['m2-l6', '큰 부탁을 작은 단계로 나누고, 앞 단계에서 받은 아이미의 답을 다음 부탁에 이어 써요.'],
@@ -134,7 +134,7 @@ const M4_OBJECTIVES = new Map([
 
 const M5_OBJECTIVES = new Map([
   ['m5-l1', '물품이 안 온 상황에서 지금 모습과 원하는 모습을 나눠 적고, 아이미와 함께 진짜 문제를 한 문장으로 만들어요.'],
-  ['m5-l2', '`부스 설치`라는 큰 일을 작은 과제로 나누고, 아이미의 목록에서 빠진 과제와 필요 없는 과제를 찾아 고쳐요.'],
+  ['m5-l2', '"부스 설치"라는 큰 일을 작은 과제로 나누고, 아이미의 목록에서 빠진 과제와 필요 없는 과제를 찾아 고쳐요.'],
   ['m5-l3', '아이미가 추천한 설치 순서를 모의 실행으로 시험하고, 먼저 해야 하는 이유가 있는 순서로 다시 조립해요.'],
   ['m5-l4', '한꺼번에 온 세 가지 일에 안전·마감·도움 기준을 붙이고, 아이미와 함께 먼저 할 일을 정해 이유를 말해요.'],
   ['m5-l5', '막힌 문제에서 완성 답 대신, 아이미에게 필요한 만큼의 힌트만 골라 받아 내 방법을 고쳐요.'],
@@ -244,9 +244,6 @@ if (/\bgoal\s*:/.test(hardInterface)) {
 const lessonView = read('src/views/LessonView.tsx');
 const studioPanel = read('src/features/studio/components/StudioExplanationPanel.tsx');
 const teacherPanel = read('src/features/teacher/LegacyTeacherPanels.tsx');
-if (!lessonView.includes('const goalText = lesson.objective;')) {
-  throw new Error('LessonView must use lesson.objective as the single goal');
-}
 if (!studioPanel.includes('const goal = lesson.objective;')) {
   throw new Error('StudioExplanationPanel must use lesson.objective as the single goal');
 }

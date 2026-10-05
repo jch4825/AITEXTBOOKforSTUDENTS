@@ -287,7 +287,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
 
           <section className="studio-editorial p-6" ref={criteriaSectionRef} tabIndex={-1}>
             <h2 className="text-xl font-extrabold">3단계 · 내가 잘한 과정</h2>
-            <p className="mt-1 text-sm text-[color:var(--muted)]">하나 이상 골라 보십시오.</p>
+            <p className="mt-1 text-sm text-[color:var(--muted)]">하나 이상 골라 보세요.</p>
             <div className="mt-4 grid gap-3 md:grid-cols-2">
               {CRITERIA.map((criterion) => {
                 const selected = selectedCriteria.includes(criterion);
@@ -316,7 +316,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
               value={nextMethod}
               choices={definition.nextChoices}
               modes={NEXT_MODES}
-              prompt={definition.transferPrompt ?? '다른 문제가 생기면 어떤 방법을 다시 써 보겠습니까?'}
+              prompt={definition.transferPrompt ?? '다른 문제가 생기면 어떤 방법을 다시 써 볼까요?'}
               accent={theme.accent}
               onChange={setNextMethod}
               readingSupport={moduleHasReadingSupport(definition.moduleId)}

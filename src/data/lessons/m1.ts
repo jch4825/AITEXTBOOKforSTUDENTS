@@ -1,4 +1,5 @@
 import type { LessonContent } from '../../types';
+import { AI_DEFINITION } from '../studentDictionary';
 
 const AI_STANDARD = '[9정통02-04] 인공지능에 대해 관심을 기울이고, 생활 속 인공지능의 다양한 사례를 탐색한다.';
 
@@ -17,10 +18,10 @@ export const M1_LESSONS: LessonContent[] = [
     title: '아이미와 처음 만난 날',
     objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 나만의 표현으로 소개해요.',
     standards: [AI_STANDARD],
-    bodyEasy: 'AI(인공지능)는 사람처럼 생각하고 배워서 여러 가지 일을 도와주는 프로그램이에요. 말, 글, 사진을 받아 번역, 추천, 분류처럼 필요한 결과를 만들어 줘요.',
-    bodyNormal: 'AI(인공지능)는 많은 자료에서 비슷한 점을 찾아 여러 문제 해결을 돕는 기술입니다. 말, 글, 사진 같은 입력을 받아 번역, 음악 추천, 사진 속 동물 찾기처럼 할 수 있는 일을 처리해 결과를 만듭니다.',
-    wrapUpEasy: 'AI(인공지능)는 사람처럼 생각하고 배워서 번역·추천·분류 같은 다양한 일을 도와줘요.',
-    wrapUpNormal: 'AI(인공지능)는 컴퓨터가 사람처럼 학습하고 판단하는 기술로, 입력(말·글·사진)을 바탕으로 번역, 추천, 분류 등의 결과를 만듭니다.',
+    bodyEasy: `${AI_DEFINITION.whatEasy} ${AI_DEFINITION.does.easy}`,
+    bodyNormal: `${AI_DEFINITION.what} ${AI_DEFINITION.does.normal} 번역, 음악 추천, 사진 속 동물 찾기가 그 예입니다.`,
+    wrapUpEasy: `${AI_DEFINITION.whatEasy} ${AI_DEFINITION.does.easy}`,
+    wrapUpNormal: `${AI_DEFINITION.what} ${AI_DEFINITION.does.normal}`,
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['인공지능', '데이터', '프로그램', '의사결정', '정보', '입력', '번역', '수행', '범주', '신호', '구조'], imagePlaceholder: true } },
     ],
@@ -203,8 +204,8 @@ export const M1_LESSONS: LessonContent[] = [
     standards: [AI_STANDARD],
     bodyEasy: '인공지능은 사진에 보이는 특징을 살펴보고 무엇인지 알아맞혀요. 사진이 가려지거나 어두우면 엉뚱하게 알아볼 수도 있어요.',
     bodyNormal: '사진을 알아보는 인공지능은 눈에 보이는 특징을 바탕으로 가장 알맞다고 생각하는 답을 고릅니다. 가려진 부분이나 밝기, 각도 같은 사진 조건이 바뀌면 인공지능의 답도 달라질 수 있습니다.',
-    wrapUpEasy: '사진의 밝기나 각도가 바뀌면 인공지능의 답도 달라질 수 있어요. 항상 원래 진짜 모습을 함께 확인해요.',
-    wrapUpNormal: '사진 인식 결과는 가림이나 밝기, 각도의 영향을 크게 받으므로, 사진 조건과 원래 진짜 모습을 함께 비교해 보아야 합니다.',
+    wrapUpEasy: '사진의 밝기나 각도가 바뀌면 인공지능의 답도 달라질 수 있어요. 항상 원래 모습을 함께 확인해요.',
+    wrapUpNormal: '사진 인식 결과는 가림이나 밝기, 각도의 영향을 크게 받으므로, 사진 조건과 원래 모습을 함께 비교해 보아야 합니다.',
     steps: [
       { kind: 'text', data: { dictionaryTerms: ['이미지 인식', '입력', '결과'], imagePlaceholder: true } },
     ],

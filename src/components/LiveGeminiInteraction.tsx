@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Icon from './Icon';
 import MicButton from './MicButton';
-import { askGemini, GeminiError } from '../utils/gemini';
+import { askGemini, AI_NOT_CONNECTED_MESSAGE, GeminiError } from '../utils/gemini';
 import { hasApiKey } from '../utils/apiKey';
 import { getLessonSystemPrompt, type LessonPromptContext } from '../data/lessonSystemPrompts';
 import { useSpeak } from '../hooks/useSpeak';
@@ -71,7 +71,7 @@ export default function LiveGeminiInteraction({
     if (activeRequestRef.current) return;
 
     if (!isConnected) {
-      setErrorMessage('인공지능이 연결되지 않아 이 페이지 활동은 지금 하기 어려워요. 다음에 다시 활용해 보세요.');
+      setErrorMessage(AI_NOT_CONNECTED_MESSAGE);
       return;
     }
 
@@ -124,12 +124,12 @@ export default function LiveGeminiInteraction({
       }
       if (err instanceof GeminiError) {
         if (err.kind === 'no-key') {
-          setErrorMessage('인공지능이 연결되지 않아 이 페이지 활동은 지금 하기 어려워요. 다음에 다시 활용해 보세요.');
+          setErrorMessage(AI_NOT_CONNECTED_MESSAGE);
         } else {
           setErrorMessage(err.studentMessage);
         }
       } else {
-        setErrorMessage('인공지능이 연결되지 않아 이 페이지 활동은 지금 하기 어려워요. 다음에 다시 활용해 보세요.');
+        setErrorMessage(AI_NOT_CONNECTED_MESSAGE);
       }
     } finally {
       if (activeRequestRef.current?.id === requestId) {
@@ -172,10 +172,10 @@ export default function LiveGeminiInteraction({
       <div className="p-5 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50 text-amber-900 depth-paper space-y-3">
         <div className="flex items-center gap-3 font-bold text-base">
           <Icon name="warning" size={24} className="text-amber-600 shrink-0" />
-          <span>실시간 인공지능(Gemini) 대화 안내</span>
+          <span>실시간 인공지능 대화 안내</span>
         </div>
         <p className="text-sm font-semibold leading-relaxed">
-          인공지능이 연결되지 않아 이 페이지 활동은 지금 하기 어려워요. 다음에 다시 활용해 보세요.
+          {AI_NOT_CONNECTED_MESSAGE}
         </p>
       </div>
     );
@@ -371,7 +371,7 @@ export default function LiveGeminiInteraction({
             className="col-start-3 row-start-2 flex h-11 w-full min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl px-1 text-sm font-bold text-white depth-paper transition cursor-pointer disabled:opacity-50 sm:px-4"
             style={{ background: accent }}
           >
-            {loading ? '인식 중...' : '보내기'}
+            {loading ? '생각하는 중...' : '보내기'}
           </button>
         </div>
       </div>

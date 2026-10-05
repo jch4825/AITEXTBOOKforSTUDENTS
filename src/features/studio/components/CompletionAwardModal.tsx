@@ -147,7 +147,7 @@ export default function CompletionAwardModal({
               {/* Citation (수여문) */}
               <div className="my-6 space-y-4 text-center px-4">
                 <h2 className="text-xl md:text-2xl font-bold text-amber-900 tracking-wider font-sans">
-                  상목: 인공지능(AI) 탐구 학습 최고상
+                  상 이름: 인공지능(AI) 탐구 학습 최고상
                 </h2>
                 <p className="text-lg md:text-xl font-medium text-slate-800 leading-loose break-keep font-serif">
                   위 학생은 특수교육 인공지능 탐구 학습 <br />

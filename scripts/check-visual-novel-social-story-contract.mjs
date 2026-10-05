@@ -162,14 +162,15 @@ for (const token of [
   "objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 나만의 표현으로 소개해요.'",
   "imageSrc: '/lessons/story/m1/m1-l1-scene-01.webp'",
   '아이미의 설명에는 어려운 말이 많았습니다.',
-  'AI(인공지능)는 사람처럼 학습하고 판단하여 여러 가지 문제 해결을 도와주는 기술이나 프로그램입니다.',
+  // 1번 카드(AI의 뜻)는 사전의 단일 정의를 쓴다. 정의 문장은 studentDictionary.ts의 AI_DEFINITION 한 곳에서 정한다.
+  'core: AI_DEFINITION.what,',
   // 3번 카드는 2번 카드와 내용이 겹쳐 있었다. AI를 사회적 존재로 오인하지 않도록
   // 「아이미는 마음이 없어요」로 교체했다(m4-l9의 낯선 계정 경계 학습과 충돌 방지).
   '아이미는 도와주는 도구입니다. 사람처럼 기뻐하거나 서운해하지 않습니다.',
  ]) {
   if (!m1Studio.includes(token)) throw new Error(`missing m1-l1 social story data: ${token}`);
 }
-for (const retiredToken of ['어제 자리표', '아이미가 본 것은 어제 자리표']) {
+for (const retiredToken of ['어제 자리표', '아이미가 본 것은 어제 자리표', '사람처럼 학습하고 판단하여', '사람처럼 스스로 배우고 생각']) {
   if (m1Studio.includes(retiredToken)) throw new Error(`retired m1-l1 story remains: ${retiredToken}`);
 }
 if (!m1Lesson.includes("objective: '어려운 말로 인사한 아이미 대신, AI(인공지능)의 뜻과 AI가 돕는 일 두 가지를 나만의 표현으로 소개해요.'")) {

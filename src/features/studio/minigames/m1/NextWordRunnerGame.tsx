@@ -1,7 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Icon from '../../../../components/Icon';
 import { useSpeak } from '../../../../hooks/useSpeak';
-import { BAUHAUS, BauhausMark, STROKE, drawBar, drawShape } from '../engine';
+import { BAUHAUS, BauhausMark, CANVAS_FONT, STROKE, drawBar, drawShape } from '../engine';
+import { GAME_STAGES, type StageConfig } from './nextWordStages';
+import {
+  BALLOON_FACES,
+  STRING_LENGTH,
+  SWAY_X,
+  SWAY_Y,
+  commonScale,
+  heroX,
+  inkOnFace,
+  labelRows,
+  layoutBalloons,
+  type MeasureText,
+} from './nextWordBalloons';
 
 /**
  * 이 판이 쓰는 바우하우스 색. 판은 어두운 면이다.
@@ -16,12 +29,21 @@ interface Balloon {
   id: string;
   word: string;
   probability: number; // 0 to 100
+  /** 그려지는 중심. 들어오는 거리와 흔들림이 얹힌 값이라 누르기 판정도 이 값을 쓴다. */
   x: number;
   y: number;
+  /** 자리 잡은 중심 */
+  targetX: number;
   targetY: number;
   radius: number;
   color: string;
   borderColor: string;
+  /** 면 색 위에서 읽히는 글자 색 */
+  ink: string;
+  /** 낱말을 줄바꿈한 결과와 글자 크기. 풍선 안에 다 들어오게 정해진 값이다. */
+  lines: string[];
+  wordFont: number;
+  pctFont: number;
 }
 
 interface Particle {
@@ -35,109 +57,34 @@ interface Particle {
   maxLife: number;
 }
 
-interface StepConfig {
-  balloons: { word: string; probability: number }[];
-}
+/* 세 단계의 모든 풍선 묶음. 판 크기마다 이 전체가 담기는 배율을 정해 모든 단계가 같이 쓴다. */
+const ALL_BALLOON_GROUPS = GAME_STAGES.flatMap((s) => s.steps.map((step) => step.balloons));
 
-interface StageConfig {
-  id: string;
-  title: string;
-  initialPrompt: string;
-  steps: StepConfig[];
-  factCheckSource: string;
-  realFact: string;
-}
+/* 글자 너비를 재는 캔버스. 그림 그리는 캔버스와 따로 둬서 재는 일이 판 그림에 끼어들지 않는다. */
+let measureContext: CanvasRenderingContext2D | null = null;
+const widthCache = new Map<string, number>();
 
-const GAME_STAGES: StageConfig[] = [
-  {
-    id: 'lunch',
-    title: '1단계 · 오늘 급식 메뉴 만들기',
-    initialPrompt: '오늘 급식은',
-    factCheckSource: '학교 게시판 주간 식단표',
-    realFact: '오늘의 진짜 급식 메뉴는 제육볶음과 미역국입니다.',
-    steps: [
-      {
-        balloons: [
-          { word: '맛있는', probability: 85 },
-          { word: '달콤한', probability: 55 },
-          { word: '엉뚱한', probability: 25 },
-        ],
-      },
-      {
-        balloons: [
-          { word: '무지개', probability: 90 },
-          { word: '얼큰한', probability: 50 },
-          { word: '따뜻한', probability: 30 },
-        ],
-      },
-      {
-        balloons: [
-          { word: '아이스크림 떡볶이야!', probability: 95 },
-          { word: '제육볶음이야!', probability: 65 },
-          { word: '피자 치킨이야!', probability: 40 },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'school',
-    title: '2단계 · 학교 소식 만들기',
-    initialPrompt: '우리 학교 운동장에서',
-    factCheckSource: '학교 공식 가정통신문',
-    realFact: '오늘 운동장에서는 체육 수업이 진행됩니다.',
-    steps: [
-      {
-        balloons: [
-          { word: '신나는', probability: 80 },
-          { word: '조용한', probability: 40 },
-        ],
-      },
-      {
-        balloons: [
-          { word: '우주비행사', probability: 90 },
-          { word: '공룡 친구들의', probability: 45 },
-        ],
-      },
-      {
-        balloons: [
-          { word: '아이돌 콘서트가 열려!', probability: 95 },
-          { word: '로봇 축제가 시작돼!', probability: 60 },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'weather',
-    title: '3단계 · 오늘 날씨 예보 만들기',
-    initialPrompt: '오늘 날씨는',
-    factCheckSource: '기상청 공식 일기예보',
-    realFact: '오늘 서울 지역은 맑고 기온은 22도입니다.',
-    steps: [
-      {
-        balloons: [
-          { word: '햇살 쨍쨍한', probability: 85 },
-          { word: '바람 쌩쌩', probability: 45 },
-        ],
-      },
-      {
-        balloons: [
-          { word: '무지개 구름과', probability: 80 },
-          { word: '초콜릿 비가 내려', probability: 35 },
-        ],
-      },
-      {
-        balloons: [
-          { word: '소풍 가기 딱 좋아!', probability: 95 },
-          { word: '우산 꼭 챙겨요!', probability: 50 },
-        ],
-      },
-    ],
-  },
-];
+const measureText: MeasureText = (text, fontPx) => {
+  const key = `${fontPx}|${text}`;
+  const cached = widthCache.get(key);
+  if (cached !== undefined) return cached;
+  measureContext ??= document.createElement('canvas').getContext('2d');
+  /* 잴 수 없으면 한 글자를 1em으로 잡는다. 실제보다 넓어서 풍선이 커질 뿐 글자가 넘치지는 않는다. */
+  let width = text.length * fontPx;
+  if (measureContext) {
+    measureContext.font = `800 ${fontPx}px ${CANVAS_FONT}`;
+    width = measureContext.measureText(text).width;
+  }
+  widthCache.set(key, width);
+  return width;
+};
 
 export default function NextWordRunnerGame() {
   const { speakNow } = useSpeak();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const boardRef = useRef<HTMLDivElement | null>(null);
+  /* 판의 실제 크기(CSS 픽셀)와 화소비. 캔버스를 이 크기로 그려서 잘리거나 늘어나지 않는다. */
+  const sizeRef = useRef({ width: 540, height: 270, dpr: 1 });
 
   const [currentStageIdx, setCurrentStageIdx] = useState(0);
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
@@ -147,6 +94,9 @@ export default function NextWordRunnerGame() {
 
   // Animation state in refs to prevent 60fps React re-renders
   const balloonsRef = useRef<Balloon[]>([]);
+  /* 풍선 무리가 오른쪽 판 밖에서 자리까지 들어오는 동안 남은 거리. 풍선마다 따로 다가가면
+     속도가 달라 들어오는 도중 서로 겹치므로, 무리 전체가 이 값 하나로 같이 움직인다. */
+  const enterRef = useRef(0);
   const particlesRef = useRef<Particle[]>([]);
   const gameStateRef = useRef(gameState);
   const currentStepRef = useRef(currentStepIdx);
@@ -179,40 +129,61 @@ export default function NextWordRunnerGame() {
     }
   };
 
+  /* 풍선의 자리·반지름·글자를 지금 판 크기에 맞춘다. 글자가 풍선 안에 다 들어오고 풍선끼리
+     겹치지 않는 자리는 nextWordBalloons가 정한다. */
+  const arrangeBalloons = () => {
+    const balloons = balloonsRef.current;
+    if (balloons.length === 0) return;
+    const { width, height } = sizeRef.current;
+    const board = { width, height };
+    const layout = layoutBalloons(
+      balloons.map((b) => ({ word: b.word, probability: b.probability })),
+      board,
+      measureText,
+      commonScale(ALL_BALLOON_GROUPS, board, measureText),
+    );
+    balloons.forEach((b, idx) => {
+      const spot = layout.placements[idx];
+      b.radius = spot.radius;
+      b.lines = spot.lines;
+      b.wordFont = spot.wordFont;
+      b.pctFont = spot.pctFont;
+      b.targetX = spot.x;
+      b.targetY = spot.y;
+    });
+  };
+
   const spawnBalloons = (s: StageConfig, stepIdx: number) => {
     if (stepIdx >= s.steps.length) return;
     const stepConfig = s.steps[stepIdx];
-    const canvas = canvasRef.current;
-    const width = canvas ? canvas.width : 540;
-    const height = canvas ? canvas.height : 280;
-
-    /* 어울림이 큰 낱말일수록 노랑, 작을수록 회색이다. 크기(반지름)와 색이 같은 방향으로
-       움직이므로 색을 구별하지 못해도 큰 것이 더 어울리는 낱말이라는 것은 남는다. */
-    const colors = [
-      { bg: B.yellow, border: B.keyline },
-      { bg: B.blue, border: B.keyline },
-      { bg: B.grey, border: B.keyline },
-    ];
-
-    const count = stepConfig.balloons.length;
-    const verticalGap = height / (count + 1);
 
     balloonsRef.current = stepConfig.balloons.map((b, idx) => {
-      // Radius scale based on probability: 95% -> radius 46, 25% -> radius 32
-      const radius = 32 + (b.probability / 100) * 16;
-      const colorScheme = colors[idx % colors.length];
-
+      const color = BALLOON_FACES[idx % BALLOON_FACES.length];
       return {
         id: `${stepIdx}-${idx}-${Date.now()}`,
         word: b.word,
         probability: b.probability,
-        x: width - 90 + (idx % 2 === 0 ? 0 : 35), // Visible right side spawn
-        y: verticalGap * (idx + 1),
-        targetY: verticalGap * (idx + 1),
-        radius,
-        color: colorScheme.bg,
-        borderColor: colorScheme.border,
+        x: 0,
+        y: 0,
+        targetX: 0,
+        targetY: 0,
+        radius: 0,
+        color,
+        borderColor: B.keyline,
+        ink: inkOnFace(color),
+        lines: [b.word],
+        wordFont: 16,
+        pctFont: 14,
       };
+    });
+    arrangeBalloons();
+
+    // 가장 왼쪽 풍선까지 판 밖에 있도록 멀리서 시작해 오른쪽에서 들어온다.
+    const balloons = balloonsRef.current;
+    enterRef.current = sizeRef.current.width - Math.min(...balloons.map((b) => b.targetX - b.radius)) + 12;
+    balloons.forEach((b) => {
+      b.x = b.targetX + enterRef.current;
+      b.y = b.targetY;
     });
   };
 
@@ -264,6 +235,44 @@ export default function NextWordRunnerGame() {
     }
   };
 
+  /* 캔버스를 판의 실제 크기로 맞춘다. 고정 크기(540×270) 그림을 `object-cover`로 덮어 두면
+     판이 좁은 화면(1024px에서 판이 323px)에서 그림의 양옆이 잘려 나가 풍선이 반쯤 가려졌다.
+     크기가 바뀌면 풍선도 새 판에 다시 놓는다. */
+  useEffect(() => {
+    const board = boardRef.current;
+    const canvas = canvasRef.current;
+    if (!board || !canvas) return;
+
+    const fit = () => {
+      const width = Math.max(1, Math.round(board.clientWidth));
+      const height = Math.max(1, Math.round(board.clientHeight));
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      if (canvas.width !== Math.round(width * dpr) || canvas.height !== Math.round(height * dpr)) {
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+      }
+      sizeRef.current = { width, height, dpr };
+      /* 놀이 중에 판이 줄거나 늘면(대체 단추가 두 줄이 되는 때) 들어오는 풍선을 멈춰 세우지 않고
+         새 자리로 이어서 가게 한다. */
+      arrangeBalloons();
+    };
+    fit();
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(fit);
+    observer?.observe(board);
+
+    /* 글꼴이 늦게 들어오면 글자 너비가 달라진다. 다시 재서 놓는다. */
+    const remeasure = () => {
+      widthCache.clear();
+      arrangeBalloons();
+    };
+    document.fonts?.addEventListener('loadingdone', remeasure);
+
+    return () => {
+      observer?.disconnect();
+      document.fonts?.removeEventListener('loadingdone', remeasure);
+    };
+  }, []);
+
   // Smooth Canvas Animation Loop
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -276,33 +285,35 @@ export default function NextWordRunnerGame() {
 
     const render = () => {
       time += 0.03;
+      const { width, height, dpr } = sizeRef.current;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       // 1. 판 바탕
       ctx.fillStyle = B.ground;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, width, height);
 
       // 2. 흘러가는 격자 — 낱말이 다가온다는 것을 배경의 움직임으로 알린다.
       ctx.strokeStyle = B.surface;
       ctx.lineWidth = 1.5;
       const gridOffset = (time * 30) % 40;
-      for (let x = -gridOffset; x < canvas.width; x += 40) {
+      for (let x = -gridOffset; x < width; x += 40) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
+        ctx.lineTo(x, height);
         ctx.stroke();
       }
 
-      // 바닥선
+      // 바닥선 — 풍선과 줄 아래, 판 맨 아래에 둔다.
       ctx.strokeStyle = B.blue;
       ctx.lineWidth = STROKE.hair;
       ctx.beginPath();
-      ctx.moveTo(0, canvas.height - 30);
-      ctx.lineTo(canvas.width, canvas.height - 30);
+      ctx.moveTo(0, height - 6);
+      ctx.lineTo(width, height - 6);
       ctx.stroke();
 
-      // 3. Draw Aimi Robot Hero (Hovering at x=80)
-      const aimiX = 80;
-      const aimiY = canvas.height / 2 - 5 + Math.sin(time * 2) * 6;
+      // 3. Draw Aimi Robot Hero (Hovering at the left)
+      const aimiX = heroX(width);
+      const aimiY = height / 2 - 5 + Math.sin(time * 2) * 6;
 
       ctx.save();
       ctx.translate(aimiX, aimiY);
@@ -343,39 +354,43 @@ export default function NextWordRunnerGame() {
         ctx.globalAlpha = 1.0;
       });
 
-      // 5. Update and Draw Approaching Word Balloons
+      // 5. Update and Draw Word Balloons
       if (gameStateRef.current === 'playing') {
+        /* 무리가 오른쪽 판 밖에서 자리까지 들어온다. 멀수록 빠르고, 가까워지면 느려진다.
+           자리를 잡은 뒤에는 떠 있는 것처럼 살짝 흔들릴 뿐 어디로도 흘러가지 않는다 —
+           흘러가다 되돌아가면 글자가 판 가장자리에 걸려 반쯤 가려지는 때가 생긴다. */
+        const entering = enterRef.current;
+        if (entering > 0) {
+          enterRef.current = Math.max(0, entering - Math.min(4.5, Math.max(0.8, entering * 0.06)));
+        }
         balloonsRef.current.forEach((b, idx) => {
-          // Slow, comfortable, crystal-clear approach speed (0.6px per frame)
-          b.x -= 0.6;
-          b.y = b.targetY + Math.sin(time * 2 + idx) * 4; // Gentle vertical floating
-
-          // If balloon floats past Aimi (x < 140), reset position to right so student never misses it!
-          if (b.x < 140) {
-            b.x = canvas.width - 60 + idx * 75;
-          }
+          b.x = b.targetX + enterRef.current + Math.sin(time * 0.9 + idx * 2.1) * SWAY_X;
+          b.y = b.targetY + Math.sin(time * 2 + idx) * SWAY_Y;
         });
       }
 
+      // 풍선 줄 — 곧은 선 하나. 줄은 모두 먼저 그려서 이웃 풍선 위로 올라오지 않게 한다.
       balloonsRef.current.forEach((b) => {
-        // 풍선 줄 — 곧은 선 하나. 흔들리던 곡선을 곧게 폈다.
         ctx.beginPath();
         ctx.moveTo(b.x, b.y + b.radius);
-        ctx.lineTo(b.x, b.y + b.radius + 26);
+        ctx.lineTo(b.x, b.y + b.radius + STRING_LENGTH);
         ctx.strokeStyle = B.grey;
         ctx.lineWidth = 1.5;
         ctx.stroke();
+      });
 
+      balloonsRef.current.forEach((b) => {
         drawShape(ctx, 'circle', b.x, b.y, b.radius * 2,
           { fill: b.color, stroke: b.borderColor, width: STROKE.hair });
 
-        ctx.fillStyle = B.ground;
+        /* 글자는 면 색에 맞는 색으로, 풍선 안에 맞춰 둔 크기와 줄바꿈 그대로 그린다. */
+        ctx.fillStyle = b.ink;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = '800 14px "Pretendard", system-ui, sans-serif';
-        ctx.fillText(`${b.probability}%`, b.x, b.y - b.radius * 0.42);
-        ctx.font = '800 15px "Pretendard", system-ui, sans-serif';
-        ctx.fillText(b.word, b.x, b.y + 5);
+        for (const row of labelRows(`${b.probability}%`, b.lines, b.wordFont, b.pctFont)) {
+          ctx.font = `800 ${row.font}px ${CANVAS_FONT}`;
+          ctx.fillText(row.text, b.x, b.y + row.y);
+        }
       });
 
       animId = requestAnimationFrame(render);
@@ -392,16 +407,20 @@ export default function NextWordRunnerGame() {
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const clickX = (e.clientX - rect.left) * scaleX;
-    const clickY = (e.clientY - rect.top) * scaleY;
+    const { width, height } = sizeRef.current;
+    const clickX = (e.clientX - rect.left) * (width / rect.width);
+    const clickY = (e.clientY - rect.top) * (height / rect.height);
 
-    // Generous hit test radius for easy student clicking
-    const clickedBalloon = balloonsRef.current.find((b) => {
-      const dist = Math.hypot(clickX - b.x, clickY - b.y);
-      return dist <= b.radius + 16;
-    });
+    // Generous hit test radius for easy student clicking. 겹쳐 닿으면 눌린 곳에 더 가까운 풍선이다.
+    let clickedBalloon: Balloon | null = null;
+    let nearest = Infinity;
+    for (const b of balloonsRef.current) {
+      const outside = Math.hypot(clickX - b.x, clickY - b.y) - b.radius;
+      if (outside <= 16 && outside < nearest) {
+        nearest = outside;
+        clickedBalloon = b;
+      }
+    }
 
     if (clickedBalloon) {
       popBalloon(clickedBalloon);
@@ -531,15 +550,19 @@ export default function NextWordRunnerGame() {
         </div>
       )}
 
-      {/* 놀이판 */}
-      <div className="relative min-h-[240px] w-full flex-1 overflow-hidden" style={boardPanel}>
+      {/* 놀이판. 높이가 정해지지 않은 자리에서는 2:1 비율로 서고, 캔버스는 이 칸을 그대로 채운다. */}
+      <div
+        ref={boardRef}
+        className="relative aspect-[2/1] min-h-[240px] w-full flex-1 overflow-hidden"
+        style={boardPanel}
+      >
         <canvas
           ref={canvasRef}
           width={540}
           height={270}
           onClick={handleCanvasClick}
           aria-label="움직이는 말풍선 장면. 아래 낱말 버튼으로도 고를 수 있어요."
-          className="h-full w-full cursor-pointer object-cover"
+          className="absolute inset-0 h-full w-full cursor-pointer"
         />
 
         {gameState === 'idle' && (
@@ -608,7 +631,7 @@ export default function NextWordRunnerGame() {
               style={{
                 background: 'var(--game-board-blue)',
                 border: 'var(--game-line) solid var(--game-board-blue)',
-                color: 'var(--game-board)',
+                color: 'var(--game-board-ink)',
               }}
             >
               <BauhausMark kind="square" size={18} />
@@ -664,7 +687,7 @@ export default function NextWordRunnerGame() {
                   style={{
                     background: 'var(--game-board-blue)',
                     border: 'var(--game-line) solid var(--game-board-blue)',
-                    color: 'var(--game-board)',
+                    color: 'var(--game-board-ink)',
                   }}
                 >
                   <BauhausMark kind="retry" size={16} />

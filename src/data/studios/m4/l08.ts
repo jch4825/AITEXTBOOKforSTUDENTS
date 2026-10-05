@@ -98,7 +98,7 @@ export const M4_L8_STUDIO: StudioDefinition = {
         },
         {
           id: 'm4-l8-stop-flag',
-          label: '당신의 멈춤 신호는?',
+          label: '여러분의 멈춤 신호는?',
           imageSrc: '/lessons/story/m4/m4-l8-scene-04.webp',
           alt: '아이미가 숫자 하나로는 부족하다며 학생의 멈춤 신호와 다음 행동을 묻는 장면을 위한 빈 이미지 자리',
           knowledgeStep: 2,

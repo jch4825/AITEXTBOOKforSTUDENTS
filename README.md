@@ -5,12 +5,14 @@
 
 ## 현재 구성
 
-- 경험 중심 스튜디오 62개
-- 단원 마무리 성장 포트폴리오 6개
-- 스토리 WebP 266개
-- 충분한 지원 / 보통 / 도전적 3단계
-- TTS, 쉬운 사전, 교사용 과정 기록과 암호화 백업
-- 준비된 AI 예시를 기본으로 사용하므로 카메라·마이크 권한 없이 학습 가능
+- 경험 중심 스튜디오 62개, 단원 마무리 성장 포트폴리오 6개
+- 스토리 WebP 266개, 스튜디오마다 놀이(미니게임) 하나 — 놀이는 태블릿·PC(768px 이상)에서만 열리고, 휴대전화에서는 정리 패널로 같은 학습을 마칩니다
+- 지원 수준 3단계: **충분한 지원 / 중학 / 고등**. 중학과 고등은 지원 강도이자 학년군(9학년군·12학년군 성취기준)입니다
+- 읽기 지원: 듣기 단추(TTS), 그림 카드로 고르기, 쉬운 사전
+- 교사 도구: 운영 허브, 과정 기록, 성취기준, 암호화 백업, A4 학습지(하·중·상)
+- 준비된 AI 예시를 기본으로 쓰므로 카메라·마이크 권한 없이 핵심 학습이 끝납니다. 교사가 직접 Gemini API 키를 넣으면 AI와 대화하는 단계와 사전의 AI 풀이가 열립니다
+
+AI를 말하는 글은 `src/data/studentDictionary.ts`의 `AI_DEFINITION` 한 곳에서 정한 정의를 따릅니다.
 
 ## 로컬 실행
 
@@ -19,7 +21,7 @@ npm install
 npm run dev
 ```
 
-기본 주소는 `http://localhost:3000/AITEXTBOOKforSTUDENTS/`입니다.
+기본 주소는 `http://localhost:3000/AITEXTBOOKforSTUDENTS/`입니다. Node 24를 씁니다.
 
 ## 검증
 
@@ -30,7 +32,11 @@ npm run check:encoding
 npm run check:public-images
 npm run check:studio-rollout
 npm run check:modules-remodel
+npm run check:dictionary
 ```
+
+변경 범위에 맞는 계약 검사는 `package.json`의 `check:*`와 `test:*`에서 고릅니다. 현재 기준과 완료 전
+검증 절차는 `CLAUDE.md`에 있습니다.
 
 ## 배포
 
@@ -47,3 +53,7 @@ npm run check:modules-remodel
 - 교육과정 참고: `docs/reference/2022-special-education-curriculum.pdf`
 
 과거 계획서와 생성 중간물은 저장소에 중복 보관하지 않으며 Git 기록에서 확인합니다.
+
+## 보안
+
+학생 정보와 API 키를 어떻게 다루는지, 취약점을 어떻게 알리는지는 `SECURITY.md`에 적었습니다.
