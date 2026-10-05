@@ -42,6 +42,9 @@
   다만 앱이 학생에게 직접 건네는 말(UI·게임 피드백·지시문)에는 반말을 쓰지 않습니다.
   학생이 아이미에게 하는 질문은 반말이어도 됩니다. `npm run check:student-formal-style`이
   이를 검사합니다.
+- 게임·화면 문구에서 판마다 바뀌는 낱말 뒤에 조사를 고정해 쓰지 않습니다("봄바람는", "도구으로", "우유은 품절").
+  `src/features/studio/minigames/engine/korean.ts`의 `topicOf`·`objectOf`·`subjectOf`·`withOf`·`viaOf`(ㄹ 받침도 "로")·
+  `particleFor`(따옴표로 감싼 낱말)를 씁니다. `npm run test:korean`.
 - 이야기(visualNovel)는 **쉬운 글이 곧 짧은 글이 아니라는 원칙**을 따릅니다. 장면 하나를
   대사 칸 3~4개로 나눠 학생이 넘겨 읽고, 각 칸은 배경·이유·인물의 반응을 생략하지 않습니다.
   지원 수준 셋은 칸 수와 사건이 같고 문장 길이와 낱말만 다릅니다. 쉬운 수준이라고 정보를
@@ -81,12 +84,20 @@
   - 뜻풀이는 그 낱말이 교재에서 쓰이는 모든 뜻을 덮어야 하고 한 단원의 용례에만 맞추지 않습니다(신호는 기계가 받는 신호와 몸이 보내는
     경고 신호, 문제는 풀어야 할 일과 퀴즈의 물음). 항목·별칭을 더하거나 고친 뒤에는 `npm run check:dictionary`로 교재 본문 전체를
     훑습니다(조각 밑줄·끊긴 서술어가 0건이어야 합니다).
+  - **인공지능이 무엇인지는 사전의 `AI_DEFINITION` 한 곳에서 정합니다.** 사람이 만든 프로그램이고, 많은 자료에서 비슷한 점을 찾아
+    번역·추천·분류 같은 결과를 만든다는 셋을 말하며, 사람처럼 생각하고 배우거나 느끼는 존재로 말하지 않습니다. 정의를 말하는 글(차시
+    본문·정리·개념 카드·정식 콘텐츠·사전)은 이것을 가져다 쓰고(m1-l1은 import합니다) 지원 수준마다 길이와 낱말만 다릅니다.
+    "스스로 보고 듣고 알아보는 기계"는 센서 자동문과 가려지지 않아 쓰지 않고, 놀이의 판단 기준은 "사진이나 소리, 말을 받아 알아내거나
+    골라 주는가"입니다. `check:dictionary`가 정의의 일치와 사람처럼 말하는 정의의 재등장을 막습니다.
   - AI 풀이(`src/utils/dictionaryAi.ts`)는 이 앱의 기존 연결 하나, 곧 교사가 직접 넣은 Gemini 키(`utils/apiKey.ts`)와 `askGemini`만 씁니다.
     키가 없으면 열리지 않습니다. 학생이 사전 칸에 쓴 글이 사전에 없을 때 찾기 단추나 엔터를 눌러야 부르고, 낱말 하나(20자·세 마디 이내,
     4자리 이상 숫자·메일·주소는 거름)만 보내며, 학생 화면에 키·모델·기술 오류를 내지 않고 "AI가 만든 설명"임을 밝힙니다. 실패하면
     선생님께 물어보라고만 안내합니다. `npm run test:dictionary-ai`.
 - 상단 바(차시 화면·표지·목차·교사 허브)에는 **인공지능 연결됨/연결 안됨** 표시(`AiStatus`)가 있습니다. 교사가 키를 넣거나 빼면 바로
   바뀌고, 키·모델·기술 오류는 보이지 않으며, 좁은 폭에서는 'AI 연결됨'으로 줄어듭니다.
+- 개념 카드(`src/features/studio/components/ConceptNotes.tsx`)는 **충분한 지원에서 가장 쉬운 글(`detail.full`)을 중심 문장으로 보이고
+  추상적인 `core`는 "자세한 설명 보기"로 접습니다.** 중학·고등은 `core`를 중심으로 두고 그 수준의 `detail`을 아래에 보입니다. 예전에는
+  충분한 지원에서 `detail`을 그리지 않아 가장 쉬운 글 186개가 화면에 한 번도 나오지 않았습니다. `npm run test:concept-notes`.
 - 교사 도구 A4 학습지(`src/features/teacher/worksheet/`)의 **하·중 수준은 글이 아니라 그림 카드가 중심**이고, **하 수준은
   무오류 학습이 바탕**입니다. 둘 다 두 장으로 앞장은 쓰기 칸이 있는 면, 뒷장은 오려 붙이는 면입니다. 카드는 `data/choiceCards/`의
   선택지 그림 카드를 그대로 쓰고(학생 화면에서 만난 그림과 낱말이 종이에서도 같아야 합니다), 오리는 카드는 한 변 48mm 이상,
@@ -128,7 +139,8 @@
 npm run check:standards-integrity
 npm run check:highschool-tasks`가 강제합니다.
 - 정식 콘텐츠와 성취기준: `src/data/canonicalLessons/`, `src/data/aiAchievementStandards.ts`
-- 학생 사전: `src/data/studentDictionary.ts` — 항목·별칭·`verbal`·`notIn`, 본문에서 밑줄을 치지 않는 낱말 목록. 밑줄 자리를 정하는 엔진은
+- 학생 사전: `src/data/studentDictionary.ts` — 항목·별칭·`verbal`·`notIn`, 본문에서 밑줄을 치지 않는 낱말 목록, 그리고 인공지능 정의
+  `AI_DEFINITION`(차시 글이 이것을 따른다). 밑줄 자리를 정하는 엔진은
   `src/utils/dictionaryMatch.ts`, 사전에 없는 낱말의 AI 풀이는 `src/utils/dictionaryAi.ts`. 항목을 더하거나 고치면 `check:dictionary`를 돌린다.
 - 차시 도움 영상: `src/data/lessonVideos.ts` — 선생님이 올린 해설 영상. 학생 정리 노트
   (`LessonVideoCard`)와 교사 자료(`teacherResources.ts`)가 이 목록 하나를 함께 쓴다. 영상을 더할
@@ -184,6 +196,9 @@ src/
    ├─ dictionaryAi.ts              사전에 없는 낱말의 AI 풀이
    └─ tts.ts, stt.ts               Web Speech API
 ```
+
+차시 화면은 스튜디오(62)와 단원 마무리(6)뿐입니다. 예전 단계형 렌더러(`ImplementedLesson`·`MissionStep`·`games/*`·`RealAIStep` 등 약
+5,000줄)는 쓰는 차시가 없어 지웠습니다. `data/lessons/*.ts`의 `steps`는 남아 있지만 사이드바의 AI 표시(`SidebarTree`)만 읽습니다.
 
 ## 이미지와 public 경로
 
@@ -313,6 +328,8 @@ npm run check:choice-cards
 npm run check:worksheet-picture
 npm run check:dictionary
 npm run test:dictionary-ai
+npm run test:korean
+npm run test:concept-notes
 ```
 
 변경 범위에 맞는 계약 검사도 `package.json`의 `check:*` 명령에서 골라 실행합니다.

@@ -1,21 +1,34 @@
-# Security Policy
+# 보안 정책
 
-## Supported Versions
+## 지원하는 버전
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+버전을 나누어 배포하지 않습니다. `main` 브랜치와 GitHub Pages에 배포된 최신본만 보안 수정 대상입니다.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+## 취약점 신고
 
-## Reporting a Vulnerability
+취약점은 공개 이슈에 내용을 쓰지 말고 비공개로 알려 주세요.
 
-Use this section to tell people how to report a vulnerability.
+1. 저장소의 **Security** 탭에 **Report a vulnerability**가 보이면 그것으로 신고합니다.
+2. 보이지 않으면 공개 이슈에 "보안 문의"라고만 쓰고 내용은 적지 마세요. 비공개로 이어 갈 방법을 알려 드립니다.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+재현 방법, 닿는 범위(학생 정보·API 키·교사 기능 중 무엇인지), 확인한 브라우저를 적어 주시면 처리가 빠릅니다.
+학생의 실제 이름·사진·음성이 담긴 자료는 첨부하지 마세요. 개인이 운영하는 프로젝트라 처리 일정은 약속하지
+못하지만, 확인되면 고치고 신고하신 분께 알립니다.
+
+## 이 앱이 다루는 정보
+
+서버가 없는 정적 웹 앱입니다.
+
+- 학습 진도·설정·과정 기록은 학생이 쓰는 기기의 브라우저(localStorage)에만 저장됩니다. 과정 기록은 교사가
+  켠 경우에만 남습니다. 교사 도구의 백업 파일은 암호로 보호되며, API 키와 원본 음성·사진·그림은 담기지 않습니다.
+- Gemini API 키는 교사가 직접 입력해 그 브라우저에만 저장합니다. 학생 화면에는 키·모델명·기술 오류를
+  보이지 않습니다.
+- 카메라와 마이크 없이도 핵심 학습이 끝납니다. 교사가 AI를 연결하면 학생이 입력한 글과 사진이 Google의 Gemini
+  서버로 전송되며, 화면에 "학교 밖 서버로 전송됩니다"라고 안내합니다.
+- 교사 모드(`?teacher=1`)의 비밀번호는 브라우저 안에서 화면을 나누는 장치일 뿐 서버 인증이 아닙니다.
+  학생 기기에서 교사 기능을 막는 보안 경계로 쓰지 마세요.
+
+## 범위 밖
+
+- 브라우저나 운영체제 자체의 취약점
+- 기기를 직접 만질 수 있는 사람이 저장된 기록을 열어 보는 일
