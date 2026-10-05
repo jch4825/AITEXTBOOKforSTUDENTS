@@ -8,6 +8,7 @@
     "build": "tsc --noEmit && vite build",
     "test:gemini": "node --test tests/unit/gemini.test.mjs",
     "test:dictionary-ai": "node --test tests/unit/dictionaryAi.test.mjs",
+    "test:next-word-balloons": "node --test tests/unit/nextWordBalloons.test.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",

@@ -237,7 +237,8 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-const total = files.filter((f) => /[/\\]m[1-6][/\\]/.test(f)).length;
+/* 분모는 게임 파일만 센다. 게임 곁에 둔 보조 모듈(배치·데이터)은 전환할 게임이 아니다. */
+const total = files.filter((f) => /[/\\]m[1-6][/\\][^/\\]*Game\.tsx$/.test(f)).length;
 console.log(
   `Game visual contract passed: 바우하우스 전환 ${migratedSeen}/${total}개, `
   + `남은 임의 색상 ${hexTotal}/${BASELINE.hex}, 남은 이모지 ${emojiTotal}/${BASELINE.emoji}.`,
