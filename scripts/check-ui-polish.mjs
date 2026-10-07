@@ -22,6 +22,23 @@ if (!existsSync(new URL('../src/components/ComicPanel.tsx', import.meta.url)) ||
   throw new Error('Webtoon panel and WebP asset fallback components must exist.');
 }
 
+// 저작자 표시와 제작 방식(인공지능 바이브코딩 도구·보조 도구 사용)은 표지와 교사 허브에 있고, 문구는 projectCredit.ts 한 곳에서 온다.
+const credit = readFileSync(new URL('../src/data/projectCredit.ts', import.meta.url), 'utf8');
+for (const token of [
+  '전창한',
+  'Anthropic의 Claude Code', 'OpenAI의 Codex', 'Google Antigravity',
+  '인공지능 바이브코딩 도구를 사용하여 제작하였습니다',
+  'Google Notebook(구 NotebookLM)', 'Google Flow', 'Google Stitch',
+  '동영상 제작', '이미지 수정', '표지 제작',
+]) {
+  if (!credit.includes(token)) throw new Error(`Project credit is missing: ${token}`);
+}
+if (/Antropic|Goolge/.test(credit)) throw new Error('Project credit has a misspelled tool name.');
+const teacherHub = readFileSync(new URL('../src/features/teacher/TeacherHub.tsx', import.meta.url), 'utf8');
+if (!home.includes('<ProjectCredit variant="cover"') || !teacherHub.includes('<ProjectCredit variant="teacher"')) {
+  throw new Error('The author credit and the AI-tools disclosure must appear on the cover and the teacher hub.');
+}
+
 const contents = readFileSync(new URL('../src/views/ContentsView.tsx', import.meta.url), 'utf8');
 if (!existsSync(new URL('../src/components/SeasonMap.tsx', import.meta.url)) || !contents.includes('SeasonMap')) {
   throw new Error('Contents must use the season map navigation.');
