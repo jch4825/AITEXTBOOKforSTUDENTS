@@ -1401,16 +1401,33 @@
   font-weight: 800;
 }
 
-.mobile-teacher-tools-grid > button:last-child {
+/* 한 줄을 통째로 쓰는 것은 교사 전용 다섯째 단추(교사 자료)뿐이다. 학생 모드에는 넷뿐이라
+   :last-child만 걸면 넷째가 늘어나 둘째 줄이 그림 카드 하나로 비고 학습지가 셋째 줄로 밀린다. */
+.mobile-teacher-tools-grid > button:nth-child(5):last-child {
   grid-column: 1 / -1;
 }
 
+/* 교사 자료에 걸린 링크 수. 열기 전에 비었는지 알려 준다. */
+.teacher-tool-count {
+  display: inline-grid;
+  min-width: 1.6em;
+  height: 1.6em;
+  padding-inline: 0.4em;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--paper-0);
+  color: var(--brand-ink);
+  font-size: 0.8em;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* 시트 안 패널(타이머·그림 카드·교사 자료)은 틀이 없다. 안의 카드와 단추가 각자 면이라
+   패널이 한 겹 더 감싸면 상자 안의 상자가 된다. 단원 색은 시트가 --tool-accent·--tool-soft·
+   --btn-accent로 내려 주고, 세 패널이 같은 머리글(.tool-panel-head)을 쓴다. */
 .mobile-teacher-tools-panel {
   margin-top: 12px;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--paper-0);
 }
 
 /* 교실 도구 시트는 이름과 달리 모든 폭에서 쓴다(mobile- 접두는 모바일에서 먼저 만든 흔적이다).
@@ -1432,12 +1449,413 @@
     border-radius: 18px;
   }
 
+  /* 교실 도구 넷이 한 줄이고, 교사 모드의 다섯째(교사 자료)는 그 아래 한 줄을 다 쓴다.
+     예전에는 auto-fit이라 다섯째가 홀로 왼쪽 칸에 매달려 있었다. */
   .mobile-teacher-tools-grid {
-    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ── 시트 안 패널 공통 머리글 ─────────────────────────────────────────
+   타이머·그림 카드·교사 자료가 같은 머리글을 쓴다. 왼쪽이 이름, 오른쪽이 한 줄 안내이고
+   좁으면 안내가 이름 밑으로 내려간다. 이 패널들은 옛 떠 있는 도크의 w-64(타이머·교사 자료)와
+   w-72·md:w-[500px](그림 카드) 같은 고정 폭이 시트 안까지 남아 720px 시트의 40~70%만 썼다.
+   지금은 시트 폭을 다 쓰고, 안의 배치는 각 패널이 칸의 폭(@container)으로 정한다.
+   글자는 읽는 글이라 --font-bump를 따르고, 단추 안의 글자는 전역 규칙이 원래 크기로 되돌린다. */
+.tool-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.15rem 1rem;
+  padding: 0.3rem 0.25rem 0.65rem;
+}
+
+.tool-panel-head h3 {
+  margin: 0;
+  color: var(--tool-accent, var(--brand-ink));
+  font-size: calc(1.05rem + var(--font-bump));
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.tool-panel-head p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: calc(0.75rem + var(--font-bump));
+  line-height: 1.5;
+}
+
+/* ── 교사 자료(외부 링크) ───────────────────────────────────────────
+   링크가 세로로만 길게 쌓이고 글이 한 줄 열두 글자쯤에서 꺾이던 것을, 카드가 시트 폭을 다 쓰고
+   카드 안의 배치는 칸의 폭(@container)이 정하도록 바꿨다. */
+.teacher-resources {
+  container: teacher-resources / inline-size;
+}
+
+.teacher-resources-empty {
+  display: grid;
+  gap: 0.2rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--r-md);
+  background: var(--paper-1);
+  color: var(--ink-1);
+  font-size: calc(0.875rem + var(--font-bump));
+  line-height: 1.6;
+}
+
+.teacher-resources-empty strong {
+  color: var(--brand-ink);
+  font-size: calc(1rem + var(--font-bump));
+  font-weight: 800;
+}
+
+/* 줄 끝에 한 어절만 남는 것을 막는다(미지원 브라우저는 그대로 둔다). */
+.teacher-resources-empty span,
+.teacher-resource-desc {
+  text-wrap: pretty;
+}
+
+.teacher-resource-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 좁은 칸(휴대전화)의 기본 배치: 그림과 제목이 한 줄이고, 그 밑의 메타·설명·안 열릴 때·열기는 카드 폭을 다 쓴다.
+   요소 사이는 행 간격 대신 각자의 위쪽 여백으로 띄운다. 제목과 메타는 붙여 두고 나머지만 떼려는 것이다.
+   카드 안의 마크업 순서가 곧 읽는 순서라, 배치를 바꿔도 화면 낭독 순서는 그대로다. */
+.teacher-resource {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "tile title"
+    "meta meta"
+    "desc desc"
+    "fallback fallback"
+    "open open";
+  align-items: start;
+  column-gap: 0.9rem;
+  padding: 1rem;
+  border-radius: var(--r-md);
+}
+
+.teacher-resource-tile {
+  grid-area: tile;
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: var(--r-md);
+  background: var(--tool-soft, var(--paper-2));
+  color: var(--tool-accent, var(--brand-ink));
+}
+
+/* 선생님이 직접 만든 영상은 도구와 한눈에 갈리게 면을 채운다. */
+.teacher-resource[data-kind="video"] .teacher-resource-tile {
+  background: var(--tool-accent, var(--brand-ink));
+  color: var(--paper-0);
+}
+
+.teacher-resource-title {
+  grid-area: title;
+  align-self: center;
+  min-width: 0;
+  margin: 0;
+  color: var(--brand-ink);
+  font-size: calc(1rem + var(--font-bump));
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.teacher-resource-meta {
+  grid-area: meta;
+  margin: 0.45rem 0 0;
+  color: var(--ink-2);
+  font-size: calc(0.75rem + var(--font-bump));
+  line-height: 1.5;
+}
+
+.teacher-resource-meta strong {
+  color: var(--brand-ink);
+  font-weight: 800;
+}
+
+/* 날짜는 하이픈에서 줄이 끊기면 읽기 어렵다. 한 덩어리로 둔다. */
+.teacher-resource-date {
+  white-space: nowrap;
+}
+
+.teacher-resource-desc {
+  grid-area: desc;
+  margin: 0.65rem 0 0;
+  color: var(--ink-1);
+  font-size: calc(0.875rem + var(--font-bump));
+  line-height: 1.6;
+}
+
+/* paper-1 위의 글자는 --ink-2(6.6:1)가 7:1에 못 미쳐 --ink-1·--brand-ink로 쓴다. */
+.teacher-resource-fallback {
+  grid-area: fallback;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0.6rem 0 0;
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--r-sm);
+  background: var(--paper-1);
+  color: var(--ink-1);
+  font-size: calc(0.8125rem + var(--font-bump));
+  line-height: 1.55;
+}
+
+.teacher-resource-fallback b {
+  flex: none;
+  color: var(--brand-ink);
+  font-weight: 800;
+}
+
+.teacher-resource-fallback span {
+  min-width: 0;
+}
+
+.teacher-resource-open {
+  grid-area: open;
+  margin-top: 0.9rem;
+  min-height: 2.75rem;
+  padding-inline: 1.1rem;
+  font-size: calc(0.8125rem + var(--font-bump));
+  text-decoration: none;
+}
+
+/* 넓은 칸(태블릿·데스크톱 시트): 그림 · 제목과 메타 · 열기가 한 줄이고 설명이 그 아래로 넓게 깔린다. */
+@container teacher-resources (min-width: 34rem) {
+  .teacher-resource {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "tile title open"
+      "tile meta  open"
+      "tile desc  desc"
+      "tile fallback fallback";
+    column-gap: 1.1rem;
+    padding: 1rem 1.2rem;
   }
 
-  .mobile-teacher-tools-grid > button:last-child {
-    grid-column: auto;
+  .teacher-resource-title {
+    align-self: end;
+  }
+
+  .teacher-resource-meta {
+    align-self: start;
+    margin-top: 0.15rem;
+  }
+
+  .teacher-resource-open {
+    align-self: center;
+    margin-top: 0;
+  }
+}
+
+/* ── 타이머 ─────────────────────────────────────────────────────────
+   시간 고르기는 한 줄(좁으면 3×2)이고, 돌아가는 중에는 숫자판이 왼쪽·조작이 오른쪽이다.
+   좁은 칸(휴대전화)에서는 숫자가 가운데이고 단추가 그 밑에서 전체 폭을 쓴다.
+   숫자는 한 자리 흔들림이 없게 고정폭 숫자(tabular-nums)로 둔다. */
+.class-timer {
+  container: class-timer / inline-size;
+}
+
+.class-timer-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.class-timer-presets button {
+  display: grid;
+  min-height: 4.25rem;
+  place-items: center;
+  padding: 0.6rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper-1);
+  color: var(--ink-2);
+  font-weight: 700;
+  transition: background-color var(--t-fast) ease-out, border-color var(--t-fast) ease-out;
+}
+
+.class-timer-presets button:hover {
+  border-color: var(--tool-accent, var(--brand-ink));
+  background: var(--tool-soft, var(--paper-2));
+}
+
+.class-timer-presets b {
+  color: var(--tool-accent, var(--brand-ink));
+  font-size: 1.75rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.class-timer-run {
+  display: grid;
+  gap: 1rem;
+  padding: 1.1rem 1.2rem 1.2rem;
+  border-radius: var(--r-md);
+  text-align: center;
+}
+
+.class-timer-caption {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: calc(0.8125rem + var(--font-bump));
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.class-timer-digits {
+  margin: 0;
+  color: var(--ink-1);
+  font-size: calc(3.5rem + var(--font-bump));
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+}
+
+.class-timer-actions {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 0.6rem;
+}
+
+/* 끝났을 때: 색(주황 면)과 글(시간이 끝났습니다)을 함께 쓴다. 숫자는 짙은 잉크라 면 위에서도 또렷하다. */
+.class-timer-run.is-done {
+  border-color: var(--warn);
+  background: var(--warn-bg);
+}
+
+.class-timer-run.is-done .class-timer-caption {
+  color: var(--ink-1);
+  font-weight: 800;
+}
+
+@container class-timer (min-width: 34rem) {
+  .class-timer-presets {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .class-timer-run {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    text-align: left;
+  }
+
+  .class-timer-digits {
+    font-size: calc(4.5rem + var(--font-bump));
+  }
+
+  .class-timer-actions {
+    grid-auto-columns: 8.5rem;
+  }
+}
+
+/* ── 그림 카드 ───────────────────────────────────────────────────────
+   목록은 시트 폭을 다 쓰는 격자다(넓으면 여섯 열, 휴대전화는 세 열). 칸 크기를 정해 두지 않고
+   최소 폭만 줘서 글자 크기를 키워도 열 수가 알아서 줄어든다. 안쪽 스크롤 상자는 두지 않는다 —
+   시트가 이미 스크롤하므로 스크롤이 겹치면 손가락으로 어느 쪽이 움직일지 알 수 없다.
+   카드 그림에 이미 낱말이 인쇄돼 있으니 라벨은 그 낱말과 같은 글자를 그림 밑에 큰 글씨로 한 번 더 보인다. */
+.pecs-board {
+  container: pecs-board / inline-size;
+}
+
+.pecs-board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pecs-board-grid li {
+  display: flex;
+  min-width: 0;
+}
+
+.pecs-board-grid button {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.3rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper-1);
+  color: var(--ink-1);
+  transition: background-color var(--t-fast) ease-out, border-color var(--t-fast) ease-out;
+}
+
+.pecs-board-grid button:hover {
+  border-color: var(--tool-accent, var(--brand-ink));
+  background: var(--tool-soft, var(--paper-2));
+}
+
+.pecs-board-grid img {
+  width: 100%;
+  max-width: 4.75rem;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.pecs-board-grid span {
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.pecs-board-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.1rem 0 0.7rem;
+}
+
+.pecs-board-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 1.1rem 1rem 1.3rem;
+  border-radius: var(--r-md);
+}
+
+.pecs-board-card img {
+  width: min(100%, 16rem);
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.pecs-board-card figcaption {
+  color: var(--brand-ink);
+  font-size: calc(1.5rem + var(--font-bump));
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+
+@container pecs-board (min-width: 34rem) {
+  .pecs-board-card img {
+    width: min(100%, 24rem);
+  }
+
+  .pecs-board-card figcaption {
+    font-size: calc(2rem + var(--font-bump));
   }
 }
 

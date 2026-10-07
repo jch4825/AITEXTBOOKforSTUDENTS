@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import Icon from './Icon';
 import type { IconName } from './Icon';
 import DrawBoard from './DrawBoard';
@@ -11,6 +11,7 @@ import { getTeacherResources } from '../data/teacherResources';
 import { isTeacherSessionActive } from '../utils/teacherMode';
 import type { LessonId } from '../types';
 import WorksheetPanel from '../features/teacher/worksheet/WorksheetPanel';
+import TeacherResourcesPanel from '../features/teacher/TeacherResourcesPanel';
 
 type ToolId = 'draw' | 'timer' | 'pecs' | 'worksheet' | 'resources';
 type PanelId = Exclude<ToolId, 'draw'>;
@@ -151,41 +152,16 @@ export default function ClassroomDock({
         />
       )}
       {panelTool === 'pecs' && <PecsBoard moduleId={moduleId} />}
-      {panelTool === 'resources' && (
-        <div className="p-4 w-64 max-w-full">
-          <h3 className="text-lg font-bold mb-2" style={{ color: theme.accent }}>교사 자료</h3>
-          {resources.length === 0 ? (
-            <p className="text-[color:var(--muted)]">자료 준비 중입니다.</p>
-          ) : (
-            <ul className="space-y-2">
-              {resources.map((resource) => (
-                <li key={resource.url} className="rounded-[var(--r-sm)] border border-[color:var(--border)] bg-[color:var(--paper-1)] p-3">
-                  <span className="mb-1 inline-block rounded-[var(--r-pill)] bg-[color:var(--paper-2)] px-2 py-0.5 text-xs font-bold text-[color:var(--muted)]">
-                    {resource.kind === 'video' ? '영상' : '도구'}
-                  </span>
-                  <a
-                    href={resource.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block font-bold underline underline-offset-4"
-                    style={{ color: theme.accent }}
-                  >{resource.label}</a>
-                  {/* m4가 출처와 날짜 확인을 가르치므로 교재 자신의 링크도 그것을 밝힌다. */}
-                  <p className="mt-1 text-xs text-[color:var(--muted)]">
-                    {resource.source} · {resource.checkedAt} 확인 · 외부 사이트로 이동합니다
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">{resource.description}</p>
-                  <p className="mt-2 border-t border-dashed border-[color:var(--border)] pt-2 text-xs leading-relaxed text-[color:var(--muted)]">
-                    안 열릴 때 · {resource.fallback}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
+      {panelTool === 'resources' && <TeacherResourcesPanel resources={resources} />}
     </>
   );
+
+  // 세 패널(타이머·그림 카드·교사 자료)이 단원 색을 같은 이름으로 받는다. 머리글 색·아이콘 면·단추 색이 여기서 온다.
+  const panelThemeVars = {
+    '--tool-accent': theme.accent,
+    '--tool-soft': theme.accentSoft,
+    '--btn-accent': theme.accent,
+  } as CSSProperties;
 
   return (
     <>
@@ -220,11 +196,23 @@ export default function ClassroomDock({
                     color: open === tool.id ? theme.accent : 'var(--ink-1)',
                     borderColor: open === tool.id ? theme.accent : 'var(--border)',
                   }}
-                ><Icon name={tool.icon} size={22} /><span>{tool.label}</span></button>
+                >
+                  <Icon name={tool.icon} size={22} />
+                  <span>{tool.label}</span>
+                  {/* 몇 개가 걸려 있는지 열기 전에 알린다. 하나도 없으면 숫자를 달지 않는다. */}
+                  {tool.id === 'resources' && resources.length > 0 && (
+                    <span className="teacher-tool-count">
+                      <span aria-hidden="true">{resources.length}</span>
+                      <span className="sr-only">링크 {resources.length}개</span>
+                    </span>
+                  )}
+                </button>
               ))}
             </div>
             {panelTool && panelTool !== 'worksheet' && (
-              <div className="mobile-teacher-tools-panel">{panelContent}</div>
+              <div className="mobile-teacher-tools-panel" style={panelThemeVars}>
+                {panelContent}
+              </div>
             )}
           </section>
         </div>
