@@ -163,6 +163,10 @@ npm run check:highschool-tasks`가 강제합니다.
   핵심 문장의 낱말이 바뀌면 `word`(빈칸·그림 카드 낱말)와 `sentence`를 함께 고칩니다.
   옛 그림 카드 127장의 이름은 `src/data/legacyPecs.ts`에 있고 학습지 편집기의 그림 고르기에서 씁니다.
 - 교육과정 원문 참고자료: `docs/reference/2022-special-education-curriculum.pdf`
+- 저작자 표시와 제작 방식: `src/data/projectCredit.ts` — 저작자 전창한, 인공지능 바이브코딩 도구(Claude Code·Codex·Antigravity)와 일마다
+  쓴 보조 도구(동영상 Google Notebook, 이미지 수정 Google Flow, 표지 Google Stitch)를 밝히는 문구 한 곳. 표지 바닥글(`Home`)과 교사 허브
+  (`TeacherHub`)가 `ProjectCredit`으로 같은 문구를 보이고, 표지에는 학생이 누르면 밖으로 나가는 링크를 두지 않는다. README의
+  "저작자와 제작 방식"과 같은 내용이라 바꾸면 함께 고치며, `check:ui-polish`가 두 화면에 있는지 본다.
 
 없는 차시 ID는 임의 데모로 대체하지 않고 `ComingSoonLesson`을 표시합니다.
 
@@ -354,6 +358,6 @@ npm run test:concept-notes
 - `output/`, Playwright 임시 결과, 생성 중간 이미지, 로컬 도구 캐시는 커밋하지 않습니다.
 - 루트에 참고 이미지나 임시 파일을 놓지 않습니다.
 - 비밀키, `.env`, 학생 원본 미디어를 커밋하지 않습니다.
-- 라이선스는 저장소 전체에 CC BY-NC-SA 4.0(`LICENSE`)이고, `public/sounds/`의 효과음은 구매한 개별 상업 라이선스라 예외입니다
-  (재사용·재배포 금지, `public/sounds/NOTICE.md`). 새 외부 자산(소리·그림·글꼴)을 저장소에 더하기 전에 재배포가 허락되는지 확인하고,
+- 라이선스는 저장소 전체에 CC BY-NC-SA 4.0(`LICENSE`)이고, `public/sounds/`의 효과음은 Humble Bundle로 구매한 자료라 예외입니다
+  (구매 때 받은 라이선스를 따르며 재사용·재배포 금지, `public/sounds/NOTICE.md`). 새 외부 자산(소리·그림·글꼴)을 저장소에 더하기 전에 재배포가 허락되는지 확인하고,
   안 되면 저장소에 두지 않거나 README 라이선스 절에 예외로 적습니다.

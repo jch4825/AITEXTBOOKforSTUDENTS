@@ -58,6 +58,14 @@ npm run check:dictionary
 
 학생 정보와 API 키를 어떻게 다루는지, 취약점을 어떻게 알리는지는 `SECURITY.md`에 적었습니다.
 
+## 저작자와 제작 방식
+
+저작자는 전창한입니다.
+
+이 프로젝트는 Anthropic의 Claude Code, OpenAI의 Codex, Google Antigravity 등의 인공지능 바이브코딩 도구를 사용하여 제작하였습니다. 동영상 제작에는 Google Notebook(구 NotebookLM)을, 이미지 수정에는 Google Flow를, 표지 제작에는 Google Stitch를 보조 도구로 활용하였습니다.
+
+같은 문구가 표지 바닥글과 교사 허브의 "이 교재에 대하여"에도 있습니다(`src/data/projectCredit.ts`).
+
 ## 라이선스
 
 이 저장소의 교재 본문·그림·코드는 [CC BY-NC-SA 4.0](LICENSE)으로 공개합니다.
@@ -67,10 +75,10 @@ npm run check:dictionary
 - 고쳐서 공유할 때는 같은 라이선스(CC BY-NC-SA 4.0)를 적용해야 합니다.
 
 쉬운 설명은 https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko 에 있습니다.
-출처 표시 예: 「AI 교과서 — 발달장애 학생을 위한 AI 학습」, jch4825, https://github.com/jch4825/AITEXTBOOKforSTUDENTS, CC BY-NC-SA 4.0
+출처 표시 예: 「AI 교과서 — 발달장애 학생을 위한 AI 학습」, 전창한, https://github.com/jch4825/AITEXTBOOKforSTUDENTS, CC BY-NC-SA 4.0
 
 ### 이 라이선스에 포함되지 않는 것
 
-- **`public/sounds/`의 효과음**: 저장소 소유자가 구매한 개별 상업 라이선스 자료입니다. 이 프로젝트 안에서만 쓰며, 꺼내 쓰거나 다시 배포하거나 다른 곳에 쓸 수 없습니다.
+- **`public/sounds/`의 효과음**: 저장소 소유자가 Humble Bundle로 구매한 자료입니다. 이 저장소의 라이선스가 아니라 구매 때 받은 라이선스를 따르며, 이 프로젝트 안에서만 쓰고 꺼내 쓰거나 다시 배포하거나 다른 곳에 쓸 수 없습니다.
 - `docs/reference/`의 교육과정 원문: 교육부 자료입니다.
 - 외부 라이브러리와 글꼴: 각각의 라이선스를 따릅니다.

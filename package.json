@@ -2,6 +2,7 @@
   "name": "ai-textbook-for-students",
   "private": true,
   "license": "CC-BY-NC-SA-4.0",
+  "author": "전창한",
   "version": "0.1.0",
   "type": "module",
   "scripts": {

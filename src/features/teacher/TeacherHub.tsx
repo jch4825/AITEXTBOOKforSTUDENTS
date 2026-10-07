@@ -1,5 +1,6 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
 import Button from '../../components/Button';
+import ProjectCredit from '../../components/ProjectCredit';
 import AiStatus from '../../components/controls/AiStatus';
 import GeneralizationRecordsPanel from '../../components/mission/GeneralizationRecordsPanel';
 import { clearStudioEvidence } from '../studio/evidenceStorage';
@@ -174,6 +175,8 @@ export default function TeacherHub({ onExit }: Props) {
           />
         )}
       </div>
+
+      <ProjectCredit variant="teacher" />
     </main>
   );
 }

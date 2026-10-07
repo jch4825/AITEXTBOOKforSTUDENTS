@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import AiStatus from '../components/controls/AiStatus';
 import ModuleIcon from '../components/ModuleIcon';
+import ProjectCredit from '../components/ProjectCredit';
 import { useProgress } from '../context/ProgressContext';
 import { useSettings } from '../context/SettingsContext';
 import { DIFFICULTY_TO_SUPPORT, SUPPORT_LABELS, SUPPORT_TO_DIFFICULTY } from '../features/studio/supportLevel';
@@ -299,6 +300,9 @@ export default function Home({ onEnter, onEnterLesson }: Props) {
             <span>학습 기록은 이 기기에 저장됩니다</span>
             <span>도움이 필요하면 선생님께 알려 주세요</span>
           </div>
+        </div>
+        <div className="mx-auto mt-6 max-w-[1200px] px-6 text-center md:text-left">
+          <ProjectCredit variant="cover" />
         </div>
       </footer>
     </div>
