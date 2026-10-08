@@ -112,18 +112,18 @@ export default function StudioEvidencePanel({ mode }: Props) {
 
   if (records.length === 0) {
     return (
-      <section className="studio-editorial p-6">
-        <h2 className="text-xl font-extrabold">{mode === 'teacher' ? '학생 과정기록' : '핵심 경험 포트폴리오'}</h2>
+      <section className="studio-editorial p-6 md:p-8">
+        <h3 className="text-xl font-extrabold">{mode === 'teacher' ? '학생 과정기록' : '핵심 경험 포트폴리오'}</h3>
         <p className="studio-margin-note mt-4">이 브라우저에는 저장된 과정기록이 없습니다. 기록 기능을 켜지 않아도 학습 활동은 그대로 진행됩니다.</p>
       </section>
     );
   }
 
   return (
-    <section className="studio-editorial p-6 print:shadow-none">
+    <section className="studio-editorial p-6 md:p-8 print:shadow-none">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-extrabold">{mode === 'teacher' ? '학생 과정기록' : '핵심 경험 포트폴리오'}</h2>
+          <h3 className="text-xl font-extrabold">{mode === 'teacher' ? '학생 과정기록' : '핵심 경험 포트폴리오'}</h3>
           <p className="mt-1 text-sm text-[color:var(--muted)]">한 브라우저를 여러 학생이 함께 쓰면 별칭별 기록이 섞일 수 있으므로 수업 전에 별칭을 확인하세요.</p>
         </div>
         {mode === 'portfolio' && <Button variant="secondary" onClick={() => window.print()} className="teacher-hub-chrome">포트폴리오 인쇄·PDF</Button>}
@@ -131,18 +131,18 @@ export default function StudioEvidencePanel({ mode }: Props) {
 
       {mode === 'teacher' && (
         <div className="mt-5 overflow-x-auto">
-          <table className="w-full min-w-[760px] border-collapse text-sm">
-            <thead><tr>{['학생·경험', '첫 생각', 'AI와 비교', '최종 판단', '새 상황에 적용'].map((label) => <th key={label} className="border p-2 text-left">{label}</th>)}</tr></thead>
+          <table className="hub-table w-full min-w-[760px] text-sm">
+            <thead><tr>{['학생·경험', '첫 생각', 'AI와 비교', '최종 판단', '새 상황에 적용'].map((label) => <th key={label}>{label}</th>)}</tr></thead>
             <tbody>
               {ordered.map((record) => {
                 const definition = getStudioDefinition(record.lessonId);
                 return (
                   <tr key={record.id}>
-                    <td className="border p-2 font-bold">{record.learnerAlias}<br />{definition?.title ?? record.lessonId}</td>
-                    <td className="border p-2">{expressionText(record.firstAttempt, definition?.firstAttempt.choices)}</td>
-                    <td className="border p-2">{record.aiDecision ? DECISION_LABELS[record.aiDecision] : '기록 없음'}</td>
-                    <td className="border p-2">{expressionText(record.finalExpression, definition?.firstAttempt.choices)}</td>
-                    <td className="border p-2">{expressionText(record.transferExpression, definition?.transfer.choices)}</td>
+                    <td className="font-bold">{record.learnerAlias}<br />{definition?.title ?? record.lessonId}</td>
+                    <td>{expressionText(record.firstAttempt, definition?.firstAttempt.choices)}</td>
+                    <td>{record.aiDecision ? DECISION_LABELS[record.aiDecision] : '기록 없음'}</td>
+                    <td>{expressionText(record.finalExpression, definition?.firstAttempt.choices)}</td>
+                    <td>{expressionText(record.transferExpression, definition?.transfer.choices)}</td>
                   </tr>
                 );
               })}
@@ -151,7 +151,7 @@ export default function StudioEvidencePanel({ mode }: Props) {
         </div>
       )}
 
-      <div className="mt-6 space-y-5">
+      <div className="hub-grid hub-grid--records mt-6">
         {ordered.map((record) => {
           const definition = getStudioDefinition(record.lessonId);
           const first = expressionText(record.firstAttempt, definition?.firstAttempt.choices);
@@ -162,14 +162,14 @@ export default function StudioEvidencePanel({ mode }: Props) {
               <header className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="studio-kicker text-[color:var(--accent)]">{record.learnerAlias}</p>
-                  <h3 className="text-lg font-extrabold">{definition?.title ?? record.lessonId}</h3>
+                  <h4 className="text-lg font-extrabold">{definition?.title ?? record.lessonId}</h4>
                   <p className="text-sm text-[color:var(--muted)]">{new Date(record.completedAt).toLocaleString('ko-KR')} · {SUPPORT_LABELS[record.supportLevel]}</p>
                 </div>
                 {mode === 'teacher' && (
                   <button
                     type="button"
                     onClick={() => { if (window.confirm('이 과정기록 한 건을 삭제할까요?')) deleteStudioEvidence(record.id); }}
-                    className="rounded-full border border-red-300 px-3 py-1 text-sm font-bold text-red-700"
+                    className="hub-danger hub-danger--sm"
                   >
                     이 기록 삭제
                   </button>

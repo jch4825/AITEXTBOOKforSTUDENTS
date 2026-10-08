@@ -89,50 +89,90 @@ export default function TeacherDataManagement({ settings, onSettingsChanged, onR
     }
   }
 
+  // 일상 작업(기록 켜고 끄기·삭제, 백업)은 두 칸에, 되돌릴 수 없는 초기화는 맨 아래 붉은 구역에 따로 둔다.
+  // 예전에는 다섯 장이 같은 모양으로 세로로 쌓여 삭제·초기화가 백업과 한 덩어리로 보였다.
   return (
-    <div className="space-y-6">
+    <div className="hub-stack">
       {message && (
         <p className={`rounded-xl border p-3 font-bold ${message.kind === 'ok' ? 'border-green-300 bg-green-50 text-green-800' : 'border-red-300 bg-red-50 text-red-800'}`} role="status">
           {message.text}
         </p>
       )}
 
-      <section className="studio-editorial p-6">
-        <h2 className="text-xl font-extrabold">기록 기능</h2>
-        <p className="mt-2">학생 별칭: <strong>{settings.learnerAlias}</strong></p>
-        <p className="mt-1">새 과정기록: <strong>{settings.processRecording ? '켜짐' : '꺼짐'}</strong></p>
-        <p className="mt-3 text-sm text-[color:var(--muted)]">과정기록을 꺼도 이미 저장된 기록은 자동으로 삭제되지 않습니다. 진도 저장은 계속 작동합니다.</p>
-        <div className="mt-4">
-          {settings.processRecording
-            ? <Button variant="secondary" onClick={disableRecording}>새 과정기록 끄기</Button>
-            : <Button onClick={onRequestEnable}>과정기록 켜기 안내</Button>}
-        </div>
-      </section>
+      <div className="hub-grid hub-grid--pair">
+        <div className="hub-stack">
+          <section className="studio-editorial p-6 md:p-8" aria-labelledby="data-recording-title">
+            <h3 id="data-recording-title" className="text-xl font-extrabold">기록 기능</h3>
+            <dl className="hub-grid hub-grid--facts mt-4">
+              <div className="studio-fact-card">
+                <dt className="text-sm text-[color:var(--muted)]">학생 별칭</dt>
+                <dd className="font-bold">{settings.learnerAlias}</dd>
+              </div>
+              <div className="studio-fact-card">
+                <dt className="text-sm text-[color:var(--muted)]">새 과정기록</dt>
+                <dd className="font-bold">{settings.processRecording ? '켜짐' : '꺼짐'}</dd>
+              </div>
+            </dl>
+            <p className="mt-4 text-sm text-[color:var(--muted)]">과정기록을 꺼도 이미 저장된 기록은 자동으로 삭제되지 않습니다. 진도 저장은 계속 작동합니다.</p>
+            <div className="mt-4">
+              {settings.processRecording
+                ? <Button variant="secondary" onClick={disableRecording}>새 과정기록 끄기</Button>
+                : <Button onClick={onRequestEnable}>과정기록 켜기 안내</Button>}
+            </div>
+          </section>
 
-      <section className="studio-editorial p-6">
-        <h2 className="text-xl font-extrabold">기록 삭제</h2>
-        <p className="mt-2 text-sm text-[color:var(--muted)]">학생의 수행 기록은 스튜디오 과정기록, 일반화 기록, 진도(완료한 차시) 세 곳에 나뉘어 저장됩니다. 아래 버튼은 세 곳을 함께 지워 다음 학생이 남의 완료 표시나 「이어서 학습하기」를 보지 않게 합니다. 설정과 AI 연결 키까지 지우려면 아래 초기화를 사용하세요.</p>
-        <div className="mt-4">
-          <button
-            type="button"
-            onClick={clearAllRecords}
-            className="btn border-red-300 bg-[color:var(--paper-0)] px-4 font-bold text-red-700"
-          >
-            모든 과정기록 삭제
-          </button>
+          <section className="studio-editorial p-6 md:p-8" aria-labelledby="data-clear-title">
+            <h3 id="data-clear-title" className="text-xl font-extrabold">기록 삭제</h3>
+            <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">학생의 수행 기록은 스튜디오 과정기록, 일반화 기록, 진도(완료한 차시) 세 곳에 나뉘어 저장됩니다. 아래 버튼은 세 곳을 함께 지워 다음 학생이 남의 완료 표시나 「이어서 학습하기」를 보지 않게 합니다. 설정과 AI 연결 키까지 지우려면 아래 초기화를 사용하세요.</p>
+            <div className="mt-4">
+              <button type="button" onClick={clearAllRecords} className="btn hub-danger">
+                모든 과정기록 삭제
+              </button>
+            </div>
+          </section>
         </div>
-      </section>
 
-      <section className="studio-editorial p-6">
-        <h2 className="text-xl font-extrabold">초기화</h2>
-        <p className="mt-2 text-sm text-[color:var(--muted)]">이 브라우저에 저장된 AI 연결 키, 진도, 설정, 과정기록, 이전 일반화 기록을 모두 지우고 처음 상태로 되돌립니다. 되돌릴 수 없으니 필요한 기록은 먼저 암호화 백업으로 내려받으세요. 학생 기록만 지우고 설정과 AI 연결은 남기려면 위의 ‘모든 과정기록 삭제’나 화면 위 ‘과정기록 삭제’ 버튼을 사용하세요.</p>
+        <div className="hub-stack">
+          <section className="studio-editorial p-6 md:p-8" aria-labelledby="data-backup-title">
+            <h3 id="data-backup-title" className="text-xl font-extrabold">암호화 백업 만들기</h3>
+            <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">진도·설정·과정기록·이전 일반화 기록을 AES-GCM으로 암호화합니다. API 키와 원본 미디어는 포함하지 않습니다.</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <label className="font-bold">백업 암호
+                <input type="password" value={backupPassphrase} onChange={(event) => setBackupPassphrase(event.target.value)} className="mt-1 min-h-12 w-full rounded-xl border-2 px-4" />
+              </label>
+              <label className="font-bold">백업 암호 확인
+                <input type="password" value={backupConfirm} onChange={(event) => setBackupConfirm(event.target.value)} className="mt-1 min-h-12 w-full rounded-xl border-2 px-4" />
+              </label>
+            </div>
+            <Button onClick={exportBackup} className="mt-4">암호화 백업 만들기</Button>
+          </section>
+
+          <section className="studio-editorial p-6 md:p-8" aria-labelledby="data-restore-title">
+            <h3 id="data-restore-title" className="text-xl font-extrabold">암호화 백업 복원하기</h3>
+            <p className="mt-2 text-sm leading-relaxed text-[color:var(--muted)]">복원 전 파일 구조와 암호를 확인하며, 실패하면 현재 데이터는 바뀌지 않습니다.</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <label className="font-bold">백업 파일
+                <input type="file" accept="application/json,.json" onChange={(event) => setRestoreFile(event.target.files?.[0] ?? null)} className="mt-1 block min-h-12 w-full rounded-xl border p-2" />
+              </label>
+              <label className="font-bold">백업 암호
+                <input type="password" value={restorePassphrase} onChange={(event) => setRestorePassphrase(event.target.value)} className="mt-1 min-h-12 w-full rounded-xl border-2 px-4" />
+              </label>
+            </div>
+            <Button variant="secondary" onClick={restoreBackup} className="mt-4">암호화 백업 복원하기</Button>
+          </section>
+        </div>
+      </div>
+
+      <section className="hub-danger-zone studio-editorial p-6 md:p-8" aria-labelledby="data-reset-title">
+        <h3 id="data-reset-title" className="text-xl font-extrabold">초기화</h3>
+        <p className="mt-2 max-w-4xl text-sm leading-relaxed text-[color:var(--muted)]">이 브라우저에 저장된 AI 연결 키, 진도, 설정, 과정기록, 이전 일반화 기록을 모두 지우고 처음 상태로 되돌립니다. 되돌릴 수 없으니 필요한 기록은 먼저 암호화 백업으로 내려받으세요. 학생 기록만 지우고 설정과 AI 연결은 남기려면 위의 ‘모든 과정기록 삭제’나 화면 위 ‘과정기록 삭제’ 버튼을 사용하세요.</p>
         <label className="mt-4 block font-bold" htmlFor="reset-confirmation">확인을 위해 ‘초기화’를 입력하세요.</label>
-        <div className="mt-2 flex flex-wrap gap-3">
+        <div className="mt-2 flex max-w-xl flex-wrap gap-3">
           <input
             id="reset-confirmation"
             value={resetPhrase}
             onChange={(event) => setResetPhrase(event.target.value)}
-            className="min-h-12 flex-1 rounded-xl border-2 px-4"
+            className="min-h-12 min-w-0 flex-1 basis-40 rounded-xl border-2 px-4"
           />
           <button
             type="button"
@@ -143,34 +183,6 @@ export default function TeacherDataManagement({ settings, onSettingsChanged, onR
             초기화
           </button>
         </div>
-      </section>
-
-      <section className="studio-editorial p-6">
-        <h2 className="text-xl font-extrabold">암호화 백업 만들기</h2>
-        <p className="mt-2 text-sm text-[color:var(--muted)]">진도·설정·과정기록·이전 일반화 기록을 AES-GCM으로 암호화합니다. API 키와 원본 미디어는 포함하지 않습니다.</p>
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
-          <label className="font-bold">백업 암호
-            <input type="password" value={backupPassphrase} onChange={(event) => setBackupPassphrase(event.target.value)} className="mt-1 min-h-12 w-full rounded-xl border-2 px-4" />
-          </label>
-          <label className="font-bold">백업 암호 확인
-            <input type="password" value={backupConfirm} onChange={(event) => setBackupConfirm(event.target.value)} className="mt-1 min-h-12 w-full rounded-xl border-2 px-4" />
-          </label>
-        </div>
-        <Button onClick={exportBackup} className="mt-4">암호화 백업 만들기</Button>
-      </section>
-
-      <section className="studio-editorial p-6">
-        <h2 className="text-xl font-extrabold">암호화 백업 복원하기</h2>
-        <p className="mt-2 text-sm text-[color:var(--muted)]">복원 전 파일 구조와 암호를 확인하며, 실패하면 현재 데이터는 바뀌지 않습니다.</p>
-        <div className="mt-4 grid gap-3 md:grid-cols-2">
-          <label className="font-bold">백업 파일
-            <input type="file" accept="application/json,.json" onChange={(event) => setRestoreFile(event.target.files?.[0] ?? null)} className="mt-1 block min-h-12 w-full rounded-xl border p-2" />
-          </label>
-          <label className="font-bold">백업 암호
-            <input type="password" value={restorePassphrase} onChange={(event) => setRestorePassphrase(event.target.value)} className="mt-1 min-h-12 w-full rounded-xl border-2 px-4" />
-          </label>
-        </div>
-        <Button variant="secondary" onClick={restoreBackup} className="mt-4">암호화 백업 복원하기</Button>
       </section>
     </div>
   );

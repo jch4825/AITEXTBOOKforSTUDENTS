@@ -9,7 +9,7 @@ const MODULE_EXPERIENCES = [
 
 export default function TeacherOperationGuide() {
   return (
-    <details className="studio-editorial mt-6 p-6 md:p-8">
+    <details className="studio-editorial p-6 md:p-8">
       <summary className="cursor-pointer text-xl font-extrabold">교사용 상세 운영 로직 보기</summary>
       <div className="mt-6 space-y-7 text-sm leading-relaxed">
         <section>

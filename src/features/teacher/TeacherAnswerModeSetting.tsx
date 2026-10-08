@@ -30,9 +30,9 @@ export default function TeacherAnswerModeSetting() {
   const { answerMode, setAnswerMode } = useSettings();
 
   return (
-    <section className="studio-editorial mb-6 p-6 md:p-8" aria-labelledby="answer-mode-title">
+    <section className="studio-editorial p-6 md:p-8" aria-labelledby="answer-mode-title">
       <p className="studio-kicker text-[color:var(--accent)]">수업 환경</p>
-      <h2 id="answer-mode-title" className="mt-1 text-2xl font-extrabold">답하는 방식</h2>
+      <h3 id="answer-mode-title" className="mt-1 text-2xl font-extrabold">답하는 방식</h3>
       <p className="mt-3 leading-relaxed">
         {supportedModuleNames()}의 스튜디오와 단원 마무리에서 학생이 선택지에 답할 때 처음 보이는 화면을
         이 기기에서 정합니다. 글을 못 읽는 학생은 선택지 위 탭의 글자를 찾지 못하므로, 그 학생이 쓰는 기기는
@@ -40,13 +40,9 @@ export default function TeacherAnswerModeSetting() {
         과정 기록의 &lsquo;사용한 지원&rsquo;에 남습니다.
       </p>
 
-      <div role="radiogroup" aria-label="학생이 선택지에 답하는 기본 화면" className="mt-5 grid gap-3 md:grid-cols-2">
+      <div role="radiogroup" aria-label="학생이 선택지에 답하는 기본 화면" className="mt-5 grid gap-3">
         {OPTIONS.map((option) => (
-          <label
-            key={option.value}
-            className="flex cursor-pointer items-start gap-3 rounded-xl border-2 p-3"
-            style={{ borderColor: answerMode === option.value ? 'var(--accent)' : 'var(--line)' }}
-          >
+          <label key={option.value} className="hub-choice">
             <input
               type="radio"
               name="answer-mode"

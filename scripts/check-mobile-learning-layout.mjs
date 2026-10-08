@@ -424,6 +424,177 @@ try {
   assert.deepEqual(popover.labels, ['판서', '타이머', '그림 카드', '학습지'], '데스크톱 교실 도구 팝오버도 학생 모드에서 네 도구를 제공해야 합니다.');
   await evaluate(cdp, `document.querySelector('[aria-label="교사 도구 닫기"]')?.click()`);
 
+  // 교사 모드의 교사 자료(외부 링크)는 시트 폭을 다 써야 한다. 옛 떠 있는 도크의 w-64(약 290px)가
+  // 시트 안까지 남아 720px 시트의 40%만 쓰고 글이 한 줄 열두 글자쯤에서 꺾였는데, 폭을 재는 검사가
+  // 없어 오래 눈에 띄지 않았다. 다섯째 단추(교사 자료)가 홀로 왼쪽 칸에 매달린 것도 같은 시트의 결함이다.
+  await evaluate(cdp, `localStorage.setItem('ai-students-teacher-mode', '1')`);
+  await reloadAndWait(cdp);
+  await evaluate(cdp, `document.querySelector('[data-teacher-tools-trigger]')?.click()`);
+  await waitForSelector(cdp, '.mobile-teacher-tools-sheet');
+  await evaluate(cdp, `document.querySelector('[data-tool-id="resources"]')?.click()`);
+  await waitForSelector(cdp, '.teacher-resource');
+  const resources = await evaluate(cdp, `(() => {
+    const sheet = document.querySelector('.mobile-teacher-tools-sheet');
+    const style = getComputedStyle(sheet);
+    return {
+      inner: sheet.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+      cards: [...sheet.querySelectorAll('.teacher-resource')].map((element) => Math.round(element.getBoundingClientRect().width)),
+      tools: [...sheet.querySelectorAll('[data-tool-id]')].map((element) => {
+        const rect = element.getBoundingClientRect();
+        return { id: element.dataset.toolId, top: Math.round(rect.top), width: Math.round(rect.width) };
+      }),
+      horizontalOverflow: sheet.scrollWidth > sheet.clientWidth,
+    };
+  })()`);
+  assert.ok(resources.cards.length > 0, '1차시(m1-l1)에는 교사 자료가 있어야 합니다(영상 1 + 도구 2).');
+  for (const width of resources.cards) {
+    assert.ok(
+      width >= resources.inner * 0.95,
+      `교사 자료 카드는 시트 폭을 다 써야 합니다. 카드 ${width}px, 시트 안쪽 ${Math.round(resources.inner)}px`,
+    );
+  }
+  assert.equal(resources.tools.length, 5, '교사 모드의 교사 도구는 다섯 개여야 합니다.');
+  const classroomTools = resources.tools.slice(0, 4);
+  const resourcesTool = resources.tools[4];
+  assert.ok(classroomTools.every((tool) => tool.top === classroomTools[0].top), '교실 도구 넷은 한 줄이어야 합니다.');
+  assert.ok(
+    resourcesTool.id === 'resources' && resourcesTool.top > classroomTools[0].top && resourcesTool.width >= resources.inner * 0.95,
+    '교사 자료 단추는 교실 도구 아래 한 줄을 다 써야 합니다.',
+  );
+  assert.equal(resources.horizontalOverflow, false, '교사 도구 시트에 가로 넘침이 생기면 안 됩니다.');
+  await captureScreenshot(cdp, 'desktop-teacher-resources');
+
+  // 같은 시트의 타이머와 그림 카드도 옛 도크 시절의 고정 폭(w-64, w-72·md:w-[500px])이 남아 시트의 절반이
+  // 비었다. 그림 카드 목록은 안쪽 스크롤 상자(max-h-[500px])까지 따로 있어 시트 스크롤과 겹쳤고,
+  // 휴대전화에서는 라벨이 10px이었다. 시간 고르기는 한 줄을 다 쓰고, 그림 카드는 시트 폭을 다 쓰되
+  // 스크롤은 시트 하나뿐이어야 한다.
+  await evaluate(cdp, `document.querySelector('[data-tool-id="timer"]')?.click()`);
+  await waitForSelector(cdp, '.class-timer-presets');
+  const timer = await evaluate(cdp, `(() => {
+    const sheet = document.querySelector('.mobile-teacher-tools-sheet');
+    const style = getComputedStyle(sheet);
+    const presets = [...document.querySelectorAll('.class-timer-presets button')].map((element) => element.getBoundingClientRect());
+    return {
+      inner: sheet.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+      count: presets.length,
+      rows: new Set(presets.map((rect) => Math.round(rect.top))).size,
+      span: presets.length ? Math.max(...presets.map((rect) => rect.right)) - Math.min(...presets.map((rect) => rect.left)) : 0,
+    };
+  })()`);
+  assert.equal(timer.count, 6, '타이머에는 시간 고르기 단추가 여섯 개여야 합니다.');
+  assert.equal(timer.rows, 1, '넓은 시트에서 시간 고르기 단추는 한 줄이어야 합니다.');
+  assert.ok(
+    timer.span >= timer.inner * 0.95,
+    `시간 고르기 단추는 시트 폭을 다 써야 합니다. ${Math.round(timer.span)}px / ${Math.round(timer.inner)}px`,
+  );
+
+  await evaluate(cdp, `document.querySelector('[data-tool-id="pecs"]')?.click()`);
+  await waitForSelector(cdp, '.pecs-board-grid');
+  const pecs = await evaluate(cdp, `(() => {
+    const sheet = document.querySelector('.mobile-teacher-tools-sheet');
+    const style = getComputedStyle(sheet);
+    const grid = document.querySelector('.pecs-board-grid');
+    const labels = [...grid.querySelectorAll('span')].map((element) => parseFloat(getComputedStyle(element).fontSize));
+    return {
+      inner: sheet.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight),
+      width: grid.getBoundingClientRect().width,
+      overflowY: getComputedStyle(grid).overflowY,
+      count: labels.length,
+      minLabel: labels.length ? Math.min(...labels) : 0,
+    };
+  })()`);
+  assert.ok(pecs.count > 0, '그림 카드 목록에는 카드가 있어야 합니다.');
+  assert.ok(
+    pecs.width >= pecs.inner * 0.95,
+    `그림 카드 목록은 시트 폭을 다 써야 합니다. ${Math.round(pecs.width)}px / ${Math.round(pecs.inner)}px`,
+  );
+  assert.equal(pecs.overflowY, 'visible', '그림 카드 목록 안에 따로 스크롤 상자를 두면 시트 스크롤과 겹칩니다.');
+  assert.ok(pecs.minLabel >= 14, `그림 카드 라벨은 14px 이상이어야 합니다. 실제 ${pecs.minLabel}px`);
+
+  await evaluate(cdp, `document.querySelector('.pecs-board-grid button')?.click()`);
+  await waitForSelector(cdp, '.pecs-board-card');
+  const cardWidth = await evaluate(cdp, `document.querySelector('.pecs-board-card').getBoundingClientRect().width`);
+  assert.ok(
+    cardWidth >= pecs.inner * 0.95,
+    `확대한 그림 카드 면은 시트 폭을 다 써야 합니다. ${Math.round(cardWidth)}px / ${Math.round(pecs.inner)}px`,
+  );
+  await captureScreenshot(cdp, 'desktop-teacher-pecs-card');
+
+  // 교사 허브(?teacher=1). 예전에는 max-w-6xl 한 줄기라 1920px에서 본문이 1224px뿐이고 양옆이 약 340px씩
+  // 비었으며, 일곱 탭이 이름뿐인 필 한 줄이었다. 큰 화면에서는 왼쪽 메뉴 + 남은 폭을 다 쓰는 본문이어야 하고,
+  // 어떤 탭도 어떤 폭에서도 가로로 넘치면 안 된다(격자 칸의 min-width: auto가 넓은 표·입력칸에 밀려 390px에서
+  // 데이터 관리·AI 연결·학생 기록이 실제로 넘쳤다). 뷰포트는 새로 고치지 않고 장치 크기만 바꾼다.
+  async function setHubViewport(width, height) {
+    await cdp.send('Emulation.setDeviceMetricsOverride', {
+      width,
+      height,
+      screenWidth: width,
+      screenHeight: height,
+      deviceScaleFactor: 1,
+      mobile: width < 768,
+    });
+    await sleep(450);
+  }
+  const hubUrl = `http://127.0.0.1:${vitePort}/AITEXTBOOKforSTUDENTS/?teacher=1`;
+  await evaluate(cdp, `localStorage.setItem('ai-students-teacher-mode', '1')`);
+  await navigateAndWait(cdp, hubUrl, '.hub-shell');
+
+  await setHubViewport(1920, 1080);
+  const hubWide = await evaluate(cdp, `(() => {
+    const box = (selector) => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, width: rect.width };
+    };
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    const panel = document.querySelector('[role="tabpanel"]');
+    return {
+      viewport: window.innerWidth,
+      rail: box('.hub-rail'),
+      main: box('.hub-main'),
+      railPosition: getComputedStyle(document.querySelector('.hub-rail')).position,
+      tabCount: tabs.length,
+      selected: tabs.filter((tab) => tab.getAttribute('aria-selected') === 'true').length,
+      orientation: document.querySelector('[role="tablist"]').getAttribute('aria-orientation'),
+      controlsMatch: tabs.every((tab) => document.getElementById(tab.getAttribute('aria-controls') ?? '__none__') !== null || tab.getAttribute('aria-selected') !== 'true'),
+      panelLabelledBy: panel?.getAttribute('aria-labelledby') ?? null,
+      selectedId: tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')?.id ?? null,
+    };
+  })()`);
+  assert.ok(hubWide.rail && hubWide.main && hubWide.rail.right <= hubWide.main.left, '큰 화면의 교사 허브는 왼쪽 메뉴와 본문이 나란해야 합니다.');
+  assert.equal(hubWide.railPosition, 'sticky', '교사 허브 메뉴는 본문이 길어도 따라다녀야 합니다.');
+  assert.ok(
+    hubWide.main.width >= hubWide.viewport * 0.72,
+    `교사 허브 본문이 큰 화면의 폭을 다 써야 합니다. 본문 ${Math.round(hubWide.main.width)}px / 화면 ${hubWide.viewport}px`,
+  );
+  assert.equal(hubWide.tabCount, 7, '교사 허브에는 탭이 일곱 개여야 합니다.');
+  assert.equal(hubWide.selected, 1, '교사 허브는 탭 하나만 선택되어야 합니다.');
+  assert.equal(hubWide.orientation, 'vertical', '큰 화면의 교사 허브 탭 목록은 세로여야 합니다.');
+  assert.equal(hubWide.panelLabelledBy, hubWide.selectedId, '탭 패널은 선택된 탭이 이름이어야 합니다.');
+  assert.ok(hubWide.controlsMatch, '선택된 탭이 가리키는 패널(aria-controls)이 있어야 합니다.');
+  await captureScreenshot(cdp, 'desktop-teacher-hub');
+
+  const hubTabNames = await evaluate(cdp, `[...document.querySelectorAll('[role="tab"]')].map((tab) => tab.textContent.trim())`);
+  for (const [width, height] of [[1280, 900], [390, 844]]) {
+    await setHubViewport(width, height);
+    for (const name of hubTabNames) {
+      await evaluate(cdp, `[...document.querySelectorAll('[role="tab"]')].find((tab) => tab.textContent.trim() === ${JSON.stringify(name)})?.click()`);
+      await sleep(250);
+      const overflow = await evaluate(cdp, `(() => {
+        const root = document.documentElement;
+        return { scroll: root.scrollWidth, client: root.clientWidth };
+      })()`);
+      assert.ok(
+        overflow.scroll <= overflow.client + 1,
+        `교사 허브 '${name}' 탭이 ${width}px에서 가로로 넘칩니다. ${overflow.scroll}px / ${overflow.client}px`,
+      );
+    }
+  }
+  await captureScreenshot(cdp, 'mobile-teacher-hub');
+  await setHubViewport(1280, 900);
+  await evaluate(cdp, `localStorage.setItem('ai-students-teacher-mode', '0')`);
+
   console.log('mobile learning layout contract passed');
 } finally {
   try { cdp?.close(); } catch {

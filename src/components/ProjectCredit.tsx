@@ -27,7 +27,7 @@ export default function ProjectCredit({ variant }: Props) {
   return (
     <section className="studio-editorial mt-8 p-6 md:p-8" aria-label="이 교재에 대하여" data-project-credit="teacher">
       <h2 className="text-xl font-extrabold">이 교재에 대하여</h2>
-      <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm leading-relaxed md:grid-cols-[7rem_minmax(0,1fr)]">
+      <dl className="hub-credit-list mt-4 text-sm leading-relaxed">
         <dt className="font-bold">저작자</dt>
         <dd>{author} (© {year})</dd>
         <dt className="font-bold">제작 방식</dt>

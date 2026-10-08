@@ -41,16 +41,16 @@ export default function TeacherSoundSetting() {
   }
 
   return (
-    <section className="studio-editorial mb-6 p-6 md:p-8" aria-labelledby="sound-setting-title">
+    <section className="studio-editorial p-6 md:p-8" aria-labelledby="sound-setting-title">
       <p className="studio-kicker text-[color:var(--accent)]">수업 환경</p>
-      <h2 id="sound-setting-title" className="mt-1 text-2xl font-extrabold">소리</h2>
+      <h3 id="sound-setting-title" className="mt-1 text-2xl font-extrabold">소리</h3>
       <p className="mt-3 leading-relaxed">
         장면을 넘기거나 선택할 때 짧은 소리가 납니다. 놀라게 하는 소리와 틀렸을 때 나는
         소리는 넣지 않았습니다. 읽어 주기와는 별개라, 효과음을 꺼도 대사 듣기는 그대로
         쓸 수 있습니다.
       </p>
 
-      <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl border p-3">
+      <label className="hub-choice mt-5">
         <input
           type="checkbox"
           checked={soundEnabled}
@@ -85,7 +85,7 @@ export default function TeacherSoundSetting() {
         ))}
       </div>
 
-      <h3 className="mt-8 text-xl font-extrabold">읽어 주기</h3>
+      <h4 className="mt-8 text-xl font-extrabold">읽어 주기</h4>
       <p className="mt-3 leading-relaxed">
         {readingSupportModuleNames()}에서 글을 못 읽는 학생도 들으며 답할 수 있습니다. 선택지, 선택한 뒤의
         반응, AI 의견마다 듣기 단추가 있고, 선택지는 &lsquo;모두 듣기&rsquo;로 차례대로 들을 수 있습니다.
@@ -93,7 +93,7 @@ export default function TeacherSoundSetting() {
         소리가 한 번에 꺼지지만 듣기 단추는 그대로 읽어 줍니다.
       </p>
 
-      <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl border p-3">
+      <label className="hub-choice mt-5">
         <input
           type="checkbox"
           checked={autoRead}
@@ -109,7 +109,7 @@ export default function TeacherSoundSetting() {
         </span>
       </label>
 
-      <div className="mt-5 rounded-xl border p-4">
+      <div className="studio-fact-card mt-5">
         <p className="font-bold">읽어 주기 점검</p>
         <p className="mt-1 text-sm leading-relaxed text-[color:var(--muted)]">
           읽어 주는 소리는 브라우저에 들어 있는 목소리를 씁니다. 기기마다 다르므로 수업 전에 이 기기에서

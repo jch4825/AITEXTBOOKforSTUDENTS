@@ -184,7 +184,7 @@ src/
 │  ├─ studio/                      8단계 경험, 과정 기록, 지원 수준
 │  │  ├─ formats/                  포맷 A~E별 화면 순서 선언(기록 단계는 불변)
 │  │  └─ speakerLine.ts            각본 속 `진우: "..."` 표기 → 화자 말풍선 파서
-│  └─ teacher/                     운영 허브, 기록, 성취기준, 백업, AI 연결
+│  └─ teacher/                     운영 허브(왼쪽 메뉴 + 본문 격자), 기록, 성취기준, 백업, AI 연결, 교사 자료 패널
 │     └─ worksheet/                A4 학습지 상·중·하(하·중 수준은 pictureLevels.ts + pictureBlocks.ts)
 ├─ data/
 │  ├─ studios/                     62개 스튜디오 데이터
@@ -239,6 +239,12 @@ src/
 - 다크 면은 놀이 프레임(`[data-minigame-frame]`) 안에서만 허용합니다. 프레임 안에서도
   불투명한 `--game-board-*` 토큰과 2px 경계를 사용합니다.
 - 변경 뒤 `npm run check:design-system`으로 계약을 검사합니다.
+- **교사 허브(`?teacher=1`)와 교사 도구 시트(교사 자료·타이머·그림 카드)의 패널은 폭을 px·rem으로 고정하지 않고 칸의 폭으로 배치합니다**
+  (`@container`, `auto-fit`·`auto-fill`). 옛 떠 있는 도크의 `w-64`(288px)가 시트 안까지 남아 패널이 시트의 40%만 쓰고 오른쪽이 빈 적이
+  있고, 격자 칸의 기본 `min-width: auto`가 넓은 표·입력칸에 밀려 390px에서 가로로 넘친 적이 있습니다(`.hub-stack > *` 등에 `min-width: 0`).
+  허브는 1024px 이상에서 왼쪽 고정 메뉴(`.hub-rail`) + 남은 폭을 다 쓰는 본문(`.hub-main`), 더 좁으면 머리글 아래 한 줄 탭입니다.
+  시트 패널은 틀이 없고 같은 머리글(`.tool-panel-head`)과 단원 색(`--tool-accent`)을 씁니다. 폭은 `check:mobile-learning-layout`이 잽니다.
+  Tailwind 유틸리티는 `@layer` 안이라 비계층 CSS의 `margin: 0` 같은 초기화가 `mt-6`을 덮어씁니다 — 간격 유틸리티를 쓰는 요소에는 초기화를 걸지 않습니다.
 
 ## 놀이 파트의 디자인 계약 (바우하우스)
 

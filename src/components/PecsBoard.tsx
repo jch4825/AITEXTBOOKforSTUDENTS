@@ -43,9 +43,15 @@ function printCard(moduleId: ModuleId, name: string, label: string) {
 }
 
 /**
- * AAC 카드 보드 — 교실 도구 도크의 의사소통 카드.
+ * AAC 카드 보드 — 교실 도구 시트의 의사소통 카드.
  * 카드 이미지 안에 단어가 인쇄되어 있고, 밖의 라벨(PECS_LABELS)은 그 글자와 싱크되어 있다.
  * 카드를 키우면 그 자리에서 인쇄(A6=A4의 1/4)할 수 있다.
+ *
+ * 예전에는 떠 있는 도크 안의 고정 폭(w-72, md:w-[500px])이라 시트가 아무리 넓어도 한 칸만 쓰고
+ * 오른쪽이 비었다. 목록은 안쪽 스크롤 상자(max-h-[500px])까지 따로 있어 시트와 스크롤이 겹쳤고,
+ * 휴대전화에서는 한 줄 네 장에 라벨이 10px이었다. 지금은 시트 폭을 다 쓰는 격자(넓으면 여섯 열,
+ * 휴대전화는 세 열)이고 스크롤은 시트 하나뿐이다. 한 장이 400KB쯤이라 보이지 않는 카드는
+ * 스크롤해서 가까워질 때 받는다.
  */
 export default function PecsBoard({ moduleId }: Props) {
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -55,46 +61,44 @@ export default function PecsBoard({ moduleId }: Props) {
   if (expanded) {
     const label = PECS_LABELS[expanded] ?? expanded;
     return (
-      <div className="p-3 w-64 md:w-[480px]">
-        <div className="flex items-center justify-between mb-2">
+      <div className="pecs-board">
+        <div className="pecs-board-bar">
+          <button type="button" onClick={() => setExpanded(null)} className="btn btn-secondary">
+            <Icon name="chevron-left" size={18} /> 목록
+          </button>
           <button
-            onClick={() => setExpanded(null)}
-            className="btn btn-ghost h-9 px-2 text-sm md:h-12 md:px-4 md:text-base"
-          ><Icon name="chevron-left" size={18} /> 목록</button>
-          <button
+            type="button"
             onClick={() => printCard(moduleId, expanded, label)}
-            className="btn btn-secondary h-9 px-3 text-sm md:h-12 md:px-4 md:text-base"
+            className="btn btn-primary"
             aria-label={`${label} 카드 인쇄`}
-          ><Icon name="printer" size={18} /> 인쇄</button>
+          >
+            <Icon name="printer" size={18} /> 인쇄
+          </button>
         </div>
-        <div
-          className="rounded-[var(--r-md)] p-3 flex flex-col items-center gap-4 md:p-6"
-          style={{ background: 'var(--paper-2)' }}
-        >
-          <img src={src(expanded)} alt="" className="w-40 h-40 md:w-80 md:h-80 object-contain" />
-          <span className="text-xl font-bold md:text-3xl">{label}</span>
-        </div>
+        <figure className="pecs-board-card surface-paper">
+          <img src={src(expanded)} alt="" />
+          <figcaption>{label}</figcaption>
+        </figure>
       </div>
     );
   }
 
   return (
-    <div className="p-3 w-72 md:w-[500px]">
-      <h3 className="text-lg font-bold mb-2 md:text-2xl md:mb-4" style={{ color: 'var(--accent)' }}>그림 카드</h3>
-      <div className="grid grid-cols-4 gap-2 md:gap-3 max-h-64 md:max-h-[500px] overflow-y-auto">
-        {words.map((w) => (
-          <button
-            key={w}
-            onClick={() => setExpanded(w)}
-            className="aspect-square rounded-[var(--r-sm)] flex flex-col items-center justify-center gap-1 p-1 md:p-2"
-            style={{ background: 'var(--paper-2)' }}
-            aria-label={PECS_LABELS[w] ?? w}
-          >
-            <img src={src(w)} alt="" className="w-9 h-9 md:w-16 md:h-16 object-contain" />
-            <span className="text-[10px] font-semibold text-center leading-tight md:text-sm md:mt-1">{PECS_LABELS[w] ?? w}</span>
-          </button>
-        ))}
+    <div className="pecs-board">
+      <div className="tool-panel-head">
+        <h3>그림 카드</h3>
+        <p>카드를 누르면 크게 보고 인쇄할 수 있습니다.</p>
       </div>
+      <ul className="pecs-board-grid">
+        {words.map((w) => (
+          <li key={w}>
+            <button type="button" onClick={() => setExpanded(w)}>
+              <img src={src(w)} alt="" loading="lazy" decoding="async" />
+              <span>{PECS_LABELS[w] ?? w}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
