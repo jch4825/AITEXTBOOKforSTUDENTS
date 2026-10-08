@@ -593,6 +593,82 @@ try {
   }
   await captureScreenshot(cdp, 'mobile-teacher-hub');
   await setHubViewport(1280, 900);
+
+  // 포트폴리오 인쇄. 상장·수료증을 찍으려고 인쇄 매체에서 `#root { display: none }`을 늘 걸어 두었을 때는 허브의
+  // "포트폴리오 인쇄·PDF"가 빈 쪽을 냈다(기록 카드가 모두 0×0). 그래서 인쇄 매체로 바꿔 놓고 다음을 잰다.
+  // ① 상장 창이 없으면 본문이 찍히고 ② 상장 창(body 바로 아래로 포털되는 래퍼)이 있을 때만 본문이 감춰진다.
+  // ③ 기록 카드는 쪽에서 갈라지지 않되 섹션은 쪽을 넘어 이어진다(제목만 1쪽에 남지 않게).
+  // ④ 화면에서 길을 찾는 머리글·교사용 안내·교재 저작자 구역은 학생 포트폴리오에 찍히지 않는다.
+  const evidenceSeed = ['m1-l1', 'm1-l2'].map((lessonId, index) => ({
+    version: 2,
+    id: `print-check-${index}`,
+    learnerAlias: '인쇄 점검',
+    studioId: 'print-check',
+    lessonId,
+    firstAttempt: { mode: 'text', text: '처음에는 이렇게 생각했어요.' },
+    supportLevel: 'light',
+    supportModesUsed: [],
+    aiSource: 'prepared',
+    aiRole: '준비된 AI 예시',
+    aiDecision: 'modify',
+    finalExpression: { mode: 'text', text: '고쳐서 썼어요.' },
+    transferExpression: { mode: 'text', text: '다른 상황에서도 확인할게요.' },
+    observation: { importantInformation: 'independent', firstAttempt: 'independent', aiComparison: 'independent', conditionAdjustment: 'independent', note: '' },
+    startedAt: '2026-10-01T09:00:00.000Z',
+    completedAt: `2026-10-01T10:0${index}:00.000Z`,
+    updatedAt: `2026-10-01T10:0${index}:00.000Z`,
+  }));
+  await evaluate(cdp, `localStorage.setItem('ai-students-studio-evidence-v2', ${JSON.stringify(JSON.stringify(evidenceSeed))})`);
+  await evaluate(cdp, `[...document.querySelectorAll('[role="tab"]')].find((tab) => tab.textContent.trim() === '포트폴리오')?.click()`);
+  await waitForSelector(cdp, '.hub-grid--records article');
+  await cdp.send('Emulation.setEmulatedMedia', { media: 'print' });
+  await sleep(300);
+  const printed = await evaluate(cdp, `(() => {
+    const style = (selector, property) => {
+      const element = document.querySelector(selector);
+      return element ? getComputedStyle(element)[property] : null;
+    };
+    const cards = [...document.querySelectorAll('.hub-grid--records article')];
+    return {
+      rootDisplay: style('#root', 'display'),
+      cardHeights: cards.map((card) => Math.round(card.getBoundingClientRect().height)),
+      cardBreakInside: cards.map((card) => getComputedStyle(card).breakInside),
+      sectionBreakInside: style('.hub-evidence', 'breakInside'),
+      sectionBorder: style('.hub-evidence', 'borderTopWidth'),
+      panelHead: style('.hub-panel-head', 'display'),
+      credit: style('[data-project-credit="teacher"]', 'display'),
+      visibleChrome: [...document.querySelectorAll('.teacher-hub-chrome')].filter((element) => getComputedStyle(element).display !== 'none').length,
+    };
+  })()`);
+  assert.notEqual(printed.rootDisplay, 'none', '포트폴리오를 인쇄할 때 화면 본문(#root)이 감춰지면 빈 쪽이 나옵니다. 상장 창이 있을 때만 감추세요.');
+  assert.equal(printed.cardHeights.length, 2, '인쇄 점검용 기록 두 건이 포트폴리오에 있어야 합니다.');
+  assert.ok(printed.cardHeights.every((height) => height > 0), `인쇄할 때 기록 카드가 높이를 가져야 합니다. ${printed.cardHeights.join(', ')}px`);
+  assert.deepEqual(printed.cardBreakInside, ['avoid', 'avoid'], '기록 카드는 쪽 사이에서 갈라지지 않아야 합니다.');
+  assert.equal(printed.sectionBreakInside, 'auto', '포트폴리오 섹션 전체에 쪽 나눔 금지를 걸면 제목만 1쪽에 남고 본문이 다음 쪽에서 시작합니다.');
+  assert.equal(printed.sectionBorder, '0px', '화면용 종이 테두리는 쪽이 넘어갈 때마다 세로줄로 남으므로 인쇄에서는 벗겨야 합니다.');
+  assert.equal(printed.panelHead, 'none', '탭 이름과 안내 문장(허브 머리글)은 인쇄물에 찍히지 않아야 합니다.');
+  assert.equal(printed.credit, 'none', '교재 저작자 구역이 학생 포트폴리오의 마지막 쪽을 따로 차지하면 안 됩니다.');
+  assert.equal(printed.visibleChrome, 0, '화면용 허브 요소(메뉴·인쇄 단추·교사용 안내)는 인쇄할 때 숨겨야 합니다.');
+  const rootWithAward = await evaluate(cdp, `(() => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'award-print-wrapper';
+    document.body.appendChild(wrapper);
+    const display = getComputedStyle(document.getElementById('root')).display;
+    wrapper.remove();
+    return display;
+  })()`);
+  assert.equal(rootWithAward, 'none', '상장 창이 열려 있을 때는 차시 화면(#root)이 함께 찍히지 않도록 감춰야 합니다.');
+  await cdp.send('Emulation.setEmulatedMedia', { media: '' });
+  // 두 창은 body 바로 아래로 포털되어야 #root를 감춰도 같이 사라지지 않는다. 래퍼 이름과 포털이 바뀌면 상장이 빈 쪽이 된다.
+  for (const [file, wrapperClass] of [
+    ['src/features/studio/components/CompletionAwardModal.tsx', 'award-print-wrapper'],
+    ['src/features/studio/components/InquiryCertificateModal.tsx', 'certificate-print-wrapper'],
+  ]) {
+    const source = readFileSync(file, 'utf8');
+    assert.ok(source.includes(wrapperClass), `${file}에 인쇄 래퍼 클래스(${wrapperClass})가 있어야 합니다.`);
+    assert.ok(source.includes('createPortal(modalContent, document.body)'), `${file}은 body 바로 아래로 포털되어야 합니다(#root를 감춰도 인쇄되도록).`);
+  }
+  await evaluate(cdp, `localStorage.removeItem('ai-students-studio-evidence-v2')`);
   await evaluate(cdp, `localStorage.setItem('ai-students-teacher-mode', '0')`);
 
   console.log('mobile learning layout contract passed');
