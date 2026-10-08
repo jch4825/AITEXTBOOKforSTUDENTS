@@ -519,6 +519,80 @@ try {
     `확대한 그림 카드 면은 시트 폭을 다 써야 합니다. ${Math.round(cardWidth)}px / ${Math.round(pecs.inner)}px`,
   );
   await captureScreenshot(cdp, 'desktop-teacher-pecs-card');
+
+  // 교사 허브(?teacher=1). 예전에는 max-w-6xl 한 줄기라 1920px에서 본문이 1224px뿐이고 양옆이 약 340px씩
+  // 비었으며, 일곱 탭이 이름뿐인 필 한 줄이었다. 큰 화면에서는 왼쪽 메뉴 + 남은 폭을 다 쓰는 본문이어야 하고,
+  // 어떤 탭도 어떤 폭에서도 가로로 넘치면 안 된다(격자 칸의 min-width: auto가 넓은 표·입력칸에 밀려 390px에서
+  // 데이터 관리·AI 연결·학생 기록이 실제로 넘쳤다). 뷰포트는 새로 고치지 않고 장치 크기만 바꾼다.
+  async function setHubViewport(width, height) {
+    await cdp.send('Emulation.setDeviceMetricsOverride', {
+      width,
+      height,
+      screenWidth: width,
+      screenHeight: height,
+      deviceScaleFactor: 1,
+      mobile: width < 768,
+    });
+    await sleep(450);
+  }
+  const hubUrl = `http://127.0.0.1:${vitePort}/AITEXTBOOKforSTUDENTS/?teacher=1`;
+  await evaluate(cdp, `localStorage.setItem('ai-students-teacher-mode', '1')`);
+  await navigateAndWait(cdp, hubUrl, '.hub-shell');
+
+  await setHubViewport(1920, 1080);
+  const hubWide = await evaluate(cdp, `(() => {
+    const box = (selector) => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, width: rect.width };
+    };
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    const panel = document.querySelector('[role="tabpanel"]');
+    return {
+      viewport: window.innerWidth,
+      rail: box('.hub-rail'),
+      main: box('.hub-main'),
+      railPosition: getComputedStyle(document.querySelector('.hub-rail')).position,
+      tabCount: tabs.length,
+      selected: tabs.filter((tab) => tab.getAttribute('aria-selected') === 'true').length,
+      orientation: document.querySelector('[role="tablist"]').getAttribute('aria-orientation'),
+      controlsMatch: tabs.every((tab) => document.getElementById(tab.getAttribute('aria-controls') ?? '__none__') !== null || tab.getAttribute('aria-selected') !== 'true'),
+      panelLabelledBy: panel?.getAttribute('aria-labelledby') ?? null,
+      selectedId: tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')?.id ?? null,
+    };
+  })()`);
+  assert.ok(hubWide.rail && hubWide.main && hubWide.rail.right <= hubWide.main.left, '큰 화면의 교사 허브는 왼쪽 메뉴와 본문이 나란해야 합니다.');
+  assert.equal(hubWide.railPosition, 'sticky', '교사 허브 메뉴는 본문이 길어도 따라다녀야 합니다.');
+  assert.ok(
+    hubWide.main.width >= hubWide.viewport * 0.72,
+    `교사 허브 본문이 큰 화면의 폭을 다 써야 합니다. 본문 ${Math.round(hubWide.main.width)}px / 화면 ${hubWide.viewport}px`,
+  );
+  assert.equal(hubWide.tabCount, 7, '교사 허브에는 탭이 일곱 개여야 합니다.');
+  assert.equal(hubWide.selected, 1, '교사 허브는 탭 하나만 선택되어야 합니다.');
+  assert.equal(hubWide.orientation, 'vertical', '큰 화면의 교사 허브 탭 목록은 세로여야 합니다.');
+  assert.equal(hubWide.panelLabelledBy, hubWide.selectedId, '탭 패널은 선택된 탭이 이름이어야 합니다.');
+  assert.ok(hubWide.controlsMatch, '선택된 탭이 가리키는 패널(aria-controls)이 있어야 합니다.');
+  await captureScreenshot(cdp, 'desktop-teacher-hub');
+
+  const hubTabNames = await evaluate(cdp, `[...document.querySelectorAll('[role="tab"]')].map((tab) => tab.textContent.trim())`);
+  for (const [width, height] of [[1280, 900], [390, 844]]) {
+    await setHubViewport(width, height);
+    for (const name of hubTabNames) {
+      await evaluate(cdp, `[...document.querySelectorAll('[role="tab"]')].find((tab) => tab.textContent.trim() === ${JSON.stringify(name)})?.click()`);
+      await sleep(250);
+      const overflow = await evaluate(cdp, `(() => {
+        const root = document.documentElement;
+        return { scroll: root.scrollWidth, client: root.clientWidth };
+      })()`);
+      assert.ok(
+        overflow.scroll <= overflow.client + 1,
+        `교사 허브 '${name}' 탭이 ${width}px에서 가로로 넘칩니다. ${overflow.scroll}px / ${overflow.client}px`,
+      );
+    }
+  }
+  await captureScreenshot(cdp, 'mobile-teacher-hub');
+  await setHubViewport(1280, 900);
   await evaluate(cdp, `localStorage.setItem('ai-students-teacher-mode', '0')`);
 
   console.log('mobile learning layout contract passed');

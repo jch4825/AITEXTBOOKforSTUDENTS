@@ -41,34 +41,40 @@ export default function TeacherOnboarding({ onEnabled, onSkip }: Props) {
   }
 
   return (
-    <section className="studio-editorial mb-6 p-6" aria-labelledby="recording-onboarding-title">
+    <section className="studio-editorial p-6 md:p-8" aria-labelledby="recording-onboarding-title">
       <p className="studio-kicker text-[color:var(--accent)]">첫 기록 활성화 확인</p>
-      <h2 id="recording-onboarding-title" className="mt-1 text-2xl font-extrabold">과정기록을 켜기 전에 확인해 주세요</h2>
+      <h3 id="recording-onboarding-title" className="mt-1 text-2xl font-extrabold">과정기록을 켜기 전에 확인해 주세요</h3>
       <p className="mt-3 leading-relaxed">기록 기능을 켜지 않아도 모든 학생 활동과 진도 기능을 사용할 수 있습니다.</p>
 
-      <label className="mt-5 block font-bold" htmlFor="learner-alias">학생 별칭</label>
-      <input
-        id="learner-alias"
-        value={learnerAlias}
-        onChange={(event) => setLearnerAlias(event.target.value.slice(0, 24))}
-        maxLength={24}
-        className="mt-2 min-h-12 w-full max-w-sm rounded-xl border-2 px-4"
-        placeholder="예: 학생 1"
-      />
-      <p className="mt-1 text-sm text-[color:var(--muted)]">실명 대신 수업에서 구분할 수 있는 별칭을 권장합니다.</p>
+      {/* 큰 화면에서는 왼쪽이 별칭, 오른쪽이 확인할 네 가지다. 한 줄로 길게 늘어놓으면 입력칸과 네 행이
+          1000px 넘게 퍼져 어디부터 읽을지 알 수 없었다. */}
+      <div className="hub-form-split mt-6">
+        <div>
+          <label className="block font-bold" htmlFor="learner-alias">학생 별칭</label>
+          <input
+            id="learner-alias"
+            value={learnerAlias}
+            onChange={(event) => setLearnerAlias(event.target.value.slice(0, 24))}
+            maxLength={24}
+            className="mt-2 min-h-12 w-full max-w-md rounded-xl border-2 px-4"
+            placeholder="예: 학생 1"
+          />
+          <p className="mt-1 text-sm text-[color:var(--muted)]">실명 대신 수업에서 구분할 수 있는 별칭을 권장합니다.</p>
+        </div>
 
-      <div className="mt-5 space-y-3">
-        {ACKNOWLEDGEMENTS.map((label, index) => (
-          <label key={label} className="flex cursor-pointer items-start gap-3 rounded-xl border p-3">
-            <input
-              type="checkbox"
-              checked={checked[index]}
-              onChange={() => toggle(index)}
-              className="mt-1 h-5 w-5 shrink-0"
-            />
-            <span className="leading-relaxed">{label}</span>
-          </label>
-        ))}
+        <div className="space-y-3">
+          {ACKNOWLEDGEMENTS.map((label, index) => (
+            <label key={label} className="hub-choice">
+              <input
+                type="checkbox"
+                checked={checked[index]}
+                onChange={() => toggle(index)}
+                className="mt-1 h-5 w-5 shrink-0"
+              />
+              <span className="leading-relaxed">{label}</span>
+            </label>
+          ))}
+        </div>
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">
