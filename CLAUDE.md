@@ -245,6 +245,12 @@ src/
   허브는 1024px 이상에서 왼쪽 고정 메뉴(`.hub-rail`) + 남은 폭을 다 쓰는 본문(`.hub-main`), 더 좁으면 머리글 아래 한 줄 탭입니다.
   시트 패널은 틀이 없고 같은 머리글(`.tool-panel-head`)과 단원 색(`--tool-accent`)을 씁니다. 폭은 `check:mobile-learning-layout`이 잽니다.
   Tailwind 유틸리티는 `@layer` 안이라 비계층 CSS의 `margin: 0` 같은 초기화가 `mt-6`을 덮어씁니다 — 간격 유틸리티를 쓰는 요소에는 초기화를 걸지 않습니다.
+- **인쇄에서 화면 본문(`#root`)을 감추는 것은 상장·수료증 창이 열려 있을 때뿐입니다**(`body:has(.award-print-wrapper, .certificate-print-wrapper) #root`).
+  두 창은 `createPortal(…, document.body)`로 `#root` 밖에 있어 그때만 본문을 감춰도 상장은 찍힙니다. 이 규칙을 전역으로 걸었을 때는 교사 허브
+  "포트폴리오 인쇄·PDF"를 포함해 화면 자체를 인쇄하는 곳이 모두 빈 쪽을 냈습니다. 포트폴리오는 `.hub-evidence`(섹션은 쪽을 넘어 이어지고 카드
+  `.studio-artifact-sheet`만 쪼개지지 않음), 허브 머리글과 교재 저작자 구역(`[data-project-credit="teacher"]`)·교사용 안내(`.teacher-hub-chrome`)는
+  인쇄하지 않습니다. 쪽 모양은 `page.pdf()`로만 보이고, `check:mobile-learning-layout`이 인쇄 매체의 본문 표시·카드 쪼개짐 방지·상장 창일 때만 숨김을 잽니다.
+  단원 마무리의 "○○ 인쇄하기"(`ModuleCloseLessonView`)는 학습 화면 틀이 안쪽 스크롤 칸이라 아직 첫 화면만 잘려 찍힙니다(무엇을 찍을지 정해야 하는 후속 작업).
 
 ## 놀이 파트의 디자인 계약 (바우하우스)
 

@@ -120,11 +120,12 @@ export default function StudioEvidencePanel({ mode }: Props) {
   }
 
   return (
-    <section className="studio-editorial p-6 md:p-8 print:shadow-none">
+    <section className="studio-editorial hub-evidence p-6 md:p-8 print:shadow-none">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="text-xl font-extrabold">{mode === 'teacher' ? '학생 과정기록' : '핵심 경험 포트폴리오'}</h3>
-          <p className="mt-1 text-sm text-[color:var(--muted)]">한 브라우저를 여러 학생이 함께 쓰면 별칭별 기록이 섞일 수 있으므로 수업 전에 별칭을 확인하세요.</p>
+          {/* 교사가 수업 전에 읽는 안내라 인쇄물에는 싣지 않는다. */}
+          <p className="teacher-hub-chrome mt-1 text-sm text-[color:var(--muted)]">한 브라우저를 여러 학생이 함께 쓰면 별칭별 기록이 섞일 수 있으므로 수업 전에 별칭을 확인하세요.</p>
         </div>
         {mode === 'portfolio' && <Button variant="secondary" onClick={() => window.print()} className="teacher-hub-chrome">포트폴리오 인쇄·PDF</Button>}
       </div>
