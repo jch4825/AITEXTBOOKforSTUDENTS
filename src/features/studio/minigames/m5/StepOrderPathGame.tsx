@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import {
-  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape, paintBoard,
+  BAUHAUS, GameCanvas, GameHud, STROKE, centerText, clamp, drawBar, drawMark, drawShape, objectOf, paintBoard,
 } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -269,9 +269,9 @@ export default function StepOrderPathGame({ supportLevel }: MiniGameProps) {
             const blocker = stage.steps.find((s) => s.id === missing[0]);
             const name = blocker?.label ?? '앞 단계';
             if (blocker?.safety) {
-              stumble(`${name}를 아직 안 해서 구슬이 튕겨 나왔어요.`, arrived);
+              stumble(`${objectOf(name)} 아직 안 해서 구슬이 튕겨 나왔어요.`, arrived);
             } else {
-              stumble(`${name}가 아직 없어서 구슬이 떨어졌어요.`, arrived);
+              stumble(`${objectOf(name)} 아직 안 해서 구슬이 떨어졌어요.`, arrived);
             }
           } else {
             r.passed = arrived + 1;

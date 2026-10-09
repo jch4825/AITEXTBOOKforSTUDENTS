@@ -498,7 +498,7 @@ export default function AdFenceGame({ supportLevel }: MiniGameProps) {
       )}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
-      onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 담벼락으로 바꿨어요.`)}
+      onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title.split(' · ').pop()} 담벼락으로 바꿨어요.`)}
       status={game.status}
       message={game.message}
       actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 두르기" variant="primary" />}

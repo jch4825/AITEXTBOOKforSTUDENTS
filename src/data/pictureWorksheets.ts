@@ -663,7 +663,8 @@ export const PICTURE_WORKSHEET_SPECS: Partial<Record<LessonId, PictureWorksheetS
   'm5-l7': {
     word: '다 됐어요',
     wordPic: p('done_mark'),
-    sentence: '다 됐어요 표시를 확인해요.',
+    // 표시의 이름(다 됐어요)이 문장 끝말처럼 읽혀 뒤의 말과 끊기지 않게 따옴표로 묶는다.
+    sentence: '‘다 됐어요’ 표시를 확인해요.',
     ask: '아이미가 안내를 길게 해 줬어요. 어떻게 진행할까요?',
     first: { show: ['do-all-at-once', 'check-each-step', 'skip-confusing-step'], right: ['check-each-step'] },
     situation: '작품 파일을 올려요. 알맞은 진행일까요?',

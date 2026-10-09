@@ -197,7 +197,7 @@ export default function RecallSnakeGame({ supportLevel }: MiniGameProps) {
             game.fail('생명력을 다 썼어요. 초록색 조각만 차례대로 먹어 보아요.');
           } else if (w.index >= w.pieces.length) {
             w.finished = true;
-            game.succeed(`${stage.topic}의 차례를 처음부터 끝까지 내 힘으로 떠올렸어요!`);
+            game.succeed(`‘${stage.topic}’의 차례를 처음부터 끝까지 내 힘으로 떠올렸어요!`);
           }
         }
       }

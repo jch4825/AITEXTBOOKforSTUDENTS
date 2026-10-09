@@ -219,7 +219,7 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
         game.fail('벽에 닿았어요. 장면을 보고 말의 세기를 다시 골라 날아가요.');
       } else if (world.cleared >= world.pillars.length) {
         world.finished = true;
-        game.succeed(`장면마다 어울리는 ${stage.word}의 세기를 골라 모두 지나갔어요!`);
+        game.succeed(`장면마다 어울리는 ‘${stage.word}’의 세기를 골라 모두 지나갔어요!`);
       }
     }
 
@@ -292,7 +292,7 @@ export default function WordStrengthFlyGame({ supportLevel }: MiniGameProps) {
       hud={<GameHud lives={hud.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
-      onStageSelect={(index) => game.goToStage(index, `${STAGES[index].title} 낱말로 바꿨어요.`)}
+      onStageSelect={(index) => game.goToStage(index, `‘${STAGES[index].title}’ 낱말로 바꿨어요.`)}
       status={game.status}
       message={game.message}
       actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 날기" variant="primary" />}

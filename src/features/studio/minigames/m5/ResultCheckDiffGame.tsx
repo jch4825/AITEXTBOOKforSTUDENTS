@@ -166,7 +166,7 @@ export default function ResultCheckDiffGame({ supportLevel }: MiniGameProps) {
     if (!found.includes(spot.id)) {
       playSound('select');
       setFound((prev) => [...prev, spot.id]);
-      setNote(`${spot.wrong} 트레이에서 맞는 부품을 눌러 채우세요.`);
+      setNote(`${spot.wrong}. 트레이에서 맞는 부품을 눌러 채우세요.`);
       return;
     }
     if (!holding) {
