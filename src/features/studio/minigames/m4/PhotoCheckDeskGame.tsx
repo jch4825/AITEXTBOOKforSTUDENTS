@@ -6,6 +6,7 @@ import {
   drawShape, pointInRect, useGameImages, useGameKeys, paintBoard,
 } from '../engine';
 import { playSound } from '../../../../utils/sound';
+import { objectOf } from '../engine';
 import type { GameArt } from '../engine';
 import type { MiniGameProps } from '../types';
 
@@ -678,7 +679,7 @@ export default function PhotoCheckDeskGame({ supportLevel }: MiniGameProps) {
             height={H}
             onFrame={frame}
             onPointer={onPointer}
-            ariaLabel={`${stage.title}을 돋보기로 검사하는 놀이. 찾은 곳 ${hud.found}개, 가린 곳 ${hud.covered}개, 남은 기회 ${hud.lives}개.`}
+            ariaLabel={`${objectOf(stage.title)} 돋보기로 검사하는 놀이. 찾은 곳 ${hud.found}개, 가린 곳 ${hud.covered}개, 남은 기회 ${hud.lives}개.`}
           />
         </div>
       </div>

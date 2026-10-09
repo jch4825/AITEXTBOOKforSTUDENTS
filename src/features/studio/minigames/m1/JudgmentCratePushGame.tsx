@@ -3,6 +3,7 @@ import MiniGameFrame, { MiniGameButton } from '../MiniGameFrame';
 import { useMiniGameStage } from '../useMiniGameStage';
 import { BauhausMark, GameHud, GameStage, clamp, createRandom, shuffle, useCountdown, inkFor
 } from '../engine';
+import { subjectOf } from '../engine';
 import type { BauhausMarkKind } from '../engine';
 import { playSound } from '../../../../utils/sound';
 import type { MiniGameProps } from '../types';
@@ -155,7 +156,7 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
 
     if (crate.zone !== zone) {
       setHeld(null);
-      setNote(`모양이 달라요. ${ZONE_INFO[crate.zone].shapeName}가 그려진 자리를 찾아 보세요.`);
+      setNote(`모양이 달라요. ${subjectOf(ZONE_INFO[crate.zone].shapeName)} 그려진 자리를 찾아 보세요.`);
       setLives((value) => {
         const left = value - 1;
         if (left <= 0 && !doneRef.current) {
@@ -221,7 +222,7 @@ export default function JudgmentCratePushGame({ supportLevel }: MiniGameProps) {
                 type="button"
                 onClick={() => { setHeld(crate.id); playSound('select'); setNote(''); }}
                 disabled={!game.playing}
-                aria-label={`${crate.text} 상자 고르기`}
+                aria-label={`‘${crate.text}’ 상자 고르기`}
                 className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-0.5 transition"
                 style={{
                   left: `${crate.x}%`,

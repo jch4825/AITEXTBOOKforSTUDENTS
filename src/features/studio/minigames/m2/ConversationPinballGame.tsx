@@ -527,7 +527,7 @@ export default function ConversationPinballGame({ supportLevel }: MiniGameProps)
       hud={<GameHud lives={view.lives} maxLives={tuning.lives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((item) => ({ id: item.id, label: item.label }))}
       activeStageIndex={game.stageIndex}
-      onStageSelect={(index) => game.goToStage(index, `${STAGES[index].topic.join(' ')} 판으로 바꿨어요.`)}
+      onStageSelect={(index) => game.goToStage(index, `‘${STAGES[index].topic.join(' ')}’ 판으로 바꿨어요.`)}
       status={game.status}
       message={game.message}
       actions={<MiniGameButton onClick={game.retry} mark="retry" label="다시 하기" variant="primary" />}
