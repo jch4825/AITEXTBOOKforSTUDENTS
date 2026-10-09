@@ -44,7 +44,7 @@ export default function ProjectCredit({ variant }: Props) {
           전문은 <a className="underline underline-offset-2" href={license.licenseUrl} target="_blank" rel="noopener noreferrer">LICENSE</a>에 있습니다.
         </dd>
         <dt className="font-bold">예외</dt>
-        <dd>효과음은 Humble Bundle로 구매한 자료라 이 라이선스에 포함되지 않으며, 꺼내 쓰거나 다시 배포할 수 없습니다.</dd>
+        <dd>효과음은 Humble Bundle로 구매한 자료라 이 라이선스에 포함되지 않습니다. 이 앱 안에서만 쓰고 공개 저장소에는 두지 않으며, 꺼내 쓰거나 다시 배포할 수 없습니다.</dd>
         <dt className="font-bold">출처 표시</dt>
         <dd>
           다른 곳에 옮기거나 고쳐 쓸 때는 이렇게 밝혀 주세요. 「{title}」, {author},{' '}

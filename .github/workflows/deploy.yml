@@ -17,8 +17,39 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # 비밀값은 if:에서 바로 읽을 수 없어 있는지 여부만 환경 변수로 옮긴다.
+      HAS_ASSETS_KEY: ${{ secrets.ASSETS_DEPLOY_KEY != '' }}
     steps:
       - uses: actions/checkout@v4
+
+      # 효과음(*.m4a)은 구매 자료라 공개 저장소에 두지 않는다. 라이선스가 앱 밖 재배포를 허락하지 않기 때문이다.
+      # 사이트를 만들 때만 비공개 저장소에서 읽기 전용 배포 키로 받아 public/sounds/에 넣는다.
+      # 키가 없는 곳(포크 등)에서는 소리 없이 만든다. 앱은 소리 파일이 없으면 조용히 넘어간다(src/utils/sound.ts).
+      - name: Fetch licensed sound effects
+        if: env.HAS_ASSETS_KEY == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: jch4825/AITEXTBOOKforSTUDENTS-private-assets
+          ssh-key: ${{ secrets.ASSETS_DEPLOY_KEY }}
+          persist-credentials: false
+          path: .private-assets
+
+      - name: Copy sound effects into public/sounds
+        if: env.HAS_ASSETS_KEY == 'true'
+        run: |
+          cp .private-assets/sounds/*.m4a public/sounds/
+          rm -rf .private-assets
+          # 앱이 부르는 소리(SOUND_NAMES)가 하나라도 빠지면 배포를 멈춘다.
+          names=$(sed -n '/const SOUND_NAMES/,/];/p' src/utils/sound.ts | grep -o "'[a-z-]*'" | tr -d "'")
+          test -n "$names"
+          for name in $names; do
+            test -f "public/sounds/$name.m4a" || { echo "::error::missing sound: $name.m4a"; exit 1; }
+          done
+
+      - name: Build without sound effects
+        if: env.HAS_ASSETS_KEY != 'true'
+        run: echo "::warning::ASSETS_DEPLOY_KEY is not set. The site is built without sound effects."
 
       - uses: actions/setup-node@v4
         with:
