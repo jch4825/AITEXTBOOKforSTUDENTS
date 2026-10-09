@@ -198,7 +198,8 @@ export const M5_L8_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '체험 인원 합계 확인',
-      description: 'AI가 여러 모둠의 인원을 더해 합계를 제시했습니다. 어떻게 확인하겠어요?',
+      description: 'AI가 여러 모둠의 인원을 더해 합계를 제시했습니다.',
+      prompt: 'AI가 알려 준 체험 인원 합계가 맞는지 확인하려면 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm5-l8-transfer-image',

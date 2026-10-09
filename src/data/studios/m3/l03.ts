@@ -199,6 +199,7 @@ export const M3_L3_STUDIO: StudioDefinition = {
     transfer: {
       title: '물의 순환을 쉽게 설명하기',
       description: '증발, 구름, 비가 이어지는 물의 순환 설명을 쉬운 말로 바꿔 보세요.',
+      prompt: '물의 순환 설명을 쉬운 말로 바꿀 때 무엇을 남겨야 할까요?',
       stimuli: [
         {
           id: 'm3-l3-transfer-image',

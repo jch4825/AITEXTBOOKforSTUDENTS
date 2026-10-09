@@ -198,6 +198,7 @@ export const M2_L3_STUDIO: StudioDefinition = {
     transfer: {
       title: '“그거 정리해 줘”를 바꾼다면',
       description: '친구에게 받은 긴 준비물 메모를 AI로 정리하려고 합니다.',
+      prompt: '“그거 정리해 줘”라는 요청을 어떻게 바꿔야 AI가 메모를 잘 정리할까요?',
       stimuli: [
         {
           id: 'm2-l3-transfer-image',

@@ -198,6 +198,7 @@ export const M2_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '동아리 장소를 확인한다면',
       description: 'AI는 오늘 동아리 모임이 과학실이라고 말하지만 최근 교실 공사가 있었습니다.',
+      prompt: 'AI가 알려 준 동아리 장소가 맞는지 확인하려면 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm2-l9-transfer-image',

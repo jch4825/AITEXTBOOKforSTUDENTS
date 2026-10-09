@@ -198,6 +198,7 @@ export const M2_L8_STUDIO: StudioDefinition = {
     transfer: {
       title: '약속 일정을 알려 준다면',
       description: '세 번의 모임 날짜, 시간, 장소를 친구가 빠르게 비교할 수 있게 정리하려고 합니다.',
+      prompt: '세 번의 모임 일정을 친구가 쉽게 비교하게 하려면 어떻게 정리해야 할까요?',
       stimuli: [
         {
           id: 'm2-l8-transfer-image',

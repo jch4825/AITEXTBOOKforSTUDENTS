@@ -198,7 +198,8 @@ export const M5_L2_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '학급 발표 준비 나누기',
-      description: '학급 발표라는 큰 일을 준비해야 합니다. 먼저 무엇을 하겠어요?',
+      description: '학급 발표라는 큰 일을 준비해야 합니다.',
+      prompt: '학급 발표를 준비할 때 먼저 무엇을 해야 할까요?',
       stimuli: [
         {
           id: 'm5-l2-transfer-image',

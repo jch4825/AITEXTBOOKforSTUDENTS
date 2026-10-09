@@ -198,7 +198,8 @@ export const M6_L11_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '온라인 게임 채팅 자기소개',
-      description: '처음 만난 게임 친구가 학교와 사는 곳을 묻습니다. 어떻게 소개하겠어요?',
+      description: '처음 만난 게임 친구가 학교와 사는 곳을 묻습니다.',
+      prompt: '게임에서 처음 만난 친구가 학교와 사는 곳을 물을 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l11-transfer-image',

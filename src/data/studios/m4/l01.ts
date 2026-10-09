@@ -198,7 +198,8 @@ export const M4_L1_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '바뀐 교실 확인하기',
-      description: 'AI는 체험 장소가 2층이라고 했지만 오늘 안내판에는 변경 표시가 있습니다. 어떻게 확인하겠어요?',
+      description: 'AI는 체험 장소가 2층이라고 했지만 오늘 안내판에는 변경 표시가 있습니다.',
+      prompt: 'AI가 말한 체험 장소와 오늘 안내판이 다를 때 어떻게 확인해야 할까요?',
       stimuli: [
         {
           id: 'm4-l1-transfer-image',

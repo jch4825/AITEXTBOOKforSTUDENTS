@@ -203,7 +203,7 @@ export const M1_L4_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '흐린 분리배출 표지판',
-      description: '빛이 반사되어 글자가 흐릿하게 찍힌 분리배출 표지판을 AI가 “일반 쓰레기”라고 잘못 인식했습니다. 이럴 때는 어떻게 확인해야 할까요?',
+      description: '빛이 반사되어 글자가 흐릿하게 찍힌 분리배출 표지판을 AI가 “일반 쓰레기”라고 잘못 인식했습니다.',
       prompt: '흐릿한 표지판 사진을 AI가 잘못 읽었을 때 어떻게 대처해야 할지 알기 쉽게 설명해 봐요.',
       stimuli: [
         {

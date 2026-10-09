@@ -198,6 +198,7 @@ export const M2_L4_STUDIO: StudioDefinition = {
     transfer: {
       title: '표 제목 예시를 만든다면',
       description: '준비물 표의 칸 제목을 AI에게 만들어 달라고 부탁하려고 합니다.',
+      prompt: '준비물 표의 칸 제목을 부탁할 때 어떤 예시를 보여 줘야 할까요?',
       stimuli: [
         {
           id: 'm2-l4-transfer-image',

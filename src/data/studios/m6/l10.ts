@@ -198,7 +198,8 @@ export const M6_L10_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '다른 직업인을 만나기 전',
-      description: '마을 제빵사를 만나기 전에 AI가 예상한 정보가 있습니다. 어떻게 준비하겠어요?',
+      description: '마을 제빵사를 만나기 전에 AI가 예상한 정보가 있습니다.',
+      prompt: '마을 제빵사를 만나기 전에 어떻게 준비해야 할까요?',
       stimuli: [
         {
           id: 'm6-l10-transfer-image',

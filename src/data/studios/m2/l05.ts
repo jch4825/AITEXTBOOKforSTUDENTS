@@ -198,6 +198,7 @@ export const M2_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '친구와 선생님께 부탁한다면',
       description: '같은 준비물 확인을 친구와 선생님에게 각각 부탁하려고 합니다.',
+      prompt: '같은 부탁을 친구와 선생님께 할 때 어떻게 말해야 할까요?',
       stimuli: [
         {
           id: 'm2-l5-transfer-image',

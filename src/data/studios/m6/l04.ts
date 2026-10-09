@@ -198,7 +198,8 @@ export const M6_L4_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '지하철 반대 방향 상황',
-      description: '노선 색은 같지만 승강장 방향이 반대이고 안내 방송이 어렵습니다. 어떻게 하겠어요?',
+      description: '노선 색은 같지만 승강장 방향이 반대이고 안내 방송이 어렵습니다.',
+      prompt: '가야 할 승강장 방향이 헷갈릴 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l4-transfer-image',

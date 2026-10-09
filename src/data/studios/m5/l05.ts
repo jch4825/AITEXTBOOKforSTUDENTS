@@ -198,7 +198,8 @@ export const M5_L5_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '순서 퍼즐에서 도움받기',
-      description: '단계 두 개의 앞뒤 관계에서 막혔습니다. 어떤 도움을 고르겠어요?',
+      description: '단계 두 개의 앞뒤 관계에서 막혔습니다.',
+      prompt: '순서 퍼즐에서 막혔을 때 어떤 도움을 받아야 할까요?',
       stimuli: [
         {
           id: 'm5-l5-transfer-image',

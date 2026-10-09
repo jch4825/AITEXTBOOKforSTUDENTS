@@ -198,7 +198,8 @@ export const M5_L4_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '학급 준비 일정이 바뀌었어요',
-      description: '발표 마감이 앞당겨지고 친구 한 명이 도움을 줄 수 있게 됐습니다. 어떻게 하겠어요?',
+      description: '발표 마감이 앞당겨지고 친구 한 명이 도움을 줄 수 있게 됐습니다.',
+      prompt: '발표 마감이 앞당겨지고 도와줄 친구가 생겼을 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm5-l4-transfer-image',

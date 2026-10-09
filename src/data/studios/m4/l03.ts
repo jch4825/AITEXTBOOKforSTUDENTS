@@ -198,7 +198,8 @@ export const M4_L3_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '분실물 문의 고치기',
-      description: '분실물 사진을 찾으려고 집 주소와 혼자 있는 시간을 함께 쓰려 합니다. 어떻게 고치겠어요?',
+      description: '분실물 사진을 찾으려고 집 주소와 혼자 있는 시간을 함께 쓰려 합니다.',
+      prompt: '분실물을 찾는 글을 쓸 때 어떤 정보를 빼야 할까요?',
       stimuli: [
         {
           id: 'm4-l3-transfer-image',

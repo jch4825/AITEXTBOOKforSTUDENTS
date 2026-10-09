@@ -198,6 +198,7 @@ export const M3_L9_STUDIO: StudioDefinition = {
     transfer: {
       title: '해바라기 그림 설명하기',
       description: '해바라기 한 송이가 창가에 있는 새 그림을 같은 기준으로 설명해 보세요.',
+      prompt: '해바라기 그림을 설명할 때 무엇을 말해야 할까요?',
       stimuli: [
         {
           id: 'm3-l9-transfer-image',

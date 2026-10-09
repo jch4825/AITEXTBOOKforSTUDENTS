@@ -197,7 +197,8 @@ export const M6_L8_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '갑자기 어지러울 때',
-      description: '서 있기 어렵고 어지러운 느낌이 갑자기 생겼습니다. 어떻게 하겠어요?',
+      description: '서 있기 어렵고 어지러운 느낌이 갑자기 생겼습니다.',
+      prompt: '갑자기 어지러울 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l8-transfer-image',

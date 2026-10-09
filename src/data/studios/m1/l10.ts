@@ -203,7 +203,7 @@ export const M1_L10_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '체험회 안내 문구를 만든다면',
-      description: 'AI가 만든 안내 문구에 사실과 다른 행사 시간이 적혀 있습니다. 이럴 때는 어떻게 해야 할까요?',
+      description: 'AI가 만든 안내 문구에 사실과 다른 행사 시간이 적혀 있습니다.',
       prompt: 'AI의 추천 결과를 검토하여 그대로 쓸지, 고쳐서 쓸지, 쓰지 않을지 결정하는 방법을 친구에게 알기 쉽게 설명해 봐요.',
       stimuli: [
         {

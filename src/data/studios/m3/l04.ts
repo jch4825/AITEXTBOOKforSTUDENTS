@@ -199,6 +199,7 @@ export const M3_L4_STUDIO: StudioDefinition = {
     transfer: {
       title: '“조용하다”를 새 장면에 쓰기',
       description: '도서관, 운동회, 번개 사진 중 “조용하다”가 어울리는 장면과 문장을 만들어 보세요.',
+      prompt: '“조용하다”를 새 장면에 쓰려면 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm3-l4-transfer-image',

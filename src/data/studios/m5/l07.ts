@@ -198,7 +198,8 @@ export const M5_L7_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '작품 파일 올리기',
-      description: '파일 선택, 이름 확인, 올리기, 완료 확인이 필요한 상황입니다. 어떻게 진행하겠어요?',
+      description: '파일 선택, 이름 확인, 올리기, 완료 확인이 필요한 상황입니다.',
+      prompt: '작품 파일을 올릴 때 단계마다 무엇을 확인해야 할까요?',
       stimuli: [
         {
           id: 'm5-l7-transfer-image',

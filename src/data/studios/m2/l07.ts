@@ -198,6 +198,7 @@ export const M2_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '길지만 정확한 준비물 안내라면',
       description: '준비물 안내가 정확하지만 너무 길어 한눈에 읽기 어렵습니다.',
+      prompt: '정확하지만 너무 긴 준비물 안내를 줄일 때 무엇을 지켜야 할까요?',
       stimuli: [
         {
           id: 'm2-l7-transfer-image',

@@ -198,6 +198,7 @@ export const M2_L2_STUDIO: StudioDefinition = {
     transfer: {
       title: '여행 준비 부탁을 나눈다면',
       description: 'AI에게 교통편, 준비물, 여행 소개 글을 한꺼번에 부탁하려고 합니다.',
+      prompt: '여행 준비를 AI에게 부탁할 때 어떤 순서로 나누어 부탁해야 할까요?',
       stimuli: [
         {
           id: 'm2-l2-transfer-image',

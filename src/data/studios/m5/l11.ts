@@ -198,7 +198,8 @@ export const M5_L11_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '체험회 장소와 시간이 바뀌었을 때',
-      description: '설치 장소가 좁아지고 준비 시간이 10분 줄었습니다. 어떻게 하겠어요?',
+      description: '설치 장소가 좁아지고 준비 시간이 10분 줄었습니다.',
+      prompt: '체험회 장소와 시간이 바뀌었을 때 계획을 어떻게 고쳐야 할까요?',
       stimuli: [
         {
           id: 'm5-l11-transfer-image',

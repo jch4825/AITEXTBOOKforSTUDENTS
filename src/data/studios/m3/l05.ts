@@ -198,6 +198,7 @@ export const M3_L5_STUDIO: StudioDefinition = {
     transfer: {
       title: '같은 시작을 다른 분위기로',
       description: '비 오는 학교와 작은 로봇은 그대로 두고 이야기 분위기만 바꿔 보세요.',
+      prompt: '이야기의 시작은 그대로 두고 분위기만 바꾸려면 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm3-l5-transfer-image',

@@ -198,6 +198,7 @@ export const M2_L10_STUDIO: StudioDefinition = {
     transfer: {
       title: '다른 목적의 짧은 대화를 만든다면',
       description: '동아리 모집 문구를 새로 만들며 요청, 수정, 확인, 결정을 짧게 반복합니다.',
+      prompt: '동아리 모집 문구를 AI와 함께 만들 때 어떤 순서로 해야 할까요?',
       stimuli: [
         {
           id: 'm2-l10-transfer-image',

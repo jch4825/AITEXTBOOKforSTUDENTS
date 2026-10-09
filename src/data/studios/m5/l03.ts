@@ -198,7 +198,8 @@ export const M5_L3_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '프로젝터 모의 설치 순서',
-      description: '프로젝터를 실제로 조작하지 않고 설치 카드의 순서를 정합니다. 무엇을 먼저 확인하겠어요?',
+      description: '프로젝터를 실제로 조작하지 않고 설치 카드의 순서를 정합니다.',
+      prompt: '프로젝터 설치 순서를 정할 때 무엇을 먼저 확인해야 할까요?',
       stimuli: [
         {
           id: 'm5-l3-transfer-image',

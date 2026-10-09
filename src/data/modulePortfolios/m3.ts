@@ -8,6 +8,10 @@ export const M3_PORTFOLIO: ModulePortfolioDefinition = {
   title: '나만의 공부 도우미 도구함',
   description:
     '배움 전시회에서 만든 열 가지 공부 기록을 꺼내 AI가 도울 일, 내가 직접 생각하고 표현할 일, 결과를 확인할 근거가 보이는 공부 도구함을 완성합니다.',
+  storyHeading: '공부 도우미를 처음 쓰는 친구에게',
+  artifactHeading: '공부 도우미 도구함에 넣을 기록을 3개 이상 골라요',
+  guideHeading: '공부 도우미 도구함에 넣을 세 가지',
+  completionRequirement: '탐구 기록 3개, 도구함 세 칸, 잘한 과정 1개, 새 상황의 방법을 모두 남기면 마칠 수 있어요.',
   closingStory: [
     {
       id: 'm3-close-question',

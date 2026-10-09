@@ -198,7 +198,8 @@ export const M3_L1_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '모르는 낱말을 깊게 묻기',
-      description: '책에서 “서식지”를 만났습니다. 뜻과 쓰임을 알기 위해 어떤 질문을 이어서 하겠어요?',
+      description: '책에서 “서식지”를 만났습니다.',
+      prompt: '모르는 낱말의 뜻과 쓰임을 알고 싶을 때 AI에게 어떻게 물어야 할까요?',
       stimuli: [
         {
           id: 'm3-l1-transfer-image',

@@ -198,7 +198,8 @@ export const M4_L7_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '친구에게 준비물 부탁하기',
-      description: '친구에게 색종이 세 장을 쉬는 시간까지 빌리고 싶습니다. 어떻게 말하겠어요?',
+      description: '친구에게 색종이 세 장을 쉬는 시간까지 빌리고 싶습니다.',
+      prompt: '친구에게 색종이를 빌리고 싶을 때 어떻게 부탁해야 할까요?',
       stimuli: [
         {
           id: 'm4-l7-transfer-image',

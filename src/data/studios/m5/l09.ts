@@ -198,7 +198,8 @@ export const M5_L9_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '입구 화면도 쓸 수 없을 때',
-      description: '고른 화면 안내 방법을 갑자기 사용할 수 없습니다. 어떻게 하겠어요?',
+      description: '고른 화면 안내 방법을 갑자기 사용할 수 없습니다.',
+      prompt: '고른 화면 안내 방법을 쓸 수 없게 되었을 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm5-l9-transfer-image',
