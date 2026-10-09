@@ -8,6 +8,7 @@ import { getStudioDefinition } from '../../data/studios';
 import type { LessonId } from '../../types';
 import { themeFor } from '../../utils/moduleThemes';
 import { publicAssetUrl } from '../../utils/publicAssetUrl';
+import ModuleClosePrintSheet from './components/ModuleClosePrintSheet';
 import StudioExpressionInput from './components/StudioExpressionInput';
 import { loadStudioEvidence } from './evidenceStorage';
 import { formatPersistedStudioExpression, isMeaningfulStudioExpression } from './studioCompletion';
@@ -280,7 +281,8 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
                 className="mt-5 rounded-full border-2 px-5 py-2.5 font-bold"
                 style={{ borderColor: theme.accent, color: theme.accent, background: 'var(--editorial-paper)' }}
               >
-                {definition.printLabel ?? '아이미 사용 설명서 인쇄하기'}
+                {/* 2~4단원도 한때 1단원 이름("아이미 사용 설명서")으로 찍혔다. 따로 정하지 않으면 그 단원의 제목을 쓴다. */}
+                {definition.printLabel ?? `${definition.title} 인쇄하기`}
               </button>
             </section>
           ) : null}
@@ -356,6 +358,9 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
               </button>
             </div>
           ) : null}
+
+          {/* 인쇄할 때만 나오는 설명서 한 장. body 바로 아래로 포털되어 화면에는 그려지지 않는다. */}
+          <ModuleClosePrintSheet definition={definition} selectedArtifacts={selectedArtifacts} guideCopy={guideCopy} />
         </main>
       </ScreentoneBackdrop>
     </MicroLessonFrame>
