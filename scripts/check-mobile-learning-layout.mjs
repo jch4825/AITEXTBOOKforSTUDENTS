@@ -671,6 +671,45 @@ try {
   await evaluate(cdp, `localStorage.removeItem('ai-students-studio-evidence-v2')`);
   await evaluate(cdp, `localStorage.setItem('ai-students-teacher-mode', '0')`);
 
+  // 단원 마무리 인쇄. 학습 화면 틀은 창 높이에 묶인 안쪽 스크롤 칸이라, 화면을 그대로 찍으면 첫 화면만 잘렸다
+  // (그 전에는 상장용 전역 #root 숨김 때문에 빈 쪽이었다). 그래서 인쇄용 설명서 한 장을 body 바로 아래에 따로 두고,
+  // 인쇄할 때만 그것을 보이며 #root를 감춘다. 화면에서는 그 종이가 보이면 안 된다. 단추 이름은 단원 제목을 따른다
+  // (2~4단원이 1단원 이름 "아이미 사용 설명서"로 찍히던 것을 막는다).
+  await navigateAndWait(cdp, `http://127.0.0.1:${vitePort}/AITEXTBOOKforSTUDENTS/?lesson=m1-l11`);
+  const closeScreen = await evaluate(cdp, `(() => {
+    const sheet = document.querySelector('.module-close-print-sheet');
+    const button = [...document.querySelectorAll('button')].find((element) => element.textContent.includes('인쇄하기'));
+    return {
+      exists: Boolean(sheet),
+      underBody: sheet ? sheet.parentElement === document.body : false,
+      display: sheet ? getComputedStyle(sheet).display : null,
+      label: button ? button.textContent.trim() : null,
+    };
+  })()`);
+  assert.ok(closeScreen.exists && closeScreen.underBody, '단원 마무리의 인쇄용 설명서는 #root 밖(body 바로 아래)에 있어야 합니다.');
+  assert.equal(closeScreen.display, 'none', '인쇄용 설명서가 화면에 보이면 안 됩니다.');
+  assert.equal(closeScreen.label, '나만의 인공지능 사용 설명서 인쇄하기', '단원 마무리 인쇄 단추 이름은 단원 제목을 따라야 합니다.');
+  await cdp.send('Emulation.setEmulatedMedia', { media: 'print' });
+  await sleep(300);
+  const closePrinted = await evaluate(cdp, `(() => {
+    const sheet = document.querySelector('.module-close-print-sheet');
+    return {
+      rootDisplay: getComputedStyle(document.getElementById('root')).display,
+      display: getComputedStyle(sheet).display,
+      height: Math.round(sheet.getBoundingClientRect().height),
+      title: sheet.querySelector('h1')?.textContent.trim() ?? null,
+      sections: sheet.querySelectorAll('.module-close-print-guide > li').length,
+      blankSections: sheet.querySelectorAll('.module-close-print-guide .module-close-print-lines').length,
+    };
+  })()`);
+  await cdp.send('Emulation.setEmulatedMedia', { media: '' });
+  assert.equal(closePrinted.rootDisplay, 'none', '단원 마무리를 인쇄할 때 학습 화면(#root)을 감춰야 첫 화면만 잘려 찍히지 않습니다.');
+  assert.equal(closePrinted.display, 'block', '단원 마무리를 인쇄할 때 인쇄용 설명서가 나와야 합니다.');
+  assert.ok(closePrinted.height > 0, '인쇄용 설명서가 높이를 가져야 합니다.');
+  assert.equal(closePrinted.title, '나만의 인공지능 사용 설명서', '인쇄용 설명서 제목은 단원 제목이어야 합니다.');
+  assert.equal(closePrinted.sections, 3, '인쇄용 설명서에는 설명서 세 칸이 있어야 합니다.');
+  assert.equal(closePrinted.blankSections, 3, '아직 쓰지 않은 칸에는 손으로 쓸 줄이 남아야 합니다.');
+
   console.log('mobile learning layout contract passed');
 } finally {
   try { cdp?.close(); } catch {
