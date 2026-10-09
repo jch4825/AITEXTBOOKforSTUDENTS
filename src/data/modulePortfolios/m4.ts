@@ -7,7 +7,7 @@ export const M4_PORTFOLIO: ModulePortfolioDefinition = {
   kicker: '4단원 성장 포트폴리오',
   title: '나만의 인공지능 안전 수칙',
   description:
-    '학교 AI 체험회 공개 전 안전 감사에서 모은 열 가지 기록을 꺼내 확인할 때, 보내기 전, 위험할 때 실제로 사용할 행동과 도움 요청 문장을 하나의 안전 여권으로 완성합니다.',
+    '학교 AI 체험회를 열기 전 안전 점검에서 모은 열 가지 기록을 꺼냅니다. 그리고 확인할 때, 보내기 전, 위험할 때 실제로 쓸 행동과 도움 요청 문장을 안전 여권 한 권으로 완성합니다.',
   storyHeading: '인공지능을 안전하게 쓰려는 친구에게',
   artifactHeading: '안전 수칙에 넣을 기록을 3개 이상 골라요',
   guideHeading: '나를 지키는 세 가지 안전 수칙',

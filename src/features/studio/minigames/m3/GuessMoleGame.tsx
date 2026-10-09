@@ -217,7 +217,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
         const lives = prev.lives - 1;
         if (lives <= 0 && !finishedRef.current) {
           finishedRef.current = true;
-          game.fail('눈동자(사실)를 눌러서 터졌어요. 눈동자는 그대로 두세요.');
+          game.fail('사실인 눈동자를 눌러서 터졌어요. 눈동자는 그대로 두세요.');
         }
         return { ...prev, lives };
       });
@@ -259,7 +259,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
               const lives = prev.lives - 1;
               if (lives <= 0 && !finishedRef.current) {
                 finishedRef.current = true;
-                game.fail('물음표(추측)를 놓쳤어요. 사라지기 전에 눌러 보세요.');
+                game.fail('추측인 물음표를 놓쳤어요. 사라지기 전에 눌러 보세요.');
               }
               return { ...prev, lives };
             });
@@ -314,7 +314,7 @@ export default function GuessMoleGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="추측만 두드리기"
-      instruction="빨간 세모(추측)가 나오면 사라지기 전에 누르세요. 파란 네모(사실)를 잘못 누르면 터집니다."
+      instruction="빨간 세모는 추측이에요. 나오면 사라지기 전에 누르세요. 파란 네모는 사실이에요. 잘못 누르면 터져요."
       progress={{ label: '고친 추측', value: hud.caught, max: GOAL }}
       hud={<GameHud lives={hud.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}

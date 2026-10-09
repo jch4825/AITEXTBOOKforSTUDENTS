@@ -382,7 +382,7 @@ export const LESSON_OBJECTIVES: LessonObjective[] = [
   {
     lessonId: 'm4-l3',
     studentMission:
-      '아이미에게 보낼 글에서 나를 알아볼 수 있는 정보를 찾아 가리고, 필요한 조건만 남겨 안전한 부탁으로 고쳐요.',
+      '게시판에 올릴 글에서 나를 알아볼 수 있는 정보를 찾아 가리고, 필요한 조건만 남겨 안전한 부탁으로 고쳐요.',
     teacherObjective:
       '직접 단서와 간접 단서를 구분해 가리고, 목적 수행에 필요한 조건만 남긴 요청으로 수정할 수 있다.',
     aiRole:
