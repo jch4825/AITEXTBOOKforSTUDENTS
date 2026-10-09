@@ -198,7 +198,8 @@ export const M5_L6_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '체육관 안 부스 찾기',
-      description: '“체육관 부스”가 여러 곳을 뜻합니다. 어떻게 안전하게 고치겠어요?',
+      description: '“체육관 부스”가 여러 곳을 뜻합니다.',
+      prompt: '“체육관 부스”가 여러 곳을 뜻할 때 안내를 어떻게 고쳐야 할까요?',
       stimuli: [
         {
           id: 'm5-l6-transfer-image',

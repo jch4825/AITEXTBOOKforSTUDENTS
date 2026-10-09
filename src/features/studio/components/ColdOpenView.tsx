@@ -48,7 +48,9 @@ export default function ColdOpenView({
   // 소리의 이름이 다른 목록과 겹치지 않게 한다.
   const listId = useId();
   const { transfer } = definition;
-  const prompt = transfer.prompt || `${transfer.title} 상황에서 어떻게 하겠어요?`;
+  // 차시 제목("학교 준비물을 산다면" 같은 조건 꼴, "요약하기" 같은 명사 꼴)을 문장 가운데 끼우면 비문이 된다.
+  // 물음은 차시마다 transfer.prompt로 쓰고(check:reading-support가 강제), 빠졌을 때만 제목을 끼우지 않는 말을 쓴다.
+  const prompt = transfer.prompt || '이럴 때 어떻게 해야 할까요?';
   // 이 먼저 해 보기의 선택지도 그림 카드로 답할 수 있다(스튜디오의 첫 생각·적용과 같은 방식).
   const cardSet = useMemo(
     () => (readingSupport ? getChoiceCardSet(definition.lessonId) : undefined),
@@ -99,7 +101,8 @@ export default function ColdOpenView({
     <div className="space-y-5 p-5 md:p-7">
       <div className={readingSupport ? 'flex items-start justify-between gap-3' : undefined}>
         <div>
-          <p className="studio-kicker" style={{ color: accent }}>지금이라면 어떻게 할까요</p>
+          {/* 바로 아래가 물음이라 이름표까지 물음이면 물음이 두 번 이어진다. 이름표는 물음이 아닌 말로 둔다. */}
+          <p className="studio-kicker" style={{ color: accent }}>지금 내 생각</p>
           <h2 className="mt-1 text-xl font-extrabold">{prompt}</h2>
         </div>
         {/* 물음 옆 단추 하나가 물음과 선택지를 차례로 읽는다. 읽는 카드는 윤곽으로 따라간다. */}

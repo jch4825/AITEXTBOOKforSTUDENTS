@@ -198,7 +198,8 @@ export const M6_L5_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '오후 예보가 바뀌었을 때',
-      description: '오후 비 시작 시간이 빨라졌다는 공식 업데이트가 나왔습니다. 어떻게 하겠어요?',
+      description: '오후 비 시작 시간이 빨라졌다는 공식 업데이트가 나왔습니다.',
+      prompt: '오후 비 예보가 바뀌었을 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l5-transfer-image',

@@ -198,7 +198,8 @@ export const M6_L1_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '학교 준비물을 산다면',
-      description: 'AI가 공책, 색연필, 풀을 추천했지만 교실에 있는 물건과 예산은 아직 모릅니다. 어떻게 하겠어요?',
+      description: 'AI가 공책, 색연필, 풀을 추천했지만 교실에 있는 물건과 예산은 아직 모릅니다.',
+      prompt: '학교 준비물을 사야 하는 상황에서 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l1-transfer-image',

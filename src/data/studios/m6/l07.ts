@@ -198,7 +198,8 @@ export const M6_L7_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '도움 가능 시간이 바뀌었을 때',
-      description: '함께 도와줄 사람이 오후가 아니라 오전에만 가능합니다. 어떻게 하겠어요?',
+      description: '함께 도와줄 사람이 오후가 아니라 오전에만 가능합니다.',
+      prompt: '도와줄 사람이 오전에만 올 수 있을 때 계획을 어떻게 바꿔야 할까요?',
       stimuli: [
         {
           id: 'm6-l7-transfer-image',

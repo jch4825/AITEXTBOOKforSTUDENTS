@@ -198,7 +198,8 @@ export const M4_L10_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '게임 추천 영상 살펴보기',
-      description: '좋아하는 사람이 추천한 게임 영상에 유료 아이템 링크와 “반드시 이겨요”라는 말이 있습니다. 어떻게 하겠어요?',
+      description: '좋아하는 사람이 추천한 게임 영상에 유료 아이템 링크와 “반드시 이겨요”라는 말이 있습니다.',
+      prompt: '게임 추천 영상에 유료 아이템 링크가 있을 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm4-l10-transfer-image',

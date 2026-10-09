@@ -198,7 +198,8 @@ export const M4_L4_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '비밀번호 재설정 링크',
-      description: '낯선 메시지가 비밀번호를 다시 만들라며 링크를 보냈습니다. 어떻게 하겠어요?',
+      description: '낯선 메시지가 비밀번호를 다시 만들라며 링크를 보냈습니다.',
+      prompt: '낯선 메시지가 비밀번호를 바꾸라며 링크를 보냈을 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm4-l4-transfer-image',

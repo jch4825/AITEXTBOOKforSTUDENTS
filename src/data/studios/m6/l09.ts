@@ -198,7 +198,8 @@ export const M6_L9_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '정류장 안내가 어려울 때',
-      description: '직원이 빠르게 설명해 이해하기 어렵습니다. 어떻게 하겠어요?',
+      description: '직원이 빠르게 설명해 이해하기 어렵습니다.',
+      prompt: '정류장 직원의 설명을 이해하기 어려울 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l9-transfer-image',

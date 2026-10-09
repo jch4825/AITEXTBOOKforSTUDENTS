@@ -198,7 +198,8 @@ export const M4_L6_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '자동 재생 영상 멈추기',
-      description: '다음 영상이 갑자기 불편하게 느껴졌습니다. 어떻게 행동하겠어요?',
+      description: '다음 영상이 갑자기 불편하게 느껴졌습니다.',
+      prompt: '저절로 재생된 영상이 불편하게 느껴질 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm4-l6-transfer-image',

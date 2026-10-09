@@ -198,7 +198,8 @@ export const M4_L5_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '간식 사진 공유하기',
-      description: '간식 사진 뒤 유리창에 친구 얼굴과 교실 번호가 비칩니다. 어떻게 하겠어요?',
+      description: '간식 사진 뒤 유리창에 친구 얼굴과 교실 번호가 비칩니다.',
+      prompt: '간식 사진에 친구 얼굴과 교실 번호가 비칠 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm4-l5-transfer-image',

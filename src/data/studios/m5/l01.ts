@@ -198,7 +198,8 @@ export const M5_L1_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '준비물 한 개가 부족해요',
-      description: '활동 시작 전 색종이 한 묶음이 부족합니다. 문제를 어떻게 정의하겠어요?',
+      description: '활동 시작 전 색종이 한 묶음이 부족합니다.',
+      prompt: '활동 전에 준비물 한 개가 부족할 때 무엇부터 확인해야 할까요?',
       stimuli: [
         {
           id: 'm5-l1-transfer-image',

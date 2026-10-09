@@ -198,7 +198,8 @@ export const M6_L2_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '새 준비물 구매 계산',
-      description: '공책 두 권과 풀 한 개를 살 때 AI 합계가 나왔습니다. 어떻게 확인하겠어요?',
+      description: '공책 두 권과 풀 한 개를 살 때 AI 합계가 나왔습니다.',
+      prompt: 'AI가 계산한 준비물 값이 맞는지 확인하려면 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l2-transfer-image',

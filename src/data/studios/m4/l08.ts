@@ -198,7 +198,8 @@ export const M4_L8_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '주말 계획 바꾸기',
-      description: '주말 가족 일정이 늦게 시작하는 날에는 평일 계획을 어떻게 바꾸겠어요?',
+      description: '주말에는 가족 일정이 평일보다 늦게 시작하는 날이 있습니다.',
+      prompt: '주말 가족 일정이 늦게 시작할 때 평일 계획을 어떻게 바꿔야 할까요?',
       stimuli: [
         {
           id: 'm4-l8-transfer-image',

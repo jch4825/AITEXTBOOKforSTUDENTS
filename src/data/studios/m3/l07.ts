@@ -200,6 +200,7 @@ export const M3_L7_STUDIO: StudioDefinition = {
     transfer: {
       title: '학급 안내문 요약하기',
       description: '준비물, 제출 날짜, 제출 장소가 담긴 학급 안내문을 두 문장으로 줄여 보세요.',
+      prompt: '학급 안내문을 두 문장으로 줄일 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm3-l7-transfer-image',

@@ -198,7 +198,8 @@ export const M6_L3_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '보건소 연습 지도 확인',
-      description: '가상의 보건소 지도에서 AI가 표지에 없는 뒷길을 제안했습니다. 어떻게 하겠어요?',
+      description: '가상의 보건소 지도에서 AI가 표지에 없는 뒷길을 제안했습니다.',
+      prompt: 'AI가 지도에 없는 뒷길을 알려 줄 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l3-transfer-image',

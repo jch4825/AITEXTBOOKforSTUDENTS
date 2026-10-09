@@ -200,6 +200,7 @@ export const M3_L10_STUDIO: StudioDefinition = {
     transfer: {
       title: '다른 과목에서 같은 복습 사용하기',
       description: '사회나 과학에서 오늘 배운 내용 하나를 골라 책을 덮고 먼저 떠올리기, 원래 자료로 확인하기, 내 말로 설명하기 순서로 복습해 보세요.',
+      prompt: '다른 과목을 복습할 때 오늘 배운 방법을 어떻게 써야 할까요?',
       stimuli: [
         {
           id: 'm3-l10-transfer-image',

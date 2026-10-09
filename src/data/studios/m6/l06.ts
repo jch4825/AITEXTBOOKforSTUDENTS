@@ -198,7 +198,8 @@ export const M6_L6_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '다른 과일도 없을 때',
-      description: '계획한 대체 과일도 없다는 사실을 알게 되었습니다. 어떻게 하겠어요?',
+      description: '계획한 대체 과일도 없다는 사실을 알게 되었습니다.',
+      prompt: '바꿔 쓰려던 과일도 없을 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm6-l6-transfer-image',

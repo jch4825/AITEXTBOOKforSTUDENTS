@@ -102,7 +102,11 @@ for (const moduleId of modules) {
     assertSpeakable(`${lessonId} 이유 물음`, studio.firstAttempt.reasonPrompt);
     assertSpeakable(`${lessonId} AI 의견`, studio.aiContribution.text);
     assertSpeakable(`${lessonId} 결과물 안내`, studio.artifact.prompt);
+    // 물음이 비면 화면이 차시 제목을 끼워 문장을 만들었고("학교 준비물을 산다면 상황에서") 비문이 됐다.
+    assert(studio.transfer.prompt?.trim(), `${lessonId}: 적용 물음(transfer.prompt)이 없다. 차시마다 자연스러운 물음을 직접 쓴다.`);
     assertSpeakable(`${lessonId} 적용 물음`, studio.transfer.prompt);
+    // 상황 설명까지 물음으로 끝나면 화면에 물음이 두 번 이어진다("…어떻게 하겠어요?" 다음 "…어떻게 해야 할까요?"). 물음은 prompt만 맡는다.
+    assert(!/[?？]s*$/.test(studio.transfer.description), `${lessonId}: 적용 상황 설명(transfer.description)이 물음으로 끝난다. 물음은 transfer.prompt에만 쓴다.`);
     for (const [where, choices] of [['첫 생각', studio.firstAttempt.choices], ['적용', studio.transfer.choices]]) {
       const ids = new Set();
       for (const choice of choices) {

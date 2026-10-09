@@ -198,6 +198,7 @@ export const M3_L8_STUDIO: StudioDefinition = {
     transfer: {
       title: '친구 퀴즈를 먼저 풀어 보기',
       description: '친구가 만든 낱말 퀴즈를 정답을 보지 않고 먼저 풀어 본 뒤, 해설을 보며 이유를 확인해 보세요.',
+      prompt: '친구가 만든 퀴즈를 풀 때 어떤 순서로 풀어야 할까요?',
       stimuli: [
         {
           id: 'm3-l8-transfer-image',

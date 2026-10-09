@@ -197,7 +197,8 @@ export const M3_L6_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '거스름돈을 확인해요',
-      description: '10,000원을 내고 6,600원어치 물건을 샀습니다. 거스름돈을 어떻게 확인할까요?',
+      description: '10,000원을 내고 6,600원어치 물건을 샀습니다.',
+      prompt: '받은 거스름돈이 맞는지 확인하려면 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm3-l6-transfer-image',

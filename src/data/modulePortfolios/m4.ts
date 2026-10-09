@@ -8,6 +8,10 @@ export const M4_PORTFOLIO: ModulePortfolioDefinition = {
   title: '나만의 인공지능 안전 수칙',
   description:
     '학교 AI 체험회 공개 전 안전 감사에서 모은 열 가지 기록을 꺼내 확인할 때, 보내기 전, 위험할 때 실제로 사용할 행동과 도움 요청 문장을 하나의 안전 여권으로 완성합니다.',
+  storyHeading: '인공지능을 안전하게 쓰려는 친구에게',
+  artifactHeading: '안전 수칙에 넣을 기록을 3개 이상 골라요',
+  guideHeading: '나를 지키는 세 가지 안전 수칙',
+  completionRequirement: '탐구 기록 3개, 안전 수칙 세 칸, 잘한 과정 1개, 새 상황의 방법을 모두 남기면 마칠 수 있어요.',
   closingStory: [
     {
       id: 'm4-close-final-audit',

@@ -198,7 +198,8 @@ export const M4_L9_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '사진을 요구하는 새 메시지',
-      description: '다른 낯선 계정이 “친구가 되려면 얼굴 사진을 보내”라고 요구합니다. 어떻게 하겠어요?',
+      description: '다른 낯선 계정이 “친구가 되려면 얼굴 사진을 보내”라고 요구합니다.',
+      prompt: '낯선 계정이 얼굴 사진을 보내라고 할 때 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm4-l9-transfer-image',

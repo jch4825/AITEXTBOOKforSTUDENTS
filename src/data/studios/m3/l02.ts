@@ -199,6 +199,7 @@ export const M3_L2_STUDIO: StudioDefinition = {
     transfer: {
       title: '새 낱말 “서식지” 확인하기',
       description: '“여우의 서식지를 보호해요”라는 문장에서 같은 방법을 사용해 보세요.',
+      prompt: '새로 배운 낱말의 뜻이 맞는지 확인하려면 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm3-l2-transfer-image',

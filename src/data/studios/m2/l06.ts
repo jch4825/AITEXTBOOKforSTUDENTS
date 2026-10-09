@@ -198,6 +198,7 @@ export const M2_L6_STUDIO: StudioDefinition = {
     transfer: {
       title: '주말 나들이를 준비한다면',
       description: '날씨, 이동, 준비물을 한 번에 부탁하지 않고 단계별로 계획하려고 합니다.',
+      prompt: '주말 나들이 계획을 AI와 세울 때 어떤 순서로 부탁해야 할까요?',
       stimuli: [
         {
           id: 'm2-l6-transfer-image',

@@ -85,7 +85,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
     if (emptyGuideSections > 0) {
       items.push({
         id: 'guide',
-        message: `설명서에 아직 비어 있는 칸이 ${emptyGuideSections}개 있어요.`,
+        message: `세 칸 가운데 아직 비어 있는 칸이 ${emptyGuideSections}개 있어요.`,
         ref: guideSectionRef,
       });
     }
@@ -245,7 +245,7 @@ export default function ModuleCloseLessonView({ definition, onGoHome, onPickLess
 
           {definition.guideSections?.length ? (
             <section className="studio-editorial p-6" ref={guideSectionRef} tabIndex={-1}>
-              <p className="studio-kicker" style={{ color: theme.secondary }}>2단계 · 설명서 작성하기</p>
+              <p className="studio-kicker" style={{ color: theme.secondary }}>2단계 · 세 칸 채우기</p>
               <h2 className="mt-1 text-xl font-extrabold">
                 {definition.guideHeading ?? '아이미를 사용할 때 기억할 세 가지'}
               </h2>

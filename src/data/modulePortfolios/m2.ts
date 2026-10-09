@@ -8,6 +8,10 @@ export const M2_PORTFOLIO: ModulePortfolioDefinition = {
   title: '나만의 프롬프트 노트',
   description:
     '체험회 준비 과정에서 남긴 열 번의 요청 기록을 바탕으로, 첫 요청부터 수정 요청, 근거 확인, 최종 결정까지 이어지는 나만의 프롬프트 노트를 완성해 봐요.',
+  storyHeading: '프롬프트를 처음 쓰는 친구에게',
+  artifactHeading: '프롬프트 노트에 넣을 기록을 3개 이상 골라요',
+  guideHeading: '프롬프트 노트에 남길 세 가지',
+  completionRequirement: '탐구 기록 3개, 노트 세 칸, 잘한 과정 1개, 새 상황의 방법을 모두 남기면 마칠 수 있어요.',
   closingStory: [
     {
       id: 'm2-close-question',

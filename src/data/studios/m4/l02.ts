@@ -200,7 +200,8 @@ export const M4_L2_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '준비물 변경 소식 확인하기',
-      description: '친구 메시지와 어제 반 공지, 오늘 담당 선생님 공지가 서로 다릅니다. 무엇을 기준으로 고르겠어요?',
+      description: '친구 메시지와 어제 반 공지, 오늘 담당 선생님 공지가 서로 다릅니다.',
+      prompt: '준비물 소식이 서로 다를 때 무엇을 기준으로 골라야 할까요?',
       stimuli: [
         {
           id: 'm4-l2-transfer-image',

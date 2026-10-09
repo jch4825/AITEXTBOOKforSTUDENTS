@@ -198,6 +198,7 @@ export const M2_L1_STUDIO: StudioDefinition = {
     transfer: {
       title: '이름을 모르는 물건을 찾는다면',
       description: '교실에서 이름은 모르지만 종이를 묶을 때 쓰는 작은 물건을 찾고 있습니다.',
+      prompt: '이름을 모르는 물건을 AI에게 찾아 달라고 할 때 어떻게 말해야 할까요?',
       stimuli: [
         {
           id: 'm2-l1-transfer-image',

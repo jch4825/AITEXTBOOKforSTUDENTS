@@ -198,7 +198,8 @@ export const M5_L10_STUDIO: StudioDefinition = {
     },
     transfer: {
       title: '다른 친구에게도 통하는 안내',
-      description: '수정한 사람은 성공했습니다. 다음 확인은 무엇이 좋을까요?',
+      description: '수정한 사람은 성공했습니다.',
+      prompt: '고친 안내가 다른 친구에게도 통하는지 확인하려면 어떻게 해야 할까요?',
       stimuli: [
         {
           id: 'm5-l10-transfer-image',

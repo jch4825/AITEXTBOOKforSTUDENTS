@@ -175,7 +175,8 @@ function lessonPhrase(source: WorksheetLessonSource, stage: CanonicalStage | und
 function transferQuestion(topic: string): string {
   if (/[?？]$/.test(topic)) return `${topic} 오늘 배운 내용을 떠올려 답해 보세요.`;
   if (/[.!。]$/.test(topic)) return `${topic} 오늘 배운 내용을 이 상황에 어떻게 써 볼까요?`;
-  return `${topic} 상황에서 오늘 배운 내용을 어떻게 써 볼까요?`;
+  // 제목 꼴("…산다면", "…요약하기")을 그대로 "상황에서" 앞에 붙이면 비문이 되므로 따옴표로 묶어 이름처럼 쓴다.
+  return `“${topic}” 상황에서 오늘 배운 내용을 어떻게 써 볼까요?`;
 }
 
 function lessonStages(source: WorksheetLessonSource): CanonicalStage[] {
