@@ -1,3 +1,6 @@
+> **Response style:** Answer in ASD-STE100 (Simplified Technical English).
+> 사용자에게 하는 답변을 ASD-STE100(단순화된 기술 영어) 문체로 씁니다. 이 규칙은 답변에만 적용합니다. 아래의 학생 노출 한국어 문체 규칙은 그대로 지킵니다.
+
 # CLAUDE.md
 
 이 문서는 저장소를 수정할 때 사용하는 현재 기준입니다. 과거 작업 계획과 완료 보고서는 Git
