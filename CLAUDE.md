@@ -375,6 +375,10 @@ npm run test:concept-notes
 - `output/`, Playwright 임시 결과, 생성 중간 이미지, 로컬 도구 캐시는 커밋하지 않습니다.
 - 루트에 참고 이미지나 임시 파일을 놓지 않습니다.
 - 비밀키, `.env`, 학생 원본 미디어를 커밋하지 않습니다.
-- 라이선스는 저장소 전체에 CC BY-NC-SA 4.0(`LICENSE`)이고, `public/sounds/`의 효과음은 Humble Bundle로 구매한 자료라 예외입니다
-  (구매 때 받은 라이선스를 따르며 재사용·재배포 금지, `public/sounds/NOTICE.md`). 새 외부 자산(소리·그림·글꼴)을 저장소에 더하기 전에 재배포가 허락되는지 확인하고,
-  안 되면 저장소에 두지 않거나 README 라이선스 절에 예외로 적습니다.
+- 라이선스는 저장소 전체에 CC BY-NC-SA 4.0(`LICENSE`)이고, 효과음은 Humble Bundle로 구매한 자료라 예외입니다
+  (구매 때 받은 라이선스를 따르며 재사용·재배포 금지, `public/sounds/NOTICE.md`). 그 라이선스가 앱 밖 재배포를 허락하지 않아
+  **효과음 파일(`public/sounds/*.m4a`)은 공개 저장소에 두지 않습니다**(`.gitignore`). 배포 때 `deploy.yml`이 비공개 저장소
+  `jch4825/AITEXTBOOKforSTUDENTS-private-assets`의 `sounds/`에서 읽기 전용 배포 키(Actions 비밀값 `ASSETS_DEPLOY_KEY`)로 받아 넣고,
+  `src/utils/sound.ts`의 `SOUND_NAMES` 가운데 하나라도 빠지면 배포를 멈춥니다. 소리를 더하거나 바꾸면 그 비공개 저장소에 올립니다.
+  새 외부 자산(소리·그림·글꼴)을 저장소에 더하기 전에 재배포가 허락되는지 확인하고, 안 되면 같은 방식으로 저장소 밖에 두거나
+  README 라이선스 절에 예외로 적습니다. 2026-08-02부터 올라간 옛 효과음 파일은 git 기록에 남아 있습니다(지우려면 강제 푸시가 필요해 따로 정합니다).
