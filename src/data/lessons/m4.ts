@@ -54,7 +54,7 @@ export const M4_LESSONS: LessonContent[] = [
     number: 3,
     kind: 'experience',
     title: '개인정보는 가리고 필요한 조건만 말하기',
-    objective: '아이미에게 보낼 글에서 나를 알아볼 수 있는 정보를 찾아 가리고, 필요한 조건만 남겨 안전한 부탁으로 고쳐요.',
+    objective: '게시판에 올릴 글에서 나를 알아볼 수 있는 정보를 찾아 가리고, 필요한 조건만 남겨 안전한 부탁으로 고쳐요.',
     standards: [PRIVACY_STANDARD, COMMUNICATION_STANDARD],
     bodyEasy: '이름뿐 아니라 학교와 시간처럼 나를 알아볼 단서도 필요한 만큼만 남겨요.',
     bodyNormal: '개인정보에는 내 이름이나 전화번호뿐만 아니라 학교 이름, 자주 가는 장소, 하교 시간처럼 여러 개가 모이면 나를 알아볼 수 있는 단서들도 모두 포함됩니다. 인공지능에게 물어볼 때는 꼭 필요한 조건만 남기고 나를 알아볼 수 있는 개인정보는 가려야 합니다.',

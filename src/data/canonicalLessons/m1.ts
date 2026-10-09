@@ -238,7 +238,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
       purpose: '아이미가 작성한 오늘 급식 메뉴 발표 내용의 정확성 점검하기',
       mismatch: '자연스럽고 당당한 대답이지만 실제 급식 식단표와 다름',
       evidence: ['아이미 작성 대답', '학교 공식 주간 식단표'],
-      resolution: '당당하게 말한 엉뚱 대답(무지개 아이스크림 떡볶이)을 진짜 식단표(제육볶음과 미역국)와 대조해 바로잡음',
+      resolution: '당당하게 말한 엉뚱한 대답인 ‘무지개 아이스크림 떡볶이’를 진짜 식단표의 ‘제육볶음과 미역국’과 대조해 바로잡음',
     },
     stages: [
       {
@@ -963,7 +963,7 @@ export const M1_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
     number: 11,
     role: 'project',
     title: '나만의 인공지능 사용 설명서',
-    masterObjective: '오늘은 새 AI 상황에서 입력·결과·확인할 점을 찾아 나만의 AI 사용 설명서를 완성해 봐요.',
+    masterObjective: '오늘은 새로운 AI를 쓰는 상황에서 입력·결과·확인할 점을 찾아 나만의 AI 사용 설명서를 완성해 봐요.',
     standards: [STANDARD_CODES.SPEC_AI_01, STANDARD_CODES.SPEC_AI_02, STANDARD_CODES.SPEC_AI_03],
     coreConcepts: ['AI는 자료와 입력을 바탕으로 결과를 만들며 사람의 확인과 결정이 필요하다.'],
     canonicalScenario: {

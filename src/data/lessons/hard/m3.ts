@@ -111,7 +111,7 @@ export const HARD_M3: Partial<Record<LessonId, HardLessonContent>> = {
     ],
     terms: [
       { term: '핵심 정보', definition: '글의 주제와 독자의 이해나 행동에 반드시 필요한 내용.', example: '전시 방문자에게 장소, 체험 내용, 시작 전 준비 시간을 남깁니다.' },
-      { term: '원문 연결', definition: '요약 문장이 원문의 어느 문장이나 자료에서 나왔는지 표시하는 것.', example: '“2층 배움실” 요약 문장을 원문 1번과 연결합니다.' },
+      { term: '원문 연결', definition: '요약 문장이 원문의 어느 문장이나 자료에서 나왔는지 표시하는 것.', example: '“2층 도서관” 요약 문장을 원문 1번과 연결합니다.' },
     ],
     method: [
       '누가 왜 읽는지 정하고 꼭 남길 핵심을 먼저 고릅니다.',

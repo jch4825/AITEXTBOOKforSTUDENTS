@@ -224,7 +224,7 @@ export const M3_CANONICAL_LESSONS: CanonicalLessonDesign[] = [
         id: 's1-encounter',
         phase: 'encounter',
         title: '어려운 설명과 틀린 비유',
-        instruction: '광합성의 첫 쉬운 비유에서 중요한 재료(햇빛)가 빠진 것을 찾아봅시다.',
+        instruction: '광합성의 첫 쉬운 비유에서 빠진 중요한 재료인 물과 이산화탄소를 찾아봅시다.',
         activity: {
           id: 'act-s1',
           kind: 'compare',

@@ -157,7 +157,7 @@ export const HARD_M5: Partial<Record<LessonId, HardLessonContent>> = {
       {
         term: '명확화',
         definition: '여러 뜻이 생기지 않도록 필요한 정보를 분명하게 더하는 것.',
-        example: '“현재 건물 안 2층 초록 표지 앞 부스”라고 위치 단서를 더한다.',
+        example: '“이 건물 안 2층 초록 표지 앞 부스”라고 위치 단서를 더한다.',
       },
     ],
     method: [

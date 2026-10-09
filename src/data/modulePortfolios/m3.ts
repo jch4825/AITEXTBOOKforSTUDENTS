@@ -7,7 +7,7 @@ export const M3_PORTFOLIO: ModulePortfolioDefinition = {
   kicker: '3단원 성장 포트폴리오',
   title: '나만의 공부 도우미 도구함',
   description:
-    '배움 전시회에서 만든 열 가지 공부 기록을 꺼내 AI가 도울 일, 내가 직접 생각하고 표현할 일, 결과를 확인할 근거가 보이는 공부 도구함을 완성합니다.',
+    '배움 전시회에서 만든 열 가지 공부 기록을 꺼내, AI가 도울 일과 내가 직접 생각하고 표현할 일, 결과를 확인할 근거를 한눈에 볼 수 있는 공부 도구함을 완성합니다.',
   storyHeading: '공부 도우미를 처음 쓰는 친구에게',
   artifactHeading: '공부 도우미 도구함에 넣을 기록을 3개 이상 골라요',
   guideHeading: '공부 도우미 도구함에 넣을 세 가지',
@@ -84,6 +84,6 @@ export const M3_PORTFOLIO: ModulePortfolioDefinition = {
   nextChoices: [
     { id: 'think-first', emoji: '🧠', label: 'AI를 보기 전에 내 생각을 먼저 남길게요.' },
     { id: 'check-source', emoji: '🔎', label: '사전·교과서·계산기·원문으로 확인할게요.' },
-    { id: 'own-expression', emoji: '✍️', label: '제출할 생각과 표현은 나만의 표현으로 완성할게요.' },
+    { id: 'own-expression', emoji: '✍️', label: '제출할 생각과 문장은 내 말로 완성할게요.' },
   ],
 };

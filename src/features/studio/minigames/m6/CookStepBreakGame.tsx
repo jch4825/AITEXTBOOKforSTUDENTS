@@ -604,7 +604,7 @@ export default function CookStepBreakGame({ supportLevel }: MiniGameProps) {
   return (
     <MiniGameFrame
       badge="위험 단계 깨기"
-      instruction="아이미의 조리 초안이 네 층으로 서 있어요. 빨강 삼각(위험한 단계) 아래로 받침대를 옮겨 공을 쏘면, 그 자리에 파랑 사각(안전한 단계)이 내려와 메웁니다. 맨 아래 층부터 차례로 고쳐 보세요."
+      instruction="아이미의 조리 초안이 네 층으로 서 있어요. 위험한 단계인 빨강 삼각 아래로 받침대를 옮겨 공을 쏘면, 그 자리에 안전한 단계인 파랑 사각이 내려와 메워요. 맨 아래 층부터 차례로 고쳐 보세요."
       progress={{ label: '안전해진 단계', value: view.fixed, max: riskyTotal }}
       hud={<GameHud lives={view.lives} maxLives={maxLives} />}
       stages={STAGES.slice(0, game.visibleStageCount).map((s) => ({ id: s.id, label: s.label }))}
