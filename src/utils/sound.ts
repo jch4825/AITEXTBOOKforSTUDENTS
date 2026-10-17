@@ -53,8 +53,31 @@ export function setSoundEnabled(next: boolean): void {
 
 function audioContext(): AudioContext | null {
   if (typeof window === 'undefined' || typeof window.AudioContext !== 'function') return null;
-  if (!context) context = new window.AudioContext();
+  if (!context) {
+    // 아이폰은 무음 스위치를 켜면 Web Audio 소리를 끈다. 읽어 주기(speechSynthesis)는 그대로 나서
+    // 효과음만 사라진 것처럼 들렸다. 'playback'으로 두면 효과음도 읽어 주기와 같이 난다.
+    // 소리를 끄는 일은 교사 설정과 학생 소리 칩이 맡는다. 이 속성이 없는 브라우저는 그냥 넘어간다.
+    const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+    if (session) {
+      try { session.type = 'playback'; } catch { /* 지원하지 않는 값이면 기본 동작을 따른다 */ }
+    }
+    context = new window.AudioContext();
+  }
   return context;
+}
+
+/**
+ * 멈춘 소리 판을 다시 깨운다. 아이폰은 화면을 껐다 켜거나 다른 앱에 다녀오면 'suspended'가 아니라
+ * 'interrupted'로 멈추므로 'running'이 아닌 모든 상태를 깨운다.
+ */
+function wake(audio: AudioContext): Promise<void> {
+  if (audio.state === 'running') return Promise.resolve();
+  return audio.resume().catch(() => undefined);
+}
+
+/** 소리 판이 지금 소리를 낼 수 있는지. 첫 조작 처리기가 언제 그만 들을지 정할 때 쓴다. */
+export function soundsUnlocked(): boolean {
+  return context?.state === 'running';
 }
 
 function load(name: SoundName): Promise<void> {
@@ -85,7 +108,7 @@ function load(name: SoundName): Promise<void> {
 export function primeSounds(): void {
   const audio = audioContext();
   if (!audio) return;
-  if (audio.state === 'suspended') void audio.resume();
+  void wake(audio);
   for (const name of SOUND_NAMES) void load(name);
 }
 
@@ -128,9 +151,13 @@ export function playSound(name: SoundName, options?: PlaySoundOptions): void {
 }
 
 function emit(audio: AudioContext, buffer: AudioBuffer): void {
-  if (audio.state === 'suspended') void audio.resume();
-  const source = audio.createBufferSource();
-  source.buffer = buffer;
-  source.connect(audio.destination);
-  source.start();
+  const start = () => {
+    const source = audio.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audio.destination);
+    source.start();
+  };
+  // 멈춘 판에 바로 start()를 걸면 아이폰에서는 그 소리가 그냥 사라진다. 깨어난 뒤에 튼다.
+  if (audio.state === 'running') start();
+  else void wake(audio).then(() => { if (audio.state === 'running') start(); });
 }

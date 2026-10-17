@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import type { Difficulty, FontSize, SettingsState } from '../types';
-import { primeSounds, setSoundEnabled as applySoundEnabled } from '../utils/sound';
+import { primeSounds, setSoundEnabled as applySoundEnabled, soundsUnlocked } from '../utils/sound';
 import { loadSettings, saveSettings } from '../utils/storage';
 
 interface SettingsContextValue extends SettingsState {
@@ -28,10 +28,28 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   // 브라우저는 사용자가 화면을 한 번 건드리기 전에는 소리를 내주지 않는다.
   // 첫 조작에서 음원을 미리 받아 두어야 첫 소리가 늦지 않는다.
+  // 휴대폰 사파리는 손을 대는 순간(pointerdown)을 소리 허락으로 치지 않고 손을 뗄 때(touchend·click)만
+  // 친다. 예전에는 pointerdown 한 번만 듣고 그만두어 휴대폰에서 소리 판이 끝내 깨어나지 않았다.
+  // 그래서 여러 조작을 듣고, 판이 실제로 깨어난 뒤에야 듣기를 그만둔다.
   useEffect(() => {
-    const prime = () => { if (state.soundEnabled) primeSounds(); };
-    window.addEventListener('pointerdown', prime, { once: true });
-    return () => window.removeEventListener('pointerdown', prime);
+    if (!state.soundEnabled) return;
+    const events = ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'] as const;
+    const stop = () => events.forEach(name => window.removeEventListener(name, prime, true));
+    const prime = () => {
+      primeSounds();
+      if (soundsUnlocked()) stop();
+    };
+    events.forEach(name => window.addEventListener(name, prime, { capture: true, passive: true }));
+    // 화면을 껐다 켜거나 다른 앱에서 돌아오면 판이 다시 멈춘다. 다음 조작에서 다시 깨운다.
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible') return;
+      events.forEach(name => window.addEventListener(name, prime, { capture: true, passive: true }));
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      stop();
+      document.removeEventListener('visibilitychange', onVisible);
+    };
   }, [state.soundEnabled]);
 
   // 학년군은 difficulty를 따라 자동으로 갱신된다. 중학·고등을 고르면 그것이 학년군이 되고,
