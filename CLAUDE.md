@@ -175,7 +175,9 @@ npm run check:highschool-tasks`가 강제합니다.
   옛 그림 카드 127장의 이름은 `src/data/legacyPecs.ts`에 있고 학습지 편집기의 그림 고르기에서 씁니다.
 - 교육과정 원문 참고자료: `docs/reference/2022-special-education-curriculum.pdf`
 - 저작자 표시와 제작 방식: `src/data/projectCredit.ts` — 저작자 전창한, 인공지능 바이브코딩 도구(Claude Code·Codex·Antigravity)와 일마다
-  쓴 보조 도구(동영상 Google Notebook, 이미지 수정 Google Flow, 표지 Google Stitch)를 밝히는 문구 한 곳. 표지 바닥글(`Home`)과 교사 허브
+  쓴 보조 도구(동영상 Google Notebook, 이미지 생성 OpenAI, 이미지 수정 Google Flow, 표지 Google Stitch)를 밝히는 문구 한 곳.
+  자료 출처와 참고문헌은 `src/data/projectSources.ts`에 있고, 교사 허브의 같은 구역(접힌 "자료 출처와 참고문헌")과 README의
+  같은 이름의 절이 이것을 보입니다. 참고문헌은 주소가 열리는지 확인한 것만 넣고, 바꾸면 README도 함께 고칩니다. 표지 바닥글(`Home`)과 교사 허브
   (`TeacherHub`)가 `ProjectCredit`으로 같은 문구를 보이고, 표지에는 학생이 누르면 밖으로 나가는 링크를 두지 않는다. README의
   "저작자와 제작 방식"과 같은 내용이라 바꾸면 함께 고치며, `check:ui-polish`가 두 화면에 있는지 본다.
 

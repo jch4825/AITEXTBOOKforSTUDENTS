@@ -20,6 +20,7 @@ export const PROJECT_CREDIT = {
   /** 맡은 일마다 보조로 쓴 도구. `particle`은 도구 이름 바로 뒤에 붙는 목적격 조사다(이름이 정해져 있어 고정한다). */
   auxiliaryTools: [
     { use: '동영상 제작', tool: 'Google Notebook(구 NotebookLM)', particle: '을' },
+    { use: '이미지 생성', tool: 'OpenAI의 이미지 생성 도구', particle: '를' },
     { use: '이미지 수정', tool: 'Google Flow', particle: '를' },
     { use: '표지 제작', tool: 'Google Stitch', particle: '를' },
   ],

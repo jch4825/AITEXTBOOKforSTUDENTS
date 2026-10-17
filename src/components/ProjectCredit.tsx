@@ -1,4 +1,6 @@
+import { Fragment } from 'react';
 import { PROJECT_CREDIT, PROJECT_CREDIT_AUXILIARY_SENTENCE, PROJECT_CREDIT_TOOLS_SENTENCE } from '../data/projectCredit';
+import { MATERIAL_SOURCES, REFERENCE_GROUPS, SOURCES_CHECKED } from '../data/projectSources';
 
 interface Props {
   /**
@@ -51,6 +53,47 @@ export default function ProjectCredit({ variant }: Props) {
           <a className="underline underline-offset-2" href={repoUrl} target="_blank" rel="noopener noreferrer">{repoUrl}</a>, {license.name}
         </dd>
       </dl>
+
+      <details className="mt-6" data-project-sources>
+        <summary className="cursor-pointer text-lg font-extrabold">자료 출처와 참고문헌</summary>
+
+        <h3 className="mt-4 text-base font-extrabold">자료 출처</h3>
+        <dl className="hub-credit-list mt-3 text-sm leading-relaxed">
+          {MATERIAL_SOURCES.map(source => (
+            <Fragment key={source.item}>
+              <dt className="font-bold">{source.item}</dt>
+              <dd>
+                {source.origin}
+                <span className="block text-[color:var(--muted)]">{source.terms}</span>
+                {source.url && (
+                  <>
+                    {' '}
+                    <a className="underline underline-offset-2" href={source.url} target="_blank" rel="noopener noreferrer">바로 가기</a>
+                  </>
+                )}
+              </dd>
+            </Fragment>
+          ))}
+        </dl>
+
+        <h3 className="mt-6 text-base font-extrabold">참고문헌</h3>
+        <p className="mt-1 text-sm text-[color:var(--muted)]">
+          교재의 개념 설명과 지도 방법을 정하고 대조할 때 참고한 자료입니다. 주소는 {SOURCES_CHECKED}에 확인했습니다.
+        </p>
+        {REFERENCE_GROUPS.map(group => (
+          <section key={group.title} className="mt-4" aria-label={group.title}>
+            <h4 className="text-sm font-extrabold">{group.title}</h4>
+            <ul className="mt-2 space-y-2 text-sm leading-relaxed">
+              {group.items.map(ref => (
+                <li key={ref.url + ref.citation}>
+                  <a className="underline underline-offset-2" href={ref.url} target="_blank" rel="noopener noreferrer">{ref.citation}</a>
+                  <span className="block text-[color:var(--muted)]">참고한 곳: {ref.usedFor}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </details>
     </section>
   );
 }
