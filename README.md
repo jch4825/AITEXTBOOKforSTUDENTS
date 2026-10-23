@@ -76,7 +76,7 @@ npm run check:dictionary
 | --- | --- | --- |
 | 이야기 그림(266장)과 그림 카드 | 저작자가 OpenAI의 이미지 생성 도구로 만들고 Google Flow로 다듬음 | CC BY-NC-SA 4.0(이 교재) |
 | 표지 | 저작자가 Google Stitch로 만듦 | CC BY-NC-SA 4.0(이 교재) |
-| 차시 도움 영상(1~4단원 40편) | 저작자가 Google Notebook(구 NotebookLM)으로 만들어 [유튜브 채널 "00학번ㅏ"](https://www.youtube.com/@00%ED%95%99%EB%B2%88)에 올림 | 학생 화면은 youtube-nocookie.com으로만 엶 |
+| 차시 도움 영상(1~6단원 62편) | 저작자가 Google Notebook(구 NotebookLM)으로 만들어 [유튜브 채널 "00학번ㅏ"](https://www.youtube.com/@00%ED%95%99%EB%B2%88)에 올림 | 학생 화면은 youtube-nocookie.com으로만 엶 |
 | 효과음(9개) | 저작자가 Humble Bundle로 구매 | GameDev Market 표준 라이선스. 앱 안에서만 쓰고 재배포 금지(`public/sounds/NOTICE.md`) |
 | 한글 글꼴 [Pretendard](https://github.com/orioncactus/pretendard) | 길형진(orioncactus) | SIL Open Font License 1.1 |
 | 놀이판 글꼴 [Space Grotesk](https://fonts.google.com/specimen/Space+Grotesk) | Florian Karsten, Google Fonts | SIL Open Font License 1.1 |

@@ -31,7 +31,7 @@ export const MATERIAL_SOURCES: MaterialSource[] = [
     terms: '이 교재의 라이선스(CC BY-NC-SA 4.0)를 따릅니다.',
   },
   {
-    item: '차시 도움 영상(1~4단원 40편)',
+    item: '차시 도움 영상(1~6단원 62편)',
     origin: '저작자가 Google Notebook(구 NotebookLM)으로 만들어 유튜브 채널 "00학번ㅏ"에 올렸습니다.',
     terms: '학생 화면은 쿠키를 심지 않는 youtube-nocookie.com으로만 엽니다.',
     url: 'https://www.youtube.com/@00%ED%95%99%EB%B2%88',
