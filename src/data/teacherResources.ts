@@ -393,7 +393,7 @@ const LESSON_TOOLS: Partial<Record<LessonId, Array<{ tool: ToolKey; description:
  * 영상 아이디를 이 파일에 따로 두면 영상을 바꿀 때 한쪽만 고쳐진다.
  * 채널명은 유튜브 oEmbed로 확인한 값이고, 영상은 도구 링크와 따로 확인했으므로 날짜도 따로 둔다.
  */
-const VIDEO_CHECKED = '2026-10-03';
+const VIDEO_CHECKED = '2026-10-23';
 const OWN_CHANNEL = '00학번ㅏ';
 
 export function getTeacherResources(lessonId: LessonId): TeacherLink[] {
